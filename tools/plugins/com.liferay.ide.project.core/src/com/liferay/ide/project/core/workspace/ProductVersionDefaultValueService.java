@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.workspace;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.project.core.WorkspaceProductInfo;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 
 import java.util.List;
@@ -53,9 +53,8 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 
 		String category = get(_op.getProductCategory());
 
-		List<String> productVersionsList = _productInfo.getProductVersionList(category, _workspaceProducts);
-
-		productVersionsList.sort(String::compareTo);
+		List<String> productVersionsList = NewLiferayWorkspaceOpMethods.getProductVersionList(
+			category, _workspaceProducts);
 
 		return productVersionsList.get(productVersionsList.size() - 1);
 	}
@@ -75,12 +74,12 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 						try {
 							boolean showAll = get(_op.getShowAllVersionProduct());
 
-							_workspaceProducts = BladeCLI.getInitPromotedWorkspaceProduct(showAll);
+							_workspaceProducts = BladeCLI.getWorkspaceProduct(showAll);
 
 							refresh();
 						}
-						catch (Exception e) {
-							e.printStackTrace();
+						catch (Exception exception) {
+							ProjectCore.logError("Failed to init workspace product default value", exception);
 						}
 
 						return Status.OK_STATUS;
@@ -101,7 +100,6 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 
 	private FilteredListener<PropertyContentEvent> _listener;
 	private NewLiferayWorkspaceOp _op;
-	private WorkspaceProductInfo _productInfo = WorkspaceProductInfo.getInstance();
 	private String[] _workspaceProducts;
 
 }

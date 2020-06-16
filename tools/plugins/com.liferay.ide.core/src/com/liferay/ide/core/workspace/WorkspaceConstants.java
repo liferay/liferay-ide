@@ -73,8 +73,10 @@ public class WorkspaceConstants {
 
 	public static final String WARS_DIR_PROPERTY = "liferay.workspace.wars.dir";
 
-	public static final String WORKSPACE_PRODUCT_7_1 = "portal-7.1-ga4";
 	public static final String WORKSPACE_BOM_VERSION = "liferay.bom.version";
+
+	public static final String WORKSPACE_PRODUCT_7_1 = "portal-7.1-ga4";
+
 	public static final String WORKSPACE_PRODUCT_PROPERTY = "liferay.workspace.product";
 
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {

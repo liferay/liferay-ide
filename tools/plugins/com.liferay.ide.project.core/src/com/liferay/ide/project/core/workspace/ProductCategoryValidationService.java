@@ -34,6 +34,15 @@ import org.eclipse.sapphire.services.ValidationService;
 public class ProductCategoryValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
+	public void dispose() {
+		if (_op != null) {
+			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_PROJECT_PROVIDER), _listener);
+		}
+
+		super.dispose();
+	}
+
+	@Override
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
@@ -62,7 +71,7 @@ public class ProductCategoryValidationService extends ValidationService implemen
 
 		};
 
-		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
+		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PROJECT_PROVIDER), _listener);
 	}
 
 	private FilteredListener<PropertyContentEvent> _listener;

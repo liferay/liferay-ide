@@ -14,11 +14,16 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
@@ -51,6 +56,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import java.nio.file.Files;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -981,8 +988,6 @@ public class ProjectUtil {
 		return null;
 	}
 
-	// IDE-270
-
 	public static String getLiferayPluginType(String projectLocation) {
 		if (isLiferaySDKProjectDir(new File(projectLocation))) {
 			String suffix = StringPool.EMPTY;
@@ -1037,6 +1042,24 @@ public class ProjectUtil {
 
 		return null;
 	}
+
+	public static Map<String, ProductInfo> getProductInfos() {
+		try (JsonReader jsonReader = new JsonReader(Files.newBufferedReader(_workspaceCacheFile.toPath()))) {
+			Gson gson = new Gson();
+
+			TypeToken<Map<String, ProductInfo>> typeToken = new TypeToken<Map<String, ProductInfo>>() {
+			};
+
+			return gson.fromJson(jsonReader, typeToken.getType());
+		}
+		catch (Exception ce) {
+			ProjectCore.logError("Cannot Find Product Info", ce);
+		}
+
+		return null;
+	}
+
+	// IDE-270
 
 	public static IProject getProject(IDataModel model) {
 		if (model == null) {
@@ -1790,12 +1813,16 @@ public class ProjectUtil {
 		return retval;
 	}
 
+	private static final String _DEFAULT_WORKSPACE_CACHE_FILE = ".liferay/workspace/.product_info.json";
+
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
 	};
 	private static final Pattern _themeBuilderPlugin = Pattern.compile(
 		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.portal\\.tools\\.theme\\.builder[\'\"].*",
 		Pattern.MULTILINE | Pattern.DOTALL);
 	private static final Pattern _warPlugin = Pattern.compile(".*apply.*war.*", Pattern.MULTILINE | Pattern.DOTALL);
+	private static final File _workspaceCacheFile = new File(
+		System.getProperty("user.home"), _DEFAULT_WORKSPACE_CACHE_FILE);
 
 	private static class Msgs extends NLS {
 

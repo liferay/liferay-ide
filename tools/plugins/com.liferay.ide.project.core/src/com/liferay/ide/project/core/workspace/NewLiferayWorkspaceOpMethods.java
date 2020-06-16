@@ -20,6 +20,12 @@ import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -71,6 +77,20 @@ public class NewLiferayWorkspaceOpMethods {
 		}
 
 		return retval;
+	}
+
+	public static List<String> getProductVersionList(String productCategory, String[] productVersions) {
+		if (Objects.isNull(productCategory) || Objects.isNull(productVersions)) {
+			return Collections.emptyList();
+		}
+
+		return Stream.of(
+			productVersions
+		).filter(
+			category -> category.startsWith(productCategory)
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	private static void _updateBuildAndVersionPrefs(NewLiferayWorkspaceOp op) {

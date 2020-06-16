@@ -15,9 +15,10 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,12 +27,24 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
  * @author Ethan Sun
+ * @author Simon Jiang
  */
 public class ProductCategoryPossibleValuesService extends PossibleValuesService {
+
+	@Override
+	public void dispose() {
+		if (_op != null) {
+			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_PROJECT_PROVIDER), _listener);
+		}
+
+		super.dispose();
+	}
 
 	@Override
 	protected void compute(Set<String> values) {
@@ -50,11 +63,9 @@ public class ProductCategoryPossibleValuesService extends PossibleValuesService 
 		if (ListUtil.isNotEmpty(categorySet)) {
 			values.addAll(categorySet);
 
-			String[] productCategoryValuesArr = categorySet.toArray(new String[0]);
+			String[] productCategoryValuesArr = values.toArray(new String[0]);
 
-			Arrays.sort(productCategoryValuesArr, String::compareTo);
-
-			_op.setProductCategory(productCategoryValuesArr[productCategoryValuesArr.length - 1]);
+			_op.setProductCategory(productCategoryValuesArr[0]);
 		}
 	}
 
@@ -62,17 +73,28 @@ public class ProductCategoryPossibleValuesService extends PossibleValuesService 
 	protected void initPossibleValuesService() {
 		_op = context(NewLiferayWorkspaceOp.class);
 
-		Job refreshWorkspaceProductJob = new Job("") {
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PROJECT_PROVIDER), _listener);
+
+		Job refreshWorkspaceProductJob = new Job("Init liferay workspace product info.") {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					_workspaceProducts = BladeCLI.getInitPromotedWorkspaceProduct(true);
+					_workspaceProducts = BladeCLI.getWorkspaceProduct(true);
 
 					refresh();
 				}
-				catch (Exception e) {
-					e.printStackTrace();
+				catch (Exception exception) {
+					ProjectCore.logError("Failed to init workspace product possible values.", exception);
 				}
 
 				return Status.OK_STATUS;
@@ -85,6 +107,7 @@ public class ProductCategoryPossibleValuesService extends PossibleValuesService 
 		refreshWorkspaceProductJob.schedule();
 	}
 
+	private FilteredListener<PropertyContentEvent> _listener;
 	private NewLiferayWorkspaceOp _op;
 	private String[] _workspaceProducts;
 

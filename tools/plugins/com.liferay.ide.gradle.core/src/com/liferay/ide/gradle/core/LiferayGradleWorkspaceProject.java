@@ -33,7 +33,7 @@ import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
-import com.liferay.ide.project.core.WorkspaceProductInfo;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 
 import java.io.BufferedReader;
@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -281,11 +282,13 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 			return null;
 		}
 
-		WorkspaceProductInfo workspaceProductInfo = WorkspaceProductInfo.getInstance();
+		Map<String, ProductInfo> productInfos = ProjectUtil.getProductInfos();
 
-		ProductInfo productInfo = workspaceProductInfo.getWorkspaceProductInfo(workspaceProductKey);
+		if (Objects.nonNull(productInfos)) {
+			return productInfos.get(workspaceProductKey);
+		}
 
-		return productInfo;
+		return null;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.workspace;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.project.core.WorkspaceProductInfo;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 
 import java.util.List;
@@ -41,7 +41,6 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 	public void dispose() {
 		if (_op != null) {
 			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
-
 			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 		}
 
@@ -53,7 +52,8 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 		if (ListUtil.isNotEmpty(_workspaceProducts)) {
 			String category = get(_op.getProductCategory());
 
-			List<String> productVersionList = _productInfo.getProductVersionList(category, _workspaceProducts);
+			List<String> productVersionList = NewLiferayWorkspaceOpMethods.getProductVersionList(
+				category, _workspaceProducts);
 
 			values.addAll(productVersionList);
 		}
@@ -78,23 +78,21 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 							boolean showAll = get(_op.getShowAllVersionProduct());
 
-							_workspaceProducts = BladeCLI.getInitPromotedWorkspaceProduct(showAll);
+							_workspaceProducts = BladeCLI.getWorkspaceProduct(showAll);
 
-							List<String> productVersionsList = _productInfo.getProductVersionList(
+							List<String> productVersionsList = NewLiferayWorkspaceOpMethods.getProductVersionList(
 								category, _workspaceProducts);
 
 							if (Objects.nonNull(version) && !productVersionsList.contains(version) &&
 								ListUtil.isNotEmpty(productVersionsList)) {
 
-								productVersionsList.sort(String::compareTo);
-
-								_op.setProductVersion(productVersionsList.get(productVersionsList.size() - 1));
+								_op.setProductVersion(productVersionsList.get(0));
 							}
 
 							refresh();
 						}
-						catch (Exception e) {
-							e.printStackTrace();
+						catch (Exception exception) {
+							ProjectCore.logError("Failed to init product version list.", exception);
 						}
 
 						return Status.OK_STATUS;
@@ -110,13 +108,11 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 		};
 
 		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
-
 		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 	}
 
 	private FilteredListener<PropertyContentEvent> _listener;
 	private NewLiferayWorkspaceOp _op;
-	private WorkspaceProductInfo _productInfo = WorkspaceProductInfo.getInstance();
 	private String[] _workspaceProducts;
 
 }

@@ -195,27 +195,6 @@ public class BladeCLI {
 		}
 	}
 
-	public static synchronized String[] getInitPromotedWorkspaceProduct(boolean showAll) throws BladeCLIException {
-		List<String> templateNames = new ArrayList<>();
-
-		String[] executeResult;
-
-		if (showAll) {
-			executeResult = execute("init -a -l");
-		}
-		else {
-			executeResult = execute("init -l");
-		}
-
-		for (String category : executeResult) {
-			category = category.trim();
-
-			templateNames.add(category);
-		}
-
-		return templateNames.toArray(new String[0]);
-	}
-
 	public static synchronized String[] getProjectTemplates() throws BladeCLIException {
 		List<String> templateNames = new ArrayList<>();
 
@@ -239,6 +218,29 @@ public class BladeCLI {
 		}
 
 		return templateNames.toArray(new String[0]);
+	}
+
+	public static synchronized String[] getWorkspaceProduct(boolean showAll) throws BladeCLIException {
+		List<String> workspaceProducts = new ArrayList<>();
+
+		String[] executeResult;
+
+		if (showAll) {
+			executeResult = execute("init -l --all");
+		}
+		else {
+			executeResult = execute("init -l");
+		}
+
+		for (String result : executeResult) {
+			String category = result.trim();
+
+			if (category.indexOf(" ") == -1) {
+				workspaceProducts.add(category);
+			}
+		}
+
+		return workspaceProducts.toArray(new String[0]);
 	}
 
 	public static synchronized void restoreOriginal() {

@@ -107,6 +107,7 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@Service(impl = ProductCategoryDefaultValueService.class)
 	@Service(impl = ProductCategoryPossibleValuesService.class)
 	@Service(impl = ProductCategoryValidationService.class)
+	@Service(impl = ProdcutCategoryCollationService.class)
 	public ValueProperty PROP_PRODUCT_CATEGORY = new ValueProperty(TYPE, "ProductCategory");
 
 	@Label(standard = "product version")
