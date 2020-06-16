@@ -39,7 +39,8 @@ jobs:
       - name: Build repository
         shell: bash
         run: |
-          ./mvnw clean package -DskipTests=true
+          ./mvnw clean
+#          ./mvnw clean package -DskipTests=true
 #      - name: Upload p2 repository
 #        env:
 #          BINTRAY_USER: ${{ secrets.bintray_usename }}
