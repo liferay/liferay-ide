@@ -40,7 +40,6 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 	@Override
 	public void dispose() {
 		if (_op != null) {
-			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
 			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 		}
 
@@ -50,10 +49,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 	@Override
 	protected void compute(Set<String> values) {
 		if (ListUtil.isNotEmpty(_workspaceProducts)) {
-			String category = get(_op.getProductCategory());
-
-			List<String> productVersionList = NewLiferayWorkspaceOpMethods.getProductVersionList(
-				category, _workspaceProducts);
+			List<String> productVersionList = NewLiferayWorkspaceOpMethods.getProductVersionList(_workspaceProducts);
 
 			values.addAll(productVersionList);
 		}
@@ -72,8 +68,6 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
-							String category = get(_op.getProductCategory());
-
 							String version = get(_op.getProductVersion());
 
 							boolean showAll = get(_op.getShowAllVersionProduct());
@@ -81,7 +75,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 							_workspaceProducts = BladeCLI.getWorkspaceProduct(showAll);
 
 							List<String> productVersionsList = NewLiferayWorkspaceOpMethods.getProductVersionList(
-								category, _workspaceProducts);
+								_workspaceProducts);
 
 							if (Objects.nonNull(version) && !productVersionsList.contains(version) &&
 								ListUtil.isNotEmpty(productVersionsList)) {
@@ -107,7 +101,6 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 		};
 
-		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
 		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 	}
 

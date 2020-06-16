@@ -41,11 +41,6 @@
                 </property-editor>
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                    <property>ProductCategory</property>
-                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
-                </property-editor>
-                <property-editor>
-                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>ProductVersion</property>
                     <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                 </property-editor>

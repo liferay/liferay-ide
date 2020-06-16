@@ -55,8 +55,6 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public Value<Path> getLocation();
 
-	public Value<String> getProductCategory();
-
 	public Value<String> getProductVersion();
 
 	public Value<Boolean> getShowAllVersionProduct();
@@ -72,8 +70,6 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	public void setLocation(Path value);
 
 	public void setLocation(String value);
-
-	public void setProductCategory(String value);
 
 	public void setProductVersion(String value);
 
@@ -102,13 +98,6 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
-
-	@Label(standard = "product category")
-	@Service(impl = ProductCategoryDefaultValueService.class)
-	@Service(impl = ProductCategoryPossibleValuesService.class)
-	@Service(impl = ProductCategoryValidationService.class)
-	@Service(impl = ProdcutCategoryCollationService.class)
-	public ValueProperty PROP_PRODUCT_CATEGORY = new ValueProperty(TYPE, "ProductCategory");
 
 	@Label(standard = "product version")
 	@Service(impl = ProductVersionDefaultValueService.class)

@@ -36,7 +36,6 @@ public class ProductVersionValidationService extends ValidationService implement
 	@Override
 	public void dispose() {
 		if (_op != null) {
-			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
 			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 		}
 
@@ -72,7 +71,6 @@ public class ProductVersionValidationService extends ValidationService implement
 
 		};
 
-		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
 		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 	}
 

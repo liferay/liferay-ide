@@ -79,15 +79,13 @@ public class NewLiferayWorkspaceOpMethods {
 		return retval;
 	}
 
-	public static List<String> getProductVersionList(String productCategory, String[] productVersions) {
-		if (Objects.isNull(productCategory) || Objects.isNull(productVersions)) {
+	public static List<String> getProductVersionList(String[] productVersions) {
+		if (Objects.isNull(productVersions)) {
 			return Collections.emptyList();
 		}
 
 		return Stream.of(
 			productVersions
-		).filter(
-			category -> category.startsWith(productCategory)
 		).collect(
 			Collectors.toList()
 		);

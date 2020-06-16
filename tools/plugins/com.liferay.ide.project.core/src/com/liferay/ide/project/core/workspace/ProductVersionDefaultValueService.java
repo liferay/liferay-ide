@@ -38,7 +38,6 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 	@Override
 	public void dispose() {
 		if (_op != null) {
-			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
 			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 		}
 
@@ -51,10 +50,7 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 			return null;
 		}
 
-		String category = get(_op.getProductCategory());
-
-		List<String> productVersionsList = NewLiferayWorkspaceOpMethods.getProductVersionList(
-			category, _workspaceProducts);
+		List<String> productVersionsList = NewLiferayWorkspaceOpMethods.getProductVersionList(_workspaceProducts);
 
 		return productVersionsList.get(productVersionsList.size() - 1);
 	}
@@ -94,7 +90,6 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 
 		};
 
-		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
 		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 	}
 
