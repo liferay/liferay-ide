@@ -123,7 +123,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 	}
 
 	private boolean _isEmpty(String[] values) {
-		if ((values != null) && (values.length > 0)) {
+		if ((values == null) || (values.length == 0)) {
 			return true;
 		}
 
