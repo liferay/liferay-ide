@@ -330,6 +330,18 @@
                     <program>${bladeCommondPath}</program>
                     <programArguments>--base "${lrwsDir}" init -v "${selectbundleversion}"</programArguments>
                 </runProgram>
+                <propertiesFileSet>
+                    <file>${lrwsDir}${platform_path_separator}gradle.properties</file>
+                    <key>liferay.workspace.product</key>
+                    <value>dxp-7.2-ga1</value>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${isdxp}</value1>
+                            <value2>dxp</value2>
+                        </compareValues>
+                    </ruleList>
+                </propertiesFileSet>
                 <if>
                     <actionList>
                         <propertiesFileSet>
