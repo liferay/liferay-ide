@@ -383,6 +383,11 @@
                     <program>${bladeCommandPath}</program>
                     <programArguments>--base "${lrws}" init -v "7.2"</programArguments>
                 </runProgram>
+                <propertiesFileSet>
+                    <file>${lrws}${platform_path_separator}gradle.properties</file>
+                    <key>liferay.workspace.product</key>
+                    <value>dxp-7.2-ga1</value>
+                </propertiesFileSet>
                 <createDirectory>
                     <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
                     <ruleList>
