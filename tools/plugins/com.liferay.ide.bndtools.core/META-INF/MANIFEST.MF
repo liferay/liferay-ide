@@ -8,9 +8,9 @@ Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  com.liferay.ide.core,
- biz.aQute.bndlib;bundle-version="[4,5)",
- bndtools.api;bundle-version="[4,5)",
- bndtools.core;bundle-version="[4,5)",
+ biz.aQute.bndlib,
+ bndtools.api,
+ bndtools.core,
  com.liferay.ide.server.core,
  org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
