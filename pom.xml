@@ -23,22 +23,29 @@
 			<email>gregory.amerson@liferay.com</email>
 		</developer>
 		<developer>
-			<name>Kuo Zhang</name>
-			<id>kuo.zhang</id>
-			<email>kuo.zhang@liferay.com</email>
-		</developer>
-		<developer>
 			<name>Simon Jiang</name>
 			<id>simon.jiang</id>
 			<email>simon.jiang@liferay.com</email>
 		</developer>
 		<developer>
-			<name>Terry Jia</name>
-			<email>terry.jia@liferay.com</email>
+			<name>Ashley Yuan</name>
+			<id>yanan.yuan</id>
+			<email>yanan.yuan@liferay.com</email>
 		</developer>
 		<developer>
-			<name>Kamesh Sampath</name>
-			<email>kamesh.sampath@liferay.com</email>
+			<name>Seiphon Wang</name>
+			<id>seiphon.wang</id>
+			<email>seiphon.wang@liferay.com</email>
+		</developer>
+		<developer>
+			<name>Ethan Sun</name>
+			<id>ethan.sun</id>
+			<email>ethan.sun@liferay.com</email>
+		</developer>
+		<developer>
+			<name>Lily Li</name>
+			<id>lily.li</id>
+			<email>lily.li@liferay.com</email>
 		</developer>
 	</developers>
 
