@@ -71,6 +71,9 @@ public class LiferayWorkspaceUtilTests extends ProjectCoreBase
 
         op.setWorkspaceName( "test-gradle-liferay-workspace" );
         op.setUseDefaultLocation( true );
+        op.setProductVersion("portal-7.3-ga3");
+        
+        waitForBuildAndValidation();
 
         if( op.validation().ok() )
         {

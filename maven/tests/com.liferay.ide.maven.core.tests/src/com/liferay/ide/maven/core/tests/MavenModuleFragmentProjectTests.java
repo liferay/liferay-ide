@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOp;
@@ -214,6 +215,9 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
         workspaceOp.setWorkspaceName( "test-maven-liferay-workspace" );
         workspaceOp.setUseDefaultLocation( true );
+        workspaceOp.setProductVersion("portal-7.3-ga3");
+        
+        TestUtil.waitForBuildAndValidation();
 
         if( workspaceOp.validation().ok() )
         {

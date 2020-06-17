@@ -133,9 +133,12 @@ public class NewLiferayComponentOpTests extends BaseTests
         prefs.flush();
 
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
-
+        
         op.setWorkspaceName( "test-liferay-workspace" );
         op.setUseDefaultLocation( true );
+        op.setProductVersion("portal-7.3-ga3");
+        
+        TestUtil.waitForBuildAndValidation();
 
         if( op.validation().ok() )
         {

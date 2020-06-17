@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -105,6 +106,8 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 			}
 
 		};
+
+		getProductVersions.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
 
 		getProductVersions.setSystem(true);
 
