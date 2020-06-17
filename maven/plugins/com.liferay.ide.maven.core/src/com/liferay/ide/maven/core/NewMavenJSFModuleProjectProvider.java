@@ -27,14 +27,6 @@ import java.io.File;
 
 import java.util.Properties;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
@@ -85,44 +77,6 @@ public class NewMavenJSFModuleProjectProvider
 		retval = Status.OK_STATUS;
 
 		return retval;
-	}
-
-	public String getHttpResponse(String request) {
-		StringBuilder retVal = new StringBuilder();
-		HttpClient httpClient = new DefaultHttpClient();
-
-		try {
-
-			// create httpget
-
-			HttpGet httpGet = new HttpGet(request);
-
-			// execute httpRequest
-
-			HttpResponse response = httpClient.execute(httpGet);
-
-			StatusLine statusLine = response.getStatusLine();
-
-			int statusCode = statusLine.getStatusCode();
-
-			if (statusCode == HttpStatus.SC_OK) {
-				HttpEntity entity = response.getEntity();
-
-				String body = CoreUtil.readStreamToString(entity.getContent(), false);
-
-				EntityUtils.consume(entity);
-
-				retVal.append(body);
-			}
-			else {
-				return statusLine.getReasonPhrase();
-			}
-		}
-		catch (Exception e) {
-			LiferayMavenCore.logError("Failed to http response from maven central", e);
-		}
-
-		return retVal.toString();
 	}
 
 	@Override

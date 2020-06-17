@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.jsf;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import java.io.IOException;
@@ -24,6 +25,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.PossibleValuesService;
 
 import org.jsoup.Connection;
@@ -45,15 +50,35 @@ public class JSFModuleProjectComponentSuitePossibleValues
 
 		values.addAll(possibleValues);
 
-		NewLiferayJSFModuleProjectOp op = _op();
+		if (ListUtil.isEmpty(_newPossibleValues)) {
+			return;
+		}
 
-		List<String> newPossibleValues = _getComponentSuiteFromURL(get(op.getLiferayVersion()));
-
-		for (String value : newPossibleValues) {
+		for (String value : _newPossibleValues) {
 			if (!possibleValues.contains(value)) {
 				values.add(value);
 			}
 		}
+	}
+
+	@Override
+	protected void initPossibleValuesService() {
+		Job refreshComponentSuiteJob = new Job("Get latest new JSF component suite") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				_newPossibleValues = _getComponentSuiteFromURL(get(_op().getLiferayVersion()));
+
+				refresh();
+
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		refreshComponentSuiteJob.setSystem(true);
+		refreshComponentSuiteJob.setUser(false);
+		refreshComponentSuiteJob.schedule();
 	}
 
 	private List<String> _getComponentSuiteFromURL(String liferayVersion) {
@@ -66,9 +91,13 @@ public class JSFModuleProjectComponentSuitePossibleValues
 
 		sb.append("/jsf-version/2.2/component-suite/jsf/build-tool/maven");
 
-		Connection connection = Jsoup.connect(sb.toString());
-
 		try {
+			Connection connection = Jsoup.connect(sb.toString());
+
+			connection = connection.timeout(10000);
+
+			connection = connection.validateTLSCertificates(false);
+
 			Document document = connection.get();
 
 			Element select = document.getElementById(_select_element_id);
@@ -92,6 +121,7 @@ public class JSFModuleProjectComponentSuitePossibleValues
 		return context(NewLiferayJSFModuleProjectOp.class);
 	}
 
+	private List<String> _newPossibleValues = null;
 	private String _select_element_id =
 		"_1_WAR_comliferayfacessitearchetypeportlet_:form:suite:archetypeSelector_suite";
 

@@ -58,7 +58,7 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 
 	@DefaultValue(text = "7.3")
 	@Label(standard = "liferay version")
-	@PossibleValues(values = {"6.2", "7.0", "7.1", "7.2", "7.3"})
+	@PossibleValues(values = {"7.0", "7.1", "7.2", "7.3"})
 	public ValueProperty PROP_LIFERAY_VERSION = new ValueProperty(TYPE, "LiferayVersion");
 
 	@Service(

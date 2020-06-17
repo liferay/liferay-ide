@@ -65,9 +65,13 @@ public class JSFModuleProjectArchetypeDefaultValueService
 	}
 
 	private String _getArchetypeGAVFromUrl(String url) {
-		Connection connection = Jsoup.connect(url);
-
 		try {
+			Connection connection = Jsoup.connect(url);
+
+			connection = connection.timeout(10000);
+
+			connection = connection.validateTLSCertificates(false);
+
 			Document document = connection.get();
 
 			Element archetype = document.getElementById(_archetype_element_id);
