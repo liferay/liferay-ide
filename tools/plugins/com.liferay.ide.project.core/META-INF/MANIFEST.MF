@@ -34,7 +34,8 @@ Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6)",
  org.eclipse.wst.server.core,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.validation,
- org.eclipse.wst.xml.core
+ org.eclipse.wst.xml.core,
+ com.google.gson
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core,
@@ -53,4 +54,5 @@ Export-Package: com.liferay.ide.project.core,
 Bundle-ClassPath: lib/jackson-core-asl-1.9.13.jar,
  lib/jackson-mapper-asl-1.9.13.jar,
  lib/commons-validator-1.6.jar,
+ lib/com.liferay.portal.tools.bundle.support-3.6.0.jar,
  .

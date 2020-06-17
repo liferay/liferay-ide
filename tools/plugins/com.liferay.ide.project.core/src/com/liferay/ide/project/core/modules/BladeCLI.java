@@ -220,6 +220,29 @@ public class BladeCLI {
 		return templateNames.toArray(new String[0]);
 	}
 
+	public static synchronized String[] getWorkspaceProducts(boolean showAll) throws BladeCLIException {
+		List<String> workspaceProducts = new ArrayList<>();
+
+		String[] executeResult;
+
+		if (showAll) {
+			executeResult = execute("init --list --all");
+		}
+		else {
+			executeResult = execute("init --list");
+		}
+
+		for (String result : executeResult) {
+			String category = result.trim();
+
+			if (category.indexOf(" ") == -1) {
+				workspaceProducts.add(category);
+			}
+		}
+
+		return workspaceProducts.toArray(new String[0]);
+	}
+
 	public static synchronized void restoreOriginal() {
 		File file = _bladeJarInstancePath.toFile();
 

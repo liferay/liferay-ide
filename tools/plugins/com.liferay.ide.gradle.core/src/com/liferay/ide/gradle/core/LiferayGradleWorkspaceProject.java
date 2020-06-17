@@ -21,6 +21,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
@@ -32,6 +33,7 @@ import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 
 import java.io.BufferedReader;
@@ -42,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -269,6 +272,23 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 		return LiferayWorkspaceUtil.getGradleProperty(
 			location.toString(), WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, null);
+	}
+
+	@Override
+	public ProductInfo getWorkspaceProductInfo() {
+		String workspaceProductKey = getProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
+
+		if (CoreUtil.empty(workspaceProductKey)) {
+			return null;
+		}
+
+		Map<String, ProductInfo> productInfos = ProjectUtil.getProductInfos();
+
+		if (Objects.nonNull(productInfos)) {
+			return productInfos.get(workspaceProductKey);
+		}
+
+		return null;
 	}
 
 	@Override

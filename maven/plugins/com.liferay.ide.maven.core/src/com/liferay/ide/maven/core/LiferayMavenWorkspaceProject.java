@@ -14,7 +14,6 @@
 
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.Event;
 import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.IProjectBuilder;
@@ -27,7 +26,6 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import java.io.File;
 import java.io.FileReader;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.maven.model.Model;
@@ -69,23 +67,13 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 	}
 
 	@Override
-	public List<Artifact> getTargetPlatformArtifacts() {
-		return super.getTargetPlatformArtifacts();
-	}
-
-	@Override
 	public String getTargetPlatformVersion() {
-		return super.getTargetPlatformVersion();
+		return getProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, null);
 	}
 
 	@Override
 	public boolean isStale() {
 		return _stale;
-	}
-
-	@Override
-	public boolean isWatchable() {
-		return false;
 	}
 
 	@Override

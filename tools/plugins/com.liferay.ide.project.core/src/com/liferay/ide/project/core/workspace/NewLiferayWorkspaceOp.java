@@ -41,6 +41,7 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 /**
  * @author Andy Wu
  * @author Terry Jia
+ * @author Ethan Sun
  */
 public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
@@ -54,6 +55,10 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public Value<Path> getLocation();
 
+	public Value<String> getProductVersion();
+
+	public Value<Boolean> getShowAllVersionProduct();
+
 	public Value<String> getTargetPlatform();
 
 	public Value<Boolean> getUseDefaultLocation();
@@ -65,6 +70,10 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	public void setLocation(Path value);
 
 	public void setLocation(String value);
+
+	public void setProductVersion(String value);
+
+	public void setShowAllVersionProduct(Boolean value);
 
 	public void setTargetPlatform(String value);
 
@@ -90,10 +99,20 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
+	@Label(standard = "product version")
+	@Required
+	@Service(impl = ProductVersionPossibleValuesService.class)
+	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(TYPE, "ProductVersion");
+
 	@Service(impl = NewLiferayWorkspaceServerNameService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
 
-	@Enablement(expr = "${ EnableTargetPlatform == 'true' }")
+	@DefaultValue(text = "false")
+	@Label(standard = "Show All Version Product")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_SHOW_ALL_VERSION_PRODUCT = new ValueProperty(TYPE, "ShowAllVersionProduct");
+
+	//	@Enablement(expr = "${ EnableTargetPlatform == 'true' }")
 	@Label(standard = "target platform")
 	@Service(impl = TargetPlatformDefaultValueService.class)
 	@Service(impl = TargetPlatformPossibleValuesService.class)

@@ -41,21 +41,27 @@
                 </property-editor>
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                    <property>LiferayVersion</property>
+                    <property>ProductVersion</property>
+                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                 </property-editor>
                 <property-editor>
-                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
-                    <property>EnableTargetPlatform</property>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>LiferayVersion</property>
+                    <visible-when>${ ProjectProvider != 'gradle-liferay-workspace' }</visible-when>
                 </property-editor>
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetPlatform</property>
+                    <visible-when>${ ProjectProvider != 'gradle-liferay-workspace' }</visible-when>
+                </property-editor>
+                <property-editor>
+                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
+                    <property>ShowAllVersionProduct</property>
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                     <property>IndexSources</property>
                 </property-editor>
-                <spacer></spacer>
                 <property-editor>
                     <label>Download Liferay bundle</label>
                     <property>provisionLiferayBundle</property>
@@ -68,7 +74,7 @@
                     <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
                     <property>bundleUrl</property>
                 </property-editor>
-                <spacer></spacer>
+                <spacer/>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>
