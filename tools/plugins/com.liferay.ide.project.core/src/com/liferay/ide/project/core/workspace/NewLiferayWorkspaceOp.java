@@ -101,6 +101,7 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	@Label(standard = "product version")
 	@Required
+	@Service(impl = ProductVersionDefaultValueService.class)
 	@Service(impl = ProductVersionPossibleValuesService.class)
 	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(TYPE, "ProductVersion");
 
