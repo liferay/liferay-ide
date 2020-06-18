@@ -18,6 +18,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.Status;
@@ -47,12 +49,18 @@ public class ModuleExtProjectNameValidationService extends ModuleProjectNameVali
 			return Status.createErrorStatus("We recommend Liferay Gradle workspace to develop current project!");
 		}
 
-		Version liferayWorkspaceVersion = Version.parseVersion(
-			LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());
+		String liferayWorkspaceProjectVersion = LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion();
 
-		Version version70 = new Version("7.0");
+		if (Objects.isNull(liferayWorkspaceProjectVersion)) {
+			return Status.createErrorStatus(
+				"The property `liferay.workspace.product` or `liferay.workspace.target.platform.version` has not " +
+					"been set. It is recommended to set thess property in gradle.properties in the workspace " +
+						"directory.");
+		}
 
-		if (CoreUtil.compareVersions(liferayWorkspaceVersion, version70) <= 0) {
+		if (CoreUtil.compareVersions(
+				Version.parseVersion(liferayWorkspaceProjectVersion), Version.parseVersion("7.0")) <= 0) {
+
 			retval = Status.createErrorStatus(
 				"Module Ext projects only work on liferay workspace which version is greater than 7.0.");
 		}
