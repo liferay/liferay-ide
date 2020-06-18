@@ -270,8 +270,18 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 		IPath location = project.getLocation();
 
-		return LiferayWorkspaceUtil.getGradleProperty(
+		String targetplatformVersion = LiferayWorkspaceUtil.getGradleProperty(
 			location.toString(), WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, null);
+
+		if (CoreUtil.isNullOrEmpty(targetplatformVersion)) {
+			ProductInfo workspaceProductInfo = getWorkspaceProductInfo();
+
+			if (Objects.nonNull(workspaceProductInfo)) {
+				targetplatformVersion = workspaceProductInfo.getTargetPlatformVersion();
+			}
+		}
+
+		return targetplatformVersion;
 	}
 
 	@Override

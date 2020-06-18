@@ -17,10 +17,13 @@ package com.liferay.ide.project.core.modules;
 import aQute.bnd.version.Version;
 import aQute.bnd.version.VersionRange;
 
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -67,7 +70,17 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
+		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+		String targetPlatformVersionString = liferayWorkspaceProject.getTargetPlatformVersion();
+
 		String liferayVersion = get(op.getLiferayVersion());
+
+		if (CoreUtil.isNotNullOrEmpty(targetPlatformVersionString)) {
+			Version tagetPlatformVerstion = Version.parseVersion(targetPlatformVersionString);
+
+			liferayVersion = new String(tagetPlatformVerstion.getMajor() + "." + tagetPlatformVerstion.getMinor());
+		}
 
 		String projectTemplateName = get(op.getProjectTemplateName());
 
@@ -75,6 +88,16 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 			return Status.createErrorStatus(
 				"This wizard does not support creating this type of module. Create it using the CLI first and then " +
 					"import here.");
+		}
+
+		if (projectTemplateName.startsWith("form-field") && liferayVersion.equals("7.2")) {
+			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
+
+			String displayName = newLiferayProjectProvider.getDisplayName();
+
+			if (StringUtil.equalsIgnoreCase(displayName, "maven")) {
+				return Status.createErrorStatus("Form Field project is not supported 7.2 for Maven");
+			}
 		}
 
 		boolean warCoreExt = projectTemplateName.equals("war-core-ext");

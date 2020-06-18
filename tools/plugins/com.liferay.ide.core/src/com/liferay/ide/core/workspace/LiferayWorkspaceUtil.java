@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import java.nio.file.Files;
 
+import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +35,8 @@ import java.util.regex.Pattern;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+
+import org.osgi.framework.Version;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -209,25 +212,34 @@ public class LiferayWorkspaceUtil {
 	public static IWorkspaceProject getLiferayWorkspaceProject() {
 		IProject workspaceProject = getWorkspaceProject();
 
-		if (workspaceProject != null) {
-			return LiferayCore.create(IWorkspaceProject.class, getWorkspaceProject());
+		if (Objects.nonNull(workspaceProject)) {
+			return LiferayCore.create(IWorkspaceProject.class, workspaceProject);
 		}
 
 		return null;
 	}
 
 	public static String getLiferayWorkspaceProjectVersion() {
-		IProject workspaceProject = getWorkspaceProject();
+		IWorkspaceProject liferayWorkspaceProject = getLiferayWorkspaceProject();
 
-		if (workspaceProject == null) {
+		if (Objects.isNull(liferayWorkspaceProject)) {
 			return null;
 		}
 
-		IPath workspaceProjectPath = workspaceProject.getLocation();
+		String targetPlatformVersion = liferayWorkspaceProject.getTargetPlatformVersion();
 
-		Properties bladeProperties = PropertiesUtil.loadProperties(workspaceProjectPath.append(".blade.properties"));
+		if (CoreUtil.isNotNullOrEmpty(targetPlatformVersion)) {
+			try {
+				Version liferayVersion = new Version(targetPlatformVersion);
 
-		return bladeProperties.getProperty("liferay.version.default");
+				return new String(liferayVersion.getMajor() + "." + liferayVersion.getMinor());
+			}
+			catch (IllegalArgumentException iae) {
+				LiferayCore.logError("Failed to get liferay workspace project version.", iae);
+			}
+		}
+
+		return null;
 	}
 
 	public static String[] getLiferayWorkspaceProjectWarsDirs(String workspaceLocation) {
