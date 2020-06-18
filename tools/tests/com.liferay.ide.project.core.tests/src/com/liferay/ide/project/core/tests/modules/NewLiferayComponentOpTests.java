@@ -17,29 +17,27 @@ package com.liferay.ide.project.core.tests.modules;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOpMethods;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author Gregory Amerson
@@ -126,12 +124,6 @@ public class NewLiferayComponentOpTests extends BaseTests
     @BeforeClass
     public static void setupBladeCLIRepoUrl() throws Exception
     {
-        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
-
-        prefs.flush();
-
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
         
         op.setWorkspaceName( "test-liferay-workspace" );
@@ -255,10 +247,12 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         TestUtil.waitForBuildAndValidation();
 
+        assertTrue( op.getLocation().content().toFile().exists() );
+        
         IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
 
-        modProject.open( new NullProgressMonitor() );
-
+        //CoreUtil.openProject(op.getProjectName().content(), PathBridge.create(op.getLocation().content()).append(op.getProjectName().content()), new NullProgressMonitor());
+        
         NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
 
         cop.setProjectName( op.getProjectName().content() );
