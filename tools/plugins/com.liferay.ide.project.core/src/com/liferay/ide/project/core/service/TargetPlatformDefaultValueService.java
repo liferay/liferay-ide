@@ -14,45 +14,49 @@
 
 package com.liferay.ide.project.core.service;
 
-import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
  * @author Terry Jia
+ * @author Ethan Sun
  */
-public class TargetPlatformDefaultValueService extends DefaultValueService {
+public class TargetPlatformDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
-		String[] liferayTargetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.get("7.2");
+		String liferayVersion = get(_op.getLiferayVersion());
 
-		String defaultValue = liferayTargetPlatformVersions[0];
-
-		IScopeContext[] scopeContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
-
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		String defaultLiferayVersion = preferencesService.getString(
-			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, scopeContexts);
-
-		if (defaultLiferayVersion != null) {
-			String[] targetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.get(
-				defaultLiferayVersion);
-
-			if (ListUtil.isNotEmpty(targetPlatformVersions)) {
-				defaultValue = WorkspaceConstants.liferayTargetPlatformVersions.get(defaultLiferayVersion)[0];
-			}
-		}
-
-		return defaultValue;
+		return WorkspaceConstants.liferayTargetPlatformVersions.get(liferayVersion)[0];
 	}
+
+	@Override
+	protected void initDefaultValueService() {
+		_op = context(NewLiferayWorkspaceOp.class);
+
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				String liferayVersion = get(_op.getLiferayVersion());
+
+				_op.setTargetPlatform(WorkspaceConstants.liferayTargetPlatformVersions.get(liferayVersion)[0]);
+
+				refresh();
+			}
+
+		};
+
+		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_LIFERAY_VERSION), _listener);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+	private NewLiferayWorkspaceOp _op;
 
 }
