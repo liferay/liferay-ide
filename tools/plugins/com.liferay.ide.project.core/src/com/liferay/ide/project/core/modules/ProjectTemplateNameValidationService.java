@@ -38,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -71,6 +72,10 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
 		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+		if (Objects.isNull(liferayWorkspaceProject)) {
+			return retval;
+		}
 
 		String targetPlatformVersionString = liferayWorkspaceProject.getTargetPlatformVersion();
 
