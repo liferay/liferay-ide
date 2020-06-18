@@ -31,6 +31,7 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 
@@ -42,14 +43,23 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 
 	public Value<String> getArchetype();
 
+	public Value<String> getLiferayVersion();
+
 	public Value<String> getTemplateName();
 
 	public void setArchetype(String value);
+
+	public void setLiferayVersion(String value);
 
 	public void setTemplateName(String value);
 
 	@Service(impl = JSFModuleProjectArchetypeDefaultValueService.class)
 	public ValueProperty PROP_ARCHETYPE = new ValueProperty(TYPE, "Archetype");
+
+	@DefaultValue(text = "7.3")
+	@Label(standard = "liferay version")
+	@PossibleValues(values = {"7.0", "7.1", "7.2", "7.3"})
+	public ValueProperty PROP_LIFERAY_VERSION = new ValueProperty(TYPE, "LiferayVersion");
 
 	@Service(
 		impl = JSFModuleProjectLocationValidationService.class,
@@ -73,7 +83,7 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 	@DefaultValue(text = "jsf")
 	@Label(standard = "Component Suite")
 	@Listeners(JSFModuleProjectNameListener.class)
-	@PossibleValues(values = {"jsf", "alloy", "icefaces", "primefaces", "richfaces"})
+	@Service(impl = JSFModuleProjectComponentSuitePossibleValues.class)
 	public ValueProperty PROP_TEMPLATE_NAME = new ValueProperty(TYPE, "TemplateName");
 
 	@Listeners(JSFModuleProjectUseDefaultLocationListener.class)

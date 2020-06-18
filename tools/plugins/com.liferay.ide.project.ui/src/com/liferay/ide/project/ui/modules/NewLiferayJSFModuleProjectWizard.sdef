@@ -36,6 +36,7 @@
                     <property>Location</property>
                 </property-editor>
                 <spacer/>
+                <spacer/>
                 <property-editor>
                     <property>ProjectProvider</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
@@ -44,6 +45,10 @@
                 <property-editor>
                     <property>TemplateName</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                </property-editor>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>LiferayVersion</property>
                 </property-editor>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>

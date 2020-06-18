@@ -39,8 +39,12 @@ public class JsfFrameworkValueLabelService extends ValueLabelService {
 				return "PrimeFaces";
 			case "richfaces":
 				return "RichFaces";
+			case "butterfaces":
+				return "Butterfaces";
+			case "bootsfaces":
+				return "Bootsfaces";
 			default:
-				return "JSF Standard";
+				return value;
 		}
 	}
 
