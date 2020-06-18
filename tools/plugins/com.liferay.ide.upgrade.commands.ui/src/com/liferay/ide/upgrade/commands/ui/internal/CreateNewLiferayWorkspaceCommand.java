@@ -76,6 +76,25 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 			}
 		}
 
+		switch (upgradePlan.getTargetVersion()) {
+			case "7.0":
+				newLiferayWorkspaceOp.setProductVersion("portal-7.0-ga7");
+
+				break;
+			case "7.1":
+				newLiferayWorkspaceOp.setProductVersion("portal-7.1-ga4");
+
+				break;
+			case "7.2":
+				newLiferayWorkspaceOp.setProductVersion("portal-7.2-ga2");
+
+				break;
+			case "7.3":
+				newLiferayWorkspaceOp.setProductVersion("portal-7.3-ga2");
+
+				break;
+		}
+
 		newLiferayWorkspaceOp.setLiferayVersion(upgradePlan.getTargetVersion());
 
 		final AtomicInteger returnCode = new AtomicInteger();
