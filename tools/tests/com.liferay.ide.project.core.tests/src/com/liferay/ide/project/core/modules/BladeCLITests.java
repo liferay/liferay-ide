@@ -147,16 +147,35 @@ public class BladeCLITests
     public void bladeCLICreateProject() throws Exception {
         Path temp = Files.createTempDirectory("path with spaces");
 
+        StringBuilder sbWorkspace = new StringBuilder();
+        sbWorkspace.append("init ");
+        sbWorkspace.append("-v ");
+        sbWorkspace.append("portal-7.3-ga3 ");
+        sbWorkspace.append("testWorkspace ");
+        sbWorkspace.append("--base ");
+        sbWorkspace.append("\"");
+        sbWorkspace.append(temp.toAbsolutePath());
+        sbWorkspace.append("\"");
+
+        BladeCLI.execute( sbWorkspace.toString() );
+
+        Path workspacePath = temp.resolve("testWorkspace");
+
+        assertTrue(workspacePath.toFile().exists());
+
         StringBuilder sb = new StringBuilder();
         sb.append("create ");
         sb.append("-q ");
-        sb.append("-d \"" + temp.toAbsolutePath().toString() + "\" ");
+        sb.append("--base ");
+        sb.append("\"");
+        sb.append(workspacePath);
+        sb.append("\" ");
         sb.append("-t mvc-portlet ");
         sb.append("foo");
 
         BladeCLI.execute( sb.toString() );
 
-        assertTrue( new File( temp.toFile(), "foo/build.gradle" ).exists() );
+        assertTrue( new File(workspacePath.toFile(), "foo/build.gradle" ).exists() );
     }
 
     @Test

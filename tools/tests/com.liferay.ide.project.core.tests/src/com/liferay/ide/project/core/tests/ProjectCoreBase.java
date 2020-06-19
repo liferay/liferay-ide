@@ -48,6 +48,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -124,7 +125,10 @@ public class ProjectCoreBase extends ServerCoreBase
 
         workspaceOp.setWorkspaceName( "test-liferay-workspace" );
         workspaceOp.setUseDefaultLocation( true );
-
+        workspaceOp.setProductVersion("portal-7.3-ga3");
+        
+        waitForBuildAndValidation();
+        
         if( workspaceOp.validation().ok() )
         {
             NewLiferayWorkspaceOpMethods.execute( workspaceOp, ProgressMonitorBridge.create( new NullProgressMonitor() ) );

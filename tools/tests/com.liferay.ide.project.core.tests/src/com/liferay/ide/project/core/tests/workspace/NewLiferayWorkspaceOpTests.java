@@ -119,6 +119,9 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
         op.setWorkspaceName( projectName );
         op.setUseDefaultLocation( false );
         op.setLocation( workspaceLocation.toPortableString() );
+        op.setProductVersion("portal-7.3-ga3");
+        
+        waitForBuildAndValidation();
 
         op.execute( new ProgressMonitor() );
 

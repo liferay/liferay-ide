@@ -15,6 +15,7 @@
 package com.liferay.ide.core.tests;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.JobUtil;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -70,6 +71,7 @@ public class TestUtil {
 			manager.join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
 			manager.join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
 			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+			JobUtil.waitForLiferayProjectJob();
 			Thread.sleep(200);
 			manager.beginRule(root = workspace.getRoot(), null);
 		}
