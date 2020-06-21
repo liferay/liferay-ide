@@ -18,6 +18,8 @@ package com.liferay.ide.project.core.tests.workspace;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
@@ -27,6 +29,7 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
@@ -105,9 +108,13 @@ public class LiferayWorkspaceUtilTests extends ProjectCoreBase
 
         assertTrue( themesValue.equals( "themes" ) );
 
-        String warsValue = LiferayWorkspaceUtil.getWarsDirs( workspaceProject )[0];
+        IWorkspaceProject liferayWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, workspaceProject);
 
-        assertTrue( warsValue.equals( "wars" ) );
+        String[] warsValue = liferayWorkspaceProject.getWorkspaceWarDirs();
+
+        assertTrue(Objects.nonNull(warsValue));
+
+        assertTrue( warsValue[0].equals( "modules" ) );
 
         File propertiesFile = new File(workspaceLocation+"/gradle.properties");
 
@@ -123,7 +130,6 @@ public class LiferayWorkspaceUtilTests extends ProjectCoreBase
 
         homeValue = LiferayWorkspaceUtil.getHomeDir( workspaceLocation );
 
-
         assertTrue( homeValue.equals( "bundles1" ) );
 
         modulesValue = LiferayWorkspaceUtil.getModulesDir( workspaceProject );
@@ -138,9 +144,11 @@ public class LiferayWorkspaceUtilTests extends ProjectCoreBase
 
         assertTrue( themesValue.equals( "themes1" ) );
 
-        warsValue = LiferayWorkspaceUtil.getWarsDirs( workspaceProject )[0];
+        String[] warsNewValue = liferayWorkspaceProject.getWorkspaceWarDirs();
 
-        assertTrue( warsValue.equals( "test1" ) );
+        assertTrue(Objects.nonNull(warsNewValue));
+
+        assertTrue( warsNewValue[0].equals( "test1" ) );
 
         workspaceProject.delete(true,true,new NullProgressMonitor());
     }

@@ -75,7 +75,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static File findParentFile(File dir, String[] fileNames, boolean checkParents) {
-		if (dir == null) {
+		if (Objects.isNull(dir)) {
 			return null;
 		}
 
@@ -97,10 +97,10 @@ public class LiferayWorkspaceUtil {
 	public static String getExtDir(IProject project) {
 		String retval = null;
 
-		if (project != null) {
+		if (Objects.nonNull(project)) {
 			IPath projectLocation = project.getLocation();
 
-			if (projectLocation != null) {
+			if (Objects.nonNull(projectLocation)) {
 				retval = getGradleProperty(
 					projectLocation.toPortableString(), WorkspaceConstants.EXT_DIR_PROPERTY,
 					WorkspaceConstants.DEFAULT_EXT_DIR);
@@ -149,7 +149,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static String getHomeDir(IProject project) {
-		if (project != null) {
+		if (Objects.nonNull(project)) {
 			IPath projectLocation = project.getLocation();
 
 			return getHomeDir(projectLocation.toOSString());
@@ -289,16 +289,20 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static String getModulesDir(IProject project) {
-		return getModulesDirArray(project)[0];
+		if (Objects.nonNull(getModulesDirArray(project))) {
+			return getModulesDirArray(project)[0];
+		}
+
+		return null;
 	}
 
 	public static String[] getModulesDirArray(IProject project) {
 		String[] retval = new String[0];
 
-		if (project != null) {
+		if (Objects.nonNull(project)) {
 			IPath projectLocation = project.getLocation();
 
-			if (projectLocation != null) {
+			if (Objects.nonNull(projectLocation)) {
 				String val = getGradleProperty(
 					projectLocation.toPortableString(), WorkspaceConstants.MODULES_DIR_PROPERTY, "modules");
 
@@ -326,10 +330,10 @@ public class LiferayWorkspaceUtil {
 	public static String getThemesDir(IProject project) {
 		String retval = null;
 
-		if (project != null) {
+		if (Objects.nonNull(project)) {
 			IPath projectLocation = project.getLocation();
 
-			if (projectLocation != null) {
+			if (Objects.nonNull(projectLocation)) {
 				retval = getGradleProperty(
 					projectLocation.toPortableString(), WorkspaceConstants.THEMES_DIR_PROPERTY, "themes");
 			}
@@ -337,27 +341,6 @@ public class LiferayWorkspaceUtil {
 
 		if (CoreUtil.empty(retval)) {
 			return "themes";
-		}
-
-		return retval;
-	}
-
-	public static String[] getWarsDirs(IProject project) {
-		String[] retval = null;
-
-		if (project != null) {
-			IPath projectLocation = project.getLocation();
-
-			if (projectLocation != null) {
-				String val = getGradleProperty(
-					projectLocation.toPortableString(), WorkspaceConstants.WARS_DIR_PROPERTY, "wars");
-
-				if (CoreUtil.empty(val)) {
-					val = "wars";
-				}
-
-				retval = val.split(",");
-			}
 		}
 
 		return retval;
@@ -382,13 +365,13 @@ public class LiferayWorkspaceUtil {
 	public static IWorkspaceProjectBuilder getWorkspaceProjectBuilder(IProject project) throws CoreException {
 		final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-		if (liferayProject == null) {
+		if (Objects.isNull(liferayProject)) {
 			throw new CoreException(LiferayCore.createErrorStatus("Can not find Liferay workspace project."));
 		}
 
 		final IWorkspaceProjectBuilder builder = liferayProject.adapt(IWorkspaceProjectBuilder.class);
 
-		if (builder == null) {
+		if (Objects.isNull(builder)) {
 			throw new CoreException(LiferayCore.createErrorStatus("Can not find Liferay Gradle project builder."));
 		}
 
@@ -398,7 +381,7 @@ public class LiferayWorkspaceUtil {
 	public static File getWorkspaceProjectFile() {
 		IProject workspaceProject = getWorkspaceProject();
 
-		if (workspaceProject != null) {
+		if (Objects.nonNull(workspaceProject)) {
 			IPath location = workspaceProject.getLocation();
 
 			return location.toFile();
@@ -423,7 +406,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static String guessLiferayVersion(IProject project) {
-		if (project == null) {
+		if (Objects.isNull(project)) {
 			return "";
 		}
 
@@ -537,7 +520,7 @@ public class LiferayWorkspaceUtil {
 
 		IPath workspaceLocation = getWorkspaceProject().getLocation();
 
-		if (workspaceLocation.isPrefixOf(location) && !workspaceLocation.equals(location)) {
+		if (workspaceLocation.isPrefixOf(location)) {
 			return true;
 		}
 
@@ -571,7 +554,7 @@ public class LiferayWorkspaceUtil {
 
 		String settingsContent = FileUtil.readContents(settingsGradle, true);
 
-		if (settingsContent != null) {
+		if (Objects.nonNull(settingsContent)) {
 			Matcher matcher = _workspacePluginPattern.matcher(settingsContent);
 
 			if (matcher.matches()) {
@@ -583,7 +566,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static boolean isValidGradleWorkspaceProject(IProject project) {
-		if (project == null) {
+		if (Objects.isNull(project)) {
 			return false;
 		}
 
@@ -607,7 +590,9 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static boolean isValidWorkspace(IProject project) {
-		if ((project != null) && (project.getLocation() != null) && isValidWorkspaceLocation(project.getLocation())) {
+		if (Objects.nonNull(project) && Objects.nonNull(project.getLocation()) &&
+			isValidWorkspaceLocation(project.getLocation())) {
+
 			return true;
 		}
 
@@ -635,7 +620,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	private static boolean _isValidGradleWorkspace(IProject project) {
-		if ((project != null) && (project.getLocation() != null) &&
+		if (Objects.nonNull(project) && Objects.nonNull(project.getLocation()) &&
 			isValidGradleWorkspaceLocation(FileUtil.toOSString(project.getLocation()))) {
 
 			return true;
@@ -645,7 +630,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	private static boolean _isValidMavenWorkspace(IProject project) {
-		if ((project != null) && (project.getLocation() != null) &&
+		if (Objects.nonNull(project) && Objects.nonNull(project.getLocation()) &&
 			isValidMavenWorkspaceLocation(FileUtil.toOSString(project.getLocation()))) {
 
 			return true;

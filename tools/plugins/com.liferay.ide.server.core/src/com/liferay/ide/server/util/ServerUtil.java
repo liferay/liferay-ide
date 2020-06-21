@@ -140,9 +140,18 @@ public class ServerUtil {
 
 			String bundlesDir = workspaceProject.getLiferayHome();
 
-			IPath projectLocation = project.getLocation();
+			IPath bundlesLocation = null;
 
-			IPath bundlesLocation = projectLocation.append(bundlesDir);
+			IPath bundleLocationfromOSString = Path.fromOSString(bundlesDir);
+
+			if (bundleLocationfromOSString.isAbsolute()) {
+				bundlesLocation = bundleLocationfromOSString;
+			}
+			else {
+				IPath projectLocation = project.getLocation();
+
+				bundlesLocation = projectLocation.append(bundlesDir);
+			}
 
 			if (FileUtil.exists(bundlesLocation)) {
 				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);

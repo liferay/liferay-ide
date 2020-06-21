@@ -17,8 +17,12 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -27,10 +31,14 @@ import com.liferay.ide.project.core.modules.PropertyKey;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -39,6 +47,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -178,8 +189,11 @@ public class GradleProjectProvider
 				if (!LiferayWorkspaceUtil.isValidWorkspace(project) && LiferayNature.hasNature(project) &&
 					project.hasNature("org.eclipse.buildship.core.gradleprojectnature")) {
 
-					if (ProjectUtil.isFacetedGradleBundleProject(project) &&
-						type.isAssignableFrom(FacetedGradleBundleProject.class)) {
+					boolean hasDynamicWebFaceSet = ProjectUtil.hasFacet(
+						project, ProjectFacetsManager.getProjectFacet("jst.web"));
+
+					if ((ProjectUtil.isFacetedGradleBundleProject(project) || hasDynamicWebFaceSet) &&
+						_inGradleWorkspaceWars(project) && type.isAssignableFrom(FacetedGradleBundleProject.class)) {
 
 						return new FacetedGradleBundleProject(project);
 					}
@@ -189,25 +203,53 @@ public class GradleProjectProvider
 				}
 			}
 			catch (Exception e) {
-
-				// ignore errors
-
 			}
 		}
 
 		return retval;
 	}
 
-	@Override
-	public IStatus validateProjectLocation(String projectName, IPath path) {
-		IStatus retval = Status.OK_STATUS;
+	private boolean _inGradleWorkspaceWars(IProject project) {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
-			retval = LiferayGradleCore.createErrorStatus(
-				" Can not set WorkspaceProject root folder as project directory.");
+		if (Objects.isNull(workspaceProject)) {
+			return false;
 		}
 
-		return retval;
+		IFile settingsGradleFile = workspaceProject.getFile("settings.gradle");
+
+		GradleBuildScript gradleBuildScript = null;
+
+		try {
+			gradleBuildScript = new GradleBuildScript(FileUtil.getFile(settingsGradleFile));
+		}
+		catch (IOException ioe) {
+		}
+
+		String workspacePluginVersion = Optional.ofNullable(
+			gradleBuildScript
+		).flatMap(
+			buildScript -> {
+				List<GradleDependency> dependencies = buildScript.getBuildScriptDependencies();
+
+				return dependencies.stream(
+				).filter(
+					dep -> "com.liferay".equals(dep.getGroup())
+				).filter(
+					dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
+				).filter(
+					dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
+				).map(
+					dep -> dep.getVersion()
+				).findFirst();
+			}
+		).get();
+
+		if (CoreUtil.compareVersions(Version.parseVersion(workspacePluginVersion), new Version("2.5.0")) < 0) {
+			return ProjectUtil.isWorkspaceWars(project);
+		}
+
+		return true;
 	}
 
 }

@@ -22,6 +22,8 @@ import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
@@ -102,12 +104,15 @@ public class FragmentProjectNameListener
 					if (FileUtil.exists(liferayWorkspaceProject)) {
 						String folder = LiferayWorkspaceUtil.getModulesDir(liferayWorkspaceProject);
 
-						if (folder != null) {
+						if (Objects.nonNull(folder) && !StringUtil.equals(folder, "*")) {
 							IPath path = liferayWorkspaceProject.getLocation();
 
 							IPath appendPath = path.append(folder);
 
 							newLocationBase = PathBridge.create(appendPath);
+						}
+						else {
+							newLocationBase = PathBridge.create(liferayWorkspaceProject.getLocation());
 						}
 					}
 				}

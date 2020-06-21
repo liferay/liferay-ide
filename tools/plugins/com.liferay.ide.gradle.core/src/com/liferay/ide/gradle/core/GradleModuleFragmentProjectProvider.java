@@ -158,16 +158,4 @@ public class GradleModuleFragmentProjectProvider
 		return null;
 	}
 
-	@Override
-	public IStatus validateProjectLocation(String projectName, IPath path) {
-		IStatus retval = Status.OK_STATUS;
-
-		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
-			retval = LiferayGradleCore.createErrorStatus(
-				" Can not set WorkspaceProject root folder as project directory.");
-		}
-
-		return retval;
-	}
-
 }

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.jsf;
 
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
@@ -22,6 +24,7 @@ import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
@@ -80,8 +83,11 @@ public class JSFModuleProjectNameListener
 					return;
 				}
 
-				String[] folders = LiferayWorkspaceUtil.getLiferayWorkspaceProjectWarsDirs(
-					workspaceDir.getAbsolutePath());
+				IProject project = CoreUtil.getProject(currentProjectLocation.toFile());
+
+				IWorkspaceProject liferayWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
+				String[] folders = liferayWorkspaceProject.getWorkspaceWarDirs();
 
 				if (folders != null) {
 					boolean appendWarFolder = false;

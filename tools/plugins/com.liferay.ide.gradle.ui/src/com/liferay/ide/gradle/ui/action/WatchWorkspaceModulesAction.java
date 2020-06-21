@@ -18,6 +18,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
@@ -154,7 +155,9 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 	private void _stopBundleProject(GogoBundleDeployer gogoBundleDeployer, IBundleProject bundleProject) {
 		try {
-			gogoBundleDeployer.uninstall(bundleProject);
+			if (!StringUtil.equals(bundleProject.getBundleShape(), "war")) {
+				gogoBundleDeployer.uninstall(bundleProject);
+			}
 
 			GradleProject gradleProject = GradleUtil.getGradleProject(bundleProject.getProject());
 

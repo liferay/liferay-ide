@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
@@ -22,6 +23,8 @@ import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
+
+import java.util.Objects;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -110,32 +113,44 @@ public class ModuleProjectNameListener
 				}
 
 				if ((gradleModule && hasGradleWorkspace) || (mavenModule && hasMavenWorkspace)) {
-					IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+					IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-					if (FileUtil.exists(liferayWorkspaceProject)) {
-						IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+					if (FileUtil.exists(workspaceProject)) {
+						IPath workspaceLocation = workspaceProject.getLocation();
 
 						NewLiferayModuleProjectOp moduleProjectOp = op;
 
 						String projectTemplateName = get(moduleProjectOp.getProjectTemplateName());
 
 						if (warProject) {
-							String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(liferayWorkspaceProject);
+							IWorkspaceProject liferayWorkspaceProject =
+								LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+							String[] defaultWarDirs = null;
 
-							// use the first configured wars fodle name
+							if (gradleModule) {
+								defaultWarDirs = liferayWorkspaceProject.getWorkspaceWarDirs();
+							}
 
-							newLocationBase = PathBridge.create(workspaceLocation.append(warsNames[0]));
+							if (Objects.nonNull(defaultWarDirs)) {
+								newLocationBase = PathBridge.create(workspaceLocation.append(defaultWarDirs[0]));
+							}
+							else {
+								newLocationBase = PathBridge.create(workspaceLocation);
+							}
 						}
 						else if ("war-core-ext".equals(projectTemplateName)) {
-							String extName = LiferayWorkspaceUtil.getExtDir(liferayWorkspaceProject);
+							String extName = LiferayWorkspaceUtil.getExtDir(workspaceProject);
 
 							newLocationBase = PathBridge.create(workspaceLocation.append(extName));
 						}
 						else {
-							String folder = LiferayWorkspaceUtil.getModulesDir(liferayWorkspaceProject);
+							String folder = LiferayWorkspaceUtil.getModulesDir(workspaceProject);
 
-							if (folder != null) {
+							if (!StringUtil.equals(folder, "*")) {
 								newLocationBase = PathBridge.create(workspaceLocation.append(folder));
+							}
+							else {
+								newLocationBase = PathBridge.create(workspaceLocation);
 							}
 						}
 					}

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -34,6 +35,7 @@ import org.apache.maven.archetype.catalog.Archetype;
 
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -95,7 +97,11 @@ public class NewMavenJSFModuleProjectProvider
 				return LiferayCore.createErrorStatus("The project location of Liferay Workspace shoule be existed.");
 			}
 
-			String[] folders = LiferayWorkspaceUtil.getLiferayWorkspaceProjectWarsDirs(workspaceDir.getAbsolutePath());
+			IProject project = CoreUtil.getProject(path.toFile());
+
+			IWorkspaceProject liferayWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
+			String[] folders = liferayWorkspaceProject.getWorkspaceWarDirs();
 
 			if (folders != null) {
 				boolean appendWarFolder = false;

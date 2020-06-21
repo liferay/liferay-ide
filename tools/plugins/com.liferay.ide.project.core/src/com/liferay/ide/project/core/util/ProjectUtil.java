@@ -22,6 +22,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.util.CoreUtil;
@@ -65,6 +66,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -1303,7 +1305,7 @@ public class ProjectUtil {
 	}
 
 	public static boolean isFacetedGradleBundleProject(IProject project) {
-		if (isWorkspaceWars(project) || _checkGradleThemePlugin(project) || _checkGradleWarPlugin(project)) {
+		if (_checkGradleThemePlugin(project) || _checkGradleWarPlugin(project)) {
 			return true;
 		}
 
@@ -1571,11 +1573,15 @@ public class ProjectUtil {
 
 	public static boolean isWorkspaceWars(IProject project) {
 		if (LiferayWorkspaceUtil.hasWorkspace() && FileUtil.exists(project.getFolder("src"))) {
-			IProject wsProject = LiferayWorkspaceUtil.getWorkspaceProject();
-
 			File wsRootDir = LiferayWorkspaceUtil.getWorkspaceProjectFile();
 
-			String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(wsProject);
+			IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+			String[] warsNames = liferayWorkspaceProject.getWorkspaceWarDirs();
+
+			if (Objects.isNull(warsNames)) {
+				return false;
+			}
 
 			File[] warsDirs = new File[warsNames.length];
 

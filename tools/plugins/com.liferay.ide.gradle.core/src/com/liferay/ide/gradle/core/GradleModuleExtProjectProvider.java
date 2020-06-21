@@ -104,15 +104,4 @@ public class GradleModuleExtProjectProvider
 		return null;
 	}
 
-	@Override
-	public IStatus validateProjectLocation(String projectName, IPath path) {
-		IStatus retval = Status.OK_STATUS;
-
-		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
-			retval = LiferayGradleCore.createErrorStatus("Invalid location for workspace project.");
-		}
-
-		return retval;
-	}
-
 }
