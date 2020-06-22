@@ -38,6 +38,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Terry Jia
  * @author Lovett Li
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class GradleModuleFragmentProjectProvider
 	extends AbstractLiferayProjectProvider
@@ -81,11 +82,16 @@ public class GradleModuleFragmentProjectProvider
 		sb.append("-d \"");
 		sb.append(locationFile.getAbsolutePath());
 		sb.append("\" ");
-		sb.append("");
 		sb.append("-t ");
-		sb.append("");
 		sb.append("fragment ");
-		sb.append("");
+
+		String liferayVersion = get(op.getLiferayVersion());
+
+		if (CoreUtil.isNotNullOrEmpty(liferayVersion)) {
+			sb.append("-v ");
+			sb.append(liferayVersion);
+			sb.append(" ");
+		}
 
 		if (!bundleSymbolicName.equals("")) {
 			sb.append("-h ");

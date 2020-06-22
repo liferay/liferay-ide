@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
+import com.liferay.ide.project.core.service.TargetLiferayVersionPossibleValuesService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -37,6 +38,7 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 
 /**
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public interface NewModuleFragmentOp extends BaseModuleOp {
 
@@ -54,6 +56,8 @@ public interface NewModuleFragmentOp extends BaseModuleOp {
 
 	public Value<String> getLiferayRuntimeName();
 
+	public Value<String> getLiferayVersion();
+
 	public Value<String> getLpkgName();
 
 	public ElementList<OverrideFilePath> getOverrideFiles();
@@ -65,6 +69,8 @@ public interface NewModuleFragmentOp extends BaseModuleOp {
 	public void setHostOsgiBundle(String value);
 
 	public void setLiferayRuntimeName(String value);
+
+	public void setLiferayVersion(String value);
 
 	public void setLpkgName(String value);
 
@@ -94,6 +100,12 @@ public interface NewModuleFragmentOp extends BaseModuleOp {
 		}
 	)
 	public ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty(TYPE, "LiferayRuntimeName");
+
+	@Label(standard = "liferay version")
+	@Service(impl = FragmentProjectLiferayVersionDefaultValueService.class)
+	@Service(impl = TargetLiferayVersionPossibleValuesService.class)
+	@Service(impl = FragmentProjectLiferayVersionValidationService.class)
+	public ValueProperty PROP_LIFERAY_VERSION = new ValueProperty(TYPE, "LiferayVersion");
 
 	@Service(impl = CommonProjectLocationInitialValueService.class)
 	@Service(impl = FragmentProjectLocationValidationService.class)
