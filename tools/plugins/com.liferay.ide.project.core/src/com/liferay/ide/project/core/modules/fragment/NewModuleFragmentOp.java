@@ -17,7 +17,6 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
-import com.liferay.ide.project.core.service.TargetLiferayVersionDefaultValueService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionPossibleValuesService;
 
 import org.eclipse.sapphire.ElementList;
@@ -103,8 +102,9 @@ public interface NewModuleFragmentOp extends BaseModuleOp {
 	public ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty(TYPE, "LiferayRuntimeName");
 
 	@Label(standard = "liferay version")
-	@Service(impl = TargetLiferayVersionDefaultValueService.class)
+	@Service(impl = FragmentProjectLiferayVersionDefaultValueService.class)
 	@Service(impl = TargetLiferayVersionPossibleValuesService.class)
+	@Service(impl = FragmentProjectLiferayVersionValidationService.class)
 	public ValueProperty PROP_LIFERAY_VERSION = new ValueProperty(TYPE, "LiferayVersion");
 
 	@Service(impl = CommonProjectLocationInitialValueService.class)
