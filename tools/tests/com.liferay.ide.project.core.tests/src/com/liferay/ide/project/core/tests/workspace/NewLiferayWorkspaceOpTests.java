@@ -42,6 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

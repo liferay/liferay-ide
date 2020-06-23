@@ -302,6 +302,72 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 	}
 
 	@Override
+	public String[] getWorkspaceWarDirs() {
+		IProject project = getProject();
+
+		IFile settingsGradleFile = project.getFile("settings.gradle");
+
+		GradleBuildScript gradleBuildScript = null;
+
+		try {
+			gradleBuildScript = new GradleBuildScript(FileUtil.getFile(settingsGradleFile));
+		}
+		catch (IOException ioe) {
+		}
+
+		String workspacePluginVersion = Optional.ofNullable(
+			gradleBuildScript
+		).flatMap(
+			buildScript -> {
+				List<GradleDependency> dependencies = buildScript.getBuildScriptDependencies();
+
+				return dependencies.stream(
+				).filter(
+					dep -> "com.liferay".equals(dep.getGroup())
+				).filter(
+					dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
+				).filter(
+					dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
+				).map(
+					dep -> dep.getVersion()
+				).findFirst();
+			}
+		).get();
+
+		IPath workspaceLocation = project.getLocation();
+
+		if (CoreUtil.compareVersions(Version.parseVersion(workspacePluginVersion), new Version("2.5.0")) < 0) {
+			String warDirs = LiferayWorkspaceUtil.getGradleProperty(
+				workspaceLocation.toOSString(), WorkspaceConstants.WARS_DIR_PROPERTY, null);
+
+			if (Objects.isNull(warDirs)) {
+				return new String[] {"war"};
+			}
+
+			return warDirs.split(",");
+		}
+		else {
+			String warDirs = LiferayWorkspaceUtil.getGradleProperty(
+				workspaceLocation.toOSString(), WorkspaceConstants.WARS_DIR_PROPERTY, null);
+
+			if (Objects.nonNull(warDirs)) {
+				String[] warsDir = warDirs.split(",");
+
+				return warsDir;
+			}
+
+			String modulesDir = LiferayWorkspaceUtil.getGradleProperty(
+				workspaceLocation.toOSString(), WorkspaceConstants.MODULES_DIR_PROPERTY, "modules");
+
+			if (StringUtil.equals(modulesDir, "*")) {
+				return null;
+			}
+
+			return modulesDir.split(",");
+		}
+	}
+
+	@Override
 	public boolean isStale() {
 		return _stale;
 	}

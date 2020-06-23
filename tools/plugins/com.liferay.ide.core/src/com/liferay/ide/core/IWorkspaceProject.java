@@ -40,6 +40,10 @@ public interface IWorkspaceProject extends ILiferayProject {
 		return null;
 	}
 
+	public default String[] getWorkspaceWarDirs() {
+		return new String[] {"wars"};
+	}
+
 	public default boolean isWatchable() {
 		return false;
 	}

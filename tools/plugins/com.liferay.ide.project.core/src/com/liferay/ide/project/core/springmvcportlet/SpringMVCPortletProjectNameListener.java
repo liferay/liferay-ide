@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.springmvcportlet;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
@@ -22,6 +23,8 @@ import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
+
+import java.util.Objects;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -94,14 +97,24 @@ public class SpringMVCPortletProjectNameListener
 				}
 
 				if ((gradleModule && hasGradleWorkspace) || (mavenModule && hasMavenWorkspace)) {
-					IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+					IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-					if (FileUtil.exists(liferayWorkspaceProject)) {
-						IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+					if (FileUtil.exists(workspaceProject)) {
+						IPath workspaceLocation = workspaceProject.getLocation();
 
-						String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(liferayWorkspaceProject);
+						IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+						String[] defaultWarDirs = null;
 
-						newLocationBase = PathBridge.create(workspaceLocation.append(warsNames[0]));
+						if (gradleModule) {
+							defaultWarDirs = liferayWorkspaceProject.getWorkspaceWarDirs();
+						}
+
+						if (Objects.nonNull(defaultWarDirs)) {
+							newLocationBase = PathBridge.create(workspaceLocation.append(defaultWarDirs[0]));
+						}
+						else {
+							newLocationBase = PathBridge.create(workspaceLocation);
+						}
 					}
 				}
 				else {

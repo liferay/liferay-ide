@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.ExecutableElement;
 
 /**
@@ -29,6 +30,8 @@ public abstract interface NewLiferayProjectProvider<T extends ExecutableElement>
 
 	public abstract IStatus createNewProject(T op, IProgressMonitor monitor) throws CoreException, InterruptedException;
 
-	public abstract IStatus validateProjectLocation(String projectName, IPath path);
+	public default IStatus validateProjectLocation(String projectName, IPath path) {
+		return Status.OK_STATUS;
+	}
 
 }

@@ -196,9 +196,4 @@ public class NewMavenSpringMVCPortletProjectProvider
 		return retval;
 	}
 
-	@Override
-	public IStatus validateProjectLocation(String projectName, IPath path) {
-		return Status.OK_STATUS;
-	}
-
 }
