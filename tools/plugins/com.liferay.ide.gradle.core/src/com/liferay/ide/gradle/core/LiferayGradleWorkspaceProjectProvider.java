@@ -41,8 +41,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.sapphire.Value;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.wst.server.core.IServer;
 
@@ -65,9 +63,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 	@Override
 	public IStatus createNewProject(NewLiferayWorkspaceOp op, IProgressMonitor monitor) throws CoreException {
-		Value<Path> locationPath = op.getLocation();
-
-		IPath location = PathBridge.create(locationPath.content());
+		IPath location = PathBridge.create(get(op.getLocation()));
 
 		String workspaceName = get(op.getWorkspaceName());
 
@@ -176,15 +172,6 @@ public class LiferayGradleWorkspaceProjectProvider
 		).orElse(
 			null
 		);
-	}
-
-	@Override
-	public IStatus validateProjectLocation(String projectName, IPath path) {
-		IStatus retval = Status.OK_STATUS;
-
-		// TODO validation gradle project location
-
-		return retval;
 	}
 
 	private static IWorkspaceProject _getWorkspaceProjectFromLiferayHome(final IPath liferayHome) {

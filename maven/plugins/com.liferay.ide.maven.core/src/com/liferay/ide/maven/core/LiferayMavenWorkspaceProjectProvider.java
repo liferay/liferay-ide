@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
@@ -37,8 +38,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.sapphire.Value;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
@@ -48,21 +47,18 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Seiphon Wang
  */
 public class LiferayMavenWorkspaceProjectProvider
-	extends LiferayMavenProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
+	extends LiferayMavenProjectProvider
+	implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>, SapphireContentAccessor {
 
 	@Override
 	public IStatus createNewProject(NewLiferayWorkspaceOp op, IProgressMonitor monitor) throws CoreException {
-		Value<Path> locationValue = op.getLocation();
+		IPath location = PathBridge.create(get(op.getLocation()));
 
-		IPath location = PathBridge.create(locationValue.content());
-
-		Value<String> workspaceNameValue = op.getWorkspaceName();
-
-		String workspaceName = workspaceNameValue.content();
+		String workspaceName = get(op.getWorkspaceName());
 
 		IPath workspaceLocation = location.append(workspaceName);
 
-		Value<String> version = op.getLiferayVersion();
+		String version = get(op.getLiferayVersion());
 
 		StringBuilder sb = new StringBuilder();
 
@@ -75,7 +71,7 @@ public class LiferayMavenWorkspaceProjectProvider
 		sb.append("-b ");
 		sb.append("maven ");
 		sb.append("-v ");
-		sb.append(version.content());
+		sb.append(version);
 
 		try {
 			BladeCLI.execute(sb.toString());
@@ -107,14 +103,14 @@ public class LiferayMavenWorkspaceProjectProvider
 			return importProjectStatus;
 		}
 
-		Value<Boolean> initBundle = op.getProvisionLiferayBundle();
+		Boolean initBundle = get(op.getProvisionLiferayBundle());
 
-		if (initBundle.content()) {
-			Value<String> bundleUrl = op.getBundleUrl();
+		if (initBundle) {
+			String bundleUrl = get(op.getBundleUrl());
 
-			Value<String> serverName = op.getServerName();
+			String serverName = get(op.getServerName());
 
-			initBundle(bundleUrl.content(), serverName.content(), workspaceName);
+			initBundle(bundleUrl, serverName, workspaceName);
 		}
 
 		return Status.OK_STATUS;
@@ -161,15 +157,6 @@ public class LiferayMavenWorkspaceProjectProvider
 		}
 
 		return null;
-	}
-
-	@Override
-	public IStatus validateProjectLocation(String projectName, IPath path) {
-		IStatus retval = Status.OK_STATUS;
-
-		// TODO validation maven project location
-
-		return retval;
 	}
 
 }
