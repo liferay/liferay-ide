@@ -36,12 +36,16 @@ public interface IWorkspaceProject extends ILiferayProject {
 
 	public String getTargetPlatformVersion();
 
+	public default String[] getWorkspaceModuleDirs() {
+		return null;
+	}
+
 	public default ProductInfo getWorkspaceProductInfo() {
 		return null;
 	}
 
 	public default String[] getWorkspaceWarDirs() {
-		return new String[] {"wars"};
+		return null;
 	}
 
 	public default boolean isWatchable() {

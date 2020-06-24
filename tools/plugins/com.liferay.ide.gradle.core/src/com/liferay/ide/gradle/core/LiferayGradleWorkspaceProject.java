@@ -285,6 +285,34 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 	}
 
 	@Override
+	public String[] getWorkspaceModuleDirs() {
+		String workspacePluginVersion = _getGradleWorkspacePluginVersion();
+
+		IPath workspaceLocation = getProject().getLocation();
+
+		if (CoreUtil.compareVersions(Version.parseVersion(workspacePluginVersion), new Version("2.5.0")) < 0) {
+			String moduleDirs = LiferayWorkspaceUtil.getGradleProperty(
+				workspaceLocation.toOSString(), WorkspaceConstants.MODULES_DIR_PROPERTY, null);
+
+			if (Objects.isNull(moduleDirs)) {
+				return new String[] {"modules"};
+			}
+
+			return moduleDirs.split(",");
+		}
+		else {
+			String modulesDir = LiferayWorkspaceUtil.getGradleProperty(
+				workspaceLocation.toOSString(), WorkspaceConstants.MODULES_DIR_PROPERTY, "modules");
+
+			if (StringUtil.equals(modulesDir, "*")) {
+				return null;
+			}
+
+			return modulesDir.split(",");
+		}
+	}
+
+	@Override
 	public ProductInfo getWorkspaceProductInfo() {
 		String workspaceProductKey = getProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
 
@@ -303,45 +331,16 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 	@Override
 	public String[] getWorkspaceWarDirs() {
-		IProject project = getProject();
+		String workspacePluginVersion = _getGradleWorkspacePluginVersion();
 
-		IFile settingsGradleFile = project.getFile("settings.gradle");
-
-		GradleBuildScript gradleBuildScript = null;
-
-		try {
-			gradleBuildScript = new GradleBuildScript(FileUtil.getFile(settingsGradleFile));
-		}
-		catch (IOException ioe) {
-		}
-
-		String workspacePluginVersion = Optional.ofNullable(
-			gradleBuildScript
-		).flatMap(
-			buildScript -> {
-				List<GradleDependency> dependencies = buildScript.getBuildScriptDependencies();
-
-				return dependencies.stream(
-				).filter(
-					dep -> "com.liferay".equals(dep.getGroup())
-				).filter(
-					dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
-				).filter(
-					dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
-				).map(
-					dep -> dep.getVersion()
-				).findFirst();
-			}
-		).get();
-
-		IPath workspaceLocation = project.getLocation();
+		IPath workspaceLocation = getProject().getLocation();
 
 		if (CoreUtil.compareVersions(Version.parseVersion(workspacePluginVersion), new Version("2.5.0")) < 0) {
 			String warDirs = LiferayWorkspaceUtil.getGradleProperty(
 				workspaceLocation.toOSString(), WorkspaceConstants.WARS_DIR_PROPERTY, null);
 
 			if (Objects.isNull(warDirs)) {
-				return new String[] {"war"};
+				return new String[] {"wars"};
 			}
 
 			return warDirs.split(",");
@@ -512,6 +511,41 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 		if (ListUtil.isNotEmpty(childProjects)) {
 			job.schedule();
 		}
+	}
+
+	private String _getGradleWorkspacePluginVersion() {
+		IProject project = getProject();
+
+		IFile settingsGradleFile = project.getFile("settings.gradle");
+
+		GradleBuildScript gradleBuildScript = null;
+
+		try {
+			gradleBuildScript = new GradleBuildScript(FileUtil.getFile(settingsGradleFile));
+		}
+		catch (IOException ioe) {
+		}
+
+		String workspacePluginVersion = Optional.ofNullable(
+			gradleBuildScript
+		).flatMap(
+			buildScript -> {
+				List<GradleDependency> dependencies = buildScript.getBuildScriptDependencies();
+
+				return dependencies.stream(
+				).filter(
+					dep -> "com.liferay".equals(dep.getGroup())
+				).filter(
+					dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
+				).filter(
+					dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
+				).map(
+					dep -> dep.getVersion()
+				).findFirst();
+			}
+		).get();
+
+		return workspacePluginVersion;
 	}
 
 	private void _initializeGradleWorkspaceProperties(IProject project) {
