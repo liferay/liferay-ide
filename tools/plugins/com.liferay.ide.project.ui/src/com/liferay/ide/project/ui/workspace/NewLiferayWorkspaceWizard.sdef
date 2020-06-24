@@ -56,7 +56,7 @@
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
-                    <property>ShowAllVersionProduct</property>
+                    <property>ShowAllProductVersions</property>
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
