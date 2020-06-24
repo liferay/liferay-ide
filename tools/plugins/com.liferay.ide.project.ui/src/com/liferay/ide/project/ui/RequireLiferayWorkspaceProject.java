@@ -75,22 +75,19 @@ public interface RequireLiferayWorkspaceProject {
 		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(liferayWorkspaceProject.getLocation()) &&
 			Objects.isNull(workspaceProductInfo)) {
 
-			int continueUpdateProduct = MessageDialog.open(
+			int updateProduct = MessageDialog.open(
 				MessageDialog.QUESTION, activeShell, NLS.bind(Msgs.newElement, wizardName),
-				NLS.bind(Msgs.needWorkspaceProduct, liferayWorkspaceProject.getName()), SWT.NONE, "Update product...",
-				"Ignore, Update later.");
+				NLS.bind(Msgs.needWorkspaceProduct, liferayWorkspaceProject.getName()), SWT.NONE,
+				"Update product setting", "Ignore");
 
-			switch (continueUpdateProduct) {
+			switch (updateProduct) {
 				case 0:
-					ConfigureWorkspaceProductDialog switchUpgradePlanDialog = new ConfigureWorkspaceProductDialog();
+					ConfigureWorkspaceProductDialog dialog = new ConfigureWorkspaceProductDialog();
 
-					try {
-						switchUpgradePlanDialog.open();
-					}
-					catch (Exception e) {
-					}
+					dialog.open();
 
 					break;
+
 				case 1:
 
 					break;

@@ -18,7 +18,6 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
 
@@ -30,10 +29,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.ISafeRunnable;
-import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
 /**
  * @author Simon Jiang
@@ -62,19 +60,11 @@ public class ConfigureWorkspaceProductOpMethods {
 
 				IFile gradlePropertiesIFile = workspaceProject.getFile(gradlePropertiesPath);
 
-				SafeRunner.run(
-					new ISafeRunnable() {
-
-						@Override
-						public void run() throws Exception {
-							gradlePropertiesIFile.refreshLocal(IResource.DEPTH_INFINITE, null);
-						}
-
-					});
+				gradlePropertiesIFile.refreshLocal(IResource.DEPTH_ONE, ProgressMonitorBridge.create(progressMonitor));
 			}
 		}
 		catch (Exception e) {
-			ProjectCore.logError("Failed to update workspace product information.", e);
+			return Status.createErrorStatus("Failed to update workspace product.", e);
 		}
 
 		return Status.createOkStatus();
