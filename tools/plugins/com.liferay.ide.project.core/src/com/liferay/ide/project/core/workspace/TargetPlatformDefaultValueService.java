@@ -15,24 +15,30 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 
 import org.eclipse.sapphire.Value;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
+ * @author Ethan Sun
  */
-public class ProductVersionDefaultValueService extends AbstractDefaultValueService implements SapphireContentAccessor {
+public class TargetPlatformDefaultValueService extends AbstractDefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	protected Value<Object> getDefaultValueProperty() {
 		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
 
-		return op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_VERSION);
+		return op.property(NewLiferayWorkspaceOp.PROP_TARGET_PLATFORM);
 	}
 
 	@Override
 	protected String initDefaultValue() {
-		return null;
+		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
+
+		String liferayVersion = get(op.getLiferayVersion());
+
+		return WorkspaceConstants.liferayTargetPlatformVersions.get(liferayVersion)[0];
 	}
 
 }
