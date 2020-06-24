@@ -14,13 +14,11 @@
 
 package com.liferay.ide.project.core.springmvcportlet;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -64,62 +62,34 @@ public class SpringMVCPortletProjectNameListener
 			Path newLocationBase = null;
 
 			boolean hasLiferayWorkspace = false;
-			boolean hasGradleWorkspace = false;
-			boolean hasMavenWorkspace = false;
 
 			try {
 				hasLiferayWorkspace = LiferayWorkspaceUtil.hasWorkspace();
-				hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-				hasMavenWorkspace = LiferayWorkspaceUtil.hasMavenWorkspace();
 			}
 			catch (Exception e) {
 				ProjectCore.logError("Failed to check LiferayWorkspace project.");
 			}
 
-			if (!hasLiferayWorkspace) {
-				newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
-			}
-			else {
-				boolean gradleModule = false;
-				boolean mavenModule = false;
+			if (hasLiferayWorkspace) {
+				IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-				ILiferayProjectProvider provider = get(op.getProjectProvider());
+				if (FileUtil.exists(workspaceProject)) {
+					IPath workspaceLocation = workspaceProject.getLocation();
 
-				if (provider != null) {
-					String shortName = provider.getShortName();
+					IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
-					if (StringUtil.startsWith(shortName, "gradle")) {
-						gradleModule = true;
+					String[] defaultWarDirs = liferayWorkspaceProject.getWorkspaceWarDirs();
+
+					if (Objects.nonNull(defaultWarDirs)) {
+						newLocationBase = PathBridge.create(workspaceLocation.append(defaultWarDirs[0]));
 					}
 					else {
-						mavenModule = true;
+						newLocationBase = PathBridge.create(workspaceLocation);
 					}
 				}
-
-				if ((gradleModule && hasGradleWorkspace) || (mavenModule && hasMavenWorkspace)) {
-					IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
-
-					if (FileUtil.exists(workspaceProject)) {
-						IPath workspaceLocation = workspaceProject.getLocation();
-
-						IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
-						String[] defaultWarDirs = null;
-
-						if (gradleModule) {
-							defaultWarDirs = liferayWorkspaceProject.getWorkspaceWarDirs();
-						}
-
-						if (Objects.nonNull(defaultWarDirs)) {
-							newLocationBase = PathBridge.create(workspaceLocation.append(defaultWarDirs[0]));
-						}
-						else {
-							newLocationBase = PathBridge.create(workspaceLocation);
-						}
-					}
-				}
-				else {
-					newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
-				}
+			}
+			else {
+				newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
 			}
 
 			if (newLocationBase != null) {

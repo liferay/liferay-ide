@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -152,19 +153,36 @@ public class LiferayMavenModuleProjectProvider
 				name.setName(projectName + "-service");
 			}
 
-			IPath projectLocation = location;
+			Job importMaveModuleJob = new Job("Import Maven Module Project") {
 
-			String lastSegment = location.lastSegment();
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						IPath projectLocation = location;
 
-			if ((location != null) && (location.segmentCount() > 0)) {
-				if (!lastSegment.equals(projectName)) {
-					projectLocation = location.append(projectName);
+						String lastSegment = location.lastSegment();
+
+						if ((location != null) && (location.segmentCount() > 0)) {
+							if (!lastSegment.equals(projectName)) {
+								projectLocation = location.append(projectName);
+							}
+						}
+
+						CoreUtil.openProject(projectName, projectLocation, monitor);
+
+						MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
+					}
+					catch (Exception exception) {
+						ProjectCore.logError("Failed to import liferay maven module project.", exception);
+					}
+
+					return Status.OK_STATUS;
 				}
-			}
 
-			CoreUtil.openProject(projectName, projectLocation, monitor);
+			};
 
-			MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
+			importMaveModuleJob.setUser(true);
+			importMaveModuleJob.schedule();
 		}
 		catch (Exception e) {
 			ProjectCore.logError(e);
