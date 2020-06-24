@@ -48,8 +48,8 @@ public interface ConfigureWorkspaceProductOp extends ExecutableElement {
 
 	@Label(standard = "Product Version")
 	@Required
-	@Service(impl = ConfigureProductVersionPossibleValuesService.class)
-	@Service(impl = ConfigureProductVersionDefaultValueService.class)
+	@Service(impl = ProductVersionPossibleValuesService.class)
+	@Service(impl = ProductVersionDefaultValueService.class)
 	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(TYPE, "ProductVersion");
 
 	@DefaultValue(text = "false")
