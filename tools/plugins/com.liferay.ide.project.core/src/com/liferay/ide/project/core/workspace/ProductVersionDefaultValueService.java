@@ -16,23 +16,74 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 
+import java.util.Iterator;
+import java.util.Set;
+
+import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
 
 /**
  * @author Gregory Amerson
  */
-public class ProductVersionDefaultValueService extends AbstractDefaultValueService implements SapphireContentAccessor {
+public class ProductVersionDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
+
+	public ProductVersionDefaultValueService() {
+	}
 
 	@Override
-	protected Value<Object> getDefaultValueProperty() {
+	public void dispose() {
+		super.dispose();
+
+		PossibleValuesService possibleValuesService = _possibleValuesService();
+
+		possibleValuesService.detach(_listener);
+	}
+
+	@Override
+	protected String compute() {
+		return _defaultValue;
+	}
+
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
+
+		PossibleValuesService possibleValuesService = _possibleValuesService();
+
+		_listener = new Listener() {
+
+			@Override
+			public void handle(Event event) {
+				Set<String> values = possibleValuesService.values();
+
+				if (!values.isEmpty()) {
+					Iterator<String> iterator = values.iterator();
+
+					_defaultValue = iterator.next();
+
+					refresh();
+				}
+			}
+
+		};
+
+		possibleValuesService.attach(_listener);
+	}
+
+	private PossibleValuesService _possibleValuesService() {
 		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
 
-		return op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_VERSION);
+		Value<Object> property = op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_VERSION);
+
+		PossibleValuesService possibleValuesService = property.service(PossibleValuesService.class);
+
+		return possibleValuesService;
 	}
 
-	@Override
-	protected String initDefaultValue() {
-		return null;
-	}
+	private String _defaultValue = null;
+	private Listener _listener;
 
 }
