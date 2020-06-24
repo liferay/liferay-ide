@@ -18,6 +18,7 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -58,6 +59,10 @@ public class WorkingSetCustomPart extends FormComponentPart {
 		super.init();
 
 		IWorkbenchWindow activeWorkbenchWindow = UIUtil.getActiveWorkbenchWindow();
+
+		if (Objects.isNull(activeWorkbenchWindow)) {
+			return;
+		}
 
 		ISelectionService service = (ISelectionService)activeWorkbenchWindow.getSelectionService();
 

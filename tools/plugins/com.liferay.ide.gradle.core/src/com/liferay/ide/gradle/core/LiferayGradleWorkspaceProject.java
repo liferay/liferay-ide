@@ -84,8 +84,6 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 			projectPath.append("gradle.properties"), projectPath.append("build.gradle"),
 			projectPath.append("settings.gradle")
 		};
-
-		_initializeGradleWorkspaceProperties(project);
 	}
 
 	@Override
@@ -266,12 +264,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 	@Override
 	public String getTargetPlatformVersion() {
-		IProject project = getProject();
+		_loadGradleWorkspaceProperties();
 
-		IPath location = project.getLocation();
-
-		String targetplatformVersion = LiferayWorkspaceUtil.getGradleProperty(
-			location.toString(), WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, null);
+		String targetplatformVersion = getProperty(WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, null);
 
 		if (CoreUtil.isNullOrEmpty(targetplatformVersion)) {
 			ProductInfo workspaceProductInfo = getWorkspaceProductInfo();
@@ -314,6 +309,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 	@Override
 	public ProductInfo getWorkspaceProductInfo() {
+		_loadGradleWorkspaceProperties();
+
 		String workspaceProductKey = getProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
 
 		if (CoreUtil.empty(workspaceProductKey)) {
@@ -548,13 +545,15 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 		return workspacePluginVersion;
 	}
 
-	private void _initializeGradleWorkspaceProperties(IProject project) {
-		if (project.exists()) {
-			IPath projectLocation = project.getLocation();
+	private void _loadGradleWorkspaceProperties() {
+		IProject project = getProject();
+
+		if (Objects.nonNull(project) && project.exists()) {
+			IPath projectLocation = getProject().getLocation();
 
 			IPath gradleProperties = projectLocation.append("gradle.properties");
 
-			properties.putAll(PropertiesUtil.loadProperties(gradleProperties));
+			properties = PropertiesUtil.loadProperties(gradleProperties);
 		}
 	}
 
