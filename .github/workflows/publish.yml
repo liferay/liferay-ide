@@ -39,7 +39,7 @@ jobs:
       - name: Build repository
         shell: bash
         run: |
-          ./mvnw clean
+          ./mvnw --help
 #          ./mvnw clean package -DskipTests=true
 #      - name: Upload p2 repository
 #        env:

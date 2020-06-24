@@ -61,6 +61,12 @@ jobs:
         shell: bash
         run: |
           ./run-tests.sh
+      - name: Upload tests
+        uses: actions/upload-artifact@v1
+        if: ${{ failure() }}
+        with:
+          name: surefire-reports.tar.gz
+          path: surefire-reports.tar.gz
       - name: Run reporter
         uses: check-run-reporter/action@v1.1.1
         if: ${{ always() }}
@@ -68,9 +74,3 @@ jobs:
           CHECK_RUN_REPORTER_LABEL: "Maven surefire test reports"
           CHECK_RUN_REPORTER_REPORT: "**/TEST-*.xml"
           CHECK_RUN_REPORTER_TOKEN: ${{ secrets.CHECK_RUN_REPORTER_TOKEN_LIFERAY_IDE}}
-      - name: Upload tests
-        uses: actions/upload-artifact@v1
-        if: ${{ always() }}
-        with:
-          name: surefire-reports.tar.gz
-          path: surefire-reports.tar.gz
