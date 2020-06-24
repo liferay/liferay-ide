@@ -12,12 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.project.core.service;
+package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.util.ArrayList;
 import java.util.Collections;
