@@ -15,7 +15,6 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -62,7 +61,6 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 
 	public void setServerName(String value);
 
-	@DefaultValue(text = WorkspaceConstants.BUNDLE_URL_CE_7_2)
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "bundleUrl");
 

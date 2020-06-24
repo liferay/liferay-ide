@@ -83,6 +83,9 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public void setWorkspaceName(String value);
 
+	@Service(impl = BundleUrlDefaultValueService.class)
+	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_BUNDLE_URL);
+
 	@Label(standard = "liferay version")
 	@Listeners(value = TargetLiferayVersionListener.class)
 	@Service(impl = TargetLiferayVersionDefaultValueService.class)

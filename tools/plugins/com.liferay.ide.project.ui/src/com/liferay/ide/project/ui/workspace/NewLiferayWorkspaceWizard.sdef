@@ -71,7 +71,7 @@
                     <property>serverName</property>
                 </property-editor>
                 <property-editor>
-                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
+                    <visible-when>${ provisionLiferayBundle == 'true' &amp;&amp; ProjectProvider != 'gradle-liferay-workspace' }</visible-when>
                     <property>bundleUrl</property>
                 </property-editor>
                 <spacer/>

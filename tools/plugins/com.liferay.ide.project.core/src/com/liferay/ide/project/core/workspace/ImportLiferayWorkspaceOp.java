@@ -61,7 +61,7 @@ public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@Service(impl = ImportWorkspaceBuildTypeDerivedValueService.class)
 	public ValueProperty PROP_BUILD_TYPE = new ValueProperty(TYPE, "BuildType");
 
-	@Service(impl = BundleUrlDefaultValueService.class)
+	@Service(impl = ImportWorkspaceBundleUrlDefaultValueService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_BUNDLE_URL);
 
 	@Derived

@@ -17,9 +17,6 @@ package com.liferay.ide.project.core.workspace;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Property;
@@ -41,30 +38,6 @@ public class TargetLiferayVersionListener
 		Element newLiferayWorkspaceOp = property.element();
 
 		NewLiferayWorkspaceOp op = newLiferayWorkspaceOp.adapt(NewLiferayWorkspaceOp.class);
-
-		String bundleUrl = get(op.getBundleUrl());
-
-		List<String> bundleUrls = new ArrayList<>();
-
-		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_3);
-		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_2);
-		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_1);
-		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_0);
-
-		if (bundleUrls.contains(bundleUrl)) {
-			if (liferayVersion.equals("7.3")) {
-				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_3);
-			}
-			else if (liferayVersion.equals("7.2")) {
-				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_2);
-			}
-			else if (liferayVersion.equals("7.1")) {
-				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_1);
-			}
-			else {
-				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_0);
-			}
-		}
 
 		op.setTargetPlatform(WorkspaceConstants.liferayTargetPlatformVersions.get(liferayVersion)[0]);
 	}
