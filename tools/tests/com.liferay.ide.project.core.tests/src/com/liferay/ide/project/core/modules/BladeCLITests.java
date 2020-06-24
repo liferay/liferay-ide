@@ -175,7 +175,7 @@ public class BladeCLITests
 
         BladeCLI.execute( sb.toString() );
 
-        assertTrue( new File(workspacePath.toFile(), "foo/build.gradle" ).exists() );
+        assertTrue( new File(workspacePath.toFile(), "modules/foo/build.gradle" ).exists() );
     }
 
     @Test
