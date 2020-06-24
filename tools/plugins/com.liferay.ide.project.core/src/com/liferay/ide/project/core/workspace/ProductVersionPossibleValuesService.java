@@ -48,7 +48,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
 
 		if (op != null) {
-			SapphireUtil.detachListener(op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
+			SapphireUtil.detachListener(op.property(ProductVersionElement.PROP_SHOW_ALL_PRODUCT_VERSIONS), _listener);
 		}
 
 		super.dispose();
@@ -61,9 +61,9 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 	@Override
 	protected void compute(Set<String> values) {
-		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
+		ProductVersionElement element = context(ProductVersionElement.class);
 
-		if (get(op.getShowAllVersionProduct())) {
+		if (get(element.getShowAllProductVersions())) {
 			values.addAll(_productVersions);
 		}
 		else {
@@ -73,7 +73,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 	@Override
 	protected void initPossibleValuesService() {
-		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
+		ProductVersionElement element = context(ProductVersionElement.class);
 
 		Job getProductVersions = new Job("Get product versions") {
 
@@ -122,7 +122,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 		};
 
-		SapphireUtil.attachListener(op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
+		SapphireUtil.attachListener(element.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_PRODUCT_VERSIONS), _listener);
 	}
 
 	private boolean _isEmpty(String[] values) {

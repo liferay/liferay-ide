@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definition>
-    <import>
-        <package>com.liferay.ide.project.core.workspace</package>
-        <package>org.eclipse.sapphire.ui.forms.swt</package>
-    </import>
-    <dialog>
-        <id>ConfigureWorkspaceProduct</id>
-        <element-type>com.liferay.ide.project.core.workspace.ConfigureWorkspaceProductOp</element-type>
-        <label>Configure Product For Liferay Workspace</label>
-        <content>
-        	<property-editor>
-            	<style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                <property>ProductVersion</property>
+	<import>
+		<package>com.liferay.ide.project.core.workspace</package>
+		<package>org.eclipse.sapphire.ui.forms.swt</package>
+	</import>
+	<dialog>
+		<id>ConfigureWorkspaceProduct</id>
+		<element-type>com.liferay.ide.project.core.workspace.ConfigureWorkspaceProductOp</element-type>
+		<label>Configure Product For Liferay Workspace</label>
+		<content>
+			<property-editor>
+				<style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+				<property>ProductVersion</property>
 			</property-editor>
-          	<separator></separator>
-          	<property-editor>
-            	<property>ShowAllVersionProduct</property>
-            </property-editor>
-        </content>
-    </dialog>
+			<separator></separator>
+			<property-editor>
+				<property>ShowAllProductVersions</property>
+			</property-editor>
+		</content>
+	</dialog>
 </definition>

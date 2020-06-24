@@ -17,8 +17,8 @@ package com.liferay.ide.project.ui;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.workspace.ConfigureWorkspaceProductOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
-import com.liferay.ide.project.ui.workspace.ConfigureWorkspaceProductDialog;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 import com.liferay.ide.project.ui.workspace.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.util.UIUtil;
@@ -29,6 +29,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
+import org.eclipse.sapphire.ui.forms.DialogDef;
+import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
@@ -78,11 +82,22 @@ public interface RequireLiferayWorkspaceProject {
 			int updateProduct = MessageDialog.open(
 				MessageDialog.QUESTION, activeShell, NLS.bind(Msgs.newElement, wizardName),
 				NLS.bind(Msgs.needWorkspaceProduct, liferayWorkspaceProject.getName()), SWT.NONE,
-				"Update product setting", "Ignore");
+				"Update product setting...", "Ignore");
 
 			switch (updateProduct) {
 				case 0:
-					ConfigureWorkspaceProductDialog dialog = new ConfigureWorkspaceProductDialog();
+					String dialogId = new String(
+						"com.liferay.ide.project.ui.workspace.ConfigureWorkspaceProductDialog");
+
+					DefinitionLoader loader = DefinitionLoader.context(getClass());
+
+					DefinitionLoader definitionLoader = loader.sdef(dialogId);
+
+					ConfigureWorkspaceProductOp op = ConfigureWorkspaceProductOp.TYPE.instantiate();
+
+					Reference<DialogDef> dialogRef = definitionLoader.dialog("ConfigureWorkspaceProduct");
+
+					SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 
 					dialog.open();
 

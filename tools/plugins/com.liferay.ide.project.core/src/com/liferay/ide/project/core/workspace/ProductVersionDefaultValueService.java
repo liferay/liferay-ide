@@ -74,9 +74,9 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 	}
 
 	private PossibleValuesService _possibleValuesService() {
-		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
+		ProductVersionElement element = context(ProductVersionElement.class);
 
-		Value<Object> property = op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_VERSION);
+		Value<Object> property = element.property(ProductVersionElement.PROP_PRODUCT_VERSION);
 
 		PossibleValuesService possibleValuesService = property.service(PossibleValuesService.class);
 

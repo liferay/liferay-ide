@@ -16,21 +16,15 @@ package com.liferay.ide.project.core.workspace;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
-import org.eclipse.sapphire.Type;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
-import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Service;
 
 /**
  * @author Simon Jiang
  */
-public interface ConfigureWorkspaceProductOp extends ExecutableElement {
+public interface ConfigureWorkspaceProductOp extends ExecutableElement, ProductVersionElement {
 
 	public ElementType TYPE = new ElementType(ConfigureWorkspaceProductOp.class);
 
@@ -38,23 +32,6 @@ public interface ConfigureWorkspaceProductOp extends ExecutableElement {
 	@Override
 	public Status execute(ProgressMonitor monitor);
 
-	public Value<String> getProductVersion();
-
-	public Value<Boolean> getShowAllVersionProduct();
-
-	public void setProductVersion(String name);
-
-	public void setShowAllVersionProduct(Boolean value);
-
-	@Label(standard = "Product Version")
-	@Required
-	@Service(impl = ProductVersionPossibleValuesService.class)
-	@Service(impl = ProductVersionDefaultValueService.class)
-	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(TYPE, "ProductVersion");
-
-	@DefaultValue(text = "false")
-	@Label(standard = "Show All Version Product")
-	@Type(base = Boolean.class)
-	public ValueProperty PROP_SHOW_ALL_VERSION_PRODUCT = new ValueProperty(TYPE, "ShowAllVersionProduct");
+	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(ProductVersionElement.TYPE, "ProductVersion");
 
 }
