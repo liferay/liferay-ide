@@ -39,12 +39,11 @@ jobs:
       - name: Build repository
         shell: bash
         run: |
-          ./mvnw clean -X -DskipTests=true
-#          ./mvnw clean package -DskipTests=true
-#      - name: Upload p2 repository
-#        env:
-#          BINTRAY_USER: ${{ secrets.bintray_usename }}
-#          BINTRAY_API_KEY: ${{ secrets.bintray_apikey }}
-#        shell: bash
-#        run: |
-#          ./build/com.liferay.ide-repository/deployToBintray.sh ./build/com.liferay.ide-repository/target/repository/ gamerson eclipse liferay-ide update-snapshot
+          ./build-updatesite.sh
+      - name: Upload p2 repository
+        env:
+          BINTRAY_USER: ${{ secrets.bintray_usename }}
+          BINTRAY_API_KEY: ${{ secrets.bintray_apikey }}
+        shell: bash
+        run: |
+          ./build/com.liferay.ide-repository/deployToBintray.sh ./build/com.liferay.ide-repository/target/repository/ gamerson eclipse liferay-ide update-snapshot
