@@ -74,38 +74,42 @@ public interface RequireLiferayWorkspaceProject {
 
 		IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
-		ProductInfo workspaceProductInfo = workspaceProject.getWorkspaceProductInfo();
+		if (workspaceProject != null) {
+			ProductInfo workspaceProductInfo = workspaceProject.getWorkspaceProductInfo();
 
-		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(liferayWorkspaceProject.getLocation()) &&
-			Objects.isNull(workspaceProductInfo)) {
+			liferayWorkspaceProject = workspaceProject.getProject();
 
-			int updateProduct = MessageDialog.open(
-				MessageDialog.QUESTION, activeShell, NLS.bind(Msgs.newElement, wizardName),
-				NLS.bind(Msgs.needWorkspaceProduct, liferayWorkspaceProject.getName()), SWT.NONE,
-				"Update product setting...", "Ignore");
+			if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(liferayWorkspaceProject.getLocation()) &&
+				Objects.isNull(workspaceProductInfo)) {
 
-			switch (updateProduct) {
-				case 0:
-					String dialogId = new String(
-						"com.liferay.ide.project.ui.workspace.ConfigureWorkspaceProductDialog");
+				int updateProduct = MessageDialog.open(
+					MessageDialog.QUESTION, activeShell, NLS.bind(Msgs.newElement, wizardName),
+					NLS.bind(Msgs.needWorkspaceProduct, liferayWorkspaceProject.getName()), SWT.NONE,
+					"Update product setting...", "Ignore");
 
-					DefinitionLoader loader = DefinitionLoader.context(getClass());
+				switch (updateProduct) {
+					case 0:
+						String dialogId = new String(
+							"com.liferay.ide.project.ui.workspace.ConfigureWorkspaceProductDialog");
 
-					DefinitionLoader definitionLoader = loader.sdef(dialogId);
+						DefinitionLoader loader = DefinitionLoader.context(getClass());
 
-					ConfigureWorkspaceProductOp op = ConfigureWorkspaceProductOp.TYPE.instantiate();
+						DefinitionLoader definitionLoader = loader.sdef(dialogId);
 
-					Reference<DialogDef> dialogRef = definitionLoader.dialog("ConfigureWorkspaceProduct");
+						ConfigureWorkspaceProductOp op = ConfigureWorkspaceProductOp.TYPE.instantiate();
 
-					SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
+						Reference<DialogDef> dialogRef = definitionLoader.dialog("ConfigureWorkspaceProduct");
 
-					dialog.open();
+						SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 
-					break;
+						dialog.open();
 
-				case 1:
+						break;
 
-					break;
+					case 1:
+
+						break;
+				}
 			}
 		}
 	}
