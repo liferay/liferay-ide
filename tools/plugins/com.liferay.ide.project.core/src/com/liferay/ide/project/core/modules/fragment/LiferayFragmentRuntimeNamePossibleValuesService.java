@@ -18,17 +18,16 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -45,6 +44,7 @@ public class LiferayFragmentRuntimeNamePossibleValuesService
 		IRuntime[] runtimes = ServerCore.getRuntimes();
 
 		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		NewModuleFragmentFilesOp op = context(NewModuleFragmentFilesOp.class);
 
 		if (ListUtil.isNotEmpty(runtimes)) {
 			for (IRuntime runtime : runtimes) {
@@ -52,7 +52,7 @@ public class LiferayFragmentRuntimeNamePossibleValuesService
 					continue;
 				}
 
-				String portalBundleVersion = _getFragmentPortalBundleVersion();
+				String portalBundleVersion = NewModuleFragmentFilesOpMethods.getFragmentPortalBundleVersion(op);
 
 				if (CoreUtil.isNotNullOrEmpty(portalBundleVersion)) {
 					PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
@@ -66,30 +66,26 @@ public class LiferayFragmentRuntimeNamePossibleValuesService
 					return;
 				}
 
-				NewModuleFragmentFilesOp op = context(NewModuleFragmentFilesOp.class);
-
-				String projectName = get(op.getProjectName());
-
-				IProject project = CoreUtil.getProject(projectName);
-
-				IPath projectLocation = project.getLocation();
-
 				if (workspaceProject != null) {
 					IPath workspaceProjectLocation = workspaceProject.getLocation();
 
-					if (workspaceProjectLocation.isPrefixOf(projectLocation)) {
-						String homeDir = LiferayWorkspaceUtil.getHomeDir(workspaceProject);
+					String homeDir = LiferayWorkspaceUtil.getHomeDir(workspaceProject);
 
-						IPath bundleLocation = workspaceProjectLocation.append(homeDir);
+					Path bundlePath = new Path(homeDir);
 
-						IPath runtimeLocation = runtime.getLocation();
+					IPath runtimeLocation = runtime.getLocation();
 
-						if (bundleLocation.isPrefixOf(runtimeLocation)) {
+					if (bundlePath.isAbsolute()) {
+						if (runtimeLocation.equals(bundlePath)) {
 							values.add(runtime.getName());
 						}
 					}
 					else {
-						values.add(runtime.getName());
+						IPath bundleLocation = workspaceProjectLocation.append(homeDir);
+
+						if (bundleLocation.equals(runtimeLocation)) {
+							values.add(runtime.getName());
+						}
 					}
 				}
 				else {
@@ -97,30 +93,6 @@ public class LiferayFragmentRuntimeNamePossibleValuesService
 				}
 			}
 		}
-	}
-
-	private String _getFragmentPortalBundleVersion() {
-		NewModuleFragmentFilesOp op = context(NewModuleFragmentFilesOp.class);
-
-		String projectName = get(op.getProjectName());
-
-		if (CoreUtil.isNullOrEmpty(projectName)) {
-			return null;
-		}
-
-		IProject project = CoreUtil.getProject(projectName);
-
-		if (project == null) {
-			return null;
-		}
-
-		Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(project);
-
-		if (fragmentProjectInfo != null) {
-			return fragmentProjectInfo.get("Portal-Bundle-Version");
-		}
-
-		return null;
 	}
 
 }

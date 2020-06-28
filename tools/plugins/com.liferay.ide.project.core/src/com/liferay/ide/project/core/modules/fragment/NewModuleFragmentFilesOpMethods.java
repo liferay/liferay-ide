@@ -21,10 +21,14 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -176,6 +180,28 @@ public class NewModuleFragmentFilesOpMethods {
 		}
 
 		return retval;
+	}
+
+	public static String getFragmentPortalBundleVersion(NewModuleFragmentFilesOp op) {
+		String projectName = _getter.get(op.getProjectName());
+
+		if (CoreUtil.isNullOrEmpty(projectName)) {
+			return null;
+		}
+
+		IProject project = CoreUtil.getProject(projectName);
+
+		if (Objects.isNull(project)) {
+			return null;
+		}
+
+		Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(project);
+
+		if (Objects.nonNull(fragmentProjectInfo)) {
+			return fragmentProjectInfo.get("Portal-Bundle-Version");
+		}
+
+		return null;
 	}
 
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {

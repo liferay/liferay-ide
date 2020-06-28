@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -88,16 +89,25 @@ public class LiferayRuntimeNamePossibleValuesService
 				}
 
 				if (workspaceProject != null) {
+					IPath workspaceProjectLocation = workspaceProject.getLocation();
+
 					String homeDir = LiferayWorkspaceUtil.getHomeDir(workspaceProject);
 
-					IPath projectLocation = workspaceProject.getLocation();
-
-					IPath bundleLocation = projectLocation.append(homeDir);
+					Path bundlePath = new Path(homeDir);
 
 					IPath runtimeLocation = runtime.getLocation();
 
-					if (bundleLocation.isPrefixOf(runtimeLocation)) {
-						values.add(runtime.getName());
+					if (bundlePath.isAbsolute()) {
+						if (runtimeLocation.equals(bundlePath)) {
+							values.add(runtime.getName());
+						}
+					}
+					else {
+						IPath bundleLocation = workspaceProjectLocation.append(homeDir);
+
+						if (bundleLocation.equals(runtimeLocation)) {
+							values.add(runtime.getName());
+						}
 					}
 				}
 				else {
