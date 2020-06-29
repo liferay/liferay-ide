@@ -54,6 +54,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -136,22 +137,7 @@ public class ServerUtil {
 				return LiferayServerCore.createErrorStatus("Can not get a valid Liferay Workspace project.");
 			}
 
-			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
-
-			String bundlesDir = workspaceProject.getLiferayHome();
-
-			IPath bundlesLocation = null;
-
-			IPath bundleLocationfromOSString = Path.fromOSString(bundlesDir);
-
-			if (bundleLocationfromOSString.isAbsolute()) {
-				bundlesLocation = bundleLocationfromOSString;
-			}
-			else {
-				IPath projectLocation = project.getLocation();
-
-				bundlesLocation = projectLocation.append(bundlesDir);
-			}
+			IPath bundlesLocation = LiferayWorkspaceUtil.getBundleHomePath(project);
 
 			if (FileUtil.exists(bundlesLocation)) {
 				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
@@ -295,9 +281,9 @@ public class ServerUtil {
 	public static void deleteWorkspaceServerAndRuntime(IProject project) {
 		IWorkspaceProject liferayWorkpsaceProject = LiferayCore.create(IWorkspaceProject.class, project);
 
-		IPath bundlesLocation = LiferayWorkspaceUtil.getHomeLocation(project);
+		String bundleHome = liferayWorkpsaceProject.getLiferayHome();
 
-		if ((liferayWorkpsaceProject != null) && (bundlesLocation != null)) {
+		if ((liferayWorkpsaceProject != null) && (bundleHome != null)) {
 			Stream.of(
 				ServerCore.getServers()
 			).filter(
@@ -307,7 +293,13 @@ public class ServerUtil {
 					IRuntime runtime = server.getRuntime();
 
 					if (runtime != null) {
-						return bundlesLocation.equals(runtime.getLocation());
+						IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(project);
+
+						if (Objects.isNull(bundleHomePath)) {
+							return false;
+						}
+
+						return bundleHomePath.equals(runtime.getLocation());
 					}
 
 					return true;

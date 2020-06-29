@@ -26,6 +26,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -102,11 +103,19 @@ public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorCont
 			IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
 
 			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(project)) {
-				IPath projectLocation = project.getLocation();
-
 				IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
 
-				if ((project != null) && projectLocation.isPrefixOf(liferayHome) &&
+				if (Objects.isNull(workspaceProject)) {
+					return;
+				}
+
+				IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(project);
+
+				if (Objects.isNull(bundleHomePath)) {
+					return;
+				}
+
+				if (Objects.nonNull(project) && bundleHomePath.equals(liferayHome) &&
 					ListUtil.isNotEmpty(workspaceProject.getChildProjects())) {
 
 					currentChildren.add(project);

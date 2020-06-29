@@ -24,7 +24,6 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IResourceBundleProject;
-import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
@@ -96,18 +95,10 @@ public class LiferayGradleProject
 
 		if (ILiferayPortal.class.equals(adapterType)) {
 			if (LiferayWorkspaceUtil.inLiferayWorkspace(getProject())) {
-				IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+				IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(getProject());
 
-				String liferayHome = workspaceProject.getLiferayHome();
-
-				IProject project = workspaceProject.getProject();
-
-				IFolder liferayHomeFolder = project.getFolder(liferayHome);
-
-				if (liferayHomeFolder.exists()) {
-					IPath liferayHomeLocation = liferayHomeFolder.getLocation();
-
-					PortalBundle portalBundle = LiferayServerCore.newPortalBundle(liferayHomeLocation);
+				if (FileUtil.exists(bundleHomePath)) {
+					PortalBundle portalBundle = LiferayServerCore.newPortalBundle(bundleHomePath);
 
 					if (portalBundle != null) {
 						return adapterType.cast(portalBundle);

@@ -32,11 +32,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -251,7 +249,7 @@ public class NewLiferayComponentOpTests extends BaseTests
         
         IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
 
-        //CoreUtil.openProject(op.getProjectName().content(), PathBridge.create(op.getLocation().content()).append(op.getProjectName().content()), new NullProgressMonitor());
+        modProject.open( new NullProgressMonitor() );
         
         NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
 

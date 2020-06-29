@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 import org.osgi.framework.Version;
 
@@ -94,6 +95,30 @@ public class LiferayWorkspaceUtil {
 		return null;
 	}
 
+	public static IPath getBundleHomePath(IProject project) {
+		if (Objects.nonNull(project)) {
+			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
+			if (Objects.isNull(workspaceProject)) {
+				return null;
+			}
+
+			String bundleHome = workspaceProject.getLiferayHome();
+
+			IPath bundleHomePath = Path.fromOSString(bundleHome);
+
+			if (!bundleHomePath.isAbsolute()) {
+				IPath projectLocation = project.getLocation();
+
+				bundleHomePath = projectLocation.append(bundleHome);
+			}
+
+			return bundleHomePath;
+		}
+
+		return null;
+	}
+
 	public static String getExtDir(IProject project) {
 		String retval = null;
 
@@ -148,16 +173,6 @@ public class LiferayWorkspaceUtil {
 		return null;
 	}
 
-	public static String getHomeDir(IProject project) {
-		if (Objects.nonNull(project)) {
-			IPath projectLocation = project.getLocation();
-
-			return getHomeDir(projectLocation.toOSString());
-		}
-
-		return null;
-	}
-
 	public static String getHomeDir(String location) {
 		String result = null;
 
@@ -175,23 +190,6 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return result;
-	}
-
-	public static IPath getHomeLocation(IProject project) {
-		if (project != null) {
-			IPath projectLocation = project.getLocation();
-
-			String homeDir = getHomeDir(projectLocation.toOSString());
-
-			if (CoreUtil.isNotNullOrEmpty(homeDir)) {
-				return projectLocation.append(homeDir);
-			}
-			else {
-				return null;
-			}
-		}
-
-		return null;
 	}
 
 	public static boolean getIndexSource(IProject project) {
@@ -442,12 +440,21 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static boolean hasBundlesDir(String location) {
-		File bundles = new File(location, getHomeDir(location));
+		String bundleHomeDir = getHomeDir(location);
 
-		File outsideOfWorkspaceBundles = new File(getHomeDir(location));
+		IPath bundleHomePath = Path.fromOSString(bundleHomeDir);
 
-		if (FileUtil.isDir(bundles) || FileUtil.isDir(outsideOfWorkspaceBundles)) {
-			return true;
+		if (bundleHomePath.isAbsolute()) {
+			if (FileUtil.isDir(bundleHomePath.toFile())) {
+				return true;
+			}
+		}
+		else {
+			File bundles = new File(location, bundleHomeDir);
+
+			if (FileUtil.isDir(bundles)) {
+				return true;
+			}
 		}
 
 		return false;
