@@ -22,6 +22,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -71,18 +72,29 @@ public class LiferayRuntimeNameDefaultValueService
 		for (IRuntime runtime : runtimes) {
 			if (LiferayServerCore.newPortalBundle(runtime.getLocation()) != null) {
 				if (workspaceProject != null) {
+					IPath workspaceProjectLocation = workspaceProject.getLocation();
+
 					String homeDir = LiferayWorkspaceUtil.getHomeDir(workspaceProject);
 
-					IPath projectLocation = workspaceProject.getLocation();
-
-					IPath bundleLocation = projectLocation.append(homeDir);
+					Path bundlePath = new Path(homeDir);
 
 					IPath runtimeLocation = runtime.getLocation();
 
-					if (bundleLocation.isPrefixOf(runtimeLocation)) {
-						value = runtime.getName();
+					if (bundlePath.isAbsolute()) {
+						if (runtimeLocation.equals(bundlePath)) {
+							value = runtime.getName();
 
-						break;
+							break;
+						}
+					}
+					else {
+						IPath bundleLocation = workspaceProjectLocation.append(homeDir);
+
+						if (bundleLocation.equals(runtimeLocation)) {
+							value = runtime.getName();
+
+							break;
+						}
 					}
 				}
 				else {

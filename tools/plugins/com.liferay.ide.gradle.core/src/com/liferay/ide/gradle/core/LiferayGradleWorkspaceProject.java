@@ -119,6 +119,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 	@Override
 	public String getLiferayHome() {
+		_loadGradleWorkspaceProperties();
+
 		return getProperty(WorkspaceConstants.HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 	}
 
