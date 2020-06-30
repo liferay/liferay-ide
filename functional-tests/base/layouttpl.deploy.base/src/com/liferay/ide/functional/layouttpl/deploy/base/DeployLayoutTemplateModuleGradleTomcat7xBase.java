@@ -48,7 +48,9 @@ public abstract class DeployLayoutTemplateModuleGradleTomcat7xBase extends Serve
 
 		dialogAction.confirm();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getWarFiles(project.getName()));
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	@Rule

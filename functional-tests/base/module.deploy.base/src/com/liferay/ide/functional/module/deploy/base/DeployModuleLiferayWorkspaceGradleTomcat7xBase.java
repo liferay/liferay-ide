@@ -414,7 +414,7 @@ public abstract class DeployModuleLiferayWorkspaceGradleTomcat7xBase extends Ser
 
 		dialogAction.confirm();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getWarFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	public void deployWarMvcPortlet() {
@@ -440,7 +440,11 @@ public abstract class DeployModuleLiferayWorkspaceGradleTomcat7xBase extends Ser
 
 		dialogAction.confirm();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getWarFiles(project.getName()));
+		jobAction.waitForNoRunningJobs();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	@Rule

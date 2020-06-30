@@ -95,6 +95,8 @@ public interface UI {
 
 	public final String BACK_WITH_LEFT_BRACKET = "< Back";
 
+	public final String BOOTSFACES = "BootsFaces";
+
 	public final String BROWSE = "Browse";
 
 	public final String BROWSE_WITH_DOT = "Browse...";
@@ -112,6 +114,8 @@ public interface UI {
 	public final String BUILD_WSDD = "Build WSDD";
 
 	public final String BUNDLE_URL = "Bundle url:";
+
+	public final String BUTTERFACES = "ButterFaces";
 
 	public final String CANCEL = "Cancel";
 
@@ -678,6 +682,8 @@ public interface UI {
 
 	public final String PROCESSACTION = "processAction";
 
+	public final String PRODUCT_VERSION = "Product Version:";
+
 	public final String PROGRESS = "Progress";
 
 	public final String PROJECT = "Project";
@@ -723,6 +729,8 @@ public interface UI {
 	public final String RESOURCE_BUNDLE_FILE_PATH = "Resource bundle file path:";
 
 	public final String REST = "rest";
+
+	public final String REST_BUILDER = "rest-builder";
 
 	public final String REST_UPCASE = "Rest";
 

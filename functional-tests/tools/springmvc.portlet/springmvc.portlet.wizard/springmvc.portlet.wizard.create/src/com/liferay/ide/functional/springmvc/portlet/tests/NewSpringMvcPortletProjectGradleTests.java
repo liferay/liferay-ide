@@ -42,7 +42,9 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -57,7 +59,9 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -72,7 +76,9 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -87,7 +93,9 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -102,7 +110,9 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -117,7 +127,9 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Rule

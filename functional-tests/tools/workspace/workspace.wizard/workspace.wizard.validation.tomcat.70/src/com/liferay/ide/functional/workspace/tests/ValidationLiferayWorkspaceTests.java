@@ -26,6 +26,7 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -60,6 +61,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	public void checkBundleUrl() {
 	}
 
+	@Ignore("because creating gradle workspace on IDE-4794 uses product key")
 	@Test
 	public void checkEnableTargePlatform() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -138,7 +140,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	public void checkIndexSources() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName());
+		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName(), "portal-7.2-ga2");
 
 		validationAction.assertEquals(THIS_WILL_CAUSE_ALL_OF_THE_BOM_ARTFACT_JARS, wizardAction.getValidationMsg(2));
 
@@ -148,13 +150,12 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		viewAction.project.openFile(project.getName(), "gradle.properties");
 
-		validationAction.assertContains("liferay.workspace.target.platform.version = 7.2.1", editorAction.getContent());
-
 		validationAction.assertContains("target.platform.index.sources = true", editorAction.getContent());
 
 		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
+	@Ignore("because creating gradle workspace on IDE-4794 uses product key")
 	@Test
 	public void checkInitialState() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -200,6 +201,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Ignore("because creating gradle workspace on IDE-4794 uses product key")
 	@Test
 	public void checkLiferayVersion() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -253,6 +255,8 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	public void checkProjectName() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
+		wizardAction.newLiferayWorkspace.setProductVersion("portal-7.2-ga2");
+
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "new-liferay-workspace-wizard-project-name.csv"))) {
@@ -275,6 +279,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	public void checkServerName() {
 	}
 
+	@Ignore("because creating gradle workspace on IDE-4794 uses product key")
 	@Test
 	public void checkTargetPlatform() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -312,6 +317,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Ignore("because creating gradle workspace on IDE-4794 uses product key")
 	@Test
 	public void checkTargetPlatformMassageForMaven() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -329,6 +335,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Ignore("ignore by IDE-4827")
 	@Test
 	public void createLiferayWorkspaceWithInvalidBundleUrl() {
 		String invalidMessage = "The bundle URL may not be a vaild URL.";

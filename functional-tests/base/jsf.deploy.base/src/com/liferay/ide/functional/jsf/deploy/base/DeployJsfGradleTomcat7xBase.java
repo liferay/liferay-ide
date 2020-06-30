@@ -18,17 +18,72 @@ import com.liferay.ide.functional.liferay.ServerTestBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
 
 import org.junit.Rule;
+import org.junit.Test;
 
 /**
  * @author Lily Li
  * @author Ashley Yuan
  */
-public class DeployJsfGradleTomcat7xBase extends ServerTestBase {
+public abstract class DeployJsfGradleTomcat7xBase extends ServerTestBase {
+
+	@Test
+	public void deployBootsFaces() {
+		wizardAction.openNewLiferayJsfProjectWizard();
+
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), BOOTSFACES, getVersion());
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
+
+		dialogAction.addAndRemove.addModule(project.getName());
+
+		dialogAction.confirm(FINISH);
+
+		viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName());
+
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", M1);
+
+		viewAction.servers.removeModule(server.getServerName(), project.getName());
+
+		dialogAction.confirm();
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void deployButterFaces() {
+		wizardAction.openNewLiferayJsfProjectWizard();
+
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), BUTTERFACES, getVersion());
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
+
+		dialogAction.addAndRemove.addModule(project.getName());
+
+		dialogAction.confirm(FINISH);
+
+		viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName());
+
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", M1);
+
+		viewAction.servers.removeModule(server.getServerName(), project.getName());
+
+		dialogAction.confirm();
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
 
 	public void deployICEFaces() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(project.getName(), ICEFACES);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), ICEFACES, getVersion());
 
 		wizardAction.finish();
 
@@ -54,7 +109,7 @@ public class DeployJsfGradleTomcat7xBase extends ServerTestBase {
 	public void deployJSFStandard() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(project.getName(), JSF_STANDARD);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), JSF_STANDARD, getVersion());
 
 		wizardAction.finish();
 
@@ -80,7 +135,7 @@ public class DeployJsfGradleTomcat7xBase extends ServerTestBase {
 	public void deployLiferayFacesAlloy() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(project.getName(), LIFERAY_FACES_ALLOY);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), LIFERAY_FACES_ALLOY, getVersion());
 
 		wizardAction.finish();
 
@@ -106,7 +161,7 @@ public class DeployJsfGradleTomcat7xBase extends ServerTestBase {
 	public void deployPrimeFaces() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(project.getName(), PRIMEFACES);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), PRIMEFACES, getVersion());
 
 		wizardAction.finish();
 
@@ -132,7 +187,7 @@ public class DeployJsfGradleTomcat7xBase extends ServerTestBase {
 	public void deployRichFaces() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(project.getName(), RICHFACES);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), RICHFACES, getVersion());
 
 		wizardAction.finish();
 
@@ -157,5 +212,7 @@ public class DeployJsfGradleTomcat7xBase extends ServerTestBase {
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	protected abstract String getVersion();
 
 }

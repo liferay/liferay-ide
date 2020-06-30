@@ -41,7 +41,7 @@ public class LiferayWorkspaceGradle70Support extends LiferayWorkspaceSupport {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(getName(), "7.0");
+		wizardAction.newLiferayWorkspace.prepareGradle(getName(), "portal-7.0-ga7");
 
 		wizardAction.finish();
 

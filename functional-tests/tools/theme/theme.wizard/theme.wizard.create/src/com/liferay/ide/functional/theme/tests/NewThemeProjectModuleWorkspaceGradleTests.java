@@ -44,9 +44,9 @@ public class NewThemeProjectModuleWorkspaceGradleTests extends SwtbotBase {
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(liferayWorkspace.getWarFiles(project.getName()));
+		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Rule

@@ -32,8 +32,16 @@ public class NewLiferayJsfWizard extends NewProjectWizard {
 		return new ComboBox(getShell().bot(), COMPONENT_SUITE);
 	}
 
+	public ComboBox getLiferayVersion() {
+		return new ComboBox(getShell().bot(), LIFERAY_VERSION);
+	}
+
 	public void setComponentSuite(String componentSuite) {
 		getComponentSuite().setSelection(componentSuite);
+	}
+
+	public void setLiferayVersion(String version) {
+		getLiferayVersion().setSelection(version);
 	}
 
 }

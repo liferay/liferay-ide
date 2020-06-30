@@ -64,7 +64,7 @@ public abstract class FragmentTomcat7xMavenDeployBase extends ServerTestBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getName(), project.getName());
 	}
 
 	@Rule

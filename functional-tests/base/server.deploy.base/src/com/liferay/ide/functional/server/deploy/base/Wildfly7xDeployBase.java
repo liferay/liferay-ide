@@ -78,17 +78,21 @@ public abstract class Wildfly7xDeployBase extends ServerTestBase {
 
 		dialogAction.confirm(FINISH);
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.servers.visibleModuleTry(wildfly.getStartedLabel(), project.getName()));
 
-		jobAction.waitForConsoleContent(wildfly.getServerName(), "STARTED " + project.getName() + "_", M1);
+		jobAction.waitForConsoleContent(wildfly.getServerName(), "STARTED " + project.getName() + "_", M5);
 
 		viewAction.servers.removeModule(wildfly.getServerName(), project.getName());
 
 		dialogAction.confirm();
 
-		jobAction.waitForConsoleContent(wildfly.getServerName(), "STOPPED " + project.getName() + "_", M1);
+		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getWarFiles(project.getName()));
+		jobAction.waitForConsoleContent(wildfly.getServerName(), "STOPPED " + project.getName() + "_", M5);
+
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	@Rule

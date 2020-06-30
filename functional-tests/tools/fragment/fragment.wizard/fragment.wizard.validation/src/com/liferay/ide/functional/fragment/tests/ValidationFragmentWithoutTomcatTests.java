@@ -39,7 +39,7 @@ public class ValidationFragmentWithoutTomcatTests extends SwtbotBase {
 
 		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
 
-		validationAction.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(PLEASE_SET_A_VALID_LIFERAY_PORTAL_RUNTIME, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 	}
@@ -61,7 +61,7 @@ public class ValidationFragmentWithoutTomcatTests extends SwtbotBase {
 
 		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
 
-		validationAction.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(PLEASE_SET_A_VALID_LIFERAY_PORTAL_RUNTIME, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 

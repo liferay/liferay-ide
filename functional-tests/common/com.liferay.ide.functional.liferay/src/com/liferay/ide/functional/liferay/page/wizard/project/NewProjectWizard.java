@@ -55,6 +55,10 @@ public class NewProjectWizard extends Wizard {
 		return new Text(getShell().bot(), LOCATION_WITH_COLON);
 	}
 
+	public ComboBox getProductVersions() {
+		return new ComboBox(getShell().bot(), PRODUCT_VERSION);
+	}
+
 	public Text getProjectName() {
 		return new Text(getShell().bot(), PROJECT_NAME);
 	}
@@ -81,6 +85,10 @@ public class NewProjectWizard extends Wizard {
 
 	public void setLocation(String location) {
 		getLocation().setText(location);
+	}
+
+	public void setProductVersion(String version) {
+		getProductVersions().setSelection(version);
 	}
 
 	public void setProjectName(String name) {

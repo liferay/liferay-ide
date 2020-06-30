@@ -27,10 +27,40 @@ import org.junit.Test;
 public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
+	public void createBootsFaces() {
+		wizardAction.openNewLiferayJsfProjectWizard();
+
+		wizardAction.newLiferayJsf.prepareMaven(project.getName(), BOOTSFACES, "7.2");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void createButterFaces() {
+		wizardAction.openNewLiferayJsfProjectWizard();
+
+		wizardAction.newLiferayJsf.prepareMaven(project.getName(), BUTTERFACES, "7.2");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
 	public void createICEFaces() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareMaven(project.getName(), ICEFACES);
+		wizardAction.newLiferayJsf.prepareMaven(project.getName(), ICEFACES, "7.2");
 
 		wizardAction.finish();
 
@@ -45,7 +75,7 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 	public void createJsfStandard() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareMaven(project.getName(), JSF_STANDARD);
+		wizardAction.newLiferayJsf.prepareMaven(project.getName(), JSF_STANDARD, "7.2");
 
 		wizardAction.finish();
 
@@ -60,7 +90,7 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 	public void createLiferayFacesAlloy() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareMaven(project.getName(), LIFERAY_FACES_ALLOY);
+		wizardAction.newLiferayJsf.prepareMaven(project.getName(), LIFERAY_FACES_ALLOY, "7.2");
 
 		wizardAction.finish();
 
@@ -75,7 +105,7 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 	public void createPrimeFaces() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareMaven(project.getName(), PRIMEFACES);
+		wizardAction.newLiferayJsf.prepareMaven(project.getName(), PRIMEFACES, "7.2");
 
 		wizardAction.finish();
 
@@ -90,7 +120,7 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 	public void createRichFaces() {
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareMaven(project.getName(), RICHFACES);
+		wizardAction.newLiferayJsf.prepareMaven(project.getName(), RICHFACES, "7.2");
 
 		wizardAction.finish();
 

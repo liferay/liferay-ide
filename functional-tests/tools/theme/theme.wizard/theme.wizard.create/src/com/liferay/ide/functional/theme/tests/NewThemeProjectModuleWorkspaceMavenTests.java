@@ -52,9 +52,9 @@ public class NewThemeProjectModuleWorkspaceMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
-		viewAction.project.closeAndDelete(liferayWorkspace.getWarFiles(project.getName()));
+		viewAction.project.closeAndDelete(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Rule

@@ -56,8 +56,8 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] jspFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "resources", "META-INF", "resources", "init.jsp"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "resources", "META-INF", "resources",
+			"init.jsp"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
@@ -73,8 +73,8 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] jspfFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "resources", "META-INF", "resources", "article_vertical_card.jspf"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "resources", "META-INF", "resources",
+			"article_vertical_card.jspf"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
@@ -90,15 +90,14 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] portletPropertiesFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "java", "portlet-ext.properties"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "java", "portlet-ext.properties"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(portletPropertiesFile));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getName(), project.getName());
 	}
 
 	public void addFragmentJspfFiles() {
@@ -129,15 +128,15 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] jspfFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "resources", "META-INF", "resources", "user_search_columns.jspf"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "resources", "META-INF", "resources",
+			"user_search_columns.jspf"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getName(), project.getName());
 	}
 
 	public void addFragmentJspFiles() {
@@ -168,15 +167,15 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] jspFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "resources", "META-INF", "resources", "view_comment.jsp"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "resources", "META-INF", "resources",
+			"view_comment.jsp"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getName(), project.getName());
 	}
 
 	public void addFragmentPortletPropertiesFiles() {
@@ -207,15 +206,14 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] portletPropertiesFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "java", "portlet-ext.properties"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "java", "portlet-ext.properties"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(portletPropertiesFile));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getName(), project.getName());
 	}
 
 	public void addFragmentResourceActionFiles() {
@@ -246,13 +244,12 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] resourceActionFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "resources", "resource-actions",
+			"default-ext.xml"
 		};
 
 		String[] portletPropertiesFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "resources", "portlet-ext.properties"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "resources", "portlet-ext.properties"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(resourceActionFile));
@@ -261,7 +258,7 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getName(), project.getName());
 	}
 
 	public void testFragmentFilesWithDeleteButton() {
@@ -312,13 +309,13 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] initJspFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "resources", "META-INF", "resources", "init.jsp"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "resources", "META-INF", "resources",
+			"init.jsp"
 		};
 
 		String[] viewJspFile = {
-			getLiferayWorkspace().getName(), getLiferayWorkspace().getName() + "-modules (in modules)",
-			project.getName(), "src", "main", "resources", "META-INF", "resources", "view.jsp"
+			getLiferayWorkspace().getName(), project.getName(), "src", "main", "resources", "META-INF", "resources",
+			"view.jsp"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(initJspFile));
@@ -327,7 +324,7 @@ public abstract class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getName(), project.getName());
 	}
 
 	@Rule

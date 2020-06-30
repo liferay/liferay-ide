@@ -63,12 +63,12 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-				"src/main/java", packageName, className + ".java"));
+				liferayWorkspace.getName(), liferayWorkspace.getName() + project.getName(), "src/main/java",
+				packageName, className + ".java"));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Test
@@ -101,8 +101,8 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", projects.getName(0),
-				"src/main/java", packageName, className + ".java [Component]"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), projects.getName(0), "src/main/java",
+				packageName, className + ".java [Component]"));
 
 		jobAction.waitForNoRunningJobs();
 
@@ -118,8 +118,8 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", projects.getName(1),
-				"src/main/java", packageName, className + ".java [Component]"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), projects.getName(1), "src/main/java",
+				packageName, className + ".java [Component]"));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
@@ -148,12 +148,12 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-				"src/main/java", packageName, className + ".java"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java", packageName,
+				className + ".java"));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Test
@@ -183,12 +183,12 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-				"src/main/java", packageName, className + ".java"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java", packageName,
+				className + ".java"));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Test
@@ -215,13 +215,12 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-				"src/main/java", packageName + " 1.0.0↔[1.0,2)",
-				project.getCapitalName() + "Portlet.java [Component]"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java",
+				packageName + " 1.0.0↔[1.0,2)", project.getCapitalName() + "Portlet.java [Component]"));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Test
@@ -246,12 +245,11 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-				"src/main/java", packageName, className + ".java [Component]"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java", packageName,
+				className + ".java [Component]"));
 
 		viewAction.project.delete(
-			liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-			"src/main/java", packageName);
+			liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java", packageName);
 
 		jobAction.waitForNoRunningJobs();
 
@@ -263,16 +261,15 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-				"src/main/java", packageName, className + ".java [Component]"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java", packageName,
+				className + ".java [Component]"));
 
 		viewAction.project.delete(
-			liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-			"src/main/java", packageName);
+			liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java", packageName);
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.openComponentClassWizard(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.openComponentClassWizard(liferayWorkspace.getName(), project.getName());
 
 		wizardAction.newLiferayComponent.prepare(project.getName(), template, className, packageName);
 
@@ -280,12 +277,12 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-				"src/main/java", packageName, className + ".java [Component]"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java", packageName,
+				className + ".java [Component]"));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Test
@@ -308,12 +305,12 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				liferayWorkspace.getName(), liferayWorkspace.getName() + "-modules (in modules)", project.getName(),
-				"src/main/java", packageName + ".application", project.getCapitalName() + "Portlet.java [Component]"));
+				liferayWorkspace.getName(), liferayWorkspace.getName(), project.getName(), "src/main/java",
+				packageName + ".application", project.getCapitalName() + "Portlet.java [Component]"));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Rule

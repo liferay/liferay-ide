@@ -121,11 +121,9 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		String exceptLocation = envAction.getEclipseWorkspacePathOSString();
 
 		String workspaceModuleFolderLocation = exceptLocation + "/" + liferayWorkspace.getName() + "/modules";
-		String workspaceWarFolderLocation = exceptLocation + "/" + liferayWorkspace.getName() + "/wars";
 
 		if ("win32".equals(Platform.getOS())) {
 			workspaceModuleFolderLocation = workspaceModuleFolderLocation.replaceAll("\\\\", "/");
-			workspaceWarFolderLocation = workspaceWarFolderLocation.replaceAll("\\\\", "/");
 		}
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -140,7 +138,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		ide.sleep();
 
-		validationAction.assertEquals(workspaceWarFolderLocation, wizardAction.newModule.getLocation());
+		validationAction.assertEquals(workspaceModuleFolderLocation, wizardAction.newModule.getLocation());
 
 		wizardAction.cancel();
 	}
@@ -232,8 +230,9 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		String[] templates = {
 			API, CONTROL_MENU_ENTRY, FORM_FIELD, JS_THEME, JS_WIDGET, LAYOUT_TEMPLATE, MVC_PORTLET, NPM_ANGULAR_PORTLET,
 			NPM_REACT_PORTLET, NPM_VUEJS_PORTLET, PANEL_APP, PORTLET_CONFIGURATION_ICON, PORTLET_PROVIDER,
-			PORTLET_TOOLBAR_CONTRIBUTOR, REST, SERVICE, SERVICE_BUILDER, SERVICE_WRAPPER, SIMULATION_PANEL_ENTRY,
-			TEMPLATE_CONTEXT_CONCONTRIBUTOR, THEME, THEME_CONTRIBUTOR, WAR_CORE_EXT, WAR_HOOK, WAR_MVC_PORTLET
+			PORTLET_TOOLBAR_CONTRIBUTOR, REST, REST_BUILDER, SERVICE, SERVICE_BUILDER, SERVICE_WRAPPER,
+			SIMULATION_PANEL_ENTRY, TEMPLATE_CONTEXT_CONCONTRIBUTOR, THEME, THEME_CONTRIBUTOR, WAR_CORE_EXT, WAR_HOOK,
+			WAR_MVC_PORTLET
 		};
 
 		wizardAction.openNewLiferayModuleWizard();

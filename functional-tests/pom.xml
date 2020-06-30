@@ -35,6 +35,7 @@
 		<eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
 		<tycho-version>1.4.0</tycho-version>
 		<liferay-ide-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide-repository/target/repository/</liferay-ide-site>
+		<orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20181128170323/repository/</orbit-site>
 	</properties>
 
 	<repositories>
@@ -47,6 +48,11 @@
 			<id>eclipse</id>
 			<layout>p2</layout>
 			<url>${eclipse-site}</url>
+		</repository>
+		<repository>
+			<id>orbit</id>
+			<layout>p2</layout>
+			<url>${orbit-site}</url>
 		</repository>
 	</repositories>
 

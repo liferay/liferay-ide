@@ -170,7 +170,9 @@ public class ValidationJsfProjectTests extends SwtbotBase {
 
 	@Test
 	public void validateJsfProjectComponentSuite() {
-		String[] templates = {LIFERAY_FACES_ALLOY, ICEFACES, JSF_STANDARD, PRIMEFACES, RICHFACES};
+		String[] templates = {
+			LIFERAY_FACES_ALLOY, BOOTSFACES, BUTTERFACES, ICEFACES, JSF_STANDARD, PRIMEFACES, RICHFACES
+		};
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
