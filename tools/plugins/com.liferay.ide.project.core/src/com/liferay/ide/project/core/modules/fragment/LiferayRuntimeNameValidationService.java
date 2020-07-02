@@ -45,13 +45,20 @@ public class LiferayRuntimeNameValidationService extends ValidationService imple
 
 		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-		if (runtime == null) {
-			return Status.createErrorStatus(
-				"Please set valid liferay portal runtime, you can initBundle or modify liferay.workspace.bundle.dir " +
-					"to make it point to an exsited runtime.");
-		}
-
 		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+		if (runtime == null) {
+			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(liferayWorkspaceProject.getProject())) {
+				return Status.createErrorStatus(
+					"Please set a valid liferay portal runtime, you can initBundle or modify " +
+						"'liferay.workspace.home.dir' to make it point to an existing runtime.");
+			}
+			else {
+				return Status.createErrorStatus(
+					"Please set a valid liferay portal runtime, you can initBundle or modify 'liferayHome' property " +
+						"to make it point to an existing runtime.");
+			}
+		}
 
 		String targetPlatformVersion = liferayWorkspaceProject.getTargetPlatformVersion();
 
