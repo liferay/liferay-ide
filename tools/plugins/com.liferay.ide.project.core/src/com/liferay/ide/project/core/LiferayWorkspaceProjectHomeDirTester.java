@@ -17,11 +17,12 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Simon Jiang
@@ -41,10 +42,14 @@ public class LiferayWorkspaceProjectHomeDirTester extends PropertyTester {
 				return false;
 			}
 
-			String homeDir = LiferayWorkspaceUtil.getHomeDir(project);
+			String bundleHomeDir = workspaceProject.getLiferayHome();
 
-			if (CoreUtil.isNotNullOrEmpty(homeDir) && homeDir.equals(folder.getName())) {
-				return true;
+			IPath bundleHomePath = Path.fromOSString(bundleHomeDir);
+
+			if (!bundleHomePath.isAbsolute()) {
+				if (CoreUtil.isNotNullOrEmpty(bundleHomeDir) && bundleHomeDir.equals(folder.getName())) {
+					return true;
+				}
 			}
 		}
 

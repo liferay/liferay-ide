@@ -14,10 +14,10 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import static org.junit.Assert.assertTrue;
+
 import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
@@ -25,13 +25,10 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 import com.liferay.ide.server.core.tests.ServerCoreBase;
 import com.liferay.ide.server.util.ServerUtil;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -58,70 +55,9 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 	}
 
 	@Test
-	public void testNewModuleFragmentFileProjectValidation() throws Exception {
-		deleteAllWorkspaceProjects();
-
-		NewModuleFragmentFilesOp fop = NewModuleFragmentFilesOp.TYPE.instantiate();
-
-		Status projectValidationStatus = fop.getProjectName().validation();
-
-		Assert.assertEquals("No suitable Liferay fragment project.", projectValidationStatus.message());
-
-		NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
-
-		String runtimeName = "liferay-portal-7.0";
-
-		NullProgressMonitor npm = new NullProgressMonitor();
-
-		IRuntime runtime = ServerCore.findRuntime(runtimeName);
-
-		if (runtime == null) {
-			IRuntimeWorkingCopy runtimeWC = ServerCore.findRuntimeType(getRuntimeId()).createRuntime(runtimeName, npm);
-
-			runtimeWC.setName(runtimeName);
-			runtimeWC.setLocation(getLiferayRuntimeDir());
-
-			runtime = runtimeWC.save(true, npm);
-		}
-
-		Assert.assertNotNull(runtime);
-
-		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(runtime);
-
-		Assert.assertNotNull(bundles);
-
-		for (String hostOsgiBundle : bundles) {
-			if (hostOsgiBundle.contains("com.liferay.asset.display.web")) {
-				op.setProjectName("test-project-validation");
-				op.setProjectProvider("gradle-module-fragment");
-				op.setLiferayRuntimeName(runtimeName);
-				op.setHostOsgiBundle(hostOsgiBundle);
-
-				OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
-
-				overrideFilePath.setValue("META-INF/resources/view.jsp");
-
-				IProject existedGradleProject = MavenTestUtil.create(op);
-
-				Assert.assertNotNull(existedGradleProject);
-
-				IFile bndFile = existedGradleProject.getFile("bnd.bnd");
-
-				bndFile.delete(true, true, new NullProgressMonitor());
-
-				fop.setProjectName(op.getProjectName().content());
-
-				projectValidationStatus = fop.getProjectName().validation();
-
-				Assert.assertEquals("Can not find bnd.bnd file in the project.", projectValidationStatus.message());
-			}
-		}
-	}
-
-	@Test
 	public void testNewModuleFragmentProjectOpProject() throws Exception {
 		NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
-		String runtimeName = "liferay-portal-7.0";
+		String runtimeName = "test-maven-liferay-workspace";
 		NullProgressMonitor npm = new NullProgressMonitor();
 
 		IRuntime runtime = ServerCore.findRuntime(runtimeName);
@@ -192,23 +128,6 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 		Assert.assertEquals("ok", projectNameOkValidationStatus2.message());
 	}
 
-	@Override
-	protected IPath getLiferayRuntimeDir() {
-		ProjectCore plugin = ProjectCore.getDefault();
-
-		return plugin.getStateLocation().append("liferay-ce-portal-7.0-ga5/tomcat-8.0.32");
-	}
-
-	@Override
-	protected IPath getLiferayRuntimeZip() {
-		return getLiferayBundlesPath().append("liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip");
-	}
-
-	@Override
-	protected String getRuntimeId() {
-		return "com.liferay.ide.server.portal.runtime";
-	}
-
     @BeforeClass
     public static void createLiferayWorkspaceProject() throws Exception {
         NewLiferayWorkspaceOp workspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
@@ -216,6 +135,8 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
         workspaceOp.setWorkspaceName( "test-maven-liferay-workspace" );
         workspaceOp.setUseDefaultLocation( true );
         workspaceOp.setProductVersion("portal-7.3-ga3");
+        workspaceOp.setProvisionLiferayBundle(true);
+        workspaceOp.setServerName("test-maven-liferay-workspace");
         
         TestUtil.waitForBuildAndValidation();
 

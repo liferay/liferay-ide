@@ -14,15 +14,16 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.server.core.LiferayServerCore;
 
-import org.eclipse.core.resources.IProject;
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -66,35 +67,24 @@ public class LiferayRuntimeNameDefaultValueService
 			return _NONE;
 		}
 
-		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 		String value = _NONE;
 
 		for (IRuntime runtime : runtimes) {
 			if (LiferayServerCore.newPortalBundle(runtime.getLocation()) != null) {
-				if (workspaceProject != null) {
-					IPath workspaceProjectLocation = workspaceProject.getLocation();
+				if (liferayWorkspaceProject != null) {
+					IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(liferayWorkspaceProject.getProject());
 
-					String homeDir = LiferayWorkspaceUtil.getHomeDir(workspaceProject);
-
-					Path bundlePath = new Path(homeDir);
+					if (Objects.isNull(bundleHomePath)) {
+						continue;
+					}
 
 					IPath runtimeLocation = runtime.getLocation();
 
-					if (bundlePath.isAbsolute()) {
-						if (runtimeLocation.equals(bundlePath)) {
-							value = runtime.getName();
+					if (bundleHomePath.equals(runtimeLocation)) {
+						value = runtime.getName();
 
-							break;
-						}
-					}
-					else {
-						IPath bundleLocation = workspaceProjectLocation.append(homeDir);
-
-						if (bundleLocation.equals(runtimeLocation)) {
-							value = runtime.getName();
-
-							break;
-						}
+						break;
 					}
 				}
 				else {

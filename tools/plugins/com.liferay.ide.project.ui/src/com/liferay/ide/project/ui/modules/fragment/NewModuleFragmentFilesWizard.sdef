@@ -43,16 +43,6 @@
                 <property-editor>
                     <property>LiferayRuntimeName</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                    <action>
-                        <id>NewLiferayRuntime</id>
-                        <label>New Liferay runtime...</label>
-                        <image>icons/n16/server_new.png</image>
-                    </action>
-                    <action-handler>
-                        <action>NewLiferayRuntime</action>
-                        <id>ModuleNewLiferayRuntimeHandler</id>
-                        <impl>ModuleNewLiferayRuntimeAction</impl>
-                    </action-handler>
                 </property-editor>
                 <property-editor>
                     <hint>

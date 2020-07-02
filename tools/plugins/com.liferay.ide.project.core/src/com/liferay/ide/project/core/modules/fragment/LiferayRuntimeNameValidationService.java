@@ -14,15 +14,24 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.util.Objects;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 import org.eclipse.wst.server.core.IRuntime;
 
+import org.osgi.framework.Version;
+
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class LiferayRuntimeNameValidationService extends ValidationService implements SapphireContentAccessor {
 
@@ -36,8 +45,44 @@ public class LiferayRuntimeNameValidationService extends ValidationService imple
 
 		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
+		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
 		if (runtime == null) {
-			retval = Status.createErrorStatus("Liferay runtime must be configured.");
+			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(liferayWorkspaceProject.getProject())) {
+				return Status.createErrorStatus(
+					"Please set a valid liferay portal runtime, you can initBundle or modify " +
+						"'liferay.workspace.home.dir' to make it point to an existing runtime.");
+			}
+			else {
+				return Status.createErrorStatus(
+					"Please set a valid liferay portal runtime, you can initBundle or modify 'liferayHome' property " +
+						"to make it point to an existing runtime.");
+			}
+		}
+
+		String targetPlatformVersion = liferayWorkspaceProject.getTargetPlatformVersion();
+
+		if (Objects.nonNull(targetPlatformVersion)) {
+			PortalRuntime liferayRuntime = (PortalRuntime)runtime.loadAdapter(
+				PortalRuntime.class, new NullProgressMonitor());
+
+			if (Objects.isNull(liferayRuntime)) {
+				return Status.createErrorStatus("Could not set invalid portal runtime");
+			}
+
+			Version workspaceVersion = Version.parseVersion(targetPlatformVersion);
+
+			Version portalRuntimeVersion = Version.parseVersion(liferayRuntime.getPortalVersion());
+
+			int majorWorkspaceVersion = workspaceVersion.getMajor();
+			int minorWorkspaceVersion = workspaceVersion.getMinor();
+			int majorPortalVersion = portalRuntimeVersion.getMajor();
+			int minorPortalVersion = portalRuntimeVersion.getMinor();
+
+			if ((majorWorkspaceVersion != majorPortalVersion) || (minorWorkspaceVersion != minorPortalVersion)) {
+				return Status.createErrorStatus(
+					"Portal runtime version is not match liferay workspace project version.");
+			}
 		}
 
 		return retval;

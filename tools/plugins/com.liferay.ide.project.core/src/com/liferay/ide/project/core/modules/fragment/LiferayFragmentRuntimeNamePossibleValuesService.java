@@ -27,7 +27,6 @@ import java.util.Set;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -67,25 +66,14 @@ public class LiferayFragmentRuntimeNamePossibleValuesService
 				}
 
 				if (workspaceProject != null) {
-					IPath workspaceProjectLocation = workspaceProject.getLocation();
+					IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(workspaceProject);
 
-					String homeDir = LiferayWorkspaceUtil.getHomeDir(workspaceProject);
-
-					Path bundlePath = new Path(homeDir);
-
-					IPath runtimeLocation = runtime.getLocation();
-
-					if (bundlePath.isAbsolute()) {
-						if (runtimeLocation.equals(bundlePath)) {
-							values.add(runtime.getName());
-						}
+					if (Objects.isNull(bundleHomePath)) {
+						continue;
 					}
-					else {
-						IPath bundleLocation = workspaceProjectLocation.append(homeDir);
 
-						if (bundleLocation.equals(runtimeLocation)) {
-							values.add(runtime.getName());
-						}
+					if (bundleHomePath.equals(runtime.getLocation())) {
+						values.add(runtime.getName());
 					}
 				}
 				else {
