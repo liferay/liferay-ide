@@ -47,6 +47,10 @@ public class LiferayRuntimeNameValidationService extends ValidationService imple
 
 		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
+		if (Objects.isNull(liferayWorkspaceProject)) {
+			return retval;
+		}
+
 		if (runtime == null) {
 			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(liferayWorkspaceProject.getProject())) {
 				return Status.createErrorStatus(
