@@ -25,6 +25,7 @@ import org.junit.Test;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class NewJSFMavenTests extends NewJSFMavenBase {
 
@@ -35,6 +36,49 @@ public class NewJSFMavenTests extends NewJSFMavenBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("alloy");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createAlloyFaces() throws Exception {
+		NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectProvider(provider());
+		op.setTemplateName("alloy");
+		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createBootsFaces() throws Exception {
+		NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectProvider(provider());
+		op.setTemplateName("bootsfaces");
+		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createButterFaces() throws Exception {
+		NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectProvider(provider());
+		op.setTemplateName("butterfaces");
+		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 
@@ -48,6 +92,7 @@ public class NewJSFMavenTests extends NewJSFMavenBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("icefaces");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 
@@ -61,6 +106,7 @@ public class NewJSFMavenTests extends NewJSFMavenBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("jsf");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 
@@ -74,6 +120,7 @@ public class NewJSFMavenTests extends NewJSFMavenBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("primefaces");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 
@@ -87,6 +134,7 @@ public class NewJSFMavenTests extends NewJSFMavenBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("richfaces");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 

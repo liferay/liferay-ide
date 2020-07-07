@@ -14,15 +14,62 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.maven.core.tests.base.NewModuleMavenBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
 public class NewModuleNpm71MavenTests extends NewModuleMavenBase {
+
+	@BeforeClass
+	public static void createLiferayWorkspace() {
+		IProgressMonitor monitor = new NullProgressMonitor();
+
+		for (IProject project : CoreUtil.getAllProjects()) {
+			try {
+				project.delete(true, monitor);
+			}
+			catch (CoreException ce) {
+				ce.printStackTrace();
+			}
+		}
+
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+		op.setProductVersion("portal-7.3-ga3");
+
+		JobUtil.waitForLiferayProjectJob();
+
+		op.setWorkspaceName("liferay-maven-workspace");
+		op.setProjectProvider("maven-liferay-workspace");
+		op.setLiferayVersion("7.1");
+
+		NewLiferayWorkspaceOpMethods.execute(op, ProgressMonitorBridge.create(new NullProgressMonitor()));
+	}
+
+	@AfterClass
+	public static void deleteWorksapceProject() throws CoreException {
+		IProgressMonitor monitor = new NullProgressMonitor();
+
+		for (IProject project : CoreUtil.getAllProjects()) {
+			project.delete(true, monitor);
+		}
+	}
 
 	@Test
 	public void createNpmAngularPortlet71() {

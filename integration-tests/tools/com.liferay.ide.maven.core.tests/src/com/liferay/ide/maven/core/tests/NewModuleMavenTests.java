@@ -20,6 +20,7 @@ import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.maven.core.tests.base.NewModuleMavenBase;
 import com.liferay.ide.maven.core.tests.util.MavenTestUtil;
@@ -70,6 +71,7 @@ import org.junit.Test;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class NewModuleMavenTests extends NewModuleMavenBase {
 
@@ -77,8 +79,13 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 	public static void createLiferayWorkspace() {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setWorkspaceName("new-maven-workspace");
+		op.setProductVersion("portal-7.3-ga3");
+
+		JobUtil.waitForLiferayProjectJob();
+
+		op.setWorkspaceName("test-maven-workspace");
 		op.setProjectProvider("maven-liferay-workspace");
+		op.setLiferayVersion("7.3");
 
 		NewLiferayWorkspaceOpMethods.execute(op, ProgressMonitorBridge.create(new NullProgressMonitor()));
 	}
@@ -198,7 +205,7 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 
 		Value<String> version = op.getLiferayVersion();
 
-		if ("7.2".equals(version.getDefaultContent())) {
+		if ("7.3".equals(version.getDefaultContent())) {
 			return;
 		}
 
@@ -711,8 +718,8 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		Status status = op.validation();
 
 		Assert.assertFalse(status.ok());
-
-		Assert.assertTrue(status.message().contains("not a valid Java identifier"));
+		
+		Assert.assertTrue(status.message().contains("not a valid Java identifier") || status.message().contains("Invalid package name"));
 
 		op.setPackageName("api.test.one");
 
@@ -818,7 +825,7 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		op.setProjectName("service-wrapper-test");
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("service-wrapper");
-		op.setServiceName("com.liferay.portal.kernel.service.UserLocalServiceWrapper");
+		op.setServiceName("com.liferay.portal.kernel.service.AccountServiceWrapper");
 		op.setComponentName("MyServiceWrapper");
 
 		MavenTestUtil.createAndBuild(op);

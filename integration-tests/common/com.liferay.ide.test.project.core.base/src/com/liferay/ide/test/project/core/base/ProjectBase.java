@@ -15,6 +15,7 @@
 package com.liferay.ide.test.project.core.base;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.test.core.base.BaseTests;
 
 import org.eclipse.core.resources.IProject;
@@ -33,6 +34,7 @@ import org.junit.AfterClass;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 @SuppressWarnings("restriction")
 public class ProjectBase extends BaseTests {
@@ -99,6 +101,12 @@ public class ProjectBase extends BaseTests {
 			manager.join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
 			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
 			manager.join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
+
+			IJobManager jobManager = Job.getJobManager();
+
+			jobManager.join("org.eclipse.buildship.core.jobs", new NullProgressMonitor());
+
+			JobUtil.waitForLiferayProjectJob();
 
 			needJobsToBuild(manager);
 
