@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core.tests.base;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
@@ -43,8 +44,13 @@ public abstract class NewModuleMavenBase extends NewModuleOpBase<NewLiferayModul
 	public static void createLiferayWorkspace() {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
+		op.setProductVersion("portal-7.3-ga3");
+
+		JobUtil.waitForLiferayProjectJob();
+
 		op.setWorkspaceName("liferay-maven-workspace");
 		op.setProjectProvider("maven-liferay-workspace");
+		op.setLiferayVersion("7.3");
 
 		NewLiferayWorkspaceOpMethods.execute(op, ProgressMonitorBridge.create(new NullProgressMonitor()));
 	}

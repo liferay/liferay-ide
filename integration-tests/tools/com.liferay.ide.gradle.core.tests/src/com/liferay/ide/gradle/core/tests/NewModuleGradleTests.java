@@ -137,7 +137,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 
 		Value<String> version = op.getLiferayVersion();
 
-		if ("7.2".equals(version.getDefaultContent())) {
+		if ("7.3".equals(version.getDefaultContent())) {
 			return;
 		}
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.core.tests.base;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
@@ -34,6 +35,7 @@ import org.junit.BeforeClass;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public abstract class NewModuleGradleBase extends NewModuleOpBase<NewLiferayModuleProjectOp> {
 
@@ -44,6 +46,9 @@ public abstract class NewModuleGradleBase extends NewModuleOpBase<NewLiferayModu
 		op.setWorkspaceName("liferay-gradle-workspace");
 
 		op.setProjectProvider("gradle-liferay-workspace");
+		op.setProductVersion("portal-7.3-ga3");
+
+		JobUtil.waitForLiferayProjectJob();
 
 		NewLiferayWorkspaceOpMethods.execute(op, ProgressMonitorBridge.create(new NullProgressMonitor()));
 	}

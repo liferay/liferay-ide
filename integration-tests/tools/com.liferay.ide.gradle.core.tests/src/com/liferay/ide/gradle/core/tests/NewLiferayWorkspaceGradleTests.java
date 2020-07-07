@@ -25,6 +25,7 @@ import org.junit.Test;
 /**
  * @author Andy Wu
  * @author Joye Luo
+ * @author Ashley Yuan
  */
 public class NewLiferayWorkspaceGradleTests extends ProjectOpBase<NewLiferayWorkspaceOp> {
 
@@ -34,6 +35,9 @@ public class NewLiferayWorkspaceGradleTests extends ProjectOpBase<NewLiferayWork
 
 		op.setWorkspaceName(workspace.getName());
 		op.setProjectProvider(provider());
+		op.setProductVersion("dxp-7.2-sp2");
+
+		waitForBuildAndValidation();
 
 		createOrImportAndBuild(op, workspace.getName());
 
@@ -46,9 +50,13 @@ public class NewLiferayWorkspaceGradleTests extends ProjectOpBase<NewLiferayWork
 
 		op.setWorkspaceName(workspace.getName());
 		op.setProjectProvider(provider());
-		op.setLiferayVersion("7.1");
+		op.setProductVersion("portal-7.1-ga4");
+
+		waitForBuildAndValidation();
 
 		createOrImportAndBuild(op, workspace.getName());
+
+		waitForBuildAndValidation();
 
 		assertPropertyValue(
 			workspace.getName(), "gradle.properties", "liferay.workspace.product",

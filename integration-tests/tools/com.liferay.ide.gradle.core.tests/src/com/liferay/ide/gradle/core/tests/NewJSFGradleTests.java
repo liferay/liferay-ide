@@ -29,6 +29,7 @@ import org.junit.Test;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class NewJSFGradleTests extends NewJSFGradleBase {
 
@@ -39,6 +40,35 @@ public class NewJSFGradleTests extends NewJSFGradleBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("alloy");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createBootsfaces() throws Exception {
+		NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectProvider(provider());
+		op.setTemplateName("bootsfaces");
+		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createButterfaces() throws Exception {
+		NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectProvider(provider());
+		op.setTemplateName("butterfaces");
+		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 
@@ -52,6 +82,7 @@ public class NewJSFGradleTests extends NewJSFGradleBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("icefaces");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 
@@ -65,6 +96,7 @@ public class NewJSFGradleTests extends NewJSFGradleBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("primefaces");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 
@@ -78,6 +110,21 @@ public class NewJSFGradleTests extends NewJSFGradleBase {
 		op.setProjectProvider(provider());
 		op.setTemplateName("richfaces");
 		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createStandard() throws Exception {
+		NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectProvider(provider());
+		op.setTemplateName("jsf");
+		op.setProjectName(project.getName());
+		op.setLiferayVersion("7.3");
 
 		createOrImportAndBuild(op, project.getName());
 
