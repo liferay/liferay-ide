@@ -49,19 +49,14 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(themeNames));
 
-		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(warNames));
-
 		String[] pomfile = {project.getName(), "pom.xml"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(pomfile));
 
-		viewAction.project.closeAndDelete(moduleNames);
-		viewAction.project.closeAndDelete(themeNames);
-		viewAction.project.closeAndDelete(warNames);
+		viewAction.project.closeAndDeleteFromDisk(moduleNames);
+		viewAction.project.closeAndDeleteFromDisk(themeNames);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -80,13 +75,11 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
-		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
-		viewAction.project.closeAndDelete(moduleNames);
-		viewAction.project.closeAndDelete(themeNames);
-		viewAction.project.closeAndDelete(warNames);
+		viewAction.project.closeAndDeleteFromDisk(moduleNames);
+		viewAction.project.closeAndDeleteFromDisk(themeNames);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -109,13 +102,11 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
-		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
-		viewAction.project.closeAndDelete(moduleNames);
-		viewAction.project.closeAndDelete(themeNames);
-		viewAction.project.closeAndDelete(warNames);
+		viewAction.project.closeAndDeleteFromDisk(moduleNames);
+		viewAction.project.closeAndDeleteFromDisk(themeNames);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -136,7 +127,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-modules (in modules)", "pom.xml");
+		viewAction.project.openFile(projects.getName(0), "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -144,10 +135,11 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.project.delete(
-			projects.getName(0), projects.getName(0) + "-modules (in modules)", projects.getName(1));
+		viewAction.project.delete(projects.getName(0), projects.getName(1));
 
-		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-modules (in modules)", "pom.xml");
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(projects.getName(0), "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -155,11 +147,10 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-modules (in modules)");
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-themes (in themes)");
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-wars (in wars)");
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0), projects.getName(0) + "-modules (in modules)");
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0), projects.getName(0) + "-themes (in themes)");
 
-		viewAction.project.closeAndDelete(projects.getName(0));
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0));
 	}
 
 	@Test
@@ -180,7 +171,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-modules (in modules)", "pom.xml");
+		viewAction.project.openFile(projects.getName(0), "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -192,10 +183,11 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.deleteProjectFromDisk(
-			projects.getName(0), projects.getName(0) + "-modules (in modules)", projects.getName(1));
+		viewAction.project.deleteProjectFromDisk(projects.getName(0), projects.getName(1));
 
-		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-modules (in modules)", "pom.xml");
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(projects.getName(0), "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -204,11 +196,10 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-modules (in modules)");
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-themes (in themes)");
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-wars (in wars)");
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0), projects.getName(0) + "-modules (in modules)");
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0), projects.getName(0) + "-themes (in themes)");
 
-		viewAction.project.closeAndDelete(projects.getName(0));
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0));
 	}
 
 	@Test
@@ -229,7 +220,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-wars (in wars)", "pom.xml");
+		viewAction.project.openFile(projects.getName(0), "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -237,9 +228,9 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.project.delete(projects.getName(0), projects.getName(0) + "-wars (in wars)", projects.getName(1));
+		viewAction.project.delete(projects.getName(0), projects.getName(1));
 
-		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-wars (in wars)", "pom.xml");
+		viewAction.project.openFile(projects.getName(0), "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -247,11 +238,10 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-modules (in modules)");
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-themes (in themes)");
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-wars (in wars)");
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0), projects.getName(0) + "-modules (in modules)");
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0), projects.getName(0) + "-themes (in themes)");
 
-		viewAction.project.closeAndDelete(projects.getName(0));
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0));
 	}
 
 	@Test
@@ -272,7 +262,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-wars (in wars)", "pom.xml");
+		viewAction.project.openFile(projects.getName(0), "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -284,10 +274,11 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.deleteProjectFromDisk(
-			projects.getName(0), projects.getName(0) + "-wars (in wars)", projects.getName(1));
+		viewAction.project.deleteProjectFromDisk(projects.getName(0), projects.getName(1));
 
-		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-wars (in wars)", "pom.xml");
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(projects.getName(0), "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -296,11 +287,10 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-modules (in modules)");
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-themes (in themes)");
-		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-wars (in wars)");
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0), projects.getName(0) + "-modules (in modules)");
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0), projects.getName(0) + "-themes (in themes)");
 
-		viewAction.project.closeAndDelete(projects.getName(0));
+		viewAction.project.closeAndDeleteFromDisk(projects.getName(0));
 	}
 
 	@Test
@@ -333,13 +323,11 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
-		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
-		viewAction.project.closeAndDelete(moduleNames);
-		viewAction.project.closeAndDelete(themeNames);
-		viewAction.project.closeAndDelete(warNames);
+		viewAction.project.closeAndDeleteFromDisk(moduleNames);
+		viewAction.project.closeAndDeleteFromDisk(themeNames);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -372,13 +360,13 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
-		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
-		viewAction.project.closeAndDelete(moduleNames);
-		viewAction.project.closeAndDelete(themeNames);
-		viewAction.project.closeAndDelete(warNames);
+		viewAction.project.closeAndDeleteFromDisk(moduleNames);
+		viewAction.project.closeAndDeleteFromDisk(themeNames);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+
+		jobAction.waitForNoRunningJobs();
 
 		dialogAction.openPreferencesDialog();
 
@@ -434,6 +422,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
 		String serverName = "Liferay 7-change-bundle-url";
@@ -484,13 +474,13 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
-		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
-		viewAction.project.closeAndDelete(moduleNames);
-		viewAction.project.closeAndDelete(themeNames);
-		viewAction.project.closeAndDelete(warNames);
+		viewAction.project.closeAndDeleteFromDisk(moduleNames);
+		viewAction.project.closeAndDeleteFromDisk(themeNames);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+
+		jobAction.waitForNoRunningJobs();
 
 		dialogAction.openPreferencesDialog();
 

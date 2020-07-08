@@ -52,6 +52,10 @@ public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 		return new CheckBox(getShell().bot(), INDEX_SOURCES);
 	}
 
+	public ComboBox getProductVersions() {
+		return new ComboBox(getShell().bot(), PRODUCT_VERSION);
+	}
+
 	public Text getServerName() {
 		return new Text(getShell().bot(), SERVER_NAME);
 	}
@@ -66,6 +70,10 @@ public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 
 	public void setBundleUrl(String url) {
 		getBundleUrl().setText(url);
+	}
+
+	public void setProductVersion(String version) {
+		getProductVersions().setSelection(version);
 	}
 
 	public void setServerName(String serverName) {

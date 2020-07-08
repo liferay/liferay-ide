@@ -1012,7 +1012,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareMaven(String projectName, String version) {
-			_prepare(projectName, MAVEN, version);
+			_prepareMavenWorkspace(projectName, MAVEN, version);
 		}
 
 		public void selectDownloadLiferayBundle() {
@@ -1064,16 +1064,17 @@ public class WizardAction extends UIAction {
 			_newLiferayWorkspaceWizard.setBuildType(buildType);
 			ide.sleep(800);
 
-			if (buildType == GRADLE) {
-				ide.waitUntil(new NoRunningJobsCondition(), 5 * 60 * 1000);
+			ide.waitUntil(new NoRunningJobsCondition(), 5 * 60 * 1000);
 
-				_newLiferayWorkspaceWizard.setProductVersion(version);
-			}
-			else {
-				_newLiferayWorkspaceWizard.setLiferayVersion(version);
-			}
+			_newLiferayWorkspaceWizard.setProductVersion(version);
 
 			ide.sleep(800);
+		}
+
+		private void _prepareMavenWorkspace(String projectName, String buildType, String version) {
+			_newLiferayWorkspaceWizard.setProjectName(projectName);
+			_newLiferayWorkspaceWizard.setBuildType(buildType);
+			_newLiferayWorkspaceWizard.setLiferayVersion(version);
 		}
 
 		private final NewLiferayWorkspaceWizard _newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);
