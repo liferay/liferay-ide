@@ -74,7 +74,7 @@ public class LiferayMavenWorkspaceProjectProvider
 		sb.append(version);
 
 		try {
-			BladeCLI.execute(sb.toString());
+			BladeCLI.executeWithNewBlade(sb.toString());
 		}
 		catch (BladeCLIException bclie) {
 			return ProjectCore.createErrorStatus(bclie);

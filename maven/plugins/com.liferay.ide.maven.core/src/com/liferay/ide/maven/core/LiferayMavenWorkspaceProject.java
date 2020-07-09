@@ -26,6 +26,7 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import java.io.File;
 import java.io.FileReader;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.maven.model.Model;
@@ -46,8 +47,6 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 		IPath projectPath = project.getFullPath();
 
 		_importantResources = new IPath[] {projectPath.append("pom.xml")};
-
-		_initializeMavenWorkspaceProperties(project);
 	}
 
 	@Override
@@ -63,12 +62,47 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 
 	@Override
 	public String getLiferayHome() {
+		_readMavenWorkspaceProperties();
+
 		return getProperty(WorkspaceConstants.LIFERAY_HOME_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 	}
 
 	@Override
 	public String getTargetPlatformVersion() {
+		_readMavenWorkspaceProperties();
+
 		return getProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, null);
+	}
+
+	@Override
+	public String[] getWorkspaceModuleDirs() {
+		String workspaceBomVersion = getTargetPlatformVersion();
+
+		if (Objects.nonNull(workspaceBomVersion)) {
+			return null;
+		}
+		else {
+			return new String[] {"modules"};
+		}
+	}
+
+	@Override
+	public String[] getWorkspaceWarDirs() {
+		String workspaceBomVersion = getTargetPlatformVersion();
+
+		if (Objects.nonNull(workspaceBomVersion)) {
+			return null;
+		}
+		else {
+			return new String[] {"wars"};
+		}
+	}
+
+	@Override
+	public boolean isFlexibleLiferayWorkspace() {
+		_readMavenWorkspaceProperties();
+
+		return Objects.nonNull(getProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, null));
 	}
 
 	@Override
@@ -93,7 +127,9 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 		);
 	}
 
-	private void _initializeMavenWorkspaceProperties(IProject project) {
+	private void _readMavenWorkspaceProperties() {
+		IProject project = getProject();
+
 		if (project.exists()) {
 			IPath projectLocation = project.getLocation();
 

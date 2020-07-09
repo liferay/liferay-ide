@@ -48,6 +48,8 @@ public interface IWorkspaceProject extends ILiferayProject {
 		return null;
 	}
 
+	public boolean isFlexibleLiferayWorkspace();
+
 	public default boolean isWatchable() {
 		return false;
 	}

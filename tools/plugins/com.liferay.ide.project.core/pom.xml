@@ -44,6 +44,7 @@
 							<directory>lib</directory>
 							<includes>
 								<include>blade.jar</include>
+								<include>blade-3.9.3.jar</include>
 							</includes>
 						</fileset>
 					</filesets>
@@ -55,7 +56,7 @@
 				<version>1.3.0</version>
 				<executions>
 					<execution>
-						<id>download-blade</id>
+						<id>download-latest-blade</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>wget</goal>
@@ -63,8 +64,21 @@
 						<configuration>
 							<url>${blade-latest-download-url}</url>
 							<outputDirectory>lib/</outputDirectory>
-							<outputFileName>blade.jar</outputFileName>
+							<outputFileName>blade-4.0.0.jar</outputFileName>
 							<md5>${blade-latest-md5}</md5>
+						</configuration>
+					</execution>
+					<execution>
+						<id>download-392-blade</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>${blade-392-download-url}</url>
+							<outputDirectory>lib/</outputDirectory>
+							<outputFileName>blade-3.9.2.jar</outputFileName>
+							<md5>${blade-392-md5}</md5>
 						</configuration>
 					</execution>
 				</executions>

@@ -81,7 +81,7 @@ public class LiferayGradleWorkspaceProjectProvider
 		sb.append(get(op.getProductVersion()));
 
 		try {
-			BladeCLI.execute(sb.toString());
+			BladeCLI.executeWithNewBlade(sb.toString());
 		}
 		catch (BladeCLIException bclie) {
 			return ProjectCore.createErrorStatus(bclie);

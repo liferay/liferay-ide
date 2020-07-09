@@ -74,7 +74,7 @@ public interface RequireLiferayWorkspaceProject {
 
 		IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
-		if (workspaceProject != null) {
+		if (Objects.nonNull(workspaceProject) && workspaceProject.isFlexibleLiferayWorkspace()) {
 			ProductInfo workspaceProductInfo = workspaceProject.getWorkspaceProductInfo();
 
 			liferayWorkspaceProject = workspaceProject.getProject();

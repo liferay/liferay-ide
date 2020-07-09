@@ -14,18 +14,9 @@
 
 package com.liferay.ide.project.core.jsf;
 
-import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
-import java.io.File;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Property;
@@ -67,52 +58,7 @@ public class JSFModuleProjectNameListener
 			newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
 		}
 		else {
-			Path currentProjectLocation = get(op.getLocation());
-
-			boolean hasLiferayWorkspace = false;
-
-			if (currentProjectLocation != null) {
-				hasLiferayWorkspace = LiferayWorkspaceUtil.isValidWorkspaceLocation(
-					currentProjectLocation.toOSString());
-			}
-
-			if (hasLiferayWorkspace) {
-				File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(currentProjectLocation.toFile());
-
-				if (FileUtil.notExists(workspaceDir)) {
-					return;
-				}
-
-				IProject project = CoreUtil.getProject(currentProjectLocation.toFile());
-
-				IWorkspaceProject liferayWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
-
-				String[] folders = liferayWorkspaceProject.getWorkspaceWarDirs();
-
-				if (folders != null) {
-					boolean appendWarFolder = false;
-
-					IPath projectLocation = PathBridge.create(currentProjectLocation);
-
-					for (String folder : folders) {
-						if (StringUtil.endsWith(projectLocation.lastSegment(), folder)) {
-							appendWarFolder = true;
-
-							break;
-						}
-					}
-
-					if (appendWarFolder) {
-						newLocationBase = PathBridge.create(projectLocation);
-					}
-					else {
-						newLocationBase = PathBridge.create(projectLocation.append(folders[0]));
-					}
-				}
-				else {
-					newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
-				}
-			}
+			newLocationBase = get(op.getLocation());
 		}
 
 		if (newLocationBase != null) {

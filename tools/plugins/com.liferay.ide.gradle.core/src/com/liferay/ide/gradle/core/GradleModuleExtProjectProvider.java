@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
@@ -24,6 +25,8 @@ import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 
 import java.io.File;
+
+import java.util.Objects;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -73,6 +76,15 @@ public class GradleModuleExtProjectProvider
 		sb.append("modules-ext ");
 		sb.append("-m ");
 		sb.append(originalModuleName);
+
+		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+		if (Objects.nonNull(liferayWorkspaceProject)) {
+			if (!liferayWorkspaceProject.isFlexibleLiferayWorkspace()) {
+				sb.append(" -M ");
+				sb.append(get(op.getOriginalModuleVersion()));
+			}
+		}
 
 		sb.append(" \"");
 		sb.append(projectName);
