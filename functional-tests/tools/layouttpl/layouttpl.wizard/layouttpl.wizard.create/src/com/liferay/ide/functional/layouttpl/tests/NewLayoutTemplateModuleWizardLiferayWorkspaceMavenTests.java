@@ -49,9 +49,13 @@ public class NewLayoutTemplateModuleWizardLiferayWorkspaceMavenTests extends Swt
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
+		jobAction.waitForNoRunningJobs();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Rule

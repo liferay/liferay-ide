@@ -24,6 +24,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -33,6 +34,7 @@ import org.junit.Test;
  */
 public class ValidationModulesExtTests extends SwtbotBase {
 
+	@Ignore("ignore by IDE-4789")
 	@Test
 	public void checkExtWithoutWorkspace() {
 		wizardAction.openNewLiferayModulesExtWizard();
@@ -57,7 +59,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 	public void checkExtWithValidWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.2-ga2");
 
 		wizardAction.finish();
 
@@ -103,7 +105,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 	public void checkExtWithWorkspace70() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.0");
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.0-ga7");
 
 		wizardAction.finish();
 
@@ -126,6 +128,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
+	@Ignore("ignore because gradle workspace has product key by default in blade 4.0.0")
 	@Test
 	public void checkExtWithWorkspaceWithoutTargetPlatform() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -157,11 +160,12 @@ public class ValidationModulesExtTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
+	@Ignore("ignore by IDE-4780")
 	@Test
 	public void checkLocation() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.0-ga7");
 
 		wizardAction.finish();
 
@@ -215,7 +219,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 	public void checkModulesExtProjectName() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.2");
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.2-ga2");
 
 		wizardAction.finish();
 

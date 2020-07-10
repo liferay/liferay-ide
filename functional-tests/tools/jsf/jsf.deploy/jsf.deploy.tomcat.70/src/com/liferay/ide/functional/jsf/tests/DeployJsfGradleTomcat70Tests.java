@@ -65,4 +65,9 @@ public class DeployJsfGradleTomcat70Tests extends DeployJsfGradleTomcat7xBase {
 		super.deployRichFaces();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.0";
+	}
+
 }

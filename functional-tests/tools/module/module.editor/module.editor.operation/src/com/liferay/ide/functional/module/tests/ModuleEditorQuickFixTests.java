@@ -29,7 +29,7 @@ public class ModuleEditorQuickFixTests extends SwtbotBase {
 	public void quickFixInServiceWrapper() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(projects.getName(0), "7.2");
+		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(projects.getName(0), "portal-7.2-ga2");
 
 		wizardAction.finish();
 
@@ -37,7 +37,7 @@ public class ModuleEditorQuickFixTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projects.getName(1), SERVICE_WRAPPER, "7.2");
+		wizardAction.newModule.prepareGradle(projects.getName(1), SERVICE_WRAPPER);
 
 		wizardAction.finish();
 

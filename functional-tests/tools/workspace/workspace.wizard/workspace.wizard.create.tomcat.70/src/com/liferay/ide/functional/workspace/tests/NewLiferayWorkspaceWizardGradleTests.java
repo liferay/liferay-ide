@@ -27,26 +27,23 @@ import org.junit.Test;
  * @author Ying Xu
  * @author Terry Jia
  * @author Lily Li
+ * @author Rui Wang
  */
 public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	String expectedBuildGradle =
-			"dependencies {\n" + 
-			"	compileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\"\n" +
-			"	compileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\"\n" +
-			"	compileOnly group: \"javax.portlet\", name: \"portlet-api\"\n" +
-			"	compileOnly group: \"javax.servlet\", name: \"javax.servlet-api\"\n" +
-			"	compileOnly group: \"jstl\", name: \"jstl\"\n" +
-			"	compileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\"\n" +
-			"\n" +
-			"	cssBuilder group: \"com.liferay\", name: \"com.liferay.css.builder\", version: \"3.0.2\"\n" +
-			"}";
+			"dependencies {\n"+
+		"	compileOnly group: \"org.osgi\", name: \"org.osgi.core\"\n"+
+		"	compileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\"\n"+
+	"}";
 
 	@Test
 	public void checkDependenciesVersionForExt() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName(), "7.1");
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.1-ga4");
 
 		wizardAction.finish();
 
@@ -81,219 +78,12 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		String[] projectNames = {project.getName(), "ext", projectName};
 		String[] newModuleNames = {project.getName(), "ext"};
 
-		viewAction.project.closeAndDelete(projectNames);
-		viewAction.project.closeAndDelete(newModuleNames);
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(newModuleNames);
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
-	@Test
-	public void checkDependenciesVersionForModule() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		String projectName = "test-mvc-portlet";
-
-		wizardAction.newModule.prepareGradleInWorkspace(projectName, MVC_PORTLET);
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningProjectBuildingJobs();
-
-		viewAction.project.refreshGradleProject(project.getName());
-
-		jobAction.waitForNoRunningJobs();
-
-		viewAction.project.openFile(project.getName(), "modules", projectName, "build.gradle");
-
-		validationAction.assertEquals(expectedBuildGradle, editorAction.getContent());
-
-		editorAction.close();
-
-		String[] projectNames = {project.getName(), "modules", projectName};
-		String[] newModuleNames = {project.getName(), "modules"};
-
-		viewAction.project.closeAndDelete(projectNames);
-		viewAction.project.closeAndDelete(newModuleNames);
-		viewAction.project.closeAndDelete(project.getName());
-	}
-
-	@Test
-	public void checkDependenciesVersionForWar() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		String projectName = "test-war-hook";
-
-		wizardAction.newModule.prepareGradleInWorkspace(projectName, WAR_HOOK);
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningProjectBuildingJobs();
-
-		viewAction.project.refreshGradleProject(project.getName());
-
-		jobAction.waitForNoRunningJobs();
-
-		viewAction.project.openFile(project.getName(), "wars", projectName, "build.gradle");
-
-		validationAction.assertDoesNotContains("version", editorAction.getContent());
-
-		editorAction.close();
-
-		String[] projectNames = {project.getName(), "wars", projectName};
-		String[] newModuleNames = {project.getName(), "wars"};
-
-		viewAction.project.closeAndDelete(projectNames);
-		viewAction.project.closeAndDelete(newModuleNames);
-		viewAction.project.closeAndDelete(project.getName());
-	}
-
-	@Test
-	public void createLiferayWorkspace() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.0");
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
-
-		String targetPlateformVersionMessage = "liferay.workspace.target.platform.version = 7.0.6";
-
-		viewAction.project.openFile(project.getName(), "gradle.properties");
-
-		validationAction.assertContains(targetPlateformVersionMessage, editorAction.getContent());
-
-		editorAction.close();
-
-		String[] moduleNames = {project.getName(), "modules"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(moduleNames));
-
-		String[] themeNames = {project.getName(), "themes"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(themeNames));
-
-		String[] warNames = {project.getName(), "wars"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(warNames));
-
-		viewAction.project.closeAndDelete(project.getName());
-	}
-
-	@Test
-	public void createLiferayWorkspace71() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.1");
-
-		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
-
-		String targetPlateformVersionMessage = "liferay.workspace.target.platform.version = 7.1.3";
-
-		viewAction.project.openFile(project.getName(), "gradle.properties");
-
-		validationAction.assertContains(targetPlateformVersionMessage, editorAction.getContent());
-
-		editorAction.close();
-
-		viewAction.project.closeAndDelete(project.getName());
-	}
-
-	@Test
-	public void createLiferayWorkspaceChangeLocation() {
-		String workspacePath = envAction.getEclipseWorkspacePathOSString();
-
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
-
-		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
-
-		String newFolderName = "changeLocation";
-
-		wizardAction.newLiferayWorkspace.prepareLocation(workspacePath + "/" + newFolderName);
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
-
-		viewAction.project.closeAndDelete(project.getName());
-	}
-
-	@Test
-	public void createLiferayWorkspaceChangeModulesDir() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
-
-		viewAction.project.openFile(project.getName(), "gradle.properties");
-
-		StringBuffer sb = new StringBuffer();
-
-		String newModulesFolderName = "modulesTest";
-
-		sb.append("liferay.workspace.modules.dir");
-		sb.append("=");
-		sb.append(newModulesFolderName);
-
-		editorAction.setText(sb.toString());
-
-		editorAction.save();
-
-		editorAction.close();
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		String projectName = "test-mvc-portlet";
-
-		wizardAction.newModule.prepareGradleInWorkspace(projectName, MVC_PORTLET);
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningProjectBuildingJobs();
-
-		viewAction.project.refreshGradleProject(project.getName());
-
-		jobAction.waitForNoRunningJobs();
-
-		String[] projectNames = {project.getName(), newModulesFolderName, projectName};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDelete(projectNames);
-
-		String[] newModuleNames = {project.getName(), newModulesFolderName};
-
-		viewAction.project.closeAndDelete(newModuleNames);
-
-		viewAction.project.closeAndDelete(project.getName());
-	}
-
+	@Ignore ("IDE-4823 After building the wars project, it will also be placed in the gradle workspace module folder")
 	@Test
 	public void createLiferayWorkspaceChangeWarsDir() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -345,6 +135,221 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Test
+	public void checkDependenciesVersionForModule() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.2-ga2");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		String projectName = "test-api";
+
+		wizardAction.newModule.prepareGradleInWorkspace(projectName, API);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.refreshGradleProject(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(project.getName(), "modules", projectName, "build.gradle");
+
+		validationAction.assertDoesNotContains("version", editorAction.getContent());
+
+		editorAction.close();
+
+		String[] projectNames = {project.getName(), "modules", projectName};
+		String[] newModuleNames = {project.getName(), "modules"};
+
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(newModuleNames);
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
+	@Test
+	public void checkDependenciesVersionForWar() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(),"portal-7.2-ga2");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		String projectName = "test-war-hook";
+
+		wizardAction.newModule.prepareGradleInWorkspace(projectName, WAR_HOOK);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.refreshGradleProject(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(project.getName(), "modules", projectName, "build.gradle");
+
+		validationAction.assertDoesNotContains("version", editorAction.getContent());
+
+		editorAction.close();
+
+		String[] projectNames = {project.getName(), "modules", projectName};
+		String[] newModuleNames = {project.getName(), "modules"};
+
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(newModuleNames);
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
+	@Test
+	public void createLiferayWorkspace70() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.0-ga7");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		String productKey = "liferay.workspace.product = portal-7.0-ga7";
+
+		viewAction.project.openFile(project.getName(), "gradle.properties");
+
+		validationAction.assertContains(productKey, editorAction.getContent());
+
+		editorAction.close();
+
+		String[] moduleNames = {project.getName(), "modules"};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(moduleNames));
+
+		String[] themeNames = {project.getName(), "themes"};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(themeNames));
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
+	@Test
+	public void createLiferayWorkspace71() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.1-ga4");
+
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+
+		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		String productKey = "liferay.workspace.product = portal-7.1-ga4";
+
+		viewAction.project.openFile(project.getName(), "gradle.properties");
+
+		validationAction.assertContains(productKey, editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
+	@Test
+	public void createLiferayWorkspaceChangeLocation() {
+		String workspacePath = envAction.getEclipseWorkspacePathOSString();
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+
+		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
+
+		String newFolderName = "changeLocation";
+
+		wizardAction.newLiferayWorkspace.prepareLocation(workspacePath + "/" + newFolderName);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
+	@Test
+	public void createLiferayWorkspaceChangeModulesDir() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "portal-7.2-ga2");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(project.getName(), "gradle.properties");
+
+		String gradlePropertiesFile = editorAction.getContent();
+
+		String previousText = "liferay.workspace.modules.dir = modules";
+		String newText = "liferay.workspace.modules.dir = modulesTest";
+
+		editorAction.selectText("liferay.workspace.modules.dir = modules");
+
+		editorAction.setText(gradlePropertiesFile.replace(previousText, newText));
+	
+		editorAction.save();
+
+		editorAction.close();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		String projectName = "test-mvc-portlet";
+
+		wizardAction.newModule.prepareGradleInWorkspace(projectName, MVC_PORTLET);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.refreshGradleProject(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		String[] projectNames = {project.getName(), "modulesTest", projectName};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
+
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
+
+		String[] newModuleNames = {project.getName(), "modulesTest"};
+
+		viewAction.project.closeAndDeleteFromDisk(newModuleNames);
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundle() {
@@ -367,6 +372,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		dialogAction.preferences.confirm();
 	}
 
+	@Ignore("IDE-4827 gradle workspace wizard no support modfiy bundle url,maven workspace file has related tests")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundleChangeBundleUrl() {
 		if (!envAction.internal()) {

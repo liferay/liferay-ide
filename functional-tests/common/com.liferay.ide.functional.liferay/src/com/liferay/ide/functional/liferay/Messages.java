@@ -135,8 +135,6 @@ public interface Messages {
 
 	public static final String LICENSES_MUST_BE_REVIEWED = "Licenses must be reviewed";
 
-	public static final String LIFERAY_RUNTIME_MUST_BE_CONFIGURED = "Liferay runtime must be configured.";
-
 	public static final String LIFERAY_WORKSPACE_NAME_COULD_NOT_EMPTY =
 		"Liferay Workspace project name could not be empty.";
 
@@ -198,6 +196,10 @@ public interface Messages {
 		"Please select at least one project to import.";
 
 	public static final String PLEASE_SELECT_THE_WORKSPACE_LOCATION = "Please select the workspace location.";
+
+	public static final String PLEASE_SET_A_VALID_LIFERAY_PORTAL_RUNTIME =
+		"Please set a valid liferay portal runtime, you can initBundle or modify 'liferay.workspace.home.dir' to " +
+			"make it point to an existing runtime.";
 
 	public static final String PORTAL_BUNDLE_DOES_NOT_EXIST = "Portal bundle does not exist";
 

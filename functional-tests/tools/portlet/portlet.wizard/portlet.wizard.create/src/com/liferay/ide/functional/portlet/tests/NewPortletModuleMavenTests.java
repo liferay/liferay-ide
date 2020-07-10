@@ -45,7 +45,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -60,11 +60,11 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Ignore("ignore create project have too long time lead to timeout")
@@ -76,9 +76,9 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), project.getName());
 	}
 
 	@Ignore("ignore create project have too long time lead to timeout")
@@ -90,7 +90,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -104,7 +104,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -120,7 +120,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -134,7 +134,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -150,7 +150,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getName(), project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}

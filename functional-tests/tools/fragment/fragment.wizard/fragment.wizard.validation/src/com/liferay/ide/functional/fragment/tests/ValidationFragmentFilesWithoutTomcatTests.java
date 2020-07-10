@@ -39,8 +39,6 @@ public class ValidationFragmentFilesWithoutTomcatTests extends SwtbotBase {
 
 		validationAction.assertTextEquals("<None>", wizardAction.newFragmentFiles.runtimeName());
 
-		validationAction.assertEnabledTrue(wizardAction.newFragmentFiles.newRuntimeBtn());
-
 		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newFragmentFiles.hostOsgiBundle());
 
 		validationAction.assertEnabledFalse(wizardAction.newFragmentFiles.addOverrideFilesBtn());

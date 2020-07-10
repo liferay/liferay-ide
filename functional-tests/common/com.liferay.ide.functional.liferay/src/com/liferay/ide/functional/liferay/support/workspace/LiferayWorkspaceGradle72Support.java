@@ -41,7 +41,7 @@ public class LiferayWorkspaceGradle72Support extends LiferayWorkspaceSupport {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(getName(), "7.2");
+		wizardAction.newLiferayWorkspace.prepareGradle(getName(), "portal-7.2-ga2");
 
 		wizardAction.finish();
 

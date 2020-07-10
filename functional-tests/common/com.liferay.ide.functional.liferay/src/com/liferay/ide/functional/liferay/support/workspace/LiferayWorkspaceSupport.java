@@ -29,6 +29,8 @@ public abstract class LiferayWorkspaceSupport extends SupportBase {
 
 	@Override
 	public void after() {
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.closeAndDeleteFromDisk(getName());
 	}
 

@@ -44,6 +44,7 @@ import com.liferay.ide.functional.liferay.page.wizard.project.NewLiferaySpringMv
 import com.liferay.ide.functional.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.functional.liferay.page.wizard.project.NewProjectWizard;
 import com.liferay.ide.functional.liferay.page.wizard.project.SetSDKLocationWizard;
+import com.liferay.ide.functional.swtbot.condition.NoRunningJobsCondition;
 import com.liferay.ide.functional.swtbot.eclipse.page.ImportProjectWizard;
 import com.liferay.ide.functional.swtbot.eclipse.page.InstallNewSoftwareWizard;
 import com.liferay.ide.functional.swtbot.eclipse.page.NewRuntimeWizard;
@@ -767,12 +768,12 @@ public class WizardAction extends UIAction {
 			_prepare(projectName, GRADLE);
 		}
 
-		public void prepareGradle(String projectName, String componentSuite) {
-			_prepare(projectName, GRADLE, componentSuite);
+		public void prepareGradle(String projectName, String componentSuite, String version) {
+			_prepare(projectName, GRADLE, componentSuite, version);
 		}
 
-		public void prepareMaven(String projectName, String componentSuite) {
-			_prepare(projectName, MAVEN, componentSuite);
+		public void prepareMaven(String projectName, String componentSuite, String version) {
+			_prepare(projectName, MAVEN, componentSuite, version);
 		}
 
 		public ComboBox projectComponentSuite() {
@@ -784,10 +785,11 @@ public class WizardAction extends UIAction {
 			_newJsfProjectWizard.setBuildType(buildType);
 		}
 
-		private void _prepare(String projectName, String buildType, String componentSuite) {
+		private void _prepare(String projectName, String buildType, String componentSuite, String version) {
 			_newJsfProjectWizard.setProjectName(projectName);
 			_newJsfProjectWizard.setBuildType(buildType);
 			_newJsfProjectWizard.setComponentSuite(componentSuite);
+			_newJsfProjectWizard.setLiferayVersion(version);
 		}
 
 		private final NewLiferayJsfWizard _newJsfProjectWizard = new NewLiferayJsfWizard(bot);
@@ -1010,7 +1012,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareMaven(String projectName, String version) {
-			_prepare(projectName, MAVEN, version);
+			_prepareMavenWorkspace(projectName, MAVEN, version);
 		}
 
 		public void selectDownloadLiferayBundle() {
@@ -1019,6 +1021,12 @@ public class WizardAction extends UIAction {
 
 		public void setBundleUrl(String bundleUrl) {
 			_newLiferayWorkspaceWizard.setBundleUrl(bundleUrl);
+		}
+
+		public void setProductVersion(String version) {
+			ide.waitUntil(new NoRunningJobsCondition(), 5 * 60 * 1000);
+
+			_newLiferayWorkspaceWizard.setProductVersion(version);
 		}
 
 		public void setServerName(String serverName) {
@@ -1055,8 +1063,18 @@ public class WizardAction extends UIAction {
 			ide.sleep(800);
 			_newLiferayWorkspaceWizard.setBuildType(buildType);
 			ide.sleep(800);
-			_newLiferayWorkspaceWizard.setLiferayVersion(version);
+
+			ide.waitUntil(new NoRunningJobsCondition(), 5 * 60 * 1000);
+
+			_newLiferayWorkspaceWizard.setProductVersion(version);
+
 			ide.sleep(800);
+		}
+
+		private void _prepareMavenWorkspace(String projectName, String buildType, String version) {
+			_newLiferayWorkspaceWizard.setProjectName(projectName);
+			_newLiferayWorkspaceWizard.setBuildType(buildType);
+			_newLiferayWorkspaceWizard.setLiferayVersion(version);
 		}
 
 		private final NewLiferayWorkspaceWizard _newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);

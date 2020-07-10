@@ -32,13 +32,17 @@ public abstract class NewFragmentWizardLiferayWorkspaceGradleBase extends Swtbot
 
 		StringBuffer sb = new StringBuffer();
 
+		String previousModulesFolderSetting = "liferay.workspace.modules.dir = modules";
+
 		String newModulesFolderName = "modulesTest";
 
 		sb.append("liferay.workspace.modules.dir");
 		sb.append("=");
 		sb.append(newModulesFolderName);
 
-		editorAction.setText(sb.toString());
+		String gradlePropertiesText = editorAction.getContent();
+
+		editorAction.setText(gradlePropertiesText.replace(previousModulesFolderSetting, sb.toString()));
 
 		editorAction.save();
 
@@ -85,10 +89,7 @@ public abstract class NewFragmentWizardLiferayWorkspaceGradleBase extends Swtbot
 
 		viewAction.project.openFile(getLiferayWorkspace().getName(), "gradle.properties");
 
-		sb.delete(0, sb.length());
-		sb.append("liferay.workspace.modules.dir=modules");
-
-		editorAction.setText(sb.toString());
+		editorAction.setText(gradlePropertiesText.replace(sb.toString(), previousModulesFolderSetting));
 
 		editorAction.save();
 

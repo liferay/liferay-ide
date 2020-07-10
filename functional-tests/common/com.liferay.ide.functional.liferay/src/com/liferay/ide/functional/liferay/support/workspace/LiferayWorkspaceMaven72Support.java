@@ -33,8 +33,6 @@ public class LiferayWorkspaceMaven72Support extends LiferayWorkspaceSupport {
 
 		String[] themesFolderNames = {getName(), getThemesDirName()};
 
-		String[] warsFolderNames = {getName(), getWarsDirName()};
-
 		viewAction.project.openUpdateMavenProjectDialog(getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -46,8 +44,6 @@ public class LiferayWorkspaceMaven72Support extends LiferayWorkspaceSupport {
 		viewAction.project.closeAndDeleteFromDisk(modulesFolderNames);
 
 		viewAction.project.closeAndDeleteFromDisk(themesFolderNames);
-
-		viewAction.project.closeAndDeleteFromDisk(warsFolderNames);
 
 		super.after();
 	}
