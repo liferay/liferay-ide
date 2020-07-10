@@ -44,7 +44,7 @@ public abstract class NewModuleMavenBase extends NewModuleOpBase<NewLiferayModul
 	public static void createLiferayWorkspace() {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga3");
+		op.setProductVersion("portal-7.3-ga4");
 
 		JobUtil.waitForLiferayProjectJob();
 
