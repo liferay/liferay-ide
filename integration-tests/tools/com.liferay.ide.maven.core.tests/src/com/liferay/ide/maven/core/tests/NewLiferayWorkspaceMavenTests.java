@@ -53,7 +53,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		op.setWorkspaceName(workspace.getName());
-		op.setProductVersion("portal-7.3-ga3");
+		op.setProductVersion("portal-7.3-ga4");
 
 		waitForBuildAndValidation();
 
@@ -80,7 +80,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewLiferayWorkspaceOpWithInvalidBundleUrl() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga3");
+		op.setProductVersion("portal-7.3-ga4");
 
 		waitForBuildAndValidation();
 
@@ -112,7 +112,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewMavenLiferayWorkspaceInitBundle() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga3");
+		op.setProductVersion("portal-7.3-ga4");
 
 		waitForBuildAndValidation();
 
@@ -158,7 +158,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewMavenLiferayWorkspaceOpWithBundle70() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga3");
+		op.setProductVersion("portal-7.3-ga4");
 
 		waitForBuildAndValidation();
 
@@ -200,7 +200,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewMavenLiferayWorkspaceOpWithBundle71() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga3");
+		op.setProductVersion("portal-7.3-ga4");
 
 		waitForBuildAndValidation();
 
@@ -242,7 +242,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewMavenLiferayWorkspaceSetUrl() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga3");
+		op.setProductVersion("portal-7.3-ga4");
 
 		waitForBuildAndValidation();
 

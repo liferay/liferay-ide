@@ -134,7 +134,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
         workspaceOp.setWorkspaceName( "test-maven-liferay-workspace" );
         workspaceOp.setUseDefaultLocation( true );
-        workspaceOp.setProductVersion("portal-7.3-ga3");
+        workspaceOp.setProductVersion("portal-7.3-ga4");
         workspaceOp.setProvisionLiferayBundle(true);
         workspaceOp.setServerName("test-maven-liferay-workspace");
         

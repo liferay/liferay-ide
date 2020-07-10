@@ -126,7 +126,7 @@ public class NewLiferayComponentOpTests extends BaseTests
         
         op.setWorkspaceName( "test-liferay-workspace" );
         op.setUseDefaultLocation( true );
-        op.setProductVersion("portal-7.3-ga3");
+        op.setProductVersion("portal-7.3-ga4");
         
         TestUtil.waitForBuildAndValidation();
 
