@@ -12,10 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.liferay70;
+package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.BaseLiferayVersionsProperties;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -24,16 +25,16 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=properties", "problem.title=liferay-versions key in Liferay Plugin Packages Properties 7.0",
-		"problem.summary=In order to deploy this project to 7.0 the liferay-versions property must be set to 7.0.0+",
-		"problem.tickets=", "problem.section=", "auto.correct=property", "version=7.0"
+		"file.extensions=properties", "problem.title=liferay-versions key in Liferay Plugin Packages Properties 7.1",
+		"problem.summary=In order to deploy this project to 7.1 the liferay-versions property must be set to 7.1.0+",
+		"problem.tickets=", "problem.section=", "auto.correct=property", "version=7.1"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )
-public class LiferayVersionsProperties extends BaseLiferayVersionsProperties {
+public class Liferay71VersionsProperties extends BaseLiferayVersionsProperties {
 
-	public LiferayVersionsProperties() {
-		super(".*7\\.[0-9]\\.[0-9].*", "7.0.0+");
+	public Liferay71VersionsProperties() {
+		super(".*7\\.[1-9]\\.[0-9].*", "7.1.0+");
 	}
 
 }

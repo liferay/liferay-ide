@@ -12,18 +12,14 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.liferay70;
+package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker.KeyInfo;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import java.nio.file.Files;
@@ -31,8 +27,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * @author Gregory Amerson
@@ -54,7 +48,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 			List<KeyInfo> keys = propertiesFileChecker.getInfos("liferay-versions");
 
-			if (ListUtil.isNotEmpty(keys)) {
+			if (keys != null && !keys.isEmpty()) {
 				KeyInfo key = keys.get(0);
 
 				String versions = key.value;
@@ -105,9 +99,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 			}
 
 			if (problemsFixed > 0) {
-				try (ByteArrayInputStream input = new ByteArrayInputStream(contents.getBytes())) {
-					FileUtils.copyInputStreamToFile(input, file);
-				}
+				Files.write(file.toPath(), contents.getBytes());
 			}
 
 			return problemsFixed;
