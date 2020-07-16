@@ -64,7 +64,7 @@
 						<configuration>
 							<url>${blade-latest-download-url}</url>
 							<outputDirectory>lib/</outputDirectory>
-							<outputFileName>blade-4.0.0.jar</outputFileName>
+							<outputFileName>blade-latest.jar</outputFileName>
 							<md5>${blade-latest-md5}</md5>
 						</configuration>
 					</execution>

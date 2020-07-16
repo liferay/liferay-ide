@@ -25,7 +25,6 @@ import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 import com.liferay.ide.server.util.ServerUtil;
@@ -81,10 +80,10 @@ public class LiferayGradleWorkspaceProjectProvider
 		sb.append(get(op.getProductVersion()));
 
 		try {
-			BladeCLI.executeWithNewBlade(sb.toString());
+			BladeCLI.executeWithLatestBlade(sb.toString());
 		}
-		catch (BladeCLIException bclie) {
-			return ProjectCore.createErrorStatus(bclie);
+		catch (Exception e) {
+			return ProjectCore.createErrorStatus(e);
 		}
 
 		boolean enableTargetPlatform = get(op.getEnableTargetPlatform());

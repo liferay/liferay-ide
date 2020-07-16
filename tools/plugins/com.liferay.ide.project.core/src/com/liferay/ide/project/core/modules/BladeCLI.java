@@ -48,7 +48,7 @@ public class BladeCLI {
 
 	public static final String BLADE_392 = "blade-3.9.2.jar";
 
-	public static final String BLADE_400 = "blade-4.0.0.jar";
+	public static final String BLADE_LATEST = "blade-latest.jar";
 
 	public static String[] execute(String args) throws BladeCLIException {
 		IPath bladeCLIPath = getBladeCLIPath();
@@ -56,8 +56,8 @@ public class BladeCLI {
 		return _execute(bladeCLIPath, args);
 	}
 
-	public static String[] executeWithNewBlade(String args) throws BladeCLIException {
-		return _execute(getNewBladeCLIPath(), args);
+	public static String[] executeWithLatestBlade(String args) throws BladeCLIException, IOException {
+		return _execute(_getBladeJarFromBundle(BLADE_LATEST), args);
 	}
 
 	/**
@@ -79,27 +79,18 @@ public class BladeCLI {
 
 		if (Objects.nonNull(liferayWorkspaceProject)) {
 			if (liferayWorkspaceProject.isFlexibleLiferayWorkspace()) {
-				_bladeJarName = BLADE_400;
+				_bladeJarName = BLADE_LATEST;
 			}
 			else {
 				_bladeJarName = BLADE_392;
 			}
 		}
 		else {
-			_bladeJarName = BLADE_400;
+			_bladeJarName = BLADE_LATEST;
 		}
 
 		try {
 			return _getBladeJarFromBundle(_bladeJarName);
-		}
-		catch (IOException ioe) {
-			throw new BladeCLIException("Could not find blade cli jar", ioe);
-		}
-	}
-
-	public static synchronized IPath getNewBladeCLIPath() throws BladeCLIException {
-		try {
-			return _getBladeJarFromBundle(BLADE_400);
 		}
 		catch (IOException ioe) {
 			throw new BladeCLIException("Could not find blade cli jar", ioe);
@@ -131,16 +122,16 @@ public class BladeCLI {
 		return templateNames.toArray(new String[0]);
 	}
 
-	public static synchronized String[] getWorkspaceProducts(boolean showAll) throws BladeCLIException {
+	public static synchronized String[] getWorkspaceProducts(boolean showAll) throws BladeCLIException, IOException {
 		List<String> workspaceProducts = new ArrayList<>();
 
 		String[] executeResult;
 
 		if (showAll) {
-			executeResult = _execute(getNewBladeCLIPath(), "init --list --all");
+			executeResult = _execute(_getBladeJarFromBundle(BLADE_LATEST), "init --list --all");
 		}
 		else {
-			executeResult = _execute(getNewBladeCLIPath(), "init --list");
+			executeResult = _execute(_getBladeJarFromBundle(BLADE_LATEST), "init --list");
 		}
 
 		for (String result : executeResult) {
