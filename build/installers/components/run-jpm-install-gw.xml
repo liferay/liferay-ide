@@ -1,4 +1,4 @@
 <runProgram>
-    <program>${jpmFilePath}</program>
-    <programArguments>install -fl --jvmlocation "${java_executable}" "${gwFilePath}"</programArguments>
+    <program>${java_executable}</program>
+    <programArguments> -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" install -fl --jvmlocation "${java_executable}" "${gwFilePath}"</programArguments>
 </runProgram>

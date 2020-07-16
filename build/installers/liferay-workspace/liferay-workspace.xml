@@ -327,8 +327,8 @@
                     <value>${jpmSystemPath}${platform_path_separator}blade</value>
                 </setInstallerVariable>
                 <runProgram>
-                    <program>${bladeCommondPath}</program>
-                    <programArguments>--base "${lrwsDir}" init -v "${selectbundleversion}"</programArguments>
+                    <program>${java_executable}</program>
+                    <programArguments> -jar "${bladeFilePath}" --base "${lrwsDir}" init -v "${selectbundleversion}"</programArguments>
                 </runProgram>
                 <propertiesFileSet>
                     <file>${lrwsDir}${platform_path_separator}gradle.properties</file>
@@ -505,6 +505,23 @@
     <vendor>Liferay, Inc</vendor>
     <width>600</width>
     <parameterList>
+        <fileParameter>
+            <name>java_executable</name>
+            <title>Select a valid Java(tm) Executable</title>
+            <description>Java(tm) Runtime</description>
+            <explanation>Please select a valid Java(tm) Runtime</explanation>
+            <value></value>
+            <default></default>
+            <allowEmptyValue>0</allowEmptyValue>
+            <mustBeWritable>0</mustBeWritable>
+            <mustExist>1</mustExist>
+            <width>30</width>
+            <ruleList>
+                <isFalse>
+                    <value>${java_autodetected}</value>
+                </isFalse>
+            </ruleList>
+        </fileParameter>
         <directoryParameter>
             <name>installdir</name>
             <description>Installer.Parameter.installdir.description</description>
