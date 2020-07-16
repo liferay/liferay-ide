@@ -1,4 +1,6 @@
 <autodetectJava>
+    <abortOnError>0</abortOnError>
+    <customErrorMessage>The installer could not find a valid Java(tm) through standard installation paths or environment variables on this machine. Required JDK versions: 1.8 64-Bit JDK or 11 64-Bit JDK. Please click OK and browse a valid java executable file to continue.</customErrorMessage>
     <promptUser>1</promptUser>
     <validVersionList>
         <validVersion>
