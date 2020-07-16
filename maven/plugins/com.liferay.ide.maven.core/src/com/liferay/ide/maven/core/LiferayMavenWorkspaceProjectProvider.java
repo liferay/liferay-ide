@@ -22,7 +22,6 @@ import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 
@@ -74,10 +73,10 @@ public class LiferayMavenWorkspaceProjectProvider
 		sb.append(version);
 
 		try {
-			BladeCLI.execute(sb.toString());
+			BladeCLI.executeWithLatestBlade(sb.toString());
 		}
-		catch (BladeCLIException bclie) {
-			return ProjectCore.createErrorStatus(bclie);
+		catch (Exception e) {
+			return ProjectCore.createErrorStatus(e);
 		}
 
 		File pomFile = FileUtil.getFile(workspaceLocation.append("pom.xml"));

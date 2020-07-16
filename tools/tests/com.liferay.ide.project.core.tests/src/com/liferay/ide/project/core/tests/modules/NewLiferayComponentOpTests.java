@@ -120,7 +120,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
 
     @BeforeClass
-    public static void setupBladeCLIRepoUrl() throws Exception
+    public static void setupWorkspaceProject() throws Exception
     {
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
         

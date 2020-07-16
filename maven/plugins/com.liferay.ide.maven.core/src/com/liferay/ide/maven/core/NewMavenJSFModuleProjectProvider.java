@@ -14,17 +14,13 @@
 
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
-
-import java.io.File;
 
 import java.util.Properties;
 
@@ -35,7 +31,6 @@ import org.apache.maven.archetype.catalog.Archetype;
 
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -77,52 +72,6 @@ public class NewMavenJSFModuleProjectProvider
 		MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
 
 		retval = Status.OK_STATUS;
-
-		return retval;
-	}
-
-	@Override
-	public IStatus validateProjectLocation(String projectName, IPath path) {
-		IStatus retval = Status.OK_STATUS;
-
-		boolean liferayWorkspace = LiferayWorkspaceUtil.isValidWorkspaceLocation(path);
-
-		if (liferayWorkspace) {
-			retval = LiferayMavenCore.createErrorStatus(
-				"Can not set WorkspaceProject root folder as project directory.");
-
-			File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(path.toFile());
-
-			if (FileUtil.notExists(workspaceDir)) {
-				return LiferayCore.createErrorStatus("The project location of Liferay Workspace shoule be existed.");
-			}
-
-			IProject project = CoreUtil.getProject(path.toFile());
-
-			IWorkspaceProject liferayWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
-
-			String[] folders = liferayWorkspaceProject.getWorkspaceWarDirs();
-
-			if (folders != null) {
-				boolean appendWarFolder = false;
-
-				for (String folder : folders) {
-					if (StringUtil.endsWith(path.lastSegment(), folder)) {
-						appendWarFolder = true;
-
-						break;
-					}
-				}
-
-				if (!appendWarFolder) {
-					return LiferayMavenCore.createErrorStatus(
-						"The project location should be wars folder of Liferay workspace.");
-				}
-			}
-			else {
-				return LiferayMavenCore.createErrorStatus("The Liferay Workspace was not defined wars folder path.");
-			}
-		}
 
 		return retval;
 	}

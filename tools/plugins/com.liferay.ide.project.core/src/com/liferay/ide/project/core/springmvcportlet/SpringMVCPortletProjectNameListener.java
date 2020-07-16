@@ -19,10 +19,14 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BaseModuleOp;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -81,7 +85,23 @@ public class SpringMVCPortletProjectNameListener
 					String[] defaultWarDirs = liferayWorkspaceProject.getWorkspaceWarDirs();
 
 					if (Objects.nonNull(defaultWarDirs)) {
-						newLocationBase = PathBridge.create(workspaceLocation.append(defaultWarDirs[0]));
+						NewLiferayProjectProvider<BaseModuleOp> projectProvider = get(op.getProjectProvider());
+
+						if (StringUtil.equals(projectProvider.getDisplayName(), "Maven")) {
+							newLocationBase = Stream.of(
+								defaultWarDirs
+							).map(
+								warDir -> PathBridge.create(workspaceLocation.append(warDir))
+							).filter(
+								warDirPath -> FileUtil.exists(warDirPath.toFile())
+							).findAny(
+							).orElseGet(
+								() -> PathBridge.create(workspaceLocation)
+							);
+						}
+						else {
+							newLocationBase = PathBridge.create(workspaceLocation.append(defaultWarDirs[0]));
+						}
 					}
 					else {
 						newLocationBase = PathBridge.create(workspaceLocation);

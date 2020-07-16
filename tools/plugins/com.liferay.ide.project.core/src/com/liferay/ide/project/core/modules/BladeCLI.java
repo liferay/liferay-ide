@@ -14,24 +14,21 @@
 
 package com.liferay.ide.project.core.modules;
 
-import aQute.bnd.osgi.Domain;
-
-import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
@@ -39,32 +36,116 @@ import org.apache.tools.ant.taskdefs.Java;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.Version;
-import org.osgi.service.prefs.Preferences;
 
 /**
  * @author Gregory Amerson
  * @author Andy Wu
+ * @author Simon Jiang
  */
 public class BladeCLI {
 
-	public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
+	public static final String BLADE_392 = "blade-3.9.2.jar";
 
-	public static final String BLADE_JAR_FILE_NAME = "blade.jar";
-
-	public static synchronized void addToLocalInstance(File latestBladeJar) {
-		FileUtil.copyFile(latestBladeJar, _bladeJarInstancePath.toFile());
-	}
+	public static final String BLADE_LATEST = "blade-latest.jar";
 
 	public static String[] execute(String args) throws BladeCLIException {
 		IPath bladeCLIPath = getBladeCLIPath();
 
+		return _execute(bladeCLIPath, args);
+	}
+
+	public static String[] executeWithLatestBlade(String args) throws BladeCLIException, IOException {
+		return _execute(_getBladeJarFromBundle(BLADE_LATEST), args);
+	}
+
+	/**
+	 * We need to get the correct path to the blade jar, here is the logic
+	 *
+	 * First see if we have a instance (workbench) copy of blade cli jar, that means
+	 * that the developer has intentially updated their blade jar to a newer version
+	 * than is shipped with the project.core bundle. The local instance copy will be
+	 * in the plugin state area.
+	 *
+	 * If there is no instance copy of blade cli jar, then fallback to use the one
+	 * that is in the bundle itself.
+	 *
+	 * @return path to local blade jar
+	 * @throws BladeCLIException
+	 */
+	public static synchronized IPath getBladeCLIPath() throws BladeCLIException {
+		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+		if (Objects.nonNull(liferayWorkspaceProject)) {
+			if (liferayWorkspaceProject.isFlexibleLiferayWorkspace()) {
+				_bladeJarName = BLADE_LATEST;
+			}
+			else {
+				_bladeJarName = BLADE_392;
+			}
+		}
+		else {
+			_bladeJarName = BLADE_LATEST;
+		}
+
+		try {
+			return _getBladeJarFromBundle(_bladeJarName);
+		}
+		catch (IOException ioe) {
+			throw new BladeCLIException("Could not find blade cli jar", ioe);
+		}
+	}
+
+	public static synchronized String[] getProjectTemplates() throws BladeCLIException {
+		List<String> templateNames = new ArrayList<>();
+
+		String[] executeResult = execute("create -q -l");
+
+		for (String name : executeResult) {
+			name = name.trim();
+
+			if (name.indexOf(" ") != -1) {
+
+				// for latest blade which print template descriptor
+
+				templateNames.add(name.substring(0, name.indexOf(" ")));
+			}
+			else {
+
+				// for legacy blade
+
+				templateNames.add(name);
+			}
+		}
+
+		return templateNames.toArray(new String[0]);
+	}
+
+	public static synchronized String[] getWorkspaceProducts(boolean showAll) throws BladeCLIException, IOException {
+		List<String> workspaceProducts = new ArrayList<>();
+
+		String[] executeResult;
+
+		if (showAll) {
+			executeResult = _execute(_getBladeJarFromBundle(BLADE_LATEST), "init --list --all");
+		}
+		else {
+			executeResult = _execute(_getBladeJarFromBundle(BLADE_LATEST), "init --list");
+		}
+
+		for (String result : executeResult) {
+			String category = result.trim();
+
+			if (category.indexOf(" ") == -1) {
+				workspaceProducts.add(category);
+			}
+		}
+
+		return workspaceProducts.toArray(new String[0]);
+	}
+
+	private static String[] _execute(IPath bladeCLIPath, String args) throws BladeCLIException {
 		if (FileUtil.notExists(bladeCLIPath)) {
 			throw new BladeCLIException("Could not get blade cli jar");
 		}
@@ -127,183 +208,16 @@ public class BladeCLI {
 		return lines.toArray(new String[0]);
 	}
 
-	public static synchronized File fetchBladeJarFromRepo(boolean useCache) throws Exception {
-		if (!useCache) {
-			_bladeJarCacheFile = null;
-		}
-
-		if (_bladeJarCacheFile == null) {
-			File settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
-
-			settingsDir.mkdirs();
-
-			File repoCache = new File(settingsDir, "repoCache");
-
-			repoCache.mkdirs();
-
-			File bladeFile = new File(repoCache.getAbsolutePath(), BLADE_JAR_FILE_NAME);
-
-			String urlStr = _getRepoURL() + "/" + BLADE_JAR_FILE_NAME;
-
-			URL url = new URL(urlStr);
-
-			FileUtils.copyURLToFile(url, bladeFile);
-
-			_bladeJarCacheFile = bladeFile;
-
-			return bladeFile;
-		}
-		else {
-			return _bladeJarCacheFile;
-		}
-	}
-
-	/**
-	 * We need to get the correct path to the blade jar, here is the logic
-	 *
-	 * First see if we have a instance (workbench) copy of blade cli jar, that means
-	 * that the developer has intentially updated their blade jar to a newer version
-	 * than is shipped with the project.core bundle. The local instance copy will be
-	 * in the plugin state area.
-	 *
-	 * If there is no instance copy of blade cli jar, then fallback to use the one
-	 * that is in the bundle itself.
-	 *
-	 * @return path to local blade jar
-	 * @throws BladeCLIException
-	 */
-	public static synchronized IPath getBladeCLIPath() throws BladeCLIException {
-		File bladeJarInstanceFile = _bladeJarInstancePath.toFile();
-
-		if (FileUtil.exists(bladeJarInstanceFile)) {
-			try {
-				Domain jar = Domain.domain(bladeJarInstanceFile);
-
-				if (_supportedVersion(jar.getBundleVersion())) {
-					return _bladeJarInstancePath;
-				}
-			}
-			catch (IOException ioe) {
-			}
-		}
-
-		try {
-			return _getBladeJarFromBundle();
-		}
-		catch (IOException ioe) {
-			throw new BladeCLIException("Could not find blade cli jar", ioe);
-		}
-	}
-
-	public static synchronized String[] getProjectTemplates() throws BladeCLIException {
-		List<String> templateNames = new ArrayList<>();
-
-		String[] executeResult = execute("create -q -l");
-
-		for (String name : executeResult) {
-			name = name.trim();
-
-			if (name.indexOf(" ") != -1) {
-
-				// for latest blade which print template descriptor
-
-				templateNames.add(name.substring(0, name.indexOf(" ")));
-			}
-			else {
-
-				// for legacy blade
-
-				templateNames.add(name);
-			}
-		}
-
-		return templateNames.toArray(new String[0]);
-	}
-
-	public static synchronized String[] getWorkspaceProducts(boolean showAll) throws BladeCLIException {
-		List<String> workspaceProducts = new ArrayList<>();
-
-		String[] executeResult;
-
-		if (showAll) {
-			executeResult = execute("init --list --all");
-		}
-		else {
-			executeResult = execute("init --list");
-		}
-
-		for (String result : executeResult) {
-			String category = result.trim();
-
-			if (category.indexOf(" ") == -1) {
-				workspaceProducts.add(category);
-			}
-		}
-
-		return workspaceProducts.toArray(new String[0]);
-	}
-
-	public static synchronized void restoreOriginal() {
-		File file = _bladeJarInstancePath.toFile();
-
-		file.delete();
-	}
-
-	private static IPath _getBladeJarFromBundle() throws IOException {
+	private static IPath _getBladeJarFromBundle(String jarName) throws IOException {
 		ProjectCore projectCore = ProjectCore.getDefault();
 
 		Bundle bundle = projectCore.getBundle();
 
-		File bladeJarBundleFile = FileUtil.getFile(
-			FileLocator.toFileURL(bundle.getEntry("lib/" + BLADE_JAR_FILE_NAME)));
+		File bladeJarBundleFile = FileUtil.getFile(FileLocator.toFileURL(bundle.getEntry("lib/" + jarName)));
 
 		return new Path(bladeJarBundleFile.getCanonicalPath());
 	}
 
-	private static String _getRepoURL() {
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		Preferences[] preferences = {
-			InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID), DefaultScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID)
-		};
-
-		String repoURL = preferencesService.get(BLADE_CLI_REPO_URL, null, preferences);
-
-		if (!repoURL.endsWith("/")) {
-			repoURL = repoURL + "/";
-		}
-
-		return repoURL;
-	}
-
-	private static boolean _supportedVersion(String verisonValue) {
-		Version version = new Version(verisonValue);
-		Version lowVersion = new Version("2");
-		Version highVersion = new Version("3");
-
-		if ((version.compareTo(lowVersion) >= 0) && (version.compareTo(highVersion) < 0)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private static File _bladeJarCacheFile = null;
-	private static IPath _bladeJarInstanceArea;
-	private static IPath _bladeJarInstancePath;
-
-	static {
-		ProjectCore projectCore = ProjectCore.getDefault();
-
-		IPath stateLocation = projectCore.getStateLocation();
-
-		_bladeJarInstanceArea = stateLocation.append("blade-jar");
-
-		_bladeJarInstancePath = _bladeJarInstanceArea.append(BLADE_JAR_FILE_NAME);
-
-		File file = FileUtil.getFile(_bladeJarInstanceArea);
-
-		file.mkdirs();
-	}
+	private static String _bladeJarName = null;
 
 }
