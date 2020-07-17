@@ -16,8 +16,8 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.internal.NameValidationService;
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
+import com.liferay.ide.upgrade.plan.core.internal.OutlineDefaultValueService;
 import com.liferay.ide.upgrade.plan.core.internal.OutlinePossibleValuesService;
-import com.liferay.ide.upgrade.plan.core.internal.OutlineValidationService;
 import com.liferay.ide.upgrade.plan.core.internal.TargetVersionValidationService;
 
 import org.eclipse.sapphire.ElementType;
@@ -86,8 +86,8 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
 	@Required
+	@Service(impl = OutlineDefaultValueService.class)
 	@Service(impl = OutlinePossibleValuesService.class)
-	@Service(impl = OutlineValidationService.class)
 	@Type(base = IUpgradePlanOutline.class)
 	public ValueProperty PROP_UPGRADE_PLAN_OUTLINE = new ValueProperty(TYPE, "UpgradePlanOutline");
 

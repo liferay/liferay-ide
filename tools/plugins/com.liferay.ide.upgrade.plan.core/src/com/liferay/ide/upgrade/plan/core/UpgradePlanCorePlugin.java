@@ -145,8 +145,6 @@ public class UpgradePlanCorePlugin extends Plugin {
 		_instance = this;
 
 		_initOfflineOutline();
-
-		_initDefaultOutline();
 	}
 
 	@Override
@@ -154,30 +152,6 @@ public class UpgradePlanCorePlugin extends Plugin {
 		_instance = null;
 
 		super.stop(context);
-	}
-
-	private void _initDefaultOutline() throws Exception {
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		String initDefaultOutline = preferencesService.getString(
-			UpgradePlanCorePlugin.ID, DEFAULT_OUTLINE_KEY, "", null);
-
-		if (CoreUtil.isNullOrEmpty(initDefaultOutline)) {
-			List<UpgradePlanOutline> offlineOutlineLists = new ArrayList<>();
-
-			for (String defaultOutline : defaultOutlines) {
-				String[] defaultOutlineArray = StringUtil.stringToArray(defaultOutline, "/");
-
-				offlineOutlineLists.add(
-					new UpgradePlanOutline(defaultOutlineArray[defaultOutlineArray.length - 1], defaultOutline, false));
-			}
-
-			String offlineOutlineString = StringUtil.objectToString(offlineOutlineLists.iterator(), "|");
-
-			_prefstore.put(DEFAULT_OUTLINE_KEY, offlineOutlineString);
-
-			_prefstore.flush();
-		}
 	}
 
 	private void _initOfflineOutline() throws Exception {
@@ -192,7 +166,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 
 			Bundle bundle = Platform.getBundle(UpgradePlanCorePlugin.ID);
 
-			Enumeration<URL> entryUrls = bundle.findEntries("resources/", "*.zip", true);
+			Enumeration<URL> entryUrls = bundle.findEntries("resources/", "liferay-docs.zip", true);
 
 			if (ListUtil.isEmpty(entryUrls)) {
 				return;
@@ -206,6 +180,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 				File outlineFile = new File(fileURL.getFile());
 
 				ZipUtil.unzip(outlineFile, offlineOutlinePath.toFile());
+
 				String offlineOutlineFileName = FilenameUtils.removeExtension(outlineFile.getName());
 
 				IPath outlinePath = offlineOutlinePath.append(offlineOutlineFileName);

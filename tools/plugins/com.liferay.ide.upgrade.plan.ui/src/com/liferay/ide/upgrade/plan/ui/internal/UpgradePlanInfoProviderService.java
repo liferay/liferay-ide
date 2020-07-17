@@ -14,8 +14,9 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.google.common.base.Joiner;
+
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
@@ -122,85 +123,19 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	private void _doUpgradeStepDetail(UpgradeStep upgradeStep, Deferred<String> deferred) {
 		String detail = "about:blank";
 
-		String url = upgradeStep.getUrl();
+		String upgradeStepUrl = upgradeStep.getUrl();
 
-		if (CoreUtil.isNotNullOrEmpty(url)) {
+		if (CoreUtil.isNotNullOrEmpty(upgradeStepUrl)) {
 			try {
-//				detail = _renderArticleMainContent(url);
 				UpgradePlan currentUpgradePlan = upgradeStep.getCurrentUpgradePlan();
 
 				IUpgradePlanOutline upgradePlanOutline = currentUpgradePlan.getUpgradePlanOutline();
 
 				if (upgradePlanOutline.isOffline()) {
-					File outlineDir = new File(upgradePlanOutline.getLocation());
-
-					List<String> urlsIn = StringUtil.stringToList(url, "#");
-
-					if (urlsIn.size() > 1) {
-						String[] urlsArray = urlsIn.toArray(new String[0]);
-
-						File[] listFiles = outlineDir.listFiles(
-							new FilenameFilter() {
-
-								@Override
-								public boolean accept(File dir, String name) {
-									if (name.contains(urlsArray[0])) {
-										return true;
-									}
-
-									return false;
-								}
-
-							});
-
-						if (ListUtil.isNotEmpty(listFiles)) {
-							if (listFiles[0].isDirectory()) {
-								detail = _getFileContents(_getEntryFile(listFiles[0]), "id", urlsArray[1]);
-							}
-							else {
-								detail = _getFileContents(listFiles[0], "id", urlsArray[1]);
-							}
-						}
-					}
-					else {
-						List<String> urlsOut = StringUtil.stringToList(url, "/");
-
-						if (ListUtil.isNotEmpty(urlsOut)) {
-							File entryFile = _getEntryFile(url, "/", outlineDir, true);
-
-							if (entryFile != null) {
-								detail = _getFileContents(entryFile);
-							}
-						}
-						else {
-							File[] listFiles = outlineDir.listFiles(
-								new FilenameFilter() {
-
-									@Override
-									public boolean accept(File dir, String name) {
-										if (name.contains(url)) {
-											return true;
-										}
-
-										return false;
-									}
-
-								});
-
-							if (listFiles[0].isFile()) {
-								StringBuffer sb = new StringBuffer();
-
-								sb.append("<html><head><body>");
-								sb.append(FileUtil.readContents(listFiles[0]));
-								sb.append("</body></head></html>");
-
-								detail = sb.toString();
-							}
-						}
-					}
+					detail = _renderArticleMainContent(upgradeStepUrl, upgradePlanOutline);
 				}
 				else {
-					detail = _renderKBMainContent(url);
+					detail = _renderKBMainContent(upgradeStepUrl);
 				}
 			}
 			catch (Throwable t) {
@@ -217,12 +152,8 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		return upgradeStep.getTitle();
 	}
 
-	private String _renderArticleMainContent(String upgradeStepUrl) throws ClientProtocolException, IOException {
-		return "";
-	}
-	
 	private File _getEntryFile(File entryFile) {
-		File[] listFiles1 = entryFile.listFiles(
+		File[] entryFiles = entryFile.listFiles(
 			new FileFilter() {
 
 				@Override
@@ -245,95 +176,82 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 			});
 
-		if (ListUtil.isNotEmpty(listFiles1)) {
-			return listFiles1[0];
+		if (ListUtil.isNotEmpty(entryFiles)) {
+			return entryFiles[0];
 		}
 		else {
 			return null;
 		}
 	}
 
-	private File _getEntryFile(String url, String splitor, File location, boolean recursive) {
+	private File _getEntryFile(String url, String splitor, File entryLocation) {
 		List<String> urls = new CopyOnWriteArrayList<>(StringUtil.stringToList(url, splitor));
 
-		if (urls.size() > 1) {
-			String[] urlsArray = urls.toArray(new String[0]);
+		String[] urlsArray = urls.toArray(new String[0]);
 
-			File[] listFiles = location.listFiles(
-				new FileFilter() {
+		if (ListUtil.isEmpty(urlsArray)) {
+			return null;
+		}
 
-					@Override
-					public boolean accept(File file) {
-						String fileName = FilenameUtils.removeExtension(file.getName());
+		File[] entryFiles = entryLocation.listFiles(
+			new FileFilter() {
 
-						if (fileName.contains(urlsArray[0])) {
-							return true;
-						}
+				@Override
+				public boolean accept(File file) {
+					String fileName = FilenameUtils.removeExtension(file.getName());
 
-						return false;
+					if (urlsArray[0].contains(fileName)) {
+						return true;
 					}
 
-				});
+					return false;
+				}
 
-			if (ListUtil.isEmpty(listFiles)) {
-				return null;
-			}
+			});
 
-			if (!recursive) {
-				return _getEntryFile(listFiles[0]);
-			}
-			else {
-				urls.remove(0);
+		if (ListUtil.isEmpty(entryFiles)) {
+			return null;
+		}
 
-				String nestUrl = StringUtil.objectToString(urls, splitor);
-
-				return _getEntryFile(nestUrl, splitor, listFiles[0], true);
-			}
+		if (entryFiles[0].isFile()) {
+			return entryFiles[0];
 		}
 		else {
-			File[] listFiles = location.listFiles(
-				new FileFilter() {
+			urls.remove(0);
 
-					@Override
-					public boolean accept(File file) {
-						String fileName = FilenameUtils.removeExtension(file.getName());
+			Joiner joiner = Joiner.on(File.separator);
 
-						if (fileName.contains(url)) {
-							return true;
-						}
+			String retainedUrls = joiner.join(urls);
 
-						return false;
-					}
-
-				});
-
-			if (ListUtil.isEmpty(listFiles)) {
-				return null;
-			}
-
-			if (listFiles[0].isFile()) {
-				return listFiles[0];
-			}
-
-			return _getEntryFile(listFiles[0]);
+			return _getEntryFile(retainedUrls, splitor, entryFiles[0]);
 		}
 	}
 
 	private String _getFileContents(File inputFile) {
 		String detail = "about:blank";
 
-		if (inputFile == null) {
-			return detail;
+		try {
+			if (inputFile == null) {
+				return detail;
+			}
+
+			if (inputFile.isFile()) {
+				Document document = Jsoup.parse(inputFile, "UTF-8");
+
+				Elements elements = document.select("a[class=go-link btn btn-primary]");
+
+				elements.forEach(
+					element -> {
+						Element pTag = element.parent();
+
+						pTag.remove();
+					});
+
+				return document.toString();
+			}
 		}
-
-		if (inputFile.isFile()) {
-			StringBuffer sb = new StringBuffer();
-
-			sb.append("<html><head><body>");
-			sb.append(FileUtil.readContents(inputFile));
-			sb.append("</body></head></html>");
-
-			return sb.toString();
+		catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 
 		return detail;
@@ -354,13 +272,24 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 				Document document = Jsoup.parse(inputFile, "UTF-8");
 
+				Elements elements = document.select("a[class=go-link btn btn-primary]");
+
+				elements.forEach(
+					element -> {
+						Element pTag = element.parent();
+
+						pTag.remove();
+					});
+
 				Elements allElements = document.getAllElements();
 
 				boolean findTag = false;
 
 				for (Element element : allElements) {
+					String nodeName = element.nodeName();
+
 					if (!findTag) {
-						if (element.hasAttr(key)) {
+						if (element.hasAttr(key) && nodeName.startsWith("h")) {
 							String idValue = element.attr(key);
 
 							if (idValue.equals(value)) {
@@ -375,7 +304,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 						}
 					}
 
-					if (findTag) {
+					if (findTag && !nodeName.equals("a") && !nodeName.equals("li")) {
 						stepContents.append(element.toString());
 					}
 
@@ -399,6 +328,60 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		return detail;
+	}
+
+	private String _renderArticleMainContent(String upgradeStepUrl, IUpgradePlanOutline upgradePlanOutline)
+		throws ClientProtocolException, IOException {
+
+		File outlineDir = new File(upgradePlanOutline.getLocation());
+
+		List<String> urlsIn = StringUtil.stringToList(upgradeStepUrl, "#");
+
+		String detail = "about:blank";
+
+		if (urlsIn.size() > 1) {
+			String[] urlsArray = urlsIn.toArray(new String[0]);
+
+			List<String> urlsList = StringUtil.stringToList(urlsArray[0], File.separator);
+
+			String url = urlsList.get(0);
+
+			File[] listFiles = outlineDir.listFiles(
+				new FilenameFilter() {
+
+					@Override
+					public boolean accept(File dir, String name) {
+						if (url.contains(name)) {
+							return true;
+						}
+
+						return false;
+					}
+
+				});
+
+			if (ListUtil.isNotEmpty(listFiles)) {
+				if (listFiles[0].isDirectory()) {
+					detail = _getFileContents(_getEntryFile(listFiles[0]), "id", urlsArray[1]);
+				}
+				else {
+					detail = _getFileContents(listFiles[0], "id", urlsArray[1]);
+				}
+			}
+		}
+		else {
+			List<String> urlsOut = StringUtil.stringToList(upgradeStepUrl, File.separator);
+
+			if (ListUtil.isNotEmpty(urlsOut)) {
+				File entryFile = _getEntryFile(upgradeStepUrl, File.separator, outlineDir);
+
+				if (entryFile != null) {
+					detail = _getFileContents(entryFile);
+				}
+			}
 		}
 
 		return detail;

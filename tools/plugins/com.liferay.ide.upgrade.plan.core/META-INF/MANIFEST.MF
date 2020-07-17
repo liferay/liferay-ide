@@ -9,7 +9,6 @@ Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.9.0.qualifier
 Export-Package: com.liferay.ide.upgrade.plan.core,
  com.liferay.ide.upgrade.plan.core.util
-Import-Package: org.apache.commons.validator.routines
 Require-Bundle: com.google.guava,
  com.liferay.ide.core,
  org.apache.commons.io,
