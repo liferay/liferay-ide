@@ -202,27 +202,27 @@ making the old tag and its soy infrastructure unnecessary.
 
 ---------------------------------------
 
-### Removed Portal Property user.groups.copy.layouts.to.user.personal.site
+### Removed Portal Property user.groups.copy.layouts.to.user.personal.site [](id=removed-portal-property-user-groups-copy-layouts-to-user-personal-site)
 - **Date:** 2019-Dec-26
 - **JIRA Ticket:** [LPS-106339](https://issues.liferay.com/browse/LPS-106339)
 
-#### What changed?
+#### What changed? [](id=what-changed-2)
 
 The portal property `user.groups.copy.layouts.to.user.personal.site` and the
 behavior associated with it were removed.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-2)
 
 This affects anyone who set the `user.groups.copy.layouts.to.user.personal.site`
 property to `true` to copy User Group pages to User Personal Sites.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-2)
 
 There's no direct replacement for this property. If you depend on the behavior,
 you can copy the old implementations of
 `UserGroupLocalServiceImpl#copyUserGroupLayouts` to your own project.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-2)
 
 The behavior associated with this property has been deprecated since 6.2.
 
