@@ -123,6 +123,22 @@
                     <progressText>unzipping</progressText>
                     <workingDirectory>${installdir}</workingDirectory>
                 </runProgram>
+                <runProgram>
+                    <program>chmod</program>
+                    <programArguments>+w "${installdir}"/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</programArguments>
+                </runProgram>
+                <addTextToFile>
+                    <file>${installdir}/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</file>
+                    <insertAt>beginning</insertAt>
+                    <text>-vm
+${libjli_path}
+</text>
+                    <ruleList>
+                        <isFalse>
+                            <value>${java_autodetected}</value>
+                        </isFalse>
+                    </ruleList>
+                </addTextToFile>
             </actionList>
             <conditionRuleList>
                 <platformTest>
@@ -135,6 +151,18 @@
                     <progressText>Unpacking files</progressText>
                     <zipFile>${studioZipPath}</zipFile>
                 </unzip>
+                <addTextToFile>
+                    <file>${installdir}/liferay-developer-studio/DeveloperStudio.ini</file>
+                    <insertAt>beginning</insertAt>
+                    <text>-vm
+${java_executable}
+</text>
+                    <ruleList>
+                        <isFalse>
+                            <value>${java_autodetected}</value>
+                        </isFalse>
+                    </ruleList>
+                </addTextToFile>
             </elseActionList>
         </if>
         <if>
@@ -259,8 +287,8 @@
                     </ruleList>
                 </runProgram>
                 <runProgram>
-                    <program>${bladeCommandPath}</program>
-                    <programArguments>--base "${lrws}" init -v "7.2"</programArguments>
+                    <program>${java_executable}</program>
+                    <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "7.2"</programArguments>
                 </runProgram>
                 <createDirectory>
                     <path>${userHome}${platform_path_separator}.gradle</path>
@@ -426,8 +454,55 @@
     <vendor>Liferay, Inc</vendor>
     <width>600</width>
     <parameterList>
+        <parameterGroup>
+            <name>java</name>
+            <title>Select a valid Java(tm) Executable</title>
+            <explanation></explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <fileParameter>
+                    <name>java_executable</name>
+                    <title></title>
+                    <description>Java(tm) Executable</description>
+                    <explanation>Please select a valid Java(tm) Executable</explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>0</allowEmptyValue>
+                    <mustBeWritable>0</mustBeWritable>
+                    <mustExist>1</mustExist>
+                    <width>30</width>
+                    <ruleList>
+                        <isFalse>
+                            <value>${java_autodetected}</value>
+                        </isFalse>
+                    </ruleList>
+                </fileParameter>
+                <fileParameter>
+                    <name>libjli_path</name>
+                    <description>Java libjli.dylib library</description>
+                    <explanation>Please select your java libjli.dylib library</explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>0</allowEmptyValue>
+                    <mustBeWritable>0</mustBeWritable>
+                    <mustExist>1</mustExist>
+                    <width>30</width>
+                    <ruleList>
+                        <isFalse>
+                            <value>${java_autodetected}</value>
+                        </isFalse>
+                        <compareText>
+                            <logic>equals</logic>
+                            <text>${platform_name}</text>
+                            <value>osx</value>
+                        </compareText>
+                    </ruleList>
+                </fileParameter>
+            </parameterList>
+        </parameterGroup>
         <directoryParameter>
-            <name>installdir</name>
+            <name>studiodir</name>
             <description>Installer.Parameter.installdir.description</description>
             <explanation>Installer.Parameter.installdir.explanation</explanation>
             <value></value>
@@ -437,9 +512,15 @@
             <mustBeWritable>1</mustBeWritable>
             <mustExist>0</mustExist>
             <width>30</width>
-            <preShowPageActionList>
+            <postShowPageActionList>
                 <setInstallerVariable>
                     <name>installdir</name>
+                    <value>${studiodir}</value>
+                </setInstallerVariable>
+            </postShowPageActionList>
+            <preShowPageActionList>
+                <setInstallerVariable>
+                    <name>studiodir</name>
                     <value>${userHome}/${product_shortname}</value>
                     <ruleList>
                         <compareText>
@@ -462,7 +543,7 @@
                     <conditionRuleList>
                         <fileTest>
                             <condition>is_not_empty</condition>
-                            <path>${installdir}</path>
+                            <path>${studiodir}</path>
                         </fileTest>
                     </conditionRuleList>
                 </if>

@@ -508,8 +508,8 @@
         <fileParameter>
             <name>java_executable</name>
             <title>Select a valid Java(tm) Executable</title>
-            <description>Java(tm) Runtime</description>
-            <explanation>Please select a valid Java(tm) Runtime</explanation>
+            <description>Java(tm) Executable</description>
+            <explanation>Please select a valid Java(tm) Executable</explanation>
             <value></value>
             <default></default>
             <allowEmptyValue>0</allowEmptyValue>
