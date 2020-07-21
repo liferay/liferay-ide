@@ -463,7 +463,6 @@ ${java_executable}
             <parameterList>
                 <fileParameter>
                     <name>java_executable</name>
-                    <title></title>
                     <description>Java(tm) Executable</description>
                     <explanation>Please select a valid Java(tm) Executable</explanation>
                     <value></value>
@@ -472,11 +471,6 @@ ${java_executable}
                     <mustBeWritable>0</mustBeWritable>
                     <mustExist>1</mustExist>
                     <width>30</width>
-                    <ruleList>
-                        <isFalse>
-                            <value>${java_autodetected}</value>
-                        </isFalse>
-                    </ruleList>
                 </fileParameter>
                 <fileParameter>
                     <name>libjli_path</name>
@@ -489,9 +483,6 @@ ${java_executable}
                     <mustExist>1</mustExist>
                     <width>30</width>
                     <ruleList>
-                        <isFalse>
-                            <value>${java_autodetected}</value>
-                        </isFalse>
                         <compareText>
                             <logic>equals</logic>
                             <text>${platform_name}</text>
@@ -500,6 +491,11 @@ ${java_executable}
                     </ruleList>
                 </fileParameter>
             </parameterList>
+            <ruleList>
+                <isFalse>
+                    <value>${java_autodetected}</value>
+                </isFalse>
+            </ruleList>
         </parameterGroup>
         <directoryParameter>
             <name>studiodir</name>
