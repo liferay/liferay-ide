@@ -359,6 +359,14 @@
 			type="org.eclipse.core.resources.IResource"
 		>
 		</propertyTester>
+		<propertyTester
+			class="com.liferay.ide.project.ui.ModuleFragmentPropertyTester"
+			id="com.liferay.ide.project.ui.isModuleFragmentProject"
+			namespace="com.liferay.ide.project.ui"
+			properties="isModuleFragmentProject"
+			type="org.eclipse.core.resources.IResource"
+		>
+		</propertyTester>
 	</extension>
 	<extension
 		point="org.eclipse.ui.keywords"
@@ -597,6 +605,39 @@
 						property="com.liferay.ide.project.ui.isSDKFolderProject"
 					/>
 				</adapt>
+			</enablement>
+		</objectContribution>
+		<objectContribution
+			adaptable="true"
+			id="org.eclipse.compare.ext.objectContribution"
+			objectClass="org.eclipse.core.resources.IResource"
+		>
+			<action
+				class="com.liferay.ide.project.ui.action.AddToCompareWithAction"
+				enablesFor="1"
+				id="com.liferay.ide.project.ui.action.addToCompareWith"
+				label="%compare.with.action.label"
+				menubarPath="compareWithMenu/compareWithGroup"
+				state="true"
+				style="push"
+			>
+			</action>
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<or>
+						<adapt type="org.eclipse.core.resources.IFile">
+							<test
+								property="com.liferay.ide.project.ui.isModuleFragmentProject"
+							/>
+						</adapt>
+						<adapt type="org.eclipse.core.resources.IFile">
+							<test
+								property="com.liferay.ide.project.ui.isModuleExtProject"
+							/>
+						</adapt>
+					</or>
+				</adapt>
+
 			</enablement>
 		</objectContribution>
 	</extension>
