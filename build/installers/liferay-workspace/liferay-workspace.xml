@@ -53,6 +53,7 @@
     </componentList>
     <preInstallationActionList>
         <include file="../components/autodetect-java.xml" />
+        <include file="../components/autodetect-java-windows.xml" />
     </preInstallationActionList>
     <postInstallationActionList>
         <createDirectory>
