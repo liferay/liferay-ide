@@ -56,6 +56,7 @@
     </componentList>
     <preInstallationActionList>
         <include file="../components/autodetect-java.xml" />
+        <include file="../components/autodetect-java-windows.xml" />
     </preInstallationActionList>
     <postInstallationActionList>
         <if>
@@ -127,6 +128,15 @@
                     <program>chmod</program>
                     <programArguments>+w "${installdir}"/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</programArguments>
                 </runProgram>
+                <dirName>
+                    <path>${java_executable}</path>
+                    <variable>find_in_path</variable>
+                </dirName>
+                 <findFile>
+                    <baseDirectory>${find_in_path}/../</baseDirectory>
+                    <pattern>libjli.dylib</pattern>
+                    <variable>libjli_path</variable>
+                </findFile>
                 <addTextToFile>
                     <file>${installdir}/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</file>
                     <insertAt>beginning</insertAt>
@@ -454,49 +464,23 @@ ${java_executable}
     <vendor>Liferay, Inc</vendor>
     <width>600</width>
     <parameterList>
-        <parameterGroup>
-            <name>java</name>
+        <fileParameter>
+            <name>java_executable</name>
             <title>Select a valid Java(tm) Executable</title>
-            <explanation></explanation>
+            <description>Java(tm) Executable</description>
+            <explanation>Please select a valid Java(tm) Executable</explanation>
             <value></value>
             <default></default>
-            <parameterList>
-                <fileParameter>
-                    <name>java_executable</name>
-                    <description>Java(tm) Executable</description>
-                    <explanation>Please select a valid Java(tm) Executable</explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>0</allowEmptyValue>
-                    <mustBeWritable>0</mustBeWritable>
-                    <mustExist>1</mustExist>
-                    <width>30</width>
-                </fileParameter>
-                <fileParameter>
-                    <name>libjli_path</name>
-                    <description>Java libjli.dylib library</description>
-                    <explanation>Please select your java libjli.dylib library</explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>0</allowEmptyValue>
-                    <mustBeWritable>0</mustBeWritable>
-                    <mustExist>1</mustExist>
-                    <width>30</width>
-                    <ruleList>
-                        <compareText>
-                            <logic>equals</logic>
-                            <text>${platform_name}</text>
-                            <value>osx</value>
-                        </compareText>
-                    </ruleList>
-                </fileParameter>
-            </parameterList>
+            <allowEmptyValue>0</allowEmptyValue>
+            <mustBeWritable>0</mustBeWritable>
+            <mustExist>1</mustExist>
+            <width>30</width>
             <ruleList>
                 <isFalse>
                     <value>${java_autodetected}</value>
                 </isFalse>
             </ruleList>
-        </parameterGroup>
+        </fileParameter>
         <directoryParameter>
             <name>studiodir</name>
             <description>Installer.Parameter.installdir.description</description>
