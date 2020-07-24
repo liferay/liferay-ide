@@ -26,12 +26,9 @@ import com.liferay.ide.ui.action.AbstractObjectAction;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.lang.reflect.InvocationTargetException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
@@ -39,7 +36,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.FileUtils;
-
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.CompareUI;
@@ -55,6 +51,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
@@ -67,18 +64,13 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 
 	@Override
 	public void run(IAction action) {
-		if (fSelection instanceof IStructuredSelection) {
-			Object selectedObject = ((IStructuredSelection)fSelection).getFirstElement();
-
-			IFile targetFile = null;
-
-			if (selectedObject instanceof IFile) {
-				targetFile = (IFile)selectedObject;
+			if (Objects.isNull(_selectedFile)) {
+				return;
 			}
+			
+			IProject project = _selectedFile.getProject();
 
-			IProject project = targetFile.getProject();
-
-			IPath projectRelativePath = targetFile.getProjectRelativePath();
+			IPath projectRelativePath = _selectedFile.getProjectRelativePath();
 
 			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
@@ -97,7 +89,7 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 
 				File sourceFile = artifact.getSource();
 
-				if (FileUtil.exists(sourceFile) && Objects.nonNull(targetFile)) {
+				if (FileUtil.exists(sourceFile)) {
 					try (ZipFile zipFile = new ZipFile(sourceFile)) {
 						ZipEntry entry = null;
 
@@ -122,7 +114,7 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 
 								CompareItem sourceCompareItem = new CompareItem(sourceEntryFile);
 
-								CompareItem targetCompareItem = new CompareItem(FileUtil.getFile(targetFile));
+								CompareItem targetCompareItem = new CompareItem(FileUtil.getFile(_selectedFile));
 
 								CompareConfiguration compareConfiguration = new CompareConfiguration();
 
@@ -147,7 +139,7 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 								};
 
 								compareEditorInput.setTitle(
-									"Compare ('" + targetFile.getName() + "'-'" + sourceFile.getName() + "')");
+									"Compare ('" + _selectedFile.getName() + "'-'" + sourceFile.getName() + "')");
 
 								CompareUI.openCompareEditor(compareEditorInput);
 							}
@@ -160,8 +152,27 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 				}
 			}
 		}
-	}
 
+	private IFile _selectedFile;
+	
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+		if (!selection.isEmpty()) {
+			if (selection instanceof IStructuredSelection) {
+				Object obj = ((IStructuredSelection)selection).getFirstElement();
+
+				if (obj instanceof IFile) {
+					_selectedFile = (IFile)obj;
+
+					action.setEnabled(true);
+				}
+				else{
+					action.setEnabled(false);
+				}
+			}
+		}
+	}
+	
 	private class CompareItem implements ITypedElement, IStreamContentAccessor, IModificationDate, IEditableContent {
 
 		public CompareItem(File file) {
