@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemoveAssetTagsSelectorTag">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.summary" value="Removed java class AssetTagsSelectorTag"/>
+   <property name="problem.tickets" value="LPS-100144"/>
+   <property name="problem.title" value="Removed java class AssetTagsSelectorTag"/>
+   <property name="problem.section" value="#removed-soy-assettagselectortag"/>
+   <property name="version" value="7.3"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemoveAssetTagsSelectorTag"/>
+</scr:component>

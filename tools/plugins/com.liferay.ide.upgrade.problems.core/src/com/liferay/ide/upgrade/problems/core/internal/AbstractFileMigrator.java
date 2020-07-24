@@ -86,6 +86,9 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 			else if (Objects.equals("7.2", version)) {
 				fileName = "liferay72/" + fileName;
 			}
+			else if (Objects.equals("7.3", version)) {
+				fileName = "liferay73/" + fileName;
+			}
 
 			String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
