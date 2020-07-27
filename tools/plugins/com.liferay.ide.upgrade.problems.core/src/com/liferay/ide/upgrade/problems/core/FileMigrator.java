@@ -17,6 +17,10 @@ package com.liferay.ide.upgrade.problems.core;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import java.util.Dictionary;
 import java.util.List;
@@ -27,6 +31,33 @@ import java.util.List;
 public interface FileMigrator {
 
 	public List<UpgradeProblem> analyze(File file);
+
+	public default String readFully(InputStream inputStream) throws IOException {
+		if (inputStream == null) {
+			return null;
+		}
+
+		char[] buffer = new char[0x10000];
+
+		StringBuilder out = new StringBuilder();
+
+		try (Reader in = new InputStreamReader(inputStream, "UTF-8")) {
+			int read;
+
+			do {
+				read = in.read(buffer, 0, buffer.length);
+
+				if (read > 0) {
+					out.append(buffer, 0, read);
+				}
+			}
+			while (read >= 0);
+		}
+
+		inputStream.close();
+
+		return out.toString();
+	}
 
 	public default String safeGet(Dictionary<String, Object> properties, String key) {
 		Object value = properties.get(key);

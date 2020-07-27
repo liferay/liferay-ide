@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -42,7 +43,7 @@ public class CategoryEntryforPages extends XMLFileMigrator {
 
 	@Override
 	protected List<FileSearchResult> searchFile(File file, XMLFile xmlFileChecker) {
-		if (!"liferay-portlet.xml".equals(file.getName())) {
+		if (!Objects.equals("liferay-portlet.xml", file.getName())) {
 			return Collections.emptyList();
 		}
 

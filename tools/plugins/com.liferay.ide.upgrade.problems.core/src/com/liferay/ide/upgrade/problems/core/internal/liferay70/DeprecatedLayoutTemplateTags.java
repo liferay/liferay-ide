@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -118,7 +119,7 @@ public class DeprecatedLayoutTemplateTags extends XMLFileMigrator implements Aut
 
 	@Override
 	protected List<FileSearchResult> searchFile(File file, XMLFile xmlFileChecker) {
-		if (!"liferay-layout-templates.xml".equals(file.getName())) {
+		if (!Objects.equals("liferay-layout-templates.xml", file.getName())) {
 			return Collections.emptyList();
 		}
 

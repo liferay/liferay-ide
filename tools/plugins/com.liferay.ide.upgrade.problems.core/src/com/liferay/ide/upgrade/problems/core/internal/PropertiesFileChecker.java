@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 
 import java.io.File;
@@ -30,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+
+import org.eclipse.core.runtime.Platform;
 
 /**
  * @author Gregory Amerson
@@ -80,6 +81,10 @@ public class PropertiesFileChecker {
 		public final int offset;
 		public String value;
 
+	}
+
+	private boolean _isWindows() {
+		return Platform.OS_WIN32.equals(Platform.getOS());
 	}
 
 	private String _loadConvert(char[] in, int off, int len, char[] convtBuf) {
@@ -192,7 +197,9 @@ public class PropertiesFileChecker {
 			boolean precedingBackslash;
 			int lineNumber = 0;
 
-			while ((limit = lr.readLine())[0] >= 0) {
+			limit = lr.readLine();
+
+			while (limit[0] >= 0) {
 				lineNumber++;
 				lineNumber += limit[2];
 				c = 0;
@@ -265,6 +272,8 @@ public class PropertiesFileChecker {
 
 					keyInfos.put(key, infos);
 				}
+
+				limit = lr.readLine();
 			}
 		}
 
@@ -316,7 +325,7 @@ public class PropertiesFileChecker {
 				if (skipLF) {
 					skipLF = false;
 
-					if (CoreUtil.isWindows()) {
+					if (_isWindows()) {
 						if (c == '\n') {
 							if (crStack.size() > 0) {
 								Character crPrefix = crStack.pop();
@@ -343,7 +352,7 @@ public class PropertiesFileChecker {
 						continue;
 					}
 
-					if (CoreUtil.isWindows()) {
+					if (_isWindows()) {
 						if (!appendedLineBegin && (c == '\r')) {
 							crStack.push(c);
 

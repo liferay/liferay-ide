@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -46,7 +47,7 @@ public class MVCPortletInitParamsChangeXML extends XMLFileMigrator {
 
 		// check if it is portlet.xml file
 
-		if (!"portlet.xml".equals(file.getName())) {
+		if (!Objects.equals("portlet.xml", file.getName())) {
 			return Collections.emptyList();
 		}
 

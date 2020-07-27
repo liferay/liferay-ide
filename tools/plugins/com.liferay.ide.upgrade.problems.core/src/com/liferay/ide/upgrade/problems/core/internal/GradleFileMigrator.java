@@ -33,8 +33,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
-
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -111,7 +109,7 @@ public abstract class GradleFileMigrator implements FileMigrator {
 				gradleFileContents::add
 			);
 
-			gradleFileContentString.set(FileUtils.readFileToString(file, "UTF-8"));
+			gradleFileContentString.set(new String(Files.readAllBytes(file.toPath())));
 		}
 		catch (Exception e) {
 		}
