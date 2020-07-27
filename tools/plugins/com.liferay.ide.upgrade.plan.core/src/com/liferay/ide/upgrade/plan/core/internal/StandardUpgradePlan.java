@@ -230,6 +230,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 			add("7.0");
 			add("7.1");
 			add("7.2");
+			add("7.3");
 		}
 	};
 

@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Objects;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -38,16 +39,16 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 	public void activate(ComponentContext ctx) {
 		context = ctx;
 
-		Dictionary<String, Object> properties = context.getProperties();
+		Dictionary<String, Object> serviceProperties = context.getProperties();
 
-		problemTitle = safeGet(properties, "problem.title");
-		problemSummary = safeGet(properties, "problem.summary");
-		problemType = safeGet(properties, "file.extensions");
-		problemTickets = safeGet(properties, "problem.tickets");
-		sectionKey = safeGet(properties, "problem.section");
-		version = safeGet(properties, "version");
+		problemTitle = safeGet(serviceProperties, "problem.title");
+		problemSummary = safeGet(serviceProperties, "problem.summary");
+		problemType = safeGet(serviceProperties, "file.extensions");
+		problemTickets = safeGet(serviceProperties, "problem.tickets");
+		sectionKey = safeGet(serviceProperties, "problem.section");
+		version = safeGet(serviceProperties, "version");
 
-		addPropertiesToSearch(this.properties);
+		addPropertiesToSearch(properties);
 	}
 
 	@Override
@@ -62,14 +63,17 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 			if (ListUtil.isNotEmpty(results)) {
 				String fileName = "BREAKING_CHANGES.markdown";
 
-				if ("7.0".equals(version)) {
+				if (Objects.equals("7.0", version)) {
 					fileName = "liferay70/" + fileName;
 				}
-				else if ("7.1".equals(version)) {
+				else if (Objects.equals("7.1", version)) {
 					fileName = "liferay71/" + fileName;
 				}
-				else if ("7.2".equals(version)) {
+				else if (Objects.equals("7.2", version)) {
 					fileName = "liferay72/" + fileName;
+				}
+				else if (Objects.equals("7.3", version)) {
+					fileName = "liferay73/" + fileName;
 				}
 
 				String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
