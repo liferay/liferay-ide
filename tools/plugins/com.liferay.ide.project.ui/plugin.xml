@@ -613,13 +613,11 @@
 			objectClass="org.eclipse.core.resources.IResource"
 		>
 			<action
-				class="com.liferay.ide.project.ui.action.AddToCompareWithAction"
+				class="com.liferay.ide.project.ui.action.CompareOriginalImplementationAction"
 				enablesFor="1"
-				id="com.liferay.ide.project.ui.action.addToCompareWith"
+				id="com.liferay.ide.project.ui.action.compareOriginalImplementation"
 				label="%compare.with.action.label"
 				menubarPath="compareWithMenu/compareWithGroup"
-				state="true"
-				style="push"
 			>
 			</action>
 			<enablement>
@@ -637,7 +635,6 @@
 						</adapt>
 					</or>
 				</adapt>
-
 			</enablement>
 		</objectContribution>
 	</extension>

@@ -19,7 +19,6 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
@@ -27,6 +26,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.action.AbstractObjectAction;
@@ -76,7 +76,7 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Ethan Sun
  */
-public class AddToCompareWithAction extends AbstractObjectAction {
+public class CompareOriginalImplementationAction extends AbstractObjectAction {
 
 	@Override
 	public void run(IAction action) {
@@ -119,8 +119,6 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 			compareEditorInput.setTitle("Compare ('" + _selectedFile.getName() + "'-'" + _sourceFile.getName() + "')");
 
 			CompareUI.openCompareEditor(compareEditorInput);
-
-			_exist = false;
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -136,6 +134,16 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 				if (obj instanceof IFile) {
 					_selectedFile = (IFile)obj;
 
+					IPath projectRelativePath = _selectedFile.getProjectRelativePath();
+
+					String projectRelativePathStr = projectRelativePath.toString();
+
+					if (!projectRelativePathStr.startsWith("src/main/")) {
+						action.setEnabled(false);
+
+						return;
+					}
+
 					_project = _selectedFile.getProject();
 
 					try {
@@ -146,6 +154,12 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 
 							String portalBundleVersion = fragmentProjectInfo.get("Portal-Bundle-Version");
 
+							if (Objects.isNull(portalBundleVersion) || Objects.isNull(portalBundleVersion)) {
+								action.setEnabled(false);
+
+								return;
+							}
+
 							ProjectCore projectCore = ProjectCore.getDefault();
 
 							IPath projectCoreLocation = projectCore.getStateLocation();
@@ -155,51 +169,44 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 							IWorkspaceProject liferayWorkspaceProject =
 								LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
-							IRuntime[] runtimes = ServerCore.getRuntimes();
+							if (liferayWorkspaceProject != null) {
+								IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(
+									liferayWorkspaceProject.getProject());
 
-							IRuntime value = null;
+								if (Objects.isNull(bundleHomePath)) {
+									action.setEnabled(false);
 
-							for (IRuntime runtime : runtimes) {
-								if (LiferayServerCore.newPortalBundle(runtime.getLocation()) == null) {
-									continue;
+									return;
 								}
 
-								if (CoreUtil.isNotNullOrEmpty(portalBundleVersion)) {
+								PortalBundle portalBundle = LiferayServerCore.newPortalBundle(bundleHomePath);
+
+								if (Objects.isNull(portalBundle)) {
+									action.setEnabled(false);
+
+									return;
+								}
+
+								IRuntime fragmentRuntime = null;
+
+								IRuntime[] runtimes = ServerCore.getRuntimes();
+
+								for (IRuntime runtime : runtimes) {
 									PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
 										PortalRuntime.class, new NullProgressMonitor());
 
-									if (!Objects.equals(portalBundleVersion, portalRuntime.getPortalVersion())) {
-										continue;
-									}
-								}
-								else {
-									break;
-								}
+									if (Objects.equals(portalBundleVersion, portalRuntime.getPortalVersion()) &&
+										Objects.equals(runtime.getLocation(), portalBundle.getLiferayHome())) {
 
-								if (liferayWorkspaceProject != null) {
-									IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(
-										liferayWorkspaceProject.getProject());
+										fragmentRuntime = runtime;
 
-									if (Objects.isNull(bundleHomePath)) {
-										continue;
-									}
-
-									IPath runtimeLocation = runtime.getLocation();
-
-									if (bundleHomePath.equals(runtimeLocation)) {
-										value = runtime;
+										_sourceFile = ServerUtil.getModuleFileFrom70Server(
+											fragmentRuntime, hostOsgiJar, projectCoreLocation);
 
 										break;
 									}
 								}
-								else {
-									value = runtime;
-
-									break;
-								}
 							}
-
-							_sourceFile = ServerUtil.getModuleFileFrom70Server(value, hostOsgiJar, projectCoreLocation);
 						}
 						else if (ProjectUtil.isModuleExtProject(_project)) {
 							ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, _project);
@@ -208,6 +215,7 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 
 							if (projectBuilder == null) {
 								ProjectCore.logWarning("Please wait for synchronized jobs to finish.");
+								action.setEnabled(false);
 
 								return;
 							}
@@ -222,43 +230,41 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 						}
 					}
 					catch (Exception e) {
-						e.printStackTrace();
+						action.setEnabled(false);
+
+						return;
 					}
 
-					_searchTargetFile(_sourceFile);
+					_sourceEntry = _searchTargetFile(_sourceFile);
 
-					IPath projectRelativePath = _selectedFile.getProjectRelativePath();
+					if (Objects.isNull(_sourceEntry)) {
+						action.setEnabled(false);
 
-					String projectRelativePathStr = projectRelativePath.toString();
-
-					action.setEnabled(false);
-
-					if (_exist && projectRelativePathStr.startsWith("src/main/")) {
-						action.setEnabled(true);
+						return;
 					}
+
+					action.setEnabled(true);
 				}
 			}
 		}
 	}
 
-	private void _searchTargetFile(File sourceFile) {
+	private ZipEntry _searchTargetFile(File sourceFile) {
+		ZipEntry targetEntry = null;
+
 		if (FileUtil.exists(sourceFile)) {
 			try (ZipFile zipFile = new ZipFile(sourceFile)) {
-				ZipEntry entry = null;
-
 				Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
 
 				while (enumeration.hasMoreElements()) {
-					entry = enumeration.nextElement();
+					ZipEntry entry = enumeration.nextElement();
 
 					String entryCanonicalName = entry.getName();
 
 					IPath relativePath = _selectedFile.getProjectRelativePath();
 
 					if (!entry.isDirectory() && StringUtil.contains(relativePath.toString(), entryCanonicalName)) {
-						_exist = true;
-
-						_sourceEntry = entry;
+						targetEntry = entry;
 
 						break;
 					}
@@ -268,9 +274,10 @@ public class AddToCompareWithAction extends AbstractObjectAction {
 				ProjectUI.logError("Failed to compare with original file for project " + _project.getName(), ioe);
 			}
 		}
+
+		return targetEntry;
 	}
 
-	private boolean _exist;
 	private IProject _project;
 	private IFile _selectedFile;
 	private ZipEntry _sourceEntry;

@@ -131,6 +131,10 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 			GradleProject workspaceGradleProject = GradleUtil.getGradleProject(getProject());
 
+			if (Objects.isNull(workspaceGradleProject)) {
+				return Collections.emptyList();
+			}
+
 			DomainObjectSet<? extends GradleTask> tasksSet = workspaceGradleProject.getTasks();
 
 			List<? extends GradleTask> tasksList = tasksSet.getAll();
