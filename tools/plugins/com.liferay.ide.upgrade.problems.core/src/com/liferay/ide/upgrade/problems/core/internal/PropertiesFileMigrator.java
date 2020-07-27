@@ -39,16 +39,16 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 	public void activate(ComponentContext ctx) {
 		context = ctx;
 
-		Dictionary<String, Object> properties = context.getProperties();
+		Dictionary<String, Object> serviceProperties = context.getProperties();
 
-		problemTitle = safeGet(properties, "problem.title");
-		problemSummary = safeGet(properties, "problem.summary");
-		problemType = safeGet(properties, "file.extensions");
-		problemTickets = safeGet(properties, "problem.tickets");
-		sectionKey = safeGet(properties, "problem.section");
-		version = safeGet(properties, "version");
+		problemTitle = safeGet(serviceProperties, "problem.title");
+		problemSummary = safeGet(serviceProperties, "problem.summary");
+		problemType = safeGet(serviceProperties, "file.extensions");
+		problemTickets = safeGet(serviceProperties, "problem.tickets");
+		sectionKey = safeGet(serviceProperties, "problem.section");
+		version = safeGet(serviceProperties, "version");
 
-		addPropertiesToSearch(this.properties);
+		addPropertiesToSearch(properties);
 	}
 
 	@Override
