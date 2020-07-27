@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -150,9 +151,6 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 					}
 					else if (_isNotEmpty(_newTagNames)) {
 						String tagName = element.getTagName();
-						NamedNodeMap attributes = element.getAttributes();
-						NodeList childNodes = element.getChildNodes();
-						String nodeValue = element.getNodeValue();
 
 						String newTagName = "";
 
@@ -164,13 +162,19 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 							}
 						}
 
-						if (newTagName.equals("")) {
+						if (Objects.equals(newTagName, "")) {
 							continue;
 						}
+
+						NamedNodeMap attributes = element.getAttributes();
+
+						NodeList childNodes = element.getChildNodes();
 
 						Document document = element.getOwnerDocument();
 
 						Element newNode = document.createElement(newTagName);
+
+						String nodeValue = element.getNodeValue();
 
 						if (nodeValue != null) {
 							newNode.setNodeValue(nodeValue);
@@ -220,10 +224,6 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		return corrected;
 	}
 
-	private boolean _isNotEmpty(Collection<?> items) {
-		return items != null && !items.isEmpty();
-	}
-
 	@Override
 	protected List<FileSearchResult> searchFile(File file, JSPFile jspFileChecker) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
@@ -232,21 +232,15 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 			if (_isNotEmpty(_tagNames) && _isEmpty(_attrNames) && _isEmpty(_attrValues)) {
 				searchResults.addAll(jspFileChecker.findJSPTags(tagName));
 			}
-			else if (_isNotEmpty(_tagNames) && _isNotEmpty(_attrNames) &&
-					 _isEmpty(_attrValues)) {
-
+			else if (_isNotEmpty(_tagNames) && _isNotEmpty(_attrNames) && _isEmpty(_attrValues)) {
 				searchResults.addAll(jspFileChecker.findJSPTags(tagName, _attrNames));
 			}
-			else if (_isNotEmpty(_tagNames) && _isNotEmpty(_attrNames) &&
-					 _isNotEmpty(_attrValues)) {
-
+			else if (_isNotEmpty(_tagNames) && _isNotEmpty(_attrNames) && _isNotEmpty(_attrValues)) {
 				searchResults.addAll(jspFileChecker.findJSPTags(tagName, _attrNames, _attrValues));
 			}
 		}
 
-		if (_isNotEmpty(_newAttrNames) || _isNotEmpty(_newAttrValues) ||
-			_isNotEmpty(_newTagNames)) {
-
+		if (_isNotEmpty(_newAttrNames) || _isNotEmpty(_newAttrValues) || _isNotEmpty(_newTagNames)) {
 			for (FileSearchResult searchResult : searchResults) {
 				searchResult.autoCorrectContext = "jsptag:" + _class.getName();
 			}
@@ -256,11 +250,27 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	}
 
 	private boolean _isEmpty(String[] names) {
-		return names == null || names.length == 0;
+		if ((names == null) || (names.length == 0)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean _isNotEmpty(Collection<?> items) {
+		if ((items != null) && !items.isEmpty()) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private boolean _isNotEmpty(String[] names) {
-		return names != null && names.length > 0;
+		if ((names != null) && (names.length > 0)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private final String[] _attrNames;

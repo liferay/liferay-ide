@@ -83,6 +83,10 @@ public class PropertiesFileChecker {
 
 	}
 
+	private boolean _isWindows() {
+		return Platform.OS_WIN32.equals(Platform.getOS());
+	}
+
 	private String _loadConvert(char[] in, int off, int len, char[] convtBuf) {
 		if (convtBuf.length < len) {
 			int newLen = len * 2;
@@ -193,7 +197,9 @@ public class PropertiesFileChecker {
 			boolean precedingBackslash;
 			int lineNumber = 0;
 
-			while ((limit = lr.readLine())[0] >= 0) {
+			limit = lr.readLine();
+
+			while (limit[0] >= 0) {
 				lineNumber++;
 				lineNumber += limit[2];
 				c = 0;
@@ -266,6 +272,8 @@ public class PropertiesFileChecker {
 
 					keyInfos.put(key, infos);
 				}
+
+				limit = lr.readLine();
 			}
 		}
 
@@ -317,7 +325,7 @@ public class PropertiesFileChecker {
 				if (skipLF) {
 					skipLF = false;
 
-					if (isWindows()) {
+					if (_isWindows()) {
 						if (c == '\n') {
 							if (crStack.size() > 0) {
 								Character crPrefix = crStack.pop();
@@ -344,7 +352,7 @@ public class PropertiesFileChecker {
 						continue;
 					}
 
-					if (isWindows()) {
+					if (_isWindows()) {
 						if (!appendedLineBegin && (c == '\r')) {
 							crStack.push(c);
 
@@ -443,7 +451,6 @@ public class PropertiesFileChecker {
 			}
 		}
 
-
 		private char[] _inCharBuf;
 		private int _inLimit = 0;
 		private int _inOff = 0;
@@ -453,7 +460,4 @@ public class PropertiesFileChecker {
 
 	}
 
-	private boolean isWindows() {
-		return Platform.OS_WIN32.equals(Platform.getOS());
-	}
 }
