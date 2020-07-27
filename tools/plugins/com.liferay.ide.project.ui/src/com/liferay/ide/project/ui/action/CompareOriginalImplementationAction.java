@@ -121,7 +121,7 @@ public class CompareOriginalImplementationAction extends AbstractObjectAction {
 			CompareUI.openCompareEditor(compareEditorInput);
 		}
 		catch (IOException ioe) {
-			ioe.printStackTrace();
+			ProjectUI.logError("Unable to open compare editor.", ioe);
 		}
 	}
 
