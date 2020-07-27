@@ -14,11 +14,10 @@
 
 package com.liferay.ide.core.util;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -155,16 +154,13 @@ public class StringUtil {
 		return sb.toString();
 	}
 
-	public static String objectToString(Iterable<?> input, String delimiter) {
-		Joiner joiner = Joiner.on(delimiter);
-
-		return joiner.join(input);
-	}
-
-	public static String objectToString(Iterator<?> input, String delimiter) {
-		Joiner joiner = Joiner.on(delimiter);
-
-		return joiner.join(input);
+	public static String objectToString(Collection<?> inputs, String delimiter) {
+		return inputs.stream(
+		).map(
+			input -> input.toString()
+		).collect(
+			Collectors.joining(delimiter)
+		);
 	}
 
 	public static String replace(String content, String source, String target) {
@@ -204,17 +200,23 @@ public class StringUtil {
 	}
 
 	public static String[] stringToArray(String input, String delimiter) {
-		Splitter splitter = Splitter.on(delimiter);
-
-		List<String> splitToList = splitter.splitToList(input);
-
-		return splitToList.toArray(new String[splitToList.size()]);
+		return Arrays.stream(
+			input.split(delimiter)
+		).map(
+			String::trim
+		).toArray(
+			String[]::new
+		);
 	}
 
 	public static List<String> stringToList(String input, String delimiter) {
-		Splitter splitter = Splitter.on(delimiter);
-
-		return splitter.splitToList(input);
+		return Arrays.stream(
+			input.split(delimiter)
+		).map(
+			String::trim
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	public static String toLowerCase(String s) {

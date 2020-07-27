@@ -14,9 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
@@ -31,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -105,25 +103,23 @@ public class UpgradePlanCorePlugin extends Plugin {
 			return Collections.emptyList();
 		}
 
-		List<String> outlineList = StringUtil.stringToList(outlines, "|");
+		List<String> outlineList = StringUtil.stringToList(outlines, "\\|");
 
 		if (ListUtil.isEmpty(outlineList)) {
 			return Collections.emptyList();
 		}
 
-		return Lists.transform(
-			outlineList,
-			new Function<String, IUpgradePlanOutline>() {
+		return outlineList.stream(
+		).map(
+			input -> {
+				String[] outlineArray = StringUtil.stringToArray(input, ",");
 
-				@Override
-				public IUpgradePlanOutline apply(String input) {
-					String[] outlineArray = StringUtil.stringToArray(input, ",");
-
-					return new UpgradePlanOutline(
-						outlineArray[0].trim(), outlineArray[1].trim(), Boolean.parseBoolean(outlineArray[2].trim()));
-				}
-
-			});
+				return new UpgradePlanOutline(
+					outlineArray[0].trim(), outlineArray[1].trim(), Boolean.parseBoolean(outlineArray[2].trim()));
+			}
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	public static void logError(String msg) {
@@ -188,7 +184,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 				offlineOutlineLists.add(new UpgradePlanOutline(offlineOutlineFileName, outlinePath.toOSString(), true));
 			}
 
-			String offlineOutlineString = StringUtil.objectToString(offlineOutlineLists.iterator(), "|");
+			String offlineOutlineString = StringUtil.objectToString(offlineOutlineLists, "|");
 
 			_prefstore.put(OFFLINE_OUTLINE_KEY, offlineOutlineString);
 

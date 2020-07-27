@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.google.common.base.Joiner;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
@@ -34,6 +32,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.ClientProtocolException;
@@ -219,9 +218,10 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		else {
 			urls.remove(0);
 
-			Joiner joiner = Joiner.on(File.separator);
-
-			String retainedUrls = joiner.join(urls);
+			String retainedUrls = urls.stream(
+			).collect(
+				Collectors.joining(File.separator)
+			);
 
 			return _getEntryFile(retainedUrls, splitor, entryFiles[0]);
 		}

@@ -37,5 +37,6 @@ Require-Bundle: com.google.guava,
  org.eclipse.ui.navigator,
  org.eclipse.ui.navigator.resources,
  org.eclipse.ui.workbench,
- org.eclipse.ui.workbench.texteditor
+ org.eclipse.ui.workbench.texteditor,
+ org.jsoup
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanInfoProviderService.xml
