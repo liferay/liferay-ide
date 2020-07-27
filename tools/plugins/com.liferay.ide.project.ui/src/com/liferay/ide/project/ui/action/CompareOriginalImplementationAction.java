@@ -127,124 +127,121 @@ public class CompareOriginalImplementationAction extends AbstractObjectAction {
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		if (!selection.isEmpty()) {
-			if (selection instanceof IStructuredSelection) {
-				Object obj = ((IStructuredSelection)selection).getFirstElement();
+		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
+			Object obj = ((IStructuredSelection)selection).getFirstElement();
 
-				if (obj instanceof IFile) {
-					_selectedFile = (IFile)obj;
+			if (obj instanceof IFile) {
+				_selectedFile = (IFile)obj;
 
-					IPath projectRelativePath = _selectedFile.getProjectRelativePath();
+				IPath projectRelativePath = _selectedFile.getProjectRelativePath();
 
-					String projectRelativePathStr = projectRelativePath.toString();
+				String projectRelativePathStr = projectRelativePath.toString();
 
-					if (!projectRelativePathStr.startsWith("src/main/")) {
-						action.setEnabled(false);
+				if (!projectRelativePathStr.startsWith("src/main/")) {
+					action.setEnabled(false);
 
-						return;
-					}
-
-					_project = _selectedFile.getProject();
-
-					try {
-						if (ProjectUtil.isFragmentProject(_project)) {
-							Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(_project);
-
-							String hostBundleName = fragmentProjectInfo.get("HostOSGiBundleName");
-
-							String portalBundleVersion = fragmentProjectInfo.get("Portal-Bundle-Version");
-
-							if (Objects.isNull(portalBundleVersion) || Objects.isNull(portalBundleVersion)) {
-								action.setEnabled(false);
-
-								return;
-							}
-
-							ProjectCore projectCore = ProjectCore.getDefault();
-
-							IPath projectCoreLocation = projectCore.getStateLocation();
-
-							String hostOsgiJar = hostBundleName + ".jar";
-
-							IWorkspaceProject liferayWorkspaceProject =
-								LiferayWorkspaceUtil.getLiferayWorkspaceProject();
-
-							if (liferayWorkspaceProject != null) {
-								IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(
-									liferayWorkspaceProject.getProject());
-
-								if (Objects.isNull(bundleHomePath)) {
-									action.setEnabled(false);
-
-									return;
-								}
-
-								PortalBundle portalBundle = LiferayServerCore.newPortalBundle(bundleHomePath);
-
-								if (Objects.isNull(portalBundle)) {
-									action.setEnabled(false);
-
-									return;
-								}
-
-								IRuntime fragmentRuntime = null;
-
-								IRuntime[] runtimes = ServerCore.getRuntimes();
-
-								for (IRuntime runtime : runtimes) {
-									PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
-										PortalRuntime.class, new NullProgressMonitor());
-
-									if (Objects.equals(portalBundleVersion, portalRuntime.getPortalVersion()) &&
-										Objects.equals(runtime.getLocation(), portalBundle.getLiferayHome())) {
-
-										fragmentRuntime = runtime;
-
-										_sourceFile = ServerUtil.getModuleFileFrom70Server(
-											fragmentRuntime, hostOsgiJar, projectCoreLocation);
-
-										break;
-									}
-								}
-							}
-						}
-						else if (ProjectUtil.isModuleExtProject(_project)) {
-							ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, _project);
-
-							IProjectBuilder projectBuilder = liferayProject.adapt(IProjectBuilder.class);
-
-							if (projectBuilder == null) {
-								ProjectCore.logWarning("Please wait for synchronized jobs to finish.");
-								action.setEnabled(false);
-
-								return;
-							}
-
-							List<Artifact> dependencies = projectBuilder.getDependencies("originalModule");
-
-							if (!dependencies.isEmpty()) {
-								Artifact artifact = dependencies.get(0);
-
-								_sourceFile = artifact.getSource();
-							}
-						}
-					}
-					catch (Exception e) {
-						action.setEnabled(false);
-
-						return;
-					}
-
-					_sourceEntry = _searchTargetFile(_sourceFile);
-
-					if (Objects.isNull(_sourceEntry)) {
-						action.setEnabled(false);
-
-						return;
-					}
-
-					action.setEnabled(true);
+					return;
 				}
+
+				_project = _selectedFile.getProject();
+
+				try {
+					if (ProjectUtil.isFragmentProject(_project)) {
+						Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(_project);
+
+						String hostBundleName = fragmentProjectInfo.get("HostOSGiBundleName");
+
+						String portalBundleVersion = fragmentProjectInfo.get("Portal-Bundle-Version");
+
+						if (Objects.isNull(portalBundleVersion) || Objects.isNull(portalBundleVersion)) {
+							action.setEnabled(false);
+
+							return;
+						}
+
+						ProjectCore projectCore = ProjectCore.getDefault();
+
+						IPath projectCoreLocation = projectCore.getStateLocation();
+
+						String hostOsgiJar = hostBundleName + ".jar";
+
+						IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+						if (liferayWorkspaceProject != null) {
+							IPath bundleHomePath = LiferayWorkspaceUtil.getBundleHomePath(
+								liferayWorkspaceProject.getProject());
+
+							if (Objects.isNull(bundleHomePath)) {
+								action.setEnabled(false);
+
+								return;
+							}
+
+							PortalBundle portalBundle = LiferayServerCore.newPortalBundle(bundleHomePath);
+
+							if (Objects.isNull(portalBundle)) {
+								action.setEnabled(false);
+
+								return;
+							}
+
+							IRuntime fragmentRuntime = null;
+
+							IRuntime[] runtimes = ServerCore.getRuntimes();
+
+							for (IRuntime runtime : runtimes) {
+								PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
+									PortalRuntime.class, new NullProgressMonitor());
+
+								if (Objects.equals(portalBundleVersion, portalRuntime.getPortalVersion()) &&
+									Objects.equals(runtime.getLocation(), portalBundle.getLiferayHome())) {
+
+									fragmentRuntime = runtime;
+
+									_sourceFile = ServerUtil.getModuleFileFrom70Server(
+										fragmentRuntime, hostOsgiJar, projectCoreLocation);
+
+									break;
+								}
+							}
+						}
+					}
+					else if (ProjectUtil.isModuleExtProject(_project)) {
+						ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, _project);
+
+						IProjectBuilder projectBuilder = liferayProject.adapt(IProjectBuilder.class);
+
+						if (projectBuilder == null) {
+							ProjectCore.logWarning("Please wait for synchronized jobs to finish.");
+							action.setEnabled(false);
+
+							return;
+						}
+
+						List<Artifact> dependencies = projectBuilder.getDependencies("originalModule");
+
+						if (!dependencies.isEmpty()) {
+							Artifact artifact = dependencies.get(0);
+
+							_sourceFile = artifact.getSource();
+						}
+					}
+				}
+				catch (Exception e) {
+					action.setEnabled(false);
+
+					return;
+				}
+
+				_sourceEntry = _searchTargetFile(_sourceFile);
+
+				if (Objects.isNull(_sourceEntry)) {
+					action.setEnabled(false);
+
+					return;
+				}
+
+				action.setEnabled(true);
 			}
 		}
 	}
