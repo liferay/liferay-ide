@@ -173,4 +173,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.Liferay71DescriptorVersion.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70DescriptorVersion.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemoveAssetTagsSelectorTag.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedCopyLayoutsProperty.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedCopyLayoutsProperty.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.Liferay71VersionsProperties.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70VersionsProperties.xml
