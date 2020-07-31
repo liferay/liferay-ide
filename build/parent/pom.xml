@@ -31,6 +31,8 @@
         <blade-latest-md5>3bc01c8b25ba38753e053c54a1f9aabe</blade-latest-md5>
         <blade-392-download-url>https://repository.liferay.com/nexus/content/repositories/public/com/liferay/blade/com.liferay.blade.cli/3.9.2/com.liferay.blade.cli-3.9.2.jar</blade-392-download-url>
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
+        <upgrade-plan-content-zip-url></upgrade-plan-content-zip-url>
+        <upgrade-plan-content-zip-md5></upgrade-plan-content-zip-md5>
         <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/</bndtools-site>
         <eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
