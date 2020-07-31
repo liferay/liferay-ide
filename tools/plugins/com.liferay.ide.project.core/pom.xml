@@ -43,8 +43,8 @@
 						<fileset>
 							<directory>lib</directory>
 							<includes>
-								<include>blade.jar</include>
-								<include>blade-3.9.3.jar</include>
+								<include>blade-latest.jar</include>
+								<include>blade-3.9.2.jar</include>
 							</includes>
 						</fileset>
 					</filesets>
