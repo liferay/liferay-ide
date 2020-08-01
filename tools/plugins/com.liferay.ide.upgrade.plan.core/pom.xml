@@ -33,5 +33,42 @@
 
 	<name>Liferay IDE Upgrade Plan Core</name>
 
-<!--  add maven download plugin to download docs zip to place in the resources folder -->
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>resources</directory>
+							<includes>
+								<include>liferay-docs.zip</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<version>1.3.0</version>
+				<executions>
+					<execution>
+						<id>download-liferay-offline-docs</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>${upgrade-plan-content-zip-url}</url>
+							<outputDirectory>resources</outputDirectory>
+							<outputFileName>liferay-docs.zip</outputFileName>
+							<md5>${upgrade-plan-content-zip-md5}</md5>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
