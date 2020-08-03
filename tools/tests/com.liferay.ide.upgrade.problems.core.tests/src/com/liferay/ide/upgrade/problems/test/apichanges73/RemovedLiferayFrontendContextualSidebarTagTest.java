@@ -27,6 +27,7 @@ import org.osgi.framework.ServiceReference;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
+import com.liferay.ide.upgrade.problems.core.test.Util;
 
 /**
  * @author Seiphon Wang
@@ -50,7 +51,17 @@ public class RemovedLiferayFrontendContextualSidebarTagTest {
 
 		for (UpgradeProblem problem : problems) {
 			if (problem.getResource().getName().endsWith("ContextualSidebarTest.jsp")) {
-				if ((problem.getLineNumber() == 33) && (problem.getStartOffset() >= 1156) && (problem.getEndOffset() >= 1237)) {
+				if (problem.getLineNumber() == 33) {
+					
+					if (Util.isWindows()) {
+						Assert.assertEquals("", 1156, problem.getStartOffset());
+						Assert.assertEquals("", 1237, problem.getEndOffset());
+					}
+					else {
+						Assert.assertEquals("", 1124, problem.getStartOffset());
+						Assert.assertEquals("", 1204, problem.getEndOffset());
+					}
+					
 					found = true;
 				}
 			}
