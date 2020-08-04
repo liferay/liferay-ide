@@ -286,7 +286,7 @@ upgrade processes on startup in production environments.
 
 ---------------------------------------
 
-### Removed Cache Bootstrap Feature
+### Removed Cache Bootstrap Feature [](id=moved-bootstrap-cache-properties)
 - **Date:** 2020-Jan-8
 - **JIRA Ticket:** [LPS-96563](https://issues.liferay.com/browse/LPS-96563)
 
