@@ -34,12 +34,10 @@ import org.osgi.service.component.annotations.Component;
 public class FontAwesomeNoLongerIncludeDefault extends JSPTagMigrator {
 
 	public FontAwesomeNoLongerIncludeDefault() {
-		super(_ATTR_NAMES, _NEW_ATTR_NAMES, new String[0], new String[0], _TAG_NAMES, new String[0]);
+		super(_ATTR_NAMES, new String[0], new String[0], new String[0], _TAG_NAMES, new String[0]);
 	}
 
 	private static final String[] _ATTR_NAMES = {"iconCssClass"};
-
-	private static final String[] _NEW_ATTR_NAMES = {"icon", "markupView"};
 
 	private static final String[] _TAG_NAMES = {"liferay-ui:icon"};
 

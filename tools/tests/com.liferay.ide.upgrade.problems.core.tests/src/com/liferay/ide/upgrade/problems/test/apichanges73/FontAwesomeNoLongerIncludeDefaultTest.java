@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.test;
+package com.liferay.ide.upgrade.problems.test.apichanges73;
 
 import java.io.File;
 import java.util.Arrays;
@@ -27,6 +27,7 @@ import org.osgi.framework.ServiceReference;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
+import com.liferay.ide.upgrade.problems.core.test.Util;
 
 /**
  * @author Ethan Sun
@@ -50,6 +51,16 @@ public class FontAwesomeNoLongerIncludeDefaultTest {
 		for (UpgradeProblem problem : problems) {
 			if (problem.getResource().getName().endsWith("FontAwesomeNoLongerIncludeDefaultTest.jsp")) {
 				if ((problem.getLineNumber() == 19)  && (problem.getStartOffset() == 643) && (problem.getEndOffset() == 655)) {
+					
+					if (Util.isWindows()) {
+						Assert.assertEquals("", 661, problem.getStartOffset());
+						Assert.assertEquals("", 673, problem.getEndOffset());
+					}
+					else {
+						Assert.assertEquals("", 643, problem.getStartOffset());
+						Assert.assertEquals("", 655, problem.getEndOffset());
+					}
+
 					found = true;
 				}
 			}
