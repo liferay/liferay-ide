@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	property = {
 		"file.extensions=jsp,jspf", "problem.title=Removed liferay-frontend:cards-treeview Tag",
-		"problem.section=#removed-the-liferay-frontend:cards-treeview-tag-with-no-direct-replacement",
+		"problem.section=#removed-the-liferay-frontend:cards-treeview-tag",
 		"problem.summary=Removed liferay-frontend:cards-treeview Tag", "problem.tickets=LPS-106899", "version=7.3"
 	},
 	service = FileMigrator.class

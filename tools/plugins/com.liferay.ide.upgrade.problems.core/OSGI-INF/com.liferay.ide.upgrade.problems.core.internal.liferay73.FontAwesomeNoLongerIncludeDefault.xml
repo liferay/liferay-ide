@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay73.FontAwesomeNoLongerIncludeDefault">
    <property name="file.extensions" value="jsp,jspf"/>
    <property name="problem.title" value="Liferay FontAwesome Is No Longer Included by Default"/>
-   <property name="problem.section" value="#deprecated-the-iconCssClass-attr-and-replaced-with-icon-and-markupView"/>
+   <property name="problem.section" value="#liferay-fontAwesome-is-no-longer-included-by-default"/>
    <property name="problem.summary" value="Liferay FontAwesome Is No Longer Included by Default"/>
    <property name="problem.tickets" value="LPS-100021"/>
    <property name="version" value="7.3"/>

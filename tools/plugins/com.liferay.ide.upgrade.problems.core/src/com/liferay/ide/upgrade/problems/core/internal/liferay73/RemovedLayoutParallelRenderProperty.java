@@ -15,7 +15,9 @@
 package com.liferay.ide.upgrade.problems.core.internal.liferay73;
 
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -24,23 +26,17 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=jsp,jspf", "problem.title=Liferay FontAwesome Is No Longer Included by Default",
-		"problem.section=#liferay-fontAwesome-is-no-longer-included-by-default",
-		"problem.summary=Liferay FontAwesome Is No Longer Included by Default", "problem.tickets=LPS-100021",
-		"version=7.3"
+		"file.extensions=properties", "problem.title=Server-side Parallel Rendering Is No Longer Supported",
+		"problem.summary=Properties with the prefix layout.parallel.render were removed, which means parallel rendering is only supported when AJAX rendering is enabled.",
+		"problem.tickets=LPS-110359", "problem.section=#removed-portal-property-layout-parallel-render", "version=7.3"
 	},
 	service = FileMigrator.class
 )
-public class FontAwesomeNoLongerIncludeDefault extends JSPTagMigrator {
+public class RemovedLayoutParallelRenderProperty extends PropertiesFileMigrator {
 
-	public FontAwesomeNoLongerIncludeDefault() {
-		super(_ATTR_NAMES, _EMPTY, _EMPTY, _EMPTY, _TAG_NAMES, _EMPTY);
+	@Override
+	protected void addPropertiesToSearch(List<String> properties) {
+		properties.add("layout.parallel.render.*");
 	}
-
-	private static final String[] _ATTR_NAMES = {"iconCssClass"};
-
-	private static final String[] _EMPTY = new String[0];
-
-	private static final String[] _TAG_NAMES = {"liferay-ui:icon"};
 
 }
