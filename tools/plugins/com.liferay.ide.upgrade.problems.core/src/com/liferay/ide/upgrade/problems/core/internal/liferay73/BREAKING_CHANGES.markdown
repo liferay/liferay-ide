@@ -464,25 +464,25 @@ every page that was mostly unused and redundant.
 
 ---------------------------------------
 
-### Server-side Parallel Rendering Is No Longer Supported
+### Server-side Parallel Rendering Is No Longer Supported [](id=removed-portal-property-layout-parallel-render)
 - **Date:** 2020-Mar-16
 - **JIRA Ticket:** [LPS-110359](https://issues.liferay.com/browse/LPS-110359)
 
-#### What changed?
+#### What changed? [](id=who-is-affected-10)
 
 Properties with the prefix `layout.parallel.render` were removed, which means
 parallel rendering is only supported when AJAX rendering is enabled.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-10)
 
 This affects anyone using the removed properties.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-10)
 
 Remove any properties prefixed with `layout.parallel.render` from your
 properties file.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-10)
 
 This feature has been deprecated.
 

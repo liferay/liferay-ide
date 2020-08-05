@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedLayoutParallelRenderProperty">
+   <property name="file.extensions" value="properties"/>
+   <property name="problem.title" value="Server-side Parallel Rendering Is No Longer Supported"/>
+   <property name="problem.summary" value="Properties with the prefix layout.parallel.render were removed, which means parallel rendering is only supported when AJAX rendering is enabled."/>
+   <property name="problem.tickets" value="LPS-110359"/>
+   <property name="problem.section" value="#removed-portal-property-layout-parallel-render"/>
+   <property name="version" value="7.3"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedLayoutParallelRenderProperty"/>
+</scr:component>
