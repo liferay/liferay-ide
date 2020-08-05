@@ -70,6 +70,15 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		_class = getClass();
 	}
 
+	public JSPTagMigrator(
+		String[] attrNames, String[] newAttrNames, String[] attrValues, String[] newAttrValues, String[] tagNames,
+		String[] newTagNames, String[] tagContents) {
+
+		this(attrNames, newAttrNames, attrValues, newAttrValues, tagNames, newTagNames);
+
+		_tagContents = tagContents;
+	}
+
 	@Override
 	@SuppressWarnings("deprecation")
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
@@ -229,7 +238,12 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		for (String tagName : _tagNames) {
-			if (_isNotEmpty(_tagNames) && _isEmpty(_attrNames) && _isEmpty(_attrValues)) {
+			if (_isNotEmpty(_tagNames) && _isEmpty(_attrNames) && _isEmpty(_attrValues) && _isNotEmpty(_tagContents)) {
+				for (String tagContent : _tagContents) {
+					searchResults.addAll(jspFileChecker.findJSPTags(tagName, tagContent));
+				}
+			}
+			else if (_isNotEmpty(_tagNames) && _isEmpty(_attrNames) && _isEmpty(_attrValues)) {
 				searchResults.addAll(jspFileChecker.findJSPTags(tagName));
 			}
 			else if (_isNotEmpty(_tagNames) && _isNotEmpty(_attrNames) && _isEmpty(_attrValues)) {
@@ -279,6 +293,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	private final String[] _newAttrNames;
 	private final String[] _newAttrValues;
 	private final String[] _newTagNames;
+	private String[] _tagContents;
 	private final String[] _tagNames;
 
 }

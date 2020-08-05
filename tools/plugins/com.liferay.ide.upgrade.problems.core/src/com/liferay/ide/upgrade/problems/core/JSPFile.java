@@ -23,6 +23,8 @@ public interface JSPFile extends JavaFile {
 
 	public List<FileSearchResult> findJSPTags(String tagName);
 
+	public List<FileSearchResult> findJSPTags(String tagName, String tagContent);
+
 	public List<FileSearchResult> findJSPTags(String tagName, String[] attrNames);
 
 	public List<FileSearchResult> findJSPTags(String tagName, String[] attrNames, String[] attrValues);

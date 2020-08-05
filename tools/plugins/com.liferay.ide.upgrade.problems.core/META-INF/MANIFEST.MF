@@ -179,5 +179,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedSettingCacheProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.Liferay71VersionsProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70VersionsProperties.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.JqueryNoLongerDefaultInclude.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemoveBlockingCacheProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedLiferayFrontendContextualSidebarTag.xml
