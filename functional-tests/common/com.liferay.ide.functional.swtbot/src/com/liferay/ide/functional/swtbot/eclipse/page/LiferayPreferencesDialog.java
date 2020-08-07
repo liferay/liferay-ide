@@ -17,50 +17,43 @@ package com.liferay.ide.functional.swtbot.eclipse.page;
 import com.liferay.ide.functional.swtbot.page.Button;
 import com.liferay.ide.functional.swtbot.page.CLabel;
 import com.liferay.ide.functional.swtbot.page.Dialog;
-import com.liferay.ide.functional.swtbot.page.Table;
+import com.liferay.ide.functional.swtbot.page.Label;
+import com.liferay.ide.functional.swtbot.page.Tree;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 /**
- * @author Ashley Yuan
  * @author Rui Wang
  */
-public class UpgradePlannerPreferencesDialog extends Dialog {
+public class LiferayPreferencesDialog extends Dialog {
 
-	public UpgradePlannerPreferencesDialog(SWTBot bot) {
-		super(bot, PREFERENCES);
+	public LiferayPreferencesDialog(SWTBot bot) {
+		super(bot);
+
+		_liferayPreferences = new Tree(bot);
 	}
 
-	public void clickAddBtn() {
-		getAddBtn().click();
+	public Label getClearAllDoNotShowAgainSettingsAndShowAllHiddenDialogsAgain() {
+		return new Label(bot, CLEAR_ALL_DO_NOT_SHOW_AGAIN_SETTINGS_AND_SHOW_ALL_HIDDEN_DIALOGS_AGAIN);
 	}
 
-	public void clickRemoveBtn() {
-		getRemoveBtn().click();
+	public Button getClearBtn() {
+		return new Button(getShell().bot(), CLEAR);
 	}
 
-	public void clickUrl(int row) {
-		getUpgradePlannerOutlines().click(row);
+	public CLabel getLiferay() {
+		return new CLabel(bot, LIFERAY);
 	}
 
-	public Button getAddBtn() {
-		return new Button(getShell().bot(), ADD);
+	public CLabel getMessageDialogs() {
+		return new CLabel(bot, MESSAGE_DIALOGS);
 	}
 
-	public Button getRemoveBtn() {
-		return new Button(getShell().bot(), REMOVE);
+	public SWTBotTreeItem getTreeItem(String items) {
+		return _liferayPreferences.getTreeItem(items);
 	}
 
-	public CLabel getUpgradePlanner() {
-		return new CLabel(bot, UPGRADE_PLANNER);
-	}
-
-	public Table getUpgradePlannerOutlines() {
-		return new Table(getShell().bot(), CONFIGURE_UPGRADE_PLANNER_OUTLINES);
-	}
-
-	public Table getUrl() {
-		return new Table(getShell().bot(), 0);
-	}
+	private Tree _liferayPreferences;
 
 }
