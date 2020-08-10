@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Platform;
 
@@ -51,7 +53,26 @@ public class PropertiesFileChecker {
 
 	public List<FileSearchResult> findProperties(String key) {
 		List<FileSearchResult> retval = new ArrayList<>();
-		List<KeyInfo> infos = _keyInfos.get(key);
+
+		List<KeyInfo> infos = new ArrayList<>();
+
+		if (key.endsWith(".*")) {
+			Set<String> keyInfosSet = _keyInfos.keySet();
+
+			List<String> keyInfos = keyInfosSet.stream(
+			).filter(
+				keyInfo -> keyInfo.startsWith(key.substring(0, key.length() - 1))
+			).collect(
+				Collectors.toList()
+			);
+
+			for (String k : keyInfos) {
+				infos.addAll(_keyInfos.get(k));
+			}
+		}
+		else {
+			infos = _keyInfos.get(key);
+		}
 
 		if (infos != null) {
 			for (KeyInfo info : infos) {

@@ -185,17 +185,17 @@ longer used.
 The Java class
 `com.liferay.asset.taglib.servlet.taglib.soy.AssetTagsSelectorTag` was removed.
 
-#### Who is affected? [](id=who-is-affected-1)
+#### Who is affected? [](id=who-is-affected-4)
 
 This affects any code that directly instantiates or extends this class.
 
-#### How should I update my code? [](id=how-should-i-update-my-code-1)
+#### How should I update my code? [](id=how-should-i-update-my-code-4)
 
 There's no direct replacement for the removed class. If you have code that
 depends on it, you must copy over the old implementation to your own
 project and change the dependency to rely on your local version.
 
-#### Why was this change made? [](id=why-was-this-change-made-1)
+#### Why was this change made? [](id=why-was-this-change-made-4)
 
 The `asset:asset-tags-selector` and its components have been migrated to React,
 making the old tag and its soy infrastructure unnecessary.
@@ -206,23 +206,23 @@ making the old tag and its soy infrastructure unnecessary.
 - **Date:** 2019-Dec-26
 - **JIRA Ticket:** [LPS-106339](https://issues.liferay.com/browse/LPS-106339)
 
-#### What changed? [](id=what-changed-2)
+#### What changed? [](id=what-changed-5)
 
 The portal property `user.groups.copy.layouts.to.user.personal.site` and the
 behavior associated with it were removed.
 
-#### Who is affected? [](id=who-is-affected-2)
+#### Who is affected? [](id=who-is-affected-5)
 
 This affects anyone who set the `user.groups.copy.layouts.to.user.personal.site`
 property to `true` to copy User Group pages to User Personal Sites.
 
-#### How should I update my code? [](id=how-should-i-update-my-code-2)
+#### How should I update my code? [](id=how-should-i-update-my-code-5)
 
 There's no direct replacement for this property. If you depend on the behavior,
 you can copy the old implementations of
 `UserGroupLocalServiceImpl#copyUserGroupLayouts` to your own project.
 
-#### Why was this change made? [](id=why-was-this-change-made-2)
+#### Why was this change made? [](id=why-was-this-change-made-5)
 
 The behavior associated with this property has been deprecated since 6.2.
 
@@ -286,7 +286,7 @@ upgrade processes on startup in production environments.
 
 ---------------------------------------
 
-### Removed Cache Bootstrap Feature []
+### Removed Cache Bootstrap Feature
 - **Date:** 2020-Jan-8
 - **JIRA Ticket:** [LPS-96563](https://issues.liferay.com/browse/LPS-96563)
 
@@ -492,15 +492,15 @@ This feature has been deprecated.
 - **Date:** 2020-Mar-27
 - **JIRA Ticket:** [LPS-110734](https://issues.liferay.com/browse/LPS-110734)
 
-### What changed?
+#### What changed?
 
 As of 7.3, CKEditor is the default and only supported WYSIWYG editor.
 
-### Who is affected
+#### Who is affected
 
 This affects anyone who uses the Liferay Frontend Editor Simple Web module.
 
-### How should I update my code?
+#### How should I update my code?
 
 If you've configured Liferay Portal to use the Simple Editor, you can remove
 these configurations. If you still want to use the Simple Editor, you must take
@@ -523,15 +523,15 @@ around a single Editor to provide a more cohesive and comprehensive experience.
 - **Date:** 2020-Mar-27
 - **JIRA Ticket:** [LPS-110733](https://issues.liferay.com/browse/LPS-110733)
 
-### What changed?
+#### What changed?
 
 As of 7.3, CKEditor is the default and only supported WYSIWYG editor.
 
-### Who is affected
+#### Who is affected
 
 This affects anyone who uses TinyMCE.
 
-### How should I update my code?
+#### How should I update my code?
 
 If you've configured Liferay Portal to use the TinyMCE, you can remove
 these configurations. If you still want to use TinyMCE, you must take these
@@ -554,16 +554,16 @@ around a single Editor to provide a more cohesive and comprehensive experience.
 - **Date:** 2020-Apr-28
 - **JIRA Ticket:** [LPS-112334](https://issues.liferay.com/browse/LPS-112334)
 
-### What changed?
+#### What changed?
 
 `asset.vocabulary.default` is now a language key and no longer has a fixed value
 of `Topic`.
 
-### Who is affected
+#### Who is affected
 
 This affects anyone who overwrites the property.
 
-### How should I update my code?
+#### How should I update my code?
 
 There is no need to change the code if the property is not overwritten. If the
 property was overwritten and the specified key is not found, the provided text
@@ -745,11 +745,11 @@ This change was made to improve performance because blocking caches should never
 
 ---------------------------------------
 
-### Remove Support for Setting Cache Properties for Each Entity Model
+### Remove Support for Setting Cache Properties for Each Entity Model [](id=removed-setting-cache-properties-for-each-entity-model)
 - **Date:** 2020-Jun-24
 - **JIRA Ticket:** [LPS-116049](https://issues.liferay.com/browse/LPS-116049)
 
-#### What changed?
+#### What changed?[](id=what-changed-21)
 
 Support was removed for setting these cache properties for an entity:
 
@@ -764,16 +764,55 @@ For example, these properties are for entity
 - `value.object.finder.cache.enabled.com.liferay.portal.kernel.model.User`
 - `value.object.column.bitmask.enabled.com.liferay.portal.kernel.model.User`
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-21)
 
 This affects anyone using the properties listed above for an entity.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-21)
 
 There's no direct replacement for the removed feature. You must remove
 these properties from your entities.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-21)
 
 This change was made because these properties are not useful for an entity.
+
+---------------------------------------
+
+### Dynamic Data Mapping fields in Elasticsearch have changed to a nested document
+- **Date:** 2020-Jul-27
+- **JIRA Ticket:** [LPS-103224](https://issues.liferay.com/browse/LPS-103224)
+
+#### What changed?
+
+Dynamic Data Mapping fields in Elasticsearch that start with `ddm__keyword__` and `ddm__text__` have been moved to a new nested document `ddmFieldArray`.
+
+The new nested document `ddmFieldArray` has several entries with following fields:
+ - `ddmFieldName`: Contains the Dynamic Data Mapping structure field name. This name is generated using `DDMIndexer.encodeName` methods.
+ - `ddmFieldValue*`: Contains the indexed data. The name of this field is generated using `DDMIndexer.getValueFieldName` and depends on its data type and language.
+ - `ddmValueFieldName`: Contains the index field name where the indexed data is stored.
+
+ This change is not applied if you are using SOLR search engine.
+
+#### Who is affected?
+
+This affects anyone with custom developments that execute queries in the Elasticsearch index using `ddm__keyword__*` and `ddm__text__*` fields.
+
+#### How should I update my code?
+
+You have to use the new nested document `ddmFieldArray` in your Elasticsearch queries.
+
+There are some examples in Liferay code, for example, you can see the usage of DDM_FIELD_ARRAY constant in [DDMIndexerImpl](https://github.com/liferay/liferay-portal/blob/master/modules/apps/dynamic-data-mapping/dynamic-data-mapping-service/src/main/java/com/liferay/dynamic/data/mapping/internal/util/DDMIndexerImpl.java) and [AssetHelperImpl](https://github.com/liferay/liferay-portal/blob/master/modules/apps/asset/asset-service/src/main/java/com/liferay/asset/internal/util/AssetHelperImpl.java) java classes.
+
+You can also restore the legacy behavior from System Settings and continue using `ddm__keyword__*` and `ddm__text__*` fields.
+ - Go to "System Settings" => "Dynamic Data Mapping" => "Dynamic Data Mapping Indexer"
+ - Check "Enable Legacy Dynamic Data Mapping Index Fields"
+ - It is necessary to execute a full reindex after changing this configuration.
+
+#### Why was this change made?
+
+This change was made to avoid Elasticsearch "Limit of total fields has been exceeded" error that can be produced if you have a large number of Dynamic Data Mapping structures.
+
+For more information about this error, see [LPS-103224](https://issues.liferay.com/browse/LPS-103224).
+
 ---------------------------------------
