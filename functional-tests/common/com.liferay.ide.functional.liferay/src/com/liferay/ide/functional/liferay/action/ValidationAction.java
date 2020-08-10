@@ -20,6 +20,7 @@ import com.liferay.ide.functional.swtbot.page.CTabItem;
 import com.liferay.ide.functional.swtbot.page.CheckBox;
 import com.liferay.ide.functional.swtbot.page.ComboBox;
 import com.liferay.ide.functional.swtbot.page.Editor;
+import com.liferay.ide.functional.swtbot.page.Radio;
 import com.liferay.ide.functional.swtbot.page.Table;
 import com.liferay.ide.functional.swtbot.page.View;
 
@@ -111,6 +112,14 @@ public class ValidationAction extends UIAction {
 
 	public void assertLengthEquals(Object[] a1, Object[] a2) {
 		Assert.assertEquals(Arrays.toString(a2), a1.length, a2.length);
+	}
+
+	public void assertRadioFalse(Radio radio) {
+		Assert.assertFalse(radio.isSelected());
+	}
+
+	public void assertRadioTrue(Radio radio) {
+		Assert.assertTrue(radio.isSelected());
 	}
 
 	public void assertTableContains(Table table, String expect) {

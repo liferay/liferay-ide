@@ -17,50 +17,27 @@ package com.liferay.ide.functional.swtbot.eclipse.page;
 import com.liferay.ide.functional.swtbot.page.Button;
 import com.liferay.ide.functional.swtbot.page.CLabel;
 import com.liferay.ide.functional.swtbot.page.Dialog;
-import com.liferay.ide.functional.swtbot.page.Table;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
- * @author Ashley Yuan
  * @author Rui Wang
  */
-public class UpgradePlannerPreferencesDialog extends Dialog {
+public class UpgradeProblemsPreferencesDialog extends Dialog {
 
-	public UpgradePlannerPreferencesDialog(SWTBot bot) {
-		super(bot, PREFERENCES);
-	}
-
-	public void clickAddBtn() {
-		getAddBtn().click();
-	}
-
-	public void clickRemoveBtn() {
-		getRemoveBtn().click();
-	}
-
-	public void clickUrl(int row) {
-		getUpgradePlannerOutlines().click(row);
-	}
-
-	public Button getAddBtn() {
-		return new Button(getShell().bot(), ADD);
+	public UpgradeProblemsPreferencesDialog(SWTBot bot) {
+		super(bot);
 	}
 
 	public Button getRemoveBtn() {
 		return new Button(getShell().bot(), REMOVE);
 	}
 
-	public CLabel getUpgradePlanner() {
-		return new CLabel(bot, UPGRADE_PLANNER);
-	}
-
-	public Table getUpgradePlannerOutlines() {
-		return new Table(getShell().bot(), CONFIGURE_UPGRADE_PLANNER_OUTLINES);
-	}
-
-	public Table getUrl() {
-		return new Table(getShell().bot(), 0);
+	public CLabel getUpgradeProblemsForIgnoreBreakingChangeProblems() {
+		return new CLabel(
+			getShell().bot(),
+			"These are ignored breaking change problems.\n" +
+				"You can remove them if you want to show this type of problem next time.");
 	}
 
 }

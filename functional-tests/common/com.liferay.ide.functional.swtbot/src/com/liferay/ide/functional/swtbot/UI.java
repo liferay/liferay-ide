@@ -71,6 +71,8 @@ public interface UI {
 
 	public final String ALLOW_MULTIPLE_INSTANCES = "Allow multiple instances";
 
+	public final String ALWAYS = "Always";
+
 	public final String ANT_LIFERAY_PLUGINS_SDK = "Ant (liferay-plugins-sdk)";
 
 	public final String API = "api";
@@ -133,6 +135,11 @@ public interface UI {
 
 	public final String CLASSNAME = "Classname:";
 
+	public final String CLEAR = "Clear";
+
+	public final String CLEAR_ALL_DO_NOT_SHOW_AGAIN_SETTINGS_AND_SHOW_ALL_HIDDEN_DIALOGS_AGAIN =
+		"Clear all 'do not show again' settings and show all hidden dialogs again.";
+
 	public final String CLEAR_CONSOLE = "Clear Console";
 
 	public final String CLEAR_LOG_VIEWER = "Clear Log Viewer";
@@ -158,6 +165,8 @@ public interface UI {
 	public final String CONFIGURE_BUNDLE_URL = "Configure Bundle URL";
 
 	public final String CONFIGURE_LIFERAY_WORKSPACE_SETTINGS = "Configure Liferay Workspace Settings";
+
+	public final String CONFIGURE_PROJECT_SPECIFIC_SETTINGS = "<a>Configure Project Specific Settings...</a>";
 
 	public final String CONFIGURE_TARGET_PLATFORM_VERSION = "Configure Target Platform Version";
 
@@ -218,6 +227,8 @@ public interface UI {
 	public final String CUSTOM_JSPS = "Custom JSPs";
 
 	public final String DEBUG = "Debug";
+
+	public final String DEFAULT_WORKFLOW_VALIDATION_LOGICAL = "Default workflow validation (logical)";
 
 	public final String DEFINE_ACTIONS_ON_PORTAL_EVENTS = "Define actions to be executed on portal events:";
 
@@ -416,6 +427,8 @@ public interface UI {
 
 	public final String KALEO_DESIGNER = "Kaleo Designer";
 
+	public final String KALEO_WORKFLOW_VALIDATION = "Kaleo Workflow Validation";
+
 	public final String KALEO_WORKFLOWS = "Kaleo Workflows";
 
 	public final String LANGUAGE_PROPERTIES = "Language properties";
@@ -441,11 +454,15 @@ public interface UI {
 
 	public final String LIFERAY_COMPONENT_CLASS = "Liferay Component Class";
 
+	public final String LIFERAY_DISPLAY_XML_DESCRIPTOR = "Liferay Display XML Descriptor";
+
 	public final String LIFERAY_FACES_ALLOY = "Liferay Faces Alloy";
 
 	public final String LIFERAY_GOGO_SHELL = "Liferay Gogo Shell";
 
 	public final String LIFERAY_HOOK_CONFIGURATION = "Liferay Hook Configuration (Legacy)";
+
+	public final String LIFERAY_HOOK_XML_DESCRIPTOR = "Liferay Hook XML Descriptor";
 
 	public final String LIFERAY_IDE_STABLE_RELEASES = "Liferay IDE Stable releases";
 
@@ -453,7 +470,11 @@ public interface UI {
 
 	public final String LIFERAY_JSF_PORTLET = "Liferay JSF Portlet";
 
+	public final String LIFERAY_JSP_FILES = "Liferay JSP Files";
+
 	public final String LIFERAY_LAYOUT_TEMPLATE = "Liferay Layout Template";
+
+	public final String LIFERAY_LAYOUT_TEMPLATES_DESCIPTOR = "Liferay Layout Templates Descriptor";
 
 	public final String LIFERAY_MODULE_EXT_FILES = "Liferay Module Ext Files";
 
@@ -474,6 +495,8 @@ public interface UI {
 	public final String LIFERAY_PORTAL_BUNDLE_DIRECTORY = "Liferay Portal Bundle Directory";
 
 	public final String LIFERAY_PORTLET = "Liferay Portlet";
+
+	public final String LIFERAY_PORTLET_XML_DESCIPTOR = "Liferay Portlet XML Descriptor";
 
 	public final String LIFERAY_PROJECT_FROM_EXISTING_SOURCE = "Liferay Project from Existing Source";
 
@@ -511,6 +534,8 @@ public interface UI {
 
 	public final String MAVEN_LIFERAY_WORKSPACE = "maven-liferay-workspace";
 
+	public final String MESSAGE_DIALOGS = "Message dialogs";
+
 	public final String MODEL_CLASS = "Model Class:";
 
 	public final String MODEL_LISTENER = "Model Listener";
@@ -530,6 +555,8 @@ public interface UI {
 	public final String NAME_WITH_COLON = "Name:";
 
 	public final String NAMESPACE = "Namespace:";
+
+	public final String NEVER = "Never";
 
 	public final String NEW = "New";
 
@@ -640,6 +667,8 @@ public interface UI {
 
 	public final String PLUGIN_TYPE = "Plugin type:";
 
+	public final String PLUGIN_VALIDATION = "Plugin Validation";
+
 	public final String POLLER_PROCESSOR = "Poller Processor";
 
 	public final String POM_XML = "pom.xml";
@@ -668,6 +697,8 @@ public interface UI {
 
 	public final String PORTLET_UPCASE = "Portlet";
 
+	public final String PORTLET_XML_DESCRIPTOR = "Portlet XML Descriptor";
+
 	public final String PORTLETMVC4SPRING = "PortletMVC4Spring";
 
 	public final String PREFERENCE_RECORDER = "Preference Recorder";
@@ -695,6 +726,8 @@ public interface UI {
 	public final String PROJECT_TEMPLATE_NAME = "Project Template Name:";
 
 	public final String PROJECT_WITH_DOT = "Project...";
+
+	public final String PROMPT = "Prompt";
 
 	public final String PROPERTIES = "Properties:";
 
@@ -774,6 +807,9 @@ public interface UI {
 
 	public final String SELECT_SERVICE_NAME = "Select Service Name:";
 
+	public final String SELECT_THE_SEVERITY_LEVEL_FOR_THE_FOLLOWING_VALIDATION_PROBLEMS =
+		"Select the severity level for the following validation problems:";
+
 	public final String SELECTED_PROJECT = "Selected project:";
 
 	public final String SERVER = "Server";
@@ -809,6 +845,8 @@ public interface UI {
 	public final String SERVICE_WRAPPER_UPCASE = "Service Wrapper";
 
 	public final String SERVICE_XML = "service.xml";
+
+	public final String SERVICE_XML_DESCIPTOR = "Service XML Descriptor";
 
 	public final String SERVICES = "Services";
 
@@ -892,6 +930,9 @@ public interface UI {
 
 	public final String TEST_LIFERAY_WEB_SERVICE = "Test Liferay Web Services";
 
+	public final String THE_SEVERITY_LEVEL_FOR_THE_FOLLOWING_VALIDATION_PROBLEMS =
+		"Select the severity level for the following validation problems:";
+
 	public final String THEME = "theme";
 
 	public final String THEME_CONTRIBUTOR = "theme-contributor";
@@ -921,6 +962,8 @@ public interface UI {
 	public final String UPGRADE_PLAN_OUTLINE = "Upgrade plan outline:";
 
 	public final String UPGRADE_PLANNER = "Upgrade Planner";
+
+	public final String UPGRADE_PROBLEMS = "Upgrade Problems";
 
 	public final String UPGRADE_TO_LIFERAY_PLUGINS_SDK_7 = "Upgrade to Liferay Plugins SDK 7";
 
@@ -986,6 +1029,8 @@ public interface UI {
 
 	public final String WINDOW = "Window";
 
+	public final String WORKFLOW_VALIDATION = "Workflow Validation";
+
 	public final String WORKING_SET = "Working set:";
 
 	public final String WORKSPACE = "Workspace:";
@@ -995,6 +1040,8 @@ public interface UI {
 	public final String WORKSPACE_LOCATION = "Workspace location:";
 
 	public final String WORKSPACE_NAME = "Workspace name:";
+
+	public final String XML_SEARCH = "XML Search";
 
 	public final String YES = "Yes";
 
