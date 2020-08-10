@@ -717,11 +717,11 @@ side, improving page loading times.
 
 ---------------------------------------
 
-### Remove Support for Blocking Cache
+### Remove Support for Blocking Cache [](id=remove-support-for-blocking-cache)
 - **Date:** 2020-Jun-17
 - **JIRA Ticket:** [LPS-115687](https://issues.liferay.com/browse/LPS-115687)
 
-#### What changed?
+#### What changed? [](id=what-changed-17)
 
 Blocking cache support was removed. These properties can no longer be used to
 enable blocking cache:
@@ -730,16 +730,16 @@ enable blocking cache:
 - `permissions.object.blocking.cache`
 - `value.object.entity.blocking.cache`
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-17)
 
 This affects anyone using the properties listed above.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-17)
 
 There's no direct replacement for the removed feature. If you have code that
 depends on it, you must implement it yourself.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-17)
 
 This change was made to improve performance because blocking caches should never be enabled.
 
