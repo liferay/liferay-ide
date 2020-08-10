@@ -14,6 +14,8 @@
 
 package com.liferay.ide.hook.ui.action;
 
+import java.util.Objects;
+
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFilter;
 
@@ -24,7 +26,7 @@ public class NoBrowseActionHandlerFilter extends SapphireActionHandlerFilter {
 
 	@Override
 	public boolean check(SapphireActionHandler handler) {
-		return !"Sapphire.Browse.Java.Type".equals(handler.getId());
+		return !Objects.equals("Sapphire.Browse.Java.Type", handler.getId());
 	}
 
 }

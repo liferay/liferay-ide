@@ -34,7 +34,6 @@ import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Service.Context;
 import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -71,8 +70,8 @@ public interface StrutsAction extends Element {
 	@Label(standard = "Struts Action Path")
 	@Required
 	@Services(
-		value = {
-			@Service(context = Context.METAMODEL, impl = StrutsActionPathPossibleValuesCacheService.class),
+		{
+			@Service(context = Service.Context.METAMODEL, impl = StrutsActionPathPossibleValuesCacheService.class),
 			@Service(impl = StrutsActionPathPossibleValuesService.class)
 		}
 	)

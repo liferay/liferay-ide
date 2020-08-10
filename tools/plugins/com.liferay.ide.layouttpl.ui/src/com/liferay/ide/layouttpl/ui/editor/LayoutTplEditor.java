@@ -36,7 +36,6 @@ import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.ui.SapphireEditor;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.def.EditorPageDef;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
@@ -179,7 +178,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
 	@Override
 	protected IEditorPart createPage(String pageDefinitionId) {
-		if ("preview".equals(pageDefinitionId)) {
+		if (pageDefinitionId.equals("preview")) {
 			if (_previewPage == null) {
 				Element element = getModelElement();
 
@@ -202,8 +201,8 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 	}
 
 	@Override
-	protected Reference<EditorPageDef> getDefinition(String pageDefinitionId) {
-		if ("preview".equals(pageDefinitionId)) {
+	protected DefinitionLoader.Reference<EditorPageDef> getDefinition(String pageDefinitionId) {
+		if (pageDefinitionId.equals("preview")) {
 			if (_definition == null) {
 				DefinitionLoader definitionLoader = DefinitionLoader.sdef(LayoutTplEditor.class);
 
@@ -217,43 +216,41 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 	}
 
 	protected void initSourceModel() {
-		if (_sourceModel == null) {
-			if ((_sourcePage != null) && (_sourcePage.getDocumentProvider() != null)) {
-				IDocumentProvider documentProvider = _sourcePage.getDocumentProvider();
+		if ((_sourceModel == null) && (_sourcePage != null) && (_sourcePage.getDocumentProvider() != null)) {
+			IDocumentProvider documentProvider = _sourcePage.getDocumentProvider();
 
-				IDocument doc = documentProvider.getDocument(getEditorInput());
+			IDocument doc = documentProvider.getDocument(getEditorInput());
 
-				IModelManager modelManager = StructuredModelManager.getModelManager();
+			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-				_sourceModel = (IDOMModel)modelManager.getExistingModelForEdit(doc);
+			_sourceModel = (IDOMModel)modelManager.getExistingModelForEdit(doc);
 
-				_sourceModel.addModelStateListener(
-					new IModelStateListener() {
+			_sourceModel.addModelStateListener(
+				new IModelStateListener() {
 
-						public void modelAboutToBeChanged(IStructuredModel model) {
-						}
+					public void modelAboutToBeChanged(IStructuredModel model) {
+					}
 
-						public void modelAboutToBeReinitialized(IStructuredModel structuredModel) {
-						}
+					public void modelAboutToBeReinitialized(IStructuredModel structuredModel) {
+					}
 
-						public void modelChanged(IStructuredModel model) {
-							setSourceModelChanged(true);
-						}
+					public void modelChanged(IStructuredModel model) {
+						setSourceModelChanged(true);
+					}
 
-						public void modelDirtyStateChanged(IStructuredModel model, boolean dirty) {
-						}
+					public void modelDirtyStateChanged(IStructuredModel model, boolean dirty) {
+					}
 
-						public void modelReinitialized(IStructuredModel structuredModel) {
-						}
+					public void modelReinitialized(IStructuredModel structuredModel) {
+					}
 
-						public void modelResourceDeleted(IStructuredModel model) {
-						}
+					public void modelResourceDeleted(IStructuredModel model) {
+					}
 
-						public void modelResourceMoved(IStructuredModel oldModel, IStructuredModel newModel) {
-						}
+					public void modelResourceMoved(IStructuredModel oldModel, IStructuredModel newModel) {
+					}
 
-					});
-			}
+				});
 		}
 	}
 
@@ -284,22 +281,18 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 			refreshPreviewPage();
 		}
 
-		if ((lastActivePage[0] == _SOURCE_PAGE_INDEX) && (pageIndex == _DESIGN_PAGE_INDEX)) {
-			if (this._sourcePage.isDirty() && _sourceModelChanged) {
-				refreshDiagramModel();
-			}
+		if ((lastActivePage[0] == _SOURCE_PAGE_INDEX) && (pageIndex == _DESIGN_PAGE_INDEX) &&
+			this._sourcePage.isDirty() && _sourceModelChanged) {
+
+			refreshDiagramModel();
 		}
 
-		if ((lastActivePage[0] == _DESIGN_PAGE_INDEX) && (pageIndex == _SOURCE_PAGE_INDEX)) {
-			if (_designPageChanged) {
-				refreshSourceModel();
-			}
+		if ((lastActivePage[0] == _DESIGN_PAGE_INDEX) && (pageIndex == _SOURCE_PAGE_INDEX) && _designPageChanged) {
+			refreshSourceModel();
 		}
 
-		if ((lastActivePage[0] == _DESIGN_PAGE_INDEX) && (pageIndex == _PREVIEW_PAGE_INDEX)) {
-			if (_designPageChanged) {
-				refreshSourceModel();
-			}
+		if ((lastActivePage[0] == _DESIGN_PAGE_INDEX) && (pageIndex == _PREVIEW_PAGE_INDEX) && _designPageChanged) {
+			refreshSourceModel();
 
 			refreshPreviewPage();
 		}

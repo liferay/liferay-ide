@@ -135,7 +135,9 @@ public final class HierarchyJavaTypeBrowseActionHandler extends BrowseActionHand
 				assert (results != null) && (results.length == 1);
 
 				if (results[0] instanceof IType) {
-					return ((IType)results[0]).getFullyQualifiedName();
+					IType typeResults = (IType)results[0];
+
+					return typeResults.getFullyQualifiedName();
 				}
 			}
 		}

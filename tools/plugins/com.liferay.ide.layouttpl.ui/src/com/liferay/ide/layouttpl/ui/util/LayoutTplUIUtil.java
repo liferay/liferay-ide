@@ -94,7 +94,9 @@ public class LayoutTplUIUtil {
 			return false;
 		}
 
-		if (!(((CreateRequest)request).getNewObjectType() == class1)) {
+		CreateRequest createRequest = (CreateRequest)request;
+
+		if (!(createRequest.getNewObjectType() == class1)) {
 			return false;
 		}
 

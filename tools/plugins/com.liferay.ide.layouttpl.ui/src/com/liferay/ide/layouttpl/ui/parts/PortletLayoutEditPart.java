@@ -102,7 +102,9 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 
 		GridData gd = createGridData();
 
-		((GraphicalEditPart)getParent()).setLayoutConstraint(this, layoutPanel, gd);
+		GraphicalEditPart editParent = (GraphicalEditPart)getParent();
+
+		editParent.setLayoutConstraint(this, layoutPanel, gd);
 
 		List rows = getParent().getChildren();
 

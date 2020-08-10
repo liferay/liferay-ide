@@ -33,9 +33,8 @@ public class HookCustomJspValidationResolutionGenerator implements IMarkerResolu
 		if (hasResolutions(marker)) {
 			return new IMarkerResolution[] {new HookCustomJspValidationResolution()};
 		}
-		else {
-			return new IMarkerResolution[0];
-		}
+
+		return new IMarkerResolution[0];
 	}
 
 	public boolean hasResolutions(IMarker marker) {

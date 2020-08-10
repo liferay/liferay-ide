@@ -73,8 +73,6 @@ public class AddLayoutTplOperation
 
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		IStatus retval = null;
-
 		IDataModel dm = getDataModel();
 
 		String diagramClassName = dm.getStringProperty(LAYOUT_TEMPLATE_ID);
@@ -119,9 +117,7 @@ public class AddLayoutTplOperation
 
 		LayoutTplDescriptorHelper layoutTplDescHelper = new LayoutTplDescriptorHelper(getTargetProject());
 
-		retval = layoutTplDescHelper.addNewLayoutTemplate(dm);
-
-		return retval;
+		return layoutTplDescHelper.addNewLayoutTemplate(dm);
 	}
 
 	public IProject getTargetProject() {

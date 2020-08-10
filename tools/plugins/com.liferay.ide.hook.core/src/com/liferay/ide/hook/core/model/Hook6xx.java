@@ -23,7 +23,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@CustomXmlRootBinding(value = HookRootElementController.class)
+@CustomXmlRootBinding(HookRootElementController.class)
 @XmlBinding(path = "hook")
 public interface Hook6xx extends Hook {
 

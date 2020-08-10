@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <?eclipse version="3.4"?>
 <plugin>
 	<extension
@@ -11,7 +11,7 @@
 			Liferay Layout Template
 			</label>
 			<description>
-			Layout template plugin for Liferay portal.  Facet version corresponds to Liferay version.
+			Layout template plugin for Liferay portal. Facet version corresponds to Liferay version.
 			</description>
 			<member
 				category="liferay.plugins"

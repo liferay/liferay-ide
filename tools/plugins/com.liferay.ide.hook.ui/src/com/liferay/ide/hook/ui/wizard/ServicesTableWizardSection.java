@@ -20,7 +20,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.ui.HookUI;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.dialog.FilteredTypesSelectionDialogEx;
 import com.liferay.ide.ui.util.UIUtil;
@@ -253,9 +252,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 				getShell(), model, serviceType, wrapperType);
 
 			if (dialog.open() == Window.OK) {
-				String qualifiedClassname = dialog.getQualifiedClassname();
-
-				text.setText(qualifiedClassname);
+				text.setText(dialog.getQualifiedClassname());
 			}
 		}
 
@@ -320,8 +317,6 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 
 			scope.setResourcePattern(new String[] {".*Service.class$"});
 
-			IProject project = ProjectUtil.getProject(model);
-
 			IWebProject liferayProject = LiferayCore.create(IWebProject.class, project);
 
 			IPath serviceJarPathService = liferayProject.getLibraryPath("portal-service");
@@ -340,7 +335,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 				enclosingjarPath = newServiceJarPathKernel;
 			}
 
-			scope.setEnclosingJarPaths(new IPath[] {newServiceJarPathKernel});
+			scope.setEnclosingJarPaths(new IPath[] {enclosingjarPath});
 
 			FilteredTypesSelectionDialog dialog = new FilteredTypesSelectionDialogEx(
 				getShell(), false, null, scope, IJavaSearchConstants.INTERFACE);
@@ -442,9 +437,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 		AddServiceDialog dialog = new AddServiceDialog(getShell(), dialogTitle, fieldLabels, buttonLabels);
 
 		if (dialog.open() == Window.OK) {
-			String[] stringArray = dialog.getStringArray();
-
-			addStringArray(stringArray);
+			addStringArray(dialog.getStringArray());
 		}
 	}
 
@@ -470,9 +463,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 
 		dialog.open();
 
-		String[] stringArray = dialog.getStringArray();
-
-		editStringArray(valuesForText, stringArray);
+		editStringArray(valuesForText, dialog.getStringArray());
 	}
 
 	protected String[] buttonLabels;

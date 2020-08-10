@@ -45,9 +45,7 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
 	}
 
 	public IStatus addNewLayoutTemplate(IDataModel dm) {
-		IFile descriptorFile = getDescriptorFile();
-
-		DOMModelOperation operation = new DOMModelEditOperation(descriptorFile) {
+		DOMModelOperation operation = new DOMModelEditOperation(getDescriptorFile()) {
 
 			protected void createDefaultFile() {
 				createDefaultDescriptor(_LAYOUT_DESCRIPTOR_TEMPLATE, getDescriptorVersion());

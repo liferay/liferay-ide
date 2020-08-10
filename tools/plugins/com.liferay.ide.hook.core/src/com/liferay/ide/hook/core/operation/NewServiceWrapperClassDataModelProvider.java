@@ -48,9 +48,8 @@ public class NewServiceWrapperClassDataModelProvider
 			if (lastDot > -1) {
 				return this.qualifiedClassname.substring(0, lastDot);
 			}
-			else {
-				return StringPool.EMPTY;
-			}
+
+			return StringPool.EMPTY;
 		}
 		else if (JAVA_PACKAGE_FRAGMENT_ROOT.equals(propertyName)) {
 			return this.hookModel.getProperty(JAVA_PACKAGE_FRAGMENT_ROOT);

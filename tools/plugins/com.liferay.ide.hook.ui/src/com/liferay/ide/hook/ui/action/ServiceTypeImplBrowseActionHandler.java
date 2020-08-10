@@ -65,7 +65,7 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 
 			TypeSelectionExtension extension = null;
 
-			if ("type".equals(_kind)) {
+			if (_kind.equals("type")) {
 				scope = SearchEngine.createJavaSearchScope(new IJavaProject[] {JavaCore.create(project)});
 
 				extension = new TypeSelectionExtension() {
@@ -89,7 +89,7 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 
 				};
 			}
-			else if ("impl".equals(_kind)) {
+			else if (_kind.equals("impl")) {
 				String serviceType = _getServiceType(element);
 
 				if (serviceType != null) {
@@ -100,7 +100,9 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 					scope = SearchEngine.createHierarchyScope(javaProject.findType(wrapperType));
 				}
 				else {
-					Shell shell = ((SwtPresentation)context).shell();
+					SwtPresentation presentationContext = (SwtPresentation)context;
+
+					Shell shell = presentationContext.shell();
 
 					MessageDialog.openInformation(shell, Msgs.serviceImplBrowse, Msgs.validServiceTypeProperty);
 
@@ -108,7 +110,9 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 				}
 			}
 
-			Shell shell = ((SwtPresentation)context).shell();
+			SwtPresentation presentationContext = (SwtPresentation)context;
+
+			Shell shell = presentationContext.shell();
 
 			SelectionDialog dlg = JavaUI.createTypeDialog(
 				shell, null, scope, _browseDialogStyle, false, StringPool.DOUBLE_ASTERISK, extension);
@@ -125,7 +129,9 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 				assert (results != null) && (results.length == 1);
 
 				if (results[0] instanceof IType) {
-					return ((IType)results[0]).getFullyQualifiedName();
+					IType typeResults = (IType)results[0];
+
+					return typeResults.getFullyQualifiedName();
 				}
 			}
 		}
@@ -144,10 +150,10 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 
 		_kind = def.getParam("kind");
 
-		if ("type".equals(_kind)) {
+		if (_kind.equals("type")) {
 			_browseDialogStyle = IJavaElementSearchConstants.CONSIDER_INTERFACES;
 		}
-		else if ("impl".equals(_kind)) {
+		else if (_kind.equals("impl")) {
 			_browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES;
 		}
 	}

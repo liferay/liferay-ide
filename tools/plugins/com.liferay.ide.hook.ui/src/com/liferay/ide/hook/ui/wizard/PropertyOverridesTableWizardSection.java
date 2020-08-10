@@ -163,9 +163,7 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 			getShell(), dialogTitle, fieldLabels, buttonLabels);
 
 		if (dialog.open() == Window.OK) {
-			String[] stringArray = dialog.getStringArray();
-
-			addStringArray(stringArray);
+			addStringArray(dialog.getStringArray());
 		}
 	}
 

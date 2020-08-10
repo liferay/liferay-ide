@@ -83,9 +83,7 @@ public class CustomJspValidationService extends ValidationService {
 
 				IFile file = hook.adapt(IFile.class);
 
-				IProject project = file.getProject();
-
-				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
+				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, file.getProject());
 
 				if (liferayProject != null) {
 					ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
