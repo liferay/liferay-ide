@@ -56,8 +56,8 @@ public class ListUtil {
 		return false;
 	}
 
-	public static boolean isEmpty(Enumeration<?> collection) {
-		if ((collection == null) || !collection.hasMoreElements()) {
+	public static boolean isEmpty(Enumeration<?> enumeration) {
+		if ((enumeration == null) || !enumeration.hasMoreElements()) {
 			return true;
 		}
 
@@ -100,8 +100,8 @@ public class ListUtil {
 		return !isEmpty(collection);
 	}
 
-	public static boolean isNotEmpty(Enumeration<?> collection) {
-		return !isEmpty(collection);
+	public static boolean isNotEmpty(Enumeration<?> enumeration) {
+		return !isEmpty(enumeration);
 	}
 
 	public static boolean isNotEmpty(List<?> list) {
