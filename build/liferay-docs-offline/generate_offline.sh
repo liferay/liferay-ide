@@ -9,8 +9,8 @@
 #!/bin/sh
 
 if [ $# -lt 1 ]; then
-    echo "Error: You need to provide liferay docs tag."
-    exit 0
+    echo "Error: You need to provide liferay docs tag. './generate_offline_docs.sh liferay-ide-offline-3.9-m2-20200811'"
+    exit 1
 fi
 
 pwd=$PWD
@@ -21,7 +21,7 @@ curl --proxy http://localhost:8001 -s -L ${github_repo}/${tag}.zip --retry 5 --o
 
 if [ $? -ne 0 ]; then
     echo "Failed to download liferay docs zip file."
-    exit 0
+    exit 1
 fi
 
 offline_doc_zip=${tag}.zip
