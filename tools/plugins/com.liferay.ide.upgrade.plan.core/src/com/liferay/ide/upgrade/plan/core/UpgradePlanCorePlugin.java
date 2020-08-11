@@ -150,6 +150,15 @@ public class UpgradePlanCorePlugin extends Plugin {
 		super.stop(context);
 	}
 
+	private static String _listToString(List<?> inputs, String delimiter) {
+		return inputs.stream(
+		).map(
+			Object::toString
+		).collect(
+			Collectors.joining(delimiter)
+		);
+	}
+
 	private void _initOfflineOutline() throws Exception {
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
@@ -184,7 +193,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 				offlineOutlineLists.add(new UpgradePlanOutline(offlineOutlineFileName, outlinePath.toOSString(), true));
 			}
 
-			String offlineOutlineString = StringUtil.objectToString(offlineOutlineLists, "|");
+			String offlineOutlineString = _listToString(offlineOutlineLists, "|");
 
 			_prefstore.put(OFFLINE_OUTLINE_KEY, offlineOutlineString);
 

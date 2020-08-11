@@ -15,7 +15,6 @@
 package com.liferay.ide.core.util;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -152,15 +151,6 @@ public class StringUtil {
 		}
 
 		return sb.toString();
-	}
-
-	public static String objectToString(Collection<?> inputs, String delimiter) {
-		return inputs.stream(
-		).map(
-			input -> input.toString()
-		).collect(
-			Collectors.joining(delimiter)
-		);
 	}
 
 	public static String replace(String content, String source, String target) {
