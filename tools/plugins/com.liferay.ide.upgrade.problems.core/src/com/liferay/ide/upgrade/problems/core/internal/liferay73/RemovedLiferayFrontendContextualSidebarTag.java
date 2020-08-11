@@ -34,8 +34,10 @@ import org.osgi.service.component.annotations.Component;
 public class RemovedLiferayFrontendContextualSidebarTag extends JSPTagMigrator {
 
 	public RemovedLiferayFrontendContextualSidebarTag() {
-		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, new String[0]);
+		super(_EMPTY, _EMPTY, _EMPTY, _EMPTY, _TAG_NAMES, _EMPTY);
 	}
+
+	private static final String[] _EMPTY = new String[0];
 
 	private static final String[] _TAG_NAMES = {"liferay-frontend:contextual-sidebar"};
 
