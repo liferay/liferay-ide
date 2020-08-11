@@ -9,8 +9,17 @@
 #!/bin/sh
 
 if [ $# -lt 1 ]; then
-    echo "Error: You need to provide liferay docs tag. './generate_offline.sh liferay-ide-offline-3.9-m2-20200811'"
-    exit 1
+  echo "Error: You need to provide liferay docs tag. './generate_offline.sh liferay-ide-offline-3.9-m2-20200811'"
+  exit 1
+fi
+
+if [ -z "$BINTRAY_USER" ]
+  echo "Must provide env vars BINTRAY_USER BINTRAY_API_KEY"
+  exit 1
+fi
+
+if [ -z "$BINTRAY_API_KEY" ]
+  echo "Must provide env vars BINTRAY_USER BINTRAY_API_KEY"
 fi
 
 pwd=$PWD
