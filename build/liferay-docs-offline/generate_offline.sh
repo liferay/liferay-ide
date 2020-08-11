@@ -20,6 +20,7 @@ fi
 
 if [ -z "$BINTRAY_API_KEY" ]
   echo "Must provide env vars BINTRAY_USER BINTRAY_API_KEY"
+  exit 1
 fi
 
 pwd=$PWD
@@ -45,25 +46,29 @@ fi
 unzip_dir=liferay-docs-${tag}
 
 if [ -d "${unzip_dir}" ]; then
-    ${pwd}/markdown-converter/bin/convertoffline.sh ${pwd}/${unzip_dir}/en/developer/tutorials/articles/03-upgrading-code-to-liferay-7.2/ ${pwd}/output
+  ${pwd}/markdown-converter/bin/convertoffline.sh ${pwd}/${unzip_dir}/en/developer/tutorials/articles/03-upgrading-code-to-liferay-7.2/ ${pwd}/output
 
-    count=`ls ${pwd}/output|wc -w`
+  count=`ls ${pwd}/output | wc -w`
 
-    if [ "$count" -gt "0" ]; then
-        cd ${pwd}/output/
-        zip -q -r "${pwd}/liferay-docs-${tag}.zip" ./
+  if [ "$count" -gt "0" ]; then
+    cd ${pwd}/output/
+    zip -q -r "${pwd}/liferay-docs-${tag}.zip" ./
 
-        cd ${pwd}
-        rm -rf ${unzip_dir} "${zipfile}"
+    cd ${pwd}
+    rm -rf ${unzip_dir} "${zipfile}"
 
-        if [ -s "liferay-docs-${tag}.zip" ]; then
-            curl -sSf  -H "X-JFrog-Art-Api:<API_KEY>" or -u "<USERNAME>:<PASSWORD>" -X PUT -T "${pwd}/liferay-docs-${tag}.zip" "https://dl.bintray.com/gamerson/liferay-ide-files/zips/"
-        else
-            echo "Failed to create liferay docs offline file for upgrade planner."
-        fi
+    if [ -s "liferay-docs-${tag}.zip" ]; then
+      curl -X PUT -T liferay-docs-${tag}.zip -u $BINTRAY_USER:$BINTRAY_API_KEY "https://api.bintray.com/content/gamerson/liferay-ide-files/contents/1/liferay-docs-${tag}.zip;bt_package=contents;bt_version=1;publish=1"
 
-        exit 0
+      if [ $? -ne 0 ]; then
+        echo "Failed to publish to bintray."
+        exit 1
+      fi
+    else
+      echo "Failed to create liferay docs offline file for upgrade planner."
+      exit 1
     fi
+
+    exit 0
+  fi
 fi
-
-
