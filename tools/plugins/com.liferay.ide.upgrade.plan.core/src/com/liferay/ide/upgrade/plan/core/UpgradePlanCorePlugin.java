@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
@@ -29,8 +30,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.apache.commons.io.FilenameUtils;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
@@ -114,8 +113,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 			input -> {
 				String[] outlineArray = StringUtil.stringToArray(input, ",");
 
-				return new UpgradePlanOutline(
-					outlineArray[0].trim(), outlineArray[1].trim(), Boolean.parseBoolean(outlineArray[2].trim()));
+				return new UpgradePlanOutline(outlineArray[0], outlineArray[1], Boolean.parseBoolean(outlineArray[2]));
 			}
 		).collect(
 			Collectors.toList()
@@ -169,29 +167,27 @@ public class UpgradePlanCorePlugin extends Plugin {
 
 			IPath offlineOutlinePath = pluginStateLocation.append(OFFLINE_UNZIP_FOLDER);
 
-			Bundle bundle = Platform.getBundle(UpgradePlanCorePlugin.ID);
-
-			Enumeration<URL> entryUrls = bundle.findEntries("resources/", "liferay-docs.zip", true);
-
-			if (ListUtil.isEmpty(entryUrls)) {
-				return;
-			}
-
 			List<UpgradePlanOutline> offlineOutlineLists = new ArrayList<>();
 
-			while (entryUrls.hasMoreElements()) {
+			if (FileUtil.notExists(offlineOutlinePath)) {
+				Bundle bundle = Platform.getBundle(UpgradePlanCorePlugin.ID);
+
+				Enumeration<URL> entryUrls = bundle.findEntries("resources/", "liferay-docs.zip", true);
+
+				if (ListUtil.isEmpty(entryUrls)) {
+					return;
+				}
+
 				URL fileURL = FileLocator.toFileURL(entryUrls.nextElement());
 
 				File outlineFile = new File(fileURL.getFile());
 
 				ZipUtil.unzip(outlineFile, offlineOutlinePath.toFile());
-
-				String offlineOutlineFileName = FilenameUtils.removeExtension(outlineFile.getName());
-
-				IPath outlinePath = offlineOutlinePath.append(offlineOutlineFileName);
-
-				offlineOutlineLists.add(new UpgradePlanOutline(offlineOutlineFileName, outlinePath.toOSString(), true));
 			}
+
+			IPath outlinePath = offlineOutlinePath.append("liferay-docs.zip");
+
+			offlineOutlineLists.add(new UpgradePlanOutline("liferay-docs.zip", outlinePath.toOSString(), true));
 
 			String offlineOutlineString = _listToString(offlineOutlineLists, "|");
 

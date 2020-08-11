@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -117,7 +115,7 @@ public class UpgradeStepsBuilder {
 				if (aTags.size() > 0) {
 					Element aTag = aTags.get(0);
 
-					url = FilenameUtils.separatorsToSystem(aTag.attr("href"));
+					url = FileUtil.separatorsToSystem(aTag.attr("href"));
 
 					title = aTag.text();
 

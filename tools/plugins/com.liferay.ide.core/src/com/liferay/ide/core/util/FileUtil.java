@@ -679,6 +679,14 @@ public class FileUtil {
 		return false;
 	}
 
+	public static boolean isSystemWindows() {
+		if (File.separatorChar == _WINDOWS_SEPARATOR) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static void mkdirs(File f) throws CoreException {
 		if (f.exists()) {
 			if (f.isFile()) {
@@ -1068,6 +1076,35 @@ public class FileUtil {
 		return replaced;
 	}
 
+	public static String separatorsToSystem(final String path) {
+		if (path == null) {
+			return null;
+		}
+
+		if (isSystemWindows()) {
+			return separatorsToWindows(path);
+		}
+		else {
+			return separatorsToUnix(path);
+		}
+	}
+
+	public static String separatorsToUnix(final String path) {
+		if ((path == null) || (path.indexOf(_WINDOWS_SEPARATOR) == _NOT_FOUND)) {
+			return path;
+		}
+
+		return path.replace(_WINDOWS_SEPARATOR, _UNIX_SEPARATOR);
+	}
+
+	public static String separatorsToWindows(final String path) {
+		if ((path == null) || (path.indexOf(_UNIX_SEPARATOR) == _NOT_FOUND)) {
+			return path;
+		}
+
+		return path.replace(_UNIX_SEPARATOR, _WINDOWS_SEPARATOR);
+	}
+
 	public static String toOSString(IPath path) {
 		if (path == null) {
 			return "";
@@ -1257,6 +1294,12 @@ public class FileUtil {
 
 		return sb.toString();
 	}
+
+	private static final int _NOT_FOUND = -1;
+
+	private static final char _UNIX_SEPARATOR = '/';
+
+	private static final char _WINDOWS_SEPARATOR = '\\';
 
 	private static class Msgs extends NLS {
 
