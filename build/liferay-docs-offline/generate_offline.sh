@@ -9,7 +9,7 @@
 #!/bin/sh
 
 if [ $# -lt 1 ]; then
-    echo "Error: You need to provide liferay docs tag. './generate_offline_docs.sh liferay-ide-offline-3.9-m2-20200811'"
+    echo "Error: You need to provide liferay docs tag. './generate_offline.sh liferay-ide-offline-3.9-m2-20200811'"
     exit 1
 fi
 
@@ -17,37 +17,38 @@ pwd=$PWD
 tag=$1
 github_repo="https://github.com/gamerson/liferay-docs/archive/"
 
-curl --proxy http://localhost:8001 -s -L ${github_repo}/${tag}.zip --retry 5 --output ${tag}.zip
+curl -s -L ${github_repo}/${tag}.zip --retry 5 --output ${tag}.zip
 
 if [ $? -ne 0 ]; then
     echo "Failed to download liferay docs zip file."
     exit 1
 fi
 
-offline_doc_zip=${tag}.zip
+zipfile=${tag}.zip
 
-if [ -s "${offline_doc_zip}" ]; then
-    #run unzip command
-    unzip -q -o ${offline_doc_zip}
+unzip -q -o ${zipfile}
+
+if [ $? -ne 0 ]; then
+  echo "Failed to unzip ${zipfile}"
+  exit 1
 fi
 
-offline_lfieray_doc_dir=liferay-docs-${tag}
+unzip_dir=liferay-docs-${tag}
 
-if [ -d "${offline_lfieray_doc_dir}" ]; then
-    #run convert shell
-    ${pwd}/markdown-converter/bin/convertoffline.sh ${pwd}/${offline_lfieray_doc_dir}/en/developer/tutorials/articles/03-upgrading-code-to-liferay-7.2/ ${pwd}/output
+if [ -d "${unzip_dir}" ]; then
+    ${pwd}/markdown-converter/bin/convertoffline.sh ${pwd}/${unzip_dir}/en/developer/tutorials/articles/03-upgrading-code-to-liferay-7.2/ ${pwd}/output
 
     count=`ls ${pwd}/output|wc -w`
+
     if [ "$count" -gt "0" ]; then
         cd ${pwd}/output/
-        zip -q -r "${pwd}/liferay-docs.zip" ./
-        rm -rf *
+        zip -q -r "${pwd}/liferay-docs-${tag}.zip" ./
 
         cd ${pwd}
-        rm -rf ${offline_lfieray_doc_dir} "${offline_doc_zip}"
+        rm -rf ${unzip_dir} "${zipfile}"
 
-        if [ -s "liferay-docs.zip" ]; then
-            curl -sSf  -H "X-JFrog-Art-Api:<API_KEY>" or -u "<USERNAME>:<PASSWORD>" -X PUT -T "${pwd}/liferay-docs.zip" "https://dl.bintray.com/gamerson/liferay-ide-files/zips/"
+        if [ -s "liferay-docs-${tag}.zip" ]; then
+            curl -sSf  -H "X-JFrog-Art-Api:<API_KEY>" or -u "<USERNAME>:<PASSWORD>" -X PUT -T "${pwd}/liferay-docs-${tag}.zip" "https://dl.bintray.com/gamerson/liferay-ide-files/zips/"
         else
             echo "Failed to create liferay docs offline file for upgrade planner."
         fi
