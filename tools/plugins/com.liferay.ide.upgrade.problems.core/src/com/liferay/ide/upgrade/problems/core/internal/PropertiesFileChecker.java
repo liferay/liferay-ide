@@ -52,37 +52,38 @@ public class PropertiesFileChecker {
 	}
 
 	public List<FileSearchResult> findProperties(String key) {
-		List<FileSearchResult> retval = new ArrayList<>();
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		List<KeyInfo> infos = new ArrayList<>();
+		List<KeyInfo> matchedKeyInfos = new ArrayList<>();
 
 		if (key.endsWith(".*")) {
-			Set<String> keyInfosSet = _keyInfos.keySet();
+			Set<String> keyInfos = _keyInfos.keySet();
 
-			List<String> keyInfos = keyInfosSet.stream(
+			List<String> matches = keyInfos.stream(
 			).filter(
 				keyInfo -> keyInfo.startsWith(key.substring(0, key.length() - 1))
 			).collect(
 				Collectors.toList()
 			);
 
-			for (String k : keyInfos) {
-				infos.addAll(_keyInfos.get(k));
+			for (String match : matches) {
+				matchedKeyInfos.addAll(_keyInfos.get(match));
 			}
 		}
 		else {
-			infos = _keyInfos.get(key);
+			matchedKeyInfos = _keyInfos.get(key);
 		}
 
-		if (infos != null) {
-			for (KeyInfo info : infos) {
-				retval.add(
+		if (matchedKeyInfos != null) {
+			for (KeyInfo keyInfo : matchedKeyInfos) {
+				searchResults.add(
 					new FileSearchResult(
-						_file, info.offset, info.offset + info.length, info.lineNumber, info.lineNumber, true));
+						_file, keyInfo.offset, keyInfo.offset + keyInfo.length, keyInfo.lineNumber, keyInfo.lineNumber,
+						true));
 			}
 		}
 
-		return retval;
+		return searchResults;
 	}
 
 	public List<KeyInfo> getInfos(String key) {
