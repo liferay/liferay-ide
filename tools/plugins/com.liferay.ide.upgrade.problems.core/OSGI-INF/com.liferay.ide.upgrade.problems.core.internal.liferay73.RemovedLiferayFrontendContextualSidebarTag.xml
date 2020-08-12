@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedLiferayFrontendContextualSidebarTag">
+   <property name="file.extensions" value="jsp,jspf"/>
+   <property name="problem.title" value="Removed liferay-frontend:contextual-sidebar Tag"/>
+   <property name="problem.section" value="#removed-liferay-frontend-contextual-sidebar-tag"/>
+   <property name="problem.summary" value="The `liferay-frontend:contextual-sidebar` tag was removed."/>
+   <property name="problem.tickets" value="LPS-100146"/>
+   <property name="version" value="7.3"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedLiferayFrontendContextualSidebarTag"/>
+</scr:component>

@@ -338,25 +338,25 @@ This change was made because the tag was primarily used internally.
 
 ---------------------------------------
 
-### Removed liferay-frontend:contextual-sidebar Tag
+### Removed liferay-frontend:contextual-sidebar Tag [](id=removed-liferay-frontend-contextual-sidebar-tag)
 - **Date:** 2020-Jan-10
 - **JIRA Ticket:** [LPS-100146](https://issues.liferay.com/browse/LPS-100146)
 
-#### What changed?
+#### What changed? [](id=what-changed-7)
 
 The `liferay-frontend:contextual-sidebar` tag was removed.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-7)
 
 This affects anyone using the tag from a jsp or some of its components inside
 a SOY (Closure Templates) template.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-7)
 
 There's no direct replacement for the removed feature. If you have code that
 depends on it, you must implement it yourself.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-2)
 
 This change was made because the tag was primarily used internally.
 
