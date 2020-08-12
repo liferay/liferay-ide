@@ -550,7 +550,7 @@ around a single Editor to provide a more cohesive and comprehensive experience.
 
 ---------------------------------------
 
-### asset.vocabulary.default Now Holds a Language Key
+### asset.vocabulary.default Now Holds a Language Key [](id=asset-vocabulary-default-now-holds-language-key)
 - **Date:** 2020-Apr-28
 - **JIRA Ticket:** [LPS-112334](https://issues.liferay.com/browse/LPS-112334)
 

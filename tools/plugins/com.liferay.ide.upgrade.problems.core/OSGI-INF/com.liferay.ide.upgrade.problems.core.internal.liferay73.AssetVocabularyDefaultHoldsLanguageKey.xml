@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay73.AssetVocabularyDefaultHoldsLanguageKey">
+   <property name="file.extensions" value="properties"/>
+   <property name="problem.title" value="Add breaking change: asset.vocabulary.default Now Holds a Language Key"/>
+   <property name="problem.summary" value="asset.vocabulary.default is now a language key and no longer has a fixed value of Topic."/>
+   <property name="problem.tickets" value="LPS-112334"/>
+   <property name="problem.section" value="#asset-vocabulary-default-now-holds-language-key"/>
+   <property name="version" value="7.3"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay73.AssetVocabularyDefaultHoldsLanguageKey"/>
+</scr:component>
