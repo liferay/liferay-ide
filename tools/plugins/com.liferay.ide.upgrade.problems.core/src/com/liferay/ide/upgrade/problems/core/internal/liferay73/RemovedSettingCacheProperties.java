@@ -37,9 +37,9 @@ public class RemovedSettingCacheProperties extends PropertiesFileMigrator {
 
 	@Override
 	protected void addPropertiesToSearch(List<String> properties) {
+		properties.add("value.object.column.bitmask.enabled.*");
 		properties.add("value.object.entity.cache.enabled.*");
 		properties.add("value.object.finder.cache.enabled.*");
-		properties.add("value.object.column.bitmask.enabled.*");
 	}
 
 }
