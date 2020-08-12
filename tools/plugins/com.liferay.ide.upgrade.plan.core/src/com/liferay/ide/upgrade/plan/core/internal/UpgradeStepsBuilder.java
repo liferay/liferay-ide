@@ -48,28 +48,26 @@ public class UpgradeStepsBuilder {
 
 		Document document = null;
 
-		if (_upgradePlanOutline.isOffline()) {
-			String outlineLocation = _upgradePlanOutline.getLocation();
+		String outlineLocation = _upgradePlanOutline.getLocation();
 
-			File outlineIndexFile = new File(outlineLocation);
+		File outlineIndexFile = new File(outlineLocation);
 
-			File[] indexFiles = outlineIndexFile.listFiles(
-				new FilenameFilter() {
+		File[] indexFiles = outlineIndexFile.listFiles(
+			new FilenameFilter() {
 
-					@Override
-					public boolean accept(File dir, String name) {
-						if (name.startsWith("01-")) {
-							return true;
-						}
-
-						return false;
+				@Override
+				public boolean accept(File dir, String name) {
+					if (name.startsWith("01-")) {
+						return true;
 					}
 
-				});
+					return false;
+				}
 
-			if (FileUtil.exists(indexFiles[0])) {
-				document = Jsoup.parse(indexFiles[0], "UTF-8");
-			}
+			});
+
+		if (FileUtil.exists(indexFiles[0])) {
+			document = Jsoup.parse(indexFiles[0], "UTF-8");
 		}
 
 		Elements roots = document.select("ol");

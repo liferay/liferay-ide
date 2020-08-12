@@ -40,24 +40,7 @@ public class OutlinePossibleValuesService extends PossibleValuesService implemen
 	protected void initPossibleValuesService() {
 		_possibleValues = new ArrayList<>();
 
-		List<IUpgradePlanOutline> customerOutlines = UpgradePlanCorePlugin.getOutlines(
-			UpgradePlanCorePlugin.CUSTOMER_OUTLINE_KEY);
-
-		for (IUpgradePlanOutline outline : customerOutlines) {
-			_possibleValues.add(outline.getName());
-		}
-
-		List<IUpgradePlanOutline> offlineOutlines = UpgradePlanCorePlugin.getOutlines(
-			UpgradePlanCorePlugin.OFFLINE_OUTLINE_KEY);
-
-		for (IUpgradePlanOutline outline : offlineOutlines) {
-			_possibleValues.add(outline.getName());
-		}
-
-		List<IUpgradePlanOutline> defaultOutlines = UpgradePlanCorePlugin.getOutlines(
-			UpgradePlanCorePlugin.DEFAULT_OUTLINE_KEY);
-
-		for (IUpgradePlanOutline outline : defaultOutlines) {
+		for (IUpgradePlanOutline outline : UpgradePlanCorePlugin.offlineOutlineLists) {
 			_possibleValues.add(outline.getName());
 		}
 

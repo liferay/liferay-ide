@@ -21,10 +21,9 @@ import org.eclipse.core.runtime.Adapters;
  */
 public class UpgradePlanOutline implements Comparable<IUpgradePlanOutline>, IUpgradePlanOutline {
 
-	public UpgradePlanOutline(String displayName, String location, boolean offline) {
+	public UpgradePlanOutline(String displayName, String location) {
 		_displayName = displayName;
 		_location = location;
-		_offline = offline;
 	}
 
 	public int compareTo(IUpgradePlanOutline outline) {
@@ -47,7 +46,7 @@ public class UpgradePlanOutline implements Comparable<IUpgradePlanOutline>, IUpg
 		}
 
 		if (isEqualIgnoreCase(_displayName, baseUpgradeOutline._displayName) &&
-			isEqualIgnoreCase(_location, baseUpgradeOutline._location) && (_offline == baseUpgradeOutline._offline)) {
+			isEqualIgnoreCase(_location, baseUpgradeOutline._location)) {
 
 			return true;
 		}
@@ -78,17 +77,11 @@ public class UpgradePlanOutline implements Comparable<IUpgradePlanOutline>, IUpg
 	}
 
 	@Override
-	public boolean isOffline() {
-		return _offline;
-	}
-
-	@Override
 	public String toString() {
-		return _displayName + ", " + _location + ", " + Boolean.toString(_offline);
+		return _displayName + ", " + _location;
 	}
 
 	private String _displayName;
 	private String _location;
-	private boolean _offline;
 
 }

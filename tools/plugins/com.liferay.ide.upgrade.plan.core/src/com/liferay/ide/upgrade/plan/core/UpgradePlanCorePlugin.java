@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
@@ -25,11 +24,8 @@ import java.io.File;
 import java.net.URL;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
@@ -38,9 +34,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -51,19 +44,11 @@ import org.osgi.framework.BundleContext;
  */
 public class UpgradePlanCorePlugin extends Plugin {
 
-	public static final String CUSTOMER_OUTLINE_KEY = "customer-outline";
-
-	public static final String DEFAULT_OUTLINE_KEY = "default-outline";
-
 	public static final String ID = "com.liferay.ide.upgrade.plan.core";
-
-	public static final String OFFLINE_OUTLINE_KEY = "offline-outline";
 
 	public static final String OFFLINE_UNZIP_FOLDER = "offline-outline";
 
-	public static final List<String> defaultOutlines = Arrays.asList(
-		"https://portal.liferay.dev/docs/7-2/tutorials/-/knowledge_base/t/upgrading-code-to-product-ver",
-		"https://portal.liferay.dev/docs/7-2/deploy/-/knowledge_base/d/upgrading-to-product-ver");
+	public static List<IUpgradePlanOutline> offlineOutlineLists = new ArrayList<>();
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, ID, msg);
@@ -74,13 +59,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 	}
 
 	public static IUpgradePlanOutline getFilterOutlines(String name) {
-		List<IUpgradePlanOutline> lists = new ArrayList<>();
-
-		lists.addAll(getOutlines(OFFLINE_OUTLINE_KEY));
-		lists.addAll(getOutlines(CUSTOMER_OUTLINE_KEY));
-		lists.addAll(getOutlines(DEFAULT_OUTLINE_KEY));
-
-		for (IUpgradePlanOutline outline : lists) {
+		for (IUpgradePlanOutline outline : offlineOutlineLists) {
 			if (StringUtil.equals(name, outline.getName())) {
 				return outline;
 			}
@@ -91,33 +70,6 @@ public class UpgradePlanCorePlugin extends Plugin {
 
 	public static UpgradePlanCorePlugin getInstance() {
 		return _instance;
-	}
-
-	public static List<IUpgradePlanOutline> getOutlines(String key) {
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		String outlines = preferencesService.getString(UpgradePlanCorePlugin.ID, key, "", null);
-
-		if (CoreUtil.isNullOrEmpty(outlines)) {
-			return Collections.emptyList();
-		}
-
-		List<String> outlineList = StringUtil.stringToList(outlines, "\\|");
-
-		if (ListUtil.isEmpty(outlineList)) {
-			return Collections.emptyList();
-		}
-
-		return outlineList.stream(
-		).map(
-			input -> {
-				String[] outlineArray = StringUtil.stringToArray(input, ",");
-
-				return new UpgradePlanOutline(outlineArray[0], outlineArray[1], Boolean.parseBoolean(outlineArray[2]));
-			}
-		).collect(
-			Collectors.toList()
-		);
 	}
 
 	public static void logError(String msg) {
@@ -148,57 +100,38 @@ public class UpgradePlanCorePlugin extends Plugin {
 		super.stop(context);
 	}
 
-	private static String _listToString(List<?> inputs, String delimiter) {
-		return inputs.stream(
-		).map(
-			Object::toString
-		).collect(
-			Collectors.joining(delimiter)
-		);
-	}
-
 	private void _initOfflineOutline() throws Exception {
-		IPreferencesService preferencesService = Platform.getPreferencesService();
+		IPath pluginStateLocation = _instance.getStateLocation();
 
-		String offlineOutlines = preferencesService.getString(UpgradePlanCorePlugin.ID, OFFLINE_OUTLINE_KEY, "", null);
+		IPath offlineOutlinePath = pluginStateLocation.append(OFFLINE_UNZIP_FOLDER);
 
-		if (CoreUtil.isNullOrEmpty(offlineOutlines)) {
-			IPath pluginStateLocation = _instance.getStateLocation();
+		if (FileUtil.notExists(offlineOutlinePath)) {
+			Bundle bundle = Platform.getBundle(UpgradePlanCorePlugin.ID);
 
-			IPath offlineOutlinePath = pluginStateLocation.append(OFFLINE_UNZIP_FOLDER);
+			Enumeration<URL> entryUrls = bundle.findEntries("resources/", "*.zip", true);
 
-			List<UpgradePlanOutline> offlineOutlineLists = new ArrayList<>();
+			if (ListUtil.isEmpty(entryUrls)) {
+				return;
+			}
 
-			if (FileUtil.notExists(offlineOutlinePath)) {
-				Bundle bundle = Platform.getBundle(UpgradePlanCorePlugin.ID);
-
-				Enumeration<URL> entryUrls = bundle.findEntries("resources/", "liferay-docs.zip", true);
-
-				if (ListUtil.isEmpty(entryUrls)) {
-					return;
-				}
-
+			while (entryUrls.hasMoreElements()) {
 				URL fileURL = FileLocator.toFileURL(entryUrls.nextElement());
 
 				File outlineFile = new File(fileURL.getFile());
 
 				ZipUtil.unzip(outlineFile, offlineOutlinePath.toFile());
+
+				String outlineFilename = outlineFile.getName();
+
+				String outlineFilenameWithoutEx = outlineFilename.split("\\.")[0];
+
+				IPath outlinePath = offlineOutlinePath.append(outlineFilenameWithoutEx);
+
+				offlineOutlineLists.add(new UpgradePlanOutline(outlineFilenameWithoutEx, outlinePath.toOSString()));
 			}
-
-			IPath outlinePath = offlineOutlinePath.append("liferay-docs.zip");
-
-			offlineOutlineLists.add(new UpgradePlanOutline("liferay-docs.zip", outlinePath.toOSString(), true));
-
-			String offlineOutlineString = _listToString(offlineOutlineLists, "|");
-
-			_prefstore.put(OFFLINE_OUTLINE_KEY, offlineOutlineString);
-
-			_prefstore.flush();
 		}
 	}
 
 	private static UpgradePlanCorePlugin _instance;
-
-	private IEclipsePreferences _prefstore = InstanceScope.INSTANCE.getNode(ID);
 
 }

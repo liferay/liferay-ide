@@ -33,12 +33,11 @@ public class OutlineDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected void initDefaultValueService() {
-		List<IUpgradePlanOutline> offlineOutlines = UpgradePlanCorePlugin.getOutlines(
-			UpgradePlanCorePlugin.OFFLINE_OUTLINE_KEY);
+		List<IUpgradePlanOutline> outlines = UpgradePlanCorePlugin.offlineOutlineLists;
 
-		IUpgradePlanOutline offlineOutline = offlineOutlines.get(0);
+		IUpgradePlanOutline outline = outlines.get(0);
 
-		_defaultValue = offlineOutline.getName();
+		_defaultValue = outline.getName();
 	}
 
 	private String _defaultValue;

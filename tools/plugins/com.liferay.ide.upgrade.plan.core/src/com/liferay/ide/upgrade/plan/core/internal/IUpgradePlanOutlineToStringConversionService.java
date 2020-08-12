@@ -22,9 +22,9 @@ import org.eclipse.sapphire.ConversionService;
 /**
  * @author Simon Jiang
  */
-public class OutlineToStringConversionService extends ConversionService<IUpgradePlanOutline, String> {
+public class IUpgradePlanOutlineToStringConversionService extends ConversionService<IUpgradePlanOutline, String> {
 
-	public OutlineToStringConversionService() {
+	public IUpgradePlanOutlineToStringConversionService() {
 		super(IUpgradePlanOutline.class, String.class);
 	}
 

@@ -27,8 +27,6 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
-import java.net.URL;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -42,7 +40,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -130,12 +127,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 				IUpgradePlanOutline upgradePlanOutline = currentUpgradePlan.getUpgradePlanOutline();
 
-				if (upgradePlanOutline.isOffline()) {
-					detail = _renderArticleMainContent(upgradeStepUrl, upgradePlanOutline);
-				}
-				else {
-					detail = _renderKBMainContent(upgradeStepUrl);
-				}
+				detail = _renderArticleMainContent(upgradeStepUrl, upgradePlanOutline);
 			}
 			catch (Throwable t) {
 				deferred.fail(t);
@@ -385,100 +377,6 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		}
 
 		return detail;
-	}
-
-	private String _renderKBMainContent(String upgradeStepUrl) throws ClientProtocolException, IOException {
-		Connection connection = Jsoup.connect(upgradeStepUrl);
-
-		connection = connection.timeout(10000);
-
-		connection = connection.validateTLSCertificates(false);
-
-		Document document = connection.get();
-
-		StringBuffer sb = new StringBuffer();
-
-		sb.append("<html>");
-
-		Elements heads = document.getElementsByTag("head");
-
-		sb.append(heads.get(0));
-
-		if (upgradeStepUrl.contains("#")) {
-			sb.append("<script type='text/javascript'>");
-			sb.append("window.onload=function(){location.href='");
-			sb.append(upgradeStepUrl.substring(upgradeStepUrl.lastIndexOf("#")));
-			sb.append("'}");
-			sb.append("</script>");
-		}
-
-		Elements articleBodies = document.getElementsByClass("article-body");
-
-		Element articleBody = articleBodies.get(0);
-
-		try {
-			Elements h1s = articleBody.getElementsByTag("h1");
-
-			Element h1 = h1s.get(0);
-
-			h1.remove();
-		}
-		catch (Exception e) {
-		}
-
-		try {
-			Elements uls = articleBody.getElementsByTag("ul");
-
-			Element ul = uls.get(0);
-
-			ul.remove();
-		}
-		catch (Exception e) {
-		}
-
-		try {
-			Elements learnPathSteps = articleBody.getElementsByClass("learn-path-step");
-
-			Element learnPathStep = learnPathSteps.get(0);
-
-			learnPathStep.remove();
-		}
-		catch (Exception e) {
-		}
-
-		try {
-			Elements learnPathSteps = articleBody.getElementsByClass("article-siblings");
-
-			Element learnPathStep = learnPathSteps.get(0);
-
-			learnPathStep.remove();
-		}
-		catch (Exception e) {
-		}
-
-		URL url = new URL(upgradeStepUrl);
-
-		String protocol = url.getProtocol();
-
-		String authority = url.getAuthority();
-
-		String prefix = protocol + "://" + authority;
-
-		for (Element element : articleBody.getAllElements()) {
-			if ("a".equals(element.tagName())) {
-				String href = element.attr("href");
-
-				if (href.startsWith("/")) {
-					element.attr("href", prefix + href);
-				}
-			}
-		}
-
-		sb.append(articleBody.toString());
-
-		sb.append("</html>");
-
-		return sb.toString();
 	}
 
 	private final PromiseFactory _promiseFactory;

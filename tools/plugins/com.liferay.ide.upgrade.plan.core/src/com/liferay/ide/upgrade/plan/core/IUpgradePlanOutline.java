@@ -23,6 +23,4 @@ public interface IUpgradePlanOutline {
 
 	public String getName();
 
-	public boolean isOffline();
-
 }

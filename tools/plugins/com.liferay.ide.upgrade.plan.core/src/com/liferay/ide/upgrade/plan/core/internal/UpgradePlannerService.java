@@ -281,7 +281,6 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 
 				upgradeOutlineMemento.putString("name", upgradePlanOutline.getName());
 				upgradeOutlineMemento.putString("location", upgradePlanOutline.getLocation());
-				upgradeOutlineMemento.putBoolean("offline", upgradePlanOutline.isOffline());
 			}
 
 			Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
@@ -396,10 +395,8 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 		if (upgradePlanOutlineMemento != null) {
 			String upgradePlanOutlineName = upgradePlanOutlineMemento.getString("name");
 			String upgradePlanOutlineLocation = upgradePlanOutlineMemento.getString("location");
-			Boolean offline = upgradePlanOutlineMemento.getBoolean("offline");
 
-			upgradePlanOutline = new UpgradePlanOutline(
-				upgradePlanOutlineName, upgradePlanOutlineLocation, (offline != null) ? offline.booleanValue() : false);
+			upgradePlanOutline = new UpgradePlanOutline(upgradePlanOutlineName, upgradePlanOutlineLocation);
 		}
 
 		IMemento[] upgradeContextEntries = upgradePlanMemento.getChildren("upgradeContext");
