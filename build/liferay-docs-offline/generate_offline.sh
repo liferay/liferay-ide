@@ -44,20 +44,20 @@ if [ -d "${unzip_dir}" ]; then
 
   if [ "$count" -gt "0" ]; then
     cd "${pwd}/output/"
-    zip -q -r "${pwd}/liferay-docs-${tag}.zip" ./
+    zip -q -r "${pwd}/code-upgrade-${tag}.zip" ./
 
     cd "${pwd}"
     rm -rf "${unzip_dir}" "${zipfile}" "output"
 
-    if [ -s "liferay-docs-${tag}.zip" ]; then
-      curl -X PUT -T liferay-docs-${tag}.zip -u $BINTRAY_USER:$BINTRAY_API_KEY "https://api.bintray.com/content/gamerson/liferay-ide-files/docs/liferay-docs-${tag}.zip;bt_package=contents;bt_version=1;publish=1"
+    if [ -s "code-upgrade-${tag}.zip" ]; then
+      curl -X PUT -T code-upgrade-${tag}.zip -u $BINTRAY_USER:$BINTRAY_API_KEY "https://api.bintray.com/content/gamerson/liferay-ide-files/docs/code-upgrade-${tag}.zip;bt_package=contents;bt_version=1;publish=1"
 
       if [ $? -ne 0 ]; then
         echo "Failed to publish to bintray."
         exit 1
       fi
     else
-      echo "Failed to create liferay docs offline file for upgrade planner."
+      echo "Failed to create code upgrade offline file for upgrade planner."
       exit 1
     fi
 
