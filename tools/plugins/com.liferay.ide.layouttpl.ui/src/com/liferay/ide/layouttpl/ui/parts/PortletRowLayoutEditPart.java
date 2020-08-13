@@ -130,7 +130,9 @@ public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart {
 
 		for (Object child : children) {
 			if (child instanceof AbstractEditPart) {
-				((AbstractEditPart)child).refresh();
+				AbstractEditPart editPart = (AbstractEditPart)child;
+
+				editPart.refresh();
 			}
 		}
 	}

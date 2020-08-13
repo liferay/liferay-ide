@@ -141,9 +141,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 		AddEventActionDialog dialog = new AddEventActionDialog(getShell(), dialogTitle, fieldLabels, buttonLabels);
 
 		if (dialog.open() == Window.OK) {
-			String[] stringArray = dialog.getStringArray();
-
-			addStringArray(stringArray);
+			addStringArray(dialog.getStringArray());
 		}
 	}
 
@@ -169,9 +167,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 
 		dialog.open();
 
-		String[] stringArray = dialog.getStringArray();
-
-		editStringArray(valuesForText, stringArray);
+		editStringArray(valuesForText, dialog.getStringArray());
 	}
 
 	protected String[] buttonLabels;
@@ -301,29 +297,26 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 			NewEventActionClassDialog dialog = new NewEventActionClassDialog(getShell(), model);
 
 			if (dialog.open() == Window.OK) {
-				String qualifiedClassname = dialog.getQualifiedClassname();
-
-				text.setText(qualifiedClassname);
+				text.setText(dialog.getQualifiedClassname());
 			}
 		}
 
 		protected void handleSelectClassButton(Text text) {
-			Control control = text;
-
 			IJavaSearchScope scope = null;
 
 			try {
 				String projectName = model.getStringProperty(INewJavaClassDataModelProperties.PROJECT_NAME);
 
-				IProject project = CoreUtil.getProject(projectName);
-
-				scope = BasicSearchEngine.createJavaSearchScope(new IJavaElement[] {JavaCore.create(project)});
+				scope = BasicSearchEngine.createJavaSearchScope(
+					new IJavaElement[] {JavaCore.create(CoreUtil.getProject(projectName))});
 			}
 			catch (Exception e) {
 				HookUI.logError(e);
 
 				return;
 			}
+
+			Control control = text;
 
 			/**
 			 * This includes all entries on the classpath.
@@ -345,13 +338,15 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 				}
 
 				if (control instanceof Text) {
-					((Text)control).setText(classFullPath);
+					Text textControl = (Text)control;
+
+					textControl.setText(classFullPath);
 				}
 				else if (control instanceof Combo) {
-					((Combo)control).setText(classFullPath);
-				}
+					Combo comboControl = (Combo)control;
 
-				return;
+					comboControl.setText(classFullPath);
+				}
 			}
 		}
 

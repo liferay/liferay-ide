@@ -149,9 +149,8 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 		if (SDKUtil.isSDKProject(project)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

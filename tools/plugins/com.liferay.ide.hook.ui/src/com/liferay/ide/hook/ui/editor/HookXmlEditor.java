@@ -133,17 +133,23 @@ public class HookXmlEditor extends SapphireEditorForXml implements SapphireConte
 		IEditorInput editorInput = getEditorInput();
 
 		if (editorInput instanceof FileEditorInput) {
-			IFile file = ((FileEditorInput)editorInput).getFile();
+			FileEditorInput fileEditorInput = (FileEditorInput)editorInput;
+
+			IFile file = fileEditorInput.getFile();
 
 			return file.getContents();
 		}
 		else if (editorInput instanceof IStorageEditorInput) {
-			IStorage storage = ((IStorageEditorInput)editorInput).getStorage();
+			IStorageEditorInput storageEditorInput = (IStorageEditorInput)editorInput;
+
+			IStorage storage = storageEditorInput.getStorage();
 
 			return storage.getContents();
 		}
 		else if (editorInput instanceof FileStoreEditorInput) {
-			URI uri = ((FileStoreEditorInput)editorInput).getURI();
+			FileStoreEditorInput fileStoreEditorInput = (FileStoreEditorInput)editorInput;
+
+			URI uri = fileStoreEditorInput.getURI();
 
 			URL url = uri.toURL();
 

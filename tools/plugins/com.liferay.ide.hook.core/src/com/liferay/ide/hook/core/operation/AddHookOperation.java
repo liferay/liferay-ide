@@ -78,15 +78,15 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		IDataModel dm = getDataModel();
-
-		IStatus retval = null;
-
 		IStatus status = checkDescriptorFile(getTargetProject());
 
 		if (!status.isOK()) {
 			return status;
 		}
+
+		IDataModel dm = getDataModel();
+
+		IStatus retval = null;
 
 		if (dm.getBooleanProperty(CREATE_CUSTOM_JSPS)) {
 			retval = createCustomJSPs(dm);
@@ -328,9 +328,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 			}
 		}
 
-		IStatus status = hookDescHelper.addLanguageProperties(languageProperties);
-
-		return status;
+		return hookDescHelper.addLanguageProperties(languageProperties);
 	}
 
 	protected IStatus createPortalProperties(IDataModel dm) {
@@ -418,9 +416,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 			}
 		}
 
-		IStatus status = hookDescHelper.setPortalProperties(model, propertiesClasspath);
-
-		return status;
+		return hookDescHelper.setPortalProperties(model, propertiesClasspath);
 	}
 
 	protected IStatus createServices(IDataModel dm) {
@@ -428,9 +424,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		HookDescriptorHelper hookDescHelper = new HookDescriptorHelper(getTargetProject());
 
-		IStatus status = hookDescHelper.addActionItems(actionItems);
-
-		return status;
+		return hookDescHelper.addActionItems(actionItems);
 	}
 
 }

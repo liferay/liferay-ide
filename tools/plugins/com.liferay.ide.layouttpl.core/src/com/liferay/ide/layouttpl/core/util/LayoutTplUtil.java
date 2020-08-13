@@ -86,7 +86,9 @@ public class LayoutTplUtil implements SapphireContentAccessor {
 	}
 
 	public static List<Element> getChildElementsByTagName(IDOMElement parentElement, String childElementTag) {
-		NodeList childNodes = ((Node)parentElement).getChildNodes();
+		Node parentElementNode = (Node)parentElement;
+
+		NodeList childNodes = parentElementNode.getChildNodes();
 
 		List<Element> childElements = new ArrayList<>();
 

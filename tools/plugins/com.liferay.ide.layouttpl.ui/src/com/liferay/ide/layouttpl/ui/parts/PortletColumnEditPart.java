@@ -95,9 +95,8 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart {
 
 			return rect;
 		}
-		else {
-			throw new IllegalArgumentException();
-		}
+
+		throw new IllegalArgumentException();
 	}
 
 	@Override
@@ -127,7 +126,9 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart {
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 
-		IFigure parentFigure = ((GraphicalEditPart)getParent()).getFigure();
+		GraphicalEditPart editParent = (GraphicalEditPart)getParent();
+
+		IFigure parentFigure = editParent.getFigure();
 
 		LayoutManager layoutManager = parentFigure.getLayoutManager();
 
@@ -146,14 +147,16 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart {
 			gd = createGridData();
 		}
 
-		((GraphicalEditPart)getParent()).setLayoutConstraint(this, getFigure(), gd);
+		editParent.setLayoutConstraint(this, getFigure(), gd);
 
 		if (getFigure() instanceof ColumnFigure) {
 			Value<Integer> weight = getCastedModel().getWeight();
 
 			Integer weightValue = weight.content();
 
-			((ColumnFigure)getFigure()).setText(weightValue.toString());
+			ColumnFigure columnFigure = (ColumnFigure)getFigure();
+
+			columnFigure.setText(weightValue.toString());
 		}
 	}
 

@@ -83,7 +83,9 @@ public class PortletLayoutPanel extends Panel {
 		}
 
 		if (getBorder() instanceof AbstractBackground) {
-			((AbstractBackground)getBorder()).paintBackground(this, graphics, NO_INSETS);
+			AbstractBackground backgroundBorder = (AbstractBackground)getBorder();
+
+			backgroundBorder.paintBackground(this, graphics, NO_INSETS);
 		}
 	}
 

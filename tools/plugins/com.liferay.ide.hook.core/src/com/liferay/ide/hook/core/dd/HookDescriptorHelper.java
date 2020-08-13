@@ -55,9 +55,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 	}
 
 	public IStatus addActionItems(final List<String[]> actionItems) {
-		IFile descriptorFile = getDescriptorFile();
-
-		DOMModelOperation operation = new DOMModelEditOperation(descriptorFile) {
+		DOMModelOperation operation = new DOMModelEditOperation(getDescriptorFile()) {
 
 			protected void createDefaultFile() {
 				createDefaultDescriptor(_HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion());
@@ -79,9 +77,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 	}
 
 	public IStatus addLanguageProperties(final List<String> languageProperties) {
-		IFile descriptorFile = getDescriptorFile();
-
-		DOMModelOperation operation = new DOMModelEditOperation(descriptorFile) {
+		DOMModelOperation operation = new DOMModelEditOperation(getDescriptorFile()) {
 
 			protected void createDefaultFile() {
 				createDefaultDescriptor(_HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion());
@@ -103,9 +99,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 	}
 
 	public void createDefaultDescriptor() {
-		IFile descriptorFile = getDescriptorFile();
-
-		DOMModelEditOperation operation = new DOMModelEditOperation(descriptorFile) {
+		DOMModelEditOperation operation = new DOMModelEditOperation(getDescriptorFile()) {
 
 			@Override
 			protected void createDefaultFile() {
@@ -184,13 +178,13 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 	}
 
 	public String getCustomJSPFolder(final IDataModel model) {
-		String[] retval = new String[1];
-
 		IFile descriptorFile = getDescriptorFile();
 
 		if (FileUtil.notExists(descriptorFile)) {
 			return null;
 		}
+
+		String[] retval = new String[1];
 
 		DOMModelOperation operation = new DOMModelReadOperation(descriptorFile) {
 
@@ -240,9 +234,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 	}
 
 	public IStatus setCustomJSPDir(final IDataModel model) {
-		final IFile descriptorFile = getDescriptorFile();
-
-		DOMModelOperation operation = new DOMModelEditOperation(descriptorFile) {
+		DOMModelOperation operation = new DOMModelEditOperation(getDescriptorFile()) {
 
 			protected void createDefaultFile() {
 				createDefaultDescriptor(_HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion());
@@ -264,9 +256,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 	}
 
 	public IStatus setPortalProperties(final IDataModel model, final String propertiesFile) {
-		final IFile descriptorFile = getDescriptorFile();
-
-		DOMModelOperation operation = new DOMModelEditOperation(descriptorFile) {
+		DOMModelOperation operation = new DOMModelEditOperation(getDescriptorFile()) {
 
 			protected void createDefaultFile() {
 				createDefaultDescriptor(_HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion());

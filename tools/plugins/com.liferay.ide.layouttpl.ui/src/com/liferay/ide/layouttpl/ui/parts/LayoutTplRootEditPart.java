@@ -106,7 +106,9 @@ public class LayoutTplRootEditPart extends SimpleRootEditPart implements LayerCo
 			Rectangle rect = new Rectangle();
 
 			for (int i = 0; i < getChildren().size(); i++) {
-				rect.union(((IFigure)getChildren().get(i)).getBounds());
+				IFigure figureChildren = (IFigure)getChildren().get(i);
+
+				rect.union(figureChildren.getBounds());
 			}
 
 			return rect.getSize();

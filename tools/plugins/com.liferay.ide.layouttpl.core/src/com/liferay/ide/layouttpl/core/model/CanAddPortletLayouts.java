@@ -30,7 +30,7 @@ public interface CanAddPortletLayouts extends Element {
 
 	public static final ElementType TYPE = new ElementType(CanAddPortletLayouts.class);
 
-	@Listeners(value = PortletLayoutsListener.class)
+	@Listeners(PortletLayoutsListener.class)
 	@Type(base = PortletLayoutElement.class)
 	public static final ListProperty PROP_PORTLET_LAYOUTS = new ListProperty(TYPE, "PortletLayouts");
 
