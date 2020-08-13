@@ -33,8 +33,10 @@ import org.osgi.service.component.annotations.Component;
 public class JqueryNoLongerDefaultInclude extends JSPTagMigrator {
 
 	public JqueryNoLongerDefaultInclude() {
-		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, new String[0], _TAG_CONTENTS);
+		super(_EMPTY, _EMPTY, _EMPTY, _EMPTY, _TAG_NAMES, _EMPTY, _TAG_CONTENTS);
 	}
+
+	private static final String[] _EMPTY = new String[0];
 
 	private static final String[] _TAG_CONTENTS = {"AUI.$", "window.$"};
 
