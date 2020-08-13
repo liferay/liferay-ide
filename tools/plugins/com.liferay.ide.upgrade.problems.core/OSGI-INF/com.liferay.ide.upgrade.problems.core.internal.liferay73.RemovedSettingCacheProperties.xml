@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedSettingCacheProperties">
+   <property name="file.extensions" value="properties"/>
+   <property name="problem.title" value="Remove Support for Setting Cache Properties for Each Entity Model"/>
+   <property name="problem.summary" value="Remove Support for Setting Cache Properties for Each Entity Model."/>
+   <property name="problem.tickets" value="LPS-116049"/>
+   <property name="problem.section" value="#removed-setting-cache-properties-for-each-entity-model"/>
+   <property name="version" value="7.3"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedSettingCacheProperties"/>
+</scr:component>
