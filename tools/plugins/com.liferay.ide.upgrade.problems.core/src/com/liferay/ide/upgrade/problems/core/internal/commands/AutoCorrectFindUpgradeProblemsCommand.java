@@ -25,8 +25,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.commands.AutoCorrectFindUpgradeProblemsCommandKeys;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
@@ -136,7 +136,7 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 					try {
 						autoFileMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
 					}
-					catch (AutoFileMigrateException afme) {
+					catch (AutoFileMigratorException afme) {
 						UpgradeProblemsCorePlugin.logError(
 							"Error encountered auto migrating file " + file.getAbsolutePath(), afme);
 					}

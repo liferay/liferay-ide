@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
@@ -61,7 +61,7 @@ public class SpringExtenderArtifactIdChangedForMavenProject extends XMLFileMigra
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		int problemsFixed = 0;
 		IDOMModel domModel = null;
 
@@ -126,7 +126,7 @@ public class SpringExtenderArtifactIdChangedForMavenProject extends XMLFileMigra
 			}
 		}
 		catch (Exception e) {
-			throw new AutoFileMigrateException("Error writing corrected file", e);
+			throw new AutoFileMigratorException("Error writing corrected file", e);
 		}
 		finally {
 			if (domModel != null) {

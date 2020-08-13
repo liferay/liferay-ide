@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 
 import java.io.File;
@@ -78,7 +78,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 	}
 
 	@Override
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		try {
 			String contents = new String(Files.readAllBytes(file.toPath()));
 

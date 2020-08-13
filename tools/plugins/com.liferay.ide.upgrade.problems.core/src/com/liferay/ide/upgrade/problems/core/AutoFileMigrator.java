@@ -25,6 +25,6 @@ import java.util.Collection;
  */
 public interface AutoFileMigrator {
 
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException;
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException;
 
 }

@@ -17,8 +17,8 @@ package com.liferay.ide.upgrade.problems.core.internal;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.CUCache;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
@@ -71,7 +71,7 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 	}
 
 	@Override
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		IProject project = _getProject(file);
 
 		IFile buildGradle = null;
@@ -178,7 +178,7 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 				return problemsFixed;
 			}
 			catch (IOException ioe) {
-				throw new AutoFileMigrateException("Unable to auto-correct", ioe);
+				throw new AutoFileMigratorException("Unable to auto-correct", ioe);
 			}
 		}
 
