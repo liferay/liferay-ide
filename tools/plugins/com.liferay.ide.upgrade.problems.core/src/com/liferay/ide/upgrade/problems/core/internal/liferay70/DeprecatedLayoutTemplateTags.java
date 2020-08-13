@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
@@ -59,7 +59,7 @@ import org.osgi.service.component.annotations.Component;
 public class DeprecatedLayoutTemplateTags extends XMLFileMigrator implements AutoFileMigrator {
 
 	@Override
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		int problemsCorrected = 0;
 		IDOMModel domModel = null;
 
@@ -106,7 +106,7 @@ public class DeprecatedLayoutTemplateTags extends XMLFileMigrator implements Aut
 			}
 		}
 		catch (Exception e) {
-			throw new AutoFileMigrateException("Error writing corrected file", e);
+			throw new AutoFileMigratorException("Error writing corrected file", e);
 		}
 		finally {
 			if (domModel != null) {

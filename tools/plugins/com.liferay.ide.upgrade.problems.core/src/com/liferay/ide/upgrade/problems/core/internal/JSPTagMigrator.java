@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JSPFile;
 
@@ -70,9 +70,18 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		_class = getClass();
 	}
 
+	public JSPTagMigrator(
+		String[] attrNames, String[] newAttrNames, String[] attrValues, String[] newAttrValues, String[] tagNames,
+		String[] newTagNames, String[] tagContents) {
+
+		this(attrNames, newAttrNames, attrValues, newAttrValues, tagNames, newTagNames);
+
+		_tagContents = tagContents;
+	}
+
 	@Override
 	@SuppressWarnings("deprecation")
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		int corrected = 0;
 
 		List<Integer> autoCorrectTagOffsets = new ArrayList<>();
@@ -212,7 +221,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 				}
 			}
 			catch (Exception e) {
-				throw new AutoFileMigrateException("Unable to auto-correct", e);
+				throw new AutoFileMigratorException("Unable to auto-correct", e);
 			}
 			finally {
 				if (domModel != null) {
@@ -229,7 +238,12 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		for (String tagName : _tagNames) {
-			if (_isNotEmpty(_tagNames) && _isEmpty(_attrNames) && _isEmpty(_attrValues)) {
+			if (_isNotEmpty(_tagNames) && _isEmpty(_attrNames) && _isEmpty(_attrValues) && _isNotEmpty(_tagContents)) {
+				for (String tagContent : _tagContents) {
+					searchResults.addAll(jspFileChecker.findJSPTags(tagName, tagContent));
+				}
+			}
+			else if (_isNotEmpty(_tagNames) && _isEmpty(_attrNames) && _isEmpty(_attrValues)) {
 				searchResults.addAll(jspFileChecker.findJSPTags(tagName));
 			}
 			else if (_isNotEmpty(_tagNames) && _isNotEmpty(_attrNames) && _isEmpty(_attrValues)) {
@@ -279,6 +293,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	private final String[] _newAttrNames;
 	private final String[] _newAttrValues;
 	private final String[] _newTagNames;
+	private String[] _tagContents;
 	private final String[] _tagNames;
 
 }

@@ -17,13 +17,13 @@ package com.liferay.ide.upgrade.problems.core;
 /**
  * @author Gregory Amerson
  */
-public class AutoFileMigrateException extends Exception {
+public class AutoFileMigratorException extends Exception {
 
-	public AutoFileMigrateException(String message) {
+	public AutoFileMigratorException(String message) {
 		super(message);
 	}
 
-	public AutoFileMigrateException(String message, Exception exception) {
+	public AutoFileMigratorException(String message, Exception exception) {
 		super(message, exception);
 	}
 

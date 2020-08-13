@@ -18,8 +18,8 @@ import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.internal.GradleFileMigrator;
@@ -50,7 +50,7 @@ import org.osgi.service.component.annotations.Component;
 public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implements AutoFileMigrator {
 
 	@Override
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		int problemsFixed = 0;
 
 		GradleBuildScript gradleBuildScript = getGradleBuildScript(file);
@@ -71,7 +71,7 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 				gradleBuildScript.updateDependency(dependency, newDependency);
 			}
 			catch (IOException ioe) {
-				throw new AutoFileMigrateException(
+				throw new AutoFileMigratorException(
 					MessageFormat.format("Failed to update dependency {0} to {1}", dependency, newDependency), ioe);
 			}
 

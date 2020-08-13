@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
 
@@ -54,7 +54,7 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		int problemsCorrected = 0;
 		IDOMModel domModel = null;
 
@@ -90,7 +90,7 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 			}
 		}
 		catch (Exception e) {
-			throw new AutoFileMigrateException("Error writing corrected file", e);
+			throw new AutoFileMigratorException("Error writing corrected file", e);
 		}
 		finally {
 			if (domModel != null) {

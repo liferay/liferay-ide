@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 
 import java.io.File;
 
@@ -82,7 +82,7 @@ public class BaseAutoCorrectAction extends SelectionProviderAction implements Up
 							}
 						}
 					}
-					catch (AutoFileMigrateException afme) {
+					catch (AutoFileMigratorException afme) {
 						UpgradeProblemsUIPlugin.logError(
 							"Problem encountered when automatically migrating file " + file, afme);
 					}

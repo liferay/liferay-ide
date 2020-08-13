@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
@@ -66,7 +66,7 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		int corrected = 0;
 		IDOMModel xmlModel = null;
 

@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.problems.core.CUCache;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JSPFile;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -89,8 +89,46 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 	}
 
 	@Override
+	public List<FileSearchResult> findJSPTags(String tagName, String tagContent) {
+		if ((tagName == null) || tagName.isEmpty()) {
+			throw new IllegalArgumentException("tagName can not be null or empty");
+		}
+
+		if ((tagContent == null) || tagContent.isEmpty()) {
+			throw new IllegalArgumentException("tagContent can not be null or empty");
+		}
+
+		List<FileSearchResult> searchResults = new ArrayList<>();
+
+		NodeList nodeList = _getTagNodes(tagName);
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			IDOMNode domNode = (IDOMNode)nodeList.item(i);
+
+			String domNodeContent = domNode.getTextContent();
+
+			if (Objects.isNull(domNodeContent)) {
+				continue;
+			}
+
+			if (domNodeContent.contains(tagContent)) {
+				int startOffset = domNode.getStartOffset();
+				int endOffset = domNode.getEndOffset();
+
+				int jspStartLine = _getJspLine(startOffset);
+				int jspEndLine = _getJspLine(endOffset);
+
+				searchResults.add(
+					super.createSearchResult(null, startOffset, endOffset, jspStartLine, jspEndLine, true));
+			}
+		}
+
+		return searchResults;
+	}
+
+	@Override
 	public List<FileSearchResult> findJSPTags(String tagName, String[] attrNames) {
-		if ((tagName == null) || tagName.isEmpty() || ListUtil.isEmpty(attrNames)) {
+		if ((tagName == null) || tagName.isEmpty() || (attrNames == null) || (attrNames.length == 0)) {
 			throw new IllegalArgumentException("tagName can not be null or empty");
 		}
 
@@ -125,7 +163,9 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 
 	@Override
 	public List<FileSearchResult> findJSPTags(String tagName, String[] attrNames, String[] attrValues) {
-		if ((tagName == null) || tagName.isEmpty() || ListUtil.isEmpty(attrNames) || ListUtil.isEmpty(attrValues)) {
+		if ((tagName == null) || tagName.isEmpty() || (attrNames == null) || (attrNames.length == 0) ||
+			(attrValues == null) || (attrValues.length == 0)) {
+
 			throw new IllegalArgumentException("tagName can not be null or empty");
 		}
 
