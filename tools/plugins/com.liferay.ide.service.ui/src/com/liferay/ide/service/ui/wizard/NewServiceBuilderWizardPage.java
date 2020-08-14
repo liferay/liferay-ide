@@ -235,14 +235,18 @@ public class NewServiceBuilderWizardPage
 				return (IPackageFragment)element;
 			}
 			else if (element.getElementType() == IJavaElement.COMPILATION_UNIT) {
-				IJavaElement parent = ((ICompilationUnit)element).getParent();
+				ICompilationUnit unitElement = (ICompilationUnit)element;
+
+				IJavaElement parent = unitElement.getParent();
 
 				if (parent.getElementType() == IJavaElement.PACKAGE_FRAGMENT) {
 					return (IPackageFragment)parent;
 				}
 			}
 			else if (element.getElementType() == IJavaElement.TYPE) {
-				return ((IType)element).getPackageFragment();
+				IType typeElement = (IType)element;
+
+				return typeElement.getPackageFragment();
 			}
 		}
 
@@ -266,10 +270,8 @@ public class NewServiceBuilderWizardPage
 
 		IJavaElement element = getInitialJavaElement(selection);
 
-		if (element != null) {
-			if (element.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT) {
-				return (IPackageFragmentRoot)element;
-			}
+		if ((element != null) && (element.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT)) {
+			return (IPackageFragmentRoot)element;
 		}
 
 		return null;

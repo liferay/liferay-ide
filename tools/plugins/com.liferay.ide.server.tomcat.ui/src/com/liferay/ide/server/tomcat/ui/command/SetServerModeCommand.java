@@ -32,12 +32,16 @@ public class SetServerModeCommand extends ServerCommand {
 	}
 
 	public void execute() {
-		oldServerMode = ((LiferayTomcatServer)server).getServerMode();
-		((LiferayTomcatServer)server).setServerMode(serverMode);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		oldServerMode = liferayServer.getServerMode();
+		liferayServer.setServerMode(serverMode);
 	}
 
 	public void undo() {
-		((LiferayTomcatServer)server).setServerMode(oldServerMode);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		liferayServer.setServerMode(oldServerMode);
 	}
 
 	protected int oldServerMode;

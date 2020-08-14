@@ -421,9 +421,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 	}
 
 	protected Layout createLayout() {
-		GridLayout layout = new GridLayout(2, false);
-
-		return layout;
+		return new GridLayout(2, false);
 	}
 
 	protected void createSpacer() {

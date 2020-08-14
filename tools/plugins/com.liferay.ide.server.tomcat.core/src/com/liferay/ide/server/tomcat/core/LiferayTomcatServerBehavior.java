@@ -31,7 +31,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
@@ -89,9 +88,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 		IPath updatedPath = null;
 
 		if ((defaultPath != null) && (defaultPath.lastSegment() != null)) {
-			IProject project = module.getProject();
-
-			String requiredSuffix = ProjectUtil.getRequiredSuffix(project);
+			String requiredSuffix = ProjectUtil.getRequiredSuffix(module.getProject());
 
 			String defaultPathLastSegment = defaultPath.lastSegment();
 
@@ -312,13 +309,14 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 			this, kind, deltaKind, moduleTree, getPublishedResourceDelta(moduleTree), monitor);
 
 		if (shouldPublishModule) {
-			if (getServer().getServerState() != IServer.STATE_STOPPED) {
-				if ((deltaKind == ServerBehaviourDelegate.ADDED) || (deltaKind == ServerBehaviourDelegate.REMOVED)) {
-					setServerRestartState(true);
-				}
-			}
-
 			setModulePublishState(moduleTree, IServer.PUBLISH_STATE_NONE);
+
+			if (((getServer().getServerState() != IServer.STATE_STOPPED) &&
+				 (deltaKind == ServerBehaviourDelegate.ADDED)) ||
+				(deltaKind == ServerBehaviourDelegate.REMOVED)) {
+
+				setServerRestartState(true);
+			}
 		}
 		else {
 

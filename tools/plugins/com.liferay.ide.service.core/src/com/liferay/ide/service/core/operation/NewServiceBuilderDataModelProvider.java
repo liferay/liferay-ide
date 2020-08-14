@@ -123,7 +123,7 @@ public class NewServiceBuilderDataModelProvider
 
 	@Override
 	public boolean isPropertyEnabled(String propertyName) {
-		if (SERVICE_FILE.equals(propertyName)) {
+		if (propertyName.equals(SERVICE_FILE)) {
 			return false;
 		}
 
@@ -132,12 +132,8 @@ public class NewServiceBuilderDataModelProvider
 
 	@Override
 	public IStatus validate(String propertyName) {
-		if (SERVICE_FILE.equals(propertyName)) {
-			IFile serviceFile = getServiceFile();
-
-			if (FileUtil.exists(serviceFile)) {
-				return ServiceCore.createErrorStatus(Msgs.projectContainsServiceXmlFile);
-			}
+		if (propertyName.equals(SERVICE_FILE) && FileUtil.exists(getServiceFile())) {
+			return ServiceCore.createErrorStatus(Msgs.projectContainsServiceXmlFile);
 		}
 		else if (PACKAGE_PATH.equals(propertyName)) {
 			String packagePath = getStringProperty(propertyName);

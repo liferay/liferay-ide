@@ -30,7 +30,7 @@ public class PortalContext {
 
 		baseName = baseName.replaceAll("/", "#");
 
-		if (baseName.startsWith("##") || "".equals(baseName)) {
+		if (baseName.startsWith("##") || baseName.equals("")) {
 			baseName = "ROOT" + baseName;
 		}
 
@@ -56,7 +56,7 @@ public class PortalContext {
 
 		_path = "/" + path.replaceAll("#", "/");
 
-		if ("ROOT".equals(path)) {
+		if (path.equals("ROOT")) {
 			_path = "";
 		}
 

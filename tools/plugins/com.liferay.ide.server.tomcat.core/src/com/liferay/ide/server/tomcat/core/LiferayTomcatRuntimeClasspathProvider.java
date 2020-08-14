@@ -97,7 +97,7 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 			}
 		}
 
-		return (IClasspathEntry[])optimizedList.toArray(new IClasspathEntry[optimizedList.size()]);
+		return (IClasspathEntry[])optimizedList.toArray(new IClasspathEntry[0]);
 	}
 
 	protected void updateClasspath(IProject project, IRuntime runtime) {

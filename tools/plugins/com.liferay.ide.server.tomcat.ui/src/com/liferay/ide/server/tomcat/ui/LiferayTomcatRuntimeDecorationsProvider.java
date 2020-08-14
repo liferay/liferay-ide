@@ -29,9 +29,8 @@ public class LiferayTomcatRuntimeDecorationsProvider implements IAdapterFactory 
 		if (IDecorationsProvider.class.equals(adapterType)) {
 			return new LiferayDecorationsProvider((IRuntime)adaptableObject);
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	public Class<?>[] getAdapterList() {

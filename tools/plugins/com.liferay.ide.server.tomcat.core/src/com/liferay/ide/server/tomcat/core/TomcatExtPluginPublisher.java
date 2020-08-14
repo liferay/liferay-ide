@@ -50,12 +50,12 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 
 		// check to make sure that the user isn't trying to add multiple ext-plugins to server
 
-		if (ILiferayTomcatConstants.PREVENT_MULTI_EXT_PLUGINS_DEPLOY && (module != null) && (server != null)) {
-			if (ProjectUtil.isExtProject(module.getProject())) {
-				for (IModule currentModule : server.getModules()) {
-					if (ProjectUtil.isExtProject(currentModule.getProject())) {
-						return LiferayTomcatPlugin.createErrorStatus(Msgs.oneExtPlugin);
-					}
+		if (ILiferayTomcatConstants.PREVENT_MULTI_EXT_PLUGINS_DEPLOY && (module != null) && (server != null) &&
+			ProjectUtil.isExtProject(module.getProject())) {
+
+			for (IModule currentModule : server.getModules()) {
+				if (ProjectUtil.isExtProject(currentModule.getProject())) {
+					return LiferayTomcatPlugin.createErrorStatus(Msgs.oneExtPlugin);
 				}
 			}
 		}

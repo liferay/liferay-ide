@@ -173,40 +173,32 @@ public class LiferayTomcatPlugin extends Plugin {
 
 		File versionProps = versionPropertiesPath.toFile();
 
-		if (FileUtil.exists(versionProps)) {
-			if (!versionProps.delete()) {
-				versionProps.deleteOnExit();
-			}
+		if (FileUtil.exists(versionProps) && !versionProps.delete()) {
+			versionProps.deleteOnExit();
 		}
 
 		IPath versionTxtPath = liferayTomcatPluginLocation.append("version.txt");
 
 		File versionTxt = versionTxtPath.toFile();
 
-		if (FileUtil.exists(versionTxt)) {
-			if (!versionTxt.delete()) {
-				versionTxt.deleteOnExit();
-			}
+		if (FileUtil.exists(versionTxt) && !versionTxt.delete()) {
+			versionTxt.deleteOnExit();
 		}
 
 		IPath serverInfosPropertiesPath = liferayTomcatPluginLocation.append("serverInfos.properties");
 
 		File serverInfosProperties = serverInfosPropertiesPath.toFile();
 
-		if (FileUtil.exists(serverInfosProperties)) {
-			if (!serverInfosProperties.delete()) {
-				serverInfosProperties.deleteOnExit();
-			}
+		if (FileUtil.exists(serverInfosProperties) && !serverInfosProperties.delete()) {
+			serverInfosProperties.deleteOnExit();
 		}
 
 		IPath serverInfoTxtPath = liferayTomcatPluginLocation.append("serverInfo.txt");
 
 		File serverInfosTxt = serverInfoTxtPath.toFile();
 
-		if (FileUtil.exists(serverInfosTxt)) {
-			if (!serverInfosTxt.delete()) {
-				serverInfosTxt.deleteOnExit();
-			}
+		if (FileUtil.exists(serverInfosTxt) && !serverInfosTxt.delete()) {
+			serverInfosTxt.deleteOnExit();
 		}
 	}
 

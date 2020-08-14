@@ -78,15 +78,13 @@ public class AddServiceBuilderOperation
 	}
 
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		IStatus retval = null;
-
 		IStatus status = _createServiceBuilderFile(getTargetProject(), monitor);
 
 		if (!status.isOK()) {
 			return status;
 		}
 
-		return retval;
+		return null;
 	}
 
 	@SuppressWarnings("restriction")

@@ -46,9 +46,7 @@ public class ImportPathService extends RelativePathService {
 
 				IPath absoluteLocation = baseLocation.append(PathBridge.create(path));
 
-				Path absolute = PathBridge.create(absoluteLocation.makeAbsolute());
-
-				return absolute;
+				return PathBridge.create(absoluteLocation.makeAbsolute());
 			}
 		}
 
@@ -90,9 +88,8 @@ public class ImportPathService extends RelativePathService {
 		if (file == null) {
 			return Collections.emptyList();
 		}
-		else {
-			return Collections.singletonList(new Path(file.getParent()));
-		}
+
+		return Collections.singletonList(new Path(file.getParent()));
 	}
 
 }

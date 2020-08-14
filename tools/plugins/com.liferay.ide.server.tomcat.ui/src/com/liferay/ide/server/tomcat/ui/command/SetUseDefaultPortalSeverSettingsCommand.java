@@ -32,12 +32,16 @@ public class SetUseDefaultPortalSeverSettingsCommand extends ServerCommand {
 	}
 
 	public void execute() {
-		oldUseDefaultPortalServerSettings = ((LiferayTomcatServer)server).getUseDefaultPortalServerSettings();
-		((LiferayTomcatServer)server).setUseDefaultPortalServerSettings(useDefaultPortalServerSettings);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		oldUseDefaultPortalServerSettings = liferayServer.getUseDefaultPortalServerSettings();
+		liferayServer.setUseDefaultPortalServerSettings(useDefaultPortalServerSettings);
 	}
 
 	public void undo() {
-		((LiferayTomcatServer)server).setUseDefaultPortalServerSettings(oldUseDefaultPortalServerSettings);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		liferayServer.setUseDefaultPortalServerSettings(oldUseDefaultPortalServerSettings);
 	}
 
 	protected boolean oldUseDefaultPortalServerSettings;

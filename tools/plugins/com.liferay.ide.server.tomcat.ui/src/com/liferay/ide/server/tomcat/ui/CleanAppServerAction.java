@@ -71,7 +71,9 @@ public class CleanAppServerAction extends AbstractObjectAction {
 				return;
 			}
 
-			Object elem = ((IStructuredSelection)fSelection).toArray()[0];
+			IStructuredSelection structuredFSelection = (IStructuredSelection)fSelection;
+
+			Object elem = structuredFSelection.toArray()[0];
 
 			if (!(elem instanceof IProject)) {
 				return;
@@ -104,8 +106,6 @@ public class CleanAppServerAction extends AbstractObjectAction {
 			}
 			else {
 				MessageDialog.openError(null, Msgs.cleanAppServer, status.getMessage());
-
-				return;
 			}
 		}
 		catch (Exception ex) {
@@ -146,8 +146,6 @@ public class CleanAppServerAction extends AbstractObjectAction {
 	}
 
 	protected int showWizard(IRuntimeWorkingCopy runtimeWorkingCopy) {
-		String title = Msgs.wizEditRuntimeWizardTitle;
-
 		IRuntimeType runtimeType = runtimeWorkingCopy.getRuntimeType();
 
 		WizardFragment fragment2 = ServerUIPlugin.getWizardFragment(runtimeType.getId());
@@ -173,6 +171,8 @@ public class CleanAppServerAction extends AbstractObjectAction {
 
 		};
 
+		String title = Msgs.wizEditRuntimeWizardTitle;
+
 		TaskWizard wizard = new TaskWizard(title, fragment, taskModel);
 
 		wizard.setForcePreviousAndNextButtons(true);
@@ -188,56 +188,55 @@ public class CleanAppServerAction extends AbstractObjectAction {
 		if (bundleZipLocation == null) {
 			return result = LiferayTomcatPlugin.createErrorStatus(Msgs.bundleZipNotdefined);
 		}
-		else {
-			String rootEntryName = null;
 
-			try (InputStream input = Files.newInputStream(Paths.get(bundleZipLocation));
-				ZipInputStream zis = new ZipInputStream(input)) {
+		String rootEntryName = null;
 
-				ZipEntry rootEntry = zis.getNextEntry();
+		try (InputStream input = Files.newInputStream(Paths.get(bundleZipLocation));
+			ZipInputStream zis = new ZipInputStream(input)) {
 
-				rootEntryName = new Path(
-					rootEntry.getName()
-				).segment(
-					0
-				);
+			ZipEntry rootEntry = zis.getNextEntry();
 
-				if (rootEntryName.endsWith(StringPool.FORWARD_SLASH)) {
-					rootEntryName = rootEntryName.substring(0, rootEntryName.length() - 1);
+			rootEntryName = new Path(
+				rootEntry.getName()
+			).segment(
+				0
+			);
+
+			if (rootEntryName.endsWith(StringPool.FORWARD_SLASH)) {
+				rootEntryName = rootEntryName.substring(0, rootEntryName.length() - 1);
+			}
+
+			boolean foundBundle = false;
+
+			ZipEntry entry = zis.getNextEntry();
+
+			while ((entry != null) && !foundBundle) {
+				String entryName = entry.getName();
+
+				if (entryName.startsWith(rootEntryName + "/tomcat-") ||
+					entryName.startsWith(rootEntryName + "/jboss-")) {
+
+					foundBundle = true;
 				}
 
-				boolean foundBundle = false;
-
-				ZipEntry entry = zis.getNextEntry();
-
-				while ((entry != null) && !foundBundle) {
-					String entryName = entry.getName();
-
-					if (entryName.startsWith(rootEntryName + "/tomcat-") ||
-						entryName.startsWith(rootEntryName + "/jboss-")) {
-
-						foundBundle = true;
-					}
-
-					entry = zis.getNextEntry();
-				}
+				entry = zis.getNextEntry();
 			}
-			catch (Exception e) {
-				return result = LiferayTomcatPlugin.createErrorStatus(Msgs.bundleZipLocationNotValid);
-			}
+		}
+		catch (Exception e) {
+			return result = LiferayTomcatPlugin.createErrorStatus(Msgs.bundleZipLocationNotValid);
+		}
 
-			PortalBundle portalBundle = ServerUtil.getPortalBundle(project);
+		PortalBundle portalBundle = ServerUtil.getPortalBundle(project);
 
-			IPath appServerDir = portalBundle.getAppServerDir();
+		IPath appServerDir = portalBundle.getAppServerDir();
 
-			appServerDir = appServerDir.removeLastSegments(1);
+		appServerDir = appServerDir.removeLastSegments(1);
 
-			String bundleDir = appServerDir.lastSegment();
+		String bundleDir = appServerDir.lastSegment();
 
-			if (!bundleDir.equals(rootEntryName)) {
-				return result = LiferayTomcatPlugin.createErrorStatus(
-					NLS.bind(Msgs.runtimeLocationDirectoryNotMatch, bundleDir, rootEntryName));
-			}
+		if (!bundleDir.equals(rootEntryName)) {
+			return result = LiferayTomcatPlugin.createErrorStatus(
+				NLS.bind(Msgs.runtimeLocationDirectoryNotMatch, bundleDir, rootEntryName));
 		}
 
 		return result;

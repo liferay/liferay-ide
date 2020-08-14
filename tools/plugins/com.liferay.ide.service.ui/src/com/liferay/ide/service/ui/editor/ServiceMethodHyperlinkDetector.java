@@ -81,9 +81,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 
 			IDocument document = documentProvider.getDocument(editorInput);
 
-			int offset = region.getOffset();
-
-			IRegion wordRegion = JavaWordFinder.findWord(document, offset);
+			IRegion wordRegion = JavaWordFinder.findWord(document, region.getOffset());
 
 			if (_isRegionValid(document, wordRegion)) {
 				IJavaElement[] elements = new IJavaElement[0];
@@ -94,7 +92,9 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 				}
 				else {
 					try {
-						elements = ((ICodeAssist)input).codeSelect(wordRegion.getOffset(), wordRegion.getLength());
+						ICodeAssist codeAssistInput = (ICodeAssist)input;
+
+						elements = codeAssistInput.codeSelect(wordRegion.getOffset(), wordRegion.getLength());
 
 						elements = _selectOpenableElements(elements);
 
@@ -311,7 +311,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 		try {
 			String word = document.get(wordRegion.getOffset(), wordRegion.getLength());
 
-			return "inheritDoc".equals(word);
+			return word.equals("inheritDoc");
 		}
 		catch (BadLocationException ble) {
 			return false;
@@ -345,7 +345,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 			}
 		}
 
-		return result.toArray(new IJavaElement[result.size()]);
+		return result.toArray(new IJavaElement[0]);
 	}
 
 	private boolean _shouldAddServiceHyperlink(JavaEditor editor) {
@@ -392,7 +392,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 		public void acceptSearchMatch(SearchMatch match) throws CoreException {
 			Object element = match.getElement();
 
-			if (element instanceof IMethod && _matches((IMethod)element)) {
+			if ((element instanceof IMethod) && _matches((IMethod)element)) {
 				_results.add((IMethod)element);
 			}
 		}

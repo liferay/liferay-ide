@@ -49,8 +49,9 @@ public class BuildServicesActionHandler extends SapphireActionHandler {
 			}
 		}
 		else {
-			MessageDialog.openWarning(
-				((SwtPresentation)context).shell(), Msgs.buildServices, Msgs.actionUnavailableImportProject);
+			SwtPresentation swtContext = (SwtPresentation)context;
+
+			MessageDialog.openWarning(swtContext.shell(), Msgs.buildServices, Msgs.actionUnavailableImportProject);
 		}
 
 		return null;

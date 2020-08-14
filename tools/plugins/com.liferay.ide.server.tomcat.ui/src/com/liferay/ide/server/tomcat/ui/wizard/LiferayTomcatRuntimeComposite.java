@@ -270,11 +270,13 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					if (wizard instanceof IWizardPage) {
-						IWizard parentWizard = ((IWizardPage)wizard).getWizard();
+						IWizardPage wizardPage = (IWizardPage)wizard;
+
+						IWizard parentWizard = wizardPage.getWizard();
 
 						IWizardContainer container = parentWizard.getContainer();
 
-						container.showPage(((IWizardPage)wizard).getNextPage());
+						container.showPage(wizardPage.getNextPage());
 					}
 				}
 
@@ -292,9 +294,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 	}
 
 	protected Layout createLayout() {
-		GridLayout layout = new GridLayout(2, false);
-
-		return layout;
+		return new GridLayout(2, false);
 	}
 
 	protected Link createLink(String linkText) {
