@@ -73,7 +73,7 @@ in ascending chronological order.
 
 ## Breaking Changes List
 
-### Liferay FontAwesome Is No Longer Included by Default
+### Liferay FontAwesome Is No Longer Included by Default [](id=#liferay-fontAwesome-is-no-longer-included-by-default)
 - **Date:** 2019-Aug-21
 - **JIRA Ticket:** [LPS-100021](https://issues.liferay.com/browse/LPS-100021)
 
@@ -314,7 +314,7 @@ This change was made to avoid security issues.
 
 ---------------------------------------
 
-### Removed liferay-frontend:cards-treeview Tag
+### Removed liferay-frontend:cards-treeview Tag [](id=#removed-the-liferay-frontend:cards-treeview-tag)
 - **Date:** 2020-Jan-10
 - **JIRA Ticket:** [LPS-106899](https://issues.liferay.com/browse/LPS-106899)
 
@@ -464,7 +464,7 @@ every page that was mostly unused and redundant.
 
 ---------------------------------------
 
-### Server-side Parallel Rendering Is No Longer Supported
+### Server-side Parallel Rendering Is No Longer Supported [](id=removed-portal-property-layout-parallel-render)
 - **Date:** 2020-Mar-16
 - **JIRA Ticket:** [LPS-110359](https://issues.liferay.com/browse/LPS-110359)
 
@@ -483,7 +483,6 @@ Remove any properties prefixed with `layout.parallel.render` from your
 properties file.
 
 #### Why was this change made? [](id=why-was-this-change-made-13)
-
 This feature has been deprecated.
 
 ---------------------------------------
