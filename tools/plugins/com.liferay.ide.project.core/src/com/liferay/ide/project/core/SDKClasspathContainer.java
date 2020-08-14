@@ -83,7 +83,7 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
 			}
 		}
 
-		classpathEntries = entries.toArray(new IClasspathEntry[entries.size()]);
+		classpathEntries = entries.toArray(new IClasspathEntry[0]);
 
 		return classpathEntries;
 	}

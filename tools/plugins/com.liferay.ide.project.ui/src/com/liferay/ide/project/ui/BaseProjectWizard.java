@@ -33,8 +33,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.platform.PathBridge;
-import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
-import org.eclipse.sapphire.ui.forms.ContainerPart.Children;
+import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.forms.ContainerPart;
 import org.eclipse.sapphire.ui.forms.WizardDef;
 import org.eclipse.sapphire.ui.forms.WizardPagePart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
@@ -58,7 +58,7 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
 public class BaseProjectWizard<T extends Element>
 	extends SapphireWizard<T> implements INewWizard, IWorkbenchWizard, SapphireContentAccessor {
 
-	public BaseProjectWizard(T t, Reference<WizardDef> wizard) {
+	public BaseProjectWizard(T t, DefinitionLoader.Reference<WizardDef> wizard) {
 		super(t, wizard);
 	}
 
@@ -69,10 +69,9 @@ public class BaseProjectWizard<T extends Element>
 		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
 			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-			final String message = wizardPage.getMessage();
 			final int messageType = wizardPage.getMessageType();
 
-			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
+			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(wizardPage.getMessage())) {
 				wizardPage.setMessage(getFirstErrorMessage(), SapphireWizardPage.NONE);
 				_firstErrorMessageRemoved = true;
 			}
@@ -94,7 +93,9 @@ public class BaseProjectWizard<T extends Element>
 				IPath location = project.getLocation();
 
 				if (location != null) {
-					((BaseModuleOp)element()).setInitialSelectionPath(PathBridge.create(location));
+					BaseModuleOp moduleOpElement = (BaseModuleOp)element();
+
+					moduleOpElement.setInitialSelectionPath(PathBridge.create(location));
 				}
 			}
 		}
@@ -107,7 +108,7 @@ public class BaseProjectWizard<T extends Element>
 
 			WizardPagePart wizardPagePart = wizardPages.get(0);
 
-			Children children = wizardPagePart.children();
+			ContainerPart.Children children = wizardPagePart.children();
 
 			for (final Object formPart : children.all()) {
 				if (formPart instanceof WorkingSetCustomPart) {

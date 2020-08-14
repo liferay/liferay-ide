@@ -103,31 +103,30 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 		if (!org.eclipse.core.runtime.Path.EMPTY.isValidPath(currentPath)) {
 			return Status.createErrorStatus("\"" + currentPath + "\" is not a valid path.");
 		}
+
+		IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
+
+		File file = osPath.toFile();
+
+		if (!file.isAbsolute()) {
+			retval = Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
+		}
 		else {
-			IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
+			if (FileUtil.notExists(osPath)) {
 
-			File file = osPath.toFile();
+				// check non-existing external location
 
-			if (!file.isAbsolute()) {
-				retval = Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
+				if (!_canCreate(osPath.toFile())) {
+					retval = Status.createErrorStatus("Cannot create project content at \"" + currentPath + "\"");
+				}
 			}
-			else {
-				if (FileUtil.notExists(osPath)) {
 
-					// check non-existing external location
+			NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
 
-					if (!_canCreate(osPath.toFile())) {
-						retval = Status.createErrorStatus("Cannot create project content at \"" + currentPath + "\"");
-					}
-				}
+			IStatus locationStatus = provider.validateProjectLocation(currentProjectName, osPath);
 
-				NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
-
-				IStatus locationStatus = provider.validateProjectLocation(currentProjectName, osPath);
-
-				if (!locationStatus.isOK()) {
-					retval = Status.createErrorStatus(locationStatus.getMessage());
-				}
+			if (!locationStatus.isOK()) {
+				retval = Status.createErrorStatus(locationStatus.getMessage());
 			}
 		}
 

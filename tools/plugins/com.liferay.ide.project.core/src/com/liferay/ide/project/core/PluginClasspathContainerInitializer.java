@@ -46,8 +46,6 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 
 	@Override
 	public void initialize(IPath containerPath, IJavaProject project) throws CoreException {
-		IClasspathContainer classpathContainer = null;
-
 		int count = containerPath.segmentCount();
 
 		if (count != 2) {
@@ -63,8 +61,6 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 
 			throw new CoreException(ProjectCore.createErrorStatus(msg + ID));
 		}
-
-		String finalSegment = containerPath.segment(1);
 
 		IPath portalDir = ServerUtil.getPortalDir(project);
 
@@ -88,7 +84,9 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 			ProjectCore.logError(e);
 		}
 
-		classpathContainer = getCorrectContainer(
+		String finalSegment = containerPath.segment(1);
+
+		IClasspathContainer classpathContainer = getCorrectContainer(
 			containerPath, finalSegment, project, portalDir, javadocURL, sourceLocation);
 
 		IJavaProject[] projects = {project};
@@ -136,11 +134,13 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 		IPath sourceLocation = null;
 
 		if (containerSuggestion instanceof PluginClasspathContainer) {
-			portalDir = ((PluginClasspathContainer)containerSuggestion).getPortalDir();
+			PluginClasspathContainer classpathContainerSuggestion = (PluginClasspathContainer)containerSuggestion;
 
-			javadocURL = ((PluginClasspathContainer)containerSuggestion).getJavadocURL();
+			portalDir = classpathContainerSuggestion.getPortalDir();
 
-			sourceLocation = ((PluginClasspathContainer)containerSuggestion).getSourceLocation();
+			javadocURL = classpathContainerSuggestion.getJavadocURL();
+
+			sourceLocation = classpathContainerSuggestion.getSourceLocation();
 		}
 		else {
 			portalDir = ServerUtil.getPortalDir(project);

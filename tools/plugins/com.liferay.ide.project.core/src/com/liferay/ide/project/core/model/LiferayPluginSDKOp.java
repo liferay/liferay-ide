@@ -38,7 +38,7 @@ public interface LiferayPluginSDKOp extends Element {
 
 	@Label(standard = "Plugins SDK")
 	@Services(
-		value = {
+		{
 			@Service(impl = PluginsSDKNamePossibleValuesService.class),
 			@Service(impl = PluginsSDKNameDefaultValueService.class)
 		}

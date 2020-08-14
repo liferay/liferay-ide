@@ -231,28 +231,26 @@ public class ProjectUtil {
 		// no project description found, so recurse into sub-directories
 
 		for (File file : contents) {
-			if (file.isDirectory()) {
-				if (!METADATA_FOLDER.equals(file.getName())) {
-					try {
-						String canonicalPath = file.getCanonicalPath();
+			if (file.isDirectory() && !METADATA_FOLDER.equals(file.getName())) {
+				try {
+					String canonicalPath = file.getCanonicalPath();
 
-						if (!directoriesVisited.add(canonicalPath)) {
+					if (!directoriesVisited.add(canonicalPath)) {
 
-							// already been here --> do not recurse
+						// already been here --> do not recurse
 
-							continue;
-						}
+						continue;
 					}
-					catch (IOException ioe) {
-						ProjectCore.logError(ioe.getLocalizedMessage(), ioe);
-					}
+				}
+				catch (IOException ioe) {
+					ProjectCore.logError(ioe.getLocalizedMessage(), ioe);
+				}
 
-					// dont recurse directories that we have already determined are Liferay projects
+				// dont recurse directories that we have already determined are Liferay projects
 
-					if (!liferayProjectDirs.contains(file) && recurse) {
-						collectSDKProjectsFromDirectory(
-							eclipseProjectFiles, liferayProjectDirs, file, directoriesVisited, recurse, monitor);
-					}
+				if (!liferayProjectDirs.contains(file) && recurse) {
+					collectSDKProjectsFromDirectory(
+						eclipseProjectFiles, liferayProjectDirs, file, directoriesVisited, recurse, monitor);
 				}
 			}
 		}
@@ -402,12 +400,10 @@ public class ProjectUtil {
 					}
 					else {
 						javaProject.setRawClasspath(
-							rawClasspaths.toArray(new IClasspathEntry[rawClasspaths.size()]),
-							new NullProgressMonitor());
+							rawClasspaths.toArray(new IClasspathEntry[0]), new NullProgressMonitor());
 
 						javaProject.setRawClasspath(
-							rawClasspaths.toArray(new IClasspathEntry[rawClasspaths.size()]),
-							new NullProgressMonitor());
+							rawClasspaths.toArray(new IClasspathEntry[0]), new NullProgressMonitor());
 
 						IAccessRule[] accessRules = {};
 
@@ -889,14 +885,12 @@ public class ProjectUtil {
 		IProject[] projects = CoreUtil.getAllProjects();
 
 		for (IProject project : projects) {
-			if (isLiferayFacetedProject(project)) {
-				if (SDKUtil.isSDKProject(project)) {
-					sdkProjects.add(project);
-				}
+			if (isLiferayFacetedProject(project) && SDKUtil.isSDKProject(project)) {
+				sdkProjects.add(project);
 			}
 		}
 
-		return sdkProjects.toArray(new IProject[sdkProjects.size()]);
+		return sdkProjects.toArray(new IProject[0]);
 	}
 
 	public static String getBundleSymbolicNameFromBND(IProject project) {
@@ -1197,9 +1191,7 @@ public class ProjectUtil {
 
 			if ((facetedProject != null) && (checkProjectFacet != null)) {
 				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
-					IProjectFacet projectFacet = facet.getProjectFacet();
-
-					if (checkProjectFacet.equals(projectFacet)) {
+					if (checkProjectFacet.equals(facet.getProjectFacet())) {
 						retval = true;
 
 						break;
@@ -1261,27 +1253,21 @@ public class ProjectUtil {
 
 						return true;
 					}
-					else {
 
-						// sdk 6.x project
+					// sdk 6.x project
 
-						return false;
-					}
-				}
-				else {
 					return false;
 				}
-			}
-			else {
 
-				// not sdk project
-
-				return true;
+				return false;
 			}
+
+			// not sdk project
+
+			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public static boolean isDynamicWebFacet(IProjectFacet facet) {
@@ -1316,7 +1302,9 @@ public class ProjectUtil {
 		IProject project = null;
 
 		if (resource instanceof IFile) {
-			project = ((IFile)resource).getProject();
+			IFile file = (IFile)resource;
+
+			project = file.getProject();
 		}
 		else if (resource instanceof IProject) {
 			project = (IProject)resource;
@@ -1414,9 +1402,7 @@ public class ProjectUtil {
 
 			if (facetedProject != null) {
 				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
-					IProjectFacet projectFacet = facet.getProjectFacet();
-
-					if (isLiferayFacet(projectFacet)) {
+					if (isLiferayFacet(facet.getProjectFacet())) {
 						retval = true;
 
 						break;
@@ -1457,7 +1443,7 @@ public class ProjectUtil {
 			boolean hasDocroot = false;
 
 			for (File content : contents) {
-				if ("build.xml".equals(content.getName())) {
+				if (Objects.equals("build.xml", content.getName())) {
 					hasBuildXml = true;
 
 					continue;
@@ -1465,8 +1451,6 @@ public class ProjectUtil {
 
 				if (ISDKConstants.DEFAULT_DOCROOT_FOLDER.equals(content.getName())) {
 					hasDocroot = true;
-
-					continue;
 				}
 			}
 
@@ -1499,7 +1483,9 @@ public class ProjectUtil {
 		IProject project = null;
 
 		if (resource instanceof IFile) {
-			project = ((IFile)resource).getProject();
+			IFile file = (IFile)resource;
+
+			project = file.getProject();
 		}
 		else if (resource instanceof IProject) {
 			project = (IProject)resource;
@@ -1532,12 +1518,11 @@ public class ProjectUtil {
 		if ((resource.getParent() != null) && folder.equals(resource.getParent())) {
 			return true;
 		}
-		else {
-			boolean retval = isParent(folder, resource.getParent());
 
-			if (retval) {
-				return true;
-			}
+		boolean retval = isParent(folder, resource.getParent());
+
+		if (retval) {
+			return true;
 		}
 
 		return false;
@@ -1750,8 +1735,8 @@ public class ProjectUtil {
 						for (IClasspathAttribute attr : attrs) {
 							IClasspathAttribute newAttr = null;
 
-							if ("owner.project.facets".equals(attr.getName()) &&
-								"liferay.plugin".equals(attr.getValue())) {
+							if (Objects.equals("owner.project.facets", attr.getName()) &&
+								Objects.equals("liferay.plugin", attr.getValue())) {
 
 								newAttr = JavaCore.newClasspathAttribute(attr.getName(), "liferay.ext");
 								fixedAttr = true;

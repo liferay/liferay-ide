@@ -94,9 +94,7 @@ public class BinaryProjectsImportWizard extends DataModelWizard implements IWork
 
 	/**
 	 * (non-Javadoc)
-	 *
-	 * @see DataModelWizard#
-	 * runForked()
+	 * @see DataModelWizard#runForked()
 	 */
 	@Override
 	protected boolean runForked() {

@@ -109,8 +109,6 @@ public class JSFModuleProjectArchetypeDefaultValueService
 					version = value.substring(value.indexOf("=") + 1, value.indexOf("\\"));
 
 					version = version.trim();
-
-					continue;
 				}
 			}
 

@@ -32,8 +32,6 @@ public class JSFModuleProjectProviderDefaultValueService extends DefaultValueSer
 
 	@Override
 	protected String compute() {
-		String defaultProjectBuildType = "maven-jsf";
-
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
 		IPreferencesService preferencesService = Platform.getPreferencesService();
@@ -51,7 +49,7 @@ public class JSFModuleProjectProviderDefaultValueService extends DefaultValueSer
 			return provider.getShortName();
 		}
 
-		return defaultProjectBuildType;
+		return "maven-jsf";
 	}
 
 }

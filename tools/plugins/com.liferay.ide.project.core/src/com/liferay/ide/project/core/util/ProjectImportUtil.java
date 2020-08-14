@@ -44,7 +44,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -89,11 +88,10 @@ public class ProjectImportUtil {
 		if (contents == null) {
 			return false;
 		}
-		else {
-			for (File file : contents) {
-				if (!binaryProjectFiles.contains(file) && isValidLiferayPlugin(file)) {
-					binaryProjectFiles.add(file);
-				}
+
+		for (File file : contents) {
+			if (!binaryProjectFiles.contains(file) && isValidLiferayPlugin(file)) {
+				binaryProjectFiles.add(file);
 			}
 		}
 
@@ -104,8 +102,8 @@ public class ProjectImportUtil {
 	 * @param dataModel
 	 * @param pluginBinaryRecord
 	 * @param liferaySDK
-	 * @return
 	 * @throws IOException
+	 * @return
 	 */
 	public static ProjectRecord createSDKPluginProject(
 			BridgedRuntime bridgedRuntime, BinaryProjectRecord pluginBinaryRecord, SDK liferaySDK)
@@ -335,9 +333,7 @@ public class ProjectImportUtil {
 
 		IProject sdkProject = CoreUtil.getProject(sdk.getName());
 
-		IFolder folder = sdkProject.getFolder(parentName);
-
-		ResourceFilterUtil.addResourceFilter(folder, project.getName(), monitor);
+		ResourceFilterUtil.addResourceFilter(sdkProject.getFolder(parentName), project.getName(), monitor);
 
 		return project;
 	}
@@ -437,14 +433,12 @@ public class ProjectImportUtil {
 			if (!valid) {
 				return valid;
 			}
-			else {
 
-				// check if its a valid web Archieve
+			// check if its a valid web Archieve
 
-				JarEntry jar = pluginBinary.getJarEntry(getConfigFileLocation(ILiferayConstants.WEB_XML_FILE));
+			JarEntry jar = pluginBinary.getJarEntry(getConfigFileLocation(ILiferayConstants.WEB_XML_FILE));
 
-				valid = valid || (jar != null);
-			}
+			valid = valid || (jar != null);
 		}
 		catch (IOException ioe) {
 			valid = false;
@@ -526,9 +520,7 @@ public class ProjectImportUtil {
 			return ProjectCore.createErrorStatus("Invalid project location");
 		}
 
-		String projectName = record.getProjectName();
-
-		IProject existingProject = CoreUtil.getProject(projectName);
+		IProject existingProject = CoreUtil.getProject(record.getProjectName());
 
 		if (FileUtil.exists(existingProject)) {
 			return ProjectCore.createErrorStatus("Project name already exists.");

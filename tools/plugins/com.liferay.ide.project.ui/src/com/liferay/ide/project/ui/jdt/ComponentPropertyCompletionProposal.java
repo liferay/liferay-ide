@@ -49,9 +49,7 @@ public class ComponentPropertyCompletionProposal extends JavaCompletionProposal 
 
 	@Override
 	public Object getAdditionalProposalInfo(IProgressMonitor monitor) {
-		String info = _addtionalString;
-
-		return info;
+		return _addtionalString;
 	}
 
 	@Override

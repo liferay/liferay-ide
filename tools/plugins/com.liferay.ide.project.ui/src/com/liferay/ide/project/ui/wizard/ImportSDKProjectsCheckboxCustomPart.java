@@ -198,7 +198,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 			projectRecords.add(project);
 		}
 
-		return projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
+		return projectRecords.toArray(new ProjectRecord[0]);
 	}
 
 	private IProject[] _getProjectsInWorkspace() {

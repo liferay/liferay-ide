@@ -99,7 +99,7 @@ public class SDKProjectsImportWizardPage
 			projectRecords.add(project);
 		}
 
-		return (ProjectRecord[])projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
+		return (ProjectRecord[])projectRecords.toArray(new ProjectRecord[0]);
 	}
 
 	public void updateProjectsList(final String path) {
@@ -331,7 +331,10 @@ public class SDKProjectsImportWizardPage
 
 		sdkLocation = SWTUtil.createText(topComposite, 1);
 
-		((GridData)sdkLocation.getLayoutData()).widthHint = 300;
+		GridData sdkLocationData = (GridData)sdkLocation.getLayoutData();
+
+		sdkLocationData.widthHint = 300;
+
 		this.synchHelper.synchText(sdkLocation, SDK_LOCATION, null);
 
 		SWTUtil.createLabel(topComposite, SWT.LEAD, StringPool.EMPTY, 1);
@@ -670,7 +673,9 @@ public class SDKProjectsImportWizardPage
 		}
 
 		public String getText(Object element) {
-			return ((ProjectRecord)element).getProjectLabel();
+			ProjectRecord projectRecordElement = (ProjectRecord)element;
+
+			return projectRecordElement.getProjectLabel();
 		}
 
 	}

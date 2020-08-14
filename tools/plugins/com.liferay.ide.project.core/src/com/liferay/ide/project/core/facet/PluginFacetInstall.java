@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -61,7 +62,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -80,15 +81,14 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 		if (!(config instanceof IDataModel)) {
 			return;
 		}
-		else {
-			model = (IDataModel)config;
 
-			masterModel = (IDataModel)model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
+		model = (IDataModel)config;
 
-			this.project = project;
+		masterModel = (IDataModel)model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
 
-			this.monitor = monitor;
-		}
+		this.project = project;
+
+		this.monitor = monitor;
 
 		/**
 		 *  IDE-195 If the user has the plugins sdk in the workspace,
@@ -186,11 +186,14 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 				// folder already exists, we can return
 
-				return;
+				// return;
+
 			}
 			else if (projectEntry instanceof IFile) {
 				try (InputStream inputStream = Files.newInputStream(newFile.toPath())) {
-					((IFile)projectEntry).setContents(inputStream, IResource.FORCE, null);
+					IFile fileProjectEntry = (IFile)projectEntry;
+
+					fileProjectEntry.setContents(inputStream, IResource.FORCE, null);
 				}
 			}
 		}
@@ -201,7 +204,9 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 		}
 		else if (projectEntry instanceof IFile) {
 			try (InputStream inputStream = Files.newInputStream(newFile.toPath())) {
-				((IFile)projectEntry).create(inputStream, IResource.FORCE, null);
+				IFile fileProjectEntry = (IFile)projectEntry;
+
+				fileProjectEntry.create(inputStream, IResource.FORCE, null);
 			}
 		}
 	}
@@ -238,7 +243,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 			IProjectFacet projectFacet = pfv.getProjectFacet();
 
 			if (StringUtil.equals(projectFacet.getId(), facetId)) {
-				Action action = fp.getProjectFacetAction(pfv.getProjectFacet());
+				IFacetedProject.Action action = fp.getProjectFacetAction(pfv.getProjectFacet());
 
 				if (action != null) {
 					Object config = action.getConfig();
@@ -380,7 +385,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 					oldOutputFolder.delete(true, null);
 
-					if (ListUtil.isEmpty(outputParent.members()) && "build".equals(outputParent.getName())) {
+					if (ListUtil.isEmpty(outputParent.members()) && Objects.equals("build", outputParent.getName())) {
 						outputParent.delete(true, null);
 					}
 				}

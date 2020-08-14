@@ -27,6 +27,8 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -64,7 +66,7 @@ public class ProjectNameValidationService extends ValidationService implements S
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		if ("ant".equals(provider.getShortName())) {
+		if (Objects.equals("ant", provider.getShortName())) {
 			SDK sdk = null;
 
 			try {
@@ -174,7 +176,7 @@ public class ProjectNameValidationService extends ValidationService implements S
 	private boolean _isAntProject(NewLiferayPluginProjectOp op) {
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		return "ant".equals(provider.getShortName());
+		return Objects.equals("ant", provider.getShortName());
 	}
 
 	private boolean _isInvalidProjectName(NewLiferayPluginProjectOp op) {
@@ -236,7 +238,7 @@ public class ProjectNameValidationService extends ValidationService implements S
 	private boolean _isMavenProject(NewLiferayPluginProjectOp op) {
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		return "maven".equals(provider.getShortName());
+		return Objects.equals(provider.getShortName(), "maven");
 	}
 
 	private boolean _isSuffixOnly(String currentProjectName) {

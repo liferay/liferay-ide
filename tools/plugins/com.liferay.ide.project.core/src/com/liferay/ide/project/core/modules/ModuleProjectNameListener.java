@@ -119,7 +119,7 @@ public class ModuleProjectNameListener
 							newLocationBase = PathBridge.create(workspaceLocation);
 						}
 					}
-					else if ("war-core-ext".equals(projectTemplateName)) {
+					else if (projectTemplateName.equals("war-core-ext")) {
 						String extName = LiferayWorkspaceUtil.getExtDir(workspaceProject);
 
 						newLocationBase = PathBridge.create(workspaceLocation.append(extName));

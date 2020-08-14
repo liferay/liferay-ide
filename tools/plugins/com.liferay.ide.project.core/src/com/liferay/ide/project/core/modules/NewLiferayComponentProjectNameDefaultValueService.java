@@ -18,6 +18,8 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.DefaultValueService;
 
@@ -34,7 +36,7 @@ public class NewLiferayComponentProjectNameDefaultValueService extends DefaultVa
 		for (IProject project : allProjects) {
 			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
-			if ((bundleProject != null) && "jar".equals(bundleProject.getBundleShape()) &&
+			if ((bundleProject != null) && Objects.equals("jar", bundleProject.getBundleShape()) &&
 				!bundleProject.isFragmentBundle()) {
 
 				return project.getName();

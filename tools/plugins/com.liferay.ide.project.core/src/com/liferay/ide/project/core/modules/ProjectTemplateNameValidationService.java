@@ -69,13 +69,13 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
-
 		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
 		if (Objects.isNull(liferayWorkspaceProject)) {
 			return retval;
 		}
+
+		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
 		String targetPlatformVersionString = liferayWorkspaceProject.getTargetPlatformVersion();
 
@@ -98,9 +98,7 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 		if (projectTemplateName.startsWith("form-field") && liferayVersion.equals("7.2")) {
 			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
 
-			String displayName = newLiferayProjectProvider.getDisplayName();
-
-			if (StringUtil.equalsIgnoreCase(displayName, "maven")) {
+			if (StringUtil.equalsIgnoreCase(newLiferayProjectProvider.getDisplayName(), "maven")) {
 				return Status.createErrorStatus("Form Field project is not supported 7.2 for Maven");
 			}
 		}
@@ -135,9 +133,7 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 		if (warCoreExt && retval.ok()) {
 			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
 
-			String displayName = newLiferayProjectProvider.getDisplayName();
-
-			if (StringUtil.equalsIgnoreCase(displayName, "maven")) {
+			if (StringUtil.equalsIgnoreCase(newLiferayProjectProvider.getDisplayName(), "maven")) {
 				retval = Status.createErrorStatus("Not support to create maven war-core-ext project.");
 			}
 		}

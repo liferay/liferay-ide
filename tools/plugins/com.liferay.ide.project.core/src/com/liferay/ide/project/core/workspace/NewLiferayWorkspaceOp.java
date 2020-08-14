@@ -77,7 +77,7 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp, ProductVe
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_BUNDLE_URL);
 
 	@Label(standard = "liferay version")
-	@Listeners(value = TargetLiferayVersionListener.class)
+	@Listeners(TargetLiferayVersionListener.class)
 	@Service(impl = TargetLiferayVersionDefaultValueService.class)
 	@Service(impl = TargetLiferayVersionPossibleValuesService.class)
 	public ValueProperty PROP_LIFERAY_VERSION = new ValueProperty(TYPE, "LiferayVersion");

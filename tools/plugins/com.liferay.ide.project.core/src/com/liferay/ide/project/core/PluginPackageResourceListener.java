@@ -191,13 +191,13 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			return null;
 		}
 
-		IPath serviceJarPath = serviceJar.getFullPath();
-
 		if (rootComponent == null) {
 			return null;
 		}
 
 		String type = VirtualArchiveComponent.LIBARCHIVETYPE + IPath.SEPARATOR;
+
+		IPath serviceJarPath = serviceJar.getFullPath();
 
 		IPath relativePath = serviceJarPath.makeRelative();
 
@@ -222,8 +222,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			return;
 		}
 
-		String[] portalTlds = portalDependencyTlds.split(StringPool.COMMA);
-
 		IVirtualComponent component = ComponentCore.createComponent(project);
 
 		if (component == null) {
@@ -239,6 +237,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		IPath portalDir = ServerUtil.getPortalDir(project);
 
 		List<IPath> tldFilesToCopy = new ArrayList<>();
+
+		String[] portalTlds = portalDependencyTlds.split(StringPool.COMMA);
 
 		if (portalDir != null) {
 			for (String portalTld : portalTlds) {
@@ -290,9 +290,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			return;
 		}
 
-		IProject project = pluginPackagePropertiesFile.getProject();
-
-		IJavaProject javaProject = JavaCore.create(project);
+		IJavaProject javaProject = JavaCore.create(pluginPackagePropertiesFile.getProject());
 
 		IPath containerPath = null;
 
@@ -347,8 +345,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			return;
 		}
 
-		List<IVirtualReference> removeRefs = new ArrayList<>();
-
 		IClasspathContainer webAppLibrariesContainer =
 			J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
 
@@ -357,6 +353,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		}
 
 		IClasspathEntry[] existingEntries = webAppLibrariesContainer.getClasspathEntries();
+
+		List<IVirtualReference> removeRefs = new ArrayList<>();
 
 		for (IClasspathEntry entry : existingEntries) {
 			IPath path = entry.getPath();
@@ -567,7 +565,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 					IFolder folder = referencedFileProject.getFolder(
 						ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/service");
 
-					((ClasspathEntry)entry).sourceAttachmentPath = folder.getFullPath();
+					ClasspathEntry classpathEntry = (ClasspathEntry)entry;
+
+					classpathEntry.sourceAttachmentPath = folder.getFullPath();
 				}
 			}
 		}

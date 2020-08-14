@@ -24,7 +24,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.ui.IMarkerResolution;
@@ -50,7 +49,7 @@ public class PluginsSDKNotSetResolution implements IMarkerResolution, SapphireCo
 
 			DefinitionLoader sdef = loader.sdef("com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog");
 
-			Reference<DialogDef> dialogRef = sdef.dialog("ConfigureLiferaySDK");
+			DefinitionLoader.Reference<DialogDef> dialogRef = sdef.dialog("ConfigureLiferaySDK");
 
 			SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 

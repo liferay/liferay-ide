@@ -19,6 +19,8 @@ import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
@@ -41,7 +43,7 @@ public class GroupIdValidationService extends ValidationService implements Sapph
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		if ("maven".equals(provider.getShortName())) {
+		if (Objects.equals(provider.getShortName(), "maven")) {
 			String groupId = get(op.getGroupId());
 
 			IStatus javaStatus = JavaConventions.validatePackageName(

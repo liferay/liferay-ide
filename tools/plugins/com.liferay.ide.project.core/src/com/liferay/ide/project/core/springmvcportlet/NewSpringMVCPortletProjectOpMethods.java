@@ -34,7 +34,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 
@@ -62,7 +61,7 @@ public class NewSpringMVCPortletProjectOpMethods {
 			if (retval.ok()) {
 				_updateBuildAndVersionPrefs(op);
 			}
-			else if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
+			else if ((retval.severity() == Status.Severity.ERROR) && (retval.exception() != null)) {
 				errorStack = retval.exception();
 			}
 		}

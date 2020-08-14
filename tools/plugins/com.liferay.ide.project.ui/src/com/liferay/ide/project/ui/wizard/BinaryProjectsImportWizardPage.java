@@ -41,7 +41,6 @@ import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -87,7 +86,7 @@ public class BinaryProjectsImportWizardPage
 			binaryProjectRecords.add(binaryProjectRecord);
 		}
 
-		return binaryProjectRecords.toArray(new BinaryProjectRecord[binaryProjectRecords.size()]);
+		return binaryProjectRecords.toArray(new BinaryProjectRecord[0]);
 	}
 
 	public void updateBinariesList() {
@@ -392,15 +391,13 @@ public class BinaryProjectsImportWizardPage
 
 			ImageRegistry imageRegistry = projectUI.getImageRegistry();
 
-			Image image = imageRegistry.get(ProjectUI.WAR_IMAGE_ID);
-
-			return image;
+			return imageRegistry.get(ProjectUI.WAR_IMAGE_ID);
 		}
 
 		/**
 		 * (non-Javadoc)
 		 *
-		 * @see StyledCellLabelProvider#update(org.eclipse.jface. viewers.ViewerCell)
+		 * @see StyledCellLabelProvider#update(ViewerCell)
 		 */
 		@Override
 		public void update(ViewerCell cell) {
@@ -444,7 +441,7 @@ public class BinaryProjectsImportWizardPage
 		private static final String _GREY_COLOR = "already_exist_element_color";
 
 		private final ColorRegistry _colorRegistry = JFaceResources.getColorRegistry();
-		private final Styler _greyedStyler;
+		private final StyledString.Styler _greyedStyler;
 
 	}
 

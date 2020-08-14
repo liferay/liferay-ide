@@ -41,16 +41,13 @@ public class BinaryProjectImportOperation extends SDKProjectsImportOperation {
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		Object selectedProjects = getDataModel().getProperty(ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS);
 
-		BridgedRuntime bridgedRuntime = (BridgedRuntime)model.getProperty(
-			IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
-
-		String sdkLocation = model.getStringProperty(ISDKProjectsImportDataModelProperties.SDK_LOCATION);
-
 		if (selectedProjects == null) {
 			return super.execute(monitor, info);
 		}
 
 		SDKManager sdkManager = SDKManager.getInstance();
+
+		String sdkLocation = model.getStringProperty(ISDKProjectsImportDataModelProperties.SDK_LOCATION);
 
 		SDK liferaySDK = sdkManager.getSDK(new Path(sdkLocation));
 
@@ -59,6 +56,9 @@ public class BinaryProjectImportOperation extends SDKProjectsImportOperation {
 		ProjectRecord[] projectRecords = new ProjectRecord[1];
 
 		BinaryProjectRecord pluginBinaryRecord = (BinaryProjectRecord)seleBinaryRecords[0];
+
+		BridgedRuntime bridgedRuntime = (BridgedRuntime)model.getProperty(
+			IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
 
 		try {
 			projectRecords[0] = ProjectImportUtil.createSDKPluginProject(

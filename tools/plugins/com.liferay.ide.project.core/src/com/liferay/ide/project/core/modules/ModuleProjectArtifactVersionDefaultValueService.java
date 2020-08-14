@@ -48,7 +48,7 @@ public class ModuleProjectArtifactVersionDefaultValueService
 
 		String data = NewLiferayModuleProjectOpMethods.getMavenParentPomVersion(op, projectName, parentProjectOsPath);
 
-		if (!"".equals(data)) {
+		if (!data.equals("")) {
 			return data;
 		}
 

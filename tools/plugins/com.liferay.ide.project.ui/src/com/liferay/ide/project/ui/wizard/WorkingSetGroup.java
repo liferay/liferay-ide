@@ -122,6 +122,7 @@ public class WorkingSetGroup {
 
 	private void _createControl(Composite container) {
 		addToWorkingSetButton = new Button(container, SWT.CHECK);
+
 		GridData gd_addToWorkingSetButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);
 
 		gd_addToWorkingSetButton.verticalIndent = 12;
@@ -165,7 +166,9 @@ public class WorkingSetGroup {
 						return new Object[] {input};
 					}
 					else if (input instanceof Set<?>) {
-						return ((Set<?>)input).toArray();
+						Set<?> setInput = (Set<?>)input;
+
+						return setInput.toArray();
 					}
 
 					return new IWorkingSet[0];
@@ -186,7 +189,9 @@ public class WorkingSetGroup {
 				@SuppressWarnings("deprecation")
 				public Image getImage(Object element) {
 					if (element instanceof IWorkingSet) {
-						ImageDescriptor imageDescriptor = ((IWorkingSet)element).getImage();
+						IWorkingSet workingSetElement = (IWorkingSet)element;
+
+						ImageDescriptor imageDescriptor = workingSetElement.getImage();
 
 						if (imageDescriptor != null) {
 							try {
@@ -203,7 +208,9 @@ public class WorkingSetGroup {
 
 				public String getText(Object element) {
 					if (element instanceof IWorkingSet) {
-						return ((IWorkingSet)element).getLabel();
+						IWorkingSet workingSetElement = (IWorkingSet)element;
+
+						return workingSetElement.getLabel();
 					}
 					else if (element instanceof List<?>) {
 						StringBuffer sb = new StringBuffer();
@@ -214,7 +221,9 @@ public class WorkingSetGroup {
 									sb.append(", ");
 								}
 
-								sb.append(((IWorkingSet)o).getLabel());
+								IWorkingSet workingSetObject = (IWorkingSet)o;
+
+								sb.append(workingSetObject.getLabel());
 							}
 						}
 

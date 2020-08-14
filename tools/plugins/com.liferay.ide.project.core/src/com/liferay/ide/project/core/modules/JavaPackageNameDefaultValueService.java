@@ -49,13 +49,13 @@ public class JavaPackageNameDefaultValueService extends DefaultValueService {
 		}
 
 		try {
-			List<IFolder> srcFolders = CoreUtil.getSourceFolders(project);
-
 			IPackageFragmentRoot[] roots = project.getAllPackageFragmentRoots();
 
 			if (ListUtil.isEmpty(roots)) {
 				return retval;
 			}
+
+			List<IFolder> srcFolders = CoreUtil.getSourceFolders(project);
 
 			for (IPackageFragmentRoot root : roots) {
 				IJavaElement[] packages = root.getChildren();

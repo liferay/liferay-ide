@@ -60,7 +60,9 @@ public class SDKImportProjectsOpMethods {
 				for (NamedItem projectNamedItem : projectItems) {
 					try {
 						if (projectNamedItem instanceof ProjectNamedItem) {
-							String projectPath = _getter.get(((ProjectNamedItem)projectNamedItem).getLocation());
+							ProjectNamedItem castProjectNameItem = (ProjectNamedItem)projectNamedItem;
+
+							String projectPath = _getter.get(castProjectNameItem.getLocation());
 
 							String projectLocation = new Path(
 								projectPath

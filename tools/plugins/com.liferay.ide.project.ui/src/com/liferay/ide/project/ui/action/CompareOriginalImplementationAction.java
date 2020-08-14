@@ -127,8 +127,10 @@ public class CompareOriginalImplementationAction extends AbstractObjectAction {
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-			Object obj = ((IStructuredSelection)selection).getFirstElement();
+		if (!selection.isEmpty() && (selection instanceof IStructuredSelection)) {
+			IStructuredSelection structureSelection = (IStructuredSelection)selection;
+
+			Object obj = structureSelection.getFirstElement();
 
 			if (obj instanceof IFile) {
 				_selectedFile = (IFile)obj;

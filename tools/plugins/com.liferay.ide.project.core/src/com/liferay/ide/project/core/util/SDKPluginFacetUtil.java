@@ -42,7 +42,7 @@ import org.eclipse.jst.common.project.facet.core.JavaFacetInstallConfig;
 import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IPreset;
@@ -69,7 +69,7 @@ public class SDKPluginFacetUtil {
 	public static void configureJavaFacet(
 		IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset, ProjectRecord projectRecord) {
 
-		Action action = fpjwc.getProjectFacetAction(requiredFacet);
+		IFacetedProject.Action action = fpjwc.getProjectFacetAction(requiredFacet);
 
 		if (action == null) {
 			return;
@@ -298,7 +298,7 @@ public class SDKPluginFacetUtil {
 	public static void configureWebFacet(IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset)
 		throws CoreException {
 
-		Action action = fpjwc.getProjectFacetAction(requiredFacet);
+		IFacetedProject.Action action = fpjwc.getProjectFacetAction(requiredFacet);
 
 		if (action != null) {
 			IDataModel dm = (IDataModel)action.getConfig();
@@ -373,22 +373,22 @@ public class SDKPluginFacetUtil {
 	public static IPreset getLiferayPresetForProject(String pluginType) {
 		IPreset preset = null;
 
-		if ("portlet".equals(pluginType) || "servicebuilder".equals(pluginType)) {
+		if (pluginType.equals("portlet") || pluginType.equals("servicebuilder")) {
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
 		}
-		else if ("hook".equals(pluginType)) {
+		else if (pluginType.equals("hook")) {
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_HOOK_PRESET);
 		}
-		else if ("ext".equals(pluginType)) {
+		else if (pluginType.equals("ext")) {
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_EXT_PRESET);
 		}
-		else if ("layouttpl".equals(pluginType)) {
+		else if (pluginType.equals("layouttpl")) {
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PRESET);
 		}
-		else if ("theme".equals(pluginType)) {
+		else if (pluginType.equals("theme")) {
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_THEME_PRESET);
 		}
-		else if ("web".equals(pluginType)) {
+		else if (pluginType.equals("web")) {
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_WEB_PRESET);
 		}
 
@@ -398,22 +398,22 @@ public class SDKPluginFacetUtil {
 	public static IFacetedProjectTemplate getLiferayTemplateForProject(String pluginType) {
 		IFacetedProjectTemplate template = null;
 
-		if ("portlet".equals(pluginType) || "servicebuilder".equals(pluginType)) {
+		if (pluginType.equals("portlet") || pluginType.equals("servicebuilder")) {
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_PORTLET_FACET_TEMPLATE_ID);
 		}
-		else if ("hook".equals(pluginType)) {
+		else if (pluginType.equals("hook")) {
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_HOOK_FACET_TEMPLATE_ID);
 		}
-		else if ("ext".equals(pluginType)) {
+		else if (pluginType.equals("ext")) {
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_EXT_FACET_TEMPLATE_ID);
 		}
-		else if ("layouttpl".equals(pluginType)) {
+		else if (pluginType.equals("layouttpl")) {
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_TEMPLATE_ID);
 		}
-		else if ("theme".equals(pluginType)) {
+		else if (pluginType.equals("theme")) {
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_THEME_FACET_TEMPLATE_ID);
 		}
-		else if ("web".equals(pluginType)) {
+		else if (pluginType.equals("web")) {
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_WEB_FACET_TEMPLATE_ID);
 		}
 

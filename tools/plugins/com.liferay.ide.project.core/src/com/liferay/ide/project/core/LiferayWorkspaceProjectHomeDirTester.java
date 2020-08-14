@@ -20,7 +20,6 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
@@ -34,9 +33,7 @@ public class LiferayWorkspaceProjectHomeDirTester extends PropertyTester {
 		if (receiver instanceof IFolder) {
 			IFolder folder = (IFolder)receiver;
 
-			IProject project = folder.getProject();
-
-			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, folder.getProject());
 
 			if (workspaceProject == null) {
 				return false;
@@ -46,10 +43,10 @@ public class LiferayWorkspaceProjectHomeDirTester extends PropertyTester {
 
 			IPath bundleHomePath = Path.fromOSString(bundleHomeDir);
 
-			if (!bundleHomePath.isAbsolute()) {
-				if (CoreUtil.isNotNullOrEmpty(bundleHomeDir) && bundleHomeDir.equals(folder.getName())) {
-					return true;
-				}
+			if (!bundleHomePath.isAbsolute() && CoreUtil.isNotNullOrEmpty(bundleHomeDir) &&
+				bundleHomeDir.equals(folder.getName())) {
+
+				return true;
 			}
 		}
 

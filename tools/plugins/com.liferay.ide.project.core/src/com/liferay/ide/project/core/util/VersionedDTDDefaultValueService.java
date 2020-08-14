@@ -52,9 +52,7 @@ public class VersionedDTDDefaultValueService extends DefaultValueService {
 			if ((document != null) && (document.getDoctype() != null)) {
 				DocumentType documentType = document.getDoctype();
 
-				String systemId = documentType.getSystemId();
-
-				Matcher matcher = _systemIdPattern.matcher(systemId);
+				Matcher matcher = _systemIdPattern.matcher(documentType.getSystemId());
 
 				if (matcher.matches()) {
 					defaultVersion = matcher.group(1);

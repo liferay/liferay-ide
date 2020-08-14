@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -95,10 +94,8 @@ public class ValidProjectChecker {
 		}
 
 		if (!hasValidProjectTypes) {
-			Shell activeShell = UIUtil.getActiveShell();
-
 			Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-				activeShell, NLS.bind(Msgs.newElement, wizardName),
+				UIUtil.getActiveShell(), NLS.bind(Msgs.newElement, wizardName),
 				NLS.bind(Msgs.noSuitableLiferayProjects, wizardName));
 
 			if (openNewLiferayProjectWizard) {
@@ -159,10 +156,8 @@ public class ValidProjectChecker {
 		}
 
 		if (!hasValidProjectTypes) {
-			Shell activeShell = UIUtil.getActiveShell();
-
 			Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-				activeShell, NLS.bind(Msgs.newElement, wizardName),
+				UIUtil.getActiveShell(), NLS.bind(Msgs.newElement, wizardName),
 				NLS.bind(Msgs.noSuitableLiferayProjects, wizardName));
 
 			if (openNewLiferayProjectWizard) {
@@ -186,7 +181,7 @@ public class ValidProjectChecker {
 	}
 
 	protected void init() {
-		if ("com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet".equals(wizardId)) {
+		if (wizardId.equals("com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet")) {
 			setJsfPortlet(true);
 		}
 

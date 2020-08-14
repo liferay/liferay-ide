@@ -100,7 +100,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 			}
 		}
 
-		classpathEntries = entries.toArray(new IClasspathEntry[entries.size()]);
+		classpathEntries = entries.toArray(new IClasspathEntry[0]);
 
 		return classpathEntries;
 	}
@@ -306,8 +306,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	}
 
 	protected String[] getPortalDependencyJars() {
-		String[] jars = new String[0];
-
 		IFile pluginPackageFile = getPluginPackageFile();
 
 		try {
@@ -326,7 +324,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		catch (Exception e) {
 		}
 
-		return jars;
+		return new String[0];
 	}
 
 	protected abstract String[] getPortalJars();
@@ -348,8 +346,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	}
 
 	protected String[] getRequiredDeploymentContexts() {
-		String[] jars = new String[0];
-
 		IFile pluginPackageFile = getPluginPackageFile();
 
 		try {
@@ -364,7 +360,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		catch (Exception e) {
 		}
 
-		return jars;
+		return new String[0];
 	}
 
 	protected IFile lookupPluginPackageFile() {

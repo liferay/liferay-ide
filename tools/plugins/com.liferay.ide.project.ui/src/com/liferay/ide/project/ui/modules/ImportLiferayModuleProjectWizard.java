@@ -44,10 +44,9 @@ public class ImportLiferayModuleProjectWizard
 		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
 			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-			final String message = wizardPage.getMessage();
 			final int messageType = wizardPage.getMessageType();
 
-			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
+			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(wizardPage.getMessage())) {
 				wizardPage.setMessage(null, SapphireWizardPage.NONE);
 
 				_firstErrorMessageRemoved = true;

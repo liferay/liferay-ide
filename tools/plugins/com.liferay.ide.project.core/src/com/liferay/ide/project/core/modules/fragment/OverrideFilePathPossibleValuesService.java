@@ -68,9 +68,8 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 			return Status.createOkStatus();
 		}
-		else {
-			return super.problem(value);
-		}
+
+		return super.problem(value);
 	}
 
 	@Override

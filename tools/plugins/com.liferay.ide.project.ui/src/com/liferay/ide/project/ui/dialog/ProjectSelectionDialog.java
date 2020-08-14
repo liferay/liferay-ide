@@ -78,9 +78,7 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 	public void create() {
 		super.create();
 
-		Object[] checkedElements = fTableViewer.getCheckedElements();
-
-		if (ListUtil.isEmpty(checkedElements)) {
+		if (ListUtil.isEmpty(fTableViewer.getCheckedElements())) {
 			getOkButton().setEnabled(false);
 		}
 	}
@@ -214,9 +212,7 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 
 	@Override
 	protected void okPressed() {
-		Object[] checkedElements = fTableViewer.getCheckedElements();
-
-		setSelectionResult(checkedElements);
+		setSelectionResult(fTableViewer.getCheckedElements());
 
 		super.okPressed();
 	}
@@ -249,7 +245,9 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 		Object element = event.getSource();
 
 		if (element instanceof CheckboxTableViewer) {
-			Object[] checkedElements = ((CheckboxTableViewer)element).getCheckedElements();
+			CheckboxTableViewer viewElement = (CheckboxTableViewer)element;
+
+			Object[] checkedElements = viewElement.getCheckedElements();
 
 			if (checkedElements.length == 0) {
 				getOkButton().setEnabled(false);

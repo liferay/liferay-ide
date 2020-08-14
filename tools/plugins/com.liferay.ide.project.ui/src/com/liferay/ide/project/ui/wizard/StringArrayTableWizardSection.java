@@ -82,6 +82,7 @@ public class StringArrayTableWizardSection extends Composite {
 
 		layout.marginHeight = 4;
 		layout.marginWidth = 0;
+
 		setLayout(layout);
 
 		setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -93,17 +94,21 @@ public class StringArrayTableWizardSection extends Composite {
 		GridData data = new GridData();
 
 		data.horizontalSpan = 2;
+
 		titleLabel.setLayoutData(data);
 
 		Table table = new Table(this, SWT.FULL_SELECTION | SWT.BORDER);
 
 		viewer = new TableViewer(table);
+
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		viewer.setContentProvider(new StringArrayListContentProvider());
+
 		viewer.setLabelProvider(new StringArrayListLabelProvider());
 
 		final Composite buttonCompo = new Composite(this, SWT.NULL);
+
 		layout = new GridLayout();
 
 		layout.marginHeight = 0;
@@ -123,7 +128,9 @@ public class StringArrayTableWizardSection extends Composite {
 					if (editButton != null) {
 						boolean enabled = false;
 
-						if (((IStructuredSelection)selection).size() == 1) {
+						IStructuredSelection structionSelection = (IStructuredSelection)selection;
+
+						if (structionSelection.size() == 1) {
 							enabled = true;
 						}
 
@@ -554,9 +561,7 @@ public class StringArrayTableWizardSection extends Composite {
 
 		dialog.open();
 
-		String[] stringArray = dialog.getStringArray();
-
-		addStringArray(stringArray);
+		addStringArray(dialog.getStringArray());
 	}
 
 	protected void handleEditButtonSelected() {
@@ -580,9 +585,7 @@ public class StringArrayTableWizardSection extends Composite {
 
 		dialog.open();
 
-		String[] stringArray = dialog.getStringArray();
-
-		editStringArray(valuesForText, stringArray);
+		editStringArray(valuesForText, dialog.getStringArray());
 	}
 
 	protected void handleRemoveButtonSelected() {
@@ -592,7 +595,9 @@ public class StringArrayTableWizardSection extends Composite {
 			return;
 		}
 
-		List selectedObj = ((IStructuredSelection)selection).toList();
+		IStructuredSelection structureSelection = (IStructuredSelection)selection;
+
+		List selectedObj = structureSelection.toList();
 
 		removeStringArrays(selectedObj);
 	}
@@ -680,7 +685,9 @@ public class StringArrayTableWizardSection extends Composite {
 
 		public Object[] getElements(Object element) {
 			if (element instanceof List) {
-				return ((List)element).toArray();
+				List listElement = (List)element;
+
+				return listElement.toArray();
 			}
 
 			return new Object[0];
@@ -726,9 +733,8 @@ public class StringArrayTableWizardSection extends Composite {
 			if (ListUtil.isNotEmpty(array)) {
 				return array[0];
 			}
-			else {
-				return super.getText(element);
-			}
+
+			return super.getText(element);
 		}
 
 	}

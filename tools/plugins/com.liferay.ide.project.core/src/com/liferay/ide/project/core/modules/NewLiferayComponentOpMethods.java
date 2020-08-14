@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
 /**
@@ -54,7 +53,7 @@ public class NewLiferayComponentOpMethods {
 			errorStack = e;
 		}
 
-		if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
+		if ((retval.severity() == Status.Severity.ERROR) && (retval.exception() != null)) {
 			errorStack = retval.exception();
 		}
 

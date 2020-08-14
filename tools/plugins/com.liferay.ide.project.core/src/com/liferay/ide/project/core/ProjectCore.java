@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IWorkspace;
@@ -341,13 +340,13 @@ public class ProjectCore extends Plugin {
 	private static LiferayDescriptorHelper[] _getDescriptorHelpers(
 		IProject project, Class<? extends IDescriptorOperation> type) {
 
-		List<LiferayDescriptorHelper> retval = new ArrayList<>();
-
 		project = CoreUtil.getLiferayProject(project);
 
 		if (FileUtil.notExists(project)) {
 			return null;
 		}
+
+		List<LiferayDescriptorHelper> retval = new ArrayList<>();
 
 		LiferayDescriptorHelperReader helperReader = LiferayDescriptorHelperReader.getInstance();
 
@@ -356,9 +355,7 @@ public class ProjectCore extends Plugin {
 		for (LiferayDescriptorHelper helper : allHelpers) {
 			helper.setProject(project);
 
-			IFile descriptorFile = helper.getDescriptorFile();
-
-			if (FileUtil.exists(descriptorFile) && (helper.getDescriptorOperation(type) != null)) {
+			if (FileUtil.exists(helper.getDescriptorFile()) && (helper.getDescriptorOperation(type) != null)) {
 				retval.add(helper);
 			}
 		}

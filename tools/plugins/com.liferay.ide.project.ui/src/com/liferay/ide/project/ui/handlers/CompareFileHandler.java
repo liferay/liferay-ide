@@ -23,7 +23,6 @@ import java.io.File;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 /**
@@ -32,9 +31,7 @@ import org.eclipse.core.runtime.IPath;
 public class CompareFileHandler extends AbstractCompareFileHandler {
 
 	protected File getTemplateFile(IFile currentFile) throws Exception {
-		final IProject project = currentFile.getProject();
-
-		final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
+		final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, currentFile.getProject());
 
 		final String themeParent = liferayProject.getProperty("theme.parent", "_styled");
 

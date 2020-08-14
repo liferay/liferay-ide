@@ -76,7 +76,7 @@ public class WorkingSets {
 			}
 		}
 
-		return workingSets.toArray(new String[workingSets.size()]);
+		return workingSets.toArray(new String[0]);
 	}
 
 }

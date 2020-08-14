@@ -17,7 +17,7 @@ package com.liferay.ide.project.ui.wizard;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.CapitalizationType;
-import org.eclipse.sapphire.ui.SapphirePart.LabelChangedEvent;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.assist.internal.PropertyEditorAssistDecorator;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
@@ -98,7 +98,7 @@ public final class PossibleValuesRadioPropertyEditorPresentation<T> extends Valu
 
 				@Override
 				public void handle(Event event) {
-					if (event instanceof LabelChangedEvent) {
+					if (event instanceof SapphirePart.LabelChangedEvent) {
 						updateLabelOp.run();
 						PossibleValuesRadioPropertyEditorPresentation.this.layout();
 					}

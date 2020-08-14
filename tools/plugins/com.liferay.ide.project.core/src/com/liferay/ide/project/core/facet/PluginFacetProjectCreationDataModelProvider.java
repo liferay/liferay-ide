@@ -55,9 +55,8 @@ public class PluginFacetProjectCreationDataModelProvider
 			if (sdk != null) {
 				return sdk.getName();
 			}
-			else {
-				return IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE;
-			}
+
+			return IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE;
 		}
 		else if (LIFERAY_USE_SDK_LOCATION.equals(propertyName)) {
 			return true;
@@ -117,9 +116,8 @@ public class PluginFacetProjectCreationDataModelProvider
 				return new DataModelPropertyDescriptor(
 					getProperty(propertyName), IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION);
 			}
-			else {
-				return new DataModelPropertyDescriptor(val, val.toString());
-			}
+
+			return new DataModelPropertyDescriptor(val, val.toString());
 		}
 
 		return super.getPropertyDescriptor(propertyName);
@@ -167,7 +165,7 @@ public class PluginFacetProjectCreationDataModelProvider
 		for (DataModelPropertyDescriptor desc : validDescriptors) {
 			Object runtime = desc.getPropertyValue();
 
-			if (runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime((BridgedRuntime)runtime)) {
+			if ((runtime instanceof BridgedRuntime) && ServerUtil.isLiferayRuntime((BridgedRuntime)runtime)) {
 				getDataModel().setProperty(FACET_RUNTIME, runtime);
 
 				break;

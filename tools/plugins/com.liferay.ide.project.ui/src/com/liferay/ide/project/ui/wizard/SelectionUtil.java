@@ -66,7 +66,9 @@ public class SelectionUtil {
 		}
 
 		if (element instanceof IAdaptable) {
-			T adapter = (T)((IAdaptable)element).getAdapter(type);
+			IAdaptable adaptableElement = (IAdaptable)element;
+
+			T adapter = (T)adaptableElement.getAdapter(type);
 
 			if (adapter != null) {
 				return adapter;

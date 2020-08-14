@@ -78,7 +78,9 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution {
 				final Set<IRuntime> availableFacetRuntimes = _convertToFacetRuntimes(
 					ServerUtil.getAvailableLiferayRuntimes());
 
-				String runtimeName = ((IRuntime)availableFacetRuntimes.toArray()[0]).getName();
+				IRuntime availableFacetRuntimesArray = (IRuntime)availableFacetRuntimes.toArray()[0];
+
+				String runtimeName = availableFacetRuntimesArray.getName();
 
 				boolean setAsPrimary = MessageDialog.openQuestion(
 					null, null, NLS.bind(Msgs.setOnlyRuntimeAsPrimary, runtimeName));

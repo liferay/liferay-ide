@@ -30,6 +30,7 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
@@ -175,13 +176,13 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 			final IPortletFramework portletFramework = get(op.getPortletFramework());
 			String wizardId = null;
 
-			if ("mvc".equals(portletFramework.getShortName())) {
+			if (Objects.equals("mvc", portletFramework.getShortName())) {
 				wizardId = "com.liferay.ide.portlet.ui.newPortletWizard";
 			}
-			else if ("jsf-2.x".equals(portletFramework.getShortName())) {
+			else if (Objects.equals("jsf-2.x", portletFramework.getShortName())) {
 				wizardId = "com.liferay.ide.portlet.ui.newJSFPortletWizard";
 			}
-			else if ("vaadin".equals(portletFramework.getShortName())) {
+			else if (Objects.equals("vaadin", portletFramework.getShortName())) {
 				wizardId = "com.liferay.ide.portlet.vaadin.ui.newVaadinPortletWizard";
 			}
 
@@ -203,7 +204,7 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 		final IConfigurationElement[] elements = extension.getConfigurationElements();
 
 		for (final IConfigurationElement element : elements) {
-			if ("wizard".equals(element.getName())) {
+			if (Objects.equals("wizard", element.getName())) {
 				UIUtil.async(
 					new Runnable() {
 
@@ -262,7 +263,9 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 							IViewPart antView = workbenchPage.findView("org.eclipse.ant.ui.views.AntView");
 
 							if (antView instanceof AntView) {
-								((AntView)antView).addProject(antProject);
+								AntView antViewCast = (AntView)antView;
+
+								antViewCast.addProject(antProject);
 							}
 						}
 					}

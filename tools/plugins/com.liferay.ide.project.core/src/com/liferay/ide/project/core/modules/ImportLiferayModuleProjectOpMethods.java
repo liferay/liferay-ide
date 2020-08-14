@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 
@@ -69,24 +68,24 @@ public class ImportLiferayModuleProjectOpMethods {
 				retval = ProjectCore.createErrorStatus("Location is not recognized as a valid project type.");
 			}
 			else if (status.isOK()) {
-				retval = StatusBridge.create(Status.createStatus(Severity.OK, importer.getBuildType()));
+				retval = StatusBridge.create(Status.createStatus(Status.Severity.OK, importer.getBuildType()));
 
 				break;
 			}
 			else if (status.getSeverity() == IStatus.ERROR) {
-				retval = StatusBridge.create(Status.createStatus(Severity.ERROR, status.getMessage()));
+				retval = StatusBridge.create(Status.createStatus(Status.Severity.ERROR, status.getMessage()));
 
 				break;
 			}
 			else if (status.getSeverity() == IStatus.WARNING) {
-				retval = StatusBridge.create(Status.createStatus(Severity.WARNING, status.getMessage()));
+				retval = StatusBridge.create(Status.createStatus(Status.Severity.WARNING, status.getMessage()));
 
 				break;
 			}
 		}
 
 		if (retval == null) {
-			retval = StatusBridge.create(Status.createStatus(Severity.ERROR, "No project importers found."));
+			retval = StatusBridge.create(Status.createStatus(Status.Severity.ERROR, "No project importers found."));
 		}
 
 		return retval;

@@ -281,8 +281,6 @@ public abstract class AbstractLiferayComponentTemplate
 	}
 
 	protected void doMergeBndOperation() throws CoreException {
-		BndProperties bndProperty = new BndProperties();
-
 		IFile file = project.getFile("bnd.bnd");
 
 		if (FileUtil.notExists(file)) {
@@ -290,6 +288,8 @@ public abstract class AbstractLiferayComponentTemplate
 		}
 
 		File bndFile = FileUtil.getFile(file);
+
+		BndProperties bndProperty = new BndProperties();
 
 		initBndProperties(bndFile, bndProperty);
 

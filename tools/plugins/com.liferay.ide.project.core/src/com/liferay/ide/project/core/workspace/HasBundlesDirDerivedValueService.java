@@ -36,10 +36,8 @@ public class HasBundlesDirDerivedValueService extends DerivedValueService {
 
 		Path path = workspaceLocationValue.content();
 
-		if (path != null) {
-			if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
-				retval = LiferayWorkspaceUtil.hasBundlesDir(path.toPortableString()) ? "true" : "false";
-			}
+		if ((path != null) && LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
+			retval = LiferayWorkspaceUtil.hasBundlesDir(path.toPortableString()) ? "true" : "false";
 		}
 
 		return retval;

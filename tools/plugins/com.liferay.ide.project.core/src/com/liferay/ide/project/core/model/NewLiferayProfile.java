@@ -49,7 +49,7 @@ public interface NewLiferayProfile extends HasLiferayRuntime, Profile {
 
 	@Label(standard = "new profile id")
 	@Services(
-		value = {
+		{
 			@Service(impl = NewLiferayProfileIdDefaultValueService.class),
 			@Service(impl = NewLiferayProfileIdValidationService.class)
 		}
@@ -59,7 +59,7 @@ public interface NewLiferayProfile extends HasLiferayRuntime, Profile {
 	@Label(standard = "liferay version")
 	@Required
 	@Services(
-		value = {
+		{
 			@Service(
 				impl = LiferayVersionPossibleValuesService.class,
 				params = {

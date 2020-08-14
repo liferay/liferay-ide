@@ -296,7 +296,9 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 				}
 
 				public Object[] getElements(Object inputElement) {
-					IWorkspaceRoot workspaceRoot = ((IWorkspace)inputElement).getRoot();
+					IWorkspace workspaceElement = (IWorkspace)inputElement;
+
+					IWorkspaceRoot workspaceRoot = workspaceElement.getRoot();
 
 					return workspaceRoot.getProjects();
 				}
@@ -318,21 +320,17 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 		dialog.setInput(ResourcesPlugin.getWorkspace());
 		dialog.setTitle(SSEUIMessages.PropertyPreferencePage_01);
 
-		if (dialog.open() == Window.OK) {
-			Object[] result = dialog.getResult();
+		if ((dialog.open() == Window.OK) && ListUtil.isNotEmpty(dialog.getResult())) {
+			IProject project = (IProject)dialog.getResult()[0];
 
-			if (ListUtil.isNotEmpty(result)) {
-				IProject project = (IProject)dialog.getResult()[0];
+			Map data = new HashMap();
 
-				Map data = new HashMap();
+			data.put(_disableLink, Boolean.TRUE);
 
-				data.put(_disableLink, Boolean.TRUE);
+			PreferenceDialog preferenceDialog = PreferencesUtil.createPropertyDialogOn(
+				getShell(), project, getPropertyPageID(), new String[] {getPropertyPageID()}, data);
 
-				PreferenceDialog preferenceDialog = PreferencesUtil.createPropertyDialogOn(
-					getShell(), project, getPropertyPageID(), new String[] {getPropertyPageID()}, data);
-
-				preferenceDialog.open();
-			}
+			preferenceDialog.open();
 		}
 	}
 

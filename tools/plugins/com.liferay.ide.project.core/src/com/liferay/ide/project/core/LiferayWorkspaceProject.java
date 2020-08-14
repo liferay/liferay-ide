@@ -77,7 +77,7 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 
 		IPath location = getProject().getLocation();
 
-		Set<IProject> childProjects = Stream.of(
+		return Stream.of(
 			CoreUtil.getAllProjects()
 		).filter(
 			project -> FileUtil.exists(project)
@@ -94,8 +94,6 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 		).collect(
 			Collectors.toSet()
 		);
-
-		return childProjects;
 	}
 
 	@Override

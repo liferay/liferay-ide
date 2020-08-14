@@ -46,7 +46,9 @@ public class ConvertProjectAction implements IObjectActionDelegate {
 
 	public void run(IAction action) {
 		if (_fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)_fSelection).toArray();
+			IStructuredSelection structuredSelection = (IStructuredSelection)_fSelection;
+
+			Object[] elems = structuredSelection.toArray();
 
 			IProject project = null;
 

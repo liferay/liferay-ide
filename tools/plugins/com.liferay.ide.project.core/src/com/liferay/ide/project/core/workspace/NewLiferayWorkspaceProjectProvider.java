@@ -18,7 +18,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.jobs.InitBundleJob;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -34,9 +33,7 @@ public interface NewLiferayWorkspaceProjectProvider<T extends ExecutableElement>
 	public IStatus importProject(IPath workspaceLocation, IProgressMonitor monitor);
 
 	public default void initBundle(String bundleUrl, String serverName, String workspaceName) {
-		IProject project = CoreUtil.getProject(workspaceName);
-
-		InitBundleJob job = new InitBundleJob(project, serverName, bundleUrl);
+		InitBundleJob job = new InitBundleJob(CoreUtil.getProject(workspaceName), serverName, bundleUrl);
 
 		job.schedule();
 	}

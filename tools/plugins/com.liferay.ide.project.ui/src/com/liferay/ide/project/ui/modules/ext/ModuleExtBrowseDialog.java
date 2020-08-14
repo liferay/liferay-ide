@@ -22,6 +22,7 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -144,7 +145,7 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog im
 		Stream<Artifact> stream = artifacts.stream();
 
 		return stream.filter(
-			artifact -> "com.liferay".equals(artifact.getGroupId())
+			artifact -> Objects.equals("com.liferay", artifact.getGroupId())
 		).toArray();
 	}
 

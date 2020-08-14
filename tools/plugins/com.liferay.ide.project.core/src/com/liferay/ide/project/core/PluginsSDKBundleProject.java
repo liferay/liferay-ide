@@ -184,7 +184,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IBundleP
 	public String getProperty(String key, String defaultValue) {
 		String retval = defaultValue;
 
-		if (("theme.type".equals(key) || "theme.parent".equals(key)) && ProjectUtil.isThemeProject(getProject())) {
+		if ((key.equals("theme.type") || key.equals("theme.parent")) && ProjectUtil.isThemeProject(getProject())) {
 			IFile buildXml = getProject().getFile("build.xml");
 
 			try (InputStream inputStream = buildXml.getContents()) {
@@ -255,11 +255,11 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IBundleP
 	}
 
 	private File[] _getSDKOutputFiles(IPath distPath) {
-		File[] distFiles = null;
-
 		if (FileUtil.notExists(distPath)) {
 			return null;
 		}
+
+		File[] distFiles = null;
 
 		try {
 			File file = distPath.toFile();

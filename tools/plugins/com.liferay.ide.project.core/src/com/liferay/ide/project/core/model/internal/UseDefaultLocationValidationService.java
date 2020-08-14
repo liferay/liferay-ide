@@ -20,6 +20,8 @@ import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
+import java.util.Objects;
+
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
@@ -49,7 +51,7 @@ public class UseDefaultLocationValidationService extends ValidationService imple
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		if ((get(op.getProjectName()) != null) && "ant".equals(provider.getShortName()) &&
+		if ((get(op.getProjectName()) != null) && Objects.equals("ant", provider.getShortName()) &&
 			!get(op.getUseDefaultLocation()) && !NewLiferayPluginProjectOpMethods.canUseCustomLocation(op)) {
 
 			retval = Status.createErrorStatus("The specified SDK version is not allowed to use custom location.");

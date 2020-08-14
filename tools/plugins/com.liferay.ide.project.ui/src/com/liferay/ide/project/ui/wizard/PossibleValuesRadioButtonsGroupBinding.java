@@ -189,14 +189,12 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
 	}
 
 	private void _removeMalformedItem() {
-		if (!this._buttonsGroup.isDisposed()) {
-			if (_badValueButton != null) {
-				_badValueButton.dispose();
+		if (!this._buttonsGroup.isDisposed() && (_badValueButton != null)) {
+			_badValueButton.dispose();
 
-				_badValueButton = null;
+			_badValueButton = null;
 
-				presentation().layout();
-			}
+			presentation().layout();
 		}
 	}
 

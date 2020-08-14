@@ -70,7 +70,7 @@ public interface SDKProjectsImportOp extends ExecutableElement {
 	@Enablement(expr = "${HasWorkspaceSDK == 'false'}")
 	@Label(standard = "SDK Directory")
 	@Services(
-		value = {
+		{
 			@Service(impl = SDKImportLocationValidationService.class),
 			@Service(impl = SDKProjectsImportLocationInitialValueService.class)
 		}

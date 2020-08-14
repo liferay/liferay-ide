@@ -53,9 +53,8 @@ public class VersionedDTDRootElementController extends StandardRootElementContro
 		if (checkRoot) {
 			return _checkDocType();
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

@@ -50,9 +50,6 @@ public class ServiceCommand {
 	}
 
 	public ServiceContainer execute() throws Exception {
-		GogoBundleDeployer bundleDeployer = null;
-		ServiceContainer result;
-
 		if (_server == null) {
 			return _getServiceFromTargetPlatform();
 		}
@@ -60,11 +57,15 @@ public class ServiceCommand {
 		PortalServerBehavior serverBehavior = (PortalServerBehavior)_server.loadAdapter(
 			PortalServerBehavior.class, null);
 
+		GogoBundleDeployer bundleDeployer = null;
+
 		bundleDeployer = serverBehavior.createBundleDeployer();
 
 		if (bundleDeployer == null) {
 			return _getServiceFromTargetPlatform();
 		}
+
+		ServiceContainer result;
 
 		if (_serviceName == null) {
 			String[] services = _getServices();

@@ -18,6 +18,8 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
@@ -60,7 +62,7 @@ public class ModuleFragmentProjectGroupIdValidationService
 
 		NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
 
-		if ("maven-module-fragment".equals(provider.getShortName())) {
+		if (Objects.equals("maven-module-fragment", provider.getShortName())) {
 			Value<String> groupIdValue = _op().getGroupId();
 
 			String groupId = groupIdValue.content(true);

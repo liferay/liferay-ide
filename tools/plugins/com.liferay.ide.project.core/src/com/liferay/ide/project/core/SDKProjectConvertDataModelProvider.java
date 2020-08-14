@@ -165,9 +165,8 @@ public class SDKProjectConvertDataModelProvider
 			if (SDKUtil.isValidSDKLocation(sdkLocation)) {
 				return Status.OK_STATUS;
 			}
-			else {
-				return ProjectCore.createErrorStatus(Msgs.projectNotLocated);
-			}
+
+			return ProjectCore.createErrorStatus(Msgs.projectNotLocated);
 		}
 		else if (SDK_VERSION.equals(name)) {
 			String sdkVersion = getStringProperty(SDK_VERSION);
@@ -175,9 +174,8 @@ public class SDKProjectConvertDataModelProvider
 			if (SDKUtil.isValidSDKVersion(sdkVersion, SDKManager.getLeastValidVersion())) {
 				return Status.OK_STATUS;
 			}
-			else {
-				return ProjectCore.createErrorStatus(Msgs.invalidPluginSDKVersion + SDKManager.getLeastValidVersion());
-			}
+
+			return ProjectCore.createErrorStatus(Msgs.invalidPluginSDKVersion + SDKManager.getLeastValidVersion());
 		}
 		else if (SELECTED_PROJECTS.equals(name)) {
 			Object val = getProperty(SELECTED_PROJECTS);
@@ -198,9 +196,8 @@ public class SDKProjectConvertDataModelProvider
 			if (!(runtime instanceof BridgedRuntime)) {
 				return ProjectCore.createErrorStatus(Msgs.validLiferayRuntimeSelected);
 			}
-			else {
-				return Status.OK_STATUS;
-			}
+
+			return Status.OK_STATUS;
 		}
 		else if (FACET_PROJECT_NAME.equals(name)) {
 

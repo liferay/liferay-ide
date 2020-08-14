@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.model.internal;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
@@ -71,7 +72,7 @@ public class RuntimeNamePossibleValuesService extends PossibleValuesService impl
 		for (IRuntime runtime : runtimes) {
 			IRuntimeType runtimeType = runtime.getRuntimeType();
 
-			if (!"com.liferay.ide.server.portal.runtime".equals(runtimeType.getId()) &&
+			if (!Objects.equals("com.liferay.ide.server.portal.runtime", runtimeType.getId()) &&
 				ServerUtil.isLiferayRuntime(runtime)) {
 
 				IStatus status = runtime.validate(new NullProgressMonitor());

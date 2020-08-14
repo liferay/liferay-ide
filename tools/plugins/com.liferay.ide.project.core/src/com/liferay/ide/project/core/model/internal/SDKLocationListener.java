@@ -44,8 +44,6 @@ public class SDKLocationListener extends FilteredListener<PropertyContentEvent> 
 	}
 
 	private void _updateLocation(NewLiferayPluginProjectOp op) {
-		Path newLocationBase = null;
-
 		Path sdkLocation = get(op.getSdkLocation());
 
 		if (sdkLocation == null) {
@@ -59,6 +57,8 @@ public class SDKLocationListener extends FilteredListener<PropertyContentEvent> 
 		if (sdk == null) {
 			return;
 		}
+
+		Path newLocationBase = null;
 
 		switch (get(op.getPluginType())) {
 			case portlet:

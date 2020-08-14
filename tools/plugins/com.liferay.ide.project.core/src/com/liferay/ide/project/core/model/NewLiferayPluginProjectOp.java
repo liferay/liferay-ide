@@ -215,9 +215,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement {
 	public ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty(TYPE, "FinalProjectName");
 
 	@Label(standard = "group id")
-	@Services(
-		value = {@Service(impl = GroupIdValidationService.class), @Service(impl = GroupIdDefaultValueService.class)}
-	)
+	@Services({@Service(impl = GroupIdValidationService.class), @Service(impl = GroupIdDefaultValueService.class)})
 	@Whitespace(trim = false)
 	public ValueProperty PROP_GROUP_ID = new ValueProperty(TYPE, "GroupId");
 
@@ -248,9 +246,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement {
 	@Label(standard = "plugin type")
 	@Listeners(PluginTypeListener.class)
 	@Services(
-		value = {
-			@Service(impl = PluginTypePossibleValuesService.class), @Service(impl = PluginTypeValidationService.class)
-		}
+		{@Service(impl = PluginTypePossibleValuesService.class), @Service(impl = PluginTypeValidationService.class)}
 	)
 	@Type(base = PluginType.class)
 	public ValueProperty PROP_PLUGIN_TYPE = new ValueProperty(TYPE, "PluginType");
@@ -258,7 +254,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement {
 	@DefaultValue(text = "mvc")
 	@Label(standard = "portlet framework")
 	@Services(
-		value = {
+		{
 			@Service(impl = PortletFrameworkValidationService.class),
 			@Service(impl = PortletFrameworkPossibleValuesService.class)
 		}
@@ -287,7 +283,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement {
 	@Label(standard = "build type")
 	@Listeners(ProjectProviderListener.class)
 	@Services(
-		value = {
+		{
 			@Service(impl = ProjectProviderPossibleValuesService.class),
 			@Service(impl = ProjectProviderDefaultValueService.class)
 		}

@@ -51,9 +51,7 @@ public class BladeCLI {
 	public static final String BLADE_LATEST = "blade-latest.jar";
 
 	public static String[] execute(String args) throws BladeCLIException {
-		IPath bladeCLIPath = getBladeCLIPath();
-
-		return _execute(bladeCLIPath, args);
+		return _execute(getBladeCLIPath(), args);
 	}
 
 	public static String[] executeWithLatestBlade(String args) throws BladeCLIException, IOException {

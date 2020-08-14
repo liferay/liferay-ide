@@ -67,9 +67,8 @@ public class LeastVersionRuntimeValidationService extends ValidationService impl
 		if (CoreUtil.compareVersions(runtimeVersion, ILiferayConstants.V620) < 0) {
 			return Status.createErrorStatus("Liferay runtime must be greater than 6.2.0.");
 		}
-		else {
-			return StatusBridge.create(runtime.validate(new NullProgressMonitor()));
-		}
+
+		return StatusBridge.create(runtime.validate(new NullProgressMonitor()));
 	}
 
 }

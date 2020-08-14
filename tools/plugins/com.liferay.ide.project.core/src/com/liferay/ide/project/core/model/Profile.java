@@ -38,7 +38,7 @@ public interface Profile extends Element {
 	public void setId(String value);
 
 	@Label(standard = "profile id")
-	@Listeners(value = ProfileIdListener.class)
+	@Listeners(ProfileIdListener.class)
 	@Service(impl = ProfileIdPossibleValuesService.class)
 	@Unique
 	public ValueProperty PROP_ID = new ValueProperty(TYPE, "Id");

@@ -66,7 +66,9 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 		IFile currentFile = null;
 
 		if (selection instanceof ITreeSelection) {
-			Object firstElement = ((ITreeSelection)selection).getFirstElement();
+			ITreeSelection treeSelection = (ITreeSelection)selection;
+
+			Object firstElement = treeSelection.getFirstElement();
 
 			if (firstElement instanceof IFile) {
 				currentFile = (IFile)firstElement;
@@ -118,7 +120,9 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 
 		configuration.setLeftLabel("Template");
 
-		File file = ((CompareItem)right).getFile();
+		CompareItem rightItem = (CompareItem)right;
+
+		File file = rightItem.getFile();
 
 		configuration.setRightLabel(file.getAbsolutePath());
 
@@ -129,9 +133,7 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 				protected Object prepareInput(final IProgressMonitor monitor)
 					throws InterruptedException, InvocationTargetException {
 
-					DiffNode diffNode = new DiffNode(left, right);
-
-					return diffNode;
+					return new DiffNode(left, right);
 				}
 
 			});

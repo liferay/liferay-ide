@@ -36,7 +36,6 @@ import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelP
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
@@ -69,7 +68,9 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 		@Override
 		public Image getImage(Object element) {
 			if (element instanceof ProjectCheckboxElement) {
-				final String projectLocation = ((ProjectCheckboxElement)element).location;
+				ProjectCheckboxElement projectElement = (ProjectCheckboxElement)element;
+
+				final String projectLocation = projectElement.location;
 
 				ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir(projectLocation);
 
@@ -88,16 +89,16 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 		@Override
 		public StyledString getStyledText(Object element) {
 			if (element instanceof ProjectCheckboxElement) {
-				final String srcLableString = ((ProjectCheckboxElement)element).context;
+				ProjectCheckboxElement projectElement = (ProjectCheckboxElement)element;
 
-				final String projectName = ((ProjectCheckboxElement)element).name;
+				final StyledString styled = new StyledString(projectElement.name);
 
-				final StyledString styled = new StyledString(projectName);
-
-				return StyledCellLabelProvider.styleDecoratedString(srcLableString, _greyed_styler, styled);
+				return StyledCellLabelProvider.styleDecoratedString(projectElement.context, _greyed_styler, styled);
 			}
 
-			return new StyledString(((ProjectCheckboxElement)element).context);
+			ProjectCheckboxElement projectElement = (ProjectCheckboxElement)element;
+
+			return new StyledString(projectElement.context);
 		}
 
 		@Override
@@ -126,7 +127,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 		private static final String _GREY_COLOR = "sdk import projects";
 
 		private final ColorRegistry _color_registry = JFaceResources.getColorRegistry();
-		private final Styler _greyed_styler;
+		private final StyledString.Styler _greyed_styler;
 
 	}
 
@@ -134,7 +135,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 	protected void checkAndUpdateCheckboxElement() {
 		List<ProjectCheckboxElement> checkboxElementList = getInitItemsList();
 
-		checkboxElements = checkboxElementList.toArray(new ProjectCheckboxElement[checkboxElementList.size()]);
+		checkboxElements = checkboxElementList.toArray(new ProjectCheckboxElement[0]);
 
 		UIUtil.async(
 			new Runnable() {

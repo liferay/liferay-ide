@@ -20,6 +20,8 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
+import java.util.Objects;
+
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
@@ -39,7 +41,7 @@ public class ActiveProfilesValidationService extends ValidationService implement
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		if ("maven".equals(provider.getShortName()) && (activeProfileId != null) &&
+		if (Objects.equals(provider.getShortName(), "maven") && (activeProfileId != null) &&
 			activeProfileId.contains(StringPool.SPACE)) {
 
 			return Status.createErrorStatus("No spaces are allowed in profile id values.");

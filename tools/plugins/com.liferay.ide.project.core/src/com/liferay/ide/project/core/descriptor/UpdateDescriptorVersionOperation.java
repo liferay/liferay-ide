@@ -33,11 +33,11 @@ public abstract class UpdateDescriptorVersionOperation implements IDescriptorOpe
 		Version v1 = null;
 		Version v2 = null;
 
-		if (params[0] instanceof Version && params[1] instanceof Version) {
+		if ((params[0] instanceof Version) && (params[1] instanceof Version)) {
 			v1 = (Version)params[0];
 			v2 = (Version)params[1];
 		}
-		else if (params[0] instanceof String && params[1] instanceof String) {
+		else if ((params[0] instanceof String) && (params[1] instanceof String)) {
 			v1 = new Version((String)params[0]);
 			v2 = new Version((String)params[1]);
 		}

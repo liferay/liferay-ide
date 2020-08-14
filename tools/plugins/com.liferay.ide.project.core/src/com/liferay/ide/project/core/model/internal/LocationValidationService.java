@@ -24,6 +24,8 @@ import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.io.File;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -62,7 +64,7 @@ public class LocationValidationService extends ValidationService implements Sapp
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		if ("ant".equals(provider.getShortName())) {
+		if (Objects.equals("ant", provider.getShortName())) {
 			SDK sdk = null;
 
 			try {

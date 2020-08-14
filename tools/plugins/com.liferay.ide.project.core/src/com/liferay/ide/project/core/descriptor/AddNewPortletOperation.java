@@ -27,7 +27,7 @@ public abstract class AddNewPortletOperation implements IDescriptorOperation {
 
 	@Override
 	public final IStatus execute(Object... params) {
-		if ((params != null) && (params.length == 1) && params[0] instanceof IDataModel) {
+		if ((params != null) && (params.length == 1) && (params[0] instanceof IDataModel)) {
 			return addNewPortlet((IDataModel)params[0]);
 		}
 

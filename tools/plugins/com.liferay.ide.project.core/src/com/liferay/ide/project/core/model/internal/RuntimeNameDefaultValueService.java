@@ -57,8 +57,6 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 
 	@Override
 	protected String compute() {
-		String value = null;
-
 		HasLiferayRuntime op = context(HasLiferayRuntime.class);
 
 		Value<Object> valueObject = op.property(HasLiferayRuntime.PROP_RUNTIME_NAME);
@@ -80,6 +78,8 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 		if (_newRuntime == null) {
 			return vals[vals.length - 1];
 		}
+
+		String value = null;
 
 		for (String runtimeName : values) {
 			if (runtimeName.equals(_newRuntime.getName())) {

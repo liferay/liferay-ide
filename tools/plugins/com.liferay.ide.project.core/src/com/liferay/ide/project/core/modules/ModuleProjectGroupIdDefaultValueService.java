@@ -90,10 +90,8 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
-		String defaultMavenGroupId = preferencesService.getString(
+		return preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, contexts);
-
-		return defaultMavenGroupId;
 	}
 
 	private NewLiferayModuleProjectOp _op() {
