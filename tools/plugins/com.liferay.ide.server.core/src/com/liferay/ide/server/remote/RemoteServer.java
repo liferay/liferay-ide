@@ -76,14 +76,13 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		if ((status != null) && status.isOK()) {
 			return true;
 		}
-		else {
-			Socket socket1 = new Socket();
 
-			status = SocketUtil.canConnectProxy(socket1, host, http);
+		Socket socket1 = new Socket();
 
-			if ((status != null) && status.isOK()) {
-				return true;
-			}
+		status = SocketUtil.canConnectProxy(socket1, host, http);
+
+		if ((status != null) && status.isOK()) {
+			return true;
 		}
 
 		return false;
@@ -152,9 +151,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		List<IModule> childModules = new ArrayList<>();
 
 		for (IModule m : module) {
-			IProject project = m.getProject();
-
-			if (CoreUtil.isLiferayProject(project)) {
+			if (CoreUtil.isLiferayProject(m.getProject())) {
 				IWebModule webModule = (IWebModule)m.loadAdapter(IWebModule.class, null);
 
 				if (webModule != null) {
@@ -304,7 +301,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		int collision = 1;
 
 		while (ServerPlugin.isNameInUse(getServer(), defaultName)) {
-			defaultName = baseName + " (" + (collision++) + ")";
+			defaultName = baseName + " (" + collision++ + ")";
 		}
 
 		getServerWorkingCopy().setName(defaultName);

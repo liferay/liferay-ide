@@ -16,6 +16,8 @@ package com.liferay.ide.server.ui;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -56,7 +58,7 @@ public class PluginsCustomLabelProvider extends LabelProvider {
 
 				IModuleType moduleType = module.getModuleType();
 
-				if ("jst.web".equals(moduleType.getId())) {
+				if (Objects.equals("jst.web", moduleType.getId())) {
 					IProject project = module.getProject();
 
 					IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);

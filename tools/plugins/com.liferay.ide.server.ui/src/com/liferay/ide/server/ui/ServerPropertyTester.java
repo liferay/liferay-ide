@@ -14,6 +14,8 @@
 
 package com.liferay.ide.server.ui;
 
+import java.util.Objects;
+
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.wst.server.core.IServerAttributes;
 import org.eclipse.wst.server.core.IServerType;
@@ -29,12 +31,8 @@ public class ServerPropertyTester extends PropertyTester {
 
 			IServerType serverType = server.getServerType();
 
-			if (serverType != null) {
-				String id = serverType.getId();
-
-				if ("com.liferay.ide.eclipse.server.remote".equals(id)) {
-					return true;
-				}
+			if ((serverType != null) && Objects.equals(serverType.getId(), "com.liferay.ide.eclipse.server.remote")) {
+				return true;
 			}
 		}
 

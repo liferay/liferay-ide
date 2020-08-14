@@ -34,7 +34,9 @@ public class MinimumRequiredSDKVersion extends PropertyTester {
 			project = (IProject)receiver;
 		}
 		else if (receiver instanceof IFile) {
-			project = ((IFile)receiver).getProject();
+			IFile receiverFile = (IFile)receiver;
+
+			project = receiverFile.getProject();
 		}
 
 		try {

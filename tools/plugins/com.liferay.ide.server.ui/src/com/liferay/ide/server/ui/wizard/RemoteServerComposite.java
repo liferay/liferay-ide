@@ -270,9 +270,8 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 		if (serverWC != null) {
 			return (RemoteServer)serverWC.loadAdapter(RemoteServer.class, null);
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	protected void initialize() {
@@ -377,15 +376,11 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 	}
 
 	protected IStatus validateServer(IProgressMonitor monitor) {
-		String host = serverWC.getHost();
-
-		if (CoreUtil.isNullOrEmpty(host)) {
+		if (CoreUtil.isNullOrEmpty(serverWC.getHost())) {
 			return LiferayServerUI.createErrorStatus(Msgs.specifyHostname);
 		}
 
-		String username = remoteServerWC.getUsername();
-
-		if (CoreUtil.isNullOrEmpty(username)) {
+		if (CoreUtil.isNullOrEmpty(remoteServerWC.getUsername())) {
 			return LiferayServerUI.createErrorStatus(Msgs.specifyUsernamePassword);
 		}
 

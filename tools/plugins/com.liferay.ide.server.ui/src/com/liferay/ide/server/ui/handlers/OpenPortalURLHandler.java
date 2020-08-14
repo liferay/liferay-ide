@@ -57,23 +57,21 @@ public abstract class OpenPortalURLHandler extends AbstractHandler {
 
 			Object selected = structuredSelection.getFirstElement();
 
-			if (selected != null) {
-				if (selected instanceof IServer) {
-					ILiferayServer portalServer = getLiferayServer(selected);
+			if ((selected != null) && (selected instanceof IServer)) {
+				ILiferayServer portalServer = getLiferayServer(selected);
 
-					new Job(
-						Msgs.openPortalUrl
-					) {
+				new Job(
+					Msgs.openPortalUrl
+				) {
 
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							openPortalURL(portalServer, selected);
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						openPortalURL(portalServer, selected);
 
-							return Status.OK_STATUS;
-						}
+						return Status.OK_STATUS;
+					}
 
-					}.schedule();
-				}
+				}.schedule();
 			}
 		}
 
@@ -92,13 +90,12 @@ public abstract class OpenPortalURLHandler extends AbstractHandler {
 
 			return site.getShell();
 		}
-		else {
-			IWorkbench workbnech = PlatformUI.getWorkbench();
 
-			IWorkbenchWindow activeWorkbenchWindow = workbnech.getActiveWorkbenchWindow();
+		IWorkbench workbnech = PlatformUI.getWorkbench();
 
-			return activeWorkbenchWindow.getShell();
-		}
+		IWorkbenchWindow activeWorkbenchWindow = workbnech.getActiveWorkbenchWindow();
+
+		return activeWorkbenchWindow.getShell();
 	}
 
 	protected ILiferayServer getLiferayServer(Object selected) {

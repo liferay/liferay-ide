@@ -75,10 +75,10 @@ public class CreateHelper extends LaunchHelper {
 
 		IPath sdkPluginLocation = sdkCorePlugin.getStateLocation();
 
-		launchConfig.setAttribute(IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString());
-		launchConfig.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, workingDir);
-		launchConfig.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, StringUtil.trim(sb.toString()));
 		launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, Boolean.TRUE);
+		launchConfig.setAttribute(IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString());
+		launchConfig.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, StringUtil.trim(sb.toString()));
+		launchConfig.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, workingDir);
 		launchConfig.setAttribute(
 			"org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", FileUtil.toOSString(sdkPluginLocation.append("sdk.log")));
 

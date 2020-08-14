@@ -110,7 +110,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 			libs = FileListing.getFileListing(bundleLibPath, "jar");
 		}
 
-		return libs.toArray(new IPath[libs.size()]);
+		return libs.toArray(new IPath[0]);
 	}
 
 	@Override

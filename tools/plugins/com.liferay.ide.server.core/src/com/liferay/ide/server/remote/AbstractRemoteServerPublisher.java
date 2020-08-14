@@ -32,7 +32,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -76,7 +75,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
 
 			processResourceDeltas(deltas, zip, deleteEntries, deletePrefix, StringPool.EMPTY, adjustGMTOffset);
 
-			for (Entry<ZipEntry, String> entry : deleteEntries.entrySet()) {
+			for (Map.Entry<ZipEntry, String> entry : deleteEntries.entrySet()) {
 				zip.putNextEntry((ZipEntry)entry);
 
 				String deleteEntry = entry.getValue();
@@ -136,7 +135,9 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
 
 				zip.putNextEntry(zipEntry);
 
-				try (InputStream inputStream = ((IFile)resource).getContents()) {
+				IFile file = (IFile)resource;
+
+				try (InputStream inputStream = file.getContents()) {
 					if (adjustGMTOffset) {
 						TimeZone currentTimeZone = TimeZone.getDefault();
 

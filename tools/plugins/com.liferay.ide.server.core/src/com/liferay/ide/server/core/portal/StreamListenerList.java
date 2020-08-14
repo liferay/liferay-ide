@@ -37,10 +37,10 @@ public class StreamListenerList {
 
 	public IStreamListener[] getListeners() {
 		if (_listeners.size() == 0) {
-			return _emptyVector.toArray(new IStreamListener[_emptyVector.size()]);
+			return _emptyVector.toArray(new IStreamListener[0]);
 		}
 
-		return _listeners.toArray(new IStreamListener[_listeners.size()]);
+		return _listeners.toArray(new IStreamListener[0]);
 	}
 
 	public void remove(IStreamListener listener) {

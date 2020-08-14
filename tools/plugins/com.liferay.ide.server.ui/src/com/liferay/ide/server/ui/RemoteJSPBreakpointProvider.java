@@ -113,11 +113,13 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 
 				String id = input.getName();
 
-				IStorage storage = ((IStorageEditorInput)input).getStorage();
+				IStorageEditorInput editorInput = (IStorageEditorInput)input;
+
+				IStorage storage = editorInput.getStorage();
 
 				IPath storagePath = storage.getFullPath();
 
-				if (input instanceof IStorageEditorInput && (storage != null) && (storage.getFullPath() != null)) {
+				if ((input instanceof IStorageEditorInput) && (storage != null) && (storage.getFullPath() != null)) {
 					id = storagePath.toString();
 				}
 
@@ -189,7 +191,9 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 
 						// optimized description lookup, might not succeed
 
-						d = ((IFile)resource).getContentDescription();
+						IFile fileResource = (IFile)resource;
+
+						d = fileResource.getContentDescription();
 
 						if (d != null) {
 							types = new IContentType[] {d.getContentType()};
@@ -213,7 +217,9 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 				StringBuffer patternBuffer = new StringBuffer("_" + shortName);
 
 				for (IContentType type : types) {
-					Object pattern = ((Map)initData).get(type.getId());
+					Map mapInitData = (Map)initData;
+
+					Object pattern = mapInitData.get(type.getId());
 
 					if (pattern != null) {
 						patternBuffer.append(StringPool.COMMA);

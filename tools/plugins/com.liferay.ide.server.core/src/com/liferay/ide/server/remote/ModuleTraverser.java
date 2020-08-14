@@ -112,13 +112,13 @@ public class ModuleTraverser {
 			return;
 		}
 
-		String typeId = moduleType.getId();
-
 		IVirtualComponent component = ComponentCore.createComponent(module.getProject());
 
 		if (component == null) {
 			return;
 		}
+
+		String typeId = moduleType.getId();
 
 		if (EAR_MODULE.equals(typeId)) {
 			_traverseEarComponent(component, visitor);
@@ -479,13 +479,13 @@ public class ModuleTraverser {
 			IFolder resFolder = null;
 			String targetPath = StringPool.EMPTY;
 
-			if ("/".equals(path)) {
+			if (path.equals("/")) {
 				resFolder = dependentProject.getFolder(srcPath.append("META-INF/resources"));
 			}
-			else if ("/META-INF".equals(path)) {
+			else if (path.equals("/META-INF")) {
 				resFolder = dependentProject.getFolder(srcPath.append("resources"));
 			}
-			else if ("/META-INF/resources".equals(path)) {
+			else if (path.equals("/META-INF/resources")) {
 				resFolder = dependentProject.getFolder(srcPath);
 			}
 			else if (path.startsWith("/META-INF/resources/")) {
@@ -732,11 +732,12 @@ public class ModuleTraverser {
 	 */
 	private static boolean _valid(IClasspathEntry entry, IClasspathAttribute attrib, boolean webApp) {
 		int kind = entry.getEntryKind();
-		boolean classFolder = _classFolderEntry(entry);
 
 		if ((kind == IClasspathEntry.CPE_PROJECT) || (kind == IClasspathEntry.CPE_SOURCE)) {
 			return false;
 		}
+
+		boolean classFolder = _classFolderEntry(entry);
 
 		String runtimePath = _getRuntimePath(attrib, webApp, classFolder);
 

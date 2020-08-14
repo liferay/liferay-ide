@@ -50,7 +50,9 @@ public class LiferayServerModuleLabelDecorator extends ModuleLabelDecorator {
 				module = (IModule)element;
 			}
 			else if (element instanceof ModuleServer) {
-				IModule[] modules = ((ModuleServer)element).module;
+				ModuleServer moduleServerElement = (ModuleServer)element;
+
+				IModule[] modules = moduleServerElement.module;
 
 				module = modules[modules.length - 1];
 

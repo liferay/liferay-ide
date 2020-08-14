@@ -108,6 +108,8 @@ public class SocketUtil {
 
 			uri = new URI("SOCKS://" + host + ":" + port);
 
+			proxyDataForHost = proxyService.select(uri);
+
 			for (IProxyData data : proxyDataForHost) {
 				if (data.getHost() != null) {
 					return canConnect(socket, data.getHost(), String.valueOf(data.getPort()));

@@ -143,7 +143,7 @@ public class GogoBundleDeployer {
 			return -1;
 		}
 
-		if ("No matching bundles found".equals(result)) {
+		if (result.equals("No matching bundles found")) {
 			return -1;
 		}
 
@@ -161,7 +161,7 @@ public class GogoBundleDeployer {
 	public int getBundleState(String bsn) throws IOException {
 		String result = run("lb -s " + bsn, true);
 
-		if ("No matching bundles found".equals(result)) {
+		if (result.equals("No matching bundles found")) {
 			return -1;
 		}
 
@@ -212,9 +212,7 @@ public class GogoBundleDeployer {
 	public BundleDTO[] listBundles() throws IOException {
 		String result = run("lb -s", true);
 
-		BundleDTO[] bundles = _parseBundleInfos(result);
-
-		return bundles;
+		return _parseBundleInfos(result);
 	}
 
 	public String refresh(long id) throws IOException {
@@ -244,7 +242,7 @@ public class GogoBundleDeployer {
 
 				retval = result.trim();
 
-				if ("".equals(retval)) {
+				if (retval.equals("")) {
 					retval = null;
 				}
 			}
@@ -315,22 +313,22 @@ public class GogoBundleDeployer {
 	}
 
 	private static int _getState(String state) {
-		if ("Active".equals(state)) {
+		if (state.equals("Active")) {
 			return Bundle.ACTIVE;
 		}
-		else if ("Starting".equals(state)) {
+		else if (state.equals("Starting")) {
 			return Bundle.STARTING;
 		}
-		else if ("Resolved".equals(state)) {
+		else if (state.equals("Resolved")) {
 			return Bundle.RESOLVED;
 		}
-		else if ("Stopping".equals(state)) {
+		else if (state.equals("Stopping")) {
 			return Bundle.STOPPING;
 		}
-		else if ("Installed".equals(state)) {
+		else if (state.equals("Installed")) {
 			return Bundle.INSTALLED;
 		}
-		else if ("Uninstalled".equals(state)) {
+		else if (state.equals("Uninstalled")) {
 			return Bundle.UNINSTALLED;
 		}
 

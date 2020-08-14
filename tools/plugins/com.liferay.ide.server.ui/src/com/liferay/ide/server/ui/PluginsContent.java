@@ -45,9 +45,8 @@ public class PluginsContent {
 		if (input != null) {
 			return input.size();
 		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	protected List<ModuleServer> input;

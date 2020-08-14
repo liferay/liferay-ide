@@ -94,6 +94,7 @@ public class LiferayServerOutputStreamMonitor implements IFlushableStreamMonitor
 			}
 
 			_text = text;
+
 			Object[] listeners = _listeners.getListeners();
 
 			for (int i = 0; i < listeners.length; ++i) {

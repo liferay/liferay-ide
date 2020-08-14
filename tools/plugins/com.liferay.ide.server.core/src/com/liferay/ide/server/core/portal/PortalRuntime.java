@@ -27,6 +27,7 @@ import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.IPath;
@@ -117,9 +118,8 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 		if (portalBundle != null) {
 			return portalBundle.getLiferayHome();
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	public PortalBundle getPortalBundle() {
@@ -222,7 +222,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if ("location".equals(evt.getPropertyName())) {
+		if (Objects.equals("location", evt.getPropertyName())) {
 			_portalBundle = null;
 
 			if (evt.getNewValue() != null) {
@@ -274,9 +274,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 		}
 
 		if (portalBundleVersion.startsWith("7")) {
-			IVMInstall vmInstall = getVMInstall();
-
-			Version jdkVersion = Version.parseVersion(JavaUtil.getJDKVersion(vmInstall));
+			Version jdkVersion = Version.parseVersion(JavaUtil.getJDKVersion(getVMInstall()));
 
 			Version jdk8Version = Version.parseVersion("1.8");
 

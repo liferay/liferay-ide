@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.ui.navigator.INavigatorContentDescriptor;
@@ -44,7 +43,9 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
 
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof PluginsContent) {
-			return ((PluginsContent)parentElement).getChildren();
+			PluginsContent pluginParentElement = (PluginsContent)parentElement;
+
+			return pluginParentElement.getChildren();
 		}
 
 		if (!(parentElement instanceof IServer)) {
@@ -87,9 +88,7 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
 
 				IModule m = module.getModule()[0];
 
-				IProject project = m.getProject();
-
-				if (ProjectUtil.isLiferayFacetedProject(project)) {
+				if (ProjectUtil.isLiferayFacetedProject(m.getProject())) {
 					redirectedModules.add(module);
 				}
 			}
@@ -110,15 +109,15 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
 
 	public Object getPipelinedParent(Object anObject, Object aSuggestedParent) {
 		if (anObject instanceof ModuleServer) {
-			IModule m = ((ModuleServer)anObject).getModule()[0];
+			ModuleServer anModuleServerObject = (ModuleServer)anObject;
 
-			IProject project = m.getProject();
+			IModule m = anModuleServerObject.getModule()[0];
 
-			if (ProjectUtil.isLiferayFacetedProject(project) && (_pluginsContentNode != null)) {
+			if (ProjectUtil.isLiferayFacetedProject(m.getProject()) && (_pluginsContentNode != null)) {
 				return _pluginsContentNode;
 			}
 		}
-		else if (anObject instanceof PluginsContent && anObject.equals(_pluginsContentNode)) {
+		else if ((anObject instanceof PluginsContent) && anObject.equals(_pluginsContentNode)) {
 			return _pluginsContentNode.getParent();
 		}
 
@@ -141,7 +140,9 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
 			return contentProvider.hasChildren(element);
 		}
 		else if (element instanceof PluginsContent) {
-			if (((PluginsContent)element).getSize() > 0) {
+			PluginsContent pluginElement = (PluginsContent)element;
+
+			if (pluginElement.getSize() > 0) {
 				return true;
 			}
 

@@ -159,15 +159,13 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 	public void selectionChanged(IAction action, ISelection selection) {
 		super.selectionChanged(action, selection);
 
-		if (!selection.isEmpty()) {
-			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection sel = (IStructuredSelection)selection;
+		if (!selection.isEmpty() && (selection instanceof IStructuredSelection)) {
+			IStructuredSelection sel = (IStructuredSelection)selection;
 
-				List<?> selList = sel.toList();
+			List<?> selList = sel.toList();
 
-				if (selList.size() > 1) {
-					action.setEnabled(selList.size() == 1);
-				}
+			if (selList.size() > 1) {
+				action.setEnabled(selList.size() == 1);
 			}
 		}
 	}
@@ -288,9 +286,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 			}
 		}
 
-		URL[] urls = libUrlList.toArray(new URL[libUrlList.size()]);
-
-		return urls;
+		return libUrlList.toArray(new URL[0]);
 	}
 
 	private static final String _JDBC_DRIVER_CLASS_NAME = "jdbc.default.driverClassName";

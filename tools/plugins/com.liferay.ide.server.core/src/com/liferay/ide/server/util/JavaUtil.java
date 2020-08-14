@@ -115,9 +115,7 @@ public class JavaUtil {
 
 					Attributes a = mf.getMainAttributes();
 
-					String val = a.getValue(propertyName);
-
-					return val;
+					return a.getValue(propertyName);
 				}
 			}
 		}

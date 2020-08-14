@@ -42,7 +42,9 @@ public class OpenLiferayHomeFolderHandler extends AbstractHandler {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
 		if (selection instanceof IStructuredSelection) {
-			List selectedObj = ((IStructuredSelection)selection).toList();
+			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+
+			List selectedObj = structuredSelection.toList();
 
 			if ((selectedObj.size() == 1) && (selectedObj.get(0) instanceof IServer)) {
 				IServer server = (IServer)selectedObj.get(0);

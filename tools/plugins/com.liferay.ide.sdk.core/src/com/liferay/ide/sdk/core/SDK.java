@@ -296,8 +296,8 @@ public class SDK {
 
 			Map<String, String> properties = new HashMap<>();
 
-			properties.put(ISDKConstants.PROPERTY_EXT_NAME, extName);
 			properties.put(ISDKConstants.PROPERTY_EXT_DISPLAY_NAME, extDisplayName);
+			properties.put(ISDKConstants.PROPERTY_EXT_NAME, extName);
 
 			// create a space for new portlet template to get built
 
@@ -332,8 +332,8 @@ public class SDK {
 		try {
 			Map<String, String> properties = new HashMap<>();
 
-			properties.put(ISDKConstants.PROPERTY_HOOK_NAME, hookName);
 			properties.put(ISDKConstants.PROPERTY_HOOK_DISPLAY_NAME, hookDisplayName);
+			properties.put(ISDKConstants.PROPERTY_HOOK_NAME, hookName);
 
 			// create a space for new portlet template to get built
 
@@ -368,8 +368,8 @@ public class SDK {
 		try {
 			Map<String, String> properties = new HashMap<>();
 
-			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_NAME, layoutTplName);
 			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_DISPLAY_NAME, layoutTplDisplayName);
+			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_NAME, layoutTplName);
 
 			// create a space for new layouttpm template to get built
 
@@ -404,9 +404,9 @@ public class SDK {
 		try {
 			Map<String, String> properties = new HashMap<>();
 
-			properties.put(ISDKConstants.PROPERTY_PORTLET_NAME, portletName);
 			properties.put(ISDKConstants.PROPERTY_PORTLET_DISPLAY_NAME, portletDisplayName);
 			properties.put(ISDKConstants.PROPERTY_PORTLET_FRAMEWORK, portletFramework);
+			properties.put(ISDKConstants.PROPERTY_PORTLET_NAME, portletName);
 
 			// create a space for new portlet template to get built
 
@@ -496,8 +496,8 @@ public class SDK {
 		try {
 			Map<String, String> properties = new HashMap<>();
 
-			properties.put(ISDKConstants.PROPERTY_THEME_NAME, themeName);
 			properties.put(ISDKConstants.PROPERTY_THEME_DISPLAY_NAME, themeDisplayName);
+			properties.put(ISDKConstants.PROPERTY_THEME_NAME, themeName);
 
 			// create a space for new portlet template to get built
 
@@ -532,8 +532,8 @@ public class SDK {
 		try {
 			Map<String, String> properties = new HashMap<>();
 
-			properties.put(ISDKConstants.PROPERTY_WEB_NAME, webName);
 			properties.put(ISDKConstants.PROPERTY_WEB_DISPLAY_NAME, webDisplayName);
+			properties.put(ISDKConstants.PROPERTY_WEB_NAME, webName);
 
 			// create a space for new web template to get built
 
@@ -708,22 +708,22 @@ public class SDK {
 	}
 
 	public String getPluginFolder(String type) {
-		if ("ext".equals(type)) {
+		if (type.equals("ext")) {
 			return ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER;
 		}
-		else if ("portlet".equals(type)) {
+		else if (type.equals("portlet")) {
 			return ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER;
 		}
-		else if ("hook".equals(type)) {
+		else if (type.equals("hook")) {
 			return ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER;
 		}
-		else if ("layouttpl".equals(type)) {
+		else if (type.equals("layouttpl")) {
 			return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER;
 		}
-		else if ("theme".equals(type)) {
+		else if (type.equals("theme")) {
 			return ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER;
 		}
-		else if ("web".equals(type)) {
+		else if (type.equals("web")) {
 			return ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER;
 		}
 		else {
@@ -891,13 +891,13 @@ public class SDK {
 
 		boolean validLocation = SDKUtil.isValidSDKLocation(getLocation());
 
-		IPath buildXmlLocation = getLocation().append("build.xml");
-
 		if (!validLocation) {
 			status.add(SDKCorePlugin.createErrorStatus(Msgs.sdkLocationInvalid));
 
 			return status;
 		}
+
+		IPath buildXmlLocation = getLocation().append("build.xml");
 
 		if (FileUtil.notExists(buildXmlLocation)) {
 			status.add(SDKCorePlugin.createErrorStatus(Msgs.buildXmlFileNotExist));
@@ -1057,22 +1057,22 @@ public class SDK {
 	}
 
 	private String _getPluginSuffix(String type) {
-		if ("ext".equals(type)) {
+		if (type.equals("ext")) {
 			return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
 		}
-		else if ("portlet".equals(type)) {
+		else if (type.equals("portlet")) {
 			return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
 		}
-		else if ("hook".equals(type)) {
+		else if (type.equals("hook")) {
 			return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
 		}
-		else if ("layouttpl".equals(type)) {
+		else if (type.equals("layouttpl")) {
 			return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
 		}
-		else if ("theme".equals(type)) {
+		else if (type.equals("theme")) {
 			return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
 		}
-		else if ("web".equals(type)) {
+		else if (type.equals("web")) {
 			return ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
 		}
 		else {

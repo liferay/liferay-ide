@@ -84,8 +84,6 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider 
 
 	@Override
 	public boolean hasChildren(Object element) {
-		boolean retVal = false;
-
 		if (element instanceof IServer) {
 			IServer server = (IServer)element;
 
@@ -98,7 +96,7 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider 
 			}
 		}
 
-		return retVal;
+		return false;
 	}
 
 	@Override

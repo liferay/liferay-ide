@@ -74,9 +74,8 @@ public class BundlesImages {
 		if (plugin == null) {
 			return null;
 		}
-		else {
-			return plugin.getImageRegistry();
-		}
+
+		return plugin.getImageRegistry();
 	}
 
 }

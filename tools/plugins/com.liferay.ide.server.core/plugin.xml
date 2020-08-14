@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <?eclipse version="3.4"?>
 <plugin>
 	<extension-point id="pluginPublishers" name="%plugin.publishers.extension.point.name" schema="schema/pluginPublishers.exsd" />

@@ -75,11 +75,10 @@ public abstract class PortalSupportProxy implements InvocationHandler {
 		if (currentClassLoader.equals(proxyClassLoader)) {
 			return;
 		}
-		else {
-			previousClassLoader = currentClassLoader;
 
-			currentThread.setContextClassLoader(proxyClassLoader);
-		}
+		previousClassLoader = currentClassLoader;
+
+		currentThread.setContextClassLoader(proxyClassLoader);
 	}
 
 	protected URLClassLoader createClassLoader() throws CoreException {

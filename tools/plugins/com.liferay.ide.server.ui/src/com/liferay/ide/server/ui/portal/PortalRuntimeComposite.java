@@ -289,6 +289,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 
 		_typeField = createReadOnlyTextField(Msgs.detectedPortalBundleType);
 		_jreLabel = createLabel(Msgs.selecteRuntimeJRE);
+
 		_jreCombo = new Combo(this, SWT.DROP_DOWN | SWT.READ_ONLY);
 
 		_jreCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

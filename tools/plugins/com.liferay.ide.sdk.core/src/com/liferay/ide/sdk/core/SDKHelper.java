@@ -94,10 +94,10 @@ public class SDKHelper extends LaunchHelper {
 		launchConfig.setAttribute(IAntLaunchConstants.ATTR_ANT_PROPERTY_FILES, (String)null);
 
 		if (separateJRE) {
+			launchConfig.setAttribute(IAntLaunchConstants.ATTR_DEFAULT_VM_INSTALL, Boolean.TRUE);
 			launchConfig.setAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, IAntLaunchConstants.MAIN_TYPE_NAME);
 			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, _getVMArgumentsAttr());
-			launchConfig.setAttribute(IAntLaunchConstants.ATTR_DEFAULT_VM_INSTALL, Boolean.TRUE);
 		}
 
 		return launchConfig;

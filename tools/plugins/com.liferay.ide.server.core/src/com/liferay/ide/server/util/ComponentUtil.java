@@ -149,7 +149,7 @@ public class ComponentUtil {
 			}
 		}
 
-		return sourceFolders.toArray(new IFolder[sourceFolders.size()]);
+		return sourceFolders.toArray(new IFolder[0]);
 	}
 
 	public static boolean hasLiferayFacet(IProject project) {
@@ -260,10 +260,8 @@ public class ComponentUtil {
 
 			if (list.isEmpty()) {
 				for (IPackageFragmentRoot root : roots) {
-					if (root.getKind() == IPackageFragmentRoot.K_SOURCE) {
-						if (!list.contains(root)) {
-							list.add(root);
-						}
+					if ((root.getKind() == IPackageFragmentRoot.K_SOURCE) && !list.contains(root)) {
+						list.add(root);
 					}
 				}
 			}
@@ -272,7 +270,7 @@ public class ComponentUtil {
 			LiferayServerCore.logError(jme);
 		}
 
-		return list.toArray(new IPackageFragmentRoot[list.size()]);
+		return list.toArray(new IPackageFragmentRoot[0]);
 	}
 
 }

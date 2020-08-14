@@ -29,7 +29,9 @@ import org.eclipse.wst.server.core.IServer;
 public class NavigatorUIUtil {
 
 	public static CommonViewer getViewer(ICommonContentExtensionSite config) {
-		return (CommonViewer)((NavigatorContentService)config.getService()).getViewer();
+		NavigatorContentService configService = (NavigatorContentService)config.getService();
+
+		return (CommonViewer)configService.getViewer();
 	}
 
 	public static void refreshUI(INavigatorContentService service, IServer server) {
@@ -38,7 +40,9 @@ public class NavigatorUIUtil {
 
 				public void run() {
 					try {
-						CommonViewer viewer = (CommonViewer)((NavigatorContentService)service).getViewer();
+						NavigatorContentService navigatorService = (NavigatorContentService)service;
+
+						CommonViewer viewer = (CommonViewer)navigatorService.getViewer();
 
 						viewer.refresh(true);
 						viewer.setExpandedState(server, true);
