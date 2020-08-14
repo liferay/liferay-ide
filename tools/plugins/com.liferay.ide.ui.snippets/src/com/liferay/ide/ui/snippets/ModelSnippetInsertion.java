@@ -55,7 +55,7 @@ public abstract class ModelSnippetInsertion extends AbstractSnippetInsertion {
 		text = StringUtils.replace(text, "\r\n", "\n");
 		text = StringUtils.replace(text, "\r", "\n");
 
-		if (!"\n".equals(systemEOL) && (systemEOL != null)) {
+		if (!systemEOL.equals("\n") && (systemEOL != null)) {
 			text = StringUtils.replace(text, "\n", systemEOL);
 		}
 

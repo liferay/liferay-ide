@@ -57,10 +57,8 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 
 			Map attributes = temp.getAttributes();
 
-			if (attributes != null) {
-				if (attributes.get(LiferayBaseValidator.MARKER_QUERY_ID) != null) {
-					return true;
-				}
+			if ((attributes != null) && (attributes.get(LiferayBaseValidator.MARKER_QUERY_ID) != null)) {
+				return true;
 			}
 		}
 
@@ -92,18 +90,18 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 				int lineNum = document.getLineOfOffset(position.getOffset()) + 1;
 				int currentLineNum = document.getLineOfOffset(context.getOffset()) + 1;
 
-				if ((marker != null) && (currentLineNum == lineNum)) {
-					if (marker.getAttribute(LiferayBaseValidator.MARKER_QUERY_ID, null) != null) {
-						ICompletionProposal[] resolutions = _createFromMarkerResolutions(marker);
+				if ((marker != null) && (currentLineNum == lineNum) &&
+					(marker.getAttribute(LiferayBaseValidator.MARKER_QUERY_ID, null) != null)) {
 
-						if (ListUtil.isNotEmpty(resolutions)) {
-							Collections.addAll(proposals, resolutions);
+					ICompletionProposal[] resolutions = _createFromMarkerResolutions(marker);
 
-							if (annotation instanceof IQuickFixableAnnotation) {
-								IQuickFixableAnnotation quick = (IQuickFixableAnnotation)annotation;
+					if (ListUtil.isNotEmpty(resolutions)) {
+						Collections.addAll(proposals, resolutions);
 
-								quick.setQuickFixable(true);
-							}
+						if (annotation instanceof IQuickFixableAnnotation) {
+							IQuickFixableAnnotation quick = (IQuickFixableAnnotation)annotation;
+
+							quick.setQuickFixable(true);
 						}
 					}
 				}

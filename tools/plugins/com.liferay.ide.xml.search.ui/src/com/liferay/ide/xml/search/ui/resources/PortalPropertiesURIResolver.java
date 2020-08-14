@@ -47,9 +47,8 @@ public class PortalPropertiesURIResolver extends ResourceBaseURIResolver {
 			if (fullMatch) {
 				return uri.equals(matching);
 			}
-			else {
-				return uri.startsWith(matching);
-			}
+
+			return uri.startsWith(matching);
 		}
 
 		return false;

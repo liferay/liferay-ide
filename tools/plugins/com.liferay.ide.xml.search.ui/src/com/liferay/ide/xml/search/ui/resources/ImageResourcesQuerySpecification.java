@@ -24,8 +24,7 @@ public class ImageResourcesQuerySpecification extends AbstractWebResourcesQueryS
 
 	/**
 	 * (non-Javadoc)
-	 * @see org.eclipse.wst.xml.search.core.resource.IURIResolverProvider#
-	 * getURIResolver (IFile, Object)
+	 * @see org.eclipse.wst.xml.search.core.resource.IURIResolverProvider#getURIResolver (IFile, Object)
 	 */
 	public IURIResolver getURIResolver(IFile file, Object selectedNode) {
 		return ImageResourcesURIResolver.INSTANCE;

@@ -104,7 +104,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 		IResource res = lrProject.findDocrootResource(
 			new Path("WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE));
 
-		if (res instanceof IFile && res.exists()) {
+		if ((res instanceof IFile) && res.exists()) {
 			lookAndFeelFile = (IFile)res;
 		}
 
@@ -121,7 +121,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 			String name = id;
 
-			if (propertiesFileRes instanceof IFile && propertiesFileRes.exists()) {
+			if ((propertiesFileRes instanceof IFile) && propertiesFileRes.exists()) {
 				Properties props = new Properties();
 				IFile propsFile = (IFile)propertiesFileRes;
 
@@ -271,7 +271,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 						IPath fullResourcePath = resource.getFullPath();
 
 						for (String segment : fullResourcePath.segments()) {
-							if ("_diffs".equals(segment)) {
+							if (segment.equals("_diffs")) {
 
 								// IDE-110 IDE-648
 
@@ -295,7 +295,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 									}
 								}
 							}
-							else if ("build.xml".equals(segment)) {
+							else if (segment.equals("build.xml")) {
 								IPath relPath = resource.getProjectRelativePath();
 
 								if ((relPath != null) && (relPath.segmentCount() == 1)) {

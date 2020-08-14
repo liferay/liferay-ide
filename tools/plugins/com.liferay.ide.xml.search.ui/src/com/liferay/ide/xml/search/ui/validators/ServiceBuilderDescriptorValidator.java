@@ -14,8 +14,10 @@
 
 package com.liferay.ide.xml.search.ui.validators;
 
-import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
+import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.xml.search.ui.util.ValidatorUtil;
+
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
@@ -44,7 +46,7 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator {
 		IXMLReference reference, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
 		boolean batchMode) {
 
-		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
+		int severity = getServerity(ValidationPreferences.ValidationType.SYNTAX_INVALID, file);
 
 		if (severity == ValidationMessage.IGNORE) {
 			return true;
@@ -57,18 +59,18 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator {
 
 			String parentNodeName = parentNode.getNodeName();
 
-			if (parentNodeName.equals("namespace")) {
-				String nodeValue = DOMUtils.getNodeValue(node);
-
-				if (!ValidatorUtil.isValidNamespace(nodeValue)) {
-					validationMsg = getMessageText(ValidationType.SYNTAX_INVALID, node);
-				}
+			if (parentNodeName.equals("namespace") && !ValidatorUtil.isValidNamespace(DOMUtils.getNodeValue(node))) {
+				validationMsg = getMessageText(ValidationPreferences.ValidationType.SYNTAX_INVALID, node);
 			}
 		}
 		else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-			Element element = ((Attr)node).getOwnerElement();
+			Attr attrNode = (Attr)node;
 
-			if ("package-path".equals(node.getNodeName()) && "service-builder".equals(element.getNodeName())) {
+			Element element = attrNode.getOwnerElement();
+
+			if (Objects.equals("package-path", node.getNodeName()) &&
+				Objects.equals("service-builder", element.getNodeName())) {
+
 				String nodeValue = DOMUtils.getNodeValue(node);
 
 				if (nodeValue != null) {
@@ -87,7 +89,8 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator {
 		}
 
 		if (validationMsg != null) {
-			String liferayPluginValidationType = getLiferayPluginValidationType(ValidationType.SYNTAX_INVALID, file);
+			String liferayPluginValidationType = getLiferayPluginValidationType(
+				ValidationPreferences.ValidationType.SYNTAX_INVALID, file);
 
 			addMessage(
 				node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType);

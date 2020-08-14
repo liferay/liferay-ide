@@ -69,7 +69,7 @@ public abstract class AbstractResourceBundleMarkerResolution extends CommonWorkb
 
 			IResource resource = marker.getResource();
 
-			if (resource instanceof IFile && !files.contains(resource)) {
+			if ((resource instanceof IFile) && !files.contains(resource)) {
 				files.add((IFile)resource);
 			}
 		}

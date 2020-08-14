@@ -28,6 +28,7 @@ import java.io.OutputStream;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 
@@ -402,6 +403,7 @@ public class BuildHelper {
 		if (toDir.exists()) {
 			if (toDir.isDirectory()) {
 				foundExistingDir = true;
+
 				toFiles = toDir.listFiles();
 
 				int toSize = toFiles.length;
@@ -412,6 +414,7 @@ public class BuildHelper {
 
 				for (int i = 0; i < toSize; i++) {
 					toFileNames[i] = toFiles[i].getName();
+
 					boolean dir = toFiles[i].isDirectory();
 					boolean found = false;
 
@@ -602,7 +605,7 @@ public class BuildHelper {
 					}
 
 					if (ListUtil.isNotEmpty(ignoreChildPaths)) {
-						ignoreChildren = ignoreChildPaths.toArray(new Path[ignoreChildPaths.size()]);
+						ignoreChildren = ignoreChildPaths.toArray(new Path[0]);
 					}
 				}
 
@@ -679,7 +682,7 @@ public class BuildHelper {
 
 		monitor = ProgressUtil.getMonitorFor(monitor);
 
-		if ((resources.length == 1) && resources[0] instanceof IFile) {
+		if ((resources.length == 1) && (resources[0] instanceof IFile)) {
 			try {
 				_copyFile((IFile)resources[0], path);
 			}
@@ -766,7 +769,7 @@ public class BuildHelper {
 		IPath diffsRelativePath = null;
 
 		for (int i = 0; i < diffsPath.segmentCount(); i++) {
-			if ("_diffs".equals(diffsPath.segment(i))) {
+			if (Objects.equals("_diffs", diffsPath.segment(i))) {
 				diffsRelativePath = diffsPath.removeFirstSegments(i + 1);
 
 				break;
@@ -1096,34 +1099,32 @@ public class BuildHelper {
 	 * @throws CoreException
 	 */
 	private void _moveTempFile(File tempFile, File file) throws CoreException {
-		if (file.exists()) {
-			if (!_safeDelete(file, 2)) {
+		if (file.exists() && !_safeDelete(file, 2)) {
 
-				// attempt to rewrite an existing file with the tempFile
-				// contents if
-				// the existing file can't be deleted to permit the move
+			// attempt to rewrite an existing file with the tempFile
+			// contents if
+			// the existing file can't be deleted to permit the move
 
-				try {
-					InputStream in = new FileInputStream(tempFile);
+			try {
+				InputStream in = new FileInputStream(tempFile);
 
-					IStatus status = _copyFile(in, file.getPath());
+				IStatus status = _copyFile(in, file.getPath());
 
-					if (!status.isOK()) {
-						MultiStatus status2 = new MultiStatus(
-							ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorDeleting, file.toString()), null);
+				if (!status.isOK()) {
+					MultiStatus status2 = new MultiStatus(
+						ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorDeleting, file.toString()), null);
 
-						status2.add(status);
+					status2.add(status);
 
-						throw new CoreException(status2);
-					}
-
-					return;
+					throw new CoreException(status2);
 				}
-				catch (FileNotFoundException fnfe) {
-				}
-				finally {
-					tempFile.delete();
-				}
+
+				return;
+			}
+			catch (FileNotFoundException fnfe) {
+			}
+			finally {
+				tempFile.delete();
 			}
 		}
 

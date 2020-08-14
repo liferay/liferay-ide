@@ -16,6 +16,8 @@ package com.liferay.ide.xml.search.ui.descriptors;
 
 import com.liferay.ide.core.util.CoreUtil;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -30,9 +32,7 @@ public abstract class AbstractWebInfQuerySpecification implements IResourceProvi
 
 	/**
 	 * (non-Javadoc)
-	 * @see org.eclipse.wst.xml.search.core.queryspecifications.container.
-	 * IResourceProvider#getResource(Object,
-	 * IResource)
+	 * @see IResourceProvider#getResource(Object,IResource)
 	 */
 	public IResource getResource(Object selectedNode, IResource resource) {
 
@@ -40,7 +40,7 @@ public abstract class AbstractWebInfQuerySpecification implements IResourceProvi
 
 		IContainer folder = resource.getParent();
 
-		if ("WEB-INF".equals(folder.getName())) {
+		if (Objects.equals("WEB-INF", folder.getName())) {
 			return folder;
 		}
 

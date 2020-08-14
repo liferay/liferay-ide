@@ -14,7 +14,9 @@
 
 package com.liferay.ide.xml.search.ui.validators;
 
-import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
+import com.liferay.ide.project.core.ValidationPreferences;
+
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.osgi.util.NLS;
@@ -41,22 +43,24 @@ public class LiferayDisplayDescriptorValidator extends LiferayBaseValidator {
 		IXMLReference reference, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
 		boolean batchMode) {
 
-		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
+		int severity = getServerity(ValidationPreferences.ValidationType.SYNTAX_INVALID, file);
 
 		if (severity == ValidationMessage.IGNORE) {
 			return true;
 		}
 
-		Element element = ((Attr)node).getOwnerElement();
+		Attr attrNode = (Attr)node;
 
-		if ((node.getNodeType() == Node.ATTRIBUTE_NODE) && "name".equals(node.getNodeName()) &&
-			"category".equals(element.getNodeName())) {
+		Element element = attrNode.getOwnerElement();
+
+		if ((node.getNodeType() == Node.ATTRIBUTE_NODE) && Objects.equals("name", node.getNodeName()) &&
+			Objects.equals("category", element.getNodeName())) {
 
 			String nodeValue = node.getNodeValue();
 
 			if (nodeValue.matches("\\s*")) {
 				String liferayPluginValidationType = getLiferayPluginValidationType(
-					ValidationType.SYNTAX_INVALID, file);
+					ValidationPreferences.ValidationType.SYNTAX_INVALID, file);
 				String validationMsg = MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY;
 
 				addMessage(

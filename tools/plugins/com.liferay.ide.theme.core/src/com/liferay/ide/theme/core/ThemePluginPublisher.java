@@ -85,7 +85,10 @@ public class ThemePluginPublisher extends AbstractPluginPublisher {
 					!webappRoot.exists(new Path("css"))) {
 
 					ThemeCSSBuilder.compileTheme(project);
-					((ILiferayServerBehavior)delegate).redeployModule(new IModule[] {module});
+
+					ILiferayServerBehavior serverDelegate = (ILiferayServerBehavior)delegate;
+
+					serverDelegate.redeployModule(new IModule[] {module});
 				}
 			}
 			else {
