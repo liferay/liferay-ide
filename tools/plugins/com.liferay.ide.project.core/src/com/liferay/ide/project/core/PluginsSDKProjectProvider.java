@@ -43,6 +43,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 
@@ -99,8 +100,6 @@ public class PluginsSDKProjectProvider
 
 		String displayName = get(op.getDisplayName());
 
-		boolean separateJRE = true;
-
 		SDK sdk = _getSDK(op);
 
 		if (sdk == null) {
@@ -124,6 +123,8 @@ public class PluginsSDKProjectProvider
 		IPath path = null;
 
 		IPath sdkLocation = sdk.getLocation();
+
+		boolean separateJRE = true;
 
 		switch (pluginType) {
 			case servicebuilder:
@@ -192,7 +193,7 @@ public class PluginsSDKProjectProvider
 
 				IProject layoutProject = ProjectUtil.getProject(projectName);
 
-				if (!"6.2.0".equals(LiferayDescriptorHelper.getDescriptorVersion(layoutProject))) {
+				if (!Objects.equals("6.2.0", LiferayDescriptorHelper.getDescriptorVersion(layoutProject))) {
 					IPath projectPath = newSDKProjectPath.append(projectName + pluginTypeSuffix);
 
 					IPath fileWap = FileUtil.pathAppend(projectPath, "docroot", "blank_columns.wap.tpl");
@@ -429,9 +430,8 @@ public class PluginsSDKProjectProvider
 
 		String portletName = get(op.getPortletName(), false);
 
-		String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName(op);
-
-		IStatus status = portletFramework.postProjectCreated(newProject, frameworkName, portletName, monitor);
+		IStatus status = portletFramework.postProjectCreated(
+			newProject, NewLiferayPluginProjectOpMethods.getFrameworkName(op), portletName, monitor);
 
 		if (!status.isOK()) {
 			throw new CoreException(status);

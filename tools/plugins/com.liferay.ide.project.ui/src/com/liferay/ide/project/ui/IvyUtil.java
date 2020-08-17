@@ -130,13 +130,11 @@ public class IvyUtil {
 
 			newEntries.add(cpeTagged);
 
-			entries = (IClasspathEntry[])newEntries.toArray(new IClasspathEntry[newEntries.size()]);
+			entries = (IClasspathEntry[])newEntries.toArray(new IClasspathEntry[0]);
 
 			javaProject.setRawClasspath(entries, javaProject.getOutputLocation(), monitor);
 
-			IvyClasspathContainer ivycp = IvyClasspathContainerHelper.getContainer(path, javaProject);
-
-			return ivycp;
+			return IvyClasspathContainerHelper.getContainer(path, javaProject);
 		}
 		catch (JavaModelException jme) {
 			ProjectUI.logError("Unable to add Ivy library container", jme);

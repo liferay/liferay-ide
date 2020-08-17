@@ -14,6 +14,8 @@
 
 package com.liferay.ide.xml.search.ui.java;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IAnnotation;
@@ -83,7 +85,7 @@ public class PortletActionMethodRequestor extends AbstractJavaMethodRequestor {
 			IMemberValuePair[] pairs = annotation.getMemberValuePairs();
 
 			for (IMemberValuePair pair : pairs) {
-				if ("name".equals(pair.getMemberName())) {
+				if (Objects.equals("name", pair.getMemberName())) {
 					retval = pair;
 
 					break;
@@ -101,7 +103,7 @@ public class PortletActionMethodRequestor extends AbstractJavaMethodRequestor {
 			IAnnotation[] annots = method.getAnnotations();
 
 			for (IAnnotation annot : annots) {
-				if ("ProcessAction".equals(annot.getElementName())) {
+				if (Objects.equals("ProcessAction", annot.getElementName())) {
 					return true;
 				}
 			}

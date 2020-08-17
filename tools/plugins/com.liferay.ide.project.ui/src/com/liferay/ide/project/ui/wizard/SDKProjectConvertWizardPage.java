@@ -30,6 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -254,31 +255,29 @@ public class SDKProjectConvertWizardPage
 		// no project description found, so recurse into sub-directories
 
 		for (File content : contents) {
-			if (content.isDirectory()) {
-				if (!METADATA_FOLDER.equals(content.getName())) {
-					try {
-						String canonicalPath = content.getCanonicalPath();
+			if (content.isDirectory() && !Objects.equals(METADATA_FOLDER, content.getName())) {
+				try {
+					String canonicalPath = content.getCanonicalPath();
 
-						if (!directoriesVisited.add(canonicalPath)) {
+					if (!directoriesVisited.add(canonicalPath)) {
 
-							// already been here --> do not recurse
+						// already been here --> do not recurse
 
-							continue;
-						}
+						continue;
 					}
-					catch (IOException ioe) {
-						StatusManager statusManager = StatusManager.getManager();
+				}
+				catch (IOException ioe) {
+					StatusManager statusManager = StatusManager.getManager();
 
-						statusManager.handle(StatusUtil.newStatus(IStatus.ERROR, ioe.getLocalizedMessage(), ioe));
-					}
+					statusManager.handle(StatusUtil.newStatus(IStatus.ERROR, ioe.getLocalizedMessage(), ioe));
+				}
 
-					// dont recurse directories that we have already determined
-					// are Liferay projects
+				// dont recurse directories that we have already determined
+				// are Liferay projects
 
-					if (!liferayProjectDirs.contains(content) && recurse) {
-						collectProjectsFromDirectory(
-							eclipseProjectFiles, liferayProjectDirs, content, directoriesVisited, recurse, monitor);
-					}
+				if (!liferayProjectDirs.contains(content) && recurse) {
+					collectProjectsFromDirectory(
+						eclipseProjectFiles, liferayProjectDirs, content, directoriesVisited, recurse, monitor);
 				}
 			}
 		}
@@ -517,7 +516,9 @@ public class SDKProjectConvertWizardPage
 		}
 
 		public String getText(Object element) {
-			return ((ProjectRecord)element).getProjectLabel();
+			ProjectRecord projectRecorderElement = (ProjectRecord)element;
+
+			return projectRecorderElement.getProjectLabel();
 		}
 
 	}
@@ -534,7 +535,7 @@ public class SDKProjectConvertWizardPage
 			boolean hasDocroot = false;
 
 			for (File content : contents) {
-				if ("build.xml".equals(content.getName()) ||
+				if (Objects.equals("build.xml", content.getName()) ||
 					FileUtil.nameEndsWith(file, ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 
 					hasBuildXml = true;
@@ -544,8 +545,6 @@ public class SDKProjectConvertWizardPage
 
 				if (ISDKConstants.DEFAULT_DOCROOT_FOLDER.equals(content.getName())) {
 					hasDocroot = true;
-
-					continue;
 				}
 			}
 

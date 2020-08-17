@@ -32,12 +32,16 @@ public class SetUserTimezoneCommand extends ServerCommand {
 	}
 
 	public void execute() {
-		oldUserTimezone = ((LiferayTomcatServer)server).getUserTimezone();
-		((LiferayTomcatServer)server).setUserTimezone(userTimezone);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		oldUserTimezone = liferayServer.getUserTimezone();
+		liferayServer.setUserTimezone(userTimezone);
 	}
 
 	public void undo() {
-		((LiferayTomcatServer)server).setUserTimezone(oldUserTimezone);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		liferayServer.setUserTimezone(oldUserTimezone);
 	}
 
 	protected String oldUserTimezone;

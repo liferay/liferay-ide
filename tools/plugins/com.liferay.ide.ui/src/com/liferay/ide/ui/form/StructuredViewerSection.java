@@ -47,9 +47,7 @@ public abstract class StructuredViewerSection extends IDESection {
 
 		IManagedForm form = formPage.getManagedForm();
 
-		FormToolkit toolkit = form.getToolkit();
-
-		createClient(getSection(), toolkit);
+		createClient(getSection(), form.getToolkit());
 
 		_fDoSelection = true;
 	}

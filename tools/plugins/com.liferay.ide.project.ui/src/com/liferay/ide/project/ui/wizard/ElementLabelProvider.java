@@ -49,7 +49,9 @@ public abstract class ElementLabelProvider
 	@Override
 	public String getText(Object element) {
 		if (element instanceof CheckboxElement) {
-			return ((CheckboxElement)element).context;
+			CheckboxElement checkboxElement = (CheckboxElement)element;
+
+			return checkboxElement.context;
 		}
 
 		return super.getText(element);

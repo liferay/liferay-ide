@@ -124,8 +124,10 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 	protected IJavaElement getInitialJavaElement(ISelection selection) {
 		IJavaElement jelem = null;
 
-		if ((selection != null) && !selection.isEmpty() && selection instanceof IStructuredSelection) {
-			Object selectedElement = ((IStructuredSelection)selection).getFirstElement();
+		if ((selection != null) && !selection.isEmpty() && (selection instanceof IStructuredSelection)) {
+			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+
+			Object selectedElement = structuredSelection.getFirstElement();
 
 			jelem = getJavaElement(selectedElement);
 
@@ -162,7 +164,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 			}
 
 			if (part instanceof IViewPartInputProvider) {
-				Object elem = ((IViewPartInputProvider)part).getViewPartInput();
+				IViewPartInputProvider inputProviderPart = (IViewPartInputProvider)part;
+
+				Object elem = inputProviderPart.getViewPartInput();
 
 				if (elem instanceof IJavaElement) {
 					jelem = (IJavaElement)elem;
@@ -198,7 +202,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 		}
 
 		if (obj instanceof IAdaptable) {
-			return (IJavaElement)((IAdaptable)obj).getAdapter(IJavaElement.class);
+			IAdaptable adaptableObj = (IAdaptable)obj;
+
+			return (IJavaElement)adaptableObj.getAdapter(IJavaElement.class);
 		}
 
 		IAdapterManager adapterManager = Platform.getAdapterManager();
@@ -216,7 +222,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 		}
 
 		if (obj instanceof IAdaptable) {
-			return (IResource)((IAdaptable)obj).getAdapter(IResource.class);
+			IAdaptable adaptableObj = (IAdaptable)obj;
+
+			return (IResource)adaptableObj.getAdapter(IResource.class);
 		}
 
 		IAdapterManager adapterManager = Platform.getAdapterManager();
@@ -379,9 +387,7 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 
 		}
 
-		String text = projectCombo.getText();
-
-		if (CoreUtil.isNullOrEmpty(text) && (names[0] != null)) {
+		if (CoreUtil.isNullOrEmpty(projectCombo.getText()) && (names[0] != null)) {
 			projectCombo.setText(names[0]);
 
 			validateProjectRequirements(CoreUtil.getProject(names[0]));

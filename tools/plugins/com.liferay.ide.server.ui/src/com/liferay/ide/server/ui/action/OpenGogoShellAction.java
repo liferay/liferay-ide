@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jface.action.IAction;
-import org.eclipse.tm.terminal.view.core.interfaces.ITerminalService.Done;
+import org.eclipse.tm.terminal.view.core.interfaces.ITerminalService;
 import org.eclipse.tm.terminal.view.core.interfaces.constants.ITerminalsConnectorConstants;
 import org.eclipse.tm.terminal.view.ui.interfaces.ILauncherDelegate;
 import org.eclipse.tm.terminal.view.ui.launcher.LauncherDelegateManager;
@@ -46,18 +46,18 @@ public class OpenGogoShellAction extends AbstractServerRunningAction {
 			Map<String, Object> properties = new HashMap<>();
 
 			properties.put(
-				ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID,
-				"org.eclipse.tm.terminal.connector.telnet.TelnetConnector");
-			properties.put(
 				ITerminalsConnectorConstants.PROP_DELEGATE_ID,
 				"org.eclipse.tm.terminal.connector.telnet.launcher.telnet");
+			properties.put(ITerminalsConnectorConstants.PROP_ENCODING, null);
 			properties.put(ITerminalsConnectorConstants.PROP_IP_HOST, host);
 			properties.put(ITerminalsConnectorConstants.PROP_IP_PORT, 11311);
+			properties.put(
+				ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID,
+				"org.eclipse.tm.terminal.connector.telnet.TelnetConnector");
 			properties.put(ITerminalsConnectorConstants.PROP_TIMEOUT, 5);
-			properties.put(ITerminalsConnectorConstants.PROP_ENCODING, null);
 			properties.put(ITerminalsConnectorConstants.PROP_TITLE, "Liferay Gogo Shell");
 
-			delegate.execute(properties, (Done)null);
+			delegate.execute(properties, (ITerminalService.Done)null);
 		}
 	}
 

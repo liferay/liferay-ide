@@ -39,17 +39,17 @@ public class LiferayRuntimeNameValidationService extends ValidationService imple
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		final NewModuleFragmentOp op = context(NewModuleFragmentOp.class);
-
-		final String runtimeName = get(op.getLiferayRuntimeName());
-
-		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
-
 		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
 		if (Objects.isNull(liferayWorkspaceProject)) {
 			return retval;
 		}
+
+		final NewModuleFragmentOp op = context(NewModuleFragmentOp.class);
+
+		final String runtimeName = get(op.getLiferayRuntimeName());
+
+		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
 		if (runtime == null) {
 			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(liferayWorkspaceProject.getProject())) {
@@ -57,11 +57,10 @@ public class LiferayRuntimeNameValidationService extends ValidationService imple
 					"Please set a valid liferay portal runtime, you can initBundle or modify " +
 						"'liferay.workspace.home.dir' to make it point to an existing runtime.");
 			}
-			else {
-				return Status.createErrorStatus(
-					"Please set a valid liferay portal runtime, you can initBundle or modify 'liferayHome' property " +
-						"to make it point to an existing runtime.");
-			}
+
+			return Status.createErrorStatus(
+				"Please set a valid liferay portal runtime, you can initBundle or modify 'liferayHome' property to " +
+					"make it point to an existing runtime.");
 		}
 
 		String targetPlatformVersion = liferayWorkspaceProject.getTargetPlatformVersion();

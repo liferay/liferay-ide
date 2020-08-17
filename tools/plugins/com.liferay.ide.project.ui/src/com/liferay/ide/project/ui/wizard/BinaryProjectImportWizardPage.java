@@ -131,7 +131,9 @@ public class BinaryProjectImportWizardPage
 
 		sdkLocation = SWTUtil.createText(topComposite, 1);
 
-		((GridData)sdkLocation.getLayoutData()).widthHint = 300;
+		GridData sdkLocationLayoutData = (GridData)sdkLocation.getLayoutData();
+
+		sdkLocationLayoutData.widthHint = 300;
 
 		synchHelper.synchText(sdkLocation, SDK_LOCATION, null);
 

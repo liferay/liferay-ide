@@ -59,7 +59,7 @@ public class StringsFilteredDialog extends FilteredElementTreeSelectionDialog {
 		}
 
 		public Object[] getElements(Object inputElement) {
-			if ((strings == null) && inputElement instanceof String[]) {
+			if ((strings == null) && (inputElement instanceof String[])) {
 				strings = (String[])inputElement;
 			}
 

@@ -124,7 +124,9 @@ public class SDKProjectBuilder extends AbstractProjectBuilder {
 			if (segment.equals(getProject().getName() + "-service.jar")) {
 				IFolder folder = getProject().getFolder(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/service");
 
-				((ClasspathEntry)entry2).sourceAttachmentPath = folder.getFullPath();
+				ClasspathEntry classpathEntry2 = (ClasspathEntry)entry2;
+
+				classpathEntry2.sourceAttachmentPath = folder.getFullPath();
 
 				break;
 			}

@@ -50,7 +50,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.swt.SWT;
@@ -105,10 +104,7 @@ public class LiferayProjectPropertyPage
 					if (runtime != null) {
 						final IFacetedProject fProject = ProjectUtil.getFacetedProject(getProject());
 
-						final org.eclipse.wst.common.project.facet.core.runtime.IRuntime primaryRuntime =
-							fProject.getPrimaryRuntime();
-
-						if (!runtime.equals(primaryRuntime)) {
+						if (!runtime.equals(fProject.getPrimaryRuntime())) {
 							Job job = new WorkspaceJob("Setting targeted runtime for project.") {
 
 								@Override
@@ -242,7 +238,8 @@ public class LiferayProjectPropertyPage
 
 									DefinitionLoader sdefLoader = loader.sdef(dialogId);
 
-									Reference<DialogDef> dialogRef = sdefLoader.dialog("ConfigureLiferaySDK");
+									DefinitionLoader.Reference<DialogDef> dialogRef = sdefLoader.dialog(
+										"ConfigureLiferaySDK");
 
 									SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 
@@ -337,9 +334,7 @@ public class LiferayProjectPropertyPage
 	protected IProject getProject() {
 		IAdaptable adaptable = getElement();
 
-		IProject project = adaptable.getAdapter(IProject.class);
-
-		return project;
+		return adaptable.getAdapter(IProject.class);
 	}
 
 	private Combo _runtimeCombo;

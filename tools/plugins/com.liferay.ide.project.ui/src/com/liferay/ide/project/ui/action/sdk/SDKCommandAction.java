@@ -42,7 +42,9 @@ public abstract class SDKCommandAction extends AbstractObjectAction {
 	@Override
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+			IStructuredSelection fStructureSelection = (IStructuredSelection)fSelection;
+
+			Object[] elems = fStructureSelection.toArray();
 
 			IFile buildXmlFile = null;
 			IProject project = null;

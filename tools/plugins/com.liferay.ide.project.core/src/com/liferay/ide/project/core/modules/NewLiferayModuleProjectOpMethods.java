@@ -57,7 +57,6 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
@@ -289,7 +288,7 @@ public class NewLiferayModuleProjectOpMethods {
 			if (retval.ok()) {
 				_updateBuildAndVersionPrefs(op);
 			}
-			else if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
+			else if ((retval.severity() == Status.Severity.ERROR) && (retval.exception() != null)) {
 				errorStack = retval.exception();
 			}
 		}

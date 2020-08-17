@@ -149,8 +149,6 @@ public class BndProperties extends Properties {
 			while ((buffer = reader.readLine()) != null) {
 				String line = _convert(buffer.getBytes(), _utf8);
 
-				BndPropertiesValue bnd = new BndPropertiesValue();
-
 				char c = 0;
 
 				int pos = 0;
@@ -275,6 +273,8 @@ public class BndProperties extends Properties {
 						pos++;
 					}
 				}
+
+				BndPropertiesValue bnd = new BndPropertiesValue();
 
 				// Short-circuit if no escape chars found.
 

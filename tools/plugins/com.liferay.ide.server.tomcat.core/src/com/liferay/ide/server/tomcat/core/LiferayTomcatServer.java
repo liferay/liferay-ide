@@ -105,9 +105,7 @@ public class LiferayTomcatServer
 
 			ServerPort mainPort = tomcatConfig.getMainPort();
 
-			Object port = mainPort.getPort();
-
-			return String.valueOf(port);
+			return String.valueOf(mainPort.getPort());
 		}
 		catch (CoreException ce) {
 			return null;
@@ -216,7 +214,9 @@ public class LiferayTomcatServer
 			}
 
 			try {
-				((ILiferayTomcatConfiguration)configuration).load(folder, null);
+				ILiferayTomcatConfiguration liferayTomcatConfiguration = (ILiferayTomcatConfiguration)configuration;
+
+				liferayTomcatConfiguration.load(folder, null);
 			}
 			catch (CoreException ce) {
 				configuration = null;
@@ -233,7 +233,9 @@ public class LiferayTomcatServer
 		ITomcatVersionHandler handler = super.getTomcatVersionHandler();
 
 		if (handler instanceof ILiferayTomcatHandler) {
-			((ILiferayTomcatHandler)handler).setCurrentServer(getServer());
+			ILiferayTomcatHandler tomcatHandler = (ILiferayTomcatHandler)handler;
+
+			tomcatHandler.setCurrentServer(getServer());
 		}
 
 		return handler;
@@ -359,11 +361,11 @@ public class LiferayTomcatServer
 
 		String expectedServerInfo = portalRuntime.getExpectedServerInfo();
 
-		if ((serverInfo != null) && (expectedServerInfo != null)) {
-			if (serverInfo.contains(Msgs.enterpriseEdition) && !expectedServerInfo.contains(Msgs.enterpriseEdition)) {
-				LiferayTomcatUtil.displayToggleMessage(
-					Msgs.switchRuntimeType, LiferayTomcatPlugin.PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY);
-			}
+		if ((serverInfo != null) && (expectedServerInfo != null) && serverInfo.contains(Msgs.enterpriseEdition) &&
+			!expectedServerInfo.contains(Msgs.enterpriseEdition)) {
+
+			LiferayTomcatUtil.displayToggleMessage(
+				Msgs.switchRuntimeType, LiferayTomcatPlugin.PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY);
 		}
 
 		super.saveConfiguration(monitor);

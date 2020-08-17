@@ -165,7 +165,7 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
 					Collections.addAll(vmArguments, execArgs.getVMArgumentsArray());
 
-					runConfig.setVMArguments(vmArguments.toArray(new String[vmArguments.size()]));
+					runConfig.setVMArguments(vmArguments.toArray(new String[0]));
 				}
 			}
 			catch (Exception e) {

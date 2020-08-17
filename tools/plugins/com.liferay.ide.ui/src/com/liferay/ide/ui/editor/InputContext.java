@@ -122,8 +122,10 @@ public abstract class InputContext {
 		_fDocumentProvider.removeElementStateListener(_fElementListener);
 		_fDocumentProvider.disconnect(_fEditorInput);
 
-		if ((_fModelListener != null) && _fModel instanceof IModelChangeProvider) {
-			((IModelChangeProvider)_fModel).removeModelChangedListener(_fModelListener);
+		if ((_fModelListener != null) && (_fModel instanceof IModelChangeProvider)) {
+			IModelChangeProvider modelProvider = (IModelChangeProvider)_fModel;
+
+			modelProvider.removeModelChangedListener(_fModelListener);
 		}
 
 		if (_fModel != null) {
@@ -170,7 +172,9 @@ public abstract class InputContext {
 		IFile file = null;
 
 		if (_fEditorInput instanceof IFileEditorInput) {
-			file = ((IFileEditorInput)_fEditorInput).getFile();
+			IFileEditorInput fileInput = (IFileEditorInput)_fEditorInput;
+
+			file = fileInput.getFile();
 
 			dialog.setOriginalFile(file);
 		}
@@ -207,14 +211,18 @@ public abstract class InputContext {
 			_fDocumentProvider.changed(_fEditorInput);
 			_fValidated = false;
 		}
-		else if ((_fModel instanceof IEditable) && ((IEditable)_fModel).isDirty()) {
+		else if (_fModel instanceof IEditable) {
 
 			// When text edit operations are made that cancel each other out,
 			// the editor is not undirtied
 			// e.g. Extensions page: Move an element up and then move it down
 			// back in the same position: Bug # 197831
 
-			((IEditable)_fModel).setDirty(false);
+			IEditable editableModel = (IEditable)_fModel;
+
+			if (editableModel.isDirty()) {
+				editableModel.setDirty(false);
+			}
 		}
 	}
 
@@ -291,11 +299,11 @@ public abstract class InputContext {
 	}
 
 	public boolean mustSave() {
-		if (!_fIsSourceMode) {
-			if (_fModel instanceof IEditable) {
-				if (((IEditable)_fModel).isDirty()) {
-					return true;
-				}
+		if (!_fIsSourceMode && (_fModel instanceof IEditable)) {
+			IEditable editableModel = (IEditable)_fModel;
+
+			if (editableModel.isDirty()) {
+				return true;
 			}
 		}
 
@@ -348,33 +356,33 @@ public abstract class InputContext {
 	}
 
 	public synchronized boolean validateEdit() {
-		if (!_fValidated) {
-			if (_fEditorInput instanceof IFileEditorInput) {
-				IFile file = ((IFileEditorInput)_fEditorInput).getFile();
+		if (!_fValidated && (_fEditorInput instanceof IFileEditorInput)) {
+			IFileEditorInput fileInpit = (IFileEditorInput)_fEditorInput;
 
-				if (file.isReadOnly()) {
-					IEditorSite editorSite = _fEditor.getEditorSite();
+			IFile file = fileInpit.getFile();
 
-					Shell shell = editorSite.getShell();
+			if (file.isReadOnly()) {
+				IEditorSite editorSite = _fEditor.getEditorSite();
 
-					IWorkspace workspace = LiferayUIPlugin.getWorkspace();
+				Shell shell = editorSite.getShell();
 
-					IStatus validateStatus = workspace.validateEdit(new IFile[] {file}, shell);
+				IWorkspace workspace = LiferayUIPlugin.getWorkspace();
 
-					// to prevent loops
+				IStatus validateStatus = workspace.validateEdit(new IFile[] {file}, shell);
 
-					_fValidated = true;
+				// to prevent loops
 
-					if (validateStatus.getSeverity() != IStatus.OK) {
-						ErrorDialog.openError(shell, _fEditor.getTitle(), null, validateStatus);
-					}
+				_fValidated = true;
 
-					if (validateStatus.getSeverity() == IStatus.OK) {
-						return true;
-					}
-
-					return false;
+				if (validateStatus.getSeverity() != IStatus.OK) {
+					ErrorDialog.openError(shell, _fEditor.getTitle(), null, validateStatus);
 				}
+
+				if (validateStatus.getSeverity() == IStatus.OK) {
+					return true;
+				}
+
+				return false;
 			}
 		}
 
@@ -446,7 +454,9 @@ public abstract class InputContext {
 			parent.addChild(edit);
 
 			if (edit instanceof MoveSourceEdit) {
-				parent.addChild(((MoveSourceEdit)edit).getTargetEdit());
+				MoveSourceEdit sourceEdit = (MoveSourceEdit)edit;
+
+				parent.addChild(sourceEdit.getTargetEdit());
 			}
 
 			return;
@@ -479,7 +489,9 @@ public abstract class InputContext {
 		parent.addChild(edit);
 
 		if (edit instanceof MoveSourceEdit) {
-			parent.addChild(((MoveSourceEdit)edit).getTargetEdit());
+			MoveSourceEdit sourceEdit = (MoveSourceEdit)edit;
+
+			parent.addChild(sourceEdit.getTargetEdit());
 		}
 	}
 
@@ -511,7 +523,9 @@ public abstract class InputContext {
 								// and a text edit operation is falsely
 								// requested
 
-								if (((IEditingModel)provider).isDirty()) {
+								IEditingModel modelProvider = (IEditingModel)provider;
+
+								if (modelProvider.isDirty()) {
 									addTextEditOperation(fEditOperations, e);
 								}
 							}
@@ -520,7 +534,9 @@ public abstract class InputContext {
 
 				};
 
-				((IModelChangeProvider)_fModel).addModelChangedListener(_fModelListener);
+				IModelChangeProvider providerModel = (IModelChangeProvider)_fModel;
+
+				providerModel.addModelChangedListener(_fModelListener);
 			}
 
 			IAnnotationModel amodel = _fDocumentProvider.getAnnotationModel(_fEditorInput);
@@ -567,7 +583,9 @@ public abstract class InputContext {
 				}
 
 				if (_fModel instanceof IEditingModel) {
-					((IEditingModel)_fModel).setStale(true);
+					IEditingModel editingModel = (IEditingModel)_fModel;
+
+					editingModel.setStale(true);
 				}
 
 				edit.apply(doc);
@@ -589,7 +607,9 @@ public abstract class InputContext {
 		// updated and the editor needs to be undirtied
 
 		if (flushed && (_fModel instanceof IEditable)) {
-			((IEditable)_fModel).setDirty(false);
+			IEditable editableModel = (IEditable)_fModel;
+
+			editableModel.setDirty(false);
 		}
 	}
 
@@ -617,7 +637,7 @@ public abstract class InputContext {
 	 * @return
 	 */
 	private WorkspaceModifyOperation _createWorkspaceModifyOperation(IEditorInput newInput) {
-		WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
+		return new WorkspaceModifyOperation() {
 
 			public void execute(IProgressMonitor monitor) throws CoreException {
 
@@ -637,8 +657,6 @@ public abstract class InputContext {
 			}
 
 		};
-
-		return operation;
 	}
 
 	private void _deinitializeDocumentProvider() {

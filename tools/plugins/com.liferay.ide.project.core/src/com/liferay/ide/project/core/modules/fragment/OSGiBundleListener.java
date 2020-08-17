@@ -25,7 +25,6 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
@@ -44,10 +43,8 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent> i
 		String runtimeName = get(op.getLiferayRuntimeName());
 		String hostOsgiBundle = get(op.getHostOsgiBundle());
 
-		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
-
 		if (!CoreUtil.empty(hostOsgiBundle)) {
-			ServerUtil.getModuleFileFrom70Server(runtime, hostOsgiBundle, temp);
+			ServerUtil.getModuleFileFrom70Server(ServerUtil.getRuntime(runtimeName), hostOsgiBundle, temp);
 		}
 
 		SapphireUtil.clear(op.getOverrideFiles());

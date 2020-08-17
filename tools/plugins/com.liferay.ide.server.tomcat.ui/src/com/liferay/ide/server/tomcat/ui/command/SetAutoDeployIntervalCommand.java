@@ -32,12 +32,16 @@ public class SetAutoDeployIntervalCommand extends ServerCommand {
 	}
 
 	public void execute() {
-		oldAutoDeployInterval = ((LiferayTomcatServer)server).getAutoDeployInterval();
-		((LiferayTomcatServer)server).setAutoDeployInterval(autoDeployInterval);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		oldAutoDeployInterval = liferayServer.getAutoDeployInterval();
+		liferayServer.setAutoDeployInterval(autoDeployInterval);
 	}
 
 	public void undo() {
-		((LiferayTomcatServer)server).setAutoDeployInterval(oldAutoDeployInterval);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		liferayServer.setAutoDeployInterval(oldAutoDeployInterval);
 	}
 
 	protected String autoDeployInterval;

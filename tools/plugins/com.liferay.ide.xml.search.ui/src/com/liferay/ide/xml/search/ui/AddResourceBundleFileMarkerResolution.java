@@ -90,13 +90,13 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 				CoreUtil.makeFolders(folder);
 			}
 
-			IFile resourceBundle = folder.getFile(_resourceBundleName + ".properties");
-
 			String resourceKey = getResourceKey(marker);
 
 			if (CoreUtil.isNullOrEmpty(resourceKey)) {
 				return;
 			}
+
+			IFile resourceBundle = folder.getFile(_resourceBundleName + ".properties");
 
 			String resourceValue = getDefaultResourceValue(resourceKey);
 

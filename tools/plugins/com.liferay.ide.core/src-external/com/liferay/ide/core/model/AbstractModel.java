@@ -57,8 +57,7 @@ public abstract class AbstractModel
 	}
 
 	public void fireModelChanged(IModelChangedEvent event) {
-		IModelChangedListener[] list = (IModelChangedListener[])_fListeners.toArray(
-			new IModelChangedListener[_fListeners.size()]);
+		IModelChangedListener[] list = (IModelChangedListener[])_fListeners.toArray(new IModelChangedListener[0]);
 
 		for (IModelChangedListener listener : list) {
 			listener.modelChanged(event);

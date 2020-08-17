@@ -509,8 +509,10 @@ public class SWTUtil {
 		Object gd = button.getLayoutData();
 
 		if (gd instanceof GridData) {
-			((GridData)gd).widthHint = getButtonWidthHint(button);
-			((GridData)gd).horizontalAlignment = GridData.FILL;
+			GridData gData = (GridData)gd;
+
+			gData.widthHint = getButtonWidthHint(button);
+			gData.horizontalAlignment = GridData.FILL;
 		}
 	}
 

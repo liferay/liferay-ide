@@ -56,7 +56,7 @@ public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 
 	@Required
 	@Services(
-		value = {
+		{
 			@Service(impl = LiferayFragmentRuntimeNamePossibleValuesService.class),
 			@Service(impl = LiferayFragmentRuntimeNameDefaultValueService.class),
 			@Service(impl = LiferayRuntimeNameValidationService.class)

@@ -48,7 +48,9 @@ public class SDKProjectsImportAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		if (_fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)_fSelection).toArray();
+			IStructuredSelection fStructureSelection = (IStructuredSelection)_fSelection;
+
+			Object[] elems = fStructureSelection.toArray();
 
 			IProject project = null;
 

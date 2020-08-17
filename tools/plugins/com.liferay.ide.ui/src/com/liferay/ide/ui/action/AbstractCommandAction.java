@@ -33,7 +33,9 @@ public abstract class AbstractCommandAction extends AbstractObjectAction {
 
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+			IStructuredSelection structuredSelection = (IStructuredSelection)fSelection;
+
+			Object[] elems = structuredSelection.toArray();
 
 			Object elem = elems[0];
 

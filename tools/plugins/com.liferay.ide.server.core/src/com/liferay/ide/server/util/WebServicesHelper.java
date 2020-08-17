@@ -59,6 +59,7 @@ public class WebServicesHelper {
 	protected void initMap() {
 		try {
 			wsdlNameURLMap = new HashMap<>();
+
 			String webServicesString = CoreUtil.readStreamToString(webServicesListURL.openStream());
 
 			List<String> wsdlUrls = _pullLinks(webServicesString);

@@ -55,8 +55,6 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 
 	@Override
 	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		CompositeChange change = new CompositeChange(getName());
-
 		IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, _workspaceProject);
 
 		if (workspaceProject == null) {
@@ -70,6 +68,8 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 		if (FileUtil.notExists(projectLocation) || CoreUtil.isNullOrEmpty(homeDir)) {
 			return null;
 		}
+
+		CompositeChange change = new CompositeChange(getName());
 
 		Stream.of(
 			ServerCore.getServers()

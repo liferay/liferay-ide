@@ -30,7 +30,7 @@ public class BundleProjectPropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if ((property != null) && property.equals("isBundleProject") && receiver instanceof IProject &&
+		if ((property != null) && property.equals("isBundleProject") && (receiver instanceof IProject) &&
 			(LiferayCore.create(IBundleProject.class, (IProject)receiver) != null)) {
 
 			return true;

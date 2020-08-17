@@ -23,6 +23,8 @@ import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -58,15 +60,21 @@ public class NewLiferayComponentWizard
 			final Object element = selection.getFirstElement();
 
 			if (element instanceof IResource) {
-				_initialProject = ((IResource)element).getProject();
+				IResource resourceElement = (IResource)element;
+
+				_initialProject = resourceElement.getProject();
 			}
 			else if (element instanceof IJavaProject) {
-				_initialProject = ((IJavaProject)element).getProject();
+				IJavaProject javaElement = (IJavaProject)element;
+
+				_initialProject = javaElement.getProject();
 			}
 			else if (element instanceof IPackageFragment) {
 				_initialPackage = (IPackageFragment)element;
 
-				IResource resource = ((IJavaElement)element).getResource();
+				IJavaElement javaElement = (IJavaElement)element;
+
+				IResource resource = javaElement.getResource();
 
 				_initialProject = resource.getProject();
 			}
@@ -78,7 +86,9 @@ public class NewLiferayComponentWizard
 				_initialProject = javaProject.getProject();
 			}
 			else if (element instanceof IJavaElement) {
-				IResource resource = ((IJavaElement)element).getResource();
+				IJavaElement javaElement = (IJavaElement)element;
+
+				IResource resource = javaElement.getResource();
 
 				_initialProject = resource.getProject();
 			}
@@ -86,7 +96,7 @@ public class NewLiferayComponentWizard
 			if (_initialProject != null) {
 				final IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, _initialProject);
 
-				if ((bundleProject != null) && "jar".equals(bundleProject.getBundleShape()) &&
+				if ((bundleProject != null) && Objects.equals("jar", bundleProject.getBundleShape()) &&
 					!bundleProject.isFragmentBundle()) {
 
 					element().setProjectName(_initialProject.getName());

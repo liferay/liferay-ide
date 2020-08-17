@@ -93,14 +93,10 @@ public class ComponentPropertiesCompletionProposalComputer implements IJavaCompl
 			if ((candidate != null) && hasQuot) {
 				candidate = candidate.trim();
 
-				int replaceStartPos = invocationOffset - candidate.length();
-
-				for (int i = 0; i < LiferayComponentProperties.CODE_ASSISTANT_RESOURCE.length - 1; i++) {
+				for (int i = 0; i < (LiferayComponentProperties.CODE_ASSISTANT_RESOURCE.length - 1); i++) {
 					final String[] propertyAssist = LiferayComponentProperties.CODE_ASSISTANT_RESOURCE[i];
 
 					final String propertyKey = propertyAssist[0];
-
-					final String propertyComment = propertyAssist[2];
 
 					if ((candidate.length() > 0) && !propertyKey.startsWith(candidate)) {
 						continue;
@@ -111,6 +107,10 @@ public class ComponentPropertiesCompletionProposalComputer implements IJavaCompl
 					Image propertiesImage = imageRegistry.get(ProjectUI.PROPERTIES_IMAGE_ID);
 
 					final String replaceString = propertyKey + "=";
+
+					final String propertyComment = propertyAssist[2];
+
+					int replaceStartPos = invocationOffset - candidate.length();
 
 					propsoalList.add(
 						new ComponentPropertyCompletionProposal(

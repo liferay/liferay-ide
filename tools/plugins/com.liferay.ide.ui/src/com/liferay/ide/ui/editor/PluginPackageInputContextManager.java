@@ -30,7 +30,9 @@ public class PluginPackageInputContextManager extends InputContextManager {
 
 	@Override
 	public IBaseModel getModel() {
-		InputContext context = findContext(((IFileEditorInput)this.editor.getEditorInput()).getFile());
+		IFileEditorInput editorInput = (IFileEditorInput)this.editor.getEditorInput();
+
+		InputContext context = findContext(editorInput.getFile());
 
 		if (context != null) {
 			return context.getModel();

@@ -65,7 +65,9 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate implemen
 	@Override
 	public void onEvent(Event event) {
 		if (event instanceof ProjectDeletedEvent) {
-			clearCache(((ProjectDeletedEvent)event).getProject());
+			ProjectDeletedEvent deletedEvent = (ProjectDeletedEvent)event;
+
+			clearCache(deletedEvent.getProject());
 		}
 	}
 

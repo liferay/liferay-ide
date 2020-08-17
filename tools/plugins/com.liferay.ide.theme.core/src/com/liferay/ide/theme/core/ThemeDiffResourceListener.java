@@ -146,10 +146,12 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 					String name = id;
 
-					if (propsRes instanceof IFile && propsRes.exists()) {
+					if ((propsRes instanceof IFile) && propsRes.exists()) {
 						Properties props = new Properties();
 
-						try (InputStream inputStream = ((IFile)propsRes).getContents()) {
+						IFile filePropsRes = (IFile)propsRes;
+
+						try (InputStream inputStream = filePropsRes.getContents()) {
 							props.load(inputStream);
 
 							String nameValue = props.getProperty("name");
@@ -212,7 +214,6 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 	}
 
 	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
-		IPath fullPath = delta.getFullPath();
 
 		// IDE-110 IDE-648
 
@@ -230,7 +231,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 		IPath diffPath = diffs.getFullPath();
 
-		return diffPath.isPrefixOf(fullPath);
+		return diffPath.isPrefixOf(delta.getFullPath());
 	}
 
 	private IFile _getWorkspaceFile(IPath path) {

@@ -74,7 +74,9 @@ public class JarEntrySelectionDialog extends ElementTreeSelectionDialog {
 
 		@Override
 		public boolean hasChildren(Object element) {
-			return ((ZipEntry)element).isDirectory();
+			ZipEntry entryElement = (ZipEntry)element;
+
+			return entryElement.isDirectory();
 		}
 
 		private ZipLeveledStructureProvider _structureProvider;
@@ -99,9 +101,8 @@ public class JarEntrySelectionDialog extends ElementTreeSelectionDialog {
 			if (entry.isDirectory()) {
 				return _imgFolder;
 			}
-			else {
-				return _imgFile;
-			}
+
+			return _imgFile;
 		}
 
 		@Override

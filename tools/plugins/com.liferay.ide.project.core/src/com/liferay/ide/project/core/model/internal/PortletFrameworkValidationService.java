@@ -23,6 +23,8 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -60,7 +62,7 @@ public class PortletFrameworkValidationService extends ValidationService impleme
 		}
 
 		try {
-			if ("ant".equals(projectProvider.getShortName())) {
+			if (Objects.equals(projectProvider.getShortName(), "ant")) {
 				SDK sdk = SDKUtil.getWorkspaceSDK();
 
 				if (sdk != null) {

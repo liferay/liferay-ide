@@ -158,9 +158,8 @@ public class RemoteConnection implements IRemoteConnection {
 
 			return body;
 		}
-		else {
-			return statusLine.getReasonPhrase();
-		}
+
+		return statusLine.getReasonPhrase();
 	}
 
 	protected Object getJSONAPI(Object... args) throws APIException {
@@ -254,9 +253,8 @@ public class RemoteConnection implements IRemoteConnection {
 				if (jsonResponse == null) {
 					throw new APIException(api, "Unable to get response: " + response);
 				}
-				else {
-					retval = jsonResponse;
-				}
+
+				retval = jsonResponse;
 			}
 		}
 		catch (APIException apie) {

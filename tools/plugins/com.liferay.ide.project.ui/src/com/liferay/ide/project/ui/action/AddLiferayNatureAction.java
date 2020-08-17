@@ -32,7 +32,9 @@ public class AddLiferayNatureAction extends AbstractObjectAction {
 	@Override
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+			IStructuredSelection structureSelection = (IStructuredSelection)fSelection;
+
+			Object[] elems = structureSelection.toArray();
 
 			IProject project = null;
 

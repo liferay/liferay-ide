@@ -49,7 +49,9 @@ public class XmlValidationQuickAssistProcessor extends AbstractQuickAssistProces
 	@Override
 	protected IMarker getMarkerFromAnnotation(Annotation annotation) {
 		if (annotation instanceof StructuredMarkerAnnotation) {
-			return ((StructuredMarkerAnnotation)annotation).getMarker();
+			StructuredMarkerAnnotation markerAnnotation = (StructuredMarkerAnnotation)annotation;
+
+			return markerAnnotation.getMarker();
 		}
 		else if (annotation instanceof TemporaryAnnotation) {
 			TemporaryAnnotation temp = (TemporaryAnnotation)annotation;

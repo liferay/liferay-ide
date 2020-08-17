@@ -20,7 +20,6 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.Map;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.InitialValueService;
 
 /**
@@ -41,9 +40,7 @@ public class HostOSGiBundleInitialValueService extends InitialValueService imple
 			return null;
 		}
 
-		IProject project = CoreUtil.getProject(projectName);
-
-		Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(project);
+		Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(CoreUtil.getProject(projectName));
 
 		return fragmentProjectInfo.get("HostOSGiBundleName");
 	}

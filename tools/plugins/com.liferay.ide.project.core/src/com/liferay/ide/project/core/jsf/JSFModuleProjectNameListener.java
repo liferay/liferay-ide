@@ -46,13 +46,13 @@ public class JSFModuleProjectNameListener
 	private void _updateLocation(NewLiferayJSFModuleProjectOp op) {
 		String currentProjectName = get(op.getProjectName());
 
-		Path newLocationBase = null;
-
 		if ((currentProjectName == null) || CoreUtil.isNullOrEmpty(currentProjectName.trim())) {
 			return;
 		}
 
 		boolean useDefaultLocation = get(op.getUseDefaultLocation());
+
+		Path newLocationBase = null;
 
 		if (useDefaultLocation) {
 			newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());

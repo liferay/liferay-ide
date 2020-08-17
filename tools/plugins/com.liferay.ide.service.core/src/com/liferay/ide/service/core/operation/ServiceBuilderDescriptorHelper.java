@@ -23,6 +23,7 @@ import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,9 +57,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 	}
 
 	public IStatus addDefaultColumns(String elementName) {
-		IFile descriptorFile = getDescriptorFile();
-
-		DOMModelEditOperation editOperation = new DOMModelEditOperation(descriptorFile) {
+		DOMModelEditOperation editOperation = new DOMModelEditOperation(getDescriptorFile()) {
 
 			@Override
 			protected IStatus doExecute(IDOMDocument document) {
@@ -170,8 +169,10 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
 
-				if ("entity".equals(node.getNodeName()) && (node instanceof Element)) {
-					if (entityName.equals(((Element)node).getAttribute("name"))) {
+				if (Objects.equals("entity", node.getNodeName()) && (node instanceof Element)) {
+					Element elementNode = (Element)node;
+
+					if (entityName.equals(elementNode.getAttribute("name"))) {
 						entityElement = (Element)node;
 					}
 				}
@@ -376,7 +377,9 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 			Node entity = entities.item(i);
 
 			if (entity instanceof Element) {
-				String name = ((Element)entity).getAttribute("name");
+				Element entityElement = (Element)entity;
+
+				String name = entityElement.getAttribute("name");
 
 				if ((name != null) && name.equals(entityName)) {
 					return Status.OK_STATUS;
@@ -441,8 +444,10 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 			for (int i = 0; i < nodes.getLength(); i++) {
 				node = nodes.item(i);
 
-				if ("entity".equals(node.getNodeName())) {
-					String entityName = ((Element)node).getAttribute("name");
+				if (Objects.equals("entity", node.getNodeName())) {
+					Element elementNode = (Element)node;
+
+					String entityName = elementNode.getAttribute("name");
 
 					if (!CoreUtil.isNullOrEmpty(entityName)) {
 						entityNames.add(entityName);

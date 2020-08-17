@@ -48,17 +48,23 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 		IEditorInput editorInput = getEditorInput();
 
 		if (editorInput instanceof FileEditorInput) {
-			IFile file = ((FileEditorInput)editorInput).getFile();
+			FileEditorInput fileEditorInput = (FileEditorInput)editorInput;
+
+			IFile file = fileEditorInput.getFile();
 
 			retval = file.getContents();
 		}
 		else if (editorInput instanceof IStorageEditorInput) {
-			IStorage storage = ((IStorageEditorInput)editorInput).getStorage();
+			IStorageEditorInput storageEditroInput = (IStorageEditorInput)editorInput;
+
+			IStorage storage = storageEditroInput.getStorage();
 
 			retval = storage.getContents();
 		}
 		else if (editorInput instanceof FileStoreEditorInput) {
-			URI uri = ((FileStoreEditorInput)editorInput).getURI();
+			FileStoreEditorInput fileStoreEditorInput = (FileStoreEditorInput)editorInput;
+
+			URI uri = fileStoreEditorInput.getURI();
 
 			URL editorInputURL = uri.toURL();
 

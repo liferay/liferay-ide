@@ -50,7 +50,7 @@ public class ServiceNameValidataionService extends ValidationService implements 
 
 		String projectTemplate = get(op.getProjectTemplateName());
 
-		if ("service".equals(projectTemplate) || "service-wrapper".equals(projectTemplate)) {
+		if (projectTemplate.equals("service") || projectTemplate.equals("service-wrapper")) {
 			String serviceName = get(op.getServiceName());
 
 			if (CoreUtil.isNullOrEmpty(serviceName)) {

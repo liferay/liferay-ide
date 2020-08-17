@@ -49,18 +49,26 @@ public class NewModuleFragmentFilesWizard
 			final Object element = selection.getFirstElement();
 
 			if (element instanceof IResource) {
-				_initialProject = ((IResource)element).getProject();
+				IResource resourceElement = (IResource)element;
+
+				_initialProject = resourceElement.getProject();
 			}
 			else if (element instanceof IJavaProject) {
-				_initialProject = ((IJavaProject)element).getProject();
+				IJavaProject javaProjectElement = (IJavaProject)element;
+
+				_initialProject = javaProjectElement.getProject();
 			}
 			else if (element instanceof IPackageFragment) {
-				IResource resource = ((IPackageFragment)element).getResource();
+				IPackageFragment packageFragmentElement = (IPackageFragment)element;
+
+				IResource resource = packageFragmentElement.getResource();
 
 				_initialProject = resource.getProject();
 			}
 			else if (element instanceof IJavaElement) {
-				IResource resource = ((IJavaElement)element).getResource();
+				IJavaElement javaElement = (IJavaElement)element;
+
+				IResource resource = javaElement.getResource();
 
 				_initialProject = resource.getProject();
 			}

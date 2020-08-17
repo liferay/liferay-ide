@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.dialog;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.viewers.Viewer;
@@ -49,9 +51,11 @@ public class JavaProjectSelectionDialog extends ProjectSelectionDialog {
 		@Override
 		public boolean select(Viewer viewer, Object parentElement, Object element) {
 			if (element instanceof IJavaProject) {
-				IProject project = ((IJavaProject)element).getProject();
+				IJavaProject javaProjectElement = (IJavaProject)element;
 
-				if ("External Plug-in Libraries".equals(project.getName())) {
+				IProject project = javaProjectElement.getProject();
+
+				if (Objects.equals("External Plug-in Libraries", project.getName())) {
 					return false;
 				}
 

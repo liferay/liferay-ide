@@ -19,6 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -45,7 +46,7 @@ public class NewLiferayComponentProjectNamePossibleService extends PossibleValue
 			for (IProject project : allProjects) {
 				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
-				if ((bundleProject != null) && "jar".equals(bundleProject.getBundleShape()) &&
+				if ((bundleProject != null) && Objects.equals("jar", bundleProject.getBundleShape()) &&
 					!bundleProject.isFragmentBundle()) {
 
 					values.add(project.getName());

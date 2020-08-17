@@ -104,10 +104,8 @@ public class ModuleFragmentProjectGroupIdDefaultValueService
 
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
-		String defaultMavenGroupId = preferencesService.getString(
+		return preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, prefContexts);
-
-		return defaultMavenGroupId;
 	}
 
 	private NewModuleFragmentOp _op() {

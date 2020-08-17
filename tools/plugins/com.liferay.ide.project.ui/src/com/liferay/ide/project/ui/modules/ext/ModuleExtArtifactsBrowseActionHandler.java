@@ -41,8 +41,10 @@ public final class ModuleExtArtifactsBrowseActionHandler extends BrowseActionHan
 
 		NewModuleExtOp newModuleExtOp = property.nearest(NewModuleExtOp.class);
 
+		FormComponentPresentation componentPresentation = (FormComponentPresentation)presentation;
+
 		ModuleExtBrowseDialog moduleExtBrowseDialog = new ModuleExtBrowseDialog(
-			((FormComponentPresentation)presentation).shell(), property);
+			componentPresentation.shell(), property);
 
 		moduleExtBrowseDialog.open();
 
@@ -51,9 +53,7 @@ public final class ModuleExtArtifactsBrowseActionHandler extends BrowseActionHan
 		if ((result != null) && (result.length == 1)) {
 			Artifact artifact = (Artifact)result[0];
 
-			String version = artifact.getVersion();
-
-			newModuleExtOp.setOriginalModuleVersion(version);
+			newModuleExtOp.setOriginalModuleVersion(artifact.getVersion());
 
 			File source = artifact.getSource();
 

@@ -41,7 +41,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
@@ -68,7 +67,7 @@ public class NewModuleExtOpMethods {
 
 			retval = StatusBridge.create(status);
 
-			if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
+			if ((retval.severity() == Status.Severity.ERROR) && (retval.exception() != null)) {
 				errorStack = retval.exception();
 			}
 			else {

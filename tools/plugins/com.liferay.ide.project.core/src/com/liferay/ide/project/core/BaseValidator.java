@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
@@ -97,12 +96,14 @@ public abstract class BaseValidator extends AbstractValidator {
 
 			liferayDescriptorXmlModel = modelManager.getModelForRead(liferayDescriptorXml);
 
-			if ((liferayDescriptorXmlModel != null) && liferayDescriptorXmlModel instanceof IDOMModel &&
+			if ((liferayDescriptorXmlModel != null) && (liferayDescriptorXmlModel instanceof IDOMModel) &&
 				(map != null)) {
 
-				liferayDescriptorXmlDocument = ((IDOMModel)liferayDescriptorXmlModel).getDocument();
+				IDOMModel liferayDescriptorXmlDomodel = (IDOMModel)liferayDescriptorXmlModel;
 
-				for (Entry<String, String> entry : map.entrySet()) {
+				liferayDescriptorXmlDocument = liferayDescriptorXmlDomodel.getDocument();
+
+				for (Map.Entry<String, String> entry : map.entrySet()) {
 					checkClassElements(
 						liferayDescriptorXmlDocument, javaProject, entry.getKey(), preferenceNodeQualifier,
 						preferenceScopes, classExistPreferenceKey, classHierarchyPreferenceKey, problems,
@@ -380,8 +381,8 @@ public abstract class BaseValidator extends AbstractValidator {
 
 		int line = structuredDocument.getLineOfOffset(start);
 
-		markerValues.put(IMarker.CHAR_START, Integer.valueOf(start));
 		markerValues.put(IMarker.CHAR_END, Integer.valueOf(end));
+		markerValues.put(IMarker.CHAR_START, Integer.valueOf(start));
 		markerValues.put(IMarker.LINE_NUMBER, Integer.valueOf(line + 1));
 		markerValues.put(IMarker.MESSAGE, message);
 	}

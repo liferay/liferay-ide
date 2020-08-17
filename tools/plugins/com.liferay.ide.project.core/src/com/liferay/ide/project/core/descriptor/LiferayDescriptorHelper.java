@@ -80,7 +80,7 @@ public abstract class LiferayDescriptorHelper {
 			LiferayCore.logError("Could not get liferay runtime.", e);
 		}
 
-		if ("0.0.0".equals(retval)) {
+		if (retval.equals("0.0.0")) {
 			retval = defaultValue;
 		}
 
@@ -169,9 +169,7 @@ public abstract class LiferayDescriptorHelper {
 
 				domModel.aboutToChangeModel();
 
-				IDOMDocument document = domModel.getDocument();
-
-				retval = doExecute(document);
+				retval = doExecute(domModel.getDocument());
 
 				domModel.changedModel();
 
@@ -197,10 +195,7 @@ public abstract class LiferayDescriptorHelper {
 	protected static String getDescriptorVersionFromPortalVersion(String versionStr) {
 		Version version = new Version(versionStr);
 
-		int major = version.getMajor();
-		int minor = version.getMinor();
-
-		return String.valueOf(major) + "." + String.valueOf(minor) + ".0";
+		return String.valueOf(version.getMajor()) + "." + String.valueOf(version.getMinor()) + ".0";
 	}
 
 	protected void addDescriptorOperation(IDescriptorOperation operation) {
@@ -306,22 +301,20 @@ public abstract class LiferayDescriptorHelper {
 
 		@Override
 		public IStatus execute() {
-			IStatus retval = null;
-
 			if (FileUtil.notExists(file)) {
 				return LiferayCore.createErrorStatus(file.getName() + " does not exist");
 			}
 
 			IDOMModel domModel = null;
 
+			IStatus retval = null;
+
 			try {
 				IModelManager modelManager = StructuredModelManager.getModelManager();
 
 				domModel = (IDOMModel)modelManager.getModelForRead(file);
 
-				IDOMDocument document = domModel.getDocument();
-
-				retval = doExecute(document);
+				retval = doExecute(domModel.getDocument());
 			}
 			catch (Exception e) {
 				retval = LiferayCore.createErrorStatus(e);

@@ -20,6 +20,8 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.util.Objects;
+
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 import org.eclipse.wst.server.core.IRuntime;
@@ -37,7 +39,7 @@ public class NewLiferayProfileRuntimeValidationService extends ValidationService
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		if ("maven".equals(provider.getShortName())) {
+		if (Objects.equals(provider.getShortName(), "maven")) {
 			NewLiferayProfile newLiferayProfile = context(NewLiferayProfile.class);
 
 			String runtimeName = get(newLiferayProfile.getRuntimeName());

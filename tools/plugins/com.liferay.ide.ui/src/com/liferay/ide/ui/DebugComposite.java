@@ -28,9 +28,7 @@ public class DebugComposite extends Composite {
 
 	@Override
 	public Point computeSize(int wHint, int hHint, boolean changed) {
-		Point p = super.computeSize(wHint, hHint, changed);
-
-		return p;
+		return super.computeSize(wHint, hHint, changed);
 	}
 
 }

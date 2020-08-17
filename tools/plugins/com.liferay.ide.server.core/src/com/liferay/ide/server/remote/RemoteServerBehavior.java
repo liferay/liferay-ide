@@ -81,12 +81,11 @@ public class RemoteServerBehavior
 		if ((status != null) && status.isOK()) {
 			return true;
 		}
-		else {
-			status = SocketUtil.canConnectProxy(getServer().getHost(), getRemoteServer().getHTTPPort());
 
-			if ((status != null) && status.isOK()) {
-				return true;
-			}
+		status = SocketUtil.canConnectProxy(getServer().getHost(), getRemoteServer().getHTTPPort());
+
+		if ((status != null) && status.isOK()) {
+			return true;
 		}
 
 		return false;
@@ -97,9 +96,8 @@ public class RemoteServerBehavior
 		if (currentLaunch != null) {
 			return Status.OK_STATUS;
 		}
-		else {
-			return Status.CANCEL_STATUS;
-		}
+
+		return Status.CANCEL_STATUS;
 	}
 
 	@Override
@@ -160,10 +158,10 @@ public class RemoteServerBehavior
 
 			String serverState = retval.toString();
 
-			if ("STARTED".equals(serverState)) {
+			if (serverState.equals("STARTED")) {
 				return IServer.STATE_STARTED;
 			}
-			else if ("STOPPED".equals(serverState)) {
+			else if (serverState.equals("STOPPED")) {
 				return IServer.STATE_STOPPED;
 			}
 		}
@@ -214,13 +212,11 @@ public class RemoteServerBehavior
 	}
 
 	public void serverRemoved(IServer server) {
-		if (server.equals(getServer())) {
-			if ((currentLaunch != null) && !currentLaunch.isTerminated()) {
-				try {
-					currentLaunch.terminate();
-				}
-				catch (DebugException de) {
-				}
+		if (server.equals(getServer()) && (currentLaunch != null) && !currentLaunch.isTerminated()) {
+			try {
+				currentLaunch.terminate();
+			}
+			catch (DebugException de) {
 			}
 		}
 
@@ -558,8 +554,6 @@ public class RemoteServerBehavior
 			throw new CoreException(LiferayServerCore.error(Msgs.publishingModuleProject));
 		}
 
-		IPath warPath = publisher.publishModuleDelta(appName + ".war", delta, "liferay", true);
-
 		monitor.worked(25);
 
 		if ((monitor != null) && monitor.isCanceled()) {
@@ -573,6 +567,8 @@ public class RemoteServerBehavior
 		monitor.subTask(NLS.bind(Msgs.updatingModuleProject, moduleProject.getName()));
 
 		Object error = null;
+
+		IPath warPath = publisher.publishModuleDelta(appName + ".war", delta, "liferay", true);
 
 		try {
 			error = connection.updateApplication(appName, warPath.toOSString(), monitor);
@@ -628,10 +624,6 @@ public class RemoteServerBehavior
 			return IServer.PUBLISH_STATE_FULL;
 		}
 
-		String appName = ComponentUtilities.getServerContextRoot(moduleProject);
-
-		IServerManagerConnection remoteConnection = getServerManagerConnection();
-
 		setModuleStatus(module, LiferayServerCore.info(Msgs.installing));
 
 		submon.worked(25);
@@ -643,6 +635,10 @@ public class RemoteServerBehavior
 		submon.subTask(NLS.bind(Msgs.publishingModuleProject, moduleProject.getName()));
 
 		Object error = null;
+
+		IServerManagerConnection remoteConnection = getServerManagerConnection();
+
+		String appName = ComponentUtilities.getServerContextRoot(moduleProject);
 
 		try {
 			error = remoteConnection.installApplication(warPath.toOSString(), appName, submon);
@@ -778,32 +774,31 @@ public class RemoteServerBehavior
 
 					break;
 				}
-				else {
-					IModuleResource resource = delta.getModuleResource();
 
-					IFile resourceFile = resource.getAdapter(IFile.class);
+				IModuleResource resource = delta.getModuleResource();
 
-					if (resourceFile != null) {
-						IWebProject lrproject = LiferayCore.create(IWebProject.class, resourceFile.getProject());
+				IFile resourceFile = resource.getAdapter(IFile.class);
 
-						if (lrproject != null) {
-							IFolder docrootFolder = lrproject.getDefaultDocrootFolder();
+				if (resourceFile != null) {
+					IWebProject lrproject = LiferayCore.create(IWebProject.class, resourceFile.getProject());
 
-							IPath docrootPath = docrootFolder.getFullPath();
+					if (lrproject != null) {
+						IFolder docrootFolder = lrproject.getDefaultDocrootFolder();
 
-							IPath resourceFullPath = resourceFile.getFullPath();
+						IPath docrootPath = docrootFolder.getFullPath();
 
-							if (lrproject.findDocrootResource(resourceFullPath.makeRelativeTo(docrootPath)) != null) {
-								String resourceName = resource.getName();
+						IPath resourceFullPath = resourceFile.getFullPath();
 
-								if (resourceName.equals("web.xml") ||
-									resourceName.equals(ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE)) {
+						if (lrproject.findDocrootResource(resourceFullPath.makeRelativeTo(docrootPath)) != null) {
+							String resourceName = resource.getName();
 
-									break;
-								}
-								else if (resourceName.equals("portlet.xml")) {
-									break;
-								}
+							if (resourceName.equals("web.xml") ||
+								resourceName.equals(ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE)) {
+
+								break;
+							}
+							else if (resourceName.equals("portlet.xml")) {
+								break;
 							}
 						}
 					}

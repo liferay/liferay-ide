@@ -58,15 +58,21 @@ public class BuildServiceHandler extends AbstractHandler {
 			Object selected = structuredSelection.getFirstElement();
 
 			if (selected instanceof IResource) {
-				project = ((IResource)selected).getProject();
+				IResource selectedResource = (IResource)selected;
+
+				project = selectedResource.getProject();
 			}
 			else if (selected instanceof IJavaElement) {
-				IJavaProject javaProject = ((IJavaElement)selected).getJavaProject();
+				IJavaElement selectedJavaElement = (IJavaElement)selected;
+
+				IJavaProject javaProject = selectedJavaElement.getJavaProject();
 
 				project = javaProject.getProject();
 			}
 			else if (selected instanceof PackageFragmentRootContainer) {
-				IJavaProject javaProject = ((PackageFragmentRootContainer)selected).getJavaProject();
+				PackageFragmentRootContainer selectedContainer = (PackageFragmentRootContainer)selected;
+
+				IJavaProject javaProject = selectedContainer.getJavaProject();
 
 				project = javaProject.getProject();
 			}
@@ -76,7 +82,9 @@ public class BuildServiceHandler extends AbstractHandler {
 			IEditorInput editorInput = HandlerUtil.getActiveEditorInput(event);
 
 			if ((editorInput != null) && (editorInput.getAdapter(IResource.class) != null)) {
-				project = ((IResource)editorInput.getAdapter(IResource.class)).getProject();
+				IResource editorInputAdapter = (IResource)editorInput.getAdapter(IResource.class);
+
+				project = editorInputAdapter.getProject();
 			}
 		}
 

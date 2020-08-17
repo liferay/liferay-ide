@@ -31,11 +31,11 @@ public class NodeUtil {
 	}
 
 	public static Element appendChildElement(Element parentElement, String newElementName, String initialTextContent) {
-		Element newChildElement = null;
-
 		if ((parentElement == null) || (newElementName == null)) {
 			return null;
 		}
+
+		Element newChildElement = null;
 
 		Document ownerDocument = parentElement.getOwnerDocument();
 
@@ -78,7 +78,7 @@ public class NodeUtil {
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
 
-			if (child instanceof Element && StringUtil.equals(child.getNodeName(), elementName)) {
+			if ((child instanceof Element) && StringUtil.equals(child.getNodeName(), elementName)) {
 				return (Element)child;
 			}
 		}
@@ -140,7 +140,7 @@ public class NodeUtil {
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
 
-			if (child instanceof Element && StringUtil.equals(child.getNodeName(), childElement)) {
+			if ((child instanceof Element) && StringUtil.equals(child.getNodeName(), childElement)) {
 				return getTextContent((Element)child);
 			}
 		}

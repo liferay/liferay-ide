@@ -77,22 +77,22 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
 	public void selectionChanged(IAction action, ISelection selection) {
 		selectedServer = null;
 
-		if (!selection.isEmpty()) {
-			if (selection instanceof IStructuredSelection) {
-				Object obj = ((IStructuredSelection)selection).getFirstElement();
+		if (!selection.isEmpty() && (selection instanceof IStructuredSelection)) {
+			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 
-				if (obj instanceof IServer) {
-					selectedServer = (IServer)obj;
+			Object obj = structuredSelection.getFirstElement();
 
-					action.setEnabled((selectedServer.getServerState() & getRequiredServerState()) > 0);
-				}
-				else if (obj instanceof IServerModule) {
-					selectedModule = (IServerModule)obj;
+			if (obj instanceof IServer) {
+				selectedServer = (IServer)obj;
 
-					selectedServer = selectedModule.getServer();
+				action.setEnabled((selectedServer.getServerState() & getRequiredServerState()) > 0);
+			}
+			else if (obj instanceof IServerModule) {
+				selectedModule = (IServerModule)obj;
 
-					action.setEnabled((selectedServer.getServerState() & getRequiredServerState()) > 0);
-				}
+				selectedServer = selectedModule.getServer();
+
+				action.setEnabled((selectedServer.getServerState() & getRequiredServerState()) > 0);
 			}
 		}
 	}
@@ -111,13 +111,12 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
 
 			return site.getShell();
 		}
-		else {
-			IWorkbench workbench = PlatformUI.getWorkbench();
 
-			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+		IWorkbench workbench = PlatformUI.getWorkbench();
 
-			return activeWorkbenchWindow.getShell();
-		}
+		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+
+		return activeWorkbenchWindow.getShell();
 	}
 
 	protected abstract int getRequiredServerState();

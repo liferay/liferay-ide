@@ -16,6 +16,7 @@ package com.liferay.ide.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 
@@ -78,19 +79,19 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
 
 		int priorityValue = 10;
 
-		if ("lowest".equals(priority)) {
+		if (Objects.equals("lowest", priority)) {
 			priorityValue = 1;
 		}
-		else if ("low".equals(priority)) {
+		else if (Objects.equals("low", priority)) {
 			priorityValue = 2;
 		}
-		else if ("normal".equals(priority)) {
+		else if (Objects.equals("normal", priority)) {
 			priorityValue = 3;
 		}
-		else if ("high".equals(priority)) {
+		else if (Objects.equals("high", priority)) {
 			priorityValue = 4;
 		}
-		else if ("highest".equals(priority)) {
+		else if (Objects.equals("highest", priority)) {
 			priorityValue = 5;
 		}
 

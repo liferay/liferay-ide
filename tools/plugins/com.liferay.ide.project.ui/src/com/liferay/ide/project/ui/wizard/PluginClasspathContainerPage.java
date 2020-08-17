@@ -107,11 +107,10 @@ public class PluginClasspathContainerPage
 		if ((_ownerProject != null) && ProjectUtil.isLiferayFacetedProject(_ownerProject)) {
 			return true;
 		}
-		else {
-			setErrorMessage(Msgs.selectedProjectNotLiferayProject);
 
-			return false;
-		}
+		setErrorMessage(Msgs.selectedProjectNotLiferayProject);
+
+		return false;
 	}
 
 	public IClasspathEntry getSelection() {

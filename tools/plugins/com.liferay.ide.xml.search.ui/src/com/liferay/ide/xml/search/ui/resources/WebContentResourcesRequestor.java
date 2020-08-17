@@ -14,6 +14,8 @@
 
 package com.liferay.ide.xml.search.ui.resources;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.xml.search.core.resource.DefaultResourceRequestor;
@@ -32,11 +34,11 @@ public class WebContentResourcesRequestor extends DefaultResourceRequestor {
 		Object selectedNode, IResource rootContainer, IFolder folder, IURIResolver resolver, String matching,
 		boolean fullMatch) {
 
-		if ("WEB-INF".equals(folder.getName())) {
+		if (Objects.equals("WEB-INF", folder.getName())) {
 			return false;
 		}
 
-		if ("META-INF".equals(folder.getName())) {
+		if (Objects.equals("META-INF", folder.getName())) {
 			return false;
 		}
 

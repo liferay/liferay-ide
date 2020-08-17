@@ -86,7 +86,7 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 			content = StringUtils.replace(content, "\r\n", "\n");
 			content = StringUtils.replace(content, "\r", "\n");
 
-			if (!"\n".equals(systemEOL) && (systemEOL != null)) {
+			if (!systemEOL.equals("\n") && (systemEOL != null)) {
 				content = StringUtils.replace(content, "\n", systemEOL);
 			}
 
@@ -134,9 +134,7 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 			return "";
 		}
 
-		String insertString = getResolvedString(host);
-
-		return insertString;
+		return getResolvedString(host);
 	}
 
 	protected abstract String getResolvedString(Shell host);

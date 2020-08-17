@@ -107,9 +107,11 @@ public class PingThread {
 
 				URLConnection conn = pingUrl.openConnection();
 
-				((HttpURLConnection)conn).setInstanceFollowRedirects(false);
+				HttpURLConnection httpConn = (HttpURLConnection)conn;
 
-				int code = ((HttpURLConnection)conn).getResponseCode();
+				httpConn.setInstanceFollowRedirects(false);
+
+				int code = httpConn.getResponseCode();
 
 				// ping worked - server is up
 

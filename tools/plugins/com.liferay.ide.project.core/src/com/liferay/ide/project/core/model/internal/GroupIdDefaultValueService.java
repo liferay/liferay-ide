@@ -91,10 +91,8 @@ public class GroupIdDefaultValueService extends DefaultValueService implements S
 
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
-		String defaultMavenGroupId = preferencesService.getString(
+		return preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, null, prefContexts);
-
-		return defaultMavenGroupId;
 	}
 
 	private NewLiferayPluginProjectOp _op() {

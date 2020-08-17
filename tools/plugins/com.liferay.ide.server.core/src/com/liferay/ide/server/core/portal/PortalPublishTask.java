@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -61,19 +62,21 @@ public class PortalPublishTask extends PublishTaskDelegate {
 				IModule[] module = (IModule[])modules.get(i);
 				Integer deltaKind = (Integer)kindList.get(i);
 
-				boolean needClean = false;
+				Server typeCastServer = (Server)server;
 
-				IModuleResourceDelta[] deltas = ((Server)server).getPublishedResourceDelta(module);
+				IModuleResourceDelta[] deltas = typeCastServer.getPublishedResourceDelta(module);
 
 				if ((deltas.length == 1) && (kind == IServer.PUBLISH_AUTO) &&
 					(deltaKind == ServerBehaviourDelegate.CHANGED)) {
 
 					IModuleResource moduleResource = deltas[0].getModuleResource();
 
-					if (".classpath".equals(moduleResource.getName())) {
+					if (Objects.equals(".classpath", moduleResource.getName())) {
 						continue;
 					}
 				}
+
+				boolean needClean = false;
 
 				for (IModuleResourceDelta delta : deltas) {
 					IModuleResource resource = delta.getModuleResource();

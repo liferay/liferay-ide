@@ -76,10 +76,8 @@ public abstract class PluginFacetInstallDataModelProvider
 
 	@Override
 	public boolean propertySet(String propertyName, Object propertyValue) {
-		if (propertyName.equals(IFacetDataModelProperties.FACET_VERSION)) {
-			if (libraryDelegate != null) {
-				libraryDelegate.setProjectFacetVersion((IProjectFacetVersion)propertyValue);
-			}
+		if (propertyName.equals(IFacetDataModelProperties.FACET_VERSION) && (libraryDelegate != null)) {
+			libraryDelegate.setProjectFacetVersion((IProjectFacetVersion)propertyValue);
 		}
 
 		return super.propertySet(propertyName, propertyValue);

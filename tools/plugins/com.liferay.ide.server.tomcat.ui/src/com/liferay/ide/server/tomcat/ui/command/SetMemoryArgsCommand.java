@@ -32,12 +32,16 @@ public class SetMemoryArgsCommand extends ServerCommand {
 	}
 
 	public void execute() {
-		oldMemoryArgs = ((LiferayTomcatServer)server).getMemoryArgs();
-		((LiferayTomcatServer)server).setMemoryArgs(memoryArgs);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		oldMemoryArgs = liferayServer.getMemoryArgs();
+		liferayServer.setMemoryArgs(memoryArgs);
 	}
 
 	public void undo() {
-		((LiferayTomcatServer)server).setMemoryArgs(oldMemoryArgs);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		liferayServer.setMemoryArgs(oldMemoryArgs);
 	}
 
 	protected String memoryArgs;

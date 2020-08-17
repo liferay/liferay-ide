@@ -87,9 +87,7 @@ public class EditableTablePart extends TablePart {
 	}
 
 	protected StructuredViewer createStructuredViewer(Composite parent, int style, FormToolkit toolkit) {
-		TableViewer tableViewer = (TableViewer)super.createStructuredViewer(parent, style, toolkit);
-
-		return tableViewer;
+		return (TableViewer)super.createStructuredViewer(parent, style, toolkit);
 	}
 
 	protected void entryModified(Object entry, String value) {

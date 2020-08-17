@@ -83,9 +83,7 @@ public abstract class AbstractDefaultHandler extends DefaultHandler {
 	protected final SAXParser createParser(SAXParserFactory parserFactory)
 		throws ParserConfigurationException, SAXException, SAXNotRecognizedException, SAXNotSupportedException {
 
-		SAXParser parser = parserFactory.newSAXParser();
-
-		return parser;
+		return parserFactory.newSAXParser();
 	}
 
 	protected SAXParserFactory getFactory() {

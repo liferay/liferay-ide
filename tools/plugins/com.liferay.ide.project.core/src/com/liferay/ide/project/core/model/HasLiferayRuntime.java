@@ -38,10 +38,7 @@ public interface HasLiferayRuntime extends Element {
 
 	@Label(standard = "runtime")
 	@Services(
-		value = {
-			@Service(impl = RuntimeNamePossibleValuesService.class),
-			@Service(impl = RuntimeNameDefaultValueService.class)
-		}
+		{@Service(impl = RuntimeNamePossibleValuesService.class), @Service(impl = RuntimeNameDefaultValueService.class)}
 	)
 	public ValueProperty PROP_RUNTIME_NAME = new ValueProperty(TYPE, "RuntimeName");
 

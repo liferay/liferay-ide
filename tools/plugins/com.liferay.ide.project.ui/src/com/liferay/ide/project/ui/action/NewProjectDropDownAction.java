@@ -66,7 +66,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 			}
 		}
 
-		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[containers.size()]);
+		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[0]);
 
 		Arrays.sort(actions);
 
@@ -82,7 +82,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 
 		if (ListUtil.isNotEmpty(actions)) {
 			for (Action action : actions) {
-				if (action instanceof NewWizardAction && wizardId.equals(action.getId())) {
+				if ((action instanceof NewWizardAction) && wizardId.equals(action.getId())) {
 					return action;
 				}
 			}
@@ -114,7 +114,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 			}
 		}
 
-		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[containers.size()]);
+		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[0]);
 
 		Arrays.sort(actions);
 
@@ -136,7 +136,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 			}
 		}
 
-		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[containers.size()]);
+		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[0]);
 
 		Arrays.sort(actions);
 
@@ -151,7 +151,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 
 				// add non project items
 
-				NewWizardAction[] nonProjectActions = getActionFromDescriptors(getNonProjectTypeAttribute());
+				NewWizardAction[] nonProjectActions = getActionFromDescriptors(getNonprojectTypeAttribute());
 
 				for (NewWizardAction action : nonProjectActions) {
 					action.setShell(fWizardShell);
@@ -200,7 +200,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 				new Separator().fill(fMenu, -1);
 
 				NewWizardAction[] pluginNonProjectActions = getActionFromDescriptors(
-					getPluginNonProjectTypeAttribute());
+					getPluginNonprojectTypeAttribute());
 
 				for (NewWizardAction action : pluginNonProjectActions) {
 					action.setShell(fWizardShell);
@@ -212,7 +212,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 
 				new Separator().fill(fMenu, -1);
 
-				NewWizardAction[] noProjectExtraActions = getActionFromDescriptors(getNonProjectExtraTypeAttribute());
+				NewWizardAction[] noProjectExtraActions = getActionFromDescriptors(getNonprojectExtraTypeAttribute());
 
 				for (NewWizardAction action : noProjectExtraActions) {
 					action.setShell(fWizardShell);
@@ -283,15 +283,15 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 		return "liferay_kaleo_workflow";
 	}
 
-	protected String getNonProjectExtraTypeAttribute() {
+	protected String getNonprojectExtraTypeAttribute() {
 		return "liferay_extra_artifact";
 	}
 
-	protected String getNonProjectTypeAttribute() {
+	protected String getNonprojectTypeAttribute() {
 		return "liferay_artifact";
 	}
 
-	protected String getPluginNonProjectTypeAttribute() {
+	protected String getPluginNonprojectTypeAttribute() {
 		return "liferay_plugin_artifact";
 	}
 
@@ -322,9 +322,8 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 		if (LiferayPerspectiveFactory.ID.equals(_getPerspectiveID())) {
 			return _getPluginProjectTypeAttribute();
 		}
-		else {
-			return _getTypeAttribute();
-		}
+
+		return _getTypeAttribute();
 	}
 
 	private static String _getExtraTypeAttribute() {
@@ -336,9 +335,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 
 		IPerspectiveDescriptor perspective = activePage.getPerspective();
 
-		String perspectiveID = perspective.getId();
-
-		return perspectiveID;
+		return perspective.getId();
 	}
 
 	private static String _getPluginProjectTypeAttribute() {

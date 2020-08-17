@@ -145,10 +145,9 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		ComboData data = (ComboData)widget.getData();
 
 		if (widget instanceof Combo) {
-			data.setIndex(((Combo)widget).getSelectionIndex());
-		}
-		else {
-			return;
+			Combo comboWidget = (Combo)widget;
+
+			data.setIndex(comboWidget.getSelectionIndex());
 		}
 	}
 
@@ -330,13 +329,15 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		IEclipsePreferences defaultContext = new DefaultScope().getNode(getPreferenceNodeQualifier());
 
 		for (int i = 0; i < _fCombos.size(); i++) {
-			ComboData data = (ComboData)((Combo)_fCombos.get(i)).getData();
+			Combo fComboCast = (Combo)_fCombos.get(i);
+
+			ComboData data = (ComboData)fComboCast.getData();
 
 			int severity = defaultContext.getInt(data.getKey(), ValidationMessage.WARNING);
 
 			data.setSeverity(severity);
 
-			((Combo)_fCombos.get(i)).select(data.getIndex());
+			fComboCast.select(data.getIndex());
 		}
 	}
 
@@ -357,7 +358,9 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		Iterator it = _fCombos.iterator();
 
 		while (it.hasNext()) {
-			ComboData data = (ComboData)((Combo)it.next()).getData();
+			Combo nextCombo = (Combo)it.next();
+
+			ComboData data = (ComboData)nextCombo.getData();
 
 			if (data.isChanged()) {
 				return true;
@@ -385,7 +388,9 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		IScopeContext[] contexts = createPreferenceScopes();
 
 		while (it.hasNext()) {
-			ComboData data = (ComboData)((Combo)it.next()).getData();
+			Combo comboNext = (Combo)it.next();
+
+			ComboData data = (ComboData)comboNext.getData();
 
 			if (data.getKey() != null) {
 				IEclipsePreferences eclipsePreferences = contexts[0].getNode(getPreferenceNodeQualifier());
@@ -477,7 +482,7 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 						}
 					}
 
-					projects = (IProject[])projectList.toArray(new IProject[projectList.size()]);
+					projects = (IProject[])projectList.toArray(new IProject[0]);
 				}
 
 				_fValidation.validate(projects, true, false, monitor);

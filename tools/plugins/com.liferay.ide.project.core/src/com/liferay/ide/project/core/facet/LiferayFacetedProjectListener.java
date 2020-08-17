@@ -29,8 +29,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action.Type;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.events.IFacetedProjectEvent;
 import org.eclipse.wst.common.project.facet.core.events.IFacetedProjectListener;
@@ -85,11 +83,12 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener {
 				// next uninstall the jsdt facet
 
 				try {
-					Set<Action> actions = new HashSet<>();
+					Set<IFacetedProject.Action> actions = new HashSet<>();
 
-					Type type = Type.valueOf("uninstall");
+					IFacetedProject.Action.Type type = IFacetedProject.Action.Type.valueOf("uninstall");
 
-					Action uninstallJsdt = new Action(type, actionEvent.getProjectFacetVersion(), null);
+					IFacetedProject.Action uninstallJsdt = new IFacetedProject.Action(
+						type, actionEvent.getProjectFacetVersion(), null);
 
 					actions.add(uninstallJsdt);
 

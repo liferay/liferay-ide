@@ -150,9 +150,8 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 		if (isAlive()) {
 			return "STARTED";
 		}
-		else {
-			return "STOPPED";
-		}
+
+		return "STOPPED";
 	}
 
 	public Object installApplication(String absolutePath, String appName, IProgressMonitor submon) throws APIException {
@@ -179,9 +178,8 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 					if (_isError(jsonObject)) {
 						return jsonObject.getString("error");
 					}
-					else {
-						return "installApplication error " + _getDeployURI(appName);
-					}
+
+					return "installApplication error " + _getDeployURI(appName);
 				}
 			}
 
@@ -279,9 +277,8 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 					if (_isError(jsonObject)) {
 						return jsonObject.getString("error");
 					}
-					else {
-						return "uninstallApplication error " + _getDeployURI(appName);
-					}
+
+					return "uninstallApplication error " + _getDeployURI(appName);
 				}
 			}
 			catch (Exception e) {
@@ -318,9 +315,8 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 					if (_isError(jsonObject)) {
 						return jsonObject.getString("error");
 					}
-					else {
-						return "updateApplication error " + _getDeployURI(appName);
-					}
+
+					return "updateApplication error " + _getDeployURI(appName);
 				}
 			}
 
@@ -360,9 +356,8 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 		if (jsonObject.has("output")) {
 			return (T)jsonObject.get("output");
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	private String _getPluginsAPI() {

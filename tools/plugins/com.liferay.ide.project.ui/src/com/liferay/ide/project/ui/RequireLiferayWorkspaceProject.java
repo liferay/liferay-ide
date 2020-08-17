@@ -30,7 +30,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.swt.SWT;
@@ -98,7 +97,8 @@ public interface RequireLiferayWorkspaceProject {
 
 						ConfigureWorkspaceProductOp op = ConfigureWorkspaceProductOp.TYPE.instantiate();
 
-						Reference<DialogDef> dialogRef = definitionLoader.dialog("ConfigureWorkspaceProduct");
+						DefinitionLoader.Reference<DialogDef> dialogRef = definitionLoader.dialog(
+							"ConfigureWorkspaceProduct");
 
 						SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 

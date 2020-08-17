@@ -32,6 +32,7 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -146,7 +147,7 @@ public class ServiceWrapperCommand {
 						}
 					}
 				}
-				else if (FileUtil.nameEndsWith(lib, "api.jar") || "portal-kernel.jar".equals(lib.getName())) {
+				else if (FileUtil.nameEndsWith(lib, "api.jar") || Objects.equals("portal-kernel.jar", lib.getName())) {
 					try (JarFile jar = new JarFile(lib);
 						JarInputStream jarinput = new JarInputStream(Files.newInputStream(lib.toPath()))) {
 
@@ -155,9 +156,7 @@ public class ServiceWrapperCommand {
 						while (enu.hasMoreElements()) {
 							JarEntry entry = enu.nextElement();
 
-							String name = entry.getName();
-
-							_getServiceWrapperList(map, name, jarinput);
+							_getServiceWrapperList(map, entry.getName(), jarinput);
 						}
 					}
 					catch (IOException ioe) {

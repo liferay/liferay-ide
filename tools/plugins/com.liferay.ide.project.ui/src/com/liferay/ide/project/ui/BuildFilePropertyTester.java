@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui;
 
+import java.util.Objects;
+
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
 
@@ -26,7 +28,7 @@ public class BuildFilePropertyTester extends PropertyTester {
 		if (receiver instanceof IFile) {
 			IFile file = (IFile)receiver;
 
-			if (file.exists() && "build.xml".equals(file.getName())) {
+			if (file.exists() && Objects.equals("build.xml", file.getName())) {
 				return true;
 			}
 		}

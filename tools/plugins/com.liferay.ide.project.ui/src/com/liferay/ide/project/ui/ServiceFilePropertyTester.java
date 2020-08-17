@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui;
 
+import java.util.Objects;
+
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.content.IContentDescription;
@@ -34,7 +36,7 @@ public class ServiceFilePropertyTester extends PropertyTester {
 				if (description != null) {
 					IContentType contentType = description.getContentType();
 
-					if ("com.liferay.ide.portlet.core.servicebuildercontent".equals(contentType.getId())) {
+					if (Objects.equals("com.liferay.ide.portlet.core.servicebuildercontent", contentType.getId())) {
 						return true;
 					}
 				}

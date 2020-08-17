@@ -51,13 +51,13 @@ public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDe
 			project = (IProject)obj;
 		}
 		else if (obj instanceof IAdaptable) {
-			project = (IProject)((IAdaptable)obj).getAdapter(IProject.class);
+			IAdaptable adaptableObj = (IAdaptable)obj;
+
+			project = (IProject)adaptableObj.getAdapter(IProject.class);
 		}
 
-		if (project != null) {
-			if (ProjectUtil.is7xServerDeployableProject(project)) {
-				return new WebResource(_getModule(project), project.getProjectRelativePath());
-			}
+		if ((project != null) && ProjectUtil.is7xServerDeployableProject(project)) {
+			return new WebResource(_getModule(project), project.getProjectRelativePath());
 		}
 
 		return null;

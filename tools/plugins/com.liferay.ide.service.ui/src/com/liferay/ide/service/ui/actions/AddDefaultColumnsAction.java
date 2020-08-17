@@ -42,7 +42,9 @@ public class AddDefaultColumnsAction extends SapphireActionHandler implements Sa
 		Element element = sapphirePart.getLocalModelElement();
 
 		if (element instanceof Entity) {
-			String entityName = get(((Entity)element).getName());
+			Entity entityElement = (Entity)element;
+
+			String entityName = get(entityElement.getName());
 
 			if (CoreUtil.isNullOrEmpty(entityName)) {
 				String title = "Add Liferay Default Columns";

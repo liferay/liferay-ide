@@ -17,7 +17,6 @@ package com.liferay.ide.project.core.library;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.SDKClasspathContainer;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -44,9 +43,7 @@ public class SDKClasspathContainerInstallOperation extends LibraryProviderOperat
 	public void execute(LibraryProviderOperationConfig config, IProgressMonitor monitor) throws CoreException {
 		IFacetedProjectBase facetedProject = config.getFacetedProject();
 
-		IProject project = facetedProject.getProject();
-
-		IJavaProject javaProject = JavaCore.create(project);
+		IJavaProject javaProject = JavaCore.create(facetedProject.getProject());
 
 		IPath containerPath = getClasspathContainerPath();
 

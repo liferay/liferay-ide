@@ -35,8 +35,7 @@ public class FormEntryAdapter implements IFormEntryListener {
 
 	/**
 	 * (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.newparts.IFormEntryListener#
-	 * browseButtonSelected(org.eclipse.pde.internal.ui.newparts.FormEntry)
+	 * @see org.eclipse.pde.internal.ui.newparts.IFormEntryListener#browseButtonSelected(org.eclipse.pde.internal.ui.newparts.FormEntry)
 	 */
 	public void browseButtonSelected(FormEntry entry) {
 	}

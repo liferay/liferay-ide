@@ -34,6 +34,7 @@ import java.io.File;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
@@ -72,7 +73,7 @@ public class NewLiferayPluginProjectOpMethods {
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> projectProvider = _getter.get(op.getProjectProvider());
 
-		if ("maven".equals(projectProvider.getShortName())) {
+		if (Objects.equals("maven", projectProvider.getShortName())) {
 			retval = true;
 		}
 
@@ -267,7 +268,7 @@ public class NewLiferayPluginProjectOpMethods {
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = _getter.get(op.getProjectProvider());
 
-		if ((projectName != null) && "ant".equals(provider.getShortName())) {
+		if ((projectName != null) && Objects.equals("ant", provider.getShortName())) {
 			suffix = getPluginTypeSuffix(_getter.get(op.getPluginType()));
 
 			if (suffix != null) {
@@ -285,60 +286,59 @@ public class NewLiferayPluginProjectOpMethods {
 	}
 
 	public static boolean supportsTypePlugin(NewLiferayPluginProjectOp op, String type) {
-		boolean retval = false;
-
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = _getter.get(op.getProjectProvider());
 
-		if ("maven".equals(provider.getShortName()) && (type.equals("web") || type.equals("theme"))) {
+		if (Objects.equals("maven", provider.getShortName()) && (type.equals("web") || type.equals("theme"))) {
 			return true;
 		}
-		else {
-			SDK sdk = null;
 
-			try {
-				sdk = SDKUtil.getWorkspaceSDK();
+		SDK sdk = null;
+
+		try {
+			sdk = SDKUtil.getWorkspaceSDK();
+		}
+		catch (CoreException ce) {
+		}
+
+		if (sdk == null) {
+			Path sdkLocation = _getter.get(op.getSdkLocation());
+
+			if (sdkLocation != null) {
+				sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
 			}
-			catch (CoreException ce) {
-			}
+		}
 
-			if (sdk == null) {
-				Path sdkLocation = _getter.get(op.getSdkLocation());
+		if (sdk == null) {
+			return true;
+		}
 
-				if (sdkLocation != null) {
-					sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
-				}
-			}
+		Version version = Version.parseVersion(sdk.getVersion());
 
-			if (sdk == null) {
+		boolean greaterThan700 = false;
+
+		if (CoreUtil.compareVersions(version, ILiferayConstants.V700) >= 0) {
+			greaterThan700 = true;
+		}
+
+		boolean retval = false;
+
+		if ((greaterThan700 && type.equals("web")) || type.equals("theme")) {
+			retval = true;
+		}
+
+		if (greaterThan700 && type.equals("ext")) {
+			IPath sdkLocation = sdk.getLocation();
+
+			IPath extFolder = sdkLocation.append("ext");
+
+			File buildXml = FileUtil.getFile(extFolder.append("build.xml"));
+
+			if (FileUtil.exists(extFolder) && FileUtil.exists(buildXml)) {
 				return true;
 			}
-
-			Version version = Version.parseVersion(sdk.getVersion());
-
-			boolean greaterThan700 = false;
-
-			if (CoreUtil.compareVersions(version, ILiferayConstants.V700) >= 0) {
-				greaterThan700 = true;
-			}
-
-			if ((greaterThan700 && "web".equals(type)) || "theme".equals(type)) {
-				retval = true;
-			}
-
-			if (greaterThan700 && "ext".equals(type)) {
-				IPath sdkLocation = sdk.getLocation();
-
-				IPath extFolder = sdkLocation.append("ext");
-
-				File buildXml = FileUtil.getFile(extFolder.append("build.xml"));
-
-				if (FileUtil.exists(extFolder) && FileUtil.exists(buildXml)) {
-					return true;
-				}
-			}
-			else if (!greaterThan700 && "ext".equals(type)) {
-				return true;
-			}
+		}
+		else if (!greaterThan700 && type.equals("ext")) {
+			return true;
 		}
 
 		return retval;
@@ -398,15 +398,13 @@ public class NewLiferayPluginProjectOpMethods {
 				catch (CoreException ce) {
 				}
 
-				if (sdk == null) {
-					if (op.getSdkLocation() != null) {
-						Path sdkPath = _getter.get(op.getSdkLocation());
+				if ((sdk == null) && (op.getSdkLocation() != null)) {
+					Path sdkPath = _getter.get(op.getSdkLocation());
 
-						if (sdkPath != null) {
-							IPath sdkLocation = PathBridge.create(sdkPath);
+					if (sdkPath != null) {
+						IPath sdkLocation = PathBridge.create(sdkPath);
 
-							sdk = SDKUtil.createSDKFromLocation(sdkLocation);
-						}
+						sdk = SDKUtil.createSDKFromLocation(sdkLocation);
 					}
 				}
 
@@ -456,13 +454,11 @@ public class NewLiferayPluginProjectOpMethods {
 	}
 
 	public static void updateLocation(NewLiferayPluginProjectOp op, Path baseLocation) {
-		String projectName = getProjectNameWithSuffix(op);
-
 		if (baseLocation == null) {
 			return;
 		}
 
-		Path newLocation = baseLocation.append(projectName);
+		Path newLocation = baseLocation.append(getProjectNameWithSuffix(op));
 
 		op.setLocation(newLocation);
 	}

@@ -30,7 +30,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@CustomXmlRootBinding(value = ServiceBuilderRootElementController.class)
+@CustomXmlRootBinding(ServiceBuilderRootElementController.class)
 @VersionCompatibilityTarget(version = "${ Version }", versioned = "Service Builder")
 @XmlBinding(path = "service-builder")
 public interface ServiceBuilder6xx extends ServiceBuilder {

@@ -86,9 +86,8 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory {
 			if (eapVersion != null) {
 				return true;
 			}
-			else {
-				return super.detectBundleDir(path);
-			}
+
+			return super.detectBundleDir(path);
 		}
 
 		return false;

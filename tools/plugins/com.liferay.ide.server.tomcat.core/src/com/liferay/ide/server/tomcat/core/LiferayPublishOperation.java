@@ -71,6 +71,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		this.module = module;
 		this.kind = kind;
 		this.deltaKind = deltaKind;
+
 		IPath base = server.getRuntimeBaseDirectory();
 
 		if (base != null) {
@@ -151,8 +152,9 @@ public class LiferayPublishOperation extends PublishOperation {
 
 		int size = a.length;
 
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < size; i++) {
 			list.add(a[i]);
+		}
 	}
 
 	protected static void throwException(List<IStatus> status) throws CoreException {
@@ -198,16 +200,12 @@ public class LiferayPublishOperation extends PublishOperation {
 			File webXmlFile = webXmlPath.toFile();
 			File liferayWebXmlFile = liferayWebXmlPath.toFile();
 
-			if (FileUtil.exists(webXmlFile)) {
-				if (!webXmlFile.delete()) {
-					ProjectUtil.createDefaultWebXml(webXmlFile, project.getName());
-				}
+			if (FileUtil.exists(webXmlFile) && !webXmlFile.delete()) {
+				ProjectUtil.createDefaultWebXml(webXmlFile, project.getName());
 			}
 
-			if (FileUtil.exists(liferayWebXmlFile)) {
-				if (!liferayWebXmlFile.delete()) {
-					ProjectUtil.createDefaultWebXml(liferayWebXmlFile, project.getName());
-				}
+			if (FileUtil.exists(liferayWebXmlFile) && !liferayWebXmlFile.delete()) {
+				ProjectUtil.createDefaultWebXml(liferayWebXmlFile, project.getName());
 			}
 		}
 	}

@@ -104,7 +104,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 			int num = 1;
 
 			while (existingVMWithSameName) {
-				newVM.setName(getRuntime().getName() + " JRE (" + (num++) + ")");
+				newVM.setName(getRuntime().getName() + " JRE (" + num++ + ")");
 
 				existingVMWithSameName = ServerUtil.isExistingVMName(newVM.getName());
 			}
@@ -276,9 +276,8 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
 				return vmInstall;
 			}
-			else {
-				return JavaRuntime.getDefaultVMInstall();
-			}
+
+			return JavaRuntime.getDefaultVMInstall();
 		}
 
 		try {

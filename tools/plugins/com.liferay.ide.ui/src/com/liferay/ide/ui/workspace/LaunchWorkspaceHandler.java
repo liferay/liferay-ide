@@ -49,8 +49,6 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		String liferay7SDKDir = event.getParameter(PARAM_LIFERAY_7_SDK_DIR);
-
 		String workspaceLocation = event.getParameter(PARAM_WORKSPACE_LOCATION);
 
 		Location installLocation = Platform.getInstallLocation();
@@ -70,6 +68,8 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 				return null;
 			}
 		}
+
+		String liferay7SDKDir = event.getParameter(PARAM_LIFERAY_7_SDK_DIR);
 
 		List<String> commands = new ArrayList<>();
 

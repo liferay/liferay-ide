@@ -265,7 +265,9 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 			IBaseModel model = fEditor.getModel();
 
 			if (model instanceof IEditable) {
-				return ((IEditable)model).isEditable();
+				IEditable editableModel = (IEditable)model;
+
+				return editableModel.isEditable();
 			}
 
 			return false;

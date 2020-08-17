@@ -36,12 +36,10 @@ public class EntityRelationshipService extends ReferenceService<Entity> implemen
 	}
 
 	public Entity findEntity(String entityName, ServiceBuilder serviceBuilder) {
-		if ((entityName != null) && (serviceBuilder != null)) {
-			if (serviceBuilder != null) {
-				for (Entity entity : serviceBuilder.getEntities()) {
-					if (entityName.equals(get(entity.getName()))) {
-						return entity;
-					}
+		if ((entityName != null) && (serviceBuilder != null) && (serviceBuilder != null)) {
+			for (Entity entity : serviceBuilder.getEntities()) {
+				if (entityName.equals(get(entity.getName()))) {
+					return entity;
 				}
 			}
 		}

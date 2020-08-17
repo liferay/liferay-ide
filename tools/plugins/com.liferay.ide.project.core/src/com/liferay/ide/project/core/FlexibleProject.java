@@ -64,7 +64,7 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IRes
 		}
 
 		for (IResource resource : virtualResource.getUnderlyingResources()) {
-			if (FileUtil.exists(resource) && resource instanceof IFile) {
+			if (FileUtil.exists(resource) && (resource instanceof IFile)) {
 				return resource;
 			}
 		}
@@ -144,7 +144,7 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IRes
 			}
 		}
 
-		return retval.toArray(new IFolder[retval.size()]);
+		return retval.toArray(new IFolder[0]);
 	}
 
 	public boolean pathInDocroot(IPath path) {

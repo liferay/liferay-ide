@@ -151,7 +151,9 @@ public class FormEntry {
 		_fText.setEditable(editable);
 
 		if (_fLabel instanceof Hyperlink) {
-			((Hyperlink)_fLabel).setUnderlined(editable);
+			Hyperlink link = (Hyperlink)_fLabel;
+
+			link.setUnderlined(editable);
 		}
 
 		if (_fBrowse != null) {
@@ -165,13 +167,17 @@ public class FormEntry {
 	 * @param listener
 	 */
 	public void setFormEntryListener(IFormEntryListener listener) {
-		if ((_fLabel != null) && _fLabel instanceof Hyperlink) {
+		if ((_fLabel != null) && (_fLabel instanceof Hyperlink)) {
 			if (_fListener != null) {
-				((Hyperlink)_fLabel).removeHyperlinkListener(_fListener);
+				Hyperlink link = (Hyperlink)_fLabel;
+
+				link.removeHyperlinkListener(_fListener);
 			}
 
 			if (listener != null) {
-				((Hyperlink)_fLabel).addHyperlinkListener(listener);
+				Hyperlink link = (Hyperlink)_fLabel;
+
+				link.addHyperlinkListener(listener);
 			}
 		}
 
@@ -188,13 +194,17 @@ public class FormEntry {
 		Object data = getText().getLayoutData();
 
 		if (data == null) {
-			return;
+			//return;
 		}
 		else if (data instanceof GridData) {
-			((GridData)data).widthHint = width;
+			GridData gData = (GridData)data;
+
+			gData.widthHint = width;
 		}
 		else if (data instanceof TableWrapData) {
-			((TableWrapData)data).maxWidth = width;
+			TableWrapData wrapData = (TableWrapData)data;
+
+			wrapData.maxWidth = width;
 		}
 	}
 
@@ -350,7 +360,9 @@ public class FormEntry {
 		int tspan;
 
 		if (layout instanceof GridLayout) {
-			int span = ((GridLayout)layout).numColumns;
+			GridLayout gridLayout = (GridLayout)layout;
+
+			int span = gridLayout.numColumns;
 
 			if (tcolspan > 0) {
 				tspan = tcolspan;
@@ -387,7 +399,9 @@ public class FormEntry {
 			}
 		}
 		else if (layout instanceof TableWrapLayout) {
-			int span = ((TableWrapLayout)layout).numColumns;
+			TableWrapLayout wrapLayout = (TableWrapLayout)layout;
+
+			int span = wrapLayout.numColumns;
 
 			if (tcolspan > 0) {
 				tspan = tcolspan;

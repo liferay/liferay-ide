@@ -66,7 +66,7 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
 
 			// now we need to check to see if we have a partial key
 
-			int rewindOffset = _rewindOffsetToNearestNonDefaultPartition(partitioner, offset);
+			int rewindOffset = _rewindOffsetToNearestNondefaultPartition(partitioner, offset);
 
 			String partialKey = _getPartialKey(document, rewindOffset, offset);
 
@@ -160,7 +160,7 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
 		return retval;
 	}
 
-	private int _rewindOffsetToNearestNonDefaultPartition(IDocumentPartitioner partitioner, final int initialOffset) {
+	private int _rewindOffsetToNearestNondefaultPartition(IDocumentPartitioner partitioner, final int initialOffset) {
 		int offset = initialOffset;
 
 		ITypedRegion partition = partitioner.getPartition(offset);

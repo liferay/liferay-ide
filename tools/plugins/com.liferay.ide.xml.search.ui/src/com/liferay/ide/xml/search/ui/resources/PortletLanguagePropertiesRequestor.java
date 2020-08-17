@@ -19,7 +19,6 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.xml.search.core.properties.DefaultPropertiesRequestor;
 import org.eclipse.wst.xml.search.core.properties.IPropertiesRequestor;
@@ -32,10 +31,8 @@ public class PortletLanguagePropertiesRequestor extends DefaultPropertiesRequest
 	public static IPropertiesRequestor instance = new PortletLanguagePropertiesRequestor();
 
 	protected boolean accept(IFile file, IResource rootResource) {
-		IProject project = rootResource.getProject();
-
 		List<IFile> defaultPortletLanguagePropertiesFiles = PropertiesUtil.getDefaultLanguagePropertiesFromProject(
-			project);
+			rootResource.getProject());
 
 		for (IFile defaultPortletLanguagePropertiesFile : defaultPortletLanguagePropertiesFiles) {
 			if (defaultPortletLanguagePropertiesFile.equals(file)) {

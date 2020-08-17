@@ -85,9 +85,7 @@ public class LiferayRuntimeStubWizardFragment extends WizardFragment {
 	protected ILiferayRuntime getLiferayRuntime() {
 		IRuntimeWorkingCopy runtimeWC = (IRuntimeWorkingCopy)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
 
-		ILiferayRuntime liferayRuntime = (ILiferayRuntime)runtimeWC.loadAdapter(ILiferayRuntime.class, null);
-
-		return liferayRuntime;
+		return (ILiferayRuntime)runtimeWC.loadAdapter(ILiferayRuntime.class, null);
 	}
 
 	protected LiferayRuntimeStubComposite composite;

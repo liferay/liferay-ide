@@ -274,7 +274,7 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 		catch (FileNotFoundException fnfe) {
 		}
 
-		return libs.toArray(new IPath[libs.size()]);
+		return libs.toArray(new IPath[0]);
 	}
 
 	@Override

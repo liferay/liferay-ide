@@ -24,8 +24,7 @@ public class PortletQuerySpecification extends AbstractWebInfQuerySpecification 
 
 	/**
 	 * (non-Javadoc)
-	 * @see org.eclipse.wst.xml.search.core.resource.IResourceRequestorProvider#
-	 * getRequestor()
+	 * @see org.eclipse.wst.xml.search.core.resource.IResourceRequestorProvider#getRequestor()
 	 */
 	public IXMLSearchRequestor getRequestor() {
 		return PortletSearchRequestor.instance;

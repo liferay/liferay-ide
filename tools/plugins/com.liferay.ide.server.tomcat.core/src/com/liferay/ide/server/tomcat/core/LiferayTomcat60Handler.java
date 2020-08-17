@@ -52,7 +52,7 @@ public class LiferayTomcat60Handler extends Tomcat60Handler implements ILiferayT
 
 		Collections.addAll(runtimeVMArgs, super.getRuntimeVMArguments(installPath, configPath, deployPath, testEnv));
 
-		return runtimeVMArgs.toArray(new String[runtimeVMArgs.size()]);
+		return runtimeVMArgs.toArray(new String[0]);
 	}
 
 	public void setCurrentServer(IServer server) {

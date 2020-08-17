@@ -35,13 +35,13 @@ import org.eclipse.core.runtime.Path;
 public class FileListing {
 
 	public static List<File> getFileListing(File dir) throws FileNotFoundException {
-		List<File> result = new ArrayList<>();
-
 		File[] files = dir.listFiles();
 
 		if (ListUtil.isEmpty(files)) {
 			return Collections.emptyList();
 		}
+
+		List<File> result = new ArrayList<>();
 
 		for (File file : files) {
 			result.add(file);

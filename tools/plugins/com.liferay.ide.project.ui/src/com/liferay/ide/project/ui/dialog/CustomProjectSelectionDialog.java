@@ -39,14 +39,11 @@ public class CustomProjectSelectionDialog extends JavaProjectSelectionDialog {
 			return false;
 		}
 
-		IProject project = javaProject.getProject();
-
-		if (_projects.contains(project)) {
+		if (_projects.contains(javaProject.getProject())) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	private List<IProject> _projects;

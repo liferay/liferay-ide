@@ -45,8 +45,6 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 
 	@Override
 	public void initialize(IPath containerPath, IJavaProject project) throws CoreException {
-		IClasspathContainer classpathContainer = null;
-
 		String root = containerPath.segment(0);
 
 		if (!SDKClasspathContainer.ID.equals(root)) {
@@ -63,21 +61,21 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 			throw new CoreException(ProjectCore.createErrorStatus(msg));
 		}
 
-		IPath globalDir = bundle.getAppServerLibGlobalDir();
-
 		IPath portalDir = bundle.getAppServerPortalDir();
-
-		IPath bundleDir = bundle.getAppServerDir();
-
-		IPath[] bundleDependencyJars = bundle.getBundleDependencyJars();
-
-		IPath[] sdkDependencyJarPaths = _getSDKDependencies(project);
 
 		if (portalDir == null) {
 			return;
 		}
 
-		classpathContainer = new SDKClasspathContainer(
+		IPath bundleDir = bundle.getAppServerDir();
+
+		IPath[] bundleDependencyJars = bundle.getBundleDependencyJars();
+
+		IPath globalDir = bundle.getAppServerLibGlobalDir();
+
+		IPath[] sdkDependencyJarPaths = _getSDKDependencies(project);
+
+		IClasspathContainer classpathContainer = new SDKClasspathContainer(
 			containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyJars,
 			sdkDependencyJarPaths);
 
@@ -135,12 +133,14 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 		boolean containerChanged = true;
 
 		if (containerSuggestion instanceof SDKClasspathContainer) {
-			portalDir = ((SDKClasspathContainer)containerSuggestion).getPortalDir();
-			bundleDir = ((SDKClasspathContainer)containerSuggestion).getBundleDir();
-			portalGlobalDir = ((SDKClasspathContainer)containerSuggestion).getPortalGlobalDir();
-			javadocURL = ((SDKClasspathContainer)containerSuggestion).getJavadocURL();
-			sourceLocation = ((SDKClasspathContainer)containerSuggestion).getSourceLocation();
-			bundleDependencyJarPaths = ((SDKClasspathContainer)containerSuggestion).getBundleLibDependencyPath();
+			SDKClasspathContainer sdkClasspathContainerSuggestion = (SDKClasspathContainer)containerSuggestion;
+
+			portalDir = sdkClasspathContainerSuggestion.getPortalDir();
+			bundleDir = sdkClasspathContainerSuggestion.getBundleDir();
+			portalGlobalDir = sdkClasspathContainerSuggestion.getPortalGlobalDir();
+			javadocURL = sdkClasspathContainerSuggestion.getJavadocURL();
+			sourceLocation = sdkClasspathContainerSuggestion.getSourceLocation();
+			bundleDependencyJarPaths = sdkClasspathContainerSuggestion.getBundleLibDependencyPath();
 
 			if ((bundle != null) && portalDir.equals(bundle.getAppServerPortalDir())) {
 				containerChanged = false;

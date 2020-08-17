@@ -207,24 +207,24 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 				String[] objectClass = (String[])serviceReference.getProperty("objectClass");
 
-				if (event.getType() == ServiceEvent.UNREGISTERING) {
-					if (objectClass[0].equals("org.eclipse.e4.ui.workbench.IWorkbench")) {
-						IPath location = Platform.getLocation();
+				if ((event.getType() == ServiceEvent.UNREGISTERING) &&
+					objectClass[0].equals("org.eclipse.e4.ui.workbench.IWorkbench")) {
 
-						File file = new File(
-							FileUtil.toOSString(location.append(".metadata/.plugins/org.eclipse.e4.workbench")),
-							"workbench.xmi");
+					IPath location = Platform.getLocation();
 
-						String content = FileUtil.readContents(file, true);
+					File file = new File(
+						FileUtil.toOSString(location.append(".metadata/.plugins/org.eclipse.e4.workbench")),
+						"workbench.xmi");
 
-						if ((content != null) && (content.indexOf("label=\"Liferay\"") != -1)) {
-							content = content.replaceFirst("label=\"Liferay\"", "label=\"Liferay Plugins\"");
+					String content = FileUtil.readContents(file, true);
 
-							try (InputStream ins = new ByteArrayInputStream(content.getBytes())) {
-								FileUtil.writeFile(file, ins);
-							}
-							catch (Exception e) {
-							}
+					if ((content != null) && (content.indexOf("label=\"Liferay\"") != -1)) {
+						content = content.replaceFirst("label=\"Liferay\"", "label=\"Liferay Plugins\"");
+
+						try (InputStream ins = new ByteArrayInputStream(content.getBytes())) {
+							FileUtil.writeFile(file, ins);
+						}
+						catch (Exception e) {
 						}
 					}
 				}
@@ -464,7 +464,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 			if (next instanceof TemplateContextType) {
 				TemplateContextType contextType = (TemplateContextType)next;
 
-				if ("java".equals(contextType.getId())) {
+				if (Objects.equals("java", contextType.getId())) {
 					contextType.addResolver(new ServiceClassNameResolver());
 				}
 			}

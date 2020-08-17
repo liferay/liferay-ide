@@ -93,7 +93,7 @@ public interface NewModuleFragmentOp extends BaseModuleOp {
 
 	@Required
 	@Services(
-		value = {
+		{
 			@Service(impl = LiferayRuntimeNamePossibleValuesService.class),
 			@Service(impl = LiferayRuntimeNameDefaultValueService.class),
 			@Service(impl = LiferayRuntimeNameValidationService.class)

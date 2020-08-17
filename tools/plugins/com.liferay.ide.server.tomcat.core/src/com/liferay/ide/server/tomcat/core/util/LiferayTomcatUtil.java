@@ -110,9 +110,7 @@ public class LiferayTomcatUtil {
 			"-Djava.util.logging.config.file=\"" + installPath.toOSString() + "/conf/logging.properties\"");
 		runtimeVMArgs.add("-Djava.io.tmpdir=\"" + installPath.toOSString() + "/temp\"");
 
-		boolean useDefaultPortalServerSettings = liferayTomcatServer.getUseDefaultPortalServerSettings();
-
-		if (useDefaultPortalServerSettings) {
+		if (liferayTomcatServer.getUseDefaultPortalServerSettings()) {
 			_addUserDefaultVMArgs(runtimeVMArgs);
 		}
 		else {
@@ -352,9 +350,7 @@ public class LiferayTomcatUtil {
 		boolean retval = false;
 
 		if (module != null) {
-			IProject project = module.getProject();
-
-			retval = ProjectUtil.isLiferayFacetedProject(project);
+			retval = ProjectUtil.isLiferayFacetedProject(module.getProject());
 		}
 
 		return retval;
@@ -397,7 +393,7 @@ public class LiferayTomcatUtil {
 
 						path = fileName.substring(0, fileName.length() - ".xml".length());
 
-						if ("ROOT".equals(path)) {
+						if (path.equals("ROOT")) {
 							path = StringPool.EMPTY;
 						}
 
@@ -416,13 +412,13 @@ public class LiferayTomcatUtil {
 	}
 
 	public static IPath modifyLocationForBundle(IPath currentLocation) {
-		IPath modifiedLocation = null;
-
 		if ((currentLocation == null) || CoreUtil.isNullOrEmpty(currentLocation.toOSString())) {
 			return null;
 		}
 
 		File location = currentLocation.toFile();
+
+		IPath modifiedLocation = null;
 
 		if (FileUtil.exists(location) && location.isDirectory()) {
 

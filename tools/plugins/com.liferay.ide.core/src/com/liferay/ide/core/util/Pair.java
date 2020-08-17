@@ -69,6 +69,7 @@ public class Pair<F, S> {
 	public int hashCode() {
 		int prime = 31;
 		int result = 1;
+
 		result = prime * result + ((_first == null) ? 0 : _first.hashCode());
 		result = prime * result + ((_second == null) ? 0 : _second.hashCode());
 

@@ -32,6 +32,7 @@ import java.io.InputStream;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -133,7 +134,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 			return defaultValue;
 		}
 
-		if ("theme.type".equals(key) || "theme.parent".equals(key)) {
+		if (Objects.equals("theme.type", key) || Objects.equals("theme.parent", key)) {
 			IFile buildXmlFile = getProject().getFile("build.xml");
 
 			try (InputStream inputStream = buildXmlFile.getContents()) {

@@ -65,7 +65,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 			}
 		}
 
-		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[containers.size()]);
+		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[0]);
 
 		Arrays.sort(actions);
 
@@ -175,9 +175,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 
 		// old way, deprecated
 
-		Boolean b = Boolean.valueOf(element.getAttribute(getTypeAttribute()));
-
-		return b;
+		return Boolean.valueOf(element.getAttribute(getTypeAttribute()));
 	}
 
 }

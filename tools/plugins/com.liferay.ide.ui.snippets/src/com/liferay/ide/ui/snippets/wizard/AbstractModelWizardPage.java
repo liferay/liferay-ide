@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
@@ -163,21 +162,19 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 	}
 
 	public IJavaProject getJavaProject() {
-		IJavaProject javaProject = null;
-
 		if (editorPart != null) {
 			IEditorInput editorInput = editorPart.getEditorInput();
 
 			if (editorInput instanceof IFileEditorInput) {
-				IFile file = ((IFileEditorInput)editorInput).getFile();
+				IFileEditorInput fileEditorInput = (IFileEditorInput)editorInput;
 
-				IProject project = file.getProject();
+				IFile file = fileEditorInput.getFile();
 
-				return JavaCore.create(project);
+				return JavaCore.create(file.getProject());
 			}
 		}
 
-		return javaProject;
+		return null;
 	}
 
 	public String getModel() {

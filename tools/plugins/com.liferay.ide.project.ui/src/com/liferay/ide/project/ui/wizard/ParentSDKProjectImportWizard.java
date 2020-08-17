@@ -49,9 +49,7 @@ public class ParentSDKProjectImportWizard
 		if (wizardPages != null) {
 			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-			final String message = wizardPage.getMessage();
-
-			if (CoreUtil.isNullOrEmpty(message)) {
+			if (CoreUtil.isNullOrEmpty(wizardPage.getMessage())) {
 				wizardPage.setMessage(_INITIAL_MESSAGE);
 			}
 

@@ -148,9 +148,8 @@ public class SDKUtil {
 			if (existingSDK != null) {
 				return existingSDK;
 			}
-			else {
-				return createSDKFromLocation(sdkLocation);
-			}
+
+			return createSDKFromLocation(sdkLocation);
 		}
 
 		return null;
@@ -194,7 +193,7 @@ public class SDKUtil {
 			}
 		}
 
-		return sdkProjects.toArray(new IProject[sdkProjects.size()]);
+		return sdkProjects.toArray(new IProject[0]);
 	}
 
 	public static boolean hasGradleTools(IPath path) {

@@ -121,8 +121,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public String getHttpPort() {
-		String retVal = "8080";
-
 		File serverXmlFile = new File(getAppServerDir().toPortableString(), "conf/server.xml");
 
 		String portValue = getHttpPortValue(serverXmlFile, "Connector", "protocol", "HTTP/1.1", "port");
@@ -131,7 +129,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 			return portValue;
 		}
 
-		return retVal;
+		return "8080";
 	}
 
 	@Override
@@ -238,7 +236,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		catch (FileNotFoundException fnfe) {
 		}
 
-		return libs.toArray(new IPath[libs.size()]);
+		return libs.toArray(new IPath[0]);
 	}
 
 	@Override
@@ -307,7 +305,9 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		args.add("-Dfile.encoding=UTF8");
 
 		if (vmInstall instanceof IVMInstall2) {
-			String javaVersion = ((IVMInstall2)vmInstall).getJavaVersion();
+			IVMInstall2 vmInstall2 = (IVMInstall2)vmInstall;
+
+			String javaVersion = vmInstall2.getJavaVersion();
 
 			if ((javaVersion != null) && (JavaCore.compareJavaVersions(javaVersion, JavaCore.VERSION_1_8) == 0)) {
 				args.add("-Djava.endorsed.dirs=\"" + endorsedPath.toPortableString() + "\"");

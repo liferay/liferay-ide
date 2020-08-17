@@ -125,7 +125,7 @@ public class WebXMLDescriptorHelper extends LiferayDescriptorHelper {
 			return null;
 		}
 
-		IStatus status = new DOMModelEditOperation(
+		return new DOMModelEditOperation(
 			file
 		) {
 
@@ -155,8 +155,6 @@ public class WebXMLDescriptorHelper extends LiferayDescriptorHelper {
 			}
 
 		}.execute();
-
-		return status;
 	}
 
 	@Override

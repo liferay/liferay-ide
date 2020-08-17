@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <?eclipse version="3.4"?>
 <plugin>
 	<extension
@@ -12,7 +12,7 @@
 			Liferay Theme
 			</label>
 			<description>
-			Theme plugin for Liferay portal.  Version corresponds to Portal version.
+			Theme plugin for Liferay portal. Version corresponds to Portal version.
 			</description>
 			<member
 				category="liferay.plugins"

@@ -65,13 +65,13 @@ public class BuildServiceJob extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		IStatus retval = null;
-
 		if (getProject() == null) {
 			return ServiceCore.createErrorStatus(Msgs.useLiferayProjectImportWizard);
 		}
 
 		monitor.beginTask(Msgs.buildingLiferayServices, 100);
+
+		IStatus retval = null;
 
 		try {
 			runBuild(monitor);

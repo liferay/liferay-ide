@@ -49,9 +49,8 @@ public class WorkingSetCustomPart extends FormComponentPart {
 		if (_presentation.isAddToWorkingSetsEnabled()) {
 			return _workingSets.toArray(new IWorkingSet[0]);
 		}
-		else {
-			return new IWorkingSet[0];
-		}
+
+		return new IWorkingSet[0];
 	}
 
 	@Override

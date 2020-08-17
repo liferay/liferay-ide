@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -67,14 +68,16 @@ public class TemplatesCore {
 
 			List<TemplateVariable> paramList = new ArrayList<>();
 
-			IConfigurationElement[] items = ((IExtension)element.getParent()).getConfigurationElements();
+			IExtension elementParent = (IExtension)element.getParent();
+
+			IConfigurationElement[] items = elementParent.getConfigurationElements();
 
 			for (IConfigurationElement item : items) {
-				if ("templatesFolder".equals(item.getName())) {
+				if (Objects.equals("templatesFolder", item.getName())) {
 					templateFolder = item.getAttribute("path");
 				}
 
-				if ("templateVariable".equals(item.getName())) {
+				if (Objects.equals("templateVariable", item.getName())) {
 					String paramName = item.getAttribute("name");
 
 					String reqVal = item.getAttribute("required");
@@ -139,7 +142,7 @@ public class TemplatesCore {
 		IConfigurationElement[] elements = _getTplDefinitionElements();
 
 		for (IConfigurationElement element : elements) {
-			if ("template".equals(element.getName()) && templateId.equals(element.getAttribute("id"))) {
+			if (Objects.equals("template", element.getName()) && templateId.equals(element.getAttribute("id"))) {
 				return element;
 			}
 		}

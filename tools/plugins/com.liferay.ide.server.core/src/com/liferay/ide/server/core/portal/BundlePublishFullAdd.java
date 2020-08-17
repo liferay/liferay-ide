@@ -57,13 +57,13 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 	@Override
 	public void execute(IProgressMonitor monitor, IAdaptable info) throws CoreException {
 		for (IModule module : modules) {
-			IStatus retval = Status.OK_STATUS;
-
 			IProject project = module.getProject();
 
 			if (project == null) {
 				continue;
 			}
+
+			IStatus retval = Status.OK_STATUS;
 
 			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 

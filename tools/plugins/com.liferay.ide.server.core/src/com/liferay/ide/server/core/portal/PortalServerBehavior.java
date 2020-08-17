@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -191,7 +192,7 @@ public class PortalServerBehavior
 	public void launchServer(ILaunch launch, String mode, IProgressMonitor monitor) throws CoreException {
 		ILaunchConfiguration launchConfiguration = launch.getLaunchConfiguration();
 
-		if ("true".equals(launchConfiguration.getAttribute(ATTR_STOP, "false"))) {
+		if (Objects.equals(launchConfiguration.getAttribute(ATTR_STOP, "false"), "true")) {
 			return;
 		}
 
@@ -223,7 +224,7 @@ public class PortalServerBehavior
 
 				String folderName = appServerPortalDir.substring(appServerPortalDir.lastIndexOf("/"));
 
-				if (!("/ROOT".equals(folderName) || "/ROOT.war".equals(folderName))) {
+				if (!(folderName.equals("/ROOT") || folderName.equals("/ROOT.war"))) {
 					url += folderName;
 				}
 			}
@@ -416,8 +417,7 @@ public class PortalServerBehavior
 			launch.setAttribute(
 				ATTR_VM_ARGUMENTS,
 				_mergeArguments(
-					StringUtil.merge(parsedExistingVMArgs.toArray(new String[parsedExistingVMArgs.size()]), " "),
-					configVMArgs, null));
+					StringUtil.merge(parsedExistingVMArgs.toArray(new String[0]), " "), configVMArgs, null));
 		}
 		else {
 			launch.setAttribute(ATTR_VM_ARGUMENTS, _mergeArguments(existingVMArgs, configVMArgs, null));
@@ -562,7 +562,9 @@ public class PortalServerBehavior
 				setServerState(IServer.STATE_STOPPING);
 			}
 
-			ILaunchConfiguration launchConfig = ((Server)getServer()).getLaunchConfiguration(false, null);
+			Server getServer = (Server)getServer();
+
+			ILaunchConfiguration launchConfig = getServer.getLaunchConfiguration(false, null);
 
 			ILaunchConfigurationWorkingCopy wc = launchConfig.getWorkingCopy();
 
@@ -620,7 +622,6 @@ public class PortalServerBehavior
 
 		// publishing is done by PortalPublishTask
 
-		return;
 	}
 
 	@Override
@@ -638,14 +639,17 @@ public class PortalServerBehavior
 			IModule[] module = (IModule[])modules.get(i);
 
 			Integer deltaKind = (Integer)deltaKind2.get(i);
-			IModuleResourceDelta[] deltas = ((Server)getServer()).getPublishedResourceDelta(module);
+
+			Server getServer = (Server)getServer();
+
+			IModuleResourceDelta[] deltas = getServer.getPublishedResourceDelta(module);
 
 			if ((deltas.length == 1) && (kind == IServer.PUBLISH_AUTO) &&
 				(deltaKind == ServerBehaviourDelegate.CHANGED)) {
 
 				IModuleResource moduleResource = deltas[0].getModuleResource();
 
-				if (".classpath".equals(moduleResource.getName())) {
+				if (Objects.equals(".classpath", moduleResource.getName())) {
 					setModulePublishState2(module, IServer.PUBLISH_STATE_NONE);
 				}
 			}
@@ -735,9 +739,7 @@ public class PortalServerBehavior
 
 		PortalServer portalServer = _getPortalServer();
 
-		boolean customLaunchSettings = portalServer.getCustomLaunchSettings();
-
-		if (customLaunchSettings) {
+		if (portalServer.getCustomLaunchSettings()) {
 			Collections.addAll(retval, portalServer.getMemoryArgs());
 
 			String externalProperties = portalServer.getExternalProperties();
@@ -866,8 +868,10 @@ public class PortalServerBehavior
 
 								// If remainder will become the first argument, remove leading blanks
 
-								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2)))
+								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2))) {
 									index2 += 1;
+								}
+
 								retval = s + retval.substring(index2);
 							}
 
@@ -892,8 +896,10 @@ public class PortalServerBehavior
 
 								// If remainder will become the first argument, remove leading blanks
 
-								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2)))
+								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2))) {
 									index2 += 1;
+								}
+
 								retval = s + retval.substring(index2);
 							}
 							else
@@ -917,8 +923,10 @@ public class PortalServerBehavior
 
 								// Remove leading blanks
 
-								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2)))
+								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2))) {
 									index2 += 1;
+								}
+
 								retval = s + retval.substring(index2);
 							}
 							else {

@@ -16,9 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
-import com.liferay.ide.project.core.model.Profile;
 
-import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -34,9 +32,7 @@ public class ProfileIdListener extends FilteredListener<PropertyContentEvent> {
 
 		NewLiferayPluginProjectOp op = property.nearest(NewLiferayPluginProjectOp.class);
 
-		ElementList<Profile> selectedProfiles = op.getSelectedProfiles();
-
-		NewLiferayPluginProjectOpMethods.updateActiveProfilesValue(op, selectedProfiles);
+		NewLiferayPluginProjectOpMethods.updateActiveProfilesValue(op, op.getSelectedProfiles());
 	}
 
 }

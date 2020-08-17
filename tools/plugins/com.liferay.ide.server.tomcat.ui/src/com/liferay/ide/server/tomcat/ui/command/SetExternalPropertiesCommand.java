@@ -32,12 +32,16 @@ public class SetExternalPropertiesCommand extends ServerCommand {
 	}
 
 	public void execute() {
-		oldExternalProperties = ((LiferayTomcatServer)server).getExternalProperties();
-		((LiferayTomcatServer)server).setExternalProperties(externalProperties);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		oldExternalProperties = liferayServer.getExternalProperties();
+		liferayServer.setExternalProperties(externalProperties);
 	}
 
 	public void undo() {
-		((LiferayTomcatServer)server).setExternalProperties(oldExternalProperties);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		liferayServer.setExternalProperties(oldExternalProperties);
 	}
 
 	protected String externalProperties;

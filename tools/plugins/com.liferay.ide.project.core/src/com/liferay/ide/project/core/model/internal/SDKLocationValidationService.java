@@ -28,6 +28,8 @@ import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
@@ -63,7 +65,7 @@ public class SDKLocationValidationService extends ValidationService implements S
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		if (!"ant".equals(provider.getShortName())) {
+		if (!Objects.equals("ant", provider.getShortName())) {
 			return Status.createOkStatus();
 		}
 

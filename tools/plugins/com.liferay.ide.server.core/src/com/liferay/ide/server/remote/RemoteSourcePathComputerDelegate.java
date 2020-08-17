@@ -77,8 +77,7 @@ public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDele
 		public ISourceContainer[] getSourceContainers() throws CoreException {
 			Collections.addAll(runtimeClasspath, JavaRuntime.computeUnresolvedSourceLookupPath(configuration));
 
-			IRuntimeClasspathEntry[] entries = runtimeClasspath.toArray(
-				new IRuntimeClasspathEntry[runtimeClasspath.size()]);
+			IRuntimeClasspathEntry[] entries = runtimeClasspath.toArray(new IRuntimeClasspathEntry[0]);
 
 			IRuntimeClasspathEntry[] resolved = JavaRuntime.resolveSourceLookupPath(entries, configuration);
 

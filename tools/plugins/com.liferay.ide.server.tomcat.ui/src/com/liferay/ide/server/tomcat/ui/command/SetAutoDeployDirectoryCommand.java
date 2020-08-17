@@ -32,12 +32,16 @@ public class SetAutoDeployDirectoryCommand extends ServerCommand {
 	}
 
 	public void execute() {
-		oldAutoDeployDir = ((LiferayTomcatServer)server).getAutoDeployDirectory();
-		((LiferayTomcatServer)server).setAutoDeployDirectory(autoDeployDir);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		oldAutoDeployDir = liferayServer.getAutoDeployDirectory();
+		liferayServer.setAutoDeployDirectory(autoDeployDir);
 	}
 
 	public void undo() {
-		((LiferayTomcatServer)server).setAutoDeployDirectory(oldAutoDeployDir);
+		LiferayTomcatServer liferayServer = (LiferayTomcatServer)server;
+
+		liferayServer.setAutoDeployDirectory(oldAutoDeployDir);
 	}
 
 	protected String autoDeployDir;

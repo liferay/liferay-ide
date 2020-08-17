@@ -110,7 +110,9 @@ public abstract class InputContextManager implements IResourceChangeListener {
 			IEditorInput input = context.getInput();
 
 			if (input instanceof IFileEditorInput) {
-				IFile file = ((IFileEditorInput)input).getFile();
+				IFileEditorInput fileInput = (IFileEditorInput)input;
+
+				IFile file = fileInput.getFile();
 
 				return file.getProject();
 			}
@@ -134,7 +136,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 			}
 		}
 
-		return (InputContext[])result.toArray(new InputContext[result.size()]);
+		return (InputContext[])result.toArray(new InputContext[0]);
 	}
 
 	public abstract IBaseModel getModel();

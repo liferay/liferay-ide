@@ -179,9 +179,8 @@ public class SDKProjectsImportDataModelProvider
 			if (SDKUtil.isValidSDKLocation(sdkLocation)) {
 				return Status.OK_STATUS;
 			}
-			else {
-				return ProjectCore.createErrorStatus(Msgs.invalidPluginSDKLocation);
-			}
+
+			return ProjectCore.createErrorStatus(Msgs.invalidPluginSDKLocation);
 		}
 		else if (SDK_VERSION.equals(name)) {
 			String sdkVersion = getStringProperty(SDK_VERSION);
@@ -192,13 +191,11 @@ public class SDKProjectsImportDataModelProvider
 				if (_compareSDKRuntimeVersion(sdkVersion, runtime)) {
 					return Status.OK_STATUS;
 				}
-				else {
-					return ProjectCore.createWarningStatus(Msgs.versionUnequal);
-				}
+
+				return ProjectCore.createWarningStatus(Msgs.versionUnequal);
 			}
-			else {
-				return ProjectCore.createErrorStatus(Msgs.invalidPluginSDKVersion + SDKManager.getLeastValidVersion());
-			}
+
+			return ProjectCore.createErrorStatus(Msgs.invalidPluginSDKVersion + SDKManager.getLeastValidVersion());
 		}
 		else if (SELECTED_PROJECTS.equals(name)) {
 			Object val = getProperty(SELECTED_PROJECTS);
@@ -233,16 +230,14 @@ public class SDKProjectsImportDataModelProvider
 			if (!(runtime instanceof BridgedRuntime)) {
 				return ProjectCore.createErrorStatus(Msgs.selectValidLiferayRuntime);
 			}
-			else {
-				String sdkVersion = getStringProperty(SDK_VERSION);
 
-				if (_compareSDKRuntimeVersion(sdkVersion, runtime)) {
-					return Status.OK_STATUS;
-				}
-				else {
-					return ProjectCore.createWarningStatus(Msgs.versionUnequal);
-				}
+			String sdkVersion = getStringProperty(SDK_VERSION);
+
+			if (_compareSDKRuntimeVersion(sdkVersion, runtime)) {
+				return Status.OK_STATUS;
 			}
+
+			return ProjectCore.createWarningStatus(Msgs.versionUnequal);
 		}
 		else if (FACET_PROJECT_NAME.equals(name)) {
 

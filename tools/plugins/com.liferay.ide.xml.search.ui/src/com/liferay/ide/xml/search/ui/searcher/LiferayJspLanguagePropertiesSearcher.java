@@ -64,9 +64,6 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 
 						sb.append("<br/>");
 					}
-					else {
-						continue;
-					}
 				}
 				catch (Exception e) {
 				}

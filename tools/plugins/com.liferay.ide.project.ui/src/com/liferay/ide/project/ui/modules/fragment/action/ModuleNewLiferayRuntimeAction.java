@@ -115,8 +115,9 @@ public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler {
 			}
 		}
 		else {
-			boolean oK = ServerUIUtil.showNewRuntimeWizard(
-				((SwtPresentation)context).shell(), "liferay.bundle", null, "com.liferay.");
+			SwtPresentation swtContext = (SwtPresentation)context;
+
+			boolean oK = ServerUIUtil.showNewRuntimeWizard(swtContext.shell(), "liferay.bundle", null, "com.liferay.");
 
 			if (oK) {
 				SapphireUtil.refresh(op.property(NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME));

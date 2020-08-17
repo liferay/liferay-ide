@@ -40,6 +40,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -117,9 +118,10 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
 			Object adapter = input.getAdapter(IFile.class);
 
-			if (adapter instanceof IFile && _isHookProject(((IFile)adapter).getProject())) {
-				ILiferayProject liferayProject = LiferayCore.create(
-					ILiferayProject.class, ((IFile)adapter).getProject());
+			IFile fileAdapter = (IFile)adapter;
+
+			if ((adapter instanceof IFile) && _isHookProject(fileAdapter.getProject())) {
+				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, fileAdapter.getProject());
 
 				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
@@ -192,7 +194,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 		else {
 			File file = input.getAdapter(File.class);
 
-			if ((file == null) && input instanceof FileStoreEditorInput) {
+			if ((file == null) && (input instanceof FileStoreEditorInput)) {
 				FileStoreEditorInput fInput = (FileStoreEditorInput)input;
 
 				URI uri = fInput.getURI();
@@ -234,7 +236,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 	private String _getPropertiesEntry(IEditorInput input) {
 		String retval = null;
 
-		if ("system-ext.properties".equals(input.getName())) {
+		if (Objects.equals("system-ext.properties", input.getName())) {
 			retval = "system.properties";
 		}
 		else {

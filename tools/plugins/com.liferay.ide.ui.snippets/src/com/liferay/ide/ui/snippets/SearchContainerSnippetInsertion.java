@@ -40,7 +40,9 @@ public class SearchContainerSnippetInsertion extends ModelSnippetInsertion {
 	protected String getPreparedText(AbstractModelWizard wizard) {
 		String text = super.getPreparedText(wizard);
 
-		text = StringUtils.replace(text, "${modelClass}", ((LiferayUISearchContainerWizard)wizard).getModelClass());
+		LiferayUISearchContainerWizard searchContainerWizard = (LiferayUISearchContainerWizard)wizard;
+
+		text = StringUtils.replace(text, "${modelClass}", searchContainerWizard.getModelClass());
 
 		StringBuffer columns = new StringBuffer();
 		String[] propColumns = wizard.getPropertyColumns();

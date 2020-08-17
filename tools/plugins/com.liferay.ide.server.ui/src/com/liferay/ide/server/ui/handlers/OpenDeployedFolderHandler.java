@@ -68,20 +68,18 @@ public class OpenDeployedFolderHandler extends AbstractHandler {
 
 		ModuleServer moduleServer = null;
 
-		if (selected != null) {
-			if (selected instanceof ModuleServer) {
-				moduleServer = (ModuleServer)selected;
+		if ((selected != null) && (selected instanceof ModuleServer)) {
+			moduleServer = (ModuleServer)selected;
 
-				moduleServer.getModule()[0].getProject();
+			moduleServer.getModule()[0].getProject();
 
-				IServer server = moduleServer.getServer();
+			IServer server = moduleServer.getServer();
 
-				ILiferayServerBehavior liferayServerBehavior = (ILiferayServerBehavior)server.loadAdapter(
-					ILiferayServerBehavior.class, null);
+			ILiferayServerBehavior liferayServerBehavior = (ILiferayServerBehavior)server.loadAdapter(
+				ILiferayServerBehavior.class, null);
 
-				if (liferayServerBehavior != null) {
-					retval = liferayServerBehavior.getDeployedPath(moduleServer.getModule());
-				}
+			if (liferayServerBehavior != null) {
+				retval = liferayServerBehavior.getDeployedPath(moduleServer.getModule());
 			}
 		}
 
