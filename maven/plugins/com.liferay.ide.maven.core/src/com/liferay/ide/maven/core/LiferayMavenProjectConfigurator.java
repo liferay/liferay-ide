@@ -585,6 +585,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		if ((mavenProject.getPlugin(ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY) != null) ||
 			(mavenProject.getPlugin(ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY) != null) ||
 			(mavenProject.getPlugin(ILiferayMavenConstants.LIFERAY_THEME_BUILDER_PLUGIN_KEY) != null) ||
+			(mavenProject.getPlugin(ILiferayMavenConstants.LIFERAY_CSS_BUILDER_PLUGIN_KEY) != null) ||
 			layoutTemplateProject) {
 
 			return true;
