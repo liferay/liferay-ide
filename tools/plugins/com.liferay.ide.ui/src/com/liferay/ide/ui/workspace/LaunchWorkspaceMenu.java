@@ -17,6 +17,7 @@ package com.liferay.ide.ui.workspace;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IContributionItem;
@@ -49,7 +50,7 @@ public class LaunchWorkspaceMenu extends ExtensionContributionFactory {
 
 				CommandContributionItemParameter parameter = commandItem.getData();
 
-				if ("Other...".equals(parameter.label)) {
+				if (Objects.equals("Other...", parameter.label)) {
 					menu.add(new Separator());
 				}
 			}

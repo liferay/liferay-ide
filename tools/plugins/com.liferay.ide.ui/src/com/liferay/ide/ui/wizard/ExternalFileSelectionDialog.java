@@ -70,7 +70,9 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
 
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof File) {
-				File[] children = ((File)parentElement).listFiles();
+				File fileElement = (File)parentElement;
+
+				File[] children = fileElement.listFiles();
 
 				if (children != null) {
 					return children;
@@ -86,7 +88,9 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
 
 		public Object getParent(Object element) {
 			if (element instanceof File) {
-				return ((File)element).getParentFile();
+				File fileElement = (File)element;
+
+				return fileElement.getParentFile();
 			}
 
 			return null;
@@ -112,9 +116,8 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
 				if (curr.isDirectory()) {
 					return _imgFolder;
 				}
-				else {
-					return _imgFile;
-				}
+
+				return _imgFile;
 			}
 
 			return null;
@@ -122,7 +125,9 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
 
 		public String getText(Object element) {
 			if (element instanceof File) {
-				return TextProcessor.process(((File)element).getName());
+				File fileElement = (File)element;
+
+				return TextProcessor.process(fileElement.getName());
 			}
 
 			return super.getText(element);
@@ -178,7 +183,9 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
 
 		public int category(Object element) {
 			if (element instanceof File) {
-				if (((File)element).isFile()) {
+				File fileElement = (File)element;
+
+				if (fileElement.isFile()) {
 					return 1;
 				}
 			}

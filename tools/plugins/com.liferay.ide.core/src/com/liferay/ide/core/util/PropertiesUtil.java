@@ -83,11 +83,11 @@ public class PropertiesUtil {
 	public static final String PROPERTIES_FILE_SUFFIX = ".properties";
 
 	/**
-	 * Convert the element values of <resource-bundle> in portlet.xml and
-	 * <language-properties> in liferay-hook.xml to the corresponding regular
-	 * expression to match the local files. The return values is: String[0] is base
-	 * value of normal format without suffix, String[1] is a regex. Both may be
-	 * null, check them before using them.
+	 * Convert the element values of <resource-bundle/> in portlet.xml and <language-properties/>
+	 * in liferay-hook.xml to the corresponding regular expression to match the local files.
+	 * The return values is:
+	 * String[0] is base value of normal format without suffix,
+	 * String[1] is a regex. Both may be null, check them before using them.
 	 */
 	public static String[] generatePropertiesNamePatternsForEncoding(String baseValue, String elementName) {
 		baseValue = baseValue.replaceAll("(^\\s*)|(\\s*$)", StringPool.BLANK);
@@ -161,17 +161,13 @@ public class PropertiesUtil {
 			}
 		}
 
-		String[] retval = {baseValue, regex};
-
-		return retval;
+		return new String[] {baseValue, regex};
 	}
 
 	/**
 	 *  Get all the language properties files referenced from portlet.xml and liferay-hook.xml
 	 */
 	public static IFile[] getAllLanguagePropertiesFiles(IProject project) {
-		List<IFile> retval = new ArrayList<>();
-
 		if (!CoreUtil.isLiferayProject(project)) {
 			project = CoreUtil.getLiferayProject(project);
 		}
@@ -187,6 +183,8 @@ public class PropertiesUtil {
 
 		IFile[] languageFiles = getLanguagePropertiesFromLiferayHookXml(
 			webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE));
+
+		List<IFile> retval = new ArrayList<>();
 
 		if (ListUtil.isNotEmpty(resourceFiles)) {
 			Collections.addAll(retval, resourceFiles);
@@ -240,9 +238,7 @@ public class PropertiesUtil {
 			String resourceBundleValue = null;
 
 			for (IType type : srcJavaTypes) {
-				IResource resource = type.getResource();
-
-				File file = FileUtil.getFile(resource);
+				File file = FileUtil.getFile(type.getResource());
 
 				String content = FileUtil.readContents(file);
 
@@ -253,28 +249,27 @@ public class PropertiesUtil {
 				if (i == -1) {
 					continue;
 				}
-				else {
-					i += key.length();
 
-					StringBuilder strBuilder = new StringBuilder();
+				i += key.length();
 
-					for (; i < content.length(); i++) {
-						char ch = content.charAt(i);
+				StringBuilder strBuilder = new StringBuilder();
 
-						if (ch != '"') {
-							strBuilder.append(ch);
-						}
-						else {
-							break;
-						}
+				for (; i < content.length(); i++) {
+					char ch = content.charAt(i);
+
+					if (ch != '"') {
+						strBuilder.append(ch);
 					}
-
-					resourceBundleValue = strBuilder.toString();
-
-					// find the first language config
-
-					break;
+					else {
+						break;
+					}
 				}
+
+				resourceBundleValue = strBuilder.toString();
+
+				// find the first language config
+
+				break;
 			}
 
 			String resourceBundle = resourceBundleValue.replaceAll("(^\\s*)|(\\s*$)", StringPool.BLANK);
@@ -316,15 +311,11 @@ public class PropertiesUtil {
 			return Collections.emptyList();
 		}
 
-		List<IFile> retvals = new ArrayList<>();
-
 		if (FileUtil.notExists(portletXml)) {
 			return Collections.emptyList();
 		}
 
 		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, proj);
-
-		IFolder[] srcFolders = liferayProject.getSourceFolders();
 
 		ResourceNodeInfo resourceNodeInfo = _getResourceNodeInfo(portletXml);
 
@@ -333,6 +324,10 @@ public class PropertiesUtil {
 		if (ListUtil.isEmpty(resourceBundles)) {
 			return Collections.emptyList();
 		}
+
+		IFolder[] srcFolders = liferayProject.getSourceFolders();
+
+		List<IFile> retvals = new ArrayList<>();
 
 		for (int i = 0; i < resourceBundles.size(); i++) {
 			String resourceBundleValue = (String)resourceBundles.toArray()[i];
@@ -364,8 +359,6 @@ public class PropertiesUtil {
 	}
 
 	public static IFile[] getLanguagePropertiesFromLiferayHookXml(IFile liferayHookXml) {
-		List<IFile> retval = new ArrayList<>();
-
 		IProject project = CoreUtil.getLiferayProject(liferayHookXml);
 
 		if (project == null) {
@@ -383,6 +376,8 @@ public class PropertiesUtil {
 		if (FileUtil.notExists(liferayHookXml)) {
 			return new IFile[0];
 		}
+
+		List<IFile> retval = new ArrayList<>();
 
 		LanguageFileInfo languageFileInfo = _getLanguageFileInfo(liferayHookXml);
 
@@ -407,8 +402,6 @@ public class PropertiesUtil {
 	 *  Search all resource bundle and supported locale files referenced by portlet.xml.
 	 */
 	public static IFile[] getLanguagePropertiesFromPortletXml(IFile portletXml) {
-		List<IFile> retval = new ArrayList<>();
-
 		IProject project = CoreUtil.getLiferayProject(portletXml);
 
 		if (project == null) {
@@ -426,6 +419,8 @@ public class PropertiesUtil {
 		if (FileUtil.notExists(portletXml)) {
 			return new IFile[0];
 		}
+
+		List<IFile> retval = new ArrayList<>();
 
 		for (IFolder srcFolder : srcFolders) {
 			if (FileUtil.notExists(srcFolder)) {
@@ -889,7 +884,7 @@ public class PropertiesUtil {
 				LiferayCore.logError(ce);
 			}
 
-			return _resources.toArray(new IFile[_resources.size()]);
+			return _resources.toArray(new IFile[0]);
 		}
 
 		private IResource _entryResource = null;

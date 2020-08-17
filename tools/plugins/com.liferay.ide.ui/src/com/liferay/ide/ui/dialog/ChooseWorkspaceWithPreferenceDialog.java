@@ -207,8 +207,6 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 	}
 
 	private IPath _getNewWorkbenchStateLocation(IPath newWorkspaceRoot) {
-		IPath currentWorkspaceRoot = Platform.getLocation();
-
 		WorkbenchPlugin workbenchPlugin = WorkbenchPlugin.getDefault();
 
 		IPath dataLocation = workbenchPlugin.getDataLocation();
@@ -216,6 +214,8 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 		if (dataLocation == null) {
 			return null;
 		}
+
+		IPath currentWorkspaceRoot = Platform.getLocation();
 
 		int segmentsToRemove = dataLocation.matchingFirstSegments(currentWorkspaceRoot);
 

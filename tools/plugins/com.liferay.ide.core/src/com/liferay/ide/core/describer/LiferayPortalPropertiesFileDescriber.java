@@ -38,10 +38,14 @@ public class LiferayPortalPropertiesFileDescriber extends LiferayPropertiesFileD
 		String fileName = null;
 
 		if (file instanceof File) {
-			fileName = ((File)file).getName();
+			File f = (File)file;
+
+			fileName = f.getName();
 		}
 		else if (file instanceof IFile) {
-			fileName = ((IFile)file).getName();
+			IFile iFile = (IFile)file;
+
+			fileName = iFile.getName();
 		}
 		else if (file instanceof String) {
 			fileName = new File(

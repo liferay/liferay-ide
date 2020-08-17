@@ -129,7 +129,9 @@ public abstract class IDEFormPage extends FormPage {
 
 		for (IFormPart part : parts) {
 			if (part instanceof IContextPart) {
-				((IContextPart)part).cancelEdit();
+				IContextPart contextPart = (IContextPart)part;
+
+				contextPart.cancelEdit();
 			}
 		}
 	}
@@ -139,11 +141,15 @@ public abstract class IDEFormPage extends FormPage {
 
 		if (focusPart != null) {
 			if (focusPart instanceof IDESection) {
-				return ((IDESection)focusPart).canCopy(selection);
+				IDESection focusSection = (IDESection)focusPart;
+
+				return focusSection.canCopy(selection);
 			}
 
 			if (focusPart instanceof FormDetails) {
-				return ((FormDetails)focusPart).canCopy(selection);
+				FormDetails detailsFocusPart = (FormDetails)focusPart;
+
+				return detailsFocusPart.canCopy(selection);
 			}
 		}
 
@@ -155,11 +161,15 @@ public abstract class IDEFormPage extends FormPage {
 
 		if (focusPart != null) {
 			if (focusPart instanceof IDESection) {
-				return ((IDESection)focusPart).canCut(selection);
+				IDESection focusSection = (IDESection)focusPart;
+
+				return focusSection.canCut(selection);
 			}
 
 			if (focusPart instanceof FormDetails) {
-				return ((FormDetails)focusPart).canCut(selection);
+				FormDetails detailsFocusPart = (FormDetails)focusPart;
+
+				return detailsFocusPart.canCut(selection);
 			}
 		}
 
@@ -171,11 +181,15 @@ public abstract class IDEFormPage extends FormPage {
 
 		if (focusPart != null) {
 			if (focusPart instanceof IDESection) {
-				return ((IDESection)focusPart).canPaste(clipboard);
+				IDESection focusSection = (IDESection)focusPart;
+
+				return focusSection.canPaste(clipboard);
 			}
 
 			if (focusPart instanceof FormDetails) {
-				return ((FormDetails)focusPart).canPaste(clipboard);
+				FormDetails detailsFocusPart = (FormDetails)focusPart;
+
+				return detailsFocusPart.canPaste(clipboard);
 			}
 		}
 
@@ -258,7 +272,9 @@ public abstract class IDEFormPage extends FormPage {
 	}
 
 	public IBaseModel getModel() {
-		return ((IDEFormEditor)getEditor()).getModel();
+		IDEFormEditor formEditor = (IDEFormEditor)getEditor();
+
+		return formEditor.getModel();
 	}
 
 	public Shell getShell() {
@@ -280,11 +296,15 @@ public abstract class IDEFormPage extends FormPage {
 
 		if (focusPart != null) {
 			if (focusPart instanceof IDESection) {
-				return ((IDESection)focusPart).doGlobalAction(actionId);
+				IDESection sectionFocusPart = (IDESection)focusPart;
+
+				return sectionFocusPart.doGlobalAction(actionId);
 			}
 
 			if (focusPart instanceof FormDetails) {
-				return ((FormDetails)focusPart).doGlobalAction(actionId);
+				FormDetails detailsFocusPart = (FormDetails)focusPart;
+
+				return detailsFocusPart.doGlobalAction(actionId);
 			}
 		}
 
@@ -545,7 +565,7 @@ public abstract class IDEFormPage extends FormPage {
 		while (parent != null) {
 			Object data = parent.getData("part");
 
-			if ((data != null) && data instanceof AbstractFormPart) {
+			if ((data != null) && (data instanceof AbstractFormPart)) {
 				targetPart = (AbstractFormPart)data;
 
 				break;

@@ -339,7 +339,9 @@ public class PropertiesFileLookup {
 			boolean hasSep;
 			boolean precedingBackslash;
 
-			while ((limit = lr.readLine())[0] >= 0) {
+			limit = lr.readLine();
+
+			while (limit[0] >= 0) {
 				c = 0;
 				keyLen = 0;
 				valueStart = limit[0];

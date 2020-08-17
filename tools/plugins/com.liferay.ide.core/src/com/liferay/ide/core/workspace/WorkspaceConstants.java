@@ -81,10 +81,10 @@ public class WorkspaceConstants {
 
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
 		{
-			put("7.3", new String[] {"7.3.2", "7.3.1", "7.3.0"});
-			put("7.2", new String[] {"7.2.1", "7.2.0"});
-			put("7.1", new String[] {"7.1.3", "7.1.2", "7.1.1", "7.1.0"});
 			put("7.0", new String[] {"7.0.6"});
+			put("7.1", new String[] {"7.1.3", "7.1.2", "7.1.1", "7.1.0"});
+			put("7.2", new String[] {"7.2.1", "7.2.0"});
+			put("7.3", new String[] {"7.3.2", "7.3.1", "7.3.0"});
 		}
 	};
 

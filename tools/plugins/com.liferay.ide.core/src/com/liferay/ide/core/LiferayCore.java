@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.eclipse.core.net.proxy.IProxyService;
@@ -293,11 +292,11 @@ public class LiferayCore extends Plugin {
 		//Handle the situation that the adaptable object could have muti-type
 
 		if (liferayProject == null) {
-			Entry<ProjectCacheKey<?>, ILiferayProject> cachedEntry = null;
+			Map.Entry<ProjectCacheKey<?>, ILiferayProject> cachedEntry = null;
 
-			List<Entry<ProjectCacheKey<?>, ILiferayProject>> staleEntries = new ArrayList<>();
+			List<Map.Entry<ProjectCacheKey<?>, ILiferayProject>> staleEntries = new ArrayList<>();
 
-			for (Entry<ProjectCacheKey<?>, ILiferayProject> entry : projectCache.entrySet()) {
+			for (Map.Entry<ProjectCacheKey<?>, ILiferayProject> entry : projectCache.entrySet()) {
 				ILiferayProject cachedLiferayProject = entry.getValue();
 
 				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject()) &&
@@ -314,7 +313,7 @@ public class LiferayCore extends Plugin {
 				liferayProject = cachedEntry.getValue();
 			}
 
-			for (Entry<ProjectCacheKey<?>, ILiferayProject> staleEntry : staleEntries) {
+			for (Map.Entry<ProjectCacheKey<?>, ILiferayProject> staleEntry : staleEntries) {
 				_removeFromCache(staleEntry.getKey(), staleEntry.getValue());
 			}
 		}

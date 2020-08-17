@@ -74,7 +74,7 @@ public final class ProjectChangeListener implements IResourceChangeListener {
 		for (IResourceDelta resourceDelta : resourceDeltas) {
 			IResource resource = resourceDelta.getResource();
 
-			if (resource instanceof IFile && project.contains(resource)) {
+			if ((resource instanceof IFile) && project.contains(resource)) {
 				paths.add(resource.getFullPath());
 			}
 
@@ -131,9 +131,8 @@ public final class ProjectChangeListener implements IResourceChangeListener {
 
 			return false;
 		}
-		else {
-			return resource instanceof IWorkspaceRoot; // don't traverse deeper than the project level
-		}
+
+		return resource instanceof IWorkspaceRoot; // don't traverse deeper than the project level
 	}
 
 	private void _visitDelta(IResourceDelta delta) throws CoreException {

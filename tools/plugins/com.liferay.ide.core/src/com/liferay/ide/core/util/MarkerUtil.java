@@ -120,9 +120,9 @@ public class MarkerUtil {
 
 		IMarker marker = resource.createMarker(markerType);
 
-		marker.setAttribute(IMarker.SEVERITY, markerSeverity);
-		marker.setAttribute(IMarker.MESSAGE, markerMsg);
 		marker.setAttribute(IMarker.LOCATION, markerLocation);
+		marker.setAttribute(IMarker.MESSAGE, markerMsg);
+		marker.setAttribute(IMarker.SEVERITY, markerSeverity);
 		marker.setAttribute(IMarker.SOURCE_ID, markerSourceId);
 	}
 

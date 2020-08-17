@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -239,7 +238,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 				message = message + ' ' + e.getMessage();
 			}
 
-			LiferayUIPlugin.logError(e);
+			LiferayUIPlugin.logError(message, e);
 		}
 	}
 
@@ -333,7 +332,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 			}
 		}
 
-		return (IFormPage[])formPages.toArray(new IFormPage[formPages.size()]);
+		return (IFormPage[])formPages.toArray(new IFormPage[0]);
 	}
 
 	public ISelection getSelection() {
@@ -366,9 +365,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	 * @return
 	 */
 	public void gotoMarker(IMarker marker) {
-		IResource resource = marker.getResource();
-
-		InputContext context = fInputContextManager.findContext(resource);
+		InputContext context = fInputContextManager.findContext(marker.getResource());
 
 		if (context == null) {
 			return;
@@ -409,7 +406,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 		// preserve selection
 
-		boolean handled = ((IDEFormPage)getActivePageInstance()).performGlobalAction(id);
+		IDEFormPage activePage = (IDEFormPage)getActivePageInstance();
+
+		boolean handled = activePage.performGlobalAction(id);
 
 		if (!handled) {
 			IFormPage page = getActivePageInstance();
@@ -430,7 +429,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 				if (id.equals(ActionFactory.CUT.getId()) || id.equals(ActionFactory.COPY.getId())) {
 					_copyToClipboard();
 
-					return;
+					//return;
 				}
 			}
 		}
@@ -449,7 +448,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		// but setActive only handles page switches and not focus events
 
 		if ((page != null) && (page instanceof IDEFormPage)) {
-			((IDEFormPage)page).updateFormSelection();
+			IDEFormPage formPage = (IDEFormPage)page;
+
+			formPage.updateFormSelection();
 		}
 	}
 
@@ -537,7 +538,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		IFormPage page = getActivePageInstance();
 
 		if (page instanceof IDEFormPage) {
-			((IDEFormPage)page).contextMenuAboutToShow(manager);
+			IDEFormPage formPage = (IDEFormPage)page;
+
+			formPage.contextMenuAboutToShow(manager);
 		}
 
 		if (contributor != null) {
@@ -563,6 +566,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	 */
 	protected void createPages() {
 		_clipboard = new Clipboard(getContainer().getDisplay());
+
 		MenuManager manager = new MenuManager();
 
 		IMenuListener listener = new IMenuListener() {
@@ -586,8 +590,10 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		fInputContextManager.addInputContextListener(this);
 		updateTitle();
 
-		if ((getPageCount() == 1) && getContainer() instanceof CTabFolder) {
-			((CTabFolder)getContainer()).setTabHeight(0);
+		if ((getPageCount() == 1) && (getContainer() instanceof CTabFolder)) {
+			CTabFolder folderContainer = (CTabFolder)getContainer();
+
+			folderContainer.setTabHeight(0);
 		}
 	}
 
@@ -676,19 +682,17 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	}
 
 	private boolean _revertSourcePages() {
-		boolean reverted = false;
-
-		return reverted;
+		return false;
 	}
 
 	private void _storeDefaultPage() {
-		IEditorInput input = getEditorInput();
-
 		String pageId = _fLastActivePageId;
 
 		if (pageId == null) {
 			return;
 		}
+
+		IEditorInput input = getEditorInput();
 
 		if (input instanceof IFileEditorInput) {
 		}

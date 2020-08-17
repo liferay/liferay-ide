@@ -73,8 +73,8 @@ public class LaunchHelper implements IDebugEventSetListener {
 			mementos.add(entry.getMemento());
 		}
 
-		launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, Boolean.FALSE);
 		launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, mementos);
+		launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, Boolean.FALSE);
 
 		if (getMainClass() != null) {
 			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, getMainClass());
@@ -113,7 +113,9 @@ public class LaunchHelper implements IDebugEventSetListener {
 			Object source = event.getSource();
 
 			if (source instanceof IProcess) {
-				ILaunch launch = ((IProcess)source).getLaunch();
+				IProcess processSource = (IProcess)source;
+
+				ILaunch launch = processSource.getLaunch();
 
 				if (launch.equals(runningLaunch) && (event.getKind() == DebugEvent.TERMINATE)) {
 					synchronized (this) {
@@ -305,7 +307,7 @@ public class LaunchHelper implements IDebugEventSetListener {
 			}
 		}
 
-		return entries.toArray(new IRuntimeClasspathEntry[entries.size()]);
+		return entries.toArray(new IRuntimeClasspathEntry[0]);
 	}
 
 	protected String getClasspathProviderAttributeValue() {

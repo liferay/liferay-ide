@@ -286,9 +286,7 @@ public class FileUtil {
 
 	public static boolean exists(IProject project, String fileName) {
 		if (exists(project) && (fileName != null)) {
-			IFile file = project.getFile(fileName);
-
-			return exists(file);
+			return exists(project.getFile(fileName));
 		}
 
 		return false;
@@ -966,7 +964,7 @@ public class FileUtil {
 			LiferayCore.logError("Could not read file: " + file.getPath());
 		}
 
-		return lines.toArray(new String[lines.size()]);
+		return lines.toArray(new String[0]);
 	}
 
 	public static String[] readMainFestProsFromJar(File systemJarFile, String... names) {

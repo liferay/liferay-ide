@@ -28,7 +28,7 @@ public class LiferayLanguagePropertiesFileDescriber extends LiferayPropertiesFil
 
 	@Override
 	protected boolean isPropertiesFile(Object file) {
-		if (file instanceof IFile && PropertiesUtil.isLanguagePropertiesFile((IFile)file)) {
+		if ((file instanceof IFile) && PropertiesUtil.isLanguagePropertiesFile((IFile)file)) {
 			return true;
 		}
 

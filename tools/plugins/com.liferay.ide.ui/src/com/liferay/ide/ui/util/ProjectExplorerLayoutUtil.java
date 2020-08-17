@@ -139,7 +139,7 @@ public class ProjectExplorerLayoutUtil {
 					filters.remove(hideFolderWhenProjectIsShownAsNested);
 				}
 
-				filterService.activateFilterIdsAndUpdateViewer(filters.toArray(new String[filters.size()]));
+				filterService.activateFilterIdsAndUpdateViewer(filters.toArray(new String[0]));
 
 				activationService.persistExtensionActivations();
 

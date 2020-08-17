@@ -49,19 +49,15 @@ public class WorkbenchPreferencesTransfer extends WorkbenchSettingsTransfer {
 
 		File[] srcSettings = srcDir.listFiles();
 
-		if (!destDir.exists()) {
-			if (!destDir.mkdirs()) {
-				return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can not create dirs");
-			}
+		if (!destDir.exists() && !destDir.mkdirs()) {
+			return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can not create dirs");
 		}
 
 		for (File src : srcSettings) {
 			File destSetting = new File(destDir.getAbsolutePath(), src.getName());
 
-			if (destSetting.exists()) {
-				if (!destSetting.delete()) {
-					return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can not delete settings file");
-				}
+			if (destSetting.exists() && !destSetting.delete()) {
+				return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can not delete settings file");
 			}
 
 			FileUtil.copyFile(src, destSetting);

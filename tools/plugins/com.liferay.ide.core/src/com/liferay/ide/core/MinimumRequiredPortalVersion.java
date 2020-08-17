@@ -34,7 +34,9 @@ public class MinimumRequiredPortalVersion extends PropertyTester {
 			project = (IProject)receiver;
 		}
 		else if (receiver instanceof IFile) {
-			project = ((IFile)receiver).getProject();
+			IFile fileReceiver = (IFile)receiver;
+
+			project = fileReceiver.getProject();
 		}
 
 		try {

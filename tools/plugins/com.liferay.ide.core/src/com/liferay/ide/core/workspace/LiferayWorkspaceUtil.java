@@ -395,9 +395,8 @@ public class LiferayWorkspaceUtil {
 			if (FileUtil.exists(pomFile)) {
 				return "maven-liferay-workspace";
 			}
-			else {
-				return "gradle-liferay-workspace";
-			}
+
+			return "gradle-liferay-workspace";
 		}
 
 		return null;

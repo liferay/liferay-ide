@@ -52,11 +52,11 @@ public class RuntimeClasspathModel {
 	}
 
 	public IClasspathEntry[] getEntries(int type, ILaunchConfiguration config) {
-		List<IClasspathEntry> entries = new ArrayList<>();
-
 		if (type != USER) {
 			return new IClasspathEntry[0];
 		}
+
+		List<IClasspathEntry> entries = new ArrayList<>();
 
 		for (Object entry : _userEntries) {
 			if (entry instanceof VariableClasspathEntry) {
