@@ -33,6 +33,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -102,7 +103,7 @@ public class SpringExtenderArtifactIdChangedForMavenProject extends XMLFileMigra
 				for (int j = 0; j < childNodes.getLength(); j++) {
 					Node childNode = childNodes.item(j);
 
-					if ("version".equals(childNode.getNodeName())) {
+					if (Objects.equals("version", childNode.getNodeName())) {
 						NodeList versionNodeChilds = childNode.getChildNodes();
 
 						Node versionNode = versionNodeChilds.item(0);

@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
@@ -65,7 +64,7 @@ public class PortalServiceImports71 extends JavaImportsMigrator {
 			for (Object key : keys) {
 				String value = (String)properties.get(key);
 
-				if (CoreUtil.isNotNullOrEmpty(value)) {
+				if ((value != null) && !value.isEmpty()) {
 					value = value + "," + moduleLayout;
 
 					importFixes.put((String)key, value);
