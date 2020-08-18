@@ -14,18 +14,30 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.net.URL;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
@@ -34,6 +46,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -44,7 +59,13 @@ import org.osgi.framework.BundleContext;
  */
 public class UpgradePlanCorePlugin extends Plugin {
 
+	public static final String CODE_UPGRADE_ZIP_MD5 = "code-upgrade-zip-md5";
+
+	public static final String DATABASE_UPGRADE_ZIP_MD5 = "database-upgrade-zip-md5";
+
 	public static final String ID = "com.liferay.ide.upgrade.plan.core";
+
+	public static final String OFFLINE_OUTLINE_KEY = "offline-outline";
 
 	public static final String OFFLINE_UNZIP_FOLDER = "offline-outline";
 
@@ -100,38 +121,93 @@ public class UpgradePlanCorePlugin extends Plugin {
 		super.stop(context);
 	}
 
+	private static String _computeMD5(File file) {
+		if (Objects.nonNull(file)) {
+			try {
+				MessageDigest md5 = MessageDigest.getInstance("MD5");
+
+				md5.update(Files.readAllBytes(file.toPath()));
+
+				return DatatypeConverter.printHexBinary(md5.digest());
+			}
+			catch (IOException | NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
+
 	private void _initOfflineOutline() throws Exception {
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
 		IPath pluginStateLocation = _instance.getStateLocation();
 
 		IPath offlineOutlinePath = pluginStateLocation.append(OFFLINE_UNZIP_FOLDER);
 
-		if (FileUtil.notExists(offlineOutlinePath)) {
-			Bundle bundle = Platform.getBundle(UpgradePlanCorePlugin.ID);
+		Bundle bundle = Platform.getBundle(UpgradePlanCorePlugin.ID);
 
-			Enumeration<URL> entryUrls = bundle.findEntries("resources/", "*.zip", true);
+		Enumeration<URL> entryUrls = bundle.findEntries("resources/", "*.zip", true);
 
-			if (ListUtil.isEmpty(entryUrls)) {
-				return;
+		if (ListUtil.isEmpty(entryUrls)) {
+			return;
+		}
+
+		while (entryUrls.hasMoreElements()) {
+			URL fileURL = FileLocator.toFileURL(entryUrls.nextElement());
+
+			File outlineFile = new File(fileURL.getFile());
+
+			String contentZipMD5 = "";
+
+			switch (outlineFile.getName()) {
+				case "code-upgrade.zip":
+					contentZipMD5 = CODE_UPGRADE_ZIP_MD5;
+
+					break;
+
+				case "database-upgrade.zip":
+					contentZipMD5 = DATABASE_UPGRADE_ZIP_MD5;
+
+					break;
 			}
 
-			while (entryUrls.hasMoreElements()) {
-				URL fileURL = FileLocator.toFileURL(entryUrls.nextElement());
+			String storedMD5 = preferencesService.getString(UpgradePlanCorePlugin.ID, contentZipMD5, "", null);
 
-				File outlineFile = new File(fileURL.getFile());
+			String updateMD5 = _computeMD5(outlineFile);
+
+			if (!updateMD5.equals(storedMD5)) {
+				Stream<Path> stream = Files.walk(Paths.get(offlineOutlinePath.toOSString()));
+
+				stream.sorted(
+					Comparator.reverseOrder()
+				).map(
+					Path::toFile
+				).forEach(
+					File::delete
+				);
+
+				stream.close();
 
 				ZipUtil.unzip(outlineFile, offlineOutlinePath.toFile());
 
-				String outlineFilename = outlineFile.getName();
+				_prefstore.put(contentZipMD5, updateMD5);
 
-				String outlineFilenameWithoutEx = outlineFilename.split("\\.")[0];
-
-				IPath outlinePath = offlineOutlinePath.append(outlineFilenameWithoutEx);
-
-				offlineOutlineLists.add(new UpgradePlanOutline(outlineFilenameWithoutEx, outlinePath.toOSString()));
+				_prefstore.flush();
 			}
+
+			String outlineFilename = outlineFile.getName();
+
+			String outlineFilenameWithoutEx = outlineFilename.split("\\.")[0];
+
+			IPath outlinePath = offlineOutlinePath.append(outlineFilenameWithoutEx);
+
+			offlineOutlineLists.add(new UpgradePlanOutline(outlineFilenameWithoutEx, outlinePath.toOSString()));
 		}
 	}
 
 	private static UpgradePlanCorePlugin _instance;
+
+	private IEclipsePreferences _prefstore = InstanceScope.INSTANCE.getNode(ID);
 
 }
