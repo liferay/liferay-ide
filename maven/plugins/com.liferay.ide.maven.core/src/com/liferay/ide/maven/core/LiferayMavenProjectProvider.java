@@ -83,7 +83,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 	public <T> List<T> getData(String key, Class<T> type, Object... params) {
 		List<T> retval = null;
 
-		if ("profileIds".equals(key)) {
+		if (key.equals("profileIds")) {
 			List<T> profileIds = new ArrayList<>();
 
 			try {
@@ -103,7 +103,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 					profileIds.add(type.cast(profile.getId()));
 				}
 
-				if ((params[0] != null) && params[0] instanceof File) {
+				if ((params[0] != null) && (params[0] instanceof File)) {
 					File locationDir = (File)params[0];
 
 					File pomFile = new File(locationDir, IMavenConstants.POM_FILE_NAME);
@@ -145,7 +145,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 			retval = profileIds;
 		}
-		else if ("liferayVersions".equals(key)) {
+		else if (key.equals("liferayVersions")) {
 			List<T> possibleVersions = new ArrayList<>();
 
 			RepositorySystem system = AetherUtil.newRepositorySystem();
@@ -173,7 +173,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 				for (Version version : versions) {
 					String val = version.toString();
 
-					if (!"6.2.0".equals(val) && !val.contains("7.0.0")) {
+					if (!val.equals("6.2.0") && !val.contains("7.0.0")) {
 						possibleVersions.add(type.cast(val));
 					}
 				}
@@ -183,7 +183,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 			catch (VersionRangeResolutionException vrre) {
 			}
 		}
-		else if ("parentVersion".equals(key)) {
+		else if (key.equals("parentVersion")) {
 			List<T> version = new ArrayList<>();
 
 			File locationDir = (File)params[0];
@@ -205,7 +205,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 				}
 			}
 		}
-		else if ("parentGroupId".equals(key)) {
+		else if (key.equals("parentGroupId")) {
 			List<T> groupId = new ArrayList<>();
 
 			File locationDir = (File)params[0];
@@ -227,7 +227,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 				}
 			}
 		}
-		else if ("archetypeGAV".equals(key)) {
+		else if (key.equals("archetypeGAV")) {
 			String frameworkType = (String)params[0];
 
 			String value = LiferayMavenCore.getPreferenceString("archetype-gav-" + frameworkType, "");
@@ -341,9 +341,6 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 							if (shortLiferayVersion.compareTo(shortPluginVersion) < 0) {
 								minExistedVersion = shortLiferayVersion;
 							}
-							else {
-								shortLiferayVersion = shortPluginVersion;
-							}
 						}
 					}
 				}
@@ -389,22 +386,20 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 				editModel = modelManager.getModelForEdit(file);
 
-				if ((editModel != null) && editModel instanceof IDOMModel) {
-					IDOMDocument xmlDocument = ((IDOMModel)editModel).getDocument();
+				if ((editModel != null) && (editModel instanceof IDOMModel)) {
+					IDOMModel editDoModel = (IDOMModel)editModel;
+
+					IDOMDocument xmlDocument = editDoModel.getDocument();
 
 					DocumentTypeImpl docType = (DocumentTypeImpl)xmlDocument.getDoctype();
 
-					String publicId = docType.getPublicId();
-
-					String newPublicId = _getNewDoctTypeSetting(publicId, tmpPublicId, _publicidPattern);
+					String newPublicId = _getNewDoctTypeSetting(docType.getPublicId(), tmpPublicId, _publicidPattern);
 
 					if (newPublicId != null) {
 						docType.setPublicId(newPublicId);
 					}
 
-					String systemId = docType.getSystemId();
-
-					String newSystemId = _getNewDoctTypeSetting(systemId, tmpSystemId, _systemidPattern);
+					String newSystemId = _getNewDoctTypeSetting(docType.getSystemId(), tmpSystemId, _systemidPattern);
 
 					if (newSystemId != null) {
 						docType.setSystemId(newSystemId);
@@ -436,7 +431,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 			files.addAll(new SearchFilesVisitor().searchFiles(project, name));
 		}
 
-		return files.toArray(new IFile[files.size()]);
+		return files.toArray(new IFile[0]);
 	}
 
 	private String _getNewDoctTypeSetting(String doctypeSetting, String newValue, Pattern p) {

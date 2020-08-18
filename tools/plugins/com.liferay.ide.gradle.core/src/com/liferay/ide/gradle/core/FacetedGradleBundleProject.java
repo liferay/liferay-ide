@@ -56,9 +56,8 @@ public class FacetedGradleBundleProject extends LiferayGradleProject implements 
 		if (FileUtil.exists(webAppDir)) {
 			return webAppDir;
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override

@@ -87,7 +87,7 @@ public class LiferayGradleDependencyQuickFix implements ArtifactBuilder, IQuickF
 			}
 		}
 
-		return resultingCollections.toArray(new IJavaCompletionProposal[resultingCollections.size()]);
+		return resultingCollections.toArray(new IJavaCompletionProposal[0]);
 	}
 
 	@Override

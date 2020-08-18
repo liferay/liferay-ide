@@ -39,7 +39,7 @@ public class ProjectTemplateNamePossibleValuesService extends PossibleValuesServ
 	@Override
 	protected void compute(Set<String> values) {
 		try {
-			String[] projectTemplates = BladeCLI.getProjectTemplates();
+			String[] projectTemplates = BladeCLI.getProjectTemplatesNames();
 
 			for (String projectTemplate : projectTemplates) {
 				if (!projectTemplate.contains("fragment") && !projectTemplate.contains("modules-ext") &&

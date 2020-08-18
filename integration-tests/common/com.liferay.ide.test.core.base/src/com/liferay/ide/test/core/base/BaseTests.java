@@ -172,15 +172,11 @@ public class BaseTests {
 	}
 
 	protected void assertLiferayServerExists(String serverName) {
-		IServer server = ServerUtil.getServer(serverName);
-
-		Assert.assertTrue(ServerUtil.isLiferayRuntime(server));
+		Assert.assertTrue(ServerUtil.isLiferayRuntime(ServerUtil.getServer(serverName)));
 	}
 
 	protected void assertLiferayServerNotExists(String serverName) {
-		IServer server = ServerUtil.getServer(serverName);
-
-		Assert.assertNull(server);
+		Assert.assertNull(ServerUtil.getServer(serverName));
 	}
 
 	protected void assertNotLiferayProject(String projectName) {
@@ -295,9 +291,7 @@ public class BaseTests {
 	}
 
 	protected void assertRuntimeExists(String serverName) {
-		IRuntime runtime = ServerUtil.getRuntime(serverName);
-
-		Assert.assertNotNull(runtime);
+		Assert.assertNotNull(ServerUtil.getRuntime(serverName));
 	}
 
 	protected void assertSourceFolders(String projectName, String expectedSourceFolderName) {
@@ -363,9 +357,7 @@ public class BaseTests {
 
 		assertProjectExists(project);
 
-		IFile file = project.getFile(fileName);
-
-		return FileUtil.readContents(file);
+		return FileUtil.readContents(project.getFile(fileName));
 	}
 
 	protected void writeFile(FileSupport fs, Iterable<? extends CharSequence> lines) throws IOException {

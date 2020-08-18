@@ -32,9 +32,8 @@ public class ShellCondition implements ICondition {
 		if (_equal) {
 			return "shell \"" + _title + "\" still not active";
 		}
-		else {
-			return "shell \"" + _title + "\" still active";
-		}
+
+		return "shell \"" + _title + "\" still active";
 	}
 
 	public void init(SWTBot bot) {

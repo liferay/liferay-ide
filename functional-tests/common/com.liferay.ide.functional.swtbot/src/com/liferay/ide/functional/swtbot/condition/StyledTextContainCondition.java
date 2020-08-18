@@ -33,9 +33,8 @@ public class StyledTextContainCondition implements ICondition {
 		if (_contain) {
 			return "wait for styled text to contain " + _content + " failed";
 		}
-		else {
-			return "wait for styled text not to contain " + _content + " failed";
-		}
+
+		return "wait for styled text not to contain " + _content + " failed";
 	}
 
 	public void init(SWTBot bot) {

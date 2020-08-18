@@ -33,9 +33,8 @@ public class TextEqualCondition implements ICondition {
 		if (_equal) {
 			return "wait for text content equals " + _content + " failed"; //$NON-NLS-1$
 		}
-		else {
-			return "wait for text content equals not " + _content + " failed"; //$NON-NLS-1$
-		}
+
+		return "wait for text content equals not " + _content + " failed"; //$NON-NLS-1$
 	}
 
 	public void init(SWTBot bot) {

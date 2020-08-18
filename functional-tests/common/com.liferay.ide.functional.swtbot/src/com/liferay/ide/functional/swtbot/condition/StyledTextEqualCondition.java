@@ -33,9 +33,8 @@ public class StyledTextEqualCondition implements ICondition {
 		if (_equal) {
 			return "wait for styled text equals " + _content + " failed"; //$NON-NLS-1$
 		}
-		else {
-			return "wait for styled text not equals " + _content + " failed"; //$NON-NLS-1$
-		}
+
+		return "wait for styled text not equals " + _content + " failed"; //$NON-NLS-1$
 	}
 
 	public void init(SWTBot bot) {

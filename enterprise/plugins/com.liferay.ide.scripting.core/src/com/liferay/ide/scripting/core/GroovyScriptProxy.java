@@ -75,11 +75,10 @@ public abstract class GroovyScriptProxy implements InvocationHandler {
 		if (currentClassLoader.equals(proxyClassLoader)) {
 			return;
 		}
-		else {
-			previousClassLoader = currentClassLoader;
 
-			thread.setContextClassLoader(proxyClassLoader);
-		}
+		previousClassLoader = currentClassLoader;
+
+		thread.setContextClassLoader(proxyClassLoader);
 	}
 
 	protected URLClassLoader createClassLoader() throws CoreException {

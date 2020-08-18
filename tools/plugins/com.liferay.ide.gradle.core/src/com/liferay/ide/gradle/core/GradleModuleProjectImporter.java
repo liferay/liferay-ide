@@ -49,42 +49,41 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter 
 			if (_findSettingsFile(file)) {
 				return Status.OK_STATUS;
 			}
-			else {
-				File parent = file.getParentFile();
 
-				while (parent != null) {
-					if (_findGradleFile(parent)) {
-						File gradleFile = new File(file, "build.gradle");
+			File parent = file.getParentFile();
 
-						IPath gradleFilelocation = Path.fromOSString(gradleFile.getAbsolutePath());
+			while (parent != null) {
+				if (_findGradleFile(parent)) {
+					File gradleFile = new File(file, "build.gradle");
 
-						IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
+					IPath gradleFilelocation = Path.fromOSString(gradleFile.getAbsolutePath());
 
-						IFile gradleWorkspaceFile = workspaceRoot.getFileForLocation(gradleFilelocation);
+					IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
-						if ((gradleWorkspaceFile != null) && (gradleWorkspaceFile.getProject() != null)) {
-							_refreshProject = gradleWorkspaceFile.getProject();
+					IFile gradleWorkspaceFile = workspaceRoot.getFileForLocation(gradleFilelocation);
 
-							retval = new Status(
-								IStatus.WARNING, LiferayGradleCore.PLUGIN_ID,
-								"Project is inside \"" + _refreshProject.getName() +
-									"\" project. we will just refresh to import");
-						}
-						else {
-							retval = new Status(
-								IStatus.ERROR, LiferayGradleCore.PLUGIN_ID,
-								"Location is not the root location of a multi-module project.");
-						}
+					if ((gradleWorkspaceFile != null) && (gradleWorkspaceFile.getProject() != null)) {
+						_refreshProject = gradleWorkspaceFile.getProject();
 
-						return retval;
+						retval = new Status(
+							IStatus.WARNING, LiferayGradleCore.PLUGIN_ID,
+							"Project is inside \"" + _refreshProject.getName() +
+								"\" project. we will just refresh to import");
+					}
+					else {
+						retval = new Status(
+							IStatus.ERROR, LiferayGradleCore.PLUGIN_ID,
+							"Location is not the root location of a multi-module project.");
 					}
 
-					parent = parent.getParentFile();
+					return retval;
 				}
 
-				if (retval == null) {
-					return Status.OK_STATUS;
-				}
+				parent = parent.getParentFile();
+			}
+
+			if (retval == null) {
+				return Status.OK_STATUS;
 			}
 		}
 

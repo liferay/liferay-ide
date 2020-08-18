@@ -121,11 +121,11 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder {
 
 		ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance(null, newName);
 
-		workingCopy.setAttribute(MavenLaunchConstants.ATTR_POM_DIR, basedirLocation.toString());
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_GOALS, goal);
+		workingCopy.setAttribute(MavenLaunchConstants.ATTR_POM_DIR, basedirLocation.toString());
+		workingCopy.setAttribute(MavenLaunchConstants.ATTR_SKIP_TESTS, Boolean.TRUE);
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_UPDATE_SNAPSHOTS, Boolean.TRUE);
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_WORKSPACE_RESOLUTION, Boolean.TRUE);
-		workingCopy.setAttribute(MavenLaunchConstants.ATTR_SKIP_TESTS, Boolean.TRUE);
 
 		ResolverConfiguration configuration = projectFacade.getResolverConfiguration();
 

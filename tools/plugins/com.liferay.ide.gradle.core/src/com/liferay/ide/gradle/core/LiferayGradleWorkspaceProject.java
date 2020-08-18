@@ -127,8 +127,6 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 	@Override
 	public List<Artifact> getTargetPlatformArtifacts() {
 		if (_targetPlatformArtifacts.isEmpty()) {
-			String output = "";
-
 			GradleProject workspaceGradleProject = GradleUtil.getGradleProject(getProject());
 
 			if (Objects.isNull(workspaceGradleProject)) {
@@ -139,12 +137,15 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 			List<? extends GradleTask> tasksList = tasksSet.getAll();
 
-			Optional<? extends GradleTask> dependencyManagementTask = tasksList.stream(
-			).filter(
+			Stream<? extends GradleTask> taskListStream = tasksList.stream();
+
+			Optional<? extends GradleTask> dependencyManagementTask = taskListStream.filter(
 				task -> StringUtil.equals("dependencyManagement", task.getName())
 			).filter(
 				task -> workspaceGradleProject.equals(task.getProject())
 			).findAny();
+
+			String output = "";
 
 			if (dependencyManagementTask.isPresent()) {
 				try {
@@ -175,9 +176,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 						return dependencies.stream(
 						).filter(
-							dep -> "com.liferay".equals(dep.getGroup())
+							dep -> Objects.equals("com.liferay", dep.getGroup())
 						).filter(
-							dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
+							dep -> Objects.equals("com.liferay.gradle.plugins.workspace", dep.getName())
 						).filter(
 							dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
 						).map(
@@ -255,9 +256,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 							version = artifactArray[2];
 						}
 
-						Artifact artifact = new Artifact(groupId, artifactId, version, "compileOnly", null);
-
-						return artifact;
+						return new Artifact(groupId, artifactId, version, "compileOnly", null);
 					}
 				).collect(
 					Collectors.toList()
@@ -305,16 +304,15 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 			return moduleDirs.split(",");
 		}
-		else {
-			String modulesDir = LiferayWorkspaceUtil.getGradleProperty(
-				workspaceLocation.toOSString(), WorkspaceConstants.MODULES_DIR_PROPERTY, "modules");
 
-			if (StringUtil.equals(modulesDir, "*")) {
-				return null;
-			}
+		String modulesDir = LiferayWorkspaceUtil.getGradleProperty(
+			workspaceLocation.toOSString(), WorkspaceConstants.MODULES_DIR_PROPERTY, "modules");
 
-			return modulesDir.split(",");
+		if (StringUtil.equals(modulesDir, "*")) {
+			return null;
 		}
+
+		return modulesDir.split(",");
 	}
 
 	@Override
@@ -352,25 +350,22 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 			return warDirs.split(",");
 		}
-		else {
-			String warDirs = LiferayWorkspaceUtil.getGradleProperty(
-				workspaceLocation.toOSString(), WorkspaceConstants.WARS_DIR_PROPERTY, null);
 
-			if (Objects.nonNull(warDirs)) {
-				String[] warsDir = warDirs.split(",");
+		String warDirs = LiferayWorkspaceUtil.getGradleProperty(
+			workspaceLocation.toOSString(), WorkspaceConstants.WARS_DIR_PROPERTY, null);
 
-				return warsDir;
-			}
-
-			String modulesDir = LiferayWorkspaceUtil.getGradleProperty(
-				workspaceLocation.toOSString(), WorkspaceConstants.MODULES_DIR_PROPERTY, "modules");
-
-			if (StringUtil.equals(modulesDir, "*")) {
-				return null;
-			}
-
-			return modulesDir.split(",");
+		if (Objects.nonNull(warDirs)) {
+			return warDirs.split(",");
 		}
+
+		String modulesDir = LiferayWorkspaceUtil.getGradleProperty(
+			workspaceLocation.toOSString(), WorkspaceConstants.MODULES_DIR_PROPERTY, "modules");
+
+		if (StringUtil.equals(modulesDir, "*")) {
+			return null;
+		}
+
+		return modulesDir.split(",");
 	}
 
 	@Override
@@ -395,9 +390,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 				return dependencies.stream(
 				).filter(
-					dep -> "com.liferay".equals(dep.getGroup())
+					dep -> Objects.equals("com.liferay", dep.getGroup())
 				).filter(
-					dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
+					dep -> Objects.equals("com.liferay.gradle.plugins.workspace", dep.getName())
 				).filter(
 					dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
 				).map(
@@ -453,7 +448,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 			).filter(
 				Objects::nonNull
 			).filter(
-				bundleProject -> "war".equals(bundleProject.getBundleShape())
+				bundleProject -> Objects.equals("war", bundleProject.getBundleShape())
 			).count();
 
 			if (warCount == 0) {
@@ -507,7 +502,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
-				if (!isWatchable() || ((bundleProject != null) && "war".equals(bundleProject.getBundleShape()))) {
+				if (!isWatchable() ||
+					((bundleProject != null) && Objects.equals("war", bundleProject.getBundleShape()))) {
+
 					taskName = "deploy";
 				}
 
@@ -569,7 +566,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 		catch (IOException ioe) {
 		}
 
-		String workspacePluginVersion = Optional.ofNullable(
+		return Optional.ofNullable(
 			gradleBuildScript
 		).flatMap(
 			buildScript -> {
@@ -577,9 +574,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 				return dependencies.stream(
 				).filter(
-					dep -> "com.liferay".equals(dep.getGroup())
+					dep -> Objects.equals("com.liferay", dep.getGroup())
 				).filter(
-					dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
+					dep -> Objects.equals("com.liferay.gradle.plugins.workspace", dep.getName())
 				).filter(
 					dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
 				).map(
@@ -587,8 +584,6 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 				).findFirst();
 			}
 		).get();
-
-		return workspacePluginVersion;
 	}
 
 	private void _readGradleWorkspaceProperties() {

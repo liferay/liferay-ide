@@ -64,13 +64,9 @@ public class LiferayProjectLifecycleConfigurator extends AbstractProjectConfigur
 	}
 
 	private boolean _isLiferayMavenExtPluginExecution(MojoExecution execution) {
-		String groupId = execution.getGroupId();
-		String artifactId = execution.getArtifactId();
-		String goal = execution.getGoal();
-
-		if (ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_GROUP_ID.equals(groupId) &&
-			ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID.equals(artifactId) &&
-			ILiferayMavenConstants.GOAL_BUILD_EXT.equals(goal)) {
+		if (ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_GROUP_ID.equals(execution.getGroupId()) &&
+			ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID.equals(execution.getArtifactId()) &&
+			ILiferayMavenConstants.GOAL_BUILD_EXT.equals(execution.getGoal())) {
 
 			return true;
 		}
@@ -79,12 +75,10 @@ public class LiferayProjectLifecycleConfigurator extends AbstractProjectConfigur
 	}
 
 	private boolean _isLiferayMavenThemePluginExecution(MojoExecution execution) {
-		String groupId = execution.getGroupId();
-		String artifactId = execution.getArtifactId();
 		String goal = execution.getGoal();
 
-		if (ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_GROUP_ID.equals(groupId) &&
-			ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID.equals(artifactId) &&
+		if (ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_GROUP_ID.equals(execution.getGroupId()) &&
+			ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID.equals(execution.getArtifactId()) &&
 			(ILiferayMavenConstants.GOAL_BUILD_CSS.equals(goal) ||
 			 ILiferayMavenConstants.GOAL_THEME_MERGE.equals(goal) ||
 			 ILiferayMavenConstants.GOAL_BUILD_THUMBNAIL.equals(goal))) {

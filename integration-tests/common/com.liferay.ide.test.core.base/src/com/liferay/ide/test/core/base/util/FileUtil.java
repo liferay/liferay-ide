@@ -23,13 +23,13 @@ import java.io.IOException;
 public class FileUtil extends com.liferay.ide.core.util.FileUtil {
 
 	public static void copyDirectiory(String sourceDir, String targetDir) throws IOException {
-		(new File(
+		new File(
 			targetDir
-		)).mkdirs();
+		).mkdirs();
 
-		File[] files = (new File(
+		File[] files = new File(
 			sourceDir
-		)).listFiles();
+		).listFiles();
 
 		for (File file : files) {
 			if (file.isFile()) {

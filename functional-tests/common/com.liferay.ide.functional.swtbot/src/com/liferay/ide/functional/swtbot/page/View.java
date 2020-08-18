@@ -60,13 +60,15 @@ public class View extends AbstractPart {
 	}
 
 	protected SWTBotView getPart() {
+		SWTWorkbenchBot swtBot = (SWTWorkbenchBot)bot;
+
 		if (isLabelNull()) {
-			((SWTWorkbenchBot)bot).activeView();
+			swtBot.activeView();
 		}
 
 		//SWTBotView testView = ((SWTWorkbenchBot)bot).viewByTitle(label);
 
-		return ((SWTWorkbenchBot)bot).viewByPartName(label);
+		return swtBot.viewByPartName(label);
 	}
 
 }

@@ -22,6 +22,8 @@ import com.liferay.ide.functional.swtbot.util.StringPool;
 
 import java.io.File;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Ignore;
@@ -37,7 +39,7 @@ public class ValidationJsfProjectTests extends SwtbotBase {
 	public void checkDefaultLocation() {
 		String exceptLocation = envAction.getEclipseWorkspacePathOSString();
 
-		if ("win32".equals(Platform.getOS())) {
+		if (Objects.equals("win32", Platform.getOS())) {
 			exceptLocation = exceptLocation.replaceAll("\\\\", "/");
 		}
 
@@ -103,7 +105,7 @@ public class ValidationJsfProjectTests extends SwtbotBase {
 	public void checkLocationWithWorkspace() {
 		String exceptLocation = envAction.getEclipseWorkspacePathOSString();
 
-		if ("win32".equals(Platform.getOS())) {
+		if (Objects.equals("win32", Platform.getOS())) {
 			exceptLocation = exceptLocation.replaceAll("\\\\", "/");
 		}
 

@@ -99,9 +99,8 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 
 					return Status.OK_STATUS;
 				}
-				else {
-					return StatusBridge.create(op.validation());
-				}
+
+				return StatusBridge.create(op.validation());
 			}
 
 		};
@@ -122,10 +121,6 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 			return;
 		}
 
-		IPerspectiveRegistry reg = UIUtil.getPerspectiveRegistry();
-
-		IPerspectiveDescriptor finalPersp = reg.findPerspectiveWithId(LiferayWorkspacePerspectiveFactory.ID);
-
 		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 		if (window == null) {
@@ -138,7 +133,9 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 			return;
 		}
 
-		page.setPerspective(finalPersp);
+		IPerspectiveRegistry reg = UIUtil.getPerspectiveRegistry();
+
+		page.setPerspective(reg.findPerspectiveWithId(LiferayWorkspacePerspectiveFactory.ID));
 	}
 
 }

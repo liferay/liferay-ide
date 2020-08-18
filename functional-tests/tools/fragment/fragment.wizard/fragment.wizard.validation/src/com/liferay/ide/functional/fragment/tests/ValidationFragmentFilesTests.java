@@ -154,7 +154,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 	@Ignore("ignore to wait IDE-4772")
 	@Test
-	public void testAddFilesOnNonFragment() {
+	public void testAddFilesOnNonfragment() {
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(project.getName());

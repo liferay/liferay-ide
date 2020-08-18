@@ -35,7 +35,9 @@ public class Perspective extends BasePageObject {
 	}
 
 	protected SWTBotPerspective getPerspective() {
-		return ((SWTWorkbenchBot)bot).perspectiveByLabel(getLabel());
+		SWTWorkbenchBot swtBot = (SWTWorkbenchBot)bot;
+
+		return swtBot.perspectiveByLabel(getLabel());
 	}
 
 }

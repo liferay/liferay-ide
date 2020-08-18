@@ -50,9 +50,7 @@ public class ScriptingCore extends Plugin {
 	public static URL getPluginEntry(String path) {
 		Bundle bundle = getDefault().getBundle();
 
-		URL pluginEntry = bundle.getEntry(path);
-
-		return pluginEntry;
+		return bundle.getEntry(path);
 	}
 
 	public static void logError(String msg, Throwable e) {

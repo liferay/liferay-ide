@@ -28,7 +28,7 @@ public class NewJsfProjectWizardSdk62Tests extends SwtbotBase {
 	@Test
 	public void createJsfStandard() {
 		if (envAction.notInternal()) {
-			return;
+			//return;
 		}
 	}
 

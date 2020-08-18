@@ -37,9 +37,8 @@ public class CleanGoalAction extends MavenGoalAction {
 		if (CoreUtil.compareVersions(Version.parseVersion(plugin.getVersion()), new Version("2.0.2")) >= 0) {
 			return "bundle-support:clean";
 		}
-		else {
-			return "liferay:clean";
-		}
+
+		return "liferay:clean";
 	}
 
 	@Override

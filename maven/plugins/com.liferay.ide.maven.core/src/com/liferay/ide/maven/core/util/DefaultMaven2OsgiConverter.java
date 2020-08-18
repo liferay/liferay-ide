@@ -126,9 +126,8 @@ public class DefaultMaven2OsgiConverter {
 			if (Character.isLetterOrDigit(artifactId.charAt(0))) {
 				return _getBundleSymbolicName(groupId, artifactId);
 			}
-			else {
-				return _getBundleSymbolicName(groupId, artifactId.substring(1));
-			}
+
+			return _getBundleSymbolicName(groupId, artifactId.substring(1));
 		}
 
 		return _getBundleSymbolicName(artifact.getGroupId(), artifact.getArtifactId());
@@ -139,7 +138,6 @@ public class DefaultMaven2OsgiConverter {
 	}
 
 	public String getVersion(String version) {
-		String osgiVersion;
 
 		// Matcher m = P_VERSION.matcher(version);
 		// if (m.matches()) {
@@ -158,7 +156,7 @@ public class DefaultMaven2OsgiConverter {
 			return version;
 		}
 
-		osgiVersion = version;
+		String osgiVersion = version;
 
 		//check for dated snapshot versions with only major or major and minor
 		m = _datedSnapshot.matcher(osgiVersion);

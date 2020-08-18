@@ -61,9 +61,8 @@ public class Text extends AbstractWidget {
 			if (_message) {
 				return bot.textWithMessage(label);
 			}
-			else {
-				return bot.textWithLabel(label);
-			}
+
+			return bot.textWithLabel(label);
 		}
 		else {
 			return bot.text();

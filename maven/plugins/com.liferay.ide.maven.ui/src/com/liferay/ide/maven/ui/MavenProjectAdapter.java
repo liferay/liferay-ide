@@ -38,7 +38,7 @@ import org.osgi.framework.Version;
 public class MavenProjectAdapter implements ILiferayProjectAdapter {
 
 	public <T> T adapt(ILiferayProject liferayProject, Class<T> adapterType) {
-		if (liferayProject instanceof IMavenProject && IProjectBuilder.class.equals(adapterType)) {
+		if ((liferayProject instanceof IMavenProject) && IProjectBuilder.class.equals(adapterType)) {
 
 			// only use this builder for versions of Liferay less than 6.2
 

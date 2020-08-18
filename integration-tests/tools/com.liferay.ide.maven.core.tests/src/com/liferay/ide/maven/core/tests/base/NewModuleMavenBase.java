@@ -28,7 +28,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.tests.common.JobHelpers;
-import org.eclipse.m2e.tests.common.JobHelpers.IJobMatcher;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
 import org.junit.AfterClass;
@@ -79,9 +78,9 @@ public abstract class NewModuleMavenBase extends NewModuleOpBase<NewLiferayModul
 		JobHelpers.waitForJobs(BuildJobMatcher.INSTANCE, 5 * 60 * 1000);
 	}
 
-	private static class BuildJobMatcher implements IJobMatcher {
+	private static class BuildJobMatcher implements JobHelpers.IJobMatcher {
 
-		public static final IJobMatcher INSTANCE = new BuildJobMatcher();
+		public static final JobHelpers.IJobMatcher INSTANCE = new BuildJobMatcher();
 
 		public boolean matches(Job job) {
 			Class<?> clazz = job.getClass();

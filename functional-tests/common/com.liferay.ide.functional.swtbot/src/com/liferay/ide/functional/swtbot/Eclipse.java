@@ -96,7 +96,9 @@ public class Eclipse extends BasePageObject {
 	}
 
 	public String getPerspectiveLabel() {
-		SWTBotPerspective botActivePerspective = ((SWTWorkbenchBot)bot).activePerspective();
+		SWTWorkbenchBot swtBot = (SWTWorkbenchBot)bot;
+
+		SWTBotPerspective botActivePerspective = swtBot.activePerspective();
 
 		return botActivePerspective.getLabel();
 	}
@@ -124,9 +126,7 @@ public class Eclipse extends BasePageObject {
 	public void maximize() {
 		Shell shell = new Shell(bot);
 
-		String label = shell.getLabel();
-
-		SWTBotShell activeShell = _getShell(label);
+		SWTBotShell activeShell = _getShell(shell.getLabel());
 
 		activeShell.maximize(true);
 	}

@@ -117,7 +117,7 @@ public class BladeCLITests
     @Test
     public void bladeCLIProjectTemplates() throws Exception
     {
-        String[] projectTemplates = BladeCLI.getProjectTemplates();
+        String[] projectTemplates = BladeCLI.getProjectTemplatesNames();
 
         assertNotNull( projectTemplates );
 

@@ -103,9 +103,7 @@ public class MavenProjectPreferencePage extends FieldEditorPreferencePage implem
 		gd.horizontalIndent = 0;
 		group.setLayoutData(gd);
 
-		Composite composite = SWTUtil.createComposite(group, 1, 2, GridData.FILL_HORIZONTAL);
-
-		return composite;
+		return SWTUtil.createComposite(group, 1, 2, GridData.FILL_HORIZONTAL);
 	}
 
 	private void _createStringEditior(Composite parent, String label, String key) {

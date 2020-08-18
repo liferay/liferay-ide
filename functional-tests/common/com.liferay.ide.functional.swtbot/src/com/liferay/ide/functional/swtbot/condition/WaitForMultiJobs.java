@@ -27,13 +27,11 @@ public abstract class WaitForMultiJobs extends JobCondition {
 
 	@Override
 	public String getFailureMessage() {
-		String msg = "Wait for jobs failed: ";
-
 		if (readableJobFamily != null) {
 			return readableJobFamily + " jobs are still running.";
 		}
 
-		return msg;
+		return "Wait for jobs failed: ";
 	}
 
 	public abstract String[] getJobNames();

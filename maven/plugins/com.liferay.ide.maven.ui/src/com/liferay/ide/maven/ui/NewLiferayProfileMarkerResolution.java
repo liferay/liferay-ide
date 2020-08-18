@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -55,7 +54,7 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 
 		DefinitionLoader definitionLoader = DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class);
 
-		Reference<DialogDef> dialogRef = definitionLoader.dialog("NewLiferayProfile");
+		DefinitionLoader.Reference<DialogDef> dialogRef = definitionLoader.dialog("NewLiferayProfile");
 
 		SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), newLiferayProfile, dialogRef);
 

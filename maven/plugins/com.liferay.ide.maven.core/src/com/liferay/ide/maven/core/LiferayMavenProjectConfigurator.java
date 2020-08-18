@@ -74,7 +74,6 @@ import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
@@ -217,7 +216,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 				LiferayMavenCore.logError("Unable to configure deployed name for project " + project.getName(), e);
 			}
 
-			if (ILiferayMavenConstants.THEME_PLUGIN_TYPE.equals(pluginType)) {
+			if (pluginType.equals(ILiferayMavenConstants.THEME_PLUGIN_TYPE)) {
 				IVirtualComponent component = ComponentCore.createComponent(project, true);
 
 				if (component != null) {
@@ -226,9 +225,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 					WarPluginConfiguration config = new WarPluginConfiguration(mavenProject, project);
 
-					String warSourceDirectory = config.getWarSourceDirectory();
-
-					IFolder contentFolder = project.getFolder(warSourceDirectory);
+					IFolder contentFolder = project.getFolder(config.getWarSourceDirectory());
 
 					IPath warPath = _rootPath.append(contentFolder.getProjectRelativePath());
 
@@ -477,34 +474,34 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		return retval;
 	}
 
-	private Action _getNewLiferayFacetInstallAction(String pluginType) {
-		Action retval = null;
+	private IFacetedProject.Action _getNewLiferayFacetInstallAction(String pluginType) {
+		IFacetedProject.Action retval = null;
 
 		IProjectFacetVersion newFacet = null;
 
 		IDataModelProvider dataModel = null;
 
-		if (ILiferayMavenConstants.PORTLET_PLUGIN_TYPE.equals(pluginType)) {
+		if (pluginType.equals(ILiferayMavenConstants.PORTLET_PLUGIN_TYPE)) {
 			newFacet = IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenPortletPluginFacetInstallProvider();
 		}
-		else if (ILiferayMavenConstants.HOOK_PLUGIN_TYPE.equals(pluginType)) {
+		else if (pluginType.equals(ILiferayMavenConstants.HOOK_PLUGIN_TYPE)) {
 			newFacet = IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenHookPluginFacetInstallProvider();
 		}
-		else if (ILiferayMavenConstants.EXT_PLUGIN_TYPE.equals(pluginType)) {
+		else if (pluginType.equals(ILiferayMavenConstants.EXT_PLUGIN_TYPE)) {
 			newFacet = IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenExtPluginFacetInstallProvider();
 		}
-		else if (ILiferayMavenConstants.LAYOUTTPL_PLUGIN_TYPE.equals(pluginType)) {
+		else if (pluginType.equals(ILiferayMavenConstants.LAYOUTTPL_PLUGIN_TYPE)) {
 			newFacet = IPluginFacetConstants.LIFERAY_LAYOUTTPL_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenLayoutTplPluginFacetInstallProvider();
 		}
-		else if (ILiferayMavenConstants.THEME_PLUGIN_TYPE.equals(pluginType)) {
+		else if (pluginType.equals(ILiferayMavenConstants.THEME_PLUGIN_TYPE)) {
 			newFacet = IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenThemePluginFacetInstallProvider();
 		}
-		else if (ILiferayMavenConstants.WEB_PLUGIN_TYPE.equals(pluginType)) {
+		else if (pluginType.equals(ILiferayMavenConstants.WEB_PLUGIN_TYPE)) {
 			newFacet = IPluginFacetConstants.LIFERAY_WEB_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenWebPluginFacetInstallProvider();
 		}
@@ -512,7 +509,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		if (newFacet != null) {
 			IDataModel config = DataModelFactory.createDataModel(dataModel);
 
-			retval = new Action(Action.Type.INSTALL, newFacet, config);
+			retval = new IFacetedProject.Action(IFacetedProject.Action.Type.INSTALL, newFacet, config);
 		}
 
 		return retval;
@@ -535,7 +532,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 		Plugin liferayMavenPlugin = MavenUtil.getPlugin(
 			request.getMavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor);
-		Action action = _getNewLiferayFacetInstallAction(pluginType);
+		IFacetedProject.Action action = _getNewLiferayFacetInstallAction(pluginType);
 
 		if (action != null) {
 			try {

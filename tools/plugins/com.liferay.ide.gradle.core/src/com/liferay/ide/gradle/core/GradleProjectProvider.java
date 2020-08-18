@@ -180,8 +180,6 @@ public class GradleProjectProvider
 
 	@Override
 	public synchronized ILiferayProject provide(Class<?> type, Object adaptable) {
-		ILiferayProject retval = null;
-
 		if (adaptable instanceof IProject) {
 			IProject project = (IProject)adaptable;
 
@@ -206,7 +204,7 @@ public class GradleProjectProvider
 			}
 		}
 
-		return retval;
+		return null;
 	}
 
 	private boolean _inGradleWorkspaceWars(IProject project) {
@@ -234,9 +232,9 @@ public class GradleProjectProvider
 
 				return dependencies.stream(
 				).filter(
-					dep -> "com.liferay".equals(dep.getGroup())
+					dep -> Objects.equals("com.liferay", dep.getGroup())
 				).filter(
-					dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
+					dep -> Objects.equals("com.liferay.gradle.plugins.workspace", dep.getName())
 				).filter(
 					dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
 				).map(

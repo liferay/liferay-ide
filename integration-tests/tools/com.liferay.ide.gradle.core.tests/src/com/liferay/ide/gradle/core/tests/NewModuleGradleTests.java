@@ -19,6 +19,8 @@ import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.Value;
 
@@ -65,7 +67,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 
 		Value<String> version = op.getLiferayVersion();
 
-		if ("7.2".equals(version.getDefaultContent())) {
+		if (Objects.equals("7.2", version.getDefaultContent())) {
 			return;
 		}
 
@@ -85,7 +87,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 
 		Value<String> version = op.getLiferayVersion();
 
-		if ("7.2".equals(version.getDefaultContent())) {
+		if (Objects.equals("7.2", version.getDefaultContent())) {
 			return;
 		}
 
@@ -105,7 +107,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 
 		Value<String> version = op.getLiferayVersion();
 
-		if ("7.2".equals(version.getDefaultContent())) {
+		if (Objects.equals("7.2", version.getDefaultContent())) {
 			return;
 		}
 
@@ -137,7 +139,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 
 		Value<String> version = op.getLiferayVersion();
 
-		if ("7.3".equals(version.getDefaultContent())) {
+		if (Objects.equals("7.3", version.getDefaultContent())) {
 			return;
 		}
 

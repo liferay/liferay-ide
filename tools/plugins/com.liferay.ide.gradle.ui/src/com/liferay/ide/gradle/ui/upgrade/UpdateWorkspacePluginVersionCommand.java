@@ -39,6 +39,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -115,10 +116,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 		_updateWorkspacePluginVersion(tempFile);
 
-		UIUtil.async(
-			() -> {
-				_upgradeCompare.openCompareEditor(workspaceSettings, tempFile);
-			});
+		UIUtil.async(() -> _upgradeCompare.openCompareEditor(workspaceSettings, tempFile));
 	}
 
 	private String _getWorkspacePluginVersion(File file) throws Exception {
@@ -156,8 +154,9 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 								List<GradleDependency> classpathDependencies =
 									gradleBuildScript.getBuildScriptDependencies();
 
-								return classpathDependencies.stream(
-								).filter(
+								Stream<GradleDependency> classpathDependenciesStream = classpathDependencies.stream();
+
+								return classpathDependenciesStream.filter(
 									artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroup())
 								).filter(
 									artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getName())
@@ -201,8 +200,9 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 			List<GradleDependency> dependencies = gradleBuildScript.getBuildScriptDependencies();
 
-			dependencies.stream(
-			).filter(
+			Stream<GradleDependency> dependenciesStream = dependencies.stream();
+
+			dependenciesStream.filter(
 				artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroup())
 			).filter(
 				artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getName())

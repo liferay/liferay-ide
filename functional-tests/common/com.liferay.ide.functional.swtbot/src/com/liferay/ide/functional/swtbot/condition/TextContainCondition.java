@@ -33,9 +33,8 @@ public class TextContainCondition implements ICondition {
 		if (_contain) {
 			return "wait for text content contains " + _content + " failed"; //$NON-NLS-1$
 		}
-		else {
-			return "wait for text content contains not " + _content + " failed"; //$NON-NLS-1$
-		}
+
+		return "wait for text content contains not " + _content + " failed"; //$NON-NLS-1$
 	}
 
 	public void init(SWTBot bot) {

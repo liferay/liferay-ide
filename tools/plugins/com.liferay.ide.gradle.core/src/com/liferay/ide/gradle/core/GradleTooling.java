@@ -109,11 +109,9 @@ public class GradleTooling {
 
 		for (File file : files) {
 			if (file.isFile() && StringUtil.startsWith(file.getName(), jarName) &&
-				!StringUtil.equals(file.getName(), fullFileName)) {
+				!StringUtil.equals(file.getName(), fullFileName) && !file.delete()) {
 
-				if (!file.delete()) {
-					LiferayGradleCore.logError("Error: delete file " + file.getAbsolutePath() + " fail");
-				}
+				LiferayGradleCore.logError("Error: delete file " + file.getAbsolutePath() + " fail");
 			}
 		}
 
@@ -162,10 +160,8 @@ public class GradleTooling {
 			catch (Exception e) {
 			}
 
-			if (shouldDelete) {
-				if (!jarFile.delete()) {
-					LiferayGradleCore.logError("Error: delete file " + jarFile.getAbsolutePath() + " fail");
-				}
+			if (shouldDelete && !jarFile.delete()) {
+				LiferayGradleCore.logError("Error: delete file " + jarFile.getAbsolutePath() + " fail");
 			}
 		}
 

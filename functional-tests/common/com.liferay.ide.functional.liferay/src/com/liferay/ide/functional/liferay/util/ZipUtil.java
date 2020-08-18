@@ -104,24 +104,23 @@ public class ZipUtil {
 				if (tarEntry.isDirectory()) {
 					continue;
 				}
-				else {
-					File entryFile = new File(destdir, tarEntry.getName());
 
-					File dir = entryFile.getParentFile();
+				File entryFile = new File(destdir, tarEntry.getName());
 
-					if (!dir.exists() && !dir.mkdirs()) {
-						String msg = "Could not create dir: " + dir.getPath();
+				File dir = entryFile.getParentFile();
 
-						throw new IOException(msg);
-					}
+				if (!dir.exists() && !dir.mkdirs()) {
+					String msg = "Could not create dir: " + dir.getPath();
 
-					try (OutputStream outputStream = Files.newOutputStream(entryFile.toPath())) {
-						int length = 0;
-						byte[] b = new byte[2048];
+					throw new IOException(msg);
+				}
 
-						while ((length = tarInputStream.read(b)) != -1) {
-							outputStream.write(b, 0, length);
-						}
+				try (OutputStream outputStream = Files.newOutputStream(entryFile.toPath())) {
+					int length = 0;
+					byte[] b = new byte[2048];
+
+					while ((length = tarInputStream.read(b)) != -1) {
+						outputStream.write(b, 0, length);
 					}
 				}
 			}

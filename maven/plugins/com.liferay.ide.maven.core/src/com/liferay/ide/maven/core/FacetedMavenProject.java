@@ -74,12 +74,10 @@ public class FacetedMavenProject extends LiferayMavenProject implements IResourc
 
 		IMavenProjectFacade facade = MavenUtil.getProjectFacade(getProject(), new NullProgressMonitor());
 
-		if (facade != null) {
-			if (ILiferayPortal.class.equals(adapterType)) {
-				ILiferayPortal portal = new LiferayPortalMaven(this);
+		if ((facade != null) && adapterType.equals(ILiferayPortal.class)) {
+			ILiferayPortal portal = new LiferayPortalMaven(this);
 
-				return adapterType.cast(portal);
-			}
+			return adapterType.cast(portal);
 		}
 
 		return null;

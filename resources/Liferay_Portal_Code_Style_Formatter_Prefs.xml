@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" standalone="no"?>
 <profiles version="13">
 	<profile kind="CodeFormatterProfile" name="Liferay [plug-in]" version="13">
 		<setting id="org.eclipse.jdt.core.formatter.insert_space_after_ellipsis" value="insert" />

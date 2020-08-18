@@ -28,9 +28,7 @@ public class CancelIvyJobCondition extends WaitForMultiJobs {
 
 	@Override
 	public String[] getJobNames() {
-		String[] jobNames = {"Configuring project with Ivy dependencies", "IvyDE resolve"};
-
-		return jobNames;
+		return new String[] {"Configuring project with Ivy dependencies", "IvyDE resolve"};
 	}
 
 	@Override

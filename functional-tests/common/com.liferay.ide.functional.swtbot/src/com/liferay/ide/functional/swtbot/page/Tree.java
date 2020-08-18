@@ -253,9 +253,8 @@ public class Tree extends AbstractWidget {
 		if (!isLabelNull()) {
 			return bot.treeWithLabel(label);
 		}
-		else {
-			return bot.tree();
-		}
+
+		return bot.tree();
 	}
 
 }

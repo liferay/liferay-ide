@@ -38,8 +38,6 @@ public class MavenConfigProblemMarkerResolutionGenerator extends ConfigProblemMa
 
 	@Override
 	protected boolean correctMarker(IMarker marker) {
-		boolean retval = false;
-
 		IProject project = MarkerUtil.getProject(marker);
 
 		if (FileUtil.notExists(project)) {
@@ -49,6 +47,8 @@ public class MavenConfigProblemMarkerResolutionGenerator extends ConfigProblemMa
 		IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
 
 		IMavenProjectFacade projectFacade = mavenProjectRegistry.getProject(project);
+
+		boolean retval = false;
 
 		if (projectFacade != null) {
 			MavenProject mavenProject = null;

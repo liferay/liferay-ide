@@ -107,6 +107,7 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+
 		result = prime * result + ((_artifact == null) ? 0 : _artifact.hashCode());
 
 		return result;

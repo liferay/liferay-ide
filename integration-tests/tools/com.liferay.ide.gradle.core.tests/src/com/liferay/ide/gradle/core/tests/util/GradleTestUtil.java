@@ -63,9 +63,8 @@ public class GradleTestUtil {
 
 			return new LiferayGradleProject(project);
 		}
-		else {
-			throw new Exception(status.getException());
-		}
+
+		throw new Exception(status.getException());
 	}
 
 	public static void waitForBuildAndValidation() throws Exception {
