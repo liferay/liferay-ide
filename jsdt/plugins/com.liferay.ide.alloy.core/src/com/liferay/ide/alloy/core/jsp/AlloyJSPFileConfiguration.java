@@ -17,7 +17,6 @@ package com.liferay.ide.alloy.core.jsp;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 
 import tern.ITernFile;
 
@@ -38,9 +37,9 @@ public class AlloyJSPFileConfiguration implements ITernFileConfiguration {
 
 		Object file = ternFile.getAdapter(IFile.class);
 
-		IProject project = ((IFile)file).getProject();
+		IFile iFile = (IFile)file;
 
-		if (file instanceof IFile && ProjectUtil.isPortletProject(project)) {
+		if ((file instanceof IFile) && ProjectUtil.isPortletProject(iFile.getProject())) {
 			return _tags;
 		}
 

@@ -81,7 +81,7 @@ public class PortletJSPSourceViewerConfiguration extends JSDTStructuredTextViewe
 		List extendedTextHover = instance.getConfigurations(
 			ExtendedConfigurationBuilder.DOCUMENTATIONTEXTHOVER, partitionType);
 
-		return (ITextHover[])extendedTextHover.toArray(new ITextHover[extendedTextHover.size()]);
+		return (ITextHover[])extendedTextHover.toArray(new ITextHover[0]);
 	}
 
 }

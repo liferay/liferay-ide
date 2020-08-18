@@ -14,6 +14,8 @@
 
 package com.liferay.ide.alloy.core.jsp;
 
+import java.util.Objects;
+
 import org.eclipse.jst.jsp.core.internal.text.StructuredTextPartitionerForJSP;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
@@ -69,8 +71,8 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 
 		String lowerCaseText = text.toLowerCase();
 
-		if ((region != null) && (childRegion != null) && "XML_TAG_NAME".equals(region.getType()) &&
-			"XML_TAG_ATTRIBUTE_VALUE".equals(childRegion.getType()) &&
+		if ((region != null) && (childRegion != null) && Objects.equals("XML_TAG_NAME", region.getType()) &&
+			Objects.equals("XML_TAG_ATTRIBUTE_VALUE", childRegion.getType()) &&
 			(lowerCaseText.startsWith("<aui:") || lowerCaseText.startsWith("<liferay-ui:"))) {
 
 			ITextRegionList regionList = region.getRegions();
@@ -78,19 +80,17 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 			ITextRegion[] regions = regionList.toArray();
 
 			for (int i = 0; i < regions.length; i++) {
-				if (regions[i].equals(childRegion)) {
-					if (i >= 2) {
-						String type = regions[i - 2].getType();
+				if (regions[i].equals(childRegion) && (i >= 2)) {
+					String type = regions[i - 2].getType();
 
-						if (type.equals("XML_TAG_ATTRIBUTE_NAME")) {
-							ITextRegion attrNameRegion = regions[i - 2];
+					if (type.equals("XML_TAG_ATTRIBUTE_NAME")) {
+						ITextRegion attrNameRegion = regions[i - 2];
 
-							String attrName = region.getFullText(attrNameRegion);
+						String attrName = region.getFullText(attrNameRegion);
 
-							for (String attr : _resourceBundleAttrs) {
-								if (attrName.equals(attr)) {
-									return true;
-								}
+						for (String attr : _resourceBundleAttrs) {
+							if (attrName.equals(attr)) {
+								return true;
 							}
 						}
 					}
@@ -106,8 +106,8 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 
 		String lowerCaseText = text.toLowerCase();
 
-		if ((region != null) && (childRegion != null) && "XML_TAG_NAME".equals(region.getType()) &&
-			"XML_TAG_ATTRIBUTE_VALUE".equals(childRegion.getType()) && lowerCaseText.startsWith("<aui:")) {
+		if ((region != null) && (childRegion != null) && Objects.equals("XML_TAG_NAME", region.getType()) &&
+			Objects.equals("XML_TAG_ATTRIBUTE_VALUE", childRegion.getType()) && lowerCaseText.startsWith("<aui:")) {
 
 			/**
 			 *  we have found an attribute value in a AUI tag
@@ -118,19 +118,17 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 			ITextRegion[] regions = regionList.toArray();
 
 			for (int i = 0; i < regions.length; i++) {
-				if (regions[i].equals(childRegion)) {
-					if (i >= 2) {
-						String type = regions[i - 2].getType();
+				if (regions[i].equals(childRegion) && (i >= 2)) {
+					String type = regions[i - 2].getType();
 
-						if (type.equals("XML_TAG_ATTRIBUTE_NAME")) {
-							ITextRegion attrNameRegion = regions[i - 2];
+					if (type.equals("XML_TAG_ATTRIBUTE_NAME")) {
+						ITextRegion attrNameRegion = regions[i - 2];
 
-							String attrName = region.getFullText(attrNameRegion);
+						String attrName = region.getFullText(attrNameRegion);
 
-							for (String attrEvent : AlloyJsTranslator.ALLOYATTREVENTS) {
-								if (attrName.equals(attrEvent)) {
-									return true;
-								}
+						for (String attrEvent : AlloyJsTranslator.ALLOYATTREVENTS) {
+							if (attrName.equals(attrEvent)) {
+								return true;
 							}
 						}
 					}

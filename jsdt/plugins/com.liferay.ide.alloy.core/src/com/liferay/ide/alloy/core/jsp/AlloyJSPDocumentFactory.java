@@ -51,9 +51,8 @@ public class AlloyJSPDocumentFactory extends BasicStructuredDocumentFactory {
 
 			return loader.createNewStructuredDocument();
 		}
-		else {
-			return new JobSafeStructuredDocument();
-		}
+
+		return new JobSafeStructuredDocument();
 	}
 
 }
