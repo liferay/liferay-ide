@@ -30,10 +30,9 @@ import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 
 /**
- * @author Gregory Amerson
- * @author Terry Jia
+ * @author Seiphon Wang
  */
-public class PortalServiceImportsAutoCorrectTest {
+public class PortalServiceImports71AutoCorrectTest {
 
 	@Test
 	public void autoCorrectProblems() throws Exception {
@@ -57,7 +56,7 @@ public class PortalServiceImportsAutoCorrectTest {
 
 			Class<?> clazz = migrator.getClass();
 
-			if (clazz.getName().contains("PortalServiceImports70")) {
+			if (clazz.getName().contains("PortalServiceImports71")) {
 				problems = migrator.analyze(testFile);
 
 				break;

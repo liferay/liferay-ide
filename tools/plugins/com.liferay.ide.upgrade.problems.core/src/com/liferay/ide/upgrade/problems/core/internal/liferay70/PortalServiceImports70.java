@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
@@ -65,7 +64,7 @@ public class PortalServiceImports70 extends JavaImportsMigrator {
 			for (Object key : keys) {
 				String value = (String)properties.get(key);
 
-				if (CoreUtil.isNotNullOrEmpty(value)) {
+				if ((value != null) && !value.isEmpty()) {
 					value = value + "," + moduleLayout;
 
 					importFixes.put((String)key, value);
@@ -93,7 +92,7 @@ public class PortalServiceImports70 extends JavaImportsMigrator {
 		"modularization-portal-rules-engine-api.properties", "modularization-portal-scheduler.properties",
 		"modularization-portal-scripting-api.properties", "modularization-portal-search-test.properties",
 		"modularization-portal-search.properties", "modularization-portal-security-audit-api.properties",
-		"modularization-portal-security-ldap.properties", "modularization-protal-tools-db-upgrade-client.properties",
+		"modularization-portal-security-ldap.properties", "modularization-portal-tools-db-upgrade-client.properties",
 		"modularization-portal-workflow-kaleo-api.properties",
 		"modularization-portal-workflow-kaleo-definition-api.properties",
 		"modularization-portlet-display-template.properties", "modularization-shopping-api.properties",

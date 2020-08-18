@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
@@ -88,7 +87,7 @@ public class RenamePortalKernelImports extends JavaImportsMigrator {
 			catch (Exception e) {
 			}
 
-			String[] lineArray = lines.toArray(new String[lines.size()]);
+			String[] lineArray = lines.toArray(new String[0]);
 
 			String[][] results = new String[lineArray.length][2];
 
@@ -121,7 +120,7 @@ public class RenamePortalKernelImports extends JavaImportsMigrator {
 
 		List<FileSearchResult> importResult = javaFile.findImports(importSet.toArray(new String[0]));
 
-		if (ListUtil.isNotEmpty(importResult)) {
+		if (!importResult.isEmpty()) {
 			for (FileSearchResult result : importResult) {
 
 				// make sure that our import is not in list of fixed imports

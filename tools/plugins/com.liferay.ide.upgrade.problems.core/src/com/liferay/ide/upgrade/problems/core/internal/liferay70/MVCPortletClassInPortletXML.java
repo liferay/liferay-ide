@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -133,7 +134,7 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
 	@Override
 	protected List<FileSearchResult> searchFile(File file, XMLFile xmlFileChecker) {
-		if (!"portlet.xml".equals(file.getName())) {
+		if (!Objects.equals("portlet.xml", file.getName())) {
 			return Collections.emptyList();
 		}
 

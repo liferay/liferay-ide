@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay72;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
@@ -65,7 +64,7 @@ public class PortalServiceImports72 extends JavaImportsMigrator {
 			for (Object key : keys) {
 				String value = (String)properties.get(key);
 
-				if (CoreUtil.isNotNullOrEmpty(value)) {
+				if ((value != null) && !value.isEmpty()) {
 					value = value + "," + moduleLayout;
 
 					importFixes.put((String)key, value);
@@ -78,7 +77,10 @@ public class PortalServiceImports72 extends JavaImportsMigrator {
 
 	private final String[] _modularizationPropertiesFileNames = {
 		"modularization-comment-api.properties", "modularization-document-library-file-rank-service.properties",
-		"modularization-petra-function.properties"
+		"modularization-petra-function.properties", "modularization-asset-list-service.properties",
+		"modularization-exportimport-test-util.properties", "modularization-petra-process.properties",
+		"modularization-portal-cache-multiple.properties", "modularization-portal-search.properties",
+		"modularization-portal-vulcan-api.properties"
 	};
 
 }

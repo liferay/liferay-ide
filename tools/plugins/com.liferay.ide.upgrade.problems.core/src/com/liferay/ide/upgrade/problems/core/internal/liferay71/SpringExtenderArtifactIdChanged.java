@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
-import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
@@ -31,8 +30,6 @@ import java.text.MessageFormat;
 
 import java.util.Collection;
 import java.util.List;
-
-import org.eclipse.core.resources.IProject;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -64,8 +61,8 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 
 		for (GradleDependency dependency : gradleDependencies) {
 			GradleDependency newDependency = new GradleDependency(
-				dependency.getConfiguration(), dependency.getGroup(), _newSpringExtenderArtifactId,
-				_getArtifactVersion(), dependency.getLineNumber(), dependency.getLastLineNumber());
+				dependency.getConfiguration(), dependency.getGroup(), _newSpringExtenderArtifactId, null,
+				dependency.getLineNumber(), dependency.getLastLineNumber());
 
 			try {
 				gradleBuildScript.updateDependency(dependency, newDependency);
@@ -89,16 +86,6 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 	@Override
 	protected List<FileSearchResult> searchFile(File file, String artifactId) {
 		return findDependencies(file, artifactId);
-	}
-
-	private String _getArtifactVersion() {
-		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
-
-		if (liferayWorkspaceProject == null) {
-			return "3.0.0";
-		}
-
-		return null;
 	}
 
 	private String _newSpringExtenderArtifactId = "com.liferay.portal.spring.extender.api";
