@@ -95,25 +95,32 @@ public class BladeCLI {
 		}
 	}
 
-	public static synchronized String[] getProjectTemplates() throws BladeCLIException {
+	public static synchronized String[] getProjectTemplatesNames() throws BladeCLIException {
 		List<String> templateNames = new ArrayList<>();
 
-		String[] executeResult = execute("create -q -l");
+		String[] outputLines = execute("create -q -l");
 
-		for (String name : executeResult) {
-			name = name.trim();
+		for (String line : outputLines) {
+			line = line.trim();
 
-			if (name.indexOf(" ") != -1) {
+			if (line.startsWith("Picked up")) {
+
+				// skip any lines that may be printed out by JVM
+
+				continue;
+			}
+
+			if (line.indexOf(" ") != -1) {
 
 				// for latest blade which print template descriptor
 
-				templateNames.add(name.substring(0, name.indexOf(" ")));
+				templateNames.add(line.substring(0, line.indexOf(" ")));
 			}
 			else {
 
 				// for legacy blade
 
-				templateNames.add(name);
+				templateNames.add(line);
 			}
 		}
 
