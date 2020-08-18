@@ -93,11 +93,12 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 
 		List<GradleDependency> buildScriptDependencies = gradleBuildScript.getBuildScriptDependencies();
 
-		Optional<GradleDependency> wsddBuilderDependency = buildScriptDependencies.stream(
+		Stream<GradleDependency> buildScriptDependenciesStream = buildScriptDependencies.stream();
+
+		Optional<GradleDependency> wsddBuilderDependency = buildScriptDependenciesStream.filter(
+			dependency -> Objects.equals("com.liferay", dependency.getGroup())
 		).filter(
-			dependency -> "com.liferay".equals(dependency.getGroup())
-		).filter(
-			dependency -> "com.liferay.gradle.plugins.wsdd.builder".equals(dependency.getName())
+			dependency -> Objects.equals("com.liferay.gradle.plugins.wsdd.builder", dependency.getName())
 		).findAny();
 
 		if (wsddBuilderDependency.isPresent()) {
@@ -105,9 +106,8 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 
 			return Status.OK_STATUS;
 		}
-		else {
-			return LiferayGradleCore.createErrorStatus("Could not find wsdd builder plugin in " + _gradleBuildFile);
-		}
+
+		return LiferayGradleCore.createErrorStatus("Could not find wsdd builder plugin in " + _gradleBuildFile);
 	}
 
 	@Override
@@ -130,8 +130,9 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 
 		List<GradleDependency> dependencies = gradleBuildScript.getDependencies(configuration);
 
-		List<Artifact> artifacts = dependencies.stream(
-		).map(
+		Stream<GradleDependency> dependenciesStream = dependencies.stream();
+
+		List<Artifact> artifacts = dependenciesStream.map(
 			this::_dependencyToArtifact
 		).collect(
 			Collectors.toList()
@@ -194,8 +195,9 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 
 			List<GradleDependency> existingDependencies = gradleBuildScript.getDependencies("*");
 
-			List<Artifact> existingArtifacts = existingDependencies.stream(
-			).map(
+			Stream<GradleDependency> existingDependenciesStream = existingDependencies.stream();
+
+			List<Artifact> existingArtifacts = existingDependenciesStream.map(
 				this::_dependencyToArtifact
 			).collect(
 				Collectors.toList()

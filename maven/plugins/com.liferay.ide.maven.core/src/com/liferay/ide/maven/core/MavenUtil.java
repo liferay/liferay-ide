@@ -372,7 +372,7 @@ public class MavenUtil {
 
 		retval = v.getMajorVersion() + "." + v.getMinorVersion() + "." + v.getIncrementalVersion();
 
-		if ("0.0.0".equals(retval)) {
+		if (retval.equals("0.0.0")) {
 			retval = v.getQualifier();
 		}
 
@@ -393,10 +393,9 @@ public class MavenUtil {
 
 		try {
 			MavenProject mavenProject = facade.getMavenProject(new NullProgressMonitor());
-			IProject project = facade.getProject();
 
 			retval = new WarPluginConfiguration(
-				mavenProject, project
+				mavenProject, facade.getProject()
 			).getWarSourceDirectory();
 		}
 		catch (CoreException ce) {
@@ -407,13 +406,13 @@ public class MavenUtil {
 	}
 
 	public static boolean hasDependency(IProject mavenProject, String groupId, String artifactId) {
-		MavenXpp3Reader mavenReader = new MavenXpp3Reader();
-
 		IFile pomFile = mavenProject.getFile("pom.xml");
 
 		if (FileUtil.notExists(pomFile)) {
 			return false;
 		}
+
+		MavenXpp3Reader mavenReader = new MavenXpp3Reader();
 
 		try (FileReader reader = new FileReader(FileUtil.getFile(pomFile))) {
 			Model model = mavenReader.read(reader);
@@ -478,7 +477,7 @@ public class MavenUtil {
 
 	public static boolean isPomFile(IFile pomFile) {
 		if (FileUtil.exists(pomFile) && IMavenConstants.POM_FILE_NAME.equals(pomFile.getName()) &&
-			pomFile.getParent() instanceof IProject) {
+			(pomFile.getParent() instanceof IProject)) {
 
 			return true;
 		}
@@ -488,8 +487,6 @@ public class MavenUtil {
 
 	public static boolean loadParentHierarchy(IMavenProjectFacade facade, IProgressMonitor monitor)
 		throws CoreException {
-
-		boolean loadedParent = false;
 
 		MavenProject mavenProject = facade.getMavenProject(monitor);
 
@@ -510,6 +507,8 @@ public class MavenUtil {
 			// The parent can not be loaded properly
 
 		}
+
+		boolean loadedParent = false;
 
 		if (mavenProject != null) {
 			Model model = mavenProject.getModel();

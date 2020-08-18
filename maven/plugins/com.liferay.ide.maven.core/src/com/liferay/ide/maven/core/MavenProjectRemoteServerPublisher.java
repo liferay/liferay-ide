@@ -186,13 +186,13 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 
 		ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance(null, newName);
 
-		workingCopy.setAttribute(
-			IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dmaven.multiModuleProjectDirectory");
-		workingCopy.setAttribute(_attrPomDir, basedirLocation.toString());
 		workingCopy.setAttribute(_attrGoals, goal);
+		workingCopy.setAttribute(_attrPomDir, basedirLocation.toString());
+		workingCopy.setAttribute(_attrSkipTests, Boolean.TRUE);
 		workingCopy.setAttribute(_attrUpdateSnapshots, Boolean.TRUE);
 		workingCopy.setAttribute(_attrWorkspaceResolution, Boolean.TRUE);
-		workingCopy.setAttribute(_attrSkipTests, Boolean.TRUE);
+		workingCopy.setAttribute(
+			IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dmaven.multiModuleProjectDirectory");
 
 		if (facade != null) {
 			ResolverConfiguration configuration = facade.getResolverConfiguration();
@@ -207,9 +207,8 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	private String _getMavenDeployGoals() {
@@ -217,7 +216,7 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 	}
 
 	private boolean _isServiceBuilderProject(IProject project, String pluginType, MavenProject parentProject) {
-		List<IFile> serviceXmls = (new SearchFilesVisitor()).searchFiles(project, "service.xml");
+		List<IFile> serviceXmls = new SearchFilesVisitor().searchFiles(project, "service.xml");
 
 		if (ListUtil.isNotEmpty(serviceXmls) &&
 			pluginType.equalsIgnoreCase(ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE) && (parentProject != null)) {

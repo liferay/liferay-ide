@@ -184,10 +184,8 @@ public class NewGradleSpringMVCPortletProjectProvider
 
 			String lastSegment = location.lastSegment();
 
-			if ((location != null) && (location.segmentCount() > 0)) {
-				if (!lastSegment.equals(projectName)) {
-					projectLocation = location.append(projectName);
-				}
+			if ((location != null) && (location.segmentCount() > 0) && !lastSegment.equals(projectName)) {
+				projectLocation = location.append(projectName);
 			}
 
 			boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
@@ -220,8 +218,6 @@ public class NewGradleSpringMVCPortletProjectProvider
 
 	@Override
 	public synchronized ILiferayProject provide(Class<?> type, Object adaptable) {
-		ILiferayProject retval = null;
-
 		if (adaptable instanceof IProject) {
 			IProject project = (IProject)adaptable;
 
@@ -246,7 +242,7 @@ public class NewGradleSpringMVCPortletProjectProvider
 			}
 		}
 
-		return retval;
+		return null;
 	}
 
 }

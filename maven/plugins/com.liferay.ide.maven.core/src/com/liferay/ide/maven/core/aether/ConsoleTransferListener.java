@@ -66,9 +66,7 @@ public class ConsoleTransferListener extends AbstractTransferListener {
 
 	@Override
 	public void transferProgressed(TransferEvent event) {
-		TransferResource resource = event.getResource();
-
-		_downloads.put(resource, Long.valueOf(event.getTransferredBytes()));
+		_downloads.put(event.getResource(), Long.valueOf(event.getTransferredBytes()));
 
 		StringBuilder buffer = new StringBuilder(64);
 

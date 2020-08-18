@@ -70,7 +70,9 @@ public class WatchTaskAction extends AbstractObjectAction {
 	@Override
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elements = ((IStructuredSelection)fSelection).toArray();
+			IStructuredSelection structuredSelection = (IStructuredSelection)fSelection;
+
+			Object[] elements = structuredSelection.toArray();
 
 			if (ListUtil.isEmpty(elements)) {
 				return;
@@ -183,13 +185,10 @@ public class WatchTaskAction extends AbstractObjectAction {
 		if (ListUtil.isEmpty(childrenGradleProjects)) {
 			return;
 		}
-		else {
-			for (GradleProject childGradleProject : childrenGradleProjects) {
-				_deleteInstallBundleIdFromBuildDirectory(childGradleProject);
-			}
-		}
 
-		return;
+		for (GradleProject childGradleProject : childrenGradleProjects) {
+			_deleteInstallBundleIdFromBuildDirectory(childGradleProject);
+		}
 	}
 
 	private List<Path> _getBndPaths(IProject project) {

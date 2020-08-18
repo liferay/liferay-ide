@@ -36,9 +36,8 @@ public class BuildLangGoalAction extends MavenGoalAction {
 
 			return "lang-builder:build";
 		}
-		else {
-			return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG;
-		}
+
+		return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG;
 	}
 
 	@Override

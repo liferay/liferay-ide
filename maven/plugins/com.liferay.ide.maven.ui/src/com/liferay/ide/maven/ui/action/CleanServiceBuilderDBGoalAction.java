@@ -37,9 +37,8 @@ public class CleanServiceBuilderDBGoalAction extends MavenGoalAction {
 		if (CoreUtil.compareVersions(Version.parseVersion(plugin.getVersion()), new Version("1.0.1")) >= 0) {
 			return "db-support:clean-service-builder";
 		}
-		else {
-			return "liferay-db-support:clean-service-builder";
-		}
+
+		return "liferay-db-support:clean-service-builder";
 	}
 
 	@Override

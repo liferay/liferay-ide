@@ -58,74 +58,71 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 	}
 
 	public void run(IAction action) {
-		if (fSelection instanceof IStructuredSelection) {
-			if (FileUtil.exists(pomXml)) {
-				IProject p = project;
-				IFile pomXmlFile = pomXml;
+		if ((fSelection instanceof IStructuredSelection) && FileUtil.exists(pomXml)) {
+			IProject p = project;
+			IFile pomXmlFile = pomXml;
 
-				try {
-					String pluginKey =
-						ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_GROUP_ID + ":" +
-							ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID;
+			try {
+				String pluginKey =
+					ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_GROUP_ID + ":" +
+						ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID;
 
-					plugin = MavenUtil.getPlugin(MavenUtil.getProjectFacade(p), pluginKey, new NullProgressMonitor());
+				plugin = MavenUtil.getPlugin(MavenUtil.getProjectFacade(p), pluginKey, new NullProgressMonitor());
 
-					if (plugin == null) {
-						plugin = MavenUtil.getPlugin(
-							MavenUtil.getProjectFacade(p), getGroupId() + ":" + getPluginKey(),
-							new NullProgressMonitor());
-					}
+				if (plugin == null) {
+					plugin = MavenUtil.getPlugin(
+						MavenUtil.getProjectFacade(p), getGroupId() + ":" + getPluginKey(), new NullProgressMonitor());
 				}
-				catch (CoreException ce) {
-				}
-
-				beforeAction();
-
-				Job job = new Job(p.getName() + " - " + getMavenGoals()) {
-
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							if (plugin == null) {
-								return ProjectUI.createErrorStatus("Can not find any plugins for " + getMavenGoals());
-							}
-
-							monitor.beginTask(getMavenGoals(), 100);
-
-							_runMavenGoal(pomXmlFile, getMavenGoals(), monitor);
-
-							monitor.worked(80);
-
-							p.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-
-							monitor.worked(10);
-
-							updateProject(p, monitor);
-
-							monitor.worked(10);
-						}
-						catch (Exception e) {
-							return ProjectUI.createErrorStatus("Error running Maven goal " + getMavenGoals(), e);
-						}
-
-						return Status.OK_STATUS;
-					}
-
-				};
-
-				job.addJobChangeListener(
-					new JobChangeAdapter() {
-
-						public void done(IJobChangeEvent event) {
-							afterAction();
-						}
-
-					});
-
-				job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
-
-				job.schedule();
 			}
+			catch (CoreException ce) {
+			}
+
+			beforeAction();
+
+			Job job = new Job(p.getName() + " - " + getMavenGoals()) {
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						if (plugin == null) {
+							return ProjectUI.createErrorStatus("Can not find any plugins for " + getMavenGoals());
+						}
+
+						monitor.beginTask(getMavenGoals(), 100);
+
+						_runMavenGoal(pomXmlFile, getMavenGoals(), monitor);
+
+						monitor.worked(80);
+
+						p.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+						monitor.worked(10);
+
+						updateProject(p, monitor);
+
+						monitor.worked(10);
+					}
+					catch (Exception e) {
+						return ProjectUI.createErrorStatus("Error running Maven goal " + getMavenGoals(), e);
+					}
+
+					return Status.OK_STATUS;
+				}
+
+			};
+
+			job.addJobChangeListener(
+				new JobChangeAdapter() {
+
+					public void done(IJobChangeEvent event) {
+						afterAction();
+					}
+
+				});
+
+			job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
+
+			job.schedule();
 		}
 	}
 
@@ -134,7 +131,9 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 		super.selectionChanged(action, selection);
 
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+			IStructuredSelection structuredSelection = (IStructuredSelection)fSelection;
+
+			Object[] elems = structuredSelection.toArray();
 
 			if (ListUtil.isNotEmpty(elems)) {
 				Object elem = elems[0];

@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -352,14 +353,12 @@ public class NewMavenPluginProjectProvider
 			try {
 				Model result = maven.readModel(pomFile);
 
-				if (!"pom".equals(result.getPackaging())) {
+				if (!Objects.equals("pom", result.getPackaging())) {
 					retval = LiferayMavenCore.createErrorStatus(
 						"\"" + pomFile.getParent() + "\" contains a non-parent maven project.");
 				}
 				else {
-					String name = result.getName();
-
-					if (projectName.equals(name)) {
+					if (projectName.equals(result.getName())) {
 						retval = LiferayMavenCore.createErrorStatus(
 							"The project name \"" + projectName + "\" can not be the same as the parent.");
 					}

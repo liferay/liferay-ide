@@ -37,9 +37,8 @@ public class DistGoalAction extends MavenGoalAction {
 		if (CoreUtil.compareVersions(Version.parseVersion(plugin.getVersion()), new Version("2.0.2")) >= 0) {
 			return "bundle-support:dist";
 		}
-		else {
-			return "liferay:dist-bundle";
-		}
+
+		return "liferay:dist-bundle";
 	}
 
 	@Override

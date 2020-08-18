@@ -43,7 +43,9 @@ public class RemoveWorkspaceModulesAction extends SelectionProviderAction {
 		IStructuredSelection selection = getStructuredSelection();
 
 		if (selection instanceof TreeSelection) {
-			TreePath treePath = ((TreeSelection)selection).getPaths()[0];
+			TreeSelection tSelection = (TreeSelection)selection;
+
+			TreePath treePath = tSelection.getPaths()[0];
 
 			IServer server = (IServer)treePath.getFirstSegment();
 

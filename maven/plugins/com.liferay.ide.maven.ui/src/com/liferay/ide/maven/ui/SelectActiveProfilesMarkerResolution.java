@@ -20,7 +20,6 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 
@@ -36,7 +35,7 @@ public class SelectActiveProfilesMarkerResolution extends AbstractProjectMarkerR
 	protected int promptUser(IProject project, NewLiferayPluginProjectOp op) {
 		DefinitionLoader definitionLoader = DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class);
 
-		Reference<DialogDef> dialogRef = definitionLoader.dialog("SelectActiveProfiles");
+		DefinitionLoader.Reference<DialogDef> dialogRef = definitionLoader.dialog("SelectActiveProfiles");
 
 		SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 

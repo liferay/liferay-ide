@@ -16,6 +16,8 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.LiferayNature;
 
+import java.util.Objects;
+
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 
@@ -72,7 +74,7 @@ public class BundleProjectConfigurator extends AbstractProjectConfigurator imple
 			try {
 				MavenProject mavenProject = facade.getMavenProject(new NullProgressMonitor());
 
-				if ((mavenProject != null) && "bundle".equals(mavenProject.getPackaging())) {
+				if ((mavenProject != null) && Objects.equals("bundle", mavenProject.getPackaging())) {
 					Plugin mavenBundlePlugin = MavenUtil.getPlugin(
 						facade, ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY, monitor);
 
@@ -80,7 +82,7 @@ public class BundleProjectConfigurator extends AbstractProjectConfigurator imple
 						return true;
 					}
 				}
-				else if ((mavenProject != null) && "jar".equals(mavenProject.getPackaging())) {
+				else if ((mavenProject != null) && Objects.equals("jar", mavenProject.getPackaging())) {
 					Plugin bndMavenPlugin = MavenUtil.getPlugin(
 						facade, ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY, monitor);
 

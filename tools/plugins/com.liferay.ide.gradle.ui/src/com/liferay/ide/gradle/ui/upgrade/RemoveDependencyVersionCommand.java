@@ -73,10 +73,9 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 			return Status.CANCEL_STATUS;
 		}
 
-		buildGradleFiles.stream(
-		).forEach(
-			this::_removeDependencyVersion
-		);
+		Stream<File> buildGradleStrem = buildGradleFiles.stream();
+
+		buildGradleStrem.forEach(this::_removeDependencyVersion);
 
 		GradleUtil.refreshProject(LiferayWorkspaceUtil.getWorkspaceProject());
 
@@ -122,8 +121,9 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 
 			List<GradleDependency> dependencies = gradleBuildScript.getDependencies();
 
-			List<GradleDependency> dependenciesWithoutVersion = dependencies.stream(
-			).map(
+			Stream<GradleDependency> dependenciesStream = dependencies.stream();
+
+			List<GradleDependency> dependenciesWithoutVersion = dependenciesStream.map(
 				dependency -> {
 					dependency.setVersion(null);
 
@@ -139,8 +139,6 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 		}
 		catch (IOException ioe) {
 			LiferayGradleUI.logError(ioe);
-
-			return;
 		}
 	}
 

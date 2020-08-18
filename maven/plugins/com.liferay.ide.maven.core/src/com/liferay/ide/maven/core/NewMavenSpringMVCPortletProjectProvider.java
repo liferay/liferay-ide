@@ -177,10 +177,8 @@ public class NewMavenSpringMVCPortletProjectProvider
 
 			String lastSegment = location.lastSegment();
 
-			if ((location != null) && (location.segmentCount() > 0)) {
-				if (!lastSegment.equals(projectName)) {
-					projectLocation = location.append(projectName);
-				}
+			if ((location != null) && (location.segmentCount() > 0) && !lastSegment.equals(projectName)) {
+				projectLocation = location.append(projectName);
 			}
 
 			CoreUtil.openProject(projectName, projectLocation, monitor);

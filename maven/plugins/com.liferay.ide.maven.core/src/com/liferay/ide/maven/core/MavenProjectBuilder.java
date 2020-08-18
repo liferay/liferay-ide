@@ -523,15 +523,15 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 		ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance(null, newName);
 
+		workingCopy.setAttribute(_attrGoals, goal);
+		workingCopy.setAttribute(_attrPomDir, basedirLocation.toString());
 		workingCopy.setAttribute(
 			IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dmaven.multiModuleProjectDirectory");
-		workingCopy.setAttribute(_attrPomDir, basedirLocation.toString());
-		workingCopy.setAttribute(_attrGoals, goal);
 
 		// workingCopy.setAttribute( ATTR_UPDATE_SNAPSHOTS, Boolean.TRUE );
 
-		workingCopy.setAttribute(_attrWorkspaceResolution, Boolean.TRUE);
 		workingCopy.setAttribute(_attrSkipTests, Boolean.TRUE);
+		workingCopy.setAttribute(_attrWorkspaceResolution, Boolean.TRUE);
 
 		if (facade != null) {
 			ResolverConfiguration configuration = facade.getResolverConfiguration();
@@ -546,9 +546,8 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	private String _attrGoals = "M2_GOALS";

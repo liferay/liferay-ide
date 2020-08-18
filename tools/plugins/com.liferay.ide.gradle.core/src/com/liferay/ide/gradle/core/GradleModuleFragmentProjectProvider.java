@@ -50,8 +50,6 @@ public class GradleModuleFragmentProjectProvider
 
 	@Override
 	public IStatus createNewProject(NewModuleFragmentOp op, IProgressMonitor monitor) throws CoreException {
-		IStatus retval = Status.OK_STATUS;
-
 		String projectName = get(op.getProjectName());
 		IPath location = PathBridge.create(get(op.getLocation()));
 
@@ -150,7 +148,7 @@ public class GradleModuleFragmentProjectProvider
 			GradleUtil.synchronizeProject(projectLocation, monitor);
 		}
 
-		return retval;
+		return Status.OK_STATUS;
 	}
 
 	@Override

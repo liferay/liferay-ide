@@ -75,7 +75,7 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 						monitor.worked(20);
 
-						GradleUtil.runGradleTask(project, gradleTasks.toArray(new String[gradleTasks.size()]), monitor);
+						GradleUtil.runGradleTask(project, gradleTasks.toArray(new String[0]), monitor);
 
 						monitor.worked(80);
 					}
@@ -116,7 +116,9 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 		super.selectionChanged(action, selection);
 
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+			IStructuredSelection structuredSelection = (IStructuredSelection)fSelection;
+
+			Object[] elems = structuredSelection.toArray();
 
 			if (ListUtil.isNotEmpty(elems)) {
 				Object elem = elems[0];
@@ -161,13 +163,13 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 	protected IProject project = null;
 
 	private void _fetchModelTasks(GradleProject gradleProject, String taskName, List<GradleTask> tasks) {
-		boolean parentHasTask = false;
-
 		if (gradleProject == null) {
 			return;
 		}
 
 		DomainObjectSet<? extends GradleTask> gradleTasks = gradleProject.getTasks();
+
+		boolean parentHasTask = false;
 
 		for (GradleTask gradleTask : gradleTasks) {
 			if (taskName.equals(gradleTask.getName())) {
@@ -181,15 +183,12 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 		if (parentHasTask) {
 			return;
 		}
-		else {
-			DomainObjectSet<? extends GradleProject> childGradleProjects = gradleProject.getChildren();
 
-			for (GradleProject childGradleProject : childGradleProjects) {
-				_fetchModelTasks(childGradleProject, taskName, tasks);
-			}
+		DomainObjectSet<? extends GradleProject> childGradleProjects = gradleProject.getChildren();
+
+		for (GradleProject childGradleProject : childGradleProjects) {
+			_fetchModelTasks(childGradleProject, taskName, tasks);
 		}
-
-		return;
 	}
 
 	private GradleProject _getGradleProjectModel() {

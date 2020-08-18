@@ -81,9 +81,8 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 		if (Objects.nonNull(workspaceBomVersion)) {
 			return null;
 		}
-		else {
-			return new String[] {"modules"};
-		}
+
+		return new String[] {"modules"};
 	}
 
 	@Override
@@ -93,9 +92,8 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 		if (Objects.nonNull(workspaceBomVersion)) {
 			return null;
 		}
-		else {
-			return new String[] {"wars"};
-		}
+
+		return new String[] {"wars"};
 	}
 
 	@Override

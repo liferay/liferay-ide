@@ -43,8 +43,6 @@ public class MavenModuleFragmentProjectProvider
 	public IStatus createNewProject(NewModuleFragmentOp op, IProgressMonitor monitor)
 		throws CoreException, InterruptedException {
 
-		IStatus retval = Status.OK_STATUS;
-
 		String projectName = get(op.getProjectName());
 
 		Path location = get(op.getLocation());
@@ -118,7 +116,7 @@ public class MavenModuleFragmentProjectProvider
 
 		MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
 
-		return retval;
+		return Status.OK_STATUS;
 	}
 
 }

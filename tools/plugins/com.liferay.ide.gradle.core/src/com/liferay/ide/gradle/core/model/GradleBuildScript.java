@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
@@ -85,8 +86,9 @@ public class GradleBuildScript {
 
 		List<GradleDependency> dependencies = buildScriptVisitor.getDependencies();
 
-		return dependencies.stream(
-		).filter(
+		Stream<GradleDependency> dependenciesStream = dependencies.stream();
+
+		return dependenciesStream.filter(
 			dep -> Objects.equals(dep.getConfiguration(), configuration)
 		).collect(
 			Collectors.toList()
@@ -149,10 +151,9 @@ public class GradleBuildScript {
 			_updateDependency(gradleDependency, gradleDependency);
 		}
 
-		String content = _fileContents.stream(
-		).collect(
-			Collectors.joining(System.lineSeparator())
-		);
+		Stream<String> fileContentsStream = _fileContents.stream();
+
+		String content = fileContentsStream.collect(Collectors.joining(System.lineSeparator()));
 
 		Files.write(_path, content.getBytes());
 	}
@@ -162,10 +163,9 @@ public class GradleBuildScript {
 
 		_updateDependency(oldArtifact, newArtifact);
 
-		String content = _fileContents.stream(
-		).collect(
-			Collectors.joining(System.lineSeparator())
-		);
+		Stream<String> fileContentsStream = _fileContents.stream();
+
+		String content = fileContentsStream.collect(Collectors.joining(System.lineSeparator()));
 
 		Files.write(_path, content.getBytes());
 	}
@@ -173,10 +173,9 @@ public class GradleBuildScript {
 	public void updateDependency(String dependency) throws IOException {
 		_insertDependency(dependency);
 
-		String content = _fileContents.stream(
-		).collect(
-			Collectors.joining(System.lineSeparator())
-		);
+		Stream<String> fileContentsStream = _fileContents.stream();
+
+		String content = fileContentsStream.collect(Collectors.joining(System.lineSeparator()));
 
 		Files.write(_path, content.getBytes());
 	}
@@ -190,8 +189,9 @@ public class GradleBuildScript {
 
 		String d = dependency.trim();
 
-		boolean exist = _fileContents.stream(
-		).map(
+		Stream<String> fileContentsStream = _fileContents.stream();
+
+		boolean exist = fileContentsStream.map(
 			line -> line.trim()
 		).filter(
 			line -> line.equals(d)
@@ -222,10 +222,9 @@ public class GradleBuildScript {
 	}
 
 	private void _save(List<String> contents) throws IOException {
-		String content = contents.stream(
-		).collect(
-			Collectors.joining(System.lineSeparator())
-		);
+		Stream<String> contentStream = contents.stream();
+
+		String content = contentStream.collect(Collectors.joining(System.lineSeparator()));
 
 		Files.write(_path, content.getBytes());
 	}

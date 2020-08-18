@@ -50,8 +50,6 @@ public class GradleModuleExtProjectProvider
 
 	@Override
 	public IStatus createNewProject(NewModuleExtOp op, IProgressMonitor monitor) throws CoreException {
-		IStatus status = Status.OK_STATUS;
-
 		String projectName = get(op.getProjectName());
 		String originalModuleName = get(op.getOriginalModuleName());
 
@@ -79,11 +77,9 @@ public class GradleModuleExtProjectProvider
 
 		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
-		if (Objects.nonNull(liferayWorkspaceProject)) {
-			if (!liferayWorkspaceProject.isFlexibleLiferayWorkspace()) {
-				sb.append(" -M ");
-				sb.append(get(op.getOriginalModuleVersion()));
-			}
+		if (Objects.nonNull(liferayWorkspaceProject) && !liferayWorkspaceProject.isFlexibleLiferayWorkspace()) {
+			sb.append(" -M ");
+			sb.append(get(op.getOriginalModuleVersion()));
 		}
 
 		sb.append(" \"");
@@ -108,7 +104,7 @@ public class GradleModuleExtProjectProvider
 			GradleUtil.synchronizeProject(projecLocation, monitor);
 		}
 
-		return status;
+		return Status.OK_STATUS;
 	}
 
 	@Override

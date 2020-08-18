@@ -133,13 +133,13 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 	public String getProperty(String key, String defaultValue) {
 		String retval = defaultValue;
 
-		if (("theme.type".equals(key) || "theme.parent".equals(key)) && ProjectUtil.isThemeProject(getProject())) {
+		if ((key.equals("theme.type") || key.equals("theme.parent")) && ProjectUtil.isThemeProject(getProject())) {
 			IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(getProject());
 
 			if (projectFacade != null) {
 				MavenProject mavenProject = projectFacade.getMavenProject();
 
-				if ("theme.type".equals(key)) {
+				if (key.equals("theme.type")) {
 					retval = MavenUtil.getLiferayMavenPluginConfig(
 						mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_THEME_TYPE);
 				}
