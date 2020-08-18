@@ -23,6 +23,8 @@ import com.liferay.ide.functional.swtbot.util.StringPool;
 
 import java.io.File;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.ClassRule;
@@ -122,7 +124,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		String workspaceModuleFolderLocation = exceptLocation + "/" + liferayWorkspace.getName() + "/modules";
 
-		if ("win32".equals(Platform.getOS())) {
+		if (Objects.equals("win32", Platform.getOS())) {
 			workspaceModuleFolderLocation = workspaceModuleFolderLocation.replaceAll("\\\\", "/");
 		}
 
@@ -199,7 +201,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		String exceptLocation = envAction.getEclipseWorkspacePathOSString();
 		String actualLocation = wizardAction.newModule.getLocation();
 
-		if ("win32".equals(Platform.getOS())) {
+		if (Objects.equals("win32", Platform.getOS())) {
 			exceptLocation = exceptLocation.replaceAll("\\\\", "/");
 		}
 

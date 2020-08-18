@@ -23,6 +23,8 @@ import com.liferay.ide.functional.swtbot.util.StringPool;
 
 import java.io.File;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
@@ -186,7 +188,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		String actualLocation = location.getText();
 
-		if ("win32".equals(Platform.getOS())) {
+		if (Objects.equals("win32", Platform.getOS())) {
 			exceptLocation = exceptLocation.replaceAll("\\\\", "/");
 		}
 

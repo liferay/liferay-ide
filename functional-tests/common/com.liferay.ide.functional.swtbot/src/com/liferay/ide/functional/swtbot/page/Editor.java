@@ -44,7 +44,9 @@ public class Editor extends AbstractPart {
 	}
 
 	public void customizedText(String fileName, int line, int column, String text) {
-		SWTBotEditor fileEditor = ((SWTWorkbenchBot)bot).editorByTitle(fileName);
+		SWTWorkbenchBot swtBot = (SWTWorkbenchBot)bot;
+
+		SWTBotEditor fileEditor = swtBot.editorByTitle(fileName);
 
 		SWTBotEclipseEditor fileContent = fileEditor.toTextEditor();
 
@@ -53,7 +55,9 @@ public class Editor extends AbstractPart {
 
 	public String getLabel() {
 		if (isLabelNull()) {
-			SWTBotEditor botActiveEditor = ((SWTWorkbenchBot)bot).activeEditor();
+			SWTWorkbenchBot swtBot = (SWTWorkbenchBot)bot;
+
+			SWTBotEditor botActiveEditor = swtBot.activeEditor();
 
 			return botActiveEditor.getTitle();
 		}
@@ -96,11 +100,13 @@ public class Editor extends AbstractPart {
 	}
 
 	protected SWTBotEditor getPart() {
+		SWTWorkbenchBot swtBot = (SWTWorkbenchBot)bot;
+
 		if (isLabelNull()) {
-			return ((SWTWorkbenchBot)bot).activeEditor();
+			return swtBot.activeEditor();
 		}
 
-		return ((SWTWorkbenchBot)bot).editorByTitle(label);
+		return swtBot.editorByTitle(label);
 	}
 
 }

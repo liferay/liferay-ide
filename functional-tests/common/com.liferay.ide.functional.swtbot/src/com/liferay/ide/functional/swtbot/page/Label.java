@@ -42,9 +42,8 @@ public class Label extends AbstractWidget {
 			if (message.contains(label)) {
 				return false;
 			}
-			else {
-				throw e;
-			}
+
+			throw e;
 		}
 		finally {
 			SWTBotPreferences.TIMEOUT = oldTimeOut;

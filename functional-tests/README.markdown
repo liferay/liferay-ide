@@ -24,7 +24,7 @@ mvn clean verify -P functional-tests-mac
 ```
 for MacOS
 
-you also need to append  *-D liferay.bundles.dir="${your.tests.resource}"* to point tests resource(for locally you can point to *ide source/tests-resources/*), for example:
+you also need to append *-D liferay.bundles.dir="${your.tests.resource}"* to point tests resource(for locally you can point to *ide source/tests-resources/*), for example:
 ```
 mvn clean verify -P functional-tests-mac -D liferay.bundles.dir="/Users/terry/work/github/liferay/liferay-ide/tests-resources"
 ```

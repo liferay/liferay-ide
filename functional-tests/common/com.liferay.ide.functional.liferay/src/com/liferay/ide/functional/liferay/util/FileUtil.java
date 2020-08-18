@@ -63,13 +63,13 @@ import org.xml.sax.ErrorHandler;
 public class FileUtil {
 
 	public static void copyDirectiory(String sourceDir, String targetDir) throws IOException {
-		(new File(
+		new File(
 			targetDir
-		)).mkdirs();
+		).mkdirs();
 
-		File[] files = (new File(
+		File[] files = new File(
 			sourceDir
-		)).listFiles();
+		).listFiles();
 
 		for (File file : files) {
 			if (file.isFile()) {
@@ -284,7 +284,7 @@ public class FileUtil {
 			}
 		}
 
-		return lines.toArray(new String[lines.size()]);
+		return lines.toArray(new String[0]);
 	}
 
 	public static Document readXML(InputStream inputStream, EntityResolver resolver, ErrorHandler error) {

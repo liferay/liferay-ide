@@ -39,9 +39,8 @@ public class EditorActiveCondition implements ICondition {
 		if (_active) {
 			return "wait for editor " + _name + " is active failed";
 		}
-		else {
-			return "wait for editor " + _name + " is not active failed";
-		}
+
+		return "wait for editor " + _name + " is not active failed";
 	}
 
 	public void init(SWTBot bot) {

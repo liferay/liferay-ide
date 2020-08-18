@@ -20,7 +20,6 @@ import com.liferay.ide.test.project.core.base.NewModuleOpBase;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.tests.common.JobHelpers;
-import org.eclipse.m2e.tests.common.JobHelpers.IJobMatcher;
 
 /**
  * @author Terry Jia
@@ -43,9 +42,9 @@ public abstract class NewJSFMavenBase extends NewModuleOpBase<NewLiferayJSFModul
 		JobHelpers.waitForJobs(BuildJobMatcher.INSTANCE, 5 * 60 * 1000);
 	}
 
-	private static class BuildJobMatcher implements IJobMatcher {
+	private static class BuildJobMatcher implements JobHelpers.IJobMatcher {
 
-		public static final IJobMatcher INSTANCE = new BuildJobMatcher();
+		public static final JobHelpers.IJobMatcher INSTANCE = new BuildJobMatcher();
 
 		public boolean matches(Job job) {
 			Class<?> clazz = job.getClass();
