@@ -41,6 +41,8 @@ public interface ILiferayMavenConstants {
 
 	public String LAYOUTTPL_PLUGIN_TYPE = "layouttpl";
 
+	public String LIFERAY_CSS_BUILDER_PLUGIN_KEY = "com.liferay:com.liferay.css.builder";
+
 	public String LIFERAY_MAVEN_MARKER_CONFIGURATION_WARNING_ID = LiferayMavenCore.PLUGIN_ID + ".configurationProblem";
 
 	public String LIFERAY_MAVEN_PLUGIN = "liferay-maven-plugin";
