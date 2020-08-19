@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.problems.test.apichanges;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -47,7 +48,7 @@ public abstract class AutoCorrectLiferayVersionPropertiesTestBase {
 
 		File originalFile = getOriginalTestFile();
 
-		Files.copy(originalFile.toPath(), testFile.toPath());
+		Files.copy(originalFile.toPath(), testFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 		FileMigrator liferayVersionsProperties = null;
 
