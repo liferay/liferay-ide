@@ -41,11 +41,11 @@ public class AllJSPTagProblemsTest {
 
 		FileMigration fileMigration = _context.getService(sr);
 
-		List<String> versions = Arrays.asList("7.0", "7.1", "7.2");
+		List<String> versions = Arrays.asList("7.0", "7.1", "7.2", "7.3");
 
 		List<UpgradeProblem> upgradeProblems = fileMigration.findUpgradeProblems(new File("jsptests/"), versions, new NullProgressMonitor()).stream().sorted().collect(Collectors.toList());
 
-		final int expectedSize = 416;
+		final int expectedSize = 424;
 		final int size = upgradeProblems.size();
 
 		if (size != expectedSize) {

@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 public class Liferay70VersionsProperties extends BaseLiferayVersionsProperties {
 
 	public Liferay70VersionsProperties() {
-		super(".*[67]\\.[0-9]\\.[0-9].*", "7.0.0+");
+		super(".*7\\.0\\.[0-9].*", "7.0.0+");
 	}
 
 }
