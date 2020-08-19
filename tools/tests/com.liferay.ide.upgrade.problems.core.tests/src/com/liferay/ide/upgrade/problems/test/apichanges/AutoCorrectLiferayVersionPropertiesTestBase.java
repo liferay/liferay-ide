@@ -18,9 +18,13 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -34,14 +38,18 @@ import com.liferay.ide.upgrade.problems.core.FileMigrator;
  */
 public abstract class AutoCorrectLiferayVersionPropertiesTestBase {
 
+	@Rule
+	public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
 	@Test
 	public void autoCorrectProblems() throws Exception {
-		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
+		File testFile = temporaryFolder.newFile("liferay-plugin-package.properties");
 
-		File testFile = new File(tempFolder, "liferay-plugin-package.properties");
+		File originalFile = getOriginalTestFile();
+
+		Files.copy(originalFile.toPath(), testFile.toPath());
 
 		FileMigrator liferayVersionsProperties = null;
-		tempFolder.deleteOnExit();
 
 		Bundle bundle = FrameworkUtil.getBundle(getClass());
 
@@ -82,6 +90,4 @@ public abstract class AutoCorrectLiferayVersionPropertiesTestBase {
 	public abstract File getOriginalTestFile();
 
 	public abstract String getVersion();
-
-	protected BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
 }
