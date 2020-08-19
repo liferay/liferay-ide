@@ -40,38 +40,39 @@ public abstract class AutoCorrectLiferayVersionPropertiesTestBase {
 
 		File testFile = new File(tempFolder, "liferay-plugin-package.properties");
 
+		FileMigrator liferayVersionsProperties = null;
 		tempFolder.deleteOnExit();
 
-		Files.copy(getOriginalTestFile().toPath(), testFile.toPath());
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
 
-		FileMigrator liferayVersionFileMigrator = null;
+		BundleContext bundleContext = bundle.getBundleContext();
 
-		Collection<ServiceReference<FileMigrator>> mrefs =
-			context.getServiceReferences(FileMigrator.class, "(version=" + getVersion() + ")");
+		Collection<ServiceReference<FileMigrator>> serviceReferences =
+			bundleContext.getServiceReferences(FileMigrator.class, "(version=" + getVersion() + ")");
 
-		for (ServiceReference<FileMigrator> mref : mrefs) {
-			FileMigrator fileMigrator = context.getService(mref);
+		for (ServiceReference<FileMigrator> serviceReference : serviceReferences) {
+			FileMigrator fileMigrator = bundleContext.getService(serviceReference);
 
 			Class<?> clazz = fileMigrator.getClass();
 
-			if (clazz.getName().contains(getImplClassName())) {
-				liferayVersionFileMigrator = fileMigrator;
+			if (Objects.equals(clazz.getSimpleName(), getImplClassName())) {
+				liferayVersionsProperties = fileMigrator;
 
 				break;
 			}
 		}
 
-		Assert.assertNotNull("Expected that a valid descriptorFileMigrator would be found", liferayVersionFileMigrator);
+		Assert.assertNotNull("Expected that a valid liferayVersionsProperties would be found", liferayVersionsProperties);
 
-		List<UpgradeProblem> upgradeProblems = liferayVersionFileMigrator.analyze(testFile);
+		List<UpgradeProblem> upgradeProblems = liferayVersionsProperties.analyze(testFile);
 
 		Assert.assertEquals("Expected to have found exactly one problem.", 1, upgradeProblems.size());
 
-		int problemsFixed = ((AutoFileMigrator)liferayVersionFileMigrator).correctProblems(testFile, upgradeProblems);
+		int problemsFixed = ((AutoFileMigrator)liferayVersionsProperties).correctProblems(testFile, upgradeProblems);
 
 		Assert.assertEquals("Expected to have fixed exactly one problem.", 1, problemsFixed);
 
-		upgradeProblems = liferayVersionFileMigrator.analyze(testFile);
+		upgradeProblems = liferayVersionsProperties.analyze(testFile);
 
 		Assert.assertEquals("Expected to not find any problems.", 0, upgradeProblems.size());
 	}
