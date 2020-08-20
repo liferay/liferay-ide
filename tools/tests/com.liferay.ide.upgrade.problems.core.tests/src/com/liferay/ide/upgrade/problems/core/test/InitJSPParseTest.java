@@ -45,7 +45,7 @@ public class InitJSPParseTest {
 
 		List<UpgradeProblem> upgradeProblems = fileMigration.findUpgradeProblems(new File("jsptests/jukebox-portlet/"), versions, new NullProgressMonitor()).stream().sorted().collect(Collectors.toList());
 
-		Assert.assertEquals("", 349, upgradeProblems.size());
+		Assert.assertEquals("", 354, upgradeProblems.size());
 
 		boolean found = false;
 
