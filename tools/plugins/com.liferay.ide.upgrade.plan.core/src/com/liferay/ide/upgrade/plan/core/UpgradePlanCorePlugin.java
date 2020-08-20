@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
@@ -24,18 +25,14 @@ import java.io.IOException;
 import java.net.URL;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -172,37 +169,27 @@ public class UpgradePlanCorePlugin extends Plugin {
 					break;
 			}
 
+			String outlineFilename = outlineFile.getName();
+
+			String outlineFilenameWithoutEx = outlineFilename.split("\\.")[0];
+
 			String storedMD5 = preferencesService.getString(UpgradePlanCorePlugin.ID, contentZipMD5, "", null);
 
 			String updateMD5 = _computeMD5(outlineFile);
 
-			if (!updateMD5.equals(storedMD5)) {
-				Stream<Path> stream = Files.walk(Paths.get(offlineOutlinePath.toOSString()));
+			IPath offlineDocDirPath = offlineOutlinePath.append(outlineFilenameWithoutEx);
 
-				stream.sorted(
-					Comparator.reverseOrder()
-				).map(
-					Path::toFile
-				).forEach(
-					File::delete
-				);
+			if (!updateMD5.equals(storedMD5) || FileUtil.notExists(offlineDocDirPath)) {
+				FileUtil.deleteDir(offlineDocDirPath.toFile(), true);
 
-				stream.close();
-
-				ZipUtil.unzip(outlineFile, offlineOutlinePath.toFile());
+				ZipUtil.unzip(outlineFile, offlineDocDirPath.toFile());
 
 				_prefstore.put(contentZipMD5, updateMD5);
 
 				_prefstore.flush();
 			}
 
-			String outlineFilename = outlineFile.getName();
-
-			String outlineFilenameWithoutEx = outlineFilename.split("\\.")[0];
-
-			IPath outlinePath = offlineOutlinePath.append(outlineFilenameWithoutEx);
-
-			offlineOutlineLists.add(new UpgradePlanOutline(outlineFilenameWithoutEx, outlinePath.toOSString()));
+			offlineOutlineLists.add(new UpgradePlanOutline(outlineFilenameWithoutEx, offlineDocDirPath.toOSString()));
 		}
 	}
 

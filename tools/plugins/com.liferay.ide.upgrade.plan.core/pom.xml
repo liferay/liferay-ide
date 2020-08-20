@@ -43,7 +43,7 @@
 						<fileset>
 							<directory>resources</directory>
 							<includes>
-								<include>liferay-docs.zip</include>
+								<include>code-upgrade.zip</include>
 							</includes>
 						</fileset>
 					</filesets>
