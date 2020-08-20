@@ -50,8 +50,8 @@ public abstract class XMLFileMigrator extends AbstractFileMigrator<XMLFile> {
 
 					return 1;
 				}
-				catch (IOException e) {
-					e.printStackTrace(System.err);
+				catch (IOException ioe) {
+					ioe.printStackTrace(System.err);
 				}
 
 				return 0;

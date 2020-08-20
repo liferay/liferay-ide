@@ -49,7 +49,7 @@ public abstract class JavaFileMigrator extends AbstractFileMigrator<JavaFile> {
 
 					return 1;
 				}
-				catch (IOException e) {
+				catch (IOException ioe) {
 				}
 
 				return 0;
