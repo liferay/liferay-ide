@@ -45,6 +45,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -186,6 +187,33 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 	}
 
 	@Override
+	public int reportProblems(File file, Collection<UpgradeProblem> upgradeProblems) {
+		Path path = new Path(file.getAbsolutePath());
+
+		JavaFile javaFile = createFileService(type, file, path.getFileExtension());
+
+		javaFile.setFile(file);
+
+		return upgradeProblems.stream(
+		).map(
+			problem -> {
+				try {
+					javaFile.appendComment(problem.getLineNumber(), problem.getTicket());
+
+					return 1;
+				}
+				catch (IOException e) {
+					e.printStackTrace(System.err);
+				}
+
+				return 0;
+			}
+		).reduce(
+			0, Integer::sum
+		);
+	}
+
+	@Override
 	public List<FileSearchResult> searchFile(File file, JavaFile javaFile) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
@@ -301,7 +329,7 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 		catch (Exception e) {
 		}
 
-		return lines.toArray(new String[lines.size()]);
+		return lines.toArray(new String[0]);
 	}
 
 	private void _clearCache(File file) {

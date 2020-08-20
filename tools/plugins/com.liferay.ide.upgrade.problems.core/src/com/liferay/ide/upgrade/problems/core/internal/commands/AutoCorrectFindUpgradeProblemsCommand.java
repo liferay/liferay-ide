@@ -37,7 +37,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,6 +54,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -121,14 +124,26 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 		}
 
 		try {
-			String filter = "(&(auto.correct=" + autoCorrectKey + ")(version=" + upgradeProblem.getVersion() + "))";
-
 			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = bundleContext.getServiceReferences(
-				AutoFileMigrator.class, filter);
+				AutoFileMigrator.class, "(auto.correct=" + autoCorrectKey + ")");
 
 			File file = upgradeProblem.getResource();
 
 			serviceReferences.stream(
+			).filter(
+				ref -> {
+					Dictionary<String, Object> serviceProperties = ref.getProperties();
+
+					return Optional.ofNullable(
+						serviceProperties.get("version")
+					).map(
+						Object::toString
+					).map(
+						VersionRange::valueOf
+					).filter(
+						range -> range.includes(new Version(upgradeProblem.getVersion()))
+					).isPresent();
+				}
 			).map(
 				bundleContext::getService
 			).forEach(

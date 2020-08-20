@@ -68,9 +68,9 @@ jobs:
           name: surefire-reports.tar.gz
           path: surefire-reports.tar.gz
       - name: Run reporter
-        uses: check-run-reporter/action@v1.1.1
+        uses: check-run-reporter/action@v2.0.0-rc8
         if: ${{ always() }}
-        env:
-          CHECK_RUN_REPORTER_LABEL: "Maven surefire test reports"
-          CHECK_RUN_REPORTER_REPORT: "**/TEST-*.xml"
-          CHECK_RUN_REPORTER_TOKEN: ${{ secrets.CHECK_RUN_REPORTER_TOKEN_LIFERAY_IDE}}
+        with:
+          label: "Maven surefire test reports"
+          report: "**/TEST-*.xml"
+          token: ${{ secrets.CHECK_RUN_REPORTER_TOKEN_LIFERAY_IDE}}

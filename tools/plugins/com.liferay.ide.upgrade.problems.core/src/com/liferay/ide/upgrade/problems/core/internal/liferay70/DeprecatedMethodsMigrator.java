@@ -59,7 +59,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 					_tempMethod = deprecatedMethodsArray.getJSONObject(j);
 
 					List<FileSearchResult> searchResults = searchFile(
-						file, createFileChecker(type, file, fileExtension));
+						file, createFileService(type, file, fileExtension));
 
 					if (searchResults != null) {
 						for (FileSearchResult searchResult : searchResults) {
@@ -88,7 +88,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 	}
 
 	@Override
-	protected List<FileSearchResult> searchFile(File file, JavaFile fileChecker) {
+	protected List<FileSearchResult> searchFile(File file, JavaFile javaFile) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		String[] parameters = null;
@@ -105,11 +105,11 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 			}
 
 			searchResults.addAll(
-				fileChecker.findMethodInvocations(
+				javaFile.findMethodInvocations(
 					_tempMethod.getString("className"), null, _tempMethod.getString("methodName"), parameters));
 
 			searchResults.addAll(
-				fileChecker.findMethodInvocations(
+				javaFile.findMethodInvocations(
 					null, _tempMethod.getString("className"), _tempMethod.getString("methodName"), parameters));
 		}
 		catch (JSONException jsone) {

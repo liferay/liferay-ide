@@ -17,6 +17,8 @@ package com.liferay.ide.upgrade.problems.core.internal;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.nio.file.Files;
@@ -28,6 +30,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -48,7 +52,27 @@ import org.w3c.dom.NodeList;
  */
 @Component(property = "file.extension=xml")
 @SuppressWarnings("restriction")
-public class SSEXMLFile extends WorkspaceFile implements XMLFile {
+public class SSEXMLFile implements XMLFile {
+
+	@Override
+	public void appendComment(int lineNumber, String comment) throws IOException {
+		try {
+			List<String> lines = Files.readAllLines(_file.toPath());
+
+			String newContent = IntStream.range(
+				0, lines.size()
+			).mapToObj(
+				i -> (i == lineNumber) ? lines.get(i) + " <!-- " + comment + " -->" : lines.get(i)
+			).collect(
+				Collectors.joining(System.lineSeparator())
+			);
+
+			Files.write(_file.toPath(), newContent.getBytes());
+		}
+		catch (Exception e) {
+			throw new IOException("Problem encountered when appending comment on line " + lineNumber, e);
+		}
+	}
 
 	@Override
 	@SuppressWarnings("deprecation")
@@ -60,8 +84,8 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
-				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			try (InputStream input = Files.newInputStream(Paths.get(_file.toURI()), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForRead(_file.getAbsolutePath(), input, null);
 			}
 
 			IDOMDocument document = domModel.getDocument();
@@ -84,7 +108,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 					int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
 
 					result = new FileSearchResult(
-						file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+						_file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
 
 					result.autoCorrectContext = "descriptor:dtd-version";
 				}
@@ -111,8 +135,8 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			try (InputStream input = Files.newInputStream(file.toPath(), StandardOpenOption.READ)) {
-				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			try (InputStream input = Files.newInputStream(_file.toPath(), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForRead(_file.getAbsolutePath(), input, null);
 			}
 
 			IDOMDocument domDocument = domModel.getDocument();
@@ -132,7 +156,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 						int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
 
 						FileSearchResult result = new FileSearchResult(
-							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+							_file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
 
 						results.add(result);
 					}
@@ -160,8 +184,8 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			try (InputStream input = Files.newInputStream(file.toPath(), StandardOpenOption.READ)) {
-				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			try (InputStream input = Files.newInputStream(_file.toPath(), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForRead(_file.getAbsolutePath(), input, null);
 			}
 
 			IDOMDocument document = domModel.getDocument();
@@ -185,7 +209,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 						int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
 
 						FileSearchResult result = new FileSearchResult(
-							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+							_file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
 
 						results.add(result);
 					}
@@ -213,8 +237,8 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
-				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			try (InputStream input = Files.newInputStream(Paths.get(_file.toURI()), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForRead(_file.getAbsolutePath(), input, null);
 			}
 
 			IDOMDocument domDocument = domModel.getDocument();
@@ -244,7 +268,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 					int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
 
 					FileSearchResult result = new FileSearchResult(
-						file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+						_file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
 
 					result.autoCorrectContext = "layout-template:css-class";
 
@@ -262,5 +286,12 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 		return results;
 	}
+
+	@Override
+	public void setFile(File file) {
+		_file = file;
+	}
+
+	private File _file;
 
 }

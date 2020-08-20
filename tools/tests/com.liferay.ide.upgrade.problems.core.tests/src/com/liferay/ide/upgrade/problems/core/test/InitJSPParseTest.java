@@ -41,11 +41,11 @@ public class InitJSPParseTest {
 
 		FileMigration fileMigration = _context.getService(sr);
 
-		List<String> versions = Arrays.asList("7.0", "7.1", "7.2");
+		List<String> versions = Arrays.asList("7.0", "7.1", "7.2", "7.3");
 
 		List<UpgradeProblem> upgradeProblems = fileMigration.findUpgradeProblems(new File("jsptests/jukebox-portlet/"), versions, new NullProgressMonitor()).stream().sorted().collect(Collectors.toList());
 
-		Assert.assertEquals("", 346, upgradeProblems.size());
+		Assert.assertEquals("", 354, upgradeProblems.size());
 
 		boolean found = false;
 

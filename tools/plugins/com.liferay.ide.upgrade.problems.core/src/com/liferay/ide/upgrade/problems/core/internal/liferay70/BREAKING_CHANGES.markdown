@@ -1882,9 +1882,9 @@ call/implement `Indexer.getFacetBooleanFilter(...)`.
 #### Why was this change made? [](id=why-was-this-change-made-48)
 
 Permission constraints placed on search should not affect the score for returned
-search results.  Thus, these constraints should be applied as search filters.
+search results. Thus, these constraints should be applied as search filters.
 `SearchPermissionChecker` is also a very deep internal interface within the
-permission system.  Thus, to limit confusion in the logic for maintainability,
+permission system. Thus, to limit confusion in the logic for maintainability,
 the `SearchPermissionChecker.getPermissionQuery(...)` method was removed as
 opposed to deprecated.
 
@@ -3861,7 +3861,7 @@ in the OSGi container.
 
 - `com.liferay.portal.kernel.security.exportimport.UserImporter`,
   `com.liferay.portal.kernel.security.exportimport.UserExporter`,
-  and `com.liferay.portal.kernel.security.exportimport.UserOperation`  have been
+  and `com.liferay.portal.kernel.security.exportimport.UserOperation` have been
   moved from portal-kernel to the portal-security-export-import-api module.
 
 - `com.liferay.portal.kernel.security.exportimport.UserImporterUtil` and

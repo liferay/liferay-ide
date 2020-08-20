@@ -16,14 +16,19 @@ package com.liferay.ide.upgrade.problems.test.apichanges;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -37,23 +42,29 @@ import com.liferay.ide.upgrade.problems.core.FileMigrator;
 /**
  * @author Seiphon Wang
  */
-public abstract class AutoCorrectDescriptorTestBase {
+public abstract class AutoCorrectLiferayVersionPropertiesTestBase {
+
+	@Rule
+	public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
 	@Test
 	public void autoCorrectProblems() throws Exception {
-		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
+		File testFile = temporaryFolder.newFile("liferay-plugin-package.properties");
 
-		File testFile = new File(tempFolder, "test.xml");
+		File originalFile = getOriginalTestFile();
 
-		tempFolder.deleteOnExit();
+		Files.copy(originalFile.toPath(), testFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-		Files.copy(getOriginalTestFile().toPath(), testFile.toPath());
+		FileMigrator liferayVersionsProperties = null;
 
-		FileMigrator descriptorFileMigrator = null;
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
 
-		Collection<ServiceReference<FileMigrator>> mrefs = context.getServiceReferences(FileMigrator.class, null);
+		BundleContext bundleContext = bundle.getBundleContext();
 
-		List<ServiceReference<FileMigrator>> filteredRefs = mrefs.stream(
+		Collection<ServiceReference<FileMigrator>> serviceReferences =
+			bundleContext.getServiceReferences(FileMigrator.class, null);
+
+		List<ServiceReference<FileMigrator>> filteredReferences = serviceReferences.stream(
 		).filter(
 			ref -> {
 				Dictionary<String, Object> serviceProperties = ref.getProperties();
@@ -67,40 +78,36 @@ public abstract class AutoCorrectDescriptorTestBase {
 				).map(
 					VersionRange::valueOf
 				).filter(
-					range -> range.includes(version)
+					range -> Objects.equals(version, range.getLeft())
 				).isPresent();
 			}
 		).collect(
 			Collectors.toList()
 		);
 
-		for (ServiceReference<FileMigrator> mref : filteredRefs) {
-			FileMigrator fileMigrator = context.getService(mref);
+		for (ServiceReference<FileMigrator> serviceReference : filteredReferences) {
+			FileMigrator fileMigrator = bundleContext.getService(serviceReference);
 
 			Class<?> clazz = fileMigrator.getClass();
 
-			if (clazz.getName().contains(getImplClassName())) {
-				descriptorFileMigrator = fileMigrator;
+			if (Objects.equals(clazz.getSimpleName(), getImplClassName())) {
+				liferayVersionsProperties = fileMigrator;
 
 				break;
 			}
 		}
 
-		Assert.assertNotNull("Expected that a valid descriptorFileMigrator would be found", descriptorFileMigrator);
+		Assert.assertNotNull("Expected that a valid liferayVersionsProperties would be found", liferayVersionsProperties);
 
-		List<UpgradeProblem> upgradeProblems = descriptorFileMigrator.analyze(testFile);
+		List<UpgradeProblem> upgradeProblems = liferayVersionsProperties.analyze(testFile);
 
 		Assert.assertEquals("Expected to have found exactly one problem.", 1, upgradeProblems.size());
 
-		File dest = new File(tempFolder, "Updated.xml");
-
-		Files.copy(testFile.toPath(), dest.toPath());
-
-		int problemsFixed = ((AutoFileMigrator)descriptorFileMigrator).correctProblems(dest, upgradeProblems);
+		int problemsFixed = ((AutoFileMigrator)liferayVersionsProperties).correctProblems(testFile, upgradeProblems);
 
 		Assert.assertEquals("Expected to have fixed exactly one problem.", 1, problemsFixed);
 
-		upgradeProblems = descriptorFileMigrator.analyze(dest);
+		upgradeProblems = liferayVersionsProperties.analyze(testFile);
 
 		Assert.assertEquals("Expected to not find any problems.", 0, upgradeProblems.size());
 	}
@@ -110,7 +117,4 @@ public abstract class AutoCorrectDescriptorTestBase {
 	public abstract File getOriginalTestFile();
 
 	public abstract String getVersion();
-
-	protected BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
-
 }

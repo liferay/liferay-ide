@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
@@ -33,6 +34,8 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -52,7 +55,19 @@ public abstract class GradleFileMigrator implements FileMigrator {
 		problemType = safeGet(properties, "file.extensions");
 		problemTickets = safeGet(properties, "problem.tickets");
 		sectionKey = safeGet(properties, "problem.section");
-		version = safeGet(properties, "version");
+
+		String versionValue = safeGet(properties, "version");
+
+		if (versionValue.isEmpty()) {
+			version = versionValue;
+		}
+		else {
+			VersionRange versionRange = new VersionRange(versionValue);
+
+			Version left = versionRange.getLeft();
+
+			version = left.getMajor() + "." + left.getMinor();
+		}
 
 		addDependenciesToSearch(artifactIds);
 	}
@@ -67,10 +82,10 @@ public abstract class GradleFileMigrator implements FileMigrator {
 			if (results != null) {
 				String fileName = "BREAKING_CHANGES.markdown";
 
-				if ("7.0".equals(version)) {
+				if (Objects.equals("7.0", version)) {
 					fileName = "liferay70/" + fileName;
 				}
-				else if ("7.1".equals(version)) {
+				else if (Objects.equals("7.1", version)) {
 					fileName = "liferay71/" + fileName;
 				}
 
@@ -159,6 +174,11 @@ public abstract class GradleFileMigrator implements FileMigrator {
 		).collect(
 			Collectors.toList()
 		);
+	}
+
+	@Override
+	public int reportProblems(File file, Collection<UpgradeProblem> upgradeProblems) {
+		return 0;
 	}
 
 	protected abstract void addDependenciesToSearch(List<String> dependencies);

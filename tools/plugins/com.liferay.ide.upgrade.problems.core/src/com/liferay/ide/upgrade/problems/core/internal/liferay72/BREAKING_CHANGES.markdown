@@ -289,7 +289,7 @@ The `Function` and `Supplier` interfaces in package
 This affects anyone who implemented the `Function` and `Supplier` interfaces in
 package `com.liferay.portal.kernel.util`.
 
-#### How should I update my code?  [](id=how-should-i-update-my-code-7)
+#### How should I update my code? [](id=how-should-i-update-my-code-7)
 
 You should replace usages of `com.liferay.portal.kernel.util.Function` and
 `com.liferay.portal.kernel.util.Supplier` with `java.util.function.Function` and
@@ -520,7 +520,7 @@ implementation for authentication.
 #### What changed?
 
 The `dl.tabs.visible` property let users toggle the visibility of the navigation
-tabs in Documents & Media when put on a widget page.  This configuration option
+tabs in Documents & Media when put on a widget page. This configuration option
 has been removed, so that the navigation tab will never be shown in widget pages.
 
 #### Who is affected?

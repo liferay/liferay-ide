@@ -53,7 +53,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 				String versions = key.value;
 
-				if (!versions.matches(_oldVersionPattern)) {
+				if (versions.matches(_oldVersionPattern)) {
 					List<FileSearchResult> results = propertiesFileChecker.findProperties("liferay-versions");
 
 					if (results != null) {

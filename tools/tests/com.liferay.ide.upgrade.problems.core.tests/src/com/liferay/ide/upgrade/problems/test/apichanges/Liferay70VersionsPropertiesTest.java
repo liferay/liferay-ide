@@ -12,23 +12,23 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal;
-
-import com.liferay.ide.upgrade.problems.core.SourceFile;
+package com.liferay.ide.upgrade.problems.test.apichanges;
 
 import java.io.File;
 
 /**
- * @author Gregory Amerson
- * @author Simon Jiang
+ * @author Seiphon Wang
  */
-public class WorkspaceFile implements SourceFile {
+public class Liferay70VersionsPropertiesTest extends APITestBase {
 
 	@Override
-	public synchronized void setFile(File file) {
-		this.file = file;
+	public String getComponentName() {
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70VersionsProperties";
 	}
 
-	protected File file;
+	@Override
+	public File getTestFile() {
+		return new File("jsptests/jukebox-portlet/docroot/WEB-INF/liferay-plugin-package.properties");
+	}
 
 }

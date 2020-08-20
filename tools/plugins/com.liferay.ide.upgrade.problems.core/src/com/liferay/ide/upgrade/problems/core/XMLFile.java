@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
+import java.io.IOException;
+
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -21,6 +23,8 @@ import java.util.regex.Pattern;
  * @author Gregory Amerson
  */
 public interface XMLFile extends SourceFile {
+
+	public void appendComment(int lineNumber, String comment) throws IOException;
 
 	public FileSearchResult findDocumentTypeDeclaration(String name, Pattern idPattern);
 

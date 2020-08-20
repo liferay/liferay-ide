@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
@@ -46,7 +45,7 @@ public class RemovedAbilitySpecifyClassLoaders extends JavaFileMigrator {
 
 		List<FileSearchResult> findImplementsInterfaces = javaFileChecker.findImplementsInterface("ScriptingExecutor");
 
-		if (ListUtil.isNotEmpty(findImplementsInterfaces)) {
+		if (!findImplementsInterfaces.isEmpty()) {
 			result.addAll(findImplementsInterfaces);
 		}
 

@@ -27,14 +27,14 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=liferay-versions key in Liferay Plugin Packages Properties 7.0",
 		"problem.summary=In order to deploy this project to 7.0 the liferay-versions property must be set to 7.0.0+",
-		"problem.tickets=", "problem.section=", "auto.correct=property", "version=7.0"
+		"problem.tickets=", "problem.section=", "auto.correct=property", "version=[7.0,7.0]"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )
 public class Liferay70VersionsProperties extends BaseLiferayVersionsProperties {
 
 	public Liferay70VersionsProperties() {
-		super(".*[67]\\.[0-9]\\.[0-9].*", "7.0.0+");
+		super(".*6\\.[0-9]\\.[0-9].*", "7.0.0+");
 	}
 
 }

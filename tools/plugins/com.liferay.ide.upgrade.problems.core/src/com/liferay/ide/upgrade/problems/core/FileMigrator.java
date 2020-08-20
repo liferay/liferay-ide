@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.List;
 
@@ -58,6 +59,8 @@ public interface FileMigrator {
 
 		return out.toString();
 	}
+
+	public int reportProblems(File file, Collection<UpgradeProblem> upgradeProblems);
 
 	public default String safeGet(Dictionary<String, Object> properties, String key) {
 		Object value = properties.get(key);

@@ -22,6 +22,8 @@ import java.io.File;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -32,6 +34,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 
 /**
  * @author Terry Jia
@@ -62,10 +66,25 @@ public class BaseAutoCorrectAction extends SelectionProviderAction implements Up
 
 		try {
 			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = bundleContext.getServiceReferences(
-				AutoFileMigrator.class,
-				"(&(auto.correct=" + autoCorrectContext + ")(version=" + upgradeProblem.getVersion() + "))");
+				AutoFileMigrator.class, "(auto.correct=" + autoCorrectContext + ")");
 
 			serviceReferences.stream(
+			).filter(
+				ref -> {
+					Dictionary<String, Object> serviceProperties = ref.getProperties();
+
+					Version version = new Version(upgradeProblem.getVersion());
+
+					return Optional.ofNullable(
+						serviceProperties.get("version")
+					).map(
+						Object::toString
+					).map(
+						VersionRange::valueOf
+					).filter(
+						range -> range.includes(version)
+					).isPresent();
+				}
 			).map(
 				bundleContext::getService
 			).forEach(

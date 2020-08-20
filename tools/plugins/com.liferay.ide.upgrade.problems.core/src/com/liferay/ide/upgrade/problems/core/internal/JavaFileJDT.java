@@ -18,8 +18,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.upgrade.problems.core.CUCache;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
@@ -27,13 +25,18 @@ import com.liferay.ide.upgrade.problems.core.JavaFile;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
@@ -54,7 +57,10 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -64,7 +70,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(property = "file.extension=java", service = JavaFile.class)
 @SuppressWarnings("rawtypes")
-public class JavaFileJDT extends WorkspaceFile implements JavaFile {
+public class JavaFileJDT implements JavaFile {
 
 	public JavaFileJDT() {
 	}
@@ -73,11 +79,38 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		setFile(file);
 	}
 
+	@Activate
+	public void activate(ComponentContext componentContext) {
+		_bundleContext = componentContext.getBundleContext();
+	}
+
+	@Override
+	public void appendComment(int lineNumber, String comment) throws IOException {
+		try {
+			List<String> lines = Files.readAllLines(_file.toPath());
+
+			String newContent = IntStream.range(
+				0, lines.size()
+			).mapToObj(
+				i -> ((i + 1) == lineNumber) ? lines.get(i) + " // " + comment : lines.get(i)
+			).collect(
+				Collectors.joining(System.lineSeparator())
+			);
+
+			Files.write(_file.toPath(), newContent.getBytes());
+
+			_clearCache(_file);
+		}
+		catch (Exception e) {
+			throw new IOException("Problem encountered when appending comment on line " + lineNumber, e);
+		}
+	}
+
 	@Override
 	public List<FileSearchResult> findCatchExceptions(String[] exceptions) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		_ast.accept(
+		_astRoot.accept(
 			new ASTVisitor() {
 
 				@Override
@@ -92,10 +125,10 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 					for (String exceptionType : exceptions) {
 						if (exceptionTypeName.equals(exceptionType)) {
-							int startLine = _ast.getLineNumber(exception.getStartPosition());
+							int startLine = _astRoot.getLineNumber(exception.getStartPosition());
 							int startOffset = exception.getStartPosition();
 
-							int endLine = _ast.getLineNumber(exception.getStartPosition() + exception.getLength());
+							int endLine = _astRoot.getLineNumber(exception.getStartPosition() + exception.getLength());
 							int endOffset = exception.getStartPosition() + exception.getLength();
 
 							searchResults.add(
@@ -118,7 +151,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	public List<FileSearchResult> findImplementsInterface(String interfaceName) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		_ast.accept(
+		_astRoot.accept(
 			new ASTVisitor() {
 
 				@Override
@@ -128,15 +161,16 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					if (typeBinding != null) {
 						ITypeBinding[] superInterfaces = typeBinding.getInterfaces();
 
-						if (ListUtil.isNotEmpty(superInterfaces)) {
+						if ((superInterfaces != null) && (superInterfaces.length != 0)) {
 							String searchContext = superInterfaces[0].getName();
 
 							SimpleName nodeName = node.getName();
 
 							if (searchContext.equals(interfaceName)) {
-								int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+								int startLine = _astRoot.getLineNumber(nodeName.getStartPosition());
 								int startOffset = nodeName.getStartPosition();
-								int endLine = _ast.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
+								int endLine = _astRoot.getLineNumber(
+									nodeName.getStartPosition() + nodeName.getLength());
 								int endOffset = nodeName.getStartPosition() + nodeName.getLength();
 
 								searchResults.add(
@@ -158,7 +192,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	public FileSearchResult findImport(String importName) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		_ast.accept(
+		_astRoot.accept(
 			new ASTVisitor() {
 
 				@Override
@@ -168,9 +202,9 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					String searchContext = nodeName.toString();
 
 					if (importName.equals(searchContext)) {
-						int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+						int startLine = _astRoot.getLineNumber(nodeName.getStartPosition());
 						int startOffset = nodeName.getStartPosition();
-						int endLine = _ast.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
+						int endLine = _astRoot.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
 						int endOffset = nodeName.getStartPosition() + nodeName.getLength();
 
 						searchResults.add(
@@ -182,7 +216,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 			});
 
-		if (ListUtil.isNotEmpty(searchResults)) {
+		if (!searchResults.isEmpty()) {
 			return searchResults.get(0);
 		}
 
@@ -193,7 +227,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	public List<FileSearchResult> findImports(String[] imports) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		_ast.accept(
+		_astRoot.accept(
 			new ASTVisitor() {
 
 				@Override
@@ -217,9 +251,9 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 								}
 							}
 
-							int startLine = _ast.getLineNumber(name.getStartPosition());
+							int startLine = _astRoot.getLineNumber(name.getStartPosition());
 							int startOffset = name.getStartPosition();
-							int endLine = _ast.getLineNumber(name.getStartPosition() + name.getLength());
+							int endLine = _astRoot.getLineNumber(name.getStartPosition() + name.getLength());
 							int endOffset = name.getStartPosition() + greedyImport.length();
 
 							searchResults.add(
@@ -239,7 +273,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	public List<FileSearchResult> findMethodDeclaration(String name, String[] params, String returnType) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		_ast.accept(
+		_astRoot.accept(
 			new ASTVisitor() {
 
 				@Override
@@ -293,7 +327,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					}
 
 					if (sameParmSize && sameReturnType) {
-						int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+						int startLine = _astRoot.getLineNumber(nodeName.getStartPosition());
 						int startOffset = nodeName.getStartPosition();
 
 						node.accept(
@@ -307,7 +341,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 									// SingleVariableDeclaration node contains the
 									// parms's type
 
-									int endLine = _ast.getLineNumber(node.getStartPosition());
+									int endLine = _astRoot.getLineNumber(node.getStartPosition());
 									int endOffset = node.getStartPosition();
 
 									searchResults.add(
@@ -346,7 +380,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		_ast.accept(
+		_astRoot.accept(
 			new ASTVisitor() {
 
 				@Override
@@ -370,26 +404,27 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					}
 
 					if (((methodName.equals(methodNameValue)) ||
-						("*".equals(methodName))) &&
+						(Objects.equals("*", methodName))) &&
 
 						// if typeHint is not null it must match the type hint and
 						// ignore the expression
 						// not strictly check the type and will check equals later
 
 						(((typeHint != null) && (type != null) &&
-							StringUtil.equals(type.getName(), typeHint)) ||
+							Objects.equals(type.getName(), typeHint)) ||
 
 							// with no typeHint then expressions can be used to
 							// match Static invocation
 
 							((typeHint == null) && (expression != null) &&
-								StringUtil.equals(expression.toString(), expressionValue)))) {
+								Objects.equals(expression.toString(), expressionValue)))) {
 
 						boolean argumentsMatch = false;
 
 						if (methodParamTypes != null) {
-							Expression[] argExpressions = ((List<Expression>)node.arguments()).toArray(
-								new Expression[0]);
+							List<Expression> expressions = (List<Expression>)node.arguments();
+
+							Expression[] argExpressions = expressions.toArray(new Expression[0]);
 
 							if (argExpressions.length == methodParamTypes.length) {
 
@@ -418,44 +453,41 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 											continue;
 										}
-										else {
 
-											// type unmatched
+										// type unmatched
 
-											possibleMatch = false;
-											typeMatched = false;
-
-											break;
-										}
-									}
-									else {
 										possibleMatch = false;
+										typeMatched = false;
 
-										// there are two cases :
-										// typeUnresolved : means that all resolved
-										// type is matched and there is unsolved
-										// type , need to set fullMatch false
-										// typeUnmatched : means that some resolved
-										// type is unmatched , no need to add
-										// SearchResult
-
-										// do not add searchResults now, just record
-										// the state and continue
-										// because there maybe unmatched type later
-										// which will break this case
-
-										typeUnresolved = true;
+										break;
 									}
+
+									possibleMatch = false;
+
+									// there are two cases :
+									// typeUnresolved : means that all resolved
+									// type is matched and there is unsolved
+									// type , need to set fullMatch false
+									// typeUnmatched : means that some resolved
+									// type is unmatched , no need to add
+									// SearchResult
+
+									// do not add searchResults now, just record
+									// the state and continue
+									// because there maybe unmatched type later
+									// which will break this case
+
+									typeUnresolved = true;
 								}
 
 								if (typeMatched && typeUnresolved) {
 									int startOffset = expression.getStartPosition();
 
-									int startLine = _ast.getLineNumber(startOffset);
+									int startLine = _astRoot.getLineNumber(startOffset);
 
 									int endOffset = node.getStartPosition() + node.getLength();
 
-									int endLine = _ast.getLineNumber(endOffset);
+									int endLine = _astRoot.getLineNumber(endOffset);
 
 									// can't resolve the type but args number
 									// matched , note that the last param is false
@@ -480,11 +512,11 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 						if (argumentsMatch) {
 							int startOffset = expression.getStartPosition();
 
-							int startLine = _ast.getLineNumber(startOffset);
+							int startLine = _astRoot.getLineNumber(startOffset);
 
 							int endOffset = node.getStartPosition() + node.getLength();
 
-							int endLine = _ast.getLineNumber(endOffset);
+							int endLine = _astRoot.getLineNumber(endOffset);
 
 							boolean fullMatch = true;
 
@@ -515,7 +547,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	public FileSearchResult findPackage(String packageName) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		_ast.accept(
+		_astRoot.accept(
 			new ASTVisitor() {
 
 				@Override
@@ -525,9 +557,9 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					String searchContext = nodeName.toString();
 
 					if (packageName.equals(searchContext)) {
-						int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+						int startLine = _astRoot.getLineNumber(nodeName.getStartPosition());
 						int startOffset = nodeName.getStartPosition();
-						int endLine = _ast.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
+						int endLine = _astRoot.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
 						int endOffset = nodeName.getStartPosition() + nodeName.getLength();
 
 						searchResults.add(
@@ -539,7 +571,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 			});
 
-		if (ListUtil.isNotEmpty(searchResults)) {
+		if (!searchResults.isEmpty()) {
 			return searchResults.get(0);
 		}
 
@@ -613,7 +645,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	public List<FileSearchResult> findSuperClass(String superClassName) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		_ast.accept(
+		_astRoot.accept(
 			new ASTVisitor() {
 
 				@Override
@@ -629,9 +661,10 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 							if (searchContext.equals(superClassName)) {
 								SimpleName nodeName = node.getName();
 
-								int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+								int startLine = _astRoot.getLineNumber(nodeName.getStartPosition());
 								int startOffset = nodeName.getStartPosition();
-								int endLine = _ast.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
+								int endLine = _astRoot.getLineNumber(
+									nodeName.getStartPosition() + nodeName.getLength());
 								int endOffset = nodeName.getStartPosition() + nodeName.getLength();
 
 								searchResults.add(
@@ -667,7 +700,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 			@SuppressWarnings("unchecked")
 			CUCache<CompilationUnit> cache = context.getService(ref);
 
-			_ast = cache.getCU(file, () -> getJavaSource());
+			_astRoot = cache.getCU(file, () -> getJavaSource());
 		}
 		catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -695,6 +728,21 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		}
 
 		return null;
+	}
+
+	private void _clearCache(File file) {
+		try {
+			Collection<ServiceReference<CUCache>> src = _bundleContext.getServiceReferences(CUCache.class, null);
+
+			for (ServiceReference<CUCache> sr : src) {
+				CUCache cache = _bundleContext.getService(sr);
+
+				cache.unget(file);
+			}
+		}
+		catch (InvalidSyntaxException ise) {
+			ise.printStackTrace();
+		}
 	}
 
 	private boolean _typeMatch(String expectType, String paramType) {
@@ -793,7 +841,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		"LocalService", "LocalServiceUtil", "LocalServiceWrapper", "Service", "ServiceUtil", "ServiceWrapper"
 	};
 
-	private CompilationUnit _ast;
+	private CompilationUnit _astRoot;
+	private BundleContext _bundleContext;
 	private File _file;
 	private final FileHelper _fileHelper = new FileHelper();
 

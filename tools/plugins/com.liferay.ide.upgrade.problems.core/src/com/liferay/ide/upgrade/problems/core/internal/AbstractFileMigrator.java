@@ -28,12 +28,15 @@ import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.eclipse.core.runtime.Path;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -61,18 +64,30 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		problemSummary = safeGet(properties, "problem.summary");
 		problemTickets = safeGet(properties, "problem.tickets");
 		sectionKey = safeGet(properties, "problem.section");
-		version = safeGet(properties, "version");
+
+		String versionValue = safeGet(properties, "version");
+
+		if (versionValue.isEmpty()) {
+			version = versionValue;
+		}
+		else {
+			VersionRange versionRange = new VersionRange(versionValue);
+
+			Version left = versionRange.getLeft();
+
+			version = left.getMajor() + "." + left.getMinor();
+		}
 	}
 
 	@Override
 	public List<UpgradeProblem> analyze(File file) {
 		List<UpgradeProblem> problems = new ArrayList<>();
 
-		String fileExtension = new Path(
-			file.getAbsolutePath()
-		).getFileExtension();
+		Path path = new Path(file.getAbsolutePath());
 
-		List<FileSearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
+		String fileExtension = path.getFileExtension();
+
+		List<FileSearchResult> searchResults = searchFile(file, createFileService(type, file, fileExtension));
 
 		if (!searchResults.isEmpty()) {
 			String fileName = "BREAKING_CHANGES.markdown";
@@ -88,6 +103,11 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 			}
 			else if (Objects.equals("7.3", version)) {
 				fileName = "liferay73/" + fileName;
+			}
+			else {
+				Optional<String> nullableVersion = Optional.ofNullable(version);
+
+				throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 			}
 
 			String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
@@ -111,7 +131,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		return problems;
 	}
 
-	protected T createFileChecker(Class<T> type, File file, String fileExtension) {
+	protected T createFileService(Class<T> type, File file, String fileExtension) {
 		try {
 			Collection<ServiceReference<T>> refs = context.getServiceReferences(
 				type, "(file.extension=" + fileExtension + ")");

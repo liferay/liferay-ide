@@ -14,7 +14,17 @@
 
 package com.liferay.ide.upgrade.problems.test.apichanges;
 
+import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
+
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
 
 /**
  * @author Seiphon Wang
@@ -23,7 +33,32 @@ public abstract class APIVersionSupportTestBase extends APITestBase {
 
 	@Override
 	protected Filter getFilter() throws Exception {
-		return context.createFilter("(&(component.name=" + getComponentName() + ")(version=" + getVersion() + "))");
+		return context.createFilter("(component.name=" + getComponentName() + ")");
+	}
+
+	@Override
+	protected ServiceReference<FileMigrator>[] filterForVersion(ServiceReference<FileMigrator>[] serviceReferences) {
+		return Arrays.stream(
+			serviceReferences
+		).filter(
+			ref -> {
+				Dictionary<String, Object> serviceProperties = ref.getProperties();
+
+				Version version = new Version(getVersion());
+
+				return Optional.ofNullable(
+					serviceProperties.get("version")
+				).map(
+					Object::toString
+				).map(
+					VersionRange::valueOf
+				).filter(
+					range -> range.includes(version)
+				).isPresent();
+			}
+		).collect(
+			Collectors.toList()
+		).toArray(serviceReferences);
 	}
 
 	public abstract String getVersion();

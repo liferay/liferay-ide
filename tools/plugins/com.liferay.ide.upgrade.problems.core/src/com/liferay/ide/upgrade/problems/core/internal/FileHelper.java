@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.FileUtil;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -48,10 +46,8 @@ public class FileHelper {
 			public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
 				File file = path.toFile();
 
-				if (file.isFile()) {
-					if (FileUtil.nameEndsWith(file, ext)) {
-						files.add(file);
-					}
+				if (file.isFile() && _nameEndsWith(file, ext)) {
+					files.add(file);
 				}
 
 				return super.visitFile(path, attrs);
@@ -98,6 +94,16 @@ public class FileHelper {
 		}
 
 		return retval;
+	}
+
+	private static boolean _nameEndsWith(File file, String suffix) {
+		if (file == null) {
+			return false;
+		}
+
+		String name = file.getName();
+
+		return name.endsWith(suffix);
 	}
 
 }
