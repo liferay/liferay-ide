@@ -66,7 +66,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 
 	public static final String OFFLINE_UNZIP_FOLDER = "offline-outline";
 
-	public static List<IUpgradePlanOutline> offlineOutlineLists = new ArrayList<>();
+	public static List<IUpgradePlanOutline> offlineOutlines = new ArrayList<>();
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, ID, msg);
@@ -76,18 +76,18 @@ public class UpgradePlanCorePlugin extends Plugin {
 		return new Status(IStatus.ERROR, ID, msg, e);
 	}
 
-	public static IUpgradePlanOutline getFilterOutlines(String name) {
-		for (IUpgradePlanOutline outline : offlineOutlineLists) {
-			if (StringUtil.equals(name, outline.getName())) {
-				return outline;
+	public static UpgradePlanCorePlugin getInstance() {
+		return _instance;
+	}
+
+	public static IUpgradePlanOutline getOutline(String name) {
+		for (IUpgradePlanOutline offlineOutline : offlineOutlines) {
+			if (StringUtil.equals(name, offlineOutline.getName())) {
+				return offlineOutline;
 			}
 		}
 
 		return null;
-	}
-
-	public static UpgradePlanCorePlugin getInstance() {
-		return _instance;
 	}
 
 	public static void logError(String msg) {
@@ -108,7 +108,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 
 		_instance = this;
 
-		_initOfflineOutline();
+		_initOfflineOutlines();
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 		return null;
 	}
 
-	private void _initOfflineOutline() throws Exception {
+	private void _initOfflineOutlines() throws Exception {
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
 		IPath pluginStateLocation = _instance.getStateLocation();
@@ -189,7 +189,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 				_prefstore.flush();
 			}
 
-			offlineOutlineLists.add(new UpgradePlanOutline(outlineFilenameWithoutEx, offlineDocDirPath.toOSString()));
+			offlineOutlines.add(new UpgradePlanOutline(outlineFilenameWithoutEx, offlineDocDirPath.toOSString()));
 		}
 	}
 

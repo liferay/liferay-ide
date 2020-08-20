@@ -40,7 +40,7 @@ public class OutlinePossibleValuesService extends PossibleValuesService implemen
 	protected void initPossibleValuesService() {
 		_possibleValues = new ArrayList<>();
 
-		for (IUpgradePlanOutline outline : UpgradePlanCorePlugin.offlineOutlineLists) {
+		for (IUpgradePlanOutline outline : UpgradePlanCorePlugin.offlineOutlines) {
 			_possibleValues.add(outline.getName());
 		}
 

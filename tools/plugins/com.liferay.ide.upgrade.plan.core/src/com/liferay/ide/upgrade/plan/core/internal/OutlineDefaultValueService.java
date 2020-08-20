@@ -33,7 +33,7 @@ public class OutlineDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected void initDefaultValueService() {
-		List<IUpgradePlanOutline> outlines = UpgradePlanCorePlugin.offlineOutlineLists;
+		List<IUpgradePlanOutline> outlines = UpgradePlanCorePlugin.offlineOutlines;
 
 		IUpgradePlanOutline outline = outlines.get(0);
 

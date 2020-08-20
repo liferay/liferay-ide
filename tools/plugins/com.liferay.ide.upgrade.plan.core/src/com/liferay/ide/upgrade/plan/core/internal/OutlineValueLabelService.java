@@ -27,7 +27,7 @@ public class OutlineValueLabelService extends ValueLabelService {
 
 	@Override
 	public String provide(String value) {
-		IUpgradePlanOutline outline = UpgradePlanCorePlugin.getFilterOutlines(value);
+		IUpgradePlanOutline outline = UpgradePlanCorePlugin.getOutline(value);
 
 		if (outline != null) {
 			return outline.getName();

@@ -31,7 +31,7 @@ public class StringToIUpgradePlanOutlineConversionService extends ConversionServ
 
 	@Override
 	public IUpgradePlanOutline convert(String object) throws ConversionException {
-		return UpgradePlanCorePlugin.getFilterOutlines(object);
+		return UpgradePlanCorePlugin.getOutline(object);
 	}
 
 }
