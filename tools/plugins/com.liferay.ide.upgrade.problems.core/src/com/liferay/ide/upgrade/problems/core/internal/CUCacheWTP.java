@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.problems.core.CUCache;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 
@@ -33,8 +32,12 @@ import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
@@ -95,6 +98,56 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 		}
 	}
 
+	private static IResource _filterIResouece(IResource[] resources) {
+		IResource result = null;
+
+		for (IResource resource : resources) {
+			if (result == null) {
+				result = resource;
+			}
+			else {
+				IPath filePath = resource.getProjectRelativePath();
+				IPath resourcePath = result.getProjectRelativePath();
+
+				if (filePath.segmentCount() < resourcePath.segmentCount()) {
+					result = resource;
+				}
+			}
+		}
+
+		if (result == null) {
+			return null;
+		}
+
+		return result;
+	}
+
+	private static IProject _getProject(File file) {
+		IWorkspaceRoot ws = _getWorkspaceRoot();
+
+		IResource[] containers = ws.findContainersForLocationURI(file.toURI());
+
+		IResource resource = _filterIResouece(containers);
+
+		if (resource == null) {
+			return null;
+		}
+
+		return resource.getProject();
+	}
+
+	private static IProject _getProject(String projectName) {
+		IWorkspaceRoot workspaceRoot = _getWorkspaceRoot();
+
+		return workspaceRoot.getProject(projectName);
+	}
+
+	private static IWorkspaceRoot _getWorkspaceRoot() {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		return workspace.getRoot();
+	}
+
 	private void _addNaturesToProject(IProject proj, String[] natureIds, IProgressMonitor monitor)
 		throws CoreException {
 
@@ -142,7 +195,7 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 
 			translator.translate();
 
-			IProject project = CoreUtil.getProject(file);
+			IProject project = _getProject(file);
 
 			IJavaProject javaProject = null;
 
@@ -168,12 +221,12 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 	}
 
 	private IJavaProject _getJavaProject(String projectName) throws CoreException {
-		IProject javaProject = CoreUtil.getProject(projectName);
+		IProject javaProject = _getProject(projectName);
 
 		IProgressMonitor monitor = new NullProgressMonitor();
 
 		if (!javaProject.exists()) {
-			IWorkspace workspace = CoreUtil.getWorkspace();
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
 			IProjectDescription description = workspace.newProjectDescription(projectName);
 
