@@ -202,8 +202,8 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 
 					return 1;
 				}
-				catch (IOException e) {
-					e.printStackTrace(System.err);
+				catch (IOException ioe) {
+					ioe.printStackTrace(System.err);
 				}
 
 				return 0;

@@ -148,7 +148,6 @@ public class FileMigrationService implements FileMigration {
 					else {
 						return true;
 					}
-
 				}
 			).filter(
 				serviceReference -> {
