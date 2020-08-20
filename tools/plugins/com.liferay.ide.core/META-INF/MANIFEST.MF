@@ -66,7 +66,7 @@ Export-Package: com.liferay.ide.core,
  org.apache.http.entity.mime,
  org.apache.http.entity.mime.content
 Bundle-ClassPath: .,
- lib/freemarker-2.3.17-patched.jar,
  lib/commons-configuration-1.6.jar,
  lib/com.liferay.portal.tools.bundle.support-3.6.0.jar,
+ lib/freemarker-2.3.17-patched.jar,
  lib/org.apache.httpcomponents.httpmime_4.2.1.jar

@@ -15,34 +15,39 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class OutlinePossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	protected void compute(Set<String> values) {
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		String outlines = preferencesService.getString(UpgradePlanCorePlugin.ID, "outlines", "", null);
-
-		List<String> outlineList = UpgradePlanCorePlugin.defaultUpgradePlanOutlines;
-
-		if (!"".equals(outlines)) {
-			outlineList = Arrays.asList(outlines.split(","));
-		}
-
-		values.addAll(outlineList);
+		values.addAll(_possibleValues);
 	}
+
+	@Override
+	protected void initPossibleValuesService() {
+		List<IUpgradePlanOutline> outlines = UpgradePlanCorePlugin.getAllOutlines();
+
+		_possibleValues = outlines.stream(
+		).map(
+			IUpgradePlanOutline::getName
+		).sorted(
+		).collect(
+			Collectors.toList()
+		);
+	}
+
+	private List<String> _possibleValues;
 
 }

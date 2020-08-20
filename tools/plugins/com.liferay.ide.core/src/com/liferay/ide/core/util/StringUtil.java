@@ -14,6 +14,9 @@
 
 package com.liferay.ide.core.util;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -184,6 +187,26 @@ public class StringUtil {
 		}
 
 		return s1.startsWith(s2);
+	}
+
+	public static String[] stringToArray(String input, String delimiter) {
+		return Arrays.stream(
+			input.split(delimiter)
+		).map(
+			String::trim
+		).toArray(
+			String[]::new
+		);
+	}
+
+	public static List<String> stringToList(String input, String delimiter) {
+		return Arrays.stream(
+			input.split(delimiter)
+		).map(
+			String::trim
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	public static String toLowerCase(String s) {

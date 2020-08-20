@@ -14,26 +14,26 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 
 import org.eclipse.sapphire.services.ValueLabelService;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class OutlineValueLabelService extends ValueLabelService {
 
 	@Override
 	public String provide(String value) {
-		String retval = "";
+		IUpgradePlanOutline outline = UpgradePlanCorePlugin.getOutline(value);
 
-		if (CoreUtil.isNotNullOrEmpty(value)) {
-			String[] s = value.split("/");
-
-			retval = s[s.length - 1] + " - " + value;
+		if (outline != null) {
+			return outline.getName();
 		}
 
-		return retval;
+		return value;
 	}
 
 }

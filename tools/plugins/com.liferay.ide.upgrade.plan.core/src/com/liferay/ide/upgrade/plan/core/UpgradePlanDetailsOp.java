@@ -35,6 +35,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public interface UpgradePlanDetailsOp extends Element {
 
@@ -130,7 +131,9 @@ public interface UpgradePlanDetailsOp extends Element {
 				_initialValue = upgradePlan.getTargetVersion();
 			}
 			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_UPGRADE_PLAN_OUTLINE)) {
-				_initialValue = upgradePlan.getUpgradePlanOutline();
+				IUpgradePlanOutline upgradePlanOutline = upgradePlan.getUpgradePlanOutline();
+
+				_initialValue = upgradePlanOutline.getName();
 			}
 			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_TOTAL_STEP_COUNT)) {
 				List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();

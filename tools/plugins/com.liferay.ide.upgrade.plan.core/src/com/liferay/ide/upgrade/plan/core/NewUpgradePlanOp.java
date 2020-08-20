@@ -16,14 +16,14 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.internal.NameValidationService;
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
+import com.liferay.ide.upgrade.plan.core.internal.OutlineDefaultValueService;
 import com.liferay.ide.upgrade.plan.core.internal.OutlinePossibleValuesService;
-import com.liferay.ide.upgrade.plan.core.internal.OutlineValidationService;
-import com.liferay.ide.upgrade.plan.core.internal.OutlineValueLabelService;
 import com.liferay.ide.upgrade.plan.core.internal.TargetVersionValidationService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.PossibleValues;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
@@ -56,7 +56,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
-	public Value<String> getUpgradePlanOutline();
+	public Value<IUpgradePlanOutline> getUpgradePlanOutline();
 
 	public void setCurrentVersion(String currentVersion);
 
@@ -66,7 +66,9 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public void setTargetVersion(String targetVersion);
 
-	public void setUpgradePlanOutline(String upgradePlanOutline);
+	public void setUpgradePlanOutline(IUpgradePlanOutline value);
+
+	public void setUpgradePlanOutline(String value);
 
 	@DefaultValue(text = "6.2")
 	@Label(standard = "Current Liferay Version")
@@ -84,9 +86,9 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
 	@Required
+	@Service(impl = OutlineDefaultValueService.class)
 	@Service(impl = OutlinePossibleValuesService.class)
-	@Service(impl = OutlineValidationService.class)
-	@Service(impl = OutlineValueLabelService.class)
+	@Type(base = IUpgradePlanOutline.class)
 	public ValueProperty PROP_UPGRADE_PLAN_OUTLINE = new ValueProperty(TYPE, "UpgradePlanOutline");
 
 }

@@ -15,15 +15,24 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
-import java.net.URL;
-
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.ClientProtocolException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,7 +40,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -111,11 +119,15 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	private void _doUpgradeStepDetail(UpgradeStep upgradeStep, Deferred<String> deferred) {
 		String detail = "about:blank";
 
-		String url = upgradeStep.getUrl();
+		String upgradeStepUrl = upgradeStep.getUrl();
 
-		if (CoreUtil.isNotNullOrEmpty(url)) {
+		if (CoreUtil.isNotNullOrEmpty(upgradeStepUrl)) {
 			try {
-				detail = _renderArticleMainContent(url);
+				UpgradePlan currentUpgradePlan = upgradeStep.getCurrentUpgradePlan();
+
+				IUpgradePlanOutline upgradePlanOutline = currentUpgradePlan.getUpgradePlanOutline();
+
+				detail = _renderArticleMainContent(upgradeStepUrl, upgradePlanOutline);
 			}
 			catch (Throwable t) {
 				deferred.fail(t);
@@ -131,98 +143,240 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		return upgradeStep.getTitle();
 	}
 
-	private String _renderArticleMainContent(String upgradeStepUrl) throws ClientProtocolException, IOException {
-		Connection connection = Jsoup.connect(upgradeStepUrl);
+	private File _getEntryFile(File entryFile) {
+		File[] entryFiles = entryFile.listFiles(
+			new FileFilter() {
 
-		connection = connection.timeout(10000);
+				@Override
+				public boolean accept(File file) {
+					if (file.isDirectory()) {
+						_getEntryFile(file);
+					}
+					else {
+						String name = file.getName();
 
-		connection = connection.validateTLSCertificates(false);
+						if (name.startsWith("01-")) {
+							return true;
+						}
 
-		Document document = connection.get();
+						return false;
+					}
 
-		StringBuffer sb = new StringBuffer();
+					return false;
+				}
 
-		sb.append("<html>");
+			});
 
-		Elements heads = document.getElementsByTag("head");
+		if (ListUtil.isNotEmpty(entryFiles)) {
+			return entryFiles[0];
+		}
+		else {
+			return null;
+		}
+	}
 
-		sb.append(heads.get(0));
+	private File _getEntryFile(String url, String splitor, File entryLocation) {
+		List<String> urls = new CopyOnWriteArrayList<>(StringUtil.stringToList(url, splitor));
 
-		if (upgradeStepUrl.contains("#")) {
-			sb.append("<script type='text/javascript'>");
-			sb.append("window.onload=function(){location.href='");
-			sb.append(upgradeStepUrl.substring(upgradeStepUrl.lastIndexOf("#")));
-			sb.append("'}");
-			sb.append("</script>");
+		String[] urlsArray = urls.toArray(new String[0]);
+
+		if (ListUtil.isEmpty(urlsArray)) {
+			return null;
 		}
 
-		Elements articleBodies = document.getElementsByClass("article-body");
+		File[] entryFiles = entryLocation.listFiles(
+			new FileFilter() {
 
-		Element articleBody = articleBodies.get(0);
+				@Override
+				public boolean accept(File file) {
+					String fileName = FilenameUtils.removeExtension(file.getName());
+
+					if (urlsArray[0].contains(fileName)) {
+						return true;
+					}
+
+					return false;
+				}
+
+			});
+
+		if (ListUtil.isEmpty(entryFiles)) {
+			return null;
+		}
+
+		if (entryFiles[0].isFile()) {
+			return entryFiles[0];
+		}
+		else {
+			urls.remove(0);
+
+			String retainedUrls = urls.stream(
+			).collect(
+				Collectors.joining(File.separator)
+			);
+
+			return _getEntryFile(retainedUrls, splitor, entryFiles[0]);
+		}
+	}
+
+	private String _getFileContents(File inputFile) {
+		String detail = "about:blank";
 
 		try {
-			Elements h1s = articleBody.getElementsByTag("h1");
+			if (inputFile == null) {
+				return detail;
+			}
 
-			Element h1 = h1s.get(0);
+			if (inputFile.isFile()) {
+				Document document = Jsoup.parse(inputFile, "UTF-8");
 
-			h1.remove();
+				Elements elements = document.select("a[class=go-link btn btn-primary]");
+
+				elements.forEach(
+					element -> {
+						Element pTag = element.parent();
+
+						pTag.remove();
+					});
+
+				return document.toString();
+			}
 		}
-		catch (Exception e) {
+		catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
+
+		return detail;
+	}
+
+	private String _getFileContents(File inputFile, String key, String value) {
+		String detail = "about:blank";
 
 		try {
-			Elements uls = articleBody.getElementsByTag("ul");
+			if (inputFile == null) {
+				return detail;
+			}
 
-			Element ul = uls.get(0);
+			if (inputFile.isFile()) {
+				StringBuffer sb = new StringBuffer();
 
-			ul.remove();
+				StringBuilder stepContents = new StringBuilder();
+
+				Document document = Jsoup.parse(inputFile, "UTF-8");
+
+				Elements elements = document.select("a[class=go-link btn btn-primary]");
+
+				elements.forEach(
+					element -> {
+						Element pTag = element.parent();
+
+						pTag.remove();
+					});
+
+				Elements allElements = document.getAllElements();
+
+				boolean findTag = false;
+
+				for (Element element : allElements) {
+					String nodeName = element.nodeName();
+
+					if (!findTag) {
+						if (element.hasAttr(key) && nodeName.startsWith("h")) {
+							String idValue = element.attr(key);
+
+							if (idValue.equals(value)) {
+								findTag = true;
+							}
+							else {
+								continue;
+							}
+						}
+						else {
+							continue;
+						}
+					}
+
+					if (findTag && !nodeName.equals("a") && !nodeName.equals("li")) {
+						stepContents.append(element.toString());
+					}
+
+					Element nextElementSibling = element.nextElementSibling();
+
+					if (nextElementSibling != null) {
+						String nextElementContent = nextElementSibling.toString();
+
+						if (nextElementContent.startsWith("<h")) {
+							break;
+						}
+					}
+				}
+
+				sb.append("<html><head><body>");
+				sb.append(stepContents);
+				sb.append("</body></head></html>");
+
+				return sb.toString();
+			}
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		try {
-			Elements learnPathSteps = articleBody.getElementsByClass("learn-path-step");
+		return detail;
+	}
 
-			Element learnPathStep = learnPathSteps.get(0);
+	private String _renderArticleMainContent(String upgradeStepUrl, IUpgradePlanOutline upgradePlanOutline)
+		throws ClientProtocolException, IOException {
 
-			learnPathStep.remove();
+		File outlineDir = new File(upgradePlanOutline.getLocation());
+
+		List<String> urlsIn = StringUtil.stringToList(upgradeStepUrl, "#");
+
+		String detail = "about:blank";
+
+		if (urlsIn.size() > 1) {
+			String[] urlsArray = urlsIn.toArray(new String[0]);
+
+			List<String> urlsList = StringUtil.stringToList(urlsArray[0], File.separator);
+
+			String url = urlsList.get(0);
+
+			File[] listFiles = outlineDir.listFiles(
+				new FilenameFilter() {
+
+					@Override
+					public boolean accept(File dir, String name) {
+						if (url.contains(name)) {
+							return true;
+						}
+
+						return false;
+					}
+
+				});
+
+			if (ListUtil.isNotEmpty(listFiles)) {
+				if (listFiles[0].isDirectory()) {
+					detail = _getFileContents(_getEntryFile(listFiles[0]), "id", urlsArray[1]);
+				}
+				else {
+					detail = _getFileContents(listFiles[0], "id", urlsArray[1]);
+				}
+			}
 		}
-		catch (Exception e) {
-		}
+		else {
+			List<String> urlsOut = StringUtil.stringToList(upgradeStepUrl, File.separator);
 
-		try {
-			Elements learnPathSteps = articleBody.getElementsByClass("article-siblings");
+			if (ListUtil.isNotEmpty(urlsOut)) {
+				File entryFile = _getEntryFile(upgradeStepUrl, File.separator, outlineDir);
 
-			Element learnPathStep = learnPathSteps.get(0);
-
-			learnPathStep.remove();
-		}
-		catch (Exception e) {
-		}
-
-		URL url = new URL(upgradeStepUrl);
-
-		String protocol = url.getProtocol();
-
-		String authority = url.getAuthority();
-
-		String prefix = protocol + "://" + authority;
-
-		for (Element element : articleBody.getAllElements()) {
-			if ("a".equals(element.tagName())) {
-				String href = element.attr("href");
-
-				if (href.startsWith("/")) {
-					element.attr("href", prefix + href);
+				if (entryFile != null) {
+					detail = _getFileContents(entryFile);
 				}
 			}
 		}
 
-		sb.append(articleBody.toString());
-
-		sb.append("</html>");
-
-		return sb.toString();
+		return detail;
 	}
 
 	private final PromiseFactory _promiseFactory;
