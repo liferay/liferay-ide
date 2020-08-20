@@ -15,9 +15,9 @@ if [ -z "$BINTRAY_API_KEY" ]; then
   exit 1
 fi
 
+github_repo="https://github.com/gamerson/liferay-docs/archive/"
 pwd=$PWD
 tag=$1
-github_repo="https://github.com/gamerson/liferay-docs/archive/"
 
 curl -s -L ${github_repo}/${tag}.zip --retry 5 --output ${tag}.zip
 
