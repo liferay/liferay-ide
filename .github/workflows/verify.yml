@@ -68,7 +68,7 @@ jobs:
           name: surefire-reports.tar.gz
           path: surefire-reports.tar.gz
       - name: Run reporter
-        uses: check-run-reporter/action@v2.0.0-rc7
+        uses: check-run-reporter/action@v2.0.0-rc8
         if: ${{ always() }}
         with:
           label: "Maven surefire test reports"
