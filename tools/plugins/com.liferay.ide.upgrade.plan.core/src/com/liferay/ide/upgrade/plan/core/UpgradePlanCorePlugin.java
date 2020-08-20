@@ -66,8 +66,6 @@ public class UpgradePlanCorePlugin extends Plugin {
 
 	public static final String OFFLINE_UNZIP_FOLDER = "offline-outline";
 
-	public static List<IUpgradePlanOutline> offlineOutlines = new ArrayList<>();
-
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, ID, msg);
 	}
@@ -76,12 +74,16 @@ public class UpgradePlanCorePlugin extends Plugin {
 		return new Status(IStatus.ERROR, ID, msg, e);
 	}
 
+	public static List<IUpgradePlanOutline> getAllOutlines() {
+		return _offlineOutlines;
+	}
+
 	public static UpgradePlanCorePlugin getInstance() {
 		return _instance;
 	}
 
 	public static IUpgradePlanOutline getOutline(String name) {
-		for (IUpgradePlanOutline offlineOutline : offlineOutlines) {
+		for (IUpgradePlanOutline offlineOutline : _offlineOutlines) {
 			if (StringUtil.equals(name, offlineOutline.getName())) {
 				return offlineOutline;
 			}
@@ -189,11 +191,13 @@ public class UpgradePlanCorePlugin extends Plugin {
 				_prefstore.flush();
 			}
 
-			offlineOutlines.add(new UpgradePlanOutline(outlineFilenameWithoutEx, offlineDocDirPath.toOSString()));
+			_offlineOutlines.add(new UpgradePlanOutline(outlineFilenameWithoutEx, offlineDocDirPath.toOSString()));
 		}
 	}
 
 	private static UpgradePlanCorePlugin _instance;
+
+	private static final List<IUpgradePlanOutline> _offlineOutlines = new ArrayList<>();
 
 	private IEclipsePreferences _prefstore = InstanceScope.INSTANCE.getNode(ID);
 

@@ -136,13 +136,11 @@ public class FileMigrationService implements FileMigration {
 						).map(
 							VersionRange::valueOf
 						).filter(
-							range -> {
-								return versions.stream(
-								).filter(
-									v -> range.includes(new Version(v))
-								).findFirst(
-								).isPresent();
-							}
+							range -> versions.stream(
+							).filter(
+								v -> range.includes(new Version(v))
+							).findFirst(
+							).isPresent()
 						).isPresent();
 					}
 					else {

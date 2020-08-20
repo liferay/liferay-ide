@@ -18,10 +18,9 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.sapphire.PossibleValuesService;
 
@@ -38,13 +37,15 @@ public class OutlinePossibleValuesService extends PossibleValuesService implemen
 
 	@Override
 	protected void initPossibleValuesService() {
-		_possibleValues = new ArrayList<>();
+		List<IUpgradePlanOutline> outlines = UpgradePlanCorePlugin.getAllOutlines();
 
-		for (IUpgradePlanOutline outline : UpgradePlanCorePlugin.offlineOutlines) {
-			_possibleValues.add(outline.getName());
-		}
-
-		Collections.sort(_possibleValues);
+		_possibleValues = outlines.stream(
+		).map(
+			IUpgradePlanOutline::getName
+		).sorted(
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	private List<String> _possibleValues;
