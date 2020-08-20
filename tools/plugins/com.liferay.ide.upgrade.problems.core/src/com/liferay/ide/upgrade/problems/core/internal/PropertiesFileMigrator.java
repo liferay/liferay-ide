@@ -21,10 +21,14 @@ import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -45,7 +49,19 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		problemType = safeGet(serviceProperties, "file.extensions");
 		problemTickets = safeGet(serviceProperties, "problem.tickets");
 		sectionKey = safeGet(serviceProperties, "problem.section");
-		version = safeGet(serviceProperties, "version");
+
+		String versionValue = safeGet(serviceProperties, "version");
+
+		if (versionValue.isEmpty()) {
+			version = versionValue;
+		}
+		else {
+			VersionRange versionRange = new VersionRange(versionValue);
+
+			Version left = versionRange.getLeft();
+
+			version = left.getMajor() + "." + left.getMinor();
+		}
 
 		addPropertiesToSearch(properties);
 	}
@@ -74,6 +90,11 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 				else if (Objects.equals("7.3", version)) {
 					fileName = "liferay73/" + fileName;
 				}
+				else {
+					Optional<String> nullableVersion = Optional.ofNullable(version);
+
+					throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
+				}
 
 				String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
@@ -89,6 +110,11 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		}
 
 		return problems;
+	}
+
+	@Override
+	public int reportProblems(File file, Collection<UpgradeProblem> upgradeProblems) {
+		return 0;
 	}
 
 	protected abstract void addPropertiesToSearch(List<String> properties);

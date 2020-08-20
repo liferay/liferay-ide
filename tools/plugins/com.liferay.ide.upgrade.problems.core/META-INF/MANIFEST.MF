@@ -185,4 +185,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedLiferayFrontendContextualSidebarTag.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.LiferayPollerNoLongerDefault.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.AssetVocabularyDefaultHoldsLanguageKey.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.Liferay72VersionsProperties.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.Liferay72VersionsProperties.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.Liferay73DescriptorVersion.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.Liferay73VersionsProperties.xml

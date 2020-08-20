@@ -43,11 +43,15 @@ public abstract class APITestBase {
 
 		fileMigratorTracker.open();
 
-		fileMigrators = fileMigratorTracker.getServiceReferences();
+		fileMigrators = filterForVersion(fileMigratorTracker.getServiceReferences());
 
 		Assert.assertNotNull(fileMigrators);
 
 		Assert.assertEquals("", 1, fileMigrators.length);
+	}
+
+	protected ServiceReference<FileMigrator>[] filterForVersion(ServiceReference<FileMigrator>[] serviceReferences) {
+		return serviceReferences;
 	}
 
 	public int getExpectedNumber() {
@@ -57,6 +61,7 @@ public abstract class APITestBase {
 	protected Filter getFilter() throws Exception {
 		return context.createFilter("(component.name=" + getComponentName() + ")");
 	}
+
 
 	public abstract String getComponentName();
 

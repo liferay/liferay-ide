@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=xml", "problem.title=Descriptor XML DTD Versions Changes 7.1",
 		"problem.summary=The descriptor XML DTD versions should be matched with version 7.1.",
-		"problem.section=#descriptor-XML-DTD-version", "auto.correct=descriptor", "version=7.1"
+		"problem.section=#descriptor-XML-DTD-version", "auto.correct=descriptor", "version=[7.1,7.1]"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

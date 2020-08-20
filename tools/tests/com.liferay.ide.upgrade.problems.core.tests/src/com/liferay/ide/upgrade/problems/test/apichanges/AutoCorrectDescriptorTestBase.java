@@ -17,13 +17,18 @@ package com.liferay.ide.upgrade.problems.test.apichanges;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -46,10 +51,30 @@ public abstract class AutoCorrectDescriptorTestBase {
 
 		FileMigrator descriptorFileMigrator = null;
 
-		Collection<ServiceReference<FileMigrator>> mrefs =
-			context.getServiceReferences(FileMigrator.class, "(version=" + getVersion() + ")");
+		Collection<ServiceReference<FileMigrator>> mrefs = context.getServiceReferences(FileMigrator.class, null);
 
-		for (ServiceReference<FileMigrator> mref : mrefs) {
+		List<ServiceReference<FileMigrator>> filteredRefs = mrefs.stream(
+		).filter(
+			ref -> {
+				Dictionary<String, Object> serviceProperties = ref.getProperties();
+
+				Version version = new Version(getVersion());
+
+				return Optional.ofNullable(
+					serviceProperties.get("version")
+				).map(
+					Object::toString
+				).map(
+					VersionRange::valueOf
+				).filter(
+					range -> range.includes(version)
+				).isPresent();
+			}
+		).collect(
+			Collectors.toList()
+		);
+
+		for (ServiceReference<FileMigrator> mref : filteredRefs) {
 			FileMigrator fileMigrator = context.getService(mref);
 
 			Class<?> clazz = fileMigrator.getClass();

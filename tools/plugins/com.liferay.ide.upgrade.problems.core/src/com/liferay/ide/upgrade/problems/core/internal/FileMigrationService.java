@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.BiConsumer;
@@ -52,6 +53,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.util.tracker.ServiceTracker;
@@ -123,15 +125,30 @@ public class FileMigrationService implements FileMigration {
 					return extensions.contains(extension);
 				}
 			).filter(
-				serviceReference -> {
+				ref -> {
 					if (ListUtil.isNotEmpty(versions)) {
-						String version = (String)serviceReference.getProperty("version");
+						Dictionary<String, Object> serviceProperties = ref.getProperties();
 
-						return versions.contains(version);
+						return Optional.ofNullable(
+							serviceProperties.get("version")
+						).map(
+							Object::toString
+						).map(
+							VersionRange::valueOf
+						).filter(
+							range -> {
+								return versions.stream(
+								).filter(
+									v -> range.includes(new Version(v))
+								).findFirst(
+								).isPresent();
+							}
+						).isPresent();
 					}
 					else {
 						return true;
 					}
+
 				}
 			).filter(
 				serviceReference -> {

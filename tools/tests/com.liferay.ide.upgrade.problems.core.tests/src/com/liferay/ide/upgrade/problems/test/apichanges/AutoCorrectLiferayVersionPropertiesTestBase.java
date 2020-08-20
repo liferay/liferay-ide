@@ -18,8 +18,11 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Collection;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -29,6 +32,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -57,9 +62,30 @@ public abstract class AutoCorrectLiferayVersionPropertiesTestBase {
 		BundleContext bundleContext = bundle.getBundleContext();
 
 		Collection<ServiceReference<FileMigrator>> serviceReferences =
-			bundleContext.getServiceReferences(FileMigrator.class, "(version=" + getVersion() + ")");
+			bundleContext.getServiceReferences(FileMigrator.class, null);
 
-		for (ServiceReference<FileMigrator> serviceReference : serviceReferences) {
+		List<ServiceReference<FileMigrator>> filteredReferences = serviceReferences.stream(
+		).filter(
+			ref -> {
+				Dictionary<String, Object> serviceProperties = ref.getProperties();
+
+				Version version = new Version(getVersion());
+
+				return Optional.ofNullable(
+					serviceProperties.get("version")
+				).map(
+					Object::toString
+				).map(
+					VersionRange::valueOf
+				).filter(
+					range -> Objects.equals(version, range.getLeft())
+				).isPresent();
+			}
+		).collect(
+			Collectors.toList()
+		);
+
+		for (ServiceReference<FileMigrator> serviceReference : filteredReferences) {
 			FileMigrator fileMigrator = bundleContext.getService(serviceReference);
 
 			Class<?> clazz = fileMigrator.getClass();
