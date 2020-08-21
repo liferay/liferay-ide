@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -216,7 +217,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 				LiferayMavenCore.logError("Unable to configure deployed name for project " + project.getName(), e);
 			}
 
-			if (pluginType.equals(ILiferayMavenConstants.THEME_PLUGIN_TYPE)) {
+			if (Objects.equals(ILiferayMavenConstants.THEME_PLUGIN_TYPE, pluginType)) {
 				IVirtualComponent component = ComponentCore.createComponent(project, true);
 
 				if (component != null) {
@@ -481,27 +482,27 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 		IDataModelProvider dataModel = null;
 
-		if (pluginType.equals(ILiferayMavenConstants.PORTLET_PLUGIN_TYPE)) {
+		if (Objects.equals(ILiferayMavenConstants.PORTLET_PLUGIN_TYPE, pluginType)) {
 			newFacet = IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenPortletPluginFacetInstallProvider();
 		}
-		else if (pluginType.equals(ILiferayMavenConstants.HOOK_PLUGIN_TYPE)) {
+		else if (Objects.equals(ILiferayMavenConstants.HOOK_PLUGIN_TYPE, pluginType)) {
 			newFacet = IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenHookPluginFacetInstallProvider();
 		}
-		else if (pluginType.equals(ILiferayMavenConstants.EXT_PLUGIN_TYPE)) {
+		else if (Objects.equals(ILiferayMavenConstants.EXT_PLUGIN_TYPE, pluginType)) {
 			newFacet = IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenExtPluginFacetInstallProvider();
 		}
-		else if (pluginType.equals(ILiferayMavenConstants.LAYOUTTPL_PLUGIN_TYPE)) {
+		else if (Objects.equals(ILiferayMavenConstants.LAYOUTTPL_PLUGIN_TYPE, pluginType)) {
 			newFacet = IPluginFacetConstants.LIFERAY_LAYOUTTPL_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenLayoutTplPluginFacetInstallProvider();
 		}
-		else if (pluginType.equals(ILiferayMavenConstants.THEME_PLUGIN_TYPE)) {
+		else if (Objects.equals(ILiferayMavenConstants.THEME_PLUGIN_TYPE, pluginType)) {
 			newFacet = IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenThemePluginFacetInstallProvider();
 		}
-		else if (pluginType.equals(ILiferayMavenConstants.WEB_PLUGIN_TYPE)) {
+		else if (Objects.equals(ILiferayMavenConstants.WEB_PLUGIN_TYPE, pluginType)) {
 			newFacet = IPluginFacetConstants.LIFERAY_WEB_PROJECT_FACET.getDefaultVersion();
 			dataModel = new MavenWebPluginFacetInstallProvider();
 		}

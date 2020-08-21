@@ -73,4 +73,4 @@ jobs:
         with:
           label: "Maven surefire test reports"
           report: "**/TEST-*.xml"
-          token: ${{ secrets.CHECK_RUN_REPORTER_TOKEN_LIFERAY_IDE}}
+          token: "000f9d8e-4211-4cb7-9438-cb165d0db32a"
