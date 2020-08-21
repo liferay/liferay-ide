@@ -184,7 +184,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 			if (!updateMD5.equals(storedMD5) || FileUtil.notExists(offlineDocDirPath)) {
 				FileUtil.deleteDir(offlineDocDirPath.toFile(), true);
 
-				ZipUtil.unzip(outlineFile, offlineDocDirPath.toFile());
+				ZipUtil.unzip(outlineFile, offlineOutlinePath.toFile());
 
 				_prefstore.put(contentZipMD5, updateMD5);
 

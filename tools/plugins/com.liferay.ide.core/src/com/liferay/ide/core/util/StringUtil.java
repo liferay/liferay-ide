@@ -16,6 +16,7 @@ package com.liferay.ide.core.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -201,7 +202,7 @@ public class StringUtil {
 
 	public static List<String> stringToList(String input, String delimiter) {
 		return Arrays.stream(
-			input.split(delimiter)
+			input.split(Pattern.quote(delimiter))
 		).map(
 			String::trim
 		).collect(
