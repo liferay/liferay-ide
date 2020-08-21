@@ -50,7 +50,7 @@ public class FontAwesomeNoLongerIncludeDefaultTest {
 
 		for (UpgradeProblem problem : problems) {
 			if (problem.getResource().getName().endsWith("FontAwesomeNoLongerIncludeDefaultTest.jsp")) {
-				if ((problem.getLineNumber() == 19)  && (problem.getStartOffset() == 643) && (problem.getEndOffset() == 655)) {
+				if (problem.getLineNumber() == 19) {
 					
 					if (Util.isWindows()) {
 						Assert.assertEquals("", 661, problem.getStartOffset());
