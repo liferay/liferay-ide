@@ -115,6 +115,43 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 		return FileUtil.getFile(gradeProperties);
 	}
 
+	private void _loadWorkspaceProduct(TreeViewer viewer, String targetPlatformVersion) {
+		try {
+			UIUtil.async(
+				() -> {
+					if (viewer == null) {
+						return;
+					}
+
+					Tree tree = viewer.getTree();
+
+					if (tree.isDisposed()) {
+						return;
+					}
+
+					try {
+						String[] filterProductKeys = Stream.of(
+							BladeCLI.getWorkspaceProducts(true)
+						).filter(
+							key -> key.contains(targetPlatformVersion)
+						).collect(
+							Collectors.toList()
+						).toArray(
+							new String[0]
+						);
+
+						viewer.setInput(filterProductKeys);
+					}
+					catch (Exception e) {
+						UpgradeCommandsUIPlugin.logError("Failed to load workspace product keys", e);
+					}
+				});
+		}
+		catch (Exception e) {
+			UpgradeCommandsUIPlugin.logError(e.getMessage());
+		}
+	}
+
 	private IStatus _updateWorkspaceProductKeyValue(File gradeProperties) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
@@ -133,68 +170,32 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 					Shell shell = workbenchWindow.getShell();
 
-					AsyncStringFilterDialog dialog = new AsyncStringFilterDialog(shell, targetVersion);
+					AsyncStringFilteredDialog dialog = new AsyncStringFilteredDialog(shell, targetVersion);
 
 					dialog.setTitle("Please select a Liferay Product Key:");
 					dialog.setMessage("Liferay Product Key Selection");
 					dialog.setInput(new String[] {"Loading Data......"});
+
 					returnCode.set(dialog.open());
-
-					if (returnCode.get() == Window.OK) {
-						try {
-							PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
-
-							config.setProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, productKey);
-
-							config.save();
-						}
-						catch (Exception e) {
-						}
-					}
+					productKey.set((String)dialog.getFirstResult());
 				});
+
+			if (returnCode.get() == Window.OK) {
+				try {
+					PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
+
+					config.setProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, productKey);
+
+					config.save();
+				}
+				catch (Exception e) {
+				}
+			}
 
 			return Status.OK_STATUS;
 		}
 		catch (Exception e) {
 			return UpgradeCommandsUIPlugin.createErrorStatus("Unable to configure worksapce product key", e);
-		}
-	}
-
-	private void loadInput(TreeViewer viewer, String targetPlatformVersion) {
-		try {
-			UIUtil.async(
-				() -> {
-					if (viewer == null) {
-						return;
-					}
-
-					Tree tree = viewer.getTree();
-
-					if (tree.isDisposed()) {
-						return;
-					}
-
-					try {
-						String[] productKeys = BladeCLI.getWorkspaceProducts(true);
-
-						String[] filterProductKeys = Stream.of(
-							productKeys
-						).filter(
-							key -> key.contains(targetPlatformVersion)
-						).collect(
-							Collectors.toList()
-						).toArray(
-							new String[0]
-						);
-
-						viewer.setInput(filterProductKeys);
-					}
-					catch (Exception e) {
-					}
-				});
-		}
-		catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -208,9 +209,9 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 	private UpgradePlanner _upgradePlanner;
 
 	@SuppressWarnings("restriction")
-	private class AsyncStringFilterDialog extends StringsFilteredDialog {
+	private class AsyncStringFilteredDialog extends StringsFilteredDialog {
 
-		public AsyncStringFilterDialog(Shell shell, String targetPlatforVersion) {
+		public AsyncStringFilteredDialog(Shell shell, String targetPlatforVersion) {
 			super(shell);
 
 			_targetPlatformVersion = targetPlatforVersion;
@@ -220,7 +221,7 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 		protected TreeViewer doCreateTreeViewer(Composite parent, int style) {
 			TreeViewer treeViewer = super.doCreateTreeViewer(parent, style);
 
-			loadInput(treeViewer, _targetPlatformVersion);
+			_loadWorkspaceProduct(treeViewer, _targetPlatformVersion);
 
 			return treeViewer;
 		}
