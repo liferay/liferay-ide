@@ -14,9 +14,7 @@
 
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.dialog.StringsFilteredDialog;
@@ -32,7 +30,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 
 import java.io.File;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -46,11 +43,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -128,7 +125,7 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 			final AtomicReference<String> productKey = new AtomicReference<>();
 
-			UIUtil.async(
+			UIUtil.sync(
 				() -> {
 					IWorkbench workbench = PlatformUI.getWorkbench();
 
@@ -136,81 +133,68 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 					Shell shell = workbenchWindow.getShell();
 
-					StringsFilteredDialog dialog = new StringsFilteredDialog(shell);
+					AsyncStringFilterDialog dialog = new AsyncStringFilterDialog(shell, targetVersion);
 
 					dialog.setTitle("Please select a Liferay Product Key:");
 					dialog.setMessage("Liferay Product Key Selection");
+					dialog.setInput(new String[] {"Loading Data......"});
+					returnCode.set(dialog.open());
 
-					List<String> productKeysList = new ArrayList<>();
+					if (returnCode.get() == Window.OK) {
+						try {
+							PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
 
-					Job loadProductJob = new Job("Load workspace product") {
+							config.setProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, productKey);
 
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							try {
-								String[] productKeys = BladeCLI.getWorkspaceProducts(true);
-
-								productKeysList.addAll(
-									Stream.of(
-										productKeys
-									).filter(
-										key -> key.contains(targetVersion)
-									).collect(
-										Collectors.toList()
-									));
-							}
-							catch (Exception e) {
-							}
-
-							return Status.OK_STATUS;
+							config.save();
 						}
-
-					};
-
-					loadProductJob.addJobChangeListener(
-						new JobChangeAdapter() {
-
-							@Override
-							public void done(IJobChangeEvent event) {
-								UIUtil.async(
-									() -> {
-										dialog.setInput(productKeysList.toArray(new String[productKeysList.size()]));
-
-										returnCode.set(dialog.open());
-
-										productKey.set((String)dialog.getFirstResult());
-
-										if (returnCode.get() == Window.OK) {
-											try {
-												PropertiesConfiguration config = new PropertiesConfiguration(
-													gradeProperties);
-
-												config.setProperty(
-													WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, productKey);
-
-												config.save();
-											}
-											catch (Exception e) {
-											}
-										}
-									});
-							}
-
-						});
-
-					loadProductJob.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
-
-					loadProductJob.setSystem(true);
-
-					loadProductJob.schedule();
-
-					JobUtil.waitForLiferayProjectJob();
+						catch (Exception e) {
+						}
+					}
 				});
 
 			return Status.OK_STATUS;
 		}
 		catch (Exception e) {
 			return UpgradeCommandsUIPlugin.createErrorStatus("Unable to configure worksapce product key", e);
+		}
+	}
+
+	private void loadInput(TreeViewer viewer, String targetPlatformVersion) {
+		try {
+			UIUtil.async(
+				() -> {
+					if (viewer == null) {
+						return;
+					}
+
+					Tree tree = viewer.getTree();
+
+					if (tree.isDisposed()) {
+						return;
+					}
+
+					try {
+						String[] productKeys = BladeCLI.getWorkspaceProducts(true);
+
+						String[] filterProductKeys = Stream.of(
+							productKeys
+						).filter(
+							key -> key.contains(targetPlatformVersion)
+						).collect(
+							Collectors.toList()
+						).toArray(
+							new String[0]
+						);
+
+						viewer.setInput(filterProductKeys);
+					}
+					catch (Exception e) {
+					}
+				});
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -222,5 +206,27 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
+
+	@SuppressWarnings("restriction")
+	private class AsyncStringFilterDialog extends StringsFilteredDialog {
+
+		public AsyncStringFilterDialog(Shell shell, String targetPlatforVersion) {
+			super(shell);
+
+			_targetPlatformVersion = targetPlatforVersion;
+		}
+
+		@Override
+		protected TreeViewer doCreateTreeViewer(Composite parent, int style) {
+			TreeViewer treeViewer = super.doCreateTreeViewer(parent, style);
+
+			loadInput(treeViewer, _targetPlatformVersion);
+
+			return treeViewer;
+		}
+
+		private String _targetPlatformVersion;
+
+	}
 
 }
