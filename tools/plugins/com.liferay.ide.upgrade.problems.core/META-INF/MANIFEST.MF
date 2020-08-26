@@ -144,7 +144,7 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.PortletsPackage.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.AssetPublisherProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.SocialNetworkingLegacyAPI.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedMethodsMigrator.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.DeprecatedMethodsMigrator.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.FileMigrationService.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.ContactNameExceptionsImport.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LayoutTemplateFile.xml,

@@ -12,19 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.liferay70;
+package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
-import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
 import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.core.runtime.Path;
@@ -122,18 +123,39 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 		if (_deprecatedMethods == null) {
 			List<JSONArray> deprecatedMethodsList = new ArrayList<>();
 
-			String fqn = "/com/liferay/ide/upgrade/problems/core/internal/liferay70/";
+			Map<String, String[]> liferayVersionMappingGroup = new LinkedHashMap<>();
 
-			String[] jsonFilePaths = {
-				fqn + "deprecatedMethods62.json", fqn + "deprecatedMethods61.json",
-				fqn + "deprecatedMethodsNoneVersionFile.json"
-			};
+			liferayVersionMappingGroup.put(
+				"liferay70",
+				new String[] {
+					"deprecatedMethods61.json", "deprecatedMethods62.json", "deprecatedMethodsNoneVersionFile.json"
+				});
 
-			Class<? extends DeprecatedMethodsMigrator> class1 = DeprecatedMethodsMigrator.class;
+			liferayVersionMappingGroup.put("liferay71", new String[] {"deprecatedMethod70.json"});
 
-			for (String path : jsonFilePaths) {
+			liferayVersionMappingGroup.put("liferay72", new String[] {"deprecatedMethod71.json"});
+
+			liferayVersionMappingGroup.put(
+				"liferay73", new String[] {"deprecatedMethod72.json", "deprecatedMethodNoneVersionFile.json"});
+
+			String fqn = "/com/liferay/ide/upgrade/problems/core/internal/";
+
+			List<String> jsonFilePathsList = new ArrayList<>();
+
+			liferayVersionMappingGroup.forEach(
+				(version, jsonFileArr) -> {
+					for (String jsonFileName : jsonFileArr) {
+						String path = fqn + version + "/" + jsonFileName;
+
+						jsonFilePathsList.add(path);
+					}
+				});
+
+			Class<? extends DeprecatedMethodsMigrator> classes = DeprecatedMethodsMigrator.class;
+
+			for (String path : jsonFilePathsList) {
 				try {
-					String jsonContent = readFully(class1.getResourceAsStream(path));
+					String jsonContent = readFully(classes.getResourceAsStream(path));
 
 					deprecatedMethodsList.add(new JSONArray(jsonContent));
 				}

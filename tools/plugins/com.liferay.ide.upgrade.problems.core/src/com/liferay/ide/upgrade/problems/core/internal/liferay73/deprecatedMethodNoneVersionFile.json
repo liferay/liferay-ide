@@ -1,0 +1,140 @@
+[
+	{
+		"className": "BundleExtension",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated Replaced by {@link #instruction(String,Object)}",
+		"methodName": "put",
+		"packageName": "com.liferay.gradle.plugins.extensions",
+		"parameters": [
+			"String",
+			"Object"
+		]
+	},
+	{
+		"className": "RootProjectConfigurator",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated As of 1.4.0, replaced by {@link #RootProjectConfigurator(Settings)}",
+		"methodName": "RootProjectConfigurator",
+		"packageName": "com.liferay.gradle.plugins.workspace.configurators",
+		"parameters": []
+	},
+	{
+		"className": "SSLSocketFactory",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated Use {@link #SSLSocketFactory(String,KeyStore,String,KeyStore,SecureRandom,X509HostnameVerifier)}",
+		"methodName": "SSLSocketFactory",
+		"packageName": "org.apache.http.conn.ssl",
+		"parameters": [
+			"String",
+			"KeyStore",
+			"String",
+			"KeyStore",
+			"SecureRandom",
+			"HostNameResolver"
+		]
+	},
+	{
+		"className": "SSLSocketFactory",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated Use {@link #SSLSocketFactory(SSLContext)}",
+		"methodName": "SSLSocketFactory",
+		"packageName": "org.apache.http.conn.ssl",
+		"parameters": [
+			"SSLContext",
+			"HostNameResolver"
+		]
+	},
+	{
+		"className": "SSLSocketFactory",
+		"deprecatedVersion": "",
+		"javadoc": "",
+		"methodName": "createSocket",
+		"packageName": "org.apache.http.conn.ssl",
+		"parameters": []
+	},
+	{
+		"className": "SSLSocketFactory",
+		"deprecatedVersion": "",
+		"javadoc": "",
+		"methodName": "setHostnameVerifier",
+		"packageName": "org.apache.http.conn.ssl",
+		"parameters": [
+			"X509HostnameVerifier"
+		]
+	},
+	{
+		"className": "SSLSocketFactory",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated Use {@link #connectSocket(Socket,InetSocketAddress,InetSocketAddress,HttpParams)}",
+		"methodName": "connectSocket",
+		"packageName": "org.apache.http.conn.ssl",
+		"parameters": [
+			"Socket",
+			"String",
+			"int",
+			"InetAddress",
+			"int",
+			"HttpParams"
+		]
+	},
+	{
+		"className": "SSLSocketFactory",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated Use {@link #createLayeredSocket(Socket,String,int,boolean)}",
+		"methodName": "createSocket",
+		"packageName": "org.apache.http.conn.ssl",
+		"parameters": [
+			"Socket",
+			"String",
+			"int",
+			"boolean"
+		]
+	},
+	{
+		"className": "PropertiesConfiguration",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated Only exists to not break backwards compatibility.Use {@link PropertiesConfiguration#isIncludesAllowed()} instead.",
+		"methodName": "getIncludesAllowed",
+		"packageName": "org.apache.commons.configuration",
+		"parameters": []
+	},
+	{
+		"className": "JUnitResultArchiver",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated since 2009-08-09.",
+		"methodName": "JUnitResultArchiver",
+		"packageName": "hudson.tasks.junit",
+		"parameters": [
+			"String"
+		]
+	},
+	{
+		"className": "JUnitResultArchiver",
+		"deprecatedVersion": "",
+		"javadoc": "",
+		"methodName": "JUnitResultArchiver",
+		"packageName": "hudson.tasks.junit",
+		"parameters": [
+			"String",
+			"DescribableList<TestDataPublisher,Descriptor<TestDataPublisher>>"
+		]
+	},
+	{
+		"className": "CacheManager",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated use {@link #removeAllCaches} instead",
+		"methodName": "removalAll",
+		"packageName": "net.sf.ehcache",
+		"parameters": []
+	},
+	{
+		"className": "ArrayUtil_IW",
+		"deprecatedVersion": "",
+		"javadoc": "@deprecated",
+		"methodName": "toArray",
+		"packageName": "com.liferay.portal.kernel.util",
+		"parameters": [
+			"java.lang.String[]"
+		]
+	}
+]
