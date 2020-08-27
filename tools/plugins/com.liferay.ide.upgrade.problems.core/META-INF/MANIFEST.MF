@@ -144,7 +144,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.PortletsPackage.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.AssetPublisherProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.SocialNetworkingLegacyAPI.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.DeprecatedMethodsMigrator.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.FileMigrationService.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.ContactNameExceptionsImport.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LayoutTemplateFile.xml,
@@ -189,4 +188,8 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.Liferay72VersionsProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.Liferay73DescriptorVersion.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.Liferay73VersionsProperties.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedClassNameIdRelatedMethods.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedClassNameIdRelatedMethods.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70DeprecatedMethodsMigrator.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.Liferay71DeprecatedMethodsMigrator.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.Liferay72DeprecatedMethodsMigrator.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.Liferay73DeprecatedMethodsMigrator.xml

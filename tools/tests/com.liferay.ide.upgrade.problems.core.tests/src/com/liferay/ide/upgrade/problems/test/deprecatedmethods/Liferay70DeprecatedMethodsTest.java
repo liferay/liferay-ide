@@ -28,7 +28,7 @@ import com.liferay.ide.upgrade.problems.test.apichanges.APITestBase;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class DeprecatedMethodsTest extends APITestBase {
+public class Liferay70DeprecatedMethodsTest extends APITestBase {
 
 	@Test
 	public void deprecatedMethods61TestFile() throws Exception {
@@ -61,7 +61,7 @@ public class DeprecatedMethodsTest extends APITestBase {
 
 	@Override
 	public String getComponentName() {
-		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedMethodsMigrator";
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70DeprecatedMethodsMigrator";
 	}
 
 	@Override

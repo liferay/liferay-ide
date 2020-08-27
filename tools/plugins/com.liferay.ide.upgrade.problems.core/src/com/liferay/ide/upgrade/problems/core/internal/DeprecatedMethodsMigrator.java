@@ -15,17 +15,13 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.core.runtime.Path;
@@ -34,18 +30,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@Component(property = "file.extensions=java,jsp,jspf", service = FileMigrator.class)
 public class DeprecatedMethodsMigrator extends JavaFileMigrator {
-
-	public DeprecatedMethodsMigrator() {
-		_deprecatedMethods = _getDeprecatedMethods();
-	}
 
 	@Override
 	public List<UpgradeProblem> analyze(File file) {
@@ -119,59 +108,8 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 		return searchResults;
 	}
 
-	private JSONArray[] _getDeprecatedMethods() {
-		if (_deprecatedMethods == null) {
-			List<JSONArray> deprecatedMethodsList = new ArrayList<>();
+	protected JSONArray[] _deprecatedMethods;
 
-			Map<String, String[]> liferayVersionMappingGroup = new LinkedHashMap<>();
-
-			liferayVersionMappingGroup.put(
-				"liferay70",
-				new String[] {
-					"deprecatedMethods61.json", "deprecatedMethods62.json", "deprecatedMethodsNoneVersionFile.json"
-				});
-
-			liferayVersionMappingGroup.put("liferay71", new String[] {"deprecatedMethod70.json"});
-
-			liferayVersionMappingGroup.put("liferay72", new String[] {"deprecatedMethod71.json"});
-
-			liferayVersionMappingGroup.put(
-				"liferay73", new String[] {"deprecatedMethod72.json", "deprecatedMethodNoneVersionFile.json"});
-
-			String fqn = "/com/liferay/ide/upgrade/problems/core/internal/";
-
-			List<String> jsonFilePathsList = new ArrayList<>();
-
-			liferayVersionMappingGroup.forEach(
-				(version, jsonFileArr) -> {
-					for (String jsonFileName : jsonFileArr) {
-						String path = fqn + version + "/" + jsonFileName;
-
-						jsonFilePathsList.add(path);
-					}
-				});
-
-			Class<? extends DeprecatedMethodsMigrator> classes = DeprecatedMethodsMigrator.class;
-
-			for (String path : jsonFilePathsList) {
-				try {
-					String jsonContent = readFully(classes.getResourceAsStream(path));
-
-					deprecatedMethodsList.add(new JSONArray(jsonContent));
-				}
-				catch (IOException ioe) {
-				}
-				catch (JSONException jsone) {
-				}
-			}
-
-			_deprecatedMethods = deprecatedMethodsList.toArray(new JSONArray[0]);
-		}
-
-		return _deprecatedMethods;
-	}
-
-	private JSONArray[] _deprecatedMethods;
 	private JSONObject _tempMethod = null;
 
 }
