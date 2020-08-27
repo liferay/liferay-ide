@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
@@ -39,10 +40,12 @@ import javax.xml.bind.DatatypeConverter;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -53,6 +56,7 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Ethan Sun
  */
 public class UpgradePlanCorePlugin extends Plugin {
 
@@ -137,7 +141,7 @@ public class UpgradePlanCorePlugin extends Plugin {
 		return null;
 	}
 
-	private void _initOfflineOutlines() throws Exception {
+	private void _initOfflineOutlines() {
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
 		IPath pluginStateLocation = _instance.getStateLocation();
@@ -152,46 +156,71 @@ public class UpgradePlanCorePlugin extends Plugin {
 			return;
 		}
 
-		while (entryUrls.hasMoreElements()) {
-			URL fileURL = FileLocator.toFileURL(entryUrls.nextElement());
+		try {
+			while (entryUrls.hasMoreElements()) {
+				URL fileURL = FileLocator.toFileURL(entryUrls.nextElement());
 
-			File outlineFile = new File(fileURL.getFile());
+				File outlineFile = new File(fileURL.getFile());
 
-			String contentZipMD5 = "";
+				String outlineFilename = outlineFile.getName();
 
-			switch (outlineFile.getName()) {
-				case "code-upgrade.zip":
-					contentZipMD5 = CODE_UPGRADE_ZIP_MD5;
+				Job outlineJob = new Job("Unzip upgrade doc: " + outlineFilename) {
 
-					break;
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							String contentZipMD5 = "";
 
-				case "database-upgrade.zip":
-					contentZipMD5 = DATABASE_UPGRADE_ZIP_MD5;
+							switch (outlineFile.getName()) {
+								case "code-upgrade.zip":
+									contentZipMD5 = CODE_UPGRADE_ZIP_MD5;
 
-					break;
+									break;
+
+								case "database-upgrade.zip":
+									contentZipMD5 = DATABASE_UPGRADE_ZIP_MD5;
+
+									break;
+							}
+
+							String outlineFilenameWithoutEx = outlineFilename.split("\\.")[0];
+
+							String storedMD5 = preferencesService.getString(
+								UpgradePlanCorePlugin.ID, contentZipMD5, "", null);
+
+							String updateMD5 = _computeMD5(outlineFile);
+
+							IPath offlineDocDirPath = offlineOutlinePath.append(outlineFilenameWithoutEx);
+
+							if (!updateMD5.equals(storedMD5) || FileUtil.notExists(offlineDocDirPath)) {
+								FileUtil.deleteDir(offlineDocDirPath.toFile(), true);
+
+								ZipUtil.unzip(outlineFile, offlineDocDirPath.toFile());
+
+								_prefstore.put(contentZipMD5, updateMD5);
+
+								_prefstore.flush();
+							}
+
+							_offlineOutlines.add(
+								new UpgradePlanOutline(outlineFilenameWithoutEx, offlineDocDirPath.toOSString()));
+						}
+						catch (Exception e) {
+						}
+
+						return Status.OK_STATUS;
+					}
+
+				};
+
+				outlineJob.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
+
+				outlineJob.setSystem(true);
+
+				outlineJob.schedule();
 			}
-
-			String outlineFilename = outlineFile.getName();
-
-			String outlineFilenameWithoutEx = outlineFilename.split("\\.")[0];
-
-			String storedMD5 = preferencesService.getString(UpgradePlanCorePlugin.ID, contentZipMD5, "", null);
-
-			String updateMD5 = _computeMD5(outlineFile);
-
-			IPath offlineDocDirPath = offlineOutlinePath.append(outlineFilenameWithoutEx);
-
-			if (!updateMD5.equals(storedMD5) || FileUtil.notExists(offlineDocDirPath)) {
-				FileUtil.deleteDir(offlineDocDirPath.toFile(), true);
-
-				ZipUtil.unzip(outlineFile, offlineDocDirPath.toFile());
-
-				_prefstore.put(contentZipMD5, updateMD5);
-
-				_prefstore.flush();
-			}
-
-			_offlineOutlines.add(new UpgradePlanOutline(outlineFilenameWithoutEx, offlineDocDirPath.toOSString()));
+		}
+		catch (Exception e) {
 		}
 	}
 

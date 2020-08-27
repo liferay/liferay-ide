@@ -66,7 +66,7 @@
 						<configuration>
 							<url>${upgrade-plan-content-zip-url}</url>
 							<outputDirectory>resources</outputDirectory>
-							<outputFileName>${code-upgrade.zip}</outputFileName>
+							<outputFileName>${code.upgrade.zip}</outputFileName>
 							<md5>${upgrade-plan-content-zip-md5}</md5>
 						</configuration>
 					</execution>
