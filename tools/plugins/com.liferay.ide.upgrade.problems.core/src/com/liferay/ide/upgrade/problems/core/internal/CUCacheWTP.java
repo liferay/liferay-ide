@@ -26,7 +26,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -153,17 +156,20 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 
 		IProjectDescription description = proj.getDescription();
 
-		String[] prevNatures = description.getNatureIds();
+		List<String> existingNatureIds = Arrays.asList(description.getNatureIds());
 
-		String[] newNatures = new String[prevNatures.length + natureIds.length];
+		List<String> addNatureIds = Arrays.asList(natureIds);
 
-		System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
+		List<String> newNatureIds = new ArrayList<>(existingNatureIds);
 
-		for (int i = prevNatures.length; i < newNatures.length; i++) {
-			newNatures[i] = natureIds[i - prevNatures.length];
-		}
+		addNatureIds.stream(
+		).filter(
+			id -> !existingNatureIds.contains(id)
+		).forEach(
+			newNatureIds::add
+		);
 
-		description.setNatureIds(newNatures);
+		description.setNatureIds(newNatureIds.toArray(new String[0]));
 
 		proj.setDescription(description, monitor);
 	}
@@ -221,26 +227,31 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 	}
 
 	private IJavaProject _getJavaProject(String projectName) throws CoreException {
-		IProject javaProject = _getProject(projectName);
+		IProject project = _getProject(projectName);
 
 		IProgressMonitor monitor = new NullProgressMonitor();
 
-		if (!javaProject.exists()) {
+		if (project.exists()) {
+			project.open(monitor);
+
+			_addNaturesToProject(project, _JAVA_NATURE_IDS, monitor);
+		}
+		else {
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
 			IProjectDescription description = workspace.newProjectDescription(projectName);
 
-			javaProject.create(monitor);
-			javaProject.open(monitor);
-			javaProject.setDescription(description, monitor);
+			description.setNatureIds(_JAVA_NATURE_IDS);
+
+			project.create(monitor);
+			project.open(monitor);
+			project.setDescription(description, monitor);
 		}
 
-		javaProject.open(monitor);
-
-		_addNaturesToProject(javaProject, new String[] {JavaCore.NATURE_ID}, monitor);
-
-		return JavaCore.create(javaProject);
+		return JavaCore.create(project);
 	}
+
+	private static final String[] _JAVA_NATURE_IDS = {JavaCore.NATURE_ID};
 
 	private static final Map<File, Long> _fileModifiedTimeMap = new HashMap<>();
 	private static final Map<File, WeakReference<JSPTranslationPrime>> _jspTranslationMap = new HashMap<>();
