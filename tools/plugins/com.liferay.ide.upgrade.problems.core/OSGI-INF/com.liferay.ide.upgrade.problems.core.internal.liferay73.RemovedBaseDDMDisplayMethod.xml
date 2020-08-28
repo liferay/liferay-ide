@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedBaseDDMDisplayMethod">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="Removed com.liferay.dynamic.data.mapping.util.BaseDDMDisplay Method"/>
+   <property name="problem.section" value="#removed-BaseDDMDisplay-method"/>
+   <property name="problem.summary" value="Removed com.liferay.dynamic.data.mapping.util.BaseDDMDisplay Method"/>
+   <property name="problem.tickets" value="LPS-103549"/>
+   <property name="version" value="7.3"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedBaseDDMDisplayMethod"/>
+</scr:component>

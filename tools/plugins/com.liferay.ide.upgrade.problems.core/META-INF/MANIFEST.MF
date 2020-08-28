@@ -182,6 +182,7 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70VersionsProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.JqueryNoLongerDefaultInclude.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemoveBlockingCacheProperties.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedBaseDDMDisplayMethod.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.RemovedLiferayFrontendContextualSidebarTag.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.LiferayPollerNoLongerDefault.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.AssetVocabularyDefaultHoldsLanguageKey.xml,
