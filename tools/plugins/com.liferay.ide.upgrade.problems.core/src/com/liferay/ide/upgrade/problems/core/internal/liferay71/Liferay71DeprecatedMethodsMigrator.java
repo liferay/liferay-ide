@@ -34,7 +34,8 @@ import org.osgi.service.component.annotations.Component;
 public class Liferay71DeprecatedMethodsMigrator extends DeprecatedMethodsMigrator {
 
 	public Liferay71DeprecatedMethodsMigrator() {
-		_deprecatedMethods = _getDeprecatedMethods();
+		version = "7.1";
+		deprecatedMethods = _getDeprecatedMethods();
 	}
 
 	private JSONArray[] _getDeprecatedMethods() {

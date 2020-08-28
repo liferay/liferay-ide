@@ -43,7 +43,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 			file.getAbsolutePath()
 		).getFileExtension();
 
-		for (JSONArray deprecatedMethodsArray : _deprecatedMethods) {
+		for (JSONArray deprecatedMethodsArray : deprecatedMethods) {
 			for (int j = 0; j < deprecatedMethodsArray.length(); j++) {
 				try {
 					_tempMethod = deprecatedMethodsArray.getJSONObject(j);
@@ -55,14 +55,14 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 						for (FileSearchResult searchResult : searchResults) {
 							int makerType = UpgradeProblem.MARKER_ERROR;
 
-							if (Objects.equals("7.0", _tempMethod.getString("deprecatedVersion"))) {
+							if (Objects.equals(version, _tempMethod.getString("deprecatedVersion"))) {
 								makerType = UpgradeProblem.MARKER_WARNING;
 							}
 
 							problems.add(
 								new UpgradeProblem(
 									_tempMethod.getString("javadoc"), _tempMethod.getString("javadoc"), fileExtension,
-									"", "7.0", file, searchResult.startLine, searchResult.startOffset,
+									"", version, file, searchResult.startLine, searchResult.startOffset,
 									searchResult.endOffset, _tempMethod.getString("javadoc"),
 									searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 									UpgradeProblem.DEFAULT_MARKER_ID, makerType));
@@ -108,7 +108,8 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 		return searchResults;
 	}
 
-	protected JSONArray[] _deprecatedMethods;
+	protected JSONArray[] deprecatedMethods;
+	protected String version;
 
 	private JSONObject _tempMethod = null;
 

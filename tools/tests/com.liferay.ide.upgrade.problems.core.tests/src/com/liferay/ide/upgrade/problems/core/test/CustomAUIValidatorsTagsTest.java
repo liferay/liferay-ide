@@ -45,7 +45,7 @@ public class CustomAUIValidatorsTagsTest {
 
 		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/custom-aui-validators/"), versions, new NullProgressMonitor());
 
-		Assert.assertEquals("", 8, problems.size());
+		Assert.assertEquals("", 10, problems.size());
 
 		boolean found = false;
 

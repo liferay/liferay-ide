@@ -25,53 +25,38 @@ import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.test.apichanges.APITestBase;
 
 /**
- * @author Gregory Amerson
- * @author Terry Jia
+ * @author Ethan Sun
  */
-public class Liferay70DeprecatedMethodsTest extends APITestBase {
+public class Liferay72DeprecatedMethodsTest extends APITestBase {
 
 	@Test
-	public void deprecatedMethods61TestFile() throws Exception {
+	public void deprecatedMethods72TestFile() throws Exception {
 		FileMigrator fmigrator = context.getService(fileMigrators[0]);
 
-		List<UpgradeProblem> problems = fmigrator.analyze(deprecatedMethods61TestFile);
+		List<UpgradeProblem> problems = fmigrator.analyze(deprecatedMethods72TestFile);
 
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals("", 4, problems.size());
-	}
-
-	@Test
-	public void deprecatedMethodsNoneVersionTestFile() throws Exception {
-		FileMigrator fmigrator = context.getService(fileMigrators[0]);
-
-		List<UpgradeProblem> problems = fmigrator.analyze(deprecatedMethodsNoneVersionTestFile);
-
-		context.ungetService(fileMigrators[0]);
-
-		Assert.assertNotNull(problems);
-		Assert.assertEquals("", 2, problems.size());
+		Assert.assertEquals("", 6, problems.size());
 	}
 
 	@Override
 	public int getExpectedNumber() {
-		return 55;
+		return 20;
 	}
 
 	@Override
 	public String getComponentName() {
-		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70DeprecatedMethodsMigrator";
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay72.Liferay72DeprecatedMethodsMigrator";
 	}
 
 	@Override
 	public File getTestFile() {
-		return new File("projects/deprecated-methods-test/liferay70-deprecated-methods-test/PortalMockFactory.java");
+		return new File("projects/deprecated-methods-test/liferay72-deprecated-methods-test/Liferay72DeprecatedMethodsTestCase.java");
 	}
 
-	public File deprecatedMethods61TestFile = new File(
-		"projects/deprecated-methods-test/liferay70-deprecated-methods-test/AssetVocabularyServiceSoap.java");
-	public File deprecatedMethodsNoneVersionTestFile = new File(
-		"projects/deprecated-methods-test/liferay70-deprecated-methods-test/WebServerServlet.java");
+	public File deprecatedMethods72TestFile = new File(
+		"projects/deprecated-methods-test/liferay72-deprecated-methods-test/DLAppServiceUtil.java");
 
 }

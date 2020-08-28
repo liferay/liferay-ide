@@ -25,21 +25,20 @@ import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.test.apichanges.APITestBase;
 
 /**
- * @author Gregory Amerson
- * @author Terry Jia
+ * @author Ethan Sun
  */
-public class Liferay70DeprecatedMethodsTest extends APITestBase {
+public class Liferay73DeprecatedMethodsTest extends APITestBase {
 
 	@Test
-	public void deprecatedMethods61TestFile() throws Exception {
+	public void deprecatedMethods73TestFile() throws Exception {
 		FileMigrator fmigrator = context.getService(fileMigrators[0]);
 
-		List<UpgradeProblem> problems = fmigrator.analyze(deprecatedMethods61TestFile);
+		List<UpgradeProblem> problems = fmigrator.analyze(deprecatedMethods73TestFile);
 
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals("", 4, problems.size());
+		Assert.assertEquals("", 14, problems.size());
 	}
 
 	@Test
@@ -51,27 +50,27 @@ public class Liferay70DeprecatedMethodsTest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals("", 2, problems.size());
+		Assert.assertEquals("", 4, problems.size());
 	}
 
 	@Override
 	public int getExpectedNumber() {
-		return 55;
+		return 17;
 	}
 
 	@Override
 	public String getComponentName() {
-		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70DeprecatedMethodsMigrator";
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay73.Liferay73DeprecatedMethodsMigrator";
 	}
 
 	@Override
 	public File getTestFile() {
-		return new File("projects/deprecated-methods-test/liferay70-deprecated-methods-test/PortalMockFactory.java");
+		return new File("projects/deprecated-methods-test/liferay73-deprecated-methods-test/Liferay73DeprecatedMethodsTestCase.java");
 	}
 
-	public File deprecatedMethods61TestFile = new File(
-		"projects/deprecated-methods-test/liferay70-deprecated-methods-test/AssetVocabularyServiceSoap.java");
+	public File deprecatedMethods73TestFile = new File(
+		"projects/deprecated-methods-test/liferay73-deprecated-methods-test/DLUtil.java");
 	public File deprecatedMethodsNoneVersionTestFile = new File(
-		"projects/deprecated-methods-test/liferay70-deprecated-methods-test/WebServerServlet.java");
+		"projects/deprecated-methods-test/liferay73-deprecated-methods-test/SSLSocketFactory.java");
 
 }

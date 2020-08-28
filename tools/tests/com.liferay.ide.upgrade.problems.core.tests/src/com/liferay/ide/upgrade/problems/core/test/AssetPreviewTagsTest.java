@@ -40,11 +40,11 @@ public class AssetPreviewTagsTest {
 
 		FileMigration m = _context.getService(sr);
 
-		List<String> versions = Arrays.asList("7.0", "7.1", "7.2");
+		List<String> versions = Arrays.asList("7.0", "7.1", "7.2", "7.3");
 
 		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/asset-preview/"), versions, new NullProgressMonitor());
 
-		Assert.assertEquals("", 1, problems.size());
+		Assert.assertEquals("", 2, problems.size());
 
 		boolean found = false;
 
