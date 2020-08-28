@@ -38,7 +38,6 @@ import java.util.stream.Stream;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -73,9 +72,7 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 			return Status.CANCEL_STATUS;
 		}
 
-		IStatus status = _updateWorkspaceProductKeyValue(gradleProperties);
-
-		return status;
+		return _updateWorkspaceProductKeyValue(gradleProperties);
 	}
 
 	@Override
@@ -94,10 +91,7 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 		_updateWorkspaceProductKeyValue(tempFile);
 
-		UIUtil.async(
-			() -> {
-				_upgradeCompare.openCompareEditor(gradeProperties, tempFile);
-			});
+		UIUtil.async(() -> _upgradeCompare.openCompareEditor(gradeProperties, tempFile));
 	}
 
 	private File _getGradlePropertiesFile() {
@@ -110,9 +104,7 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 		IProject project = projects.get(0);
 
-		IFile gradeProperties = project.getFile("gradle.properties");
-
-		return FileUtil.getFile(gradeProperties);
+		return FileUtil.getFile(project.getFile("gradle.properties"));
 	}
 
 	private void _loadWorkspaceProduct(TreeViewer viewer, String targetPlatformVersion) {
@@ -172,9 +164,9 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 					AsyncStringFilteredDialog dialog = new AsyncStringFilteredDialog(shell, targetVersion);
 
-					dialog.setTitle("Please select a Liferay Product Key:");
-					dialog.setMessage("Liferay Product Key Selection");
 					dialog.setInput(new String[] {"Loading Data......"});
+					dialog.setMessage("Liferay Product Key Selection");
+					dialog.setTitle("Please select a Liferay Product Key:");
 
 					returnCode.set(dialog.open());
 					productKey.set((String)dialog.getFirstResult());
@@ -189,13 +181,14 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 					config.save();
 				}
 				catch (Exception e) {
+					return UpgradeCommandsUIPlugin.createErrorStatus("Unable to save workspace product key", e);
 				}
 			}
 
 			return Status.OK_STATUS;
 		}
 		catch (Exception e) {
-			return UpgradeCommandsUIPlugin.createErrorStatus("Unable to configure worksapce product key", e);
+			return UpgradeCommandsUIPlugin.createErrorStatus("Unable to configure workspace product key", e);
 		}
 	}
 
