@@ -31,6 +31,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 import java.io.File;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -42,14 +43,21 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -92,6 +100,28 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 		_updateWorkspaceProductKeyValue(tempFile);
 
 		UIUtil.async(() -> _upgradeCompare.openCompareEditor(gradeProperties, tempFile));
+	}
+
+	public class AsyncStringsSelectionValidator implements ISelectionStatusValidator {
+
+		public AsyncStringsSelectionValidator(boolean multiSelect) {
+		}
+
+		public IStatus validate(Object[] selection) {
+			if ((selection != null) && (selection.length > 0)) {
+				String selectionItem = (String)selection[0];
+
+				if (Objects.equals("Loading Data......", selectionItem)) {
+					return new Status(IStatus.ERROR, "unknown", 1, "", null);
+				}
+			}
+			else {
+				return new Status(IStatus.ERROR, "unknown", 1, "", null);
+			}
+
+			return Status.OK_STATUS;
+		}
+
 	}
 
 	private File _getGradlePropertiesFile() {
@@ -205,9 +235,38 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 	private class AsyncStringFilteredDialog extends StringsFilteredDialog {
 
 		public AsyncStringFilteredDialog(Shell shell, String targetPlatforVersion) {
-			super(shell);
+			super(shell, null);
+
+			setValidator(new AsyncStringsSelectionValidator(false));
 
 			_targetPlatformVersion = targetPlatforVersion;
+		}
+
+		@Override
+		protected Control createButtonBar(Composite parent) {
+			Font font = parent.getFont();
+			Composite composite = new Composite(parent, SWT.NULL);
+
+			GridLayout layout = new GridLayout();
+
+			layout.numColumns = 2;
+			layout.marginHeight = 0;
+			layout.marginLeft = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
+			layout.marginWidth = 0;
+
+			composite.setLayout(layout);
+
+			composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+			composite.setFont(font);
+
+			boolean helpAvailable = isHelpAvailable();
+			setHelpAvailable(false);
+			super.createButtonBar(composite);
+
+			setHelpAvailable(helpAvailable);
+
+			return composite;
 		}
 
 		@Override
