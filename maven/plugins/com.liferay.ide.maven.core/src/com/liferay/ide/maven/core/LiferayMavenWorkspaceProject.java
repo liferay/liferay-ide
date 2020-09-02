@@ -71,7 +71,13 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 	public String getTargetPlatformVersion() {
 		_readMavenWorkspaceProperties();
 
-		return getProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, null);
+		String targetPlatformVersion = getProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, null);
+
+		if (Objects.nonNull(targetPlatformVersion) && targetPlatformVersion.contains("-")) {
+			targetPlatformVersion = targetPlatformVersion.substring(0, targetPlatformVersion.indexOf("-"));
+		}
+
+		return targetPlatformVersion;
 	}
 
 	@Override
