@@ -170,7 +170,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		validationAction.assertCheckedTrue(wizardAction.newLiferayWorkspace.enableTargetPlatform());
 
-		validationAction.assertTextEquals("7.2.1", wizardAction.newLiferayWorkspace.getTargetPlatform());
+		validationAction.assertTextEquals("7.2.1-1", wizardAction.newLiferayWorkspace.getTargetPlatform());
 
 		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayWorkspace.projectName());
 
@@ -287,7 +287,8 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
 		String[] expectedTargetPlatform = {
-			"7.0.6", "7.1.0", "7.1.1", "7.1.2", "7.1.3", "7.2.0", "7.2.1", "7.3.0", "7.3.1", "7.3.2"
+			"7.0.6-2", "7.1.0", "7.1.1", "7.1.2", "7.1.3-1", "7.2.0", "7.2.1-1", "7.3.0-1", "7.3.1-1", "7.3.2-1",
+			"7.3.3-1", "7.3.4"
 		};
 
 		ComboBox targetPlatformComboBox = wizardAction.newLiferayWorkspace.getTargetPlatform();
