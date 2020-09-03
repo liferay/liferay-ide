@@ -43,15 +43,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbench;
@@ -197,6 +191,8 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 					dialog.setInput(new String[] {"Loading Data......"});
 					dialog.setMessage("Liferay Product Key Selection");
 					dialog.setTitle("Please select a Liferay Product Key:");
+					dialog.setStatusLineAboveButtons(false);
+					dialog.setHelpAvailable(false);
 
 					returnCode.set(dialog.open());
 					productKey.set((String)dialog.getFirstResult());
@@ -243,39 +239,17 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 		}
 
 		@Override
-		protected Control createButtonBar(Composite parent) {
-			Font font = parent.getFont();
-			Composite composite = new Composite(parent, SWT.NULL);
-
-			GridLayout layout = new GridLayout();
-
-			layout.numColumns = 2;
-			layout.marginHeight = 0;
-			layout.marginLeft = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
-			layout.marginWidth = 0;
-
-			composite.setLayout(layout);
-
-			composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-			composite.setFont(font);
-
-			boolean helpAvailable = isHelpAvailable();
-			setHelpAvailable(false);
-			super.createButtonBar(composite);
-
-			setHelpAvailable(helpAvailable);
-
-			return composite;
-		}
-
-		@Override
 		protected TreeViewer doCreateTreeViewer(Composite parent, int style) {
 			TreeViewer treeViewer = super.doCreateTreeViewer(parent, style);
 
 			_loadWorkspaceProduct(treeViewer, _targetPlatformVersion);
 
 			return treeViewer;
+		}
+
+		@Override
+		protected void updateStatus(IStatus status) {
+			updateButtonsEnableState(status);
 		}
 
 		private String _targetPlatformVersion;
