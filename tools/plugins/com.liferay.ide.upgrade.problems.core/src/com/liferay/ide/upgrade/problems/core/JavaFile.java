@@ -14,16 +14,12 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
-import java.io.IOException;
-
 import java.util.List;
 
 /**
  * @author Gregory Amerson
  */
 public interface JavaFile extends SourceFile {
-
-	public void appendComment(int lineNumber, String comment) throws IOException;
 
 	public List<FileSearchResult> findCatchExceptions(String[] exceptions);
 

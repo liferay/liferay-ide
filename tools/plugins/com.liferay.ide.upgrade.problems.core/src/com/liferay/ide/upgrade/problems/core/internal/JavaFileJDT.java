@@ -99,7 +99,7 @@ public class JavaFileJDT implements JavaFile {
 
 			Files.write(_file.toPath(), newContent.getBytes());
 
-			_clearCache(_file);
+			clearCache(_file);
 		}
 		catch (Exception e) {
 			throw new IOException("Problem encountered when appending comment on line " + lineNumber, e);
@@ -707,6 +707,21 @@ public class JavaFileJDT implements JavaFile {
 		}
 	}
 
+	protected void clearCache(File file) {
+		try {
+			Collection<ServiceReference<CUCache>> src = _bundleContext.getServiceReferences(CUCache.class, null);
+
+			for (ServiceReference<CUCache> sr : src) {
+				CUCache cache = _bundleContext.getService(sr);
+
+				cache.unget(file);
+			}
+		}
+		catch (InvalidSyntaxException ise) {
+			ise.printStackTrace();
+		}
+	}
+
 	protected FileSearchResult createSearchResult(
 		String searchContext, int startOffset, int endOffset, int startLine, int endLine, boolean fullMatch) {
 
@@ -728,21 +743,6 @@ public class JavaFileJDT implements JavaFile {
 		}
 
 		return null;
-	}
-
-	private void _clearCache(File file) {
-		try {
-			Collection<ServiceReference<CUCache>> src = _bundleContext.getServiceReferences(CUCache.class, null);
-
-			for (ServiceReference<CUCache> sr : src) {
-				CUCache cache = _bundleContext.getService(sr);
-
-				cache.unget(file);
-			}
-		}
-		catch (InvalidSyntaxException ise) {
-			ise.printStackTrace();
-		}
 	}
 
 	private boolean _typeMatch(String expectType, String paramType) {
