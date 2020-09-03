@@ -45,7 +45,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -55,19 +54,16 @@ import org.osgi.framework.ServiceReference;
  * @author Simon Jiang
  */
 @SuppressWarnings("rawtypes")
-public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile> implements AutoFileMigrator {
+public abstract class JavaImportsMigrator extends JavaFileMigrator implements AutoFileMigrator {
 
 	public static String getPrefix() {
 		return _PREFIX;
 	}
 
 	public JavaImportsMigrator() {
-		super(JavaFile.class);
 	}
 
 	public JavaImportsMigrator(Map<String, String> importFixes) {
-		super(JavaFile.class);
-
 		_importFixes = importFixes;
 	}
 
@@ -184,33 +180,6 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 		}
 
 		return 0;
-	}
-
-	@Override
-	public int reportProblems(File file, Collection<UpgradeProblem> upgradeProblems) {
-		Path path = new Path(file.getAbsolutePath());
-
-		JavaFile javaFile = createFileService(type, file, path.getFileExtension());
-
-		javaFile.setFile(file);
-
-		return upgradeProblems.stream(
-		).map(
-			problem -> {
-				try {
-					javaFile.appendComment(problem.getLineNumber(), problem.getTicket());
-
-					return 1;
-				}
-				catch (IOException ioe) {
-					ioe.printStackTrace(System.err);
-				}
-
-				return 0;
-			}
-		).reduce(
-			0, Integer::sum
-		);
 	}
 
 	@Override

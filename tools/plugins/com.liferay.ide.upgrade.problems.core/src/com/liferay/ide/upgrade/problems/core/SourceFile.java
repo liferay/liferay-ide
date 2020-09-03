@@ -15,12 +15,15 @@
 package com.liferay.ide.upgrade.problems.core;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
 public interface SourceFile {
+
+	public void appendComment(int lineNumber, String comment) throws IOException;
 
 	public void setFile(File file);
 

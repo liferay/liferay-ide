@@ -20,6 +20,7 @@ import com.liferay.ide.upgrade.problems.core.JSPFile;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.nio.file.Files;
@@ -31,6 +32,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -61,6 +64,30 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 
 	public JSPFileWTP(File file) {
 		super(file);
+	}
+
+	@Override
+	public void appendComment(int lineNumber, String comment) throws IOException {
+		try {
+			File file = getFile();
+
+			List<String> lines = Files.readAllLines(file.toPath());
+
+			String newContent = IntStream.range(
+				0, lines.size()
+			).mapToObj(
+				i -> ((i + 1) == lineNumber) ? lines.get(i) + " <%-- " + comment + " --%>" : lines.get(i)
+			).collect(
+				Collectors.joining(System.lineSeparator())
+			);
+
+			Files.write(file.toPath(), newContent.getBytes());
+
+			clearCache(file);
+		}
+		catch (Exception e) {
+			throw new IOException("Problem encountered when appending comment on line " + lineNumber, e);
+		}
 	}
 
 	@Override
