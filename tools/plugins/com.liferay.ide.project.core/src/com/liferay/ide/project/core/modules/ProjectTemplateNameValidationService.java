@@ -95,11 +95,16 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 					"import here.");
 		}
 
-		if (projectTemplateName.startsWith("form-field") && liferayVersion.equals("7.2")) {
+		if (projectTemplateName.startsWith("form-field")) {
 			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
 
 			if (StringUtil.equalsIgnoreCase(newLiferayProjectProvider.getDisplayName(), "maven")) {
-				return Status.createErrorStatus("Form Field project is not supported 7.2 for Maven");
+				VersionRange requiredVersionRange = new VersionRange(
+					true, new Version("7.0"), new Version("7.2"), false);
+
+				if (!requiredVersionRange.includes(new Version(liferayVersion))) {
+					return Status.createErrorStatus("Form Field project is only supported 7.0 and 7.1 for Maven");
+				}
 			}
 		}
 
