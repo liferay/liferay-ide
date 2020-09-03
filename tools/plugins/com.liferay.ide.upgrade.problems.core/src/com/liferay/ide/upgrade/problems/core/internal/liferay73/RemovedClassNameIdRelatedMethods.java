@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf",
 		"problem.title=Removed classNameId related methods from DDM Persistence classes",
 		"problem.summary=Removed classNameId related methods from DDM Persistence classes",
-		"problem.tickets=LPS-108525", "version=7.3"
+		"problem.section=#removed-class-name-related-methods", "problem.tickets=LPS-108525", "version=7.3"
 	},
 	service = FileMigrator.class
 )
