@@ -14,15 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
-
-import java.io.File;
-import java.io.IOException;
-
-import java.util.Collection;
-
-import org.eclipse.core.runtime.Path;
 
 /**
  * @author Gregory Amerson
@@ -32,33 +24,6 @@ public abstract class XMLFileMigrator extends AbstractFileMigrator<XMLFile> {
 
 	public XMLFileMigrator() {
 		super(XMLFile.class);
-	}
-
-	@Override
-	public int reportProblems(File file, Collection<UpgradeProblem> upgradeProblems) {
-		Path path = new Path(file.getAbsolutePath());
-
-		XMLFile xmlFile = createFileService(type, file, path.getFileExtension());
-
-		xmlFile.setFile(file);
-
-		return upgradeProblems.stream(
-		).map(
-			problem -> {
-				try {
-					xmlFile.appendComment(problem.getLineNumber(), problem.getTicket());
-
-					return 1;
-				}
-				catch (IOException ioe) {
-					ioe.printStackTrace(System.err);
-				}
-
-				return 0;
-			}
-		).reduce(
-			0, Integer::sum
-		);
 	}
 
 }

@@ -21,7 +21,6 @@ import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JSPFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -37,7 +36,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
@@ -233,33 +231,6 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		}
 
 		return corrected;
-	}
-
-	@Override
-	public int reportProblems(File file, Collection<UpgradeProblem> upgradeProblems) {
-		Path path = new Path(file.getAbsolutePath());
-
-		JSPFile jspFile = createFileService(type, file, path.getFileExtension());
-
-		jspFile.setFile(file);
-
-		return upgradeProblems.stream(
-		).map(
-			problem -> {
-				try {
-					jspFile.appendComment(problem.getLineNumber(), problem.getTicket());
-
-					return 1;
-				}
-				catch (IOException ioe) {
-					ioe.printStackTrace(System.err);
-				}
-
-				return 0;
-			}
-		).reduce(
-			0, Integer::sum
-		);
 	}
 
 	@Override

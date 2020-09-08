@@ -20,6 +20,7 @@ import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.SourceFile;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -129,6 +130,33 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		}
 
 		return problems;
+	}
+
+	@Override
+	public int reportProblems(File file, Collection<UpgradeProblem> upgradeProblems) {
+		Path path = new Path(file.getAbsolutePath());
+
+		SourceFile sourceFile = createFileService(type, file, path.getFileExtension());
+
+		sourceFile.setFile(file);
+
+		return upgradeProblems.stream(
+		).map(
+			problem -> {
+				try {
+					sourceFile.appendComment(problem.getLineNumber(), "FIXME: " + problem.getTitle());
+
+					return 1;
+				}
+				catch (IOException ioe) {
+					ioe.printStackTrace(System.err);
+				}
+
+				return 0;
+			}
+		).reduce(
+			0, Integer::sum
+		);
 	}
 
 	protected T createFileService(Class<T> type, File file, String fileExtension) {
