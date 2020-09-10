@@ -44,8 +44,7 @@
 
     <modules>
         <module>liferay-workspace</module>
-        <module>liferay-workspace-with-devstudio-ce</module>
-        <module>liferay-workspace-with-devstudio-dxp</module>
+        <module>liferay-workspace-with-devstudio</module>
         <module>installer-tests</module>
     </modules>
 

@@ -1,6 +1,6 @@
 <project>
-    <shortName>LiferayWorkspacewithDevStudioCommunityEdition</shortName>
-    <fullName>Liferay Workspace with DevStudio - Community Edition</fullName>
+    <shortName>LiferayWorkspacewithDevStudio</shortName>
+    <fullName>Liferay Workspace with DevStudio</fullName>
     <logoImage>../shared/images/studio_logo.png</logoImage>
     <componentList>
         <component>
@@ -50,13 +50,23 @@
                 </folder>
             </folderList>
         </component>
-        <include file="../components/devstudio-linuxcomponent.xml" />
-        <include file="../components/devstudio-osxcomponent.xml" />
-        <include file="../components/devstudio-wincomponent.xml" />
+        <include>
+            <file>../components/devstudio-linuxcomponent.xml</file>
+        </include>
+        <include>
+            <file>../components/devstudio-osxcomponent.xml</file>
+        </include>
+        <include>
+            <file>../components/devstudio-wincomponent.xml</file>
+        </include>
     </componentList>
     <preInstallationActionList>
-        <include file="../components/autodetect-java.xml" />
-        <include file="../components/autodetect-java-windows.xml" />
+        <include>
+            <file>../components/autodetect-java.xml</file>
+        </include>
+        <include>
+            <file>../components/autodetect-java-windows.xml</file>
+        </include>
     </preInstallationActionList>
     <postInstallationActionList>
         <if>
@@ -69,6 +79,128 @@
             <conditionRuleList>
                 <isTrue value="${clitools}"/>
             </conditionRuleList>
+        </if>
+        <if>
+            <actionList>
+                <if>
+                    <actionList>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>proxyHostArg</name>
+                                    <value> -Dhttp.proxyHost=${httpproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPortArg</name>
+                                    <value> -Dhttp.proxyPort=${httpproxyport}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyUsernameArg</name>
+                                    <value> -Dhttp.proxyUser=${httpproxyusername}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPasswordArg</name>
+                                    <value> -Dhttp.proxyPassword=${httpproxypassword}</value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>httpProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </if>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>proxyHostArg</name>
+                                    <value> -Dhttps.proxyHost=${httpsproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPortArg</name>
+                                    <value> -Dhttps.proxyPort=${httpsproxyport}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyUsernameArg</name>
+                                    <value> -Dhttps.proxyUser=${httpsproxyusername}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPasswordArg</name>
+                                    <value> -Dhttps.proxyPassword=${httpsproxypassword}</value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>httpsProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </if>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>proxyHostArg</name>
+                                    <value> -DsocksProxyHost=${socksproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPortArg</name>
+                                    <value> -DsocksProxyPort=${socksproxyport}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyUsernameArg</name>
+                                    <value></value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPasswordArg</name>
+                                    <value></value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>socksProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </if>
+                    </actionList>
+                    <conditionRuleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                    </conditionRuleList>
+                    <elseActionList>
+                        <setInstallerVariable>
+                            <name>proxyHostArg</name>
+                            <value></value>
+                        </setInstallerVariable>
+                        <setInstallerVariable>
+                            <name>proxyPortArg</name>
+                            <value></value>
+                        </setInstallerVariable>
+                        <setInstallerVariable>
+                            <name>proxyUsernameArg</name>
+                            <value></value>
+                        </setInstallerVariable>
+                        <setInstallerVariable>
+                            <name>proxyPasswordArg</name>
+                            <value></value>
+                        </setInstallerVariable>
+                    </elseActionList>
+                </if>
+                <writeFile>
+                    <encoding>utf-8</encoding>
+                    <path>${installdir}${platform_path_separator}pwd</path>
+                    <text>${password.password}</text>
+                </writeFile>
+                <deleteFile>
+                    <path>${installdir}${platform_path_separator}pwd</path>
+                </deleteFile>
+            </actionList>
         </if>
         <if>
             <explanation>is linux</explanation>
@@ -132,7 +264,7 @@
                     <path>${java_executable}</path>
                     <variable>find_in_path</variable>
                 </dirName>
-                 <findFile>
+                <findFile>
                     <baseDirectory>${find_in_path}/../</baseDirectory>
                     <pattern>libjli.dylib</pattern>
                     <variable>libjli_path</variable>
@@ -157,6 +289,7 @@ ${libjli_path}
             </conditionRuleList>
             <elseActionList>
                 <unzip>
+                    <addToUninstaller>0</addToUninstaller>
                     <destinationDirectory>${installdir}</destinationDirectory>
                     <progressText>Unpacking files</progressText>
                     <zipFile>${studioZipPath}</zipFile>
@@ -188,7 +321,6 @@ ${java_executable}
                     <text>${platform_name}</text>
                     <value>linux</value>
                 </compareText>
-                <isTrue value="${clitools}"/>
             </conditionRuleList>
             <elseActionList>
                 <if>
@@ -222,7 +354,9 @@ ${java_executable}
         </if>
         <if>
             <actionList>
-                <include file="../components/run-java-jpm.xml" />
+                <include>
+                    <file>../components/run-java-jpm.xml</file>
+                </include>
             </actionList>
             <conditionRuleList>
                 <isTrue value="${clitools}"/>
@@ -234,13 +368,27 @@ ${java_executable}
                     <insertAt>end</insertAt>
                     <path>${jpmSystemPath}</path>
                 </addDirectoryToPath>
-                <include file="../components/set-installer-variable-jpm.xml" />
-                <include file="../components/set-installer-variable-blade.xml" />
-                <include file="../components/set-installer-variable-gw.xml" />
-                <include file="../components/set-installer-variable-bnd.xml" />
-                <include file="../components/run-jpm-install-blade.xml" />
-                <include file="../components/run-jpm-install-gw.xml" />
-                <include file="../components/run-jpm-install-bnd.xml" />
+                <include>
+                    <file>../components/set-installer-variable-jpm.xml</file>
+                </include>
+                <include>
+                    <file>../components/set-installer-variable-blade.xml</file>
+                </include>
+                <include>
+                    <file>../components/set-installer-variable-gw.xml</file>
+                </include>
+                <include>
+                    <file>../components/set-installer-variable-bnd.xml</file>
+                </include>
+                <include>
+                    <file>../components/run-jpm-install-blade.xml</file>
+                </include>
+                <include>
+                    <file>../components/run-jpm-install-gw.xml</file>
+                </include>
+                <include>
+                    <file>../components/run-jpm-install-bnd.xml</file>
+                </include>
                 <runProgram>
                     <program>chown</program>
                     <programArguments>-R ${env(SUDO_USER)} "${userHome}/jpm"</programArguments>
@@ -296,10 +444,46 @@ ${java_executable}
                         </compareText>
                     </ruleList>
                 </runProgram>
-                <runProgram>
-                    <program>${java_executable}</program>
-                    <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "7.2"</programArguments>
-                </runProgram>
+                <if>
+                    <actionList>
+                        <runProgram>
+                            <program>${java_executable}</program>
+                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "dxp-7.2-ga1"</programArguments>
+                        </runProgram>
+                        <createDirectory>
+                            <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
+                            <ruleList>
+                                <fileTest>
+                                    <condition>exists</condition>
+                                    <path>${activationKey}</path>
+                                </fileTest>
+                            </ruleList>
+                        </createDirectory>
+                        <copyFile>
+                            <destination>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy${platform_path_separator}activation_key.xml</destination>
+                            <origin>${activationKey}</origin>
+                            <ruleList>
+                                <fileTest>
+                                    <condition>exists</condition>
+                                    <path>${activationKey}</path>
+                                </fileTest>
+                            </ruleList>
+                        </copyFile>
+                    </actionList>
+                    <conditionRuleList>
+                        <compareText>
+                            <logic>equals</logic>
+                            <text>${productkey}</text>
+                            <value>dxp</value>
+                        </compareText>
+                    </conditionRuleList>
+                    <elseActionList>
+                        <runProgram>
+                            <program>${java_executable}</program>
+                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "portal-7.3-ga5"</programArguments>
+                        </runProgram>
+                    </elseActionList>
+                </if>
                 <createDirectory>
                     <path>${userHome}${platform_path_separator}.gradle</path>
                 </createDirectory>
@@ -546,6 +730,7 @@ ${java_executable}
             <name>clitools</name>
             <description>Install Command Line Tools</description>
             <explanation>Install Command Line Tools such as blade and bnd.</explanation>
+            <value></value>
             <default>1</default>
             <parameterList>
                 <directoryParameter>
@@ -562,8 +747,63 @@ ${java_executable}
                     <mustExist>1</mustExist>
                     <width>30</width>
                 </directoryParameter>
+                <labelParameter>
+                    <name>initws</name>
+                    <description></description>
+                    <explanation>Init a Liferay Workspace</explanation>
+                    <image></image>
+                </labelParameter>
             </parameterList>
         </booleanParameterGroup>
+        <choiceParameterGroup>
+            <name>productkey</name>
+            <title>Select a product to init a liferay workspace</title>
+            <description></description>
+            <explanation>When initializing a new liferay workpace, Liferay Customers can target to Liferay DXP. Community members should choose Liferay Portal Community Edition.</explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <labelParameter>
+                    <name>dxp</name>
+                    <description>Liferay DXP</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>ce</name>
+                    <description>Liferay Portal Community Editon</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+            </parameterList>
+            <ruleList>
+                <isTrue>
+                    <value>${clitools}</value>
+                </isTrue>
+            </ruleList>
+        </choiceParameterGroup>
+        <fileParameter>
+            <name>activationKey</name>
+            <title>DXP Activation Key (Optional)</title>
+            <description>activation key file</description>
+            <explanation>Please select the activation key file for Liferay DXP. If you skip this step, you can add the activation key into auto-deploy folder later.</explanation>
+            <value></value>
+            <default></default>
+            <allowEmptyValue>1</allowEmptyValue>
+            <mustBeWritable>0</mustBeWritable>
+            <mustExist>1</mustExist>
+            <width>30</width>
+            <ruleList>
+                <isTrue>
+                    <value>${clitools}</value>
+                </isTrue>
+                <compareText>
+                    <logic>equals</logic>
+                    <text>${productkey}</text>
+                    <value>dxp</value>
+                </compareText>
+            </ruleList>
+        </fileParameter>
         <choiceParameterGroup>
             <name>proxy</name>
             <description>Proxy Configuration</description>
