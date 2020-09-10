@@ -14,11 +14,18 @@
 
 package com.liferay.ide.upgrade.commands.ui.internal;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -26,7 +33,11 @@ import org.osgi.framework.BundleContext;
  */
 public class UpgradeCommandsUIPlugin extends AbstractUIPlugin {
 
+	public static final String CHECKED_IMAGE_ID = "checked.image";
+
 	public static final String PLUGIN_ID = "com.liferay.ide.upgrade.commands.ui";
+
+	public static final String UNCHECKED_IMAGE_ID = "unchecked.image";
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(msg, null);
@@ -34,6 +45,18 @@ public class UpgradeCommandsUIPlugin extends AbstractUIPlugin {
 
 	public static IStatus createErrorStatus(String msg, Exception e) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
+
+	public static Image getImage(String key) {
+		UpgradeCommandsUIPlugin upgradeCommandsUIPlugin = getInstance();
+
+		ImageRegistry imageRegistry = upgradeCommandsUIPlugin.getImageRegistry();
+
+		return imageRegistry.get(key);
+	}
+
+	public static UpgradeCommandsUIPlugin getInstance() {
+		return _instance;
 	}
 
 	public static void log(IStatus status) {
@@ -67,6 +90,33 @@ public class UpgradeCommandsUIPlugin extends AbstractUIPlugin {
 
 		super.stop(context);
 	}
+
+	@Override
+	protected void initializeImageRegistry(ImageRegistry imageRegistry) {
+		Bundle bundle = _instance.getBundle();
+
+		IPath path = _ICONS_PATH.append("skip_status.gif");
+
+		ImageDescriptor imageDescriptor = _createImageDescriptor(bundle, path);
+
+		path = _ICONS_PATH.append("checked.png");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(CHECKED_IMAGE_ID, imageDescriptor);
+
+		path = _ICONS_PATH.append("unchecked.png");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(UNCHECKED_IMAGE_ID, imageDescriptor);
+	}
+
+	private static ImageDescriptor _createImageDescriptor(Bundle bundle, IPath path) {
+		return ImageDescriptor.createFromURL(FileLocator.find(bundle, path, null));
+	}
+
+	private static final IPath _ICONS_PATH = new Path("icons/");
 
 	private static UpgradeCommandsUIPlugin _instance;
 
