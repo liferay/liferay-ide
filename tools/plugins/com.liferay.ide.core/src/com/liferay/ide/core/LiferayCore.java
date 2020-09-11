@@ -75,14 +75,28 @@ public class LiferayCore extends Plugin {
 
 		int socksProxyPort = -1;
 
-		String path = FileUtil.separatorsToSystem(System.getProperty("user.home") + "/.jpm/commands/jpm");
+		String jpmPath = FileUtil.separatorsToSystem(System.getProperty("user.home") + "/.jpm/commands/jpm");
 
 		try {
-			String content = FileUtil.readContents(new File(path));
+			File jpmCommandFile = new File(jpmPath);
+
+			if (FileUtil.notExists(jpmCommandFile)) {
+				return;
+			}
+
+			String content = FileUtil.readContents(jpmCommandFile);
+
+			if (Objects.isNull(content) || content.isEmpty()) {
+				return;
+			}
 
 			JSONObject jsonObject = new JSONObject(content);
 
 			String jvmArgs = jsonObject.getString("jvmArgs");
+
+			if (Objects.isNull(jvmArgs) || jvmArgs.isEmpty()) {
+				return;
+			}
 
 			String[] jvmArgsArr = jvmArgs.split("\\s");
 
@@ -125,7 +139,7 @@ public class LiferayCore extends Plugin {
 			}
 		}
 		catch (JSONException jsone) {
-			jsone.printStackTrace();
+			logError("Failed to read jpm proxy settings.", jsone);
 		}
 
 		IProxyService proxyService = getProxyService();
@@ -171,7 +185,7 @@ public class LiferayCore extends Plugin {
 			proxyService.setProxiesEnabled(true);
 		}
 		catch (CoreException ce) {
-			ce.printStackTrace();
+			logError("Failed to set eclipse proxy setting base on jpm.", ce);
 		}
 	}
 
