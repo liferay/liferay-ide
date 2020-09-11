@@ -31,6 +31,7 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
+import com.liferay.ide.core.workspace.ProjectDeletedEvent;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
@@ -359,6 +360,12 @@ public class LiferayGradleProject
 
 	@Override
 	public void onEvent(Event event) {
+		if (event instanceof ProjectDeletedEvent) {
+			_stale = true;
+
+			return;
+		}
+
 		Optional.of(
 			event
 		).filter(
