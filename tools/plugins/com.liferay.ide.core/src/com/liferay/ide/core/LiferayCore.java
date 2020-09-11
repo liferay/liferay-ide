@@ -14,8 +14,11 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.ProjectChangeListener;
+
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -27,13 +30,18 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -53,6 +61,119 @@ public class LiferayCore extends Plugin {
 	public static final String LIFERAY_JOB_FAMILY = "com.liferay.ide.jobs";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.core";
+
+	public static void configurePlatformProxy() {
+		String httpProxyHost = null;
+
+		String httpsProxyHost = null;
+
+		String socksProxyHost = null;
+
+		int httpProxyPort = -1;
+
+		int httpsProxyPort = -1;
+
+		int socksProxyPort = -1;
+
+		String path = FileUtil.separatorsToSystem(System.getProperty("user.home") + "/.jpm/commands/jpm");
+
+		try {
+			String content = FileUtil.readContents(new File(path));
+
+			JSONObject jsonObject = new JSONObject(content);
+
+			String jvmArgs = jsonObject.getString("jvmArgs");
+
+			String[] jvmArgsArr = jvmArgs.split("\\s");
+
+			for (String property : jvmArgsArr) {
+				if (property.contains("http.proxyHost")) {
+					httpProxyHost = property.split("=")[1];
+
+					continue;
+				}
+
+				if (property.contains("http.proxyPort")) {
+					httpProxyPort = Integer.valueOf(property.split("=")[1]);
+
+					continue;
+				}
+
+				if (property.contains("https.proxyHost")) {
+					httpsProxyHost = property.split("=")[1];
+
+					continue;
+				}
+
+				if (property.contains("https.proxyPort")) {
+					httpsProxyPort = Integer.valueOf(property.split("=")[1]);
+
+					continue;
+				}
+
+				if (property.contains("socks.proxyHost")) {
+					socksProxyHost = property.split("=")[1];
+
+					continue;
+				}
+
+				if (property.contains("socks.proxyPort")) {
+					socksProxyPort = Integer.valueOf(property.split("=")[1]);
+
+					continue;
+				}
+			}
+		}
+		catch (JSONException jsone) {
+			jsone.printStackTrace();
+		}
+
+		IProxyService proxyService = getProxyService();
+
+		IProxyData[] proxyData = proxyService.getProxyData();
+
+		for (IProxyData data : proxyData) {
+			switch (data.getType()) {
+				case IProxyData.HTTP_PROXY_TYPE:
+					if (httpProxyHost != null) {
+						data.setHost(httpProxyHost);
+
+						data.setPort(httpProxyPort);
+					}
+
+					break;
+
+				case IProxyData.HTTPS_PROXY_TYPE:
+					if (httpsProxyHost != null) {
+						data.setHost(httpsProxyHost);
+
+						data.setPort(httpsProxyPort);
+					}
+
+					break;
+
+				case IProxyData.SOCKS_PROXY_TYPE:
+					if (socksProxyHost != null) {
+						data.setHost(socksProxyHost);
+
+						data.setPort(socksProxyPort);
+					}
+
+					break;
+			}
+		}
+
+		try {
+			proxyService.setProxyData(proxyData);
+
+			proxyService.setSystemProxiesEnabled(false);
+
+			proxyService.setProxiesEnabled(true);
+		}
+		catch (CoreException ce) {
+			ce.printStackTrace();
+		}
+	}
 
 	public static synchronized <T extends ILiferayProject> T create(Class<T> type, Object adaptable) {
 		if (type == null) {
@@ -260,6 +381,8 @@ public class LiferayCore extends Plugin {
 		_listenerRegistryService = context.registerService(
 			ListenerRegistry.class.getName(), new DefaultListenerRegistry(), preferences);
 		_projectChangeListener = ProjectChangeListener.createAndRegister();
+
+		configurePlatformProxy();
 	}
 
 	@Override
