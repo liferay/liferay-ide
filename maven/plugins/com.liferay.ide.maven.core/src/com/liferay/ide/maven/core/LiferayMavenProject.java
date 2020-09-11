@@ -23,6 +23,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
+import com.liferay.ide.core.workspace.ProjectDeletedEvent;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
@@ -200,6 +201,12 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 
 	@Override
 	public void onEvent(Event event) {
+		if (event instanceof ProjectDeletedEvent) {
+			_stale = true;
+
+			return;
+		}
+
 		Optional.of(
 			event
 		).filter(

@@ -23,7 +23,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.ILog;
@@ -284,7 +286,7 @@ public class LiferayCore extends Plugin {
 
 			// Stale project should be removed the first time
 
-			_removeFromCache(projectCacheKey, liferayProject);
+			_removeFromCache(liferayProject);
 
 			liferayProject = null;
 		}
@@ -314,7 +316,7 @@ public class LiferayCore extends Plugin {
 			}
 
 			for (Map.Entry<ProjectCacheKey<?>, ILiferayProject> staleEntry : staleEntries) {
-				_removeFromCache(staleEntry.getKey(), staleEntry.getValue());
+				_removeFromCache(staleEntry.getValue());
 			}
 		}
 
@@ -356,7 +358,7 @@ public class LiferayCore extends Plugin {
 		projectCache.put(new ProjectCacheKey<>(type, adaptable), liferayProject);
 	}
 
-	private static void _removeFromCache(ProjectCacheKey<?> projectCacheKey, ILiferayProject liferayProject) {
+	private static void _removeFromCache(ILiferayProject liferayProject) {
 		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
 
 		if (liferayProject instanceof EventListener) {
@@ -365,7 +367,20 @@ public class LiferayCore extends Plugin {
 			listenerRegistry.removeEventListener((EventListener)liferayProject);
 		}
 
-		projectCache.remove(projectCacheKey);
+		Set<Entry<ProjectCacheKey<?>, ILiferayProject>> projectCachEentrySet = projectCache.entrySet();
+
+		projectCachEentrySet.stream(
+		).forEach(
+			entry -> {
+				ProjectCacheKey<?> projectCacheKey = entry.getKey();
+
+				ILiferayProject project = entry.getValue();
+
+				if (project.equals(liferayProject)) {
+					projectCache.remove(projectCacheKey);
+				}
+			}
+		);
 	}
 
 	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {
