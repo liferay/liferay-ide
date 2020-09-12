@@ -34,11 +34,10 @@ import org.osgi.service.component.annotations.Component;
 public class Liferay70DeprecatedMethodsMigrator extends DeprecatedMethodsMigrator {
 
 	public Liferay70DeprecatedMethodsMigrator() {
-		version = "7.0";
-		deprecatedMethods = _getDeprecatedMethods();
+		super(_getDeprecatedMethods(), "7.0");
 	}
 
-	private JSONArray[] _getDeprecatedMethods() {
+	private static JSONArray[] _getDeprecatedMethods() {
 		List<JSONArray> deprecatedMethodsList = new ArrayList<>();
 
 		String fqn = "/com/liferay/ide/upgrade/problems/core/internal/liferay70/";
@@ -48,11 +47,11 @@ public class Liferay70DeprecatedMethodsMigrator extends DeprecatedMethodsMigrato
 			fqn + "deprecatedMethodsNoneVersionFile.json"
 		};
 
-		Class<? extends DeprecatedMethodsMigrator> class1 = Liferay70DeprecatedMethodsMigrator.class;
+		Class<? extends DeprecatedMethodsMigrator> clazz = Liferay70DeprecatedMethodsMigrator.class;
 
 		for (String path : jsonFilePaths) {
 			try {
-				String jsonContent = readFully(class1.getResourceAsStream(path));
+				String jsonContent = read(clazz.getResourceAsStream(path));
 
 				deprecatedMethodsList.add(new JSONArray(jsonContent));
 			}

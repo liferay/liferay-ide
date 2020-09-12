@@ -34,22 +34,21 @@ import org.osgi.service.component.annotations.Component;
 public class Liferay71DeprecatedMethodsMigrator extends DeprecatedMethodsMigrator {
 
 	public Liferay71DeprecatedMethodsMigrator() {
-		version = "7.1";
-		deprecatedMethods = _getDeprecatedMethods();
+		super(_getDeprecatedMethods(), "7.1");
 	}
 
-	private JSONArray[] _getDeprecatedMethods() {
+	private static JSONArray[] _getDeprecatedMethods() {
 		List<JSONArray> deprecatedMethodsList = new ArrayList<>();
 
 		String fqn = "/com/liferay/ide/upgrade/problems/core/internal/liferay71/";
 
 		String[] jsonFilePaths = {fqn + "deprecatedMethod70.json"};
 
-		Class<? extends DeprecatedMethodsMigrator> class1 = Liferay71DeprecatedMethodsMigrator.class;
+		Class<? extends DeprecatedMethodsMigrator> clazz = Liferay71DeprecatedMethodsMigrator.class;
 
 		for (String path : jsonFilePaths) {
 			try {
-				String jsonContent = readFully(class1.getResourceAsStream(path));
+				String jsonContent = read(clazz.getResourceAsStream(path));
 
 				deprecatedMethodsList.add(new JSONArray(jsonContent));
 			}

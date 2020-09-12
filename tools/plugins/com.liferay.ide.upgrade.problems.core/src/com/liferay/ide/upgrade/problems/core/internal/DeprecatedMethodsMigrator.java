@@ -19,6 +19,10 @@ import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,11 @@ import org.json.JSONObject;
  */
 public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 
+	public DeprecatedMethodsMigrator(JSONArray[] deprecatedMethods, String version) {
+		_deprecatedMethods = deprecatedMethods;
+		_version = version;
+	}
+
 	@Override
 	public List<UpgradeProblem> analyze(File file) {
 		List<UpgradeProblem> problems = new ArrayList<>();
@@ -43,10 +52,10 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 			file.getAbsolutePath()
 		).getFileExtension();
 
-		for (JSONArray deprecatedMethodsArray : deprecatedMethods) {
-			for (int j = 0; j < deprecatedMethodsArray.length(); j++) {
+		for (JSONArray jsonArray : _deprecatedMethods) {
+			for (int j = 0; j < jsonArray.length(); j++) {
 				try {
-					_tempMethod = deprecatedMethodsArray.getJSONObject(j);
+					_searchMethod = jsonArray.getJSONObject(j);
 
 					List<FileSearchResult> searchResults = searchFile(
 						file, createFileService(type, file, fileExtension));
@@ -55,15 +64,15 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 						for (FileSearchResult searchResult : searchResults) {
 							int makerType = UpgradeProblem.MARKER_ERROR;
 
-							if (Objects.equals(version, _tempMethod.getString("deprecatedVersion"))) {
+							if (Objects.equals(version, _searchMethod.getString("deprecatedVersion"))) {
 								makerType = UpgradeProblem.MARKER_WARNING;
 							}
 
 							problems.add(
 								new UpgradeProblem(
-									_tempMethod.getString("javadoc"), _tempMethod.getString("javadoc"), fileExtension,
-									"", version, file, searchResult.startLine, searchResult.startOffset,
-									searchResult.endOffset, _tempMethod.getString("javadoc"),
+									_searchMethod.getString("javadoc"), _searchMethod.getString("javadoc"),
+									fileExtension, "", _version, file, searchResult.startLine, searchResult.startOffset,
+									searchResult.endOffset, _searchMethod.getString("javadoc"),
 									searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 									UpgradeProblem.DEFAULT_MARKER_ID, makerType));
 						}
@@ -77,6 +86,33 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 		return problems;
 	}
 
+	protected static String read(InputStream inputStream) throws IOException {
+		if (inputStream == null) {
+			return null;
+		}
+
+		char[] buffer = new char[0x10000];
+
+		StringBuilder out = new StringBuilder();
+
+		try (Reader in = new InputStreamReader(inputStream, "UTF-8")) {
+			int read;
+
+			do {
+				read = in.read(buffer, 0, buffer.length);
+
+				if (read > 0) {
+					out.append(buffer, 0, read);
+				}
+			}
+			while (read >= 0);
+		}
+
+		inputStream.close();
+
+		return out.toString();
+	}
+
 	@Override
 	protected List<FileSearchResult> searchFile(File file, JavaFile javaFile) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
@@ -84,7 +120,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 		String[] parameters = null;
 
 		try {
-			JSONArray parameterJSONArray = _tempMethod.getJSONArray("parameters");
+			JSONArray parameterJSONArray = _searchMethod.getJSONArray("parameters");
 
 			if (parameterJSONArray != null) {
 				parameters = new String[parameterJSONArray.length()];
@@ -96,11 +132,11 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 
 			searchResults.addAll(
 				javaFile.findMethodInvocations(
-					_tempMethod.getString("className"), null, _tempMethod.getString("methodName"), parameters));
+					_searchMethod.getString("className"), null, _searchMethod.getString("methodName"), parameters));
 
 			searchResults.addAll(
 				javaFile.findMethodInvocations(
-					null, _tempMethod.getString("className"), _tempMethod.getString("methodName"), parameters));
+					null, _searchMethod.getString("className"), _searchMethod.getString("methodName"), parameters));
 		}
 		catch (JSONException jsone) {
 		}
@@ -108,9 +144,8 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 		return searchResults;
 	}
 
-	protected JSONArray[] deprecatedMethods;
-	protected String version;
-
-	private JSONObject _tempMethod = null;
+	private JSONArray[] _deprecatedMethods;
+	private JSONObject _searchMethod = null;
+	private String _version;
 
 }
