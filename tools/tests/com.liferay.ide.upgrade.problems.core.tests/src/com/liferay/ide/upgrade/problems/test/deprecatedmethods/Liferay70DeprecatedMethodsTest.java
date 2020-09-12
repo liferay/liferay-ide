@@ -28,7 +28,7 @@ import com.liferay.ide.upgrade.problems.test.apichanges.APITestBase;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class DeprecatedMethodsTest extends APITestBase {
+public class Liferay70DeprecatedMethodsTest extends APITestBase {
 
 	@Test
 	public void deprecatedMethods61TestFile() throws Exception {
@@ -61,17 +61,17 @@ public class DeprecatedMethodsTest extends APITestBase {
 
 	@Override
 	public String getComponentName() {
-		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedMethodsMigrator";
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70DeprecatedMethodsMigrator";
 	}
 
 	@Override
 	public File getTestFile() {
-		return new File("projects/deprecated-methods-test/PortalMockFactory.java");
+		return new File("projects/deprecated-methods-test/liferay70-deprecated-methods-test/PortalMockFactory.java");
 	}
 
 	public File deprecatedMethods61TestFile = new File(
-		"projects/deprecated-methods-test/AssetVocabularyServiceSoap.java");
+		"projects/deprecated-methods-test/liferay70-deprecated-methods-test/AssetVocabularyServiceSoap.java");
 	public File deprecatedMethodsNoneVersionTestFile = new File(
-		"projects/deprecated-methods-test/WebServerServlet.java");
+		"projects/deprecated-methods-test/liferay70-deprecated-methods-test/WebServerServlet.java");
 
 }
