@@ -42,7 +42,7 @@ public class Liferay73DeprecatedMethodsMigrator extends DeprecatedMethodsMigrato
 
 		String fqn = "/com/liferay/ide/upgrade/problems/core/internal/liferay73/";
 
-		String[] jsonFilePaths = {fqn + "deprecatedMethod72.json", fqn + "deprecatedMethodNoneVersionFile.json"};
+		String[] jsonFilePaths = {fqn + "deprecatedMethods72.json", fqn + "deprecatedMethodsNoVersion.json"};
 
 		Class<? extends DeprecatedMethodsMigrator> clazz = Liferay73DeprecatedMethodsMigrator.class;
 
