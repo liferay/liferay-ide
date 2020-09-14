@@ -62,133 +62,6 @@ public class LiferayCore extends Plugin {
 
 	public static final String PLUGIN_ID = "com.liferay.ide.core";
 
-	public static void configurePlatformProxy() {
-		String httpProxyHost = null;
-
-		String httpsProxyHost = null;
-
-		String socksProxyHost = null;
-
-		int httpProxyPort = -1;
-
-		int httpsProxyPort = -1;
-
-		int socksProxyPort = -1;
-
-		String jpmPath = FileUtil.separatorsToSystem(System.getProperty("user.home") + "/.jpm/commands/jpm");
-
-		try {
-			File jpmCommandFile = new File(jpmPath);
-
-			if (FileUtil.notExists(jpmCommandFile)) {
-				return;
-			}
-
-			String content = FileUtil.readContents(jpmCommandFile);
-
-			if (Objects.isNull(content) || content.isEmpty()) {
-				return;
-			}
-
-			JSONObject jsonObject = new JSONObject(content);
-
-			String jvmArgs = jsonObject.getString("jvmArgs");
-
-			if (Objects.isNull(jvmArgs) || jvmArgs.isEmpty()) {
-				return;
-			}
-
-			String[] jvmArgsArr = jvmArgs.split("\\s");
-
-			for (String property : jvmArgsArr) {
-				if (property.contains("http.proxyHost")) {
-					httpProxyHost = property.split("=")[1];
-
-					continue;
-				}
-
-				if (property.contains("http.proxyPort")) {
-					httpProxyPort = Integer.valueOf(property.split("=")[1]);
-
-					continue;
-				}
-
-				if (property.contains("https.proxyHost")) {
-					httpsProxyHost = property.split("=")[1];
-
-					continue;
-				}
-
-				if (property.contains("https.proxyPort")) {
-					httpsProxyPort = Integer.valueOf(property.split("=")[1]);
-
-					continue;
-				}
-
-				if (property.contains("socks.proxyHost")) {
-					socksProxyHost = property.split("=")[1];
-
-					continue;
-				}
-
-				if (property.contains("socks.proxyPort")) {
-					socksProxyPort = Integer.valueOf(property.split("=")[1]);
-
-					continue;
-				}
-			}
-		}
-		catch (JSONException jsone) {
-			logError("Failed to read jpm proxy settings.", jsone);
-		}
-
-		IProxyService proxyService = getProxyService();
-
-		IProxyData[] proxyData = proxyService.getProxyData();
-
-		for (IProxyData data : proxyData) {
-			switch (data.getType()) {
-				case IProxyData.HTTP_PROXY_TYPE:
-					if (httpProxyHost != null) {
-						data.setHost(httpProxyHost);
-
-						data.setPort(httpProxyPort);
-					}
-
-					break;
-
-				case IProxyData.HTTPS_PROXY_TYPE:
-					if (httpsProxyHost != null) {
-						data.setHost(httpsProxyHost);
-
-						data.setPort(httpsProxyPort);
-					}
-
-					break;
-
-				case IProxyData.SOCKS_PROXY_TYPE:
-					if (socksProxyHost != null) {
-						data.setHost(socksProxyHost);
-
-						data.setPort(socksProxyPort);
-					}
-
-					break;
-			}
-		}
-
-		try {
-			proxyService.setProxyData(proxyData);
-
-			proxyService.setSystemProxiesEnabled(false);
-
-			proxyService.setProxiesEnabled(true);
-		}
-		catch (CoreException ce) {
-			logError("Failed to set eclipse proxy setting base on jpm.", ce);
-		}
-	}
-
 	public static synchronized <T extends ILiferayProject> T create(Class<T> type, Object adaptable) {
 		if (type == null) {
 			throw new IllegalArgumentException("type can not be null");
@@ -396,7 +269,7 @@ public class LiferayCore extends Plugin {
 			ListenerRegistry.class.getName(), new DefaultListenerRegistry(), preferences);
 		_projectChangeListener = ProjectChangeListener.createAndRegister();
 
-		configurePlatformProxy();
+		_configurePlatformProxy();
 	}
 
 	@Override
@@ -458,6 +331,133 @@ public class LiferayCore extends Plugin {
 		}
 
 		return liferayProject;
+	}
+
+	private static void _configurePlatformProxy() {
+		String httpProxyHost = null;
+
+		String httpsProxyHost = null;
+
+		String socksProxyHost = null;
+
+		int httpProxyPort = -1;
+
+		int httpsProxyPort = -1;
+
+		int socksProxyPort = -1;
+
+		String jpmPath = FileUtil.separatorsToSystem(System.getProperty("user.home") + "/.jpm/commands/jpm");
+
+		try {
+			File jpmCommandFile = new File(jpmPath);
+
+			if (FileUtil.notExists(jpmCommandFile)) {
+				return;
+			}
+
+			String content = FileUtil.readContents(jpmCommandFile);
+
+			if (Objects.isNull(content) || content.isEmpty()) {
+				return;
+			}
+
+			JSONObject jsonObject = new JSONObject(content);
+
+			String jvmArgs = jsonObject.getString("jvmArgs");
+
+			if (Objects.isNull(jvmArgs) || jvmArgs.isEmpty()) {
+				return;
+			}
+
+			String[] jvmArgsArr = jvmArgs.split("\\s");
+
+			for (String property : jvmArgsArr) {
+				if (property.contains("http.proxyHost")) {
+					httpProxyHost = property.split("=")[1];
+
+					continue;
+				}
+
+				if (property.contains("http.proxyPort")) {
+					httpProxyPort = Integer.valueOf(property.split("=")[1]);
+
+					continue;
+				}
+
+				if (property.contains("https.proxyHost")) {
+					httpsProxyHost = property.split("=")[1];
+
+					continue;
+				}
+
+				if (property.contains("https.proxyPort")) {
+					httpsProxyPort = Integer.valueOf(property.split("=")[1]);
+
+					continue;
+				}
+
+				if (property.contains("socks.proxyHost")) {
+					socksProxyHost = property.split("=")[1];
+
+					continue;
+				}
+
+				if (property.contains("socks.proxyPort")) {
+					socksProxyPort = Integer.valueOf(property.split("=")[1]);
+
+					continue;
+				}
+			}
+		}
+		catch (JSONException jsone) {
+			logError("Failed to read jpm proxy settings.", jsone);
+		}
+
+		IProxyService proxyService = getProxyService();
+
+		IProxyData[] proxyData = proxyService.getProxyData();
+
+		for (IProxyData data : proxyData) {
+			switch (data.getType()) {
+				case IProxyData.HTTP_PROXY_TYPE:
+					if (httpProxyHost != null) {
+						data.setHost(httpProxyHost);
+
+						data.setPort(httpProxyPort);
+					}
+
+					break;
+
+				case IProxyData.HTTPS_PROXY_TYPE:
+					if (httpsProxyHost != null) {
+						data.setHost(httpsProxyHost);
+
+						data.setPort(httpsProxyPort);
+					}
+
+					break;
+
+				case IProxyData.SOCKS_PROXY_TYPE:
+					if (socksProxyHost != null) {
+						data.setHost(socksProxyHost);
+
+						data.setPort(socksProxyPort);
+					}
+
+					break;
+			}
+		}
+
+		try {
+			proxyService.setProxyData(proxyData);
+
+			proxyService.setSystemProxiesEnabled(false);
+
+			proxyService.setProxiesEnabled(true);
+		}
+		catch (CoreException ce) {
+			logError("Failed to set eclipse proxy setting base on jpm.", ce);
+		}
 	}
 
 	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
