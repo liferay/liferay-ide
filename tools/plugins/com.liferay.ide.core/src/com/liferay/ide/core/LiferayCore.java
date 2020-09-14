@@ -369,41 +369,39 @@ public class LiferayCore extends Plugin {
 				return;
 			}
 
-			String[] jvmArgsArr = jvmArgs.split("\\s");
-
-			for (String property : jvmArgsArr) {
-				if (property.contains("http.proxyHost")) {
-					httpProxyHost = property.split("=")[1];
+			for (String jvmArg : jvmArgs.split("\\s")) {
+				if (jvmArg.contains("http.proxyHost")) {
+					httpProxyHost = jvmArg.split("=")[1];
 
 					continue;
 				}
 
-				if (property.contains("http.proxyPort")) {
-					httpProxyPort = Integer.valueOf(property.split("=")[1]);
+				if (jvmArg.contains("http.proxyPort")) {
+					httpProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
 
 					continue;
 				}
 
-				if (property.contains("https.proxyHost")) {
-					httpsProxyHost = property.split("=")[1];
+				if (jvmArg.contains("https.proxyHost")) {
+					httpsProxyHost = jvmArg.split("=")[1];
 
 					continue;
 				}
 
-				if (property.contains("https.proxyPort")) {
-					httpsProxyPort = Integer.valueOf(property.split("=")[1]);
+				if (jvmArg.contains("https.proxyPort")) {
+					httpsProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
 
 					continue;
 				}
 
-				if (property.contains("socks.proxyHost")) {
-					socksProxyHost = property.split("=")[1];
+				if (jvmArg.contains("socks.proxyHost")) {
+					socksProxyHost = jvmArg.split("=")[1];
 
 					continue;
 				}
 
-				if (property.contains("socks.proxyPort")) {
-					socksProxyPort = Integer.valueOf(property.split("=")[1]);
+				if (jvmArg.contains("socks.proxyPort")) {
+					socksProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
 
 					continue;
 				}
