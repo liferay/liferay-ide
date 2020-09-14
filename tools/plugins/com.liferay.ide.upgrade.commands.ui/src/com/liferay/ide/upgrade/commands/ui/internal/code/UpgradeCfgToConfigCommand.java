@@ -88,7 +88,7 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		List<CfgFile> cfgFiles = _getCfgFiles();
+		List<IFile> cfgFiles = _getCfgFiles();
 
 		if (Objects.isNull(cfgFiles)) {
 			return Status.CANCEL_STATUS;
@@ -107,8 +107,8 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 		}
 
 		public Object[] getElements(Object inputElement) {
-			if (inputElement instanceof CfgFile[]) {
-				return (CfgFile[])inputElement;
+			if (inputElement instanceof IFile[]) {
+				return (IFile[])inputElement;
 			}
 
 			return new Object[] {inputElement};
@@ -210,7 +210,7 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 		}
 	}
 
-	private List<CfgFile> _getCfgFiles() {
+	private List<IFile> _getCfgFiles() {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select Liferay Workspace Project", false, ResourceSelection.LIFERAY_PROJECTS);
 
@@ -227,14 +227,12 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 
 				return searchFiles.stream();
 			}
-		).map(
-			cfgFile -> new CfgFile(cfgFile.getProject(), cfgFile)
 		).collect(
 			Collectors.toList()
 		);
 	}
 
-	private IStatus _showCfgFiles(List<CfgFile> cfgFiles) {
+	private IStatus _showCfgFiles(List<IFile> cfgFiles) {
 		try {
 			UIUtil.sync(
 				() -> {
@@ -273,7 +271,7 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 
 	private class AsyncStringFilteredDialog extends SelectionStatusDialog {
 
-		public AsyncStringFilteredDialog(Shell shell, List<CfgFile> cfgFiles) {
+		public AsyncStringFilteredDialog(Shell shell, List<IFile> cfgFiles) {
 			super(shell);
 
 			_cfgFiles = cfgFiles;
@@ -286,7 +284,7 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			_cfgFiles.stream(
 			).forEach(
 				configureFile -> {
-					_convertCfgToConfig(configureFile.getCfgFile());
+					_convertCfgToConfig(configureFile);
 				}
 			);
 		}
@@ -320,7 +318,7 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			_createTableColumn(
 				_tableViewer, "Project Name", 50, null,
 				element -> {
-					CfgFile cfgFile = (CfgFile)element;
+					IFile cfgFile = (IFile)element;
 
 					IProject project = cfgFile.getProject();
 
@@ -330,26 +328,22 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			_createTableColumn(
 				_tableViewer, "Cfg File Name", 50, null,
 				element -> {
-					CfgFile cfgFile = (CfgFile)element;
+					IFile cfgFile = (IFile)element;
 
-					IFile iFile = cfgFile.getCfgFile();
-
-					return iFile.getName();
+					return cfgFile.getName();
 				});
 
 			_createTableColumn(
 				_tableViewer, "Cfg File Location", 50, null,
 				element -> {
-					CfgFile cfgFile = (CfgFile)element;
+					IFile cfgFile = (IFile)element;
 
-					IFile iFile = cfgFile.getCfgFile();
-
-					IPath cfgFilePath = iFile.getLocation();
+					IPath cfgFilePath = cfgFile.getLocation();
 
 					return cfgFilePath.toOSString();
 				});
 
-			_tableViewer.setInput(_cfgFiles.toArray(new CfgFile[0]));
+			_tableViewer.setInput(_cfgFiles.toArray(new IFile[0]));
 
 			Stream.of(
 				table.getColumns()
@@ -365,28 +359,8 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			updateButtonsEnableState(status);
 		}
 
-		private List<CfgFile> _cfgFiles;
+		private List<IFile> _cfgFiles;
 		private TableViewer _tableViewer;
-
-	}
-
-	private class CfgFile {
-
-		public CfgFile(IProject project, IFile cfgFile) {
-			_project = project;
-			_cfgFile = cfgFile;
-		}
-
-		public IFile getCfgFile() {
-			return _cfgFile;
-		}
-
-		public IProject getProject() {
-			return _project;
-		}
-
-		private IFile _cfgFile;
-		private IProject _project;
 
 	}
 
