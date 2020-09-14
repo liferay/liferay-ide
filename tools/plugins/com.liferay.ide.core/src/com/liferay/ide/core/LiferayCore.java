@@ -14,8 +14,11 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.ProjectChangeListener;
+
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -27,13 +30,18 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -260,6 +268,8 @@ public class LiferayCore extends Plugin {
 		_listenerRegistryService = context.registerService(
 			ListenerRegistry.class.getName(), new DefaultListenerRegistry(), preferences);
 		_projectChangeListener = ProjectChangeListener.createAndRegister();
+
+		_configurePlatformProxy();
 	}
 
 	@Override
@@ -321,6 +331,129 @@ public class LiferayCore extends Plugin {
 		}
 
 		return liferayProject;
+	}
+
+	private static void _configurePlatformProxy() {
+		String httpProxyHost = null;
+
+		String httpsProxyHost = null;
+
+		String socksProxyHost = null;
+
+		int httpProxyPort = -1;
+
+		int httpsProxyPort = -1;
+
+		int socksProxyPort = -1;
+
+		String jpmPath = FileUtil.separatorsToSystem(System.getProperty("user.home") + "/.jpm/commands/jpm");
+
+		try {
+			File jpmCommandFile = new File(jpmPath);
+
+			if (FileUtil.notExists(jpmCommandFile)) {
+				return;
+			}
+
+			String content = FileUtil.readContents(jpmCommandFile);
+
+			if (Objects.isNull(content) || content.isEmpty()) {
+				return;
+			}
+
+			JSONObject jsonObject = new JSONObject(content);
+
+			String jvmArgs = jsonObject.getString("jvmArgs");
+
+			if (Objects.isNull(jvmArgs) || jvmArgs.isEmpty()) {
+				return;
+			}
+
+			for (String jvmArg : jvmArgs.split("\\s")) {
+				if (jvmArg.contains("http.proxyHost")) {
+					httpProxyHost = jvmArg.split("=")[1];
+
+					continue;
+				}
+
+				if (jvmArg.contains("http.proxyPort")) {
+					httpProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
+
+					continue;
+				}
+
+				if (jvmArg.contains("https.proxyHost")) {
+					httpsProxyHost = jvmArg.split("=")[1];
+
+					continue;
+				}
+
+				if (jvmArg.contains("https.proxyPort")) {
+					httpsProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
+
+					continue;
+				}
+
+				if (jvmArg.contains("socks.proxyHost")) {
+					socksProxyHost = jvmArg.split("=")[1];
+
+					continue;
+				}
+
+				if (jvmArg.contains("socks.proxyPort")) {
+					socksProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
+
+					continue;
+				}
+			}
+
+			IProxyService proxyService = getProxyService();
+
+			IProxyData[] proxyData = proxyService.getProxyData();
+
+			for (IProxyData data : proxyData) {
+				switch (data.getType()) {
+					case IProxyData.HTTP_PROXY_TYPE:
+						if (httpProxyHost != null) {
+							data.setHost(httpProxyHost);
+
+							data.setPort(httpProxyPort);
+						}
+
+						break;
+
+					case IProxyData.HTTPS_PROXY_TYPE:
+						if (httpsProxyHost != null) {
+							data.setHost(httpsProxyHost);
+
+							data.setPort(httpsProxyPort);
+						}
+
+						break;
+
+					case IProxyData.SOCKS_PROXY_TYPE:
+						if (socksProxyHost != null) {
+							data.setHost(socksProxyHost);
+
+							data.setPort(socksProxyPort);
+						}
+
+						break;
+				}
+			}
+
+			proxyService.setProxyData(proxyData);
+
+			proxyService.setSystemProxiesEnabled(false);
+
+			proxyService.setProxiesEnabled(true);
+		}
+		catch (CoreException ce) {
+			logError("Failed to set eclipse proxy setting base on jpm.", ce);
+		}
+		catch (JSONException jsone) {
+			logError("Failed to read jpm proxy settings.", jsone);
+		}
 	}
 
 	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
