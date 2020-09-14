@@ -58,7 +58,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -124,20 +123,6 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		}
-
-	}
-
-	public static class StringsLabelProvider extends LabelProvider {
-
-		@Override
-		public Image getImage(Object element) {
-			return null;
-		}
-
-		@Override
-		public String getText(Object element) {
-			return "aaaa";
 		}
 
 	}
