@@ -167,11 +167,11 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			});
 	}
 
-	private void _convertCfgToConfig(IFile iCfgFile) {
+	private void _convertCfgToConfig(IFile originalCfgFile) {
 		try {
-			IProject project = iCfgFile.getProject();
+			IProject project = originalCfgFile.getProject();
 
-			File cfgFile = FileUtil.getFile(iCfgFile);
+			File cfgFile = FileUtil.getFile(originalCfgFile);
 
 			if (!cfgFile.exists()) {
 				return;
