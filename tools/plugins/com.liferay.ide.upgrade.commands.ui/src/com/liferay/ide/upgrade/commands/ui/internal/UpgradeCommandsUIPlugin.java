@@ -95,21 +95,9 @@ public class UpgradeCommandsUIPlugin extends AbstractUIPlugin {
 	protected void initializeImageRegistry(ImageRegistry imageRegistry) {
 		Bundle bundle = _instance.getBundle();
 
-		IPath path = _ICONS_PATH.append("skip_status.gif");
+		imageRegistry.put(CHECKED_IMAGE_ID, _createImageDescriptor(bundle, _ICONS_PATH.append("checked.png")));
 
-		ImageDescriptor imageDescriptor = _createImageDescriptor(bundle, path);
-
-		path = _ICONS_PATH.append("checked.png");
-
-		imageDescriptor = _createImageDescriptor(bundle, path);
-
-		imageRegistry.put(CHECKED_IMAGE_ID, imageDescriptor);
-
-		path = _ICONS_PATH.append("unchecked.png");
-
-		imageDescriptor = _createImageDescriptor(bundle, path);
-
-		imageRegistry.put(UNCHECKED_IMAGE_ID, imageDescriptor);
+		imageRegistry.put(UNCHECKED_IMAGE_ID, _createImageDescriptor(bundle, _ICONS_PATH.append("unchecked.png")));
 	}
 
 	private static ImageDescriptor _createImageDescriptor(Bundle bundle, IPath path) {
