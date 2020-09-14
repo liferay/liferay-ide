@@ -3,6 +3,7 @@
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.title" value="Removed classNameId related methods from DDM Persistence classes"/>
    <property name="problem.summary" value="Removed classNameId related methods from DDM Persistence classes"/>
+   <property name="problem.section" value="#removed-class-name-related-methods"/>
    <property name="problem.tickets" value="LPS-108525"/>
    <property name="version" value="7.3"/>
    <service>

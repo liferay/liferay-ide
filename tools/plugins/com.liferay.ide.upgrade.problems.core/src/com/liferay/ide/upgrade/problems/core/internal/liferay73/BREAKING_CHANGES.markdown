@@ -841,3 +841,78 @@ This change was made to enable image drag and drop handling in CKEditor, and
 have a common solution for both Alloy Editor and CKEditor.
 
 ---------------------------------------
+
+### Removed classNameId related methods from DDM Persistence classes [](id=removed-class-name-related-methods)
+- **Date:** 2020-Aug-18
+- **JIRA Ticket:** [LPS-108525](https://issues.liferay.com/browse/LPS-108525)
+
+### What changed? [](id=what-changed-24)
+
+The `countByClassNameId`, `findByClassNameId`, `removeByClassNameId` methods were removed from the following classes:
+
+`com.liferay.dynamic.data.mapping.service.persistence.DDMStructureLinkPersistence`
+`com.liferay.dynamic.data.mapping.service.persistence.DDMStructureLinkUtil`
+`com.liferay.dynamic.data.mapping.service.persistence.DDMStructurePersistence`
+`com.liferay.dynamic.data.mapping.service.persistence.DDMStructureUtil`
+`com.liferay.dynamic.data.mapping.service.persistence.DDMTemplateLinkPersistence`
+`com.liferay.dynamic.data.mapping.service.persistence.DDMTemplateLinkUtil`
+
+### Who is affected [](id=who-is-affected-24)
+
+This affects anyone who uses one of these methods.
+
+### How should I update my code? [](id=how-should-i-update-my-code-24)
+
+You can use the other finder and counter methods existing in the class instead
+of the removed methods.
+
+#### Why was this change made? [](id=why-was-this-change-made-24)
+
+These methods were removed as part of the solution for
+https://issues.liferay.com/browse/LPS-108525.
+
+---------------------------------------
+
+### Removed com.liferay.dynamic.data.mapping.util.BaseDDMDisplay Method [](id=removed-BaseDDMDisplay-method)
+- **Date:** 2020-Aug-18
+- **JIRA Ticket:** [LPS-103549](https://issues.liferay.com/browse/LPS-103549)
+
+### What changed? [](id=what-changed-25)
+
+The `isShowAddStructureButton` method was removed.
+
+### Who is affected [](id=who-is-affected-25)
+
+This affects anyone who uses one of these methods.
+
+### How should I update my code? [](id=how-should-i-update-my-code-25)
+
+You can use `isShowAddButton(Group scopeGroup)` method instead of this method.
+
+#### Why was this change made? [](id=why-was-this-change-made-25)
+
+This method was removed as part of a clean up refactor. See more in
+https://issues.liferay.com/browse/LPS-103549.
+
+---------------------------------------
+### Moving lexicon icons path
+- **Date:** 2020-Aug-17
+- **JIRA Ticket:** [LPS-115812](https://issues.liferay.com/browse/LPS-115812)
+
+### What changed? [](id=what-changed-26)
+
+The path for the lexicon icons has been changed from `themeDisplay.getPathThemeImages() + "/lexicon/icons.svg` to `themeDisplay.getPathThemeImages() + "/clay/icons.svg`
+
+### Who is affected [](id=who-is-affected-26)
+
+This affects custom solutions that use this path directly. The gradle task for building the icons on the `lexicon` path will be removed.
+
+### How should I update my code? [](id=how-should-i-update-my-code-26)
+
+Update the path to reference `clay` instead of `lexicon`
+
+#### Why was this change made? [](id=why-was-this-change-made-26)
+
+This change was made to unify references to the icon spritemap.
+
+---------------------------------------
