@@ -406,47 +406,42 @@ public class LiferayCore extends Plugin {
 					continue;
 				}
 			}
-		}
-		catch (JSONException jsone) {
-			logError("Failed to read jpm proxy settings.", jsone);
-		}
 
-		IProxyService proxyService = getProxyService();
+			IProxyService proxyService = getProxyService();
 
-		IProxyData[] proxyData = proxyService.getProxyData();
+			IProxyData[] proxyData = proxyService.getProxyData();
 
-		for (IProxyData data : proxyData) {
-			switch (data.getType()) {
-				case IProxyData.HTTP_PROXY_TYPE:
-					if (httpProxyHost != null) {
-						data.setHost(httpProxyHost);
+			for (IProxyData data : proxyData) {
+				switch (data.getType()) {
+					case IProxyData.HTTP_PROXY_TYPE:
+						if (httpProxyHost != null) {
+							data.setHost(httpProxyHost);
 
-						data.setPort(httpProxyPort);
-					}
+							data.setPort(httpProxyPort);
+						}
 
-					break;
+						break;
 
-				case IProxyData.HTTPS_PROXY_TYPE:
-					if (httpsProxyHost != null) {
-						data.setHost(httpsProxyHost);
+					case IProxyData.HTTPS_PROXY_TYPE:
+						if (httpsProxyHost != null) {
+							data.setHost(httpsProxyHost);
 
-						data.setPort(httpsProxyPort);
-					}
+							data.setPort(httpsProxyPort);
+						}
 
-					break;
+						break;
 
-				case IProxyData.SOCKS_PROXY_TYPE:
-					if (socksProxyHost != null) {
-						data.setHost(socksProxyHost);
+					case IProxyData.SOCKS_PROXY_TYPE:
+						if (socksProxyHost != null) {
+							data.setHost(socksProxyHost);
 
-						data.setPort(socksProxyPort);
-					}
+							data.setPort(socksProxyPort);
+						}
 
-					break;
+						break;
+				}
 			}
-		}
 
-		try {
 			proxyService.setProxyData(proxyData);
 
 			proxyService.setSystemProxiesEnabled(false);
@@ -455,6 +450,9 @@ public class LiferayCore extends Plugin {
 		}
 		catch (CoreException ce) {
 			logError("Failed to set eclipse proxy setting base on jpm.", ce);
+		}
+		catch (JSONException jsone) {
+			logError("Failed to read jpm proxy settings.", jsone);
 		}
 	}
 
