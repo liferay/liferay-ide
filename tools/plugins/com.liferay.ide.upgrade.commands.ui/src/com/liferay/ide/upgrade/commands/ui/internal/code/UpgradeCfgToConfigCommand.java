@@ -169,8 +169,6 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 
 	private void _convertCfgToConfig(IFile originalCfgFile) {
 		try {
-			IProject project = originalCfgFile.getProject();
-
 			File cfgFile = FileUtil.getFile(originalCfgFile);
 
 			if (!cfgFile.exists()) {
@@ -203,7 +201,9 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 
 			FileUtils.moveFile(cfgFile, targetFile);
 
-			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+			IContainer parentContainer = originalCfgFile.getParent();
+
+			parentContainer.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		}
 		catch (Exception e) {
 			UpgradeCommandsUIPlugin.logError(e.getMessage());
