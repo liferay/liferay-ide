@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.UpgradeCfgToConfigCommandKeys;
@@ -25,24 +24,13 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCompare;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
-import java.io.File;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import java.text.MessageFormat;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -54,7 +42,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -167,49 +154,6 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			});
 	}
 
-	private void _convertCfgToConfig(IFile originalCfgFile) {
-		try {
-			File cfgFile = FileUtil.getFile(originalCfgFile);
-
-			if (!cfgFile.exists()) {
-				return;
-			}
-
-			File cfgCommnetFile = new File(
-				cfgFile.getParent(), FilenameUtils.removeExtension(cfgFile.getName()) + ".txt");
-			List<String> allLines = new CopyOnWriteArrayList<>(Files.readAllLines(Paths.get(cfgFile.toURI())));
-
-			List<String> commentLines = new ArrayList<>();
-
-			for (String line : allLines) {
-				if (line.startsWith("#")) {
-					allLines.remove(line);
-
-					commentLines.add(line);
-				}
-			}
-
-			if (!commentLines.isEmpty()) {
-				allLines.add(0, MessageFormat.format(_configCommnet, cfgCommnetFile.getName(), cfgFile.getName()));
-
-				FileUtils.writeLines(cfgFile, allLines);
-				FileUtils.writeLines(cfgCommnetFile, commentLines);
-			}
-
-			File targetFile = new File(
-				cfgFile.getParent(), FilenameUtils.removeExtension(cfgFile.getName()) + ".config");
-
-			FileUtils.moveFile(cfgFile, targetFile);
-
-			IContainer parentContainer = originalCfgFile.getParent();
-
-			parentContainer.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-		}
-		catch (Exception e) {
-			UpgradeCommandsUIPlugin.logError(e.getMessage());
-		}
-	}
-
 	private List<IFile> _getCfgFiles() {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select Liferay Workspace Project", false, ResourceSelection.LIFERAY_PROJECTS);
@@ -258,8 +202,6 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 		}
 	}
 
-	private static String _configCommnet = "#comments has been moved to {0} in same folder as {1}";
-
 	@Reference
 	private ResourceSelection _resourceSelection;
 
@@ -284,7 +226,7 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			_cfgFiles.stream(
 			).forEach(
 				configureFile -> {
-					_convertCfgToConfig(configureFile);
+					CfgToConfigFileConverter.convertCfgToConfig(configureFile);
 				}
 			);
 		}
