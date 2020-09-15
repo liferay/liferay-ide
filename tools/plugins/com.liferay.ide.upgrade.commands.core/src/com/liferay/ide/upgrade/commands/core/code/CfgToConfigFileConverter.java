@@ -16,9 +16,10 @@ package com.liferay.ide.upgrade.commands.core.code;
 
 import static com.google.common.io.Files.getNameWithoutExtension;
 
+import java.io.File;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import java.text.MessageFormat;
 
@@ -27,18 +28,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 /**
  * @author Simon Jiang
  */
 public class CfgToConfigFileConverter {
 
-	public CfgToConfigFileConverter(IFile originalCfgFile) throws Exception {
-		Path cfgPath = Paths.get(originalCfgFile.getLocationURI());
+	public CfgToConfigFileConverter(File originalCfgFile) throws Exception {
+		Path cfgPath = originalCfgFile.toPath();
 
 		Path cfgParentPath = cfgPath.getParent();
 
@@ -84,10 +80,6 @@ public class CfgToConfigFileConverter {
 		Path configPath = cfgParentPath.resolve(baseName + ".config");
 
 		Files.move(cfgPath, configPath);
-
-		IContainer parentContainer = originalCfgFile.getParent();
-
-		parentContainer.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 	}
 
 	private static String _configComment = "# comments has been extracted from {0} and added to {1}";
