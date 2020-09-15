@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.ui.internal.code;
+package com.liferay.ide.upgrade.commands.core.code;
+
+import static com.google.common.io.Files.getNameWithoutExtension;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,8 +27,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -37,14 +37,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  */
 public class CfgToConfigFileConverter {
 
-	public static void convertCfgToConfig(IFile originalCfgFile) throws Exception {
+	public CfgToConfigFileConverter(IFile originalCfgFile) throws Exception {
 		Path cfgPath = Paths.get(originalCfgFile.getLocationURI());
 
 		Path cfgParentPath = cfgPath.getParent();
 
 		Path cfgFileNamePath = cfgPath.getFileName();
 
-		String baseName = FilenameUtils.removeExtension(cfgFileNamePath.toString());
+		String baseName = getNameWithoutExtension(cfgFileNamePath.toString());
 
 		Path cfgCommentPath = cfgParentPath.resolve(baseName + ".txt");
 

@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.commands.ui.internal.code;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.commands.core.code.CfgToConfigFileConverter;
 import com.liferay.ide.upgrade.commands.core.code.UpgradeCfgToConfigCommandKeys;
 import com.liferay.ide.upgrade.commands.ui.internal.UpgradeCommandsUIPlugin;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
@@ -225,9 +226,9 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 		protected void computeResult() {
 			_cfgFiles.stream(
 			).forEach(
-				configureFile -> {
+				cfgFile -> {
 					try {
-						CfgToConfigFileConverter.convertCfgToConfig(configureFile);
+						new CfgToConfigFileConverter(cfgFile);
 					}
 					catch (Exception e) {
 						UpgradeCommandsUIPlugin.logError(e.getMessage());
