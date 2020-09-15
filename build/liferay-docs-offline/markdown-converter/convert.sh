@@ -1,7 +1,7 @@
 #!/bin/sh -x
 
 scriptDir=$(dirname "$0")
-classpathDir=$(dirname "${scriptDir}")/lib
+classpathDir=$(dirname "${scriptDir}")/markdown-converter/lib
 
 if [ $# -eq 2 ]; then
 	mdFile=$1
