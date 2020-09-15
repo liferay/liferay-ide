@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.commands.ui.internal.UpgradeCommandsUIPlugin;
 
 import java.io.File;
@@ -43,7 +42,7 @@ public class CfgToConfigFileConverter {
 
 	public static void convertCfgToConfig(IFile originalCfgFile) {
 		try {
-			File cfgFile = FileUtil.getFile(originalCfgFile);
+			File cfgFile = new File(originalCfgFile.getLocationURI());
 
 			if (!cfgFile.exists()) {
 				return;
