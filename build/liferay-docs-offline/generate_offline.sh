@@ -38,19 +38,19 @@ fi
 unzip_dir=liferay-docs-${tag}
 
 if [ -d "${unzip_dir}" ]; then
-  "${pwd}/markdown-converter/bin/convert.sh" "${pwd}/${unzip_dir}/en/developer/tutorials/articles/03-upgrading-code-to-liferay-7.2/" "${pwd}/output"
+  "${pwd}/markdown-converter/convert.sh" "${pwd}/${unzip_dir}/en/developer/tutorials/articles/03-upgrading-code-to-liferay-7.2/" "${pwd}/output"
 
   count=$(ls "${pwd}/output" | wc -w)
 
   if [ "$count" -gt "0" ]; then
     cd "${pwd}/output/"
-    zip -q -r "${pwd}/code-upgrade-${tag}.zip" ./
+    zip -q -r "${pwd}/code-upgrade-docs-${tag}.zip" ./
 
     cd "${pwd}"
     rm -rf "${unzip_dir}" "${zipfile}" "output"
 
-    if [ -s "code-upgrade-${tag}.zip" ]; then
-      curl -X PUT -T code-upgrade-${tag}.zip -u $BINTRAY_USER:$BINTRAY_API_KEY "https://api.bintray.com/content/gamerson/liferay-ide-files/docs/code-upgrade-${tag}.zip;bt_package=contents;bt_version=1;publish=1"
+    if [ -s "code-upgrade-docs-${tag}.zip" ]; then
+      curl -X PUT -T code-upgrade-docs-${tag}.zip -u $BINTRAY_USER:$BINTRAY_API_KEY "https://api.bintray.com/content/gamerson/liferay-ide-files/docs/code-upgrade-docs-${tag}.zip;bt_package=contents;bt_version=1;publish=1"
 
       if [ $? -ne 0 ]; then
         echo "Failed to publish to bintray."
