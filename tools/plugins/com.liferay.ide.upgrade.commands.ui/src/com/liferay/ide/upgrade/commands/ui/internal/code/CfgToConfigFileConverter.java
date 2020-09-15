@@ -14,11 +14,8 @@
 
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
-import com.liferay.ide.upgrade.commands.ui.internal.UpgradeCommandsUIPlugin;
-
-import java.io.File;
-
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.text.MessageFormat;
@@ -26,8 +23,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import org.eclipse.core.resources.IContainer;
@@ -40,49 +37,59 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  */
 public class CfgToConfigFileConverter {
 
-	public static void convertCfgToConfig(IFile originalCfgFile) {
-		try {
-			File cfgFile = new File(originalCfgFile.getLocationURI());
+	public static void convertCfgToConfig(IFile originalCfgFile) throws Exception {
+		Path cfgPath = Paths.get(originalCfgFile.getLocationURI());
 
-			if (!cfgFile.exists()) {
-				return;
+		Path cfgParentPath = cfgPath.getParent();
+
+		Path cfgFileNamePath = cfgPath.getFileName();
+
+		String baseName = FilenameUtils.removeExtension(cfgFileNamePath.toString());
+
+		Path cfgCommentPath = cfgParentPath.resolve(baseName + ".txt");
+
+		List<String> cfgLines = new CopyOnWriteArrayList<>(Files.readAllLines(cfgPath));
+
+		List<String> commentLines = new ArrayList<>();
+
+		for (String line : cfgLines) {
+			if (line.startsWith("#")) {
+				cfgLines.remove(line);
+
+				commentLines.add(line);
 			}
-
-			File cfgCommnetFile = new File(
-				cfgFile.getParent(), FilenameUtils.removeExtension(cfgFile.getName()) + ".txt");
-			List<String> allLines = new CopyOnWriteArrayList<>(Files.readAllLines(Paths.get(cfgFile.toURI())));
-
-			List<String> commentLines = new ArrayList<>();
-
-			for (String line : allLines) {
-				if (line.startsWith("#")) {
-					allLines.remove(line);
-
-					commentLines.add(line);
-				}
-			}
-
-			if (!commentLines.isEmpty()) {
-				allLines.add(0, MessageFormat.format(_configCommnet, cfgCommnetFile.getName(), cfgFile.getName()));
-
-				FileUtils.writeLines(cfgFile, allLines);
-				FileUtils.writeLines(cfgCommnetFile, commentLines);
-			}
-
-			File targetFile = new File(
-				cfgFile.getParent(), FilenameUtils.removeExtension(cfgFile.getName()) + ".config");
-
-			FileUtils.moveFile(cfgFile, targetFile);
-
-			IContainer parentContainer = originalCfgFile.getParent();
-
-			parentContainer.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		}
-		catch (Exception e) {
-			UpgradeCommandsUIPlugin.logError(e.getMessage());
+
+		if (!commentLines.isEmpty()) {
+			Path cfgCommentFileName = cfgCommentPath.getFileName();
+
+			cfgLines.add(
+				0, MessageFormat.format(_configComment, cfgFileNamePath.toString(), cfgCommentFileName.toString()));
+
+			String cfgContent = cfgLines.stream(
+			).collect(
+				Collectors.joining(System.lineSeparator())
+			);
+
+			Files.write(cfgPath, cfgContent.getBytes());
+
+			String cfgCommentContent = commentLines.stream(
+			).collect(
+				Collectors.joining(System.lineSeparator())
+			);
+
+			Files.write(cfgCommentPath, cfgCommentContent.getBytes());
 		}
+
+		Path configPath = cfgParentPath.resolve(baseName + ".config");
+
+		Files.move(cfgPath, configPath);
+
+		IContainer parentContainer = originalCfgFile.getParent();
+
+		parentContainer.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 	}
 
-	private static String _configCommnet = "#comments has been moved to {0} in same folder as {1}";
+	private static String _configComment = "# comments has been extracted from {0} and added to {1}";
 
 }

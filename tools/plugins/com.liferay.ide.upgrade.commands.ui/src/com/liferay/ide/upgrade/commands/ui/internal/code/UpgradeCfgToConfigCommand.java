@@ -226,7 +226,12 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			_cfgFiles.stream(
 			).forEach(
 				configureFile -> {
-					CfgToConfigFileConverter.convertCfgToConfig(configureFile);
+					try {
+						CfgToConfigFileConverter.convertCfgToConfig(configureFile);
+					}
+					catch (Exception e) {
+						UpgradeCommandsUIPlugin.logError(e.getMessage());
+					}
 				}
 			);
 		}
