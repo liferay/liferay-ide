@@ -226,8 +226,7 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 
 		@Override
 		protected void computeResult() {
-			_cfgFiles.stream(
-			).forEach(
+			_cfgFiles.forEach(
 				cfgFile -> {
 					try {
 						new CfgToConfigFileConverter(FileUtil.getFile(cfgFile));
@@ -239,8 +238,7 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 					catch (Exception e) {
 						UpgradeCommandsUIPlugin.logError(e.getMessage());
 					}
-				}
-			);
+				});
 		}
 
 		@Override
