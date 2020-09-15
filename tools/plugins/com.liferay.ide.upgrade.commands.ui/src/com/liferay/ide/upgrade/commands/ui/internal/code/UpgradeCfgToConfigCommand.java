@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.CfgToConfigFileConverter;
@@ -43,6 +44,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -228,7 +230,11 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			).forEach(
 				cfgFile -> {
 					try {
-						new CfgToConfigFileConverter(cfgFile);
+						new CfgToConfigFileConverter(FileUtil.getFile(cfgFile));
+
+						IContainer parentContainer = cfgFile.getParent();
+
+						parentContainer.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 					}
 					catch (Exception e) {
 						UpgradeCommandsUIPlugin.logError(e.getMessage());
