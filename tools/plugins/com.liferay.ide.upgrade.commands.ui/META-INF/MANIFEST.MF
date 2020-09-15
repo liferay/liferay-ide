@@ -38,4 +38,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.Resourc
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.dependencies.UpdateRepositoryURLCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.code.ConfigureTargetPlatformVersionCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.sdk.MigrateExistingPluginsToWorkspaceCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.code.ConfigureWorkspaceProductKeyCommand.xml
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.code.ConfigureWorkspaceProductKeyCommand.xml,
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.code.UpgradeCfgToConfigCommand.xml
