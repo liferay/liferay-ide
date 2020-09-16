@@ -21,6 +21,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -122,6 +123,14 @@ public class GradleProjectProvider
 		sb.append(projectTemplateName);
 		sb.append(" ");
 
+		Optional<String> product = _getProduct(workspaceLocation);
+
+		if (product.isPresent()) {
+			sb.append("--product ");
+			sb.append(product.get());
+			sb.append(" ");
+		}
+
 		if (className != null) {
 			sb.append("-c ");
 			sb.append(className);
@@ -205,6 +214,29 @@ public class GradleProjectProvider
 		}
 
 		return null;
+	}
+
+	private Optional<String> _getProduct(IPath workspaceLocation) {
+		try {
+			String productKey = LiferayWorkspaceUtil.getGradleProperty(
+				workspaceLocation.toOSString(), WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
+
+			if (Objects.isNull(productKey)) {
+				return Optional.empty();
+			}
+
+			String product = productKey.substring(0, productKey.indexOf("-"));
+
+			if (Objects.equals(product, "commerce")) {
+				product = "dxp";
+			}
+
+			return Optional.of(product);
+		}
+		catch (Exception e) {
+		}
+
+		return Optional.empty();
 	}
 
 	private boolean _inGradleWorkspaceWars(IProject project) {
