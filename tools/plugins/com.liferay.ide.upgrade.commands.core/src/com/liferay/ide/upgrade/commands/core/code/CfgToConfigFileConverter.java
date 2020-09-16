@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Simon Jiang
+ * @author Gregory Amerson
  */
 public class CfgToConfigFileConverter {
 
@@ -75,13 +76,24 @@ public class CfgToConfigFileConverter {
 			);
 
 			Files.write(cfgCommentPath, cfgCommentContent.getBytes());
+
+			_modifiedPaths.add(cfgCommentPath);
 		}
 
 		Path configPath = cfgParentPath.resolve(baseName + ".config");
 
 		Files.move(cfgPath, configPath);
+
+		_modifiedPaths.add(cfgPath);
+		_modifiedPaths.add(configPath);
+	}
+
+	public List<Path> getModifiedPaths() {
+		return _modifiedPaths;
 	}
 
 	private static String _configComment = "# comments has been extracted from {0} and added to {1}";
+
+	private final List<Path> _modifiedPaths = new CopyOnWriteArrayList<>();
 
 }
