@@ -123,11 +123,11 @@ public class GradleProjectProvider
 		sb.append(projectTemplateName);
 		sb.append(" ");
 
-		String product = _getProduct(workspaceLocation);
+		Optional<String> product = _getProduct(workspaceLocation);
 
-		if (CoreUtil.isNotNullOrEmpty(product)) {
+		if (product.isPresent()) {
 			sb.append("--product ");
-			sb.append(product);
+			sb.append(product.get());
 			sb.append(" ");
 		}
 
@@ -216,27 +216,27 @@ public class GradleProjectProvider
 		return null;
 	}
 
-	private String _getProduct(IPath workspaceLocation) {
-		String product = null;
-
+	private Optional<String> _getProduct(IPath workspaceLocation) {
 		try {
 			String productKey = LiferayWorkspaceUtil.getGradleProperty(
 				workspaceLocation.toOSString(), WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
 
 			if (Objects.isNull(productKey)) {
-				return product;
+				return Optional.empty();
 			}
 
-			product = productKey.substring(0, productKey.indexOf("-"));
+			String product = productKey.substring(0, productKey.indexOf("-"));
 
 			if (Objects.equals(product, "commerce")) {
-				return "dxp";
+				product = "dxp";
 			}
+
+			return Optional.of(product);
 		}
 		catch (Exception e) {
 		}
 
-		return product;
+		return Optional.empty();
 	}
 
 	private boolean _inGradleWorkspaceWars(IProject project) {
