@@ -123,11 +123,11 @@ public class GradleProjectProvider
 		sb.append(projectTemplateName);
 		sb.append(" ");
 
-		String pruduct = _getPruduct(workspaceLocation);
+		String product = _getProduct(workspaceLocation);
 
-		if (CoreUtil.isNotNullOrEmpty(pruduct)) {
+		if (CoreUtil.isNotNullOrEmpty(product)) {
 			sb.append("--product ");
-			sb.append(pruduct);
+			sb.append(product);
 			sb.append(" ");
 		}
 
@@ -216,7 +216,7 @@ public class GradleProjectProvider
 		return null;
 	}
 
-	private String _getPruduct(IPath workspaceLocation) {
+	private String _getProduct(IPath workspaceLocation) {
 		String product = null;
 
 		try {
