@@ -27,6 +27,7 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider
 
 import java.io.File;
 
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.model.Model;
@@ -87,7 +88,14 @@ public class LiferayMavenWorkspaceProjectProvider
 
 				Properties properties = pomModel.getProperties();
 
-				properties.setProperty("liferay.bom.version", get(op.getTargetPlatform()));
+				String targetPlatform = get(op.getTargetPlatform());
+
+				Map<String, String> liferayBundleUrlVersions = WorkspaceConstants.liferayBundleUrlVersions;
+
+				properties.setProperty("liferay.bom.version", targetPlatform);
+
+				properties.setProperty(
+					WorkspaceConstants.BUNDLE_URL_PROPERTY, liferayBundleUrlVersions.get(targetPlatform));
 
 				MavenUtil.updateMavenPom(pomModel, pomFile);
 			}
