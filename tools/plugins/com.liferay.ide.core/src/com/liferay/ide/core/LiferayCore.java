@@ -19,6 +19,9 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.ProjectChangeListener;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -27,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.net.proxy.IProxyData;
@@ -40,9 +44,6 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.framework.eventmgr.CopyOnWriteIdentityMap;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -54,7 +55,11 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class LiferayCore extends Plugin {
 
-	public static final IPath GLOBAL_SETTINGS_PATH = new Path(System.getProperty("user.home", "") + "/.liferay-ide");
+	public static final IPath GENERAL_USER_HOME_PATH = new Path(System.getProperty("user.home", ""));
+
+	public static final IPath GLOBAL_GRADLE_SETTINGS_PATH = GENERAL_USER_HOME_PATH.append(".gradle");
+
+	public static final IPath GLOBAL_SETTINGS_PATH = GENERAL_USER_HOME_PATH.append(".liferay-ide");
 
 	public static final IPath GLOBAL_USER_DIR = GLOBAL_SETTINGS_PATH.append("bundles");
 
@@ -334,78 +339,34 @@ public class LiferayCore extends Plugin {
 	}
 
 	private static void _configurePlatformProxy() {
-		String httpProxyHost = null;
+		IPath gradlePropertiesPath = GLOBAL_GRADLE_SETTINGS_PATH.append("gradle.properties");
 
-		String httpsProxyHost = null;
-
-		String socksProxyHost = null;
-
-		int httpProxyPort = -1;
-
-		int httpsProxyPort = -1;
-
-		int socksProxyPort = -1;
-
-		String jpmPath = FileUtil.separatorsToSystem(System.getProperty("user.home") + "/.jpm/commands/jpm");
+		String gradleLocation = gradlePropertiesPath.toPortableString();
 
 		try {
-			File jpmCommandFile = new File(jpmPath);
+			File gradleFile = new File(gradleLocation);
 
-			if (FileUtil.notExists(jpmCommandFile)) {
+			if (FileUtil.notExists(gradleFile)) {
 				return;
 			}
 
-			String content = FileUtil.readContents(jpmCommandFile);
+			InputStream input = new FileInputStream(gradleFile);
 
-			if (Objects.isNull(content) || content.isEmpty()) {
-				return;
-			}
+			Properties prop = new Properties();
 
-			JSONObject jsonObject = new JSONObject(content);
+			prop.load(input);
 
-			String jvmArgs = jsonObject.getString("jvmArgs");
+			String httpProxyHost = prop.getProperty("systemProp.http.proxyHost", null);
 
-			if (Objects.isNull(jvmArgs) || jvmArgs.isEmpty()) {
-				return;
-			}
+			int httpProxyPort = Integer.valueOf(prop.getProperty("systemProp.http.proxyPort", "-1"));
 
-			for (String jvmArg : jvmArgs.split("\\s")) {
-				if (jvmArg.contains("http.proxyHost")) {
-					httpProxyHost = jvmArg.split("=")[1];
+			String httpsProxyHost = prop.getProperty("systemProp.https.proxyHost", null);
 
-					continue;
-				}
+			int httpsProxyPort = Integer.valueOf(prop.getProperty("systemProp.https.proxyPort", "-1"));
 
-				if (jvmArg.contains("http.proxyPort")) {
-					httpProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
+			String socksProxyHost = prop.getProperty("systemProp.socks.proxyHost", null);
 
-					continue;
-				}
-
-				if (jvmArg.contains("https.proxyHost")) {
-					httpsProxyHost = jvmArg.split("=")[1];
-
-					continue;
-				}
-
-				if (jvmArg.contains("https.proxyPort")) {
-					httpsProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
-
-					continue;
-				}
-
-				if (jvmArg.contains("socks.proxyHost")) {
-					socksProxyHost = jvmArg.split("=")[1];
-
-					continue;
-				}
-
-				if (jvmArg.contains("socks.proxyPort")) {
-					socksProxyPort = Integer.valueOf(jvmArg.split("=")[1]);
-
-					continue;
-				}
-			}
+			int socksProxyPort = Integer.valueOf(prop.getProperty("systemProp.socks.proxyPort", "-1"));
 
 			IProxyService proxyService = getProxyService();
 
@@ -448,11 +409,11 @@ public class LiferayCore extends Plugin {
 
 			proxyService.setProxiesEnabled(true);
 		}
+		catch (IOException ioe) {
+			logError("Failed to read gradle proxy settings.", ioe);
+		}
 		catch (CoreException ce) {
 			logError("Failed to set eclipse proxy setting base on jpm.", ce);
-		}
-		catch (JSONException jsone) {
-			logError("Failed to read jpm proxy settings.", jsone);
 		}
 	}
 
