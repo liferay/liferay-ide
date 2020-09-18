@@ -16,6 +16,8 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -123,7 +125,7 @@ public class GradleProjectProvider
 		sb.append(projectTemplateName);
 		sb.append(" ");
 
-		Optional<String> product = _getProduct(workspaceLocation);
+		Optional<String> product = _getProduct(liferayWorkspaceProject);
 
 		if (product.isPresent()) {
 			sb.append("--product ");
@@ -216,8 +218,16 @@ public class GradleProjectProvider
 		return null;
 	}
 
-	private Optional<String> _getProduct(IPath workspaceLocation) {
+	private Optional<String> _getProduct(IProject project) {
 		try {
+			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
+			if (!workspaceProject.isFlexibleLiferayWorkspace()) {
+				return Optional.empty();
+			}
+
+			IPath workspaceLocation = project.getLocation();
+
 			String productKey = LiferayWorkspaceUtil.getGradleProperty(
 				workspaceLocation.toOSString(), WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
 
