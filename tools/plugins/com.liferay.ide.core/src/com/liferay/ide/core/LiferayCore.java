@@ -16,12 +16,10 @@ package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.workspace.ProjectChangeListener;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -341,32 +339,26 @@ public class LiferayCore extends Plugin {
 	private static void _configurePlatformProxy() {
 		IPath gradlePropertiesPath = GLOBAL_GRADLE_SETTINGS_PATH.append("gradle.properties");
 
-		String gradleLocation = gradlePropertiesPath.toPortableString();
+		if (FileUtil.notExists(gradlePropertiesPath)) {
+			return;
+		}
+
+		File gradlePropertyFile = gradlePropertiesPath.toFile();
 
 		try {
-			File gradleFile = new File(gradleLocation);
+			Properties gradleProperties = PropertiesUtil.loadProperties(gradlePropertyFile);
 
-			if (FileUtil.notExists(gradleFile)) {
-				return;
-			}
+			String httpProxyHost = gradleProperties.getProperty("systemProp.http.proxyHost", null);
 
-			InputStream input = new FileInputStream(gradleFile);
+			int httpProxyPort = Integer.valueOf(gradleProperties.getProperty("systemProp.http.proxyPort", "-1"));
 
-			Properties prop = new Properties();
+			String httpsProxyHost = gradleProperties.getProperty("systemProp.https.proxyHost", null);
 
-			prop.load(input);
+			int httpsProxyPort = Integer.valueOf(gradleProperties.getProperty("systemProp.https.proxyPort", "-1"));
 
-			String httpProxyHost = prop.getProperty("systemProp.http.proxyHost", null);
+			String socksProxyHost = gradleProperties.getProperty("systemProp.socks.proxyHost", null);
 
-			int httpProxyPort = Integer.valueOf(prop.getProperty("systemProp.http.proxyPort", "-1"));
-
-			String httpsProxyHost = prop.getProperty("systemProp.https.proxyHost", null);
-
-			int httpsProxyPort = Integer.valueOf(prop.getProperty("systemProp.https.proxyPort", "-1"));
-
-			String socksProxyHost = prop.getProperty("systemProp.socks.proxyHost", null);
-
-			int socksProxyPort = Integer.valueOf(prop.getProperty("systemProp.socks.proxyPort", "-1"));
+			int socksProxyPort = Integer.valueOf(gradleProperties.getProperty("systemProp.socks.proxyPort", "-1"));
 
 			IProxyService proxyService = getProxyService();
 
@@ -408,9 +400,6 @@ public class LiferayCore extends Plugin {
 			proxyService.setSystemProxiesEnabled(false);
 
 			proxyService.setProxiesEnabled(true);
-		}
-		catch (IOException ioe) {
-			logError("Failed to read gradle proxy settings.", ioe);
 		}
 		catch (CoreException ce) {
 			logError("Failed to set eclipse proxy setting base on jpm.", ce);
