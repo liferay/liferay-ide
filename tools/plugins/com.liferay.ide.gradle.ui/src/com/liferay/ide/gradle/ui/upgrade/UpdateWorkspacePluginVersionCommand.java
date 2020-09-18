@@ -67,7 +67,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 	public UpdateWorkspacePluginVersionCommand() {
 		try {
-			IPath bladeCLIPath = BladeCLI.getBladeCLIPath();
+			IPath bladeCLIPath = BladeCLI.getLatestBladeCLIPath();
 
 			File bladeJarFile = bladeCLIPath.toFile();
 

@@ -43,6 +43,7 @@ import org.osgi.framework.Bundle;
  * @author Gregory Amerson
  * @author Andy Wu
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class BladeCLI {
 
@@ -89,6 +90,15 @@ public class BladeCLI {
 
 		try {
 			return _getBladeJarFromBundle(_bladeJarName);
+		}
+		catch (IOException ioe) {
+			throw new BladeCLIException("Could not find blade cli jar", ioe);
+		}
+	}
+
+	public static synchronized IPath getLatestBladeCLIPath() throws BladeCLIException {
+		try {
+			return _getBladeJarFromBundle(BLADE_LATEST);
 		}
 		catch (IOException ioe) {
 			throw new BladeCLIException("Could not find blade cli jar", ioe);
