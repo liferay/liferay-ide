@@ -18,6 +18,8 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 
+import java.util.Map;
+
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
@@ -53,24 +55,11 @@ public class BundleUrlDefaultValueService extends DefaultValueService implements
 			return null;
 		}
 
-		String liferayVersion = get(op.getLiferayVersion());
+		String targetPlatform = get(op.getTargetPlatform());
 
-		switch (liferayVersion) {
-			case "7.3":
-				return WorkspaceConstants.BUNDLE_URL_CE_7_3;
+		Map<String, String> liferayBundleUrlVersions = WorkspaceConstants.liferayBundleUrlVersions;
 
-			case "7.2":
-				return WorkspaceConstants.BUNDLE_URL_CE_7_2;
-
-			case "7.1":
-				return WorkspaceConstants.BUNDLE_URL_CE_7_1;
-
-			case "7.0":
-				return WorkspaceConstants.BUNDLE_URL_CE_7_0;
-
-			default:
-				return WorkspaceConstants.BUNDLE_URL_CE_7_3;
-		}
+		return liferayBundleUrlVersions.get(targetPlatform);
 	}
 
 	protected void initDefaultValueService() {

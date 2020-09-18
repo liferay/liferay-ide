@@ -77,6 +77,42 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	}
 
 	@Test
+	public void testNewLiferayMavenWorkspaceOpBundleUrlDependendOnTaregetPlatform() throws Exception {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+		String projectName = "test-liferay-maven-workspace-new";
+
+		op.setProjectProvider("maven-liferay-workspace");
+		op.setWorkspaceName(projectName);
+		op.setUseDefaultLocation(true);
+		op.setLiferayVersion("7.1");
+		op.setTargetPlatform("7.1.2");
+
+		createOrImportAndBuild(op, workspace.getName());
+
+		waitForBuildAndValidation();
+
+		IProject workspaceProject = CoreUtil.getProject(workspace.getName());
+
+		MavenTestUtil.waitForJobsToComplete();
+
+		IPath wsLocation = workspaceProject.getLocation();
+
+		IPath pomFilePath = wsLocation.append("pom.xml");
+
+		File pomFile = pomFilePath.toFile();
+
+		Assert.assertTrue(pomFile.exists());
+
+		String content = FileUtil.readContents(pomFile);
+
+		Assert.assertTrue(
+			content.contains(
+				"https://releases-cdn.liferay.com/portal/7.1.2-ga3" +
+					"/liferay-ce-portal-tomcat-7.1.2-ga3-20190107144105508.tar.gz"));
+	}
+
+	@Test
 	public void testNewLiferayWorkspaceOpWithInvalidBundleUrl() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 

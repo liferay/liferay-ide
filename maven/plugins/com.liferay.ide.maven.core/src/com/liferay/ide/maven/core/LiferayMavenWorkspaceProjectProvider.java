@@ -87,7 +87,13 @@ public class LiferayMavenWorkspaceProjectProvider
 
 				Properties properties = pomModel.getProperties();
 
-				properties.setProperty("liferay.bom.version", get(op.getTargetPlatform()));
+				String targetPlatform = get(op.getTargetPlatform());
+
+				String bundleUrl = get(op.getBundleUrl());
+
+				properties.setProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, targetPlatform);
+
+				properties.setProperty(WorkspaceConstants.BUNDLE_URL_PROPERTY, bundleUrl);
 
 				MavenUtil.updateMavenPom(pomModel, pomFile);
 			}
