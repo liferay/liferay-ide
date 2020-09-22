@@ -27,15 +27,12 @@ import java.net.URL;
 
 import java.nio.file.Files;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 
-import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
@@ -127,14 +124,10 @@ public class UpgradePlanCorePlugin extends Plugin {
 	private static String _computeMD5(File file) {
 		if (Objects.nonNull(file)) {
 			try {
-				MessageDigest md5 = MessageDigest.getInstance("MD5");
-
-				md5.update(Files.readAllBytes(file.toPath()));
-
-				return DatatypeConverter.printHexBinary(md5.digest());
+				return DigestUtils.md5Hex(Files.readAllBytes(file.toPath()));
 			}
-			catch (IOException | NoSuchAlgorithmException e) {
-				e.printStackTrace();
+			catch (IOException ioe) {
+				ioe.printStackTrace();
 			}
 		}
 
