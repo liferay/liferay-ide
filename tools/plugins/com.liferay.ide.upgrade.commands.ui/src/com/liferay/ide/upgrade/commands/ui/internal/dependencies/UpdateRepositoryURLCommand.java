@@ -83,10 +83,7 @@ public class UpdateRepositoryURLCommand implements UpgradeCommand, UpgradePrevie
 		IStatus status = _updateRepositoryURL(tempFile);
 
 		if (status.isOK()) {
-			UIUtil.async(
-				() -> {
-					_upgradeCompare.openCompareEditor(settingsGradle, tempFile);
-				});
+			UIUtil.async(() -> _upgradeCompare.openCompareEditor(settingsGradle, tempFile));
 		}
 	}
 
@@ -106,7 +103,7 @@ public class UpdateRepositoryURLCommand implements UpgradeCommand, UpgradePrevie
 	private IStatus _updateRepositoryURL(File settingsGradle) {
 		String contents = FileUtil.readContents(settingsGradle, true);
 
-		String oldRepositoryURLPrefix = "https://cdn.lfrs.sl/repository.liferay.com/";
+		String oldRepositoryURLPrefix = "https://repository-cdn.liferay.com/";
 
 		if (contents.contains(oldRepositoryURLPrefix)) {
 			contents = contents.replaceAll(oldRepositoryURLPrefix, "https://repository-cdn.liferay.com/");

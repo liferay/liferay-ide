@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <scr:component name="com.liferay.ide.gradle.core.UpgradeToLatestPlukginsSDKStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
 	<property name="description" value="In this step, we will download the latest Plugins SDK and extract it into your workspace upgrade project." />
 	<property name="id" value="upgrade_to_latest_plugins_sdk" />

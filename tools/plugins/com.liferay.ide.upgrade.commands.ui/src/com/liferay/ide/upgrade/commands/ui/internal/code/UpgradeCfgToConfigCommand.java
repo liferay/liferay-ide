@@ -165,8 +165,9 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			return null;
 		}
 
-		return projects.stream(
-		).flatMap(
+		Stream<IProject> projectStream = projects.stream();
+
+		return projectStream.flatMap(
 			project -> {
 				SearchCfgFilesVisitor searchVistor = new SearchCfgFilesVisitor();
 
@@ -187,9 +188,8 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 
 					IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 
-					Shell shell = workbenchWindow.getShell();
-
-					AsyncStringFilteredDialog dialog = new AsyncStringFilteredDialog(shell, cfgFiles);
+					AsyncStringFilteredDialog dialog = new AsyncStringFilteredDialog(
+						workbenchWindow.getShell(), cfgFiles);
 
 					dialog.setTitle("Migrate Cfg file to Config File List:");
 					dialog.setInitialElementSelections(cfgFiles);

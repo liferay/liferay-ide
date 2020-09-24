@@ -63,12 +63,10 @@ public class ResourceSelectionImpl implements ResourceSelection {
 
 		Path path = Paths.get(pathValue[0]);
 
-		if (validation != null) {
-			if (!validation.test(path)) {
-				IStatus status = UpgradeCommandsUIPlugin.createErrorStatus(failureMessage);
+		if ((validation != null) && !validation.test(path)) {
+			IStatus status = UpgradeCommandsUIPlugin.createErrorStatus(failureMessage);
 
-				throw new CoreException(status);
-			}
+			throw new CoreException(status);
 		}
 
 		return path;
