@@ -34,7 +34,7 @@ jobs:
       - name: Build repository
         shell: bash
         run: |
-          ./mvnw clean -DskipTests=true
+          ./build-updatesite.sh
       - name: Upload p2 repository
         env:
           BINTRAY_USER: ${{ secrets.bintray_usename }}
