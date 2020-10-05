@@ -338,7 +338,6 @@ public class GradleUtil {
 
 		BuildConfigurationBuilder gradleBuilder = BuildConfiguration.forRootProjectDirectory(dir.toFile());
 
-		gradleBuilder.overrideWorkspaceConfiguration(true);
 		gradleBuilder.autoSync(true);
 		gradleBuilder.buildScansEnabled(false);
 		gradleBuilder.gradleDistribution(GradleDistribution.fromBuild());
