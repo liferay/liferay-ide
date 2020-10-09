@@ -83,6 +83,7 @@ public class WorkspaceConstants {
 
 	public static final Map<String, String> liferayBundleUrlVersions = new HashMap<String, String>() {
 		{
+			put("7.3.5", LIFERAY_PORTAL_URL + "7.3.5-ga6/liferay-ce-portal-tomcat-7.3.5-ga6-20200930172312275.tar.gz");
 			put("7.3.4", LIFERAY_PORTAL_URL + "7.3.4-ga5/liferay-ce-portal-tomcat-7.3.4-ga5-20200811154319029.tar.gz");
 			put(
 				"7.3.3-1",
@@ -108,7 +109,7 @@ public class WorkspaceConstants {
 			put("7.0", new String[] {"7.0.6-2"});
 			put("7.1", new String[] {"7.1.3-1", "7.1.2", "7.1.1", "7.1.0"});
 			put("7.2", new String[] {"7.2.1-1", "7.2.0"});
-			put("7.3", new String[] {"7.3.4", "7.3.3-1", "7.3.2-1", "7.3.1-1", "7.3.0-1"});
+			put("7.3", new String[] {"7.3.5", "7.3.4", "7.3.3-1", "7.3.2-1", "7.3.1-1", "7.3.0-1"});
 		}
 	};
 
