@@ -316,7 +316,7 @@
                                         </compareText>
                                     </conditionRuleList>
                                     <elseActionList>
-                                        <setInstallerVariable name="selectbundleversion" value="7.3"/>
+                                        <setInstallerVariable name="selectbundleversion" value="portal-7.3-ga6"/>
                                     </elseActionList>
                                 </if>
                             </elseActionList>
@@ -334,7 +334,7 @@
                 <propertiesFileSet>
                     <file>${lrwsDir}${platform_path_separator}gradle.properties</file>
                     <key>liferay.workspace.product</key>
-                    <value>dxp-7.2-ga1</value>
+                    <value>dxp-7.3-ga1</value>
                     <ruleList>
                         <compareValues>
                             <logic>equals</logic>
@@ -648,7 +648,7 @@
             <description></description>
             <explanation>Specify initialized liferay bundle version.</explanation>
             <value></value>
-            <default>7_2</default>
+            <default>7_3</default>
             <parameterList>
                 <labelParameter>
                     <name>7_0</name>
