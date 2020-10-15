@@ -32,7 +32,7 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 	public void expandAndCollapse() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare(project.getName(), CODE_UPGRADE, "6.2", "7.1");
 
 		wizardAction.finish();
 
@@ -51,7 +51,7 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 	public void restartUpgradePlan() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare(project.getName(), CODE_UPGRADE, "6.2", "7.1");
 
 		wizardAction.finish();
 
@@ -86,7 +86,7 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 	public void switchUpgradePlan() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(projects.getName(0), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare(projects.getName(0), CODE_UPGRADE, "6.2", "7.1");
 
 		wizardAction.finish();
 
@@ -100,7 +100,7 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(projects.getName(1), UPGRADING_TO_PRODUCT_VER, "7.0", "7.2");
+		wizardAction.newUpgradePlan.prepare(projects.getName(1), CODE_UPGRADE, "7.0", "7.2");
 
 		wizardAction.finish();
 
@@ -108,8 +108,8 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 
 		viewAction.upgradePlan.clickSwitchUpgradePlan();
 
-		String[] firstUpgradePlan = {projects.getName(0), "6.2", "7.1", UPGRADING_CODE_TO_PRODUCT_VER_URL};
-		String[] secondUpgradePlan = {projects.getName(1), "7.0", "7.2", UPGRADING_TO_PRODUCT_VER_URL};
+		String[] firstUpgradePlan = {projects.getName(0), "6.2", "7.1", CODE_UPGRADE};
+		String[] secondUpgradePlan = {projects.getName(1), "7.0", "7.2", CODE_UPGRADE};
 
 		validationAction.assertEquals(
 			firstUpgradePlan, dialogAction.switchUpgradePlan.getUpgradePlan(projects.getName(0)));

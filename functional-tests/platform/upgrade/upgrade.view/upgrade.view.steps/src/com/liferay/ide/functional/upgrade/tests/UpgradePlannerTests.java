@@ -43,7 +43,7 @@ public class UpgradePlannerTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(projects.getName(1), UPGRADING_CODE_TO_PRODUCT_VER, "7.0", "7.1");
+		wizardAction.newUpgradePlan.prepare(projects.getName(1), CODE_UPGRADE, "7.0", "7.1");
 
 		wizardAction.finish();
 
@@ -100,7 +100,7 @@ public class UpgradePlannerTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(projects.getName(1), UPGRADING_CODE_TO_PRODUCT_VER, "7.0", "7.1");
+		wizardAction.newUpgradePlan.prepare(projects.getName(1), CODE_UPGRADE, "7.0", "7.1");
 
 		wizardAction.finish();
 
@@ -164,7 +164,7 @@ public class UpgradePlannerTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(projects.getName(1), UPGRADING_CODE_TO_PRODUCT_VER, "7.0", "7.1");
+		wizardAction.newUpgradePlan.prepare(projects.getName(1), CODE_UPGRADE, "7.0", "7.1");
 
 		wizardAction.finish();
 
@@ -205,7 +205,7 @@ public class UpgradePlannerTests extends SwtbotBase {
 	public void testSetUpLiferayWorkspace() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare("test", UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare("test", CODE_UPGRADE, "6.2", "7.1");
 
 		wizardAction.finish();
 
