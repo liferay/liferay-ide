@@ -123,17 +123,17 @@ public class NewLiferayComponentOpTests extends BaseTests
     public static void setupWorkspaceProject() throws Exception
     {
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
-        
+
         op.setWorkspaceName( "test-liferay-workspace" );
         op.setUseDefaultLocation( true );
-        op.setProductVersion("portal-7.3-ga5");
-        
+        op.setProductVersion("portal-7.3-ga6");
+        op.setShowAllProductVersions(true);
+
         TestUtil.waitForBuildAndValidation();
 
-        if( op.validation().ok() )
-        {
-            NewLiferayWorkspaceOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        }
+        assertTrue( op.validation().message(), op.validation().ok() );
+
+        NewLiferayWorkspaceOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         TestUtil.waitForBuildAndValidation();
     }
@@ -152,8 +152,9 @@ public class NewLiferayComponentOpTests extends BaseTests
         pop.setProjectTemplateName( "mvc-portlet" );
         pop.setProjectProvider( "gradle-module" );
 
-        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        assertTrue( modulePorjectStatus.ok() );
+        Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertTrue( moduleProjectStatus.message(), moduleProjectStatus.ok() );
 
         TestUtil.waitForBuildAndValidation();
 
@@ -239,18 +240,18 @@ public class NewLiferayComponentOpTests extends BaseTests
         op.setProjectTemplateName( "api" );
         op.setProjectProvider( "gradle-module" );
 
-        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        assertTrue( modulePorjectStatus.ok() );
+        assertTrue( moduleProjectStatus.message(), moduleProjectStatus.ok() );
 
         TestUtil.waitForBuildAndValidation();
 
         assertTrue( op.getLocation().content().toFile().exists() );
-        
+
         IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
 
         modProject.open( new NullProgressMonitor() );
-        
+
         NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
 
         cop.setProjectName( op.getProjectName().content() );
@@ -286,9 +287,9 @@ public class NewLiferayComponentOpTests extends BaseTests
         op.setProjectTemplateName( "mvc-portlet" );
         op.setProjectProvider( "gradle-module" );
 
-        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        assertTrue( modulePorjectStatus.ok() );
+        assertTrue( moduleProjectStatus.message(), moduleProjectStatus.ok() );
 
         TestUtil.waitForBuildAndValidation();
 
@@ -332,9 +333,9 @@ public class NewLiferayComponentOpTests extends BaseTests
         op.setProjectTemplateName( "api" );
         op.setProjectProvider( "gradle-module" );
 
-        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        assertTrue( modulePorjectStatus.ok() );
+        assertTrue( moduleProjectStatus.message(), moduleProjectStatus.ok() );
 
         TestUtil.waitForBuildAndValidation();
 
@@ -375,7 +376,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        assertTrue( moduleProjectStatus.ok() );
+        assertTrue( moduleProjectStatus.message(), moduleProjectStatus.ok() );
 
         TestUtil.waitForBuildAndValidation();
 

@@ -46,7 +46,8 @@ public abstract class NewModuleGradleBase extends NewModuleOpBase<NewLiferayModu
 		op.setWorkspaceName("liferay-gradle-workspace");
 
 		op.setProjectProvider("gradle-liferay-workspace");
-		op.setProductVersion("portal-7.3-ga5");
+		op.setProductVersion("portal-7.3-ga6");
+		op.setShowAllProductVersions(true);
 
 		JobUtil.waitForLiferayProjectJob();
 
