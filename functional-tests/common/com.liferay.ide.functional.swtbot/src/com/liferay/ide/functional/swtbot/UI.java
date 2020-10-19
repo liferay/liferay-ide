@@ -152,6 +152,8 @@ public interface UI {
 
 	public final String CLOSE_PROJECT = "Close Project";
 
+	public final String CODE_UPGRADE = "code-upgrade";
+
 	public final String COLLAPSE_ALL = "Collapse All";
 
 	public final String COMPONENT_CLASS_NAME = "Component Class Name:";
@@ -970,20 +972,6 @@ public interface UI {
 	public final String UPGRADE_TO_LIFERAY_WORKSPACE = "Upgrade to Liferay Workspace";
 
 	public final String UPGRADE_YOUR_DEVELOPMENT_ENVIRONMENT = "Upgrade Your Development Environment";
-
-	public final String UPGRADING_CODE_TO_PRODUCT_VER =
-		"upgrading-code-to-product-ver - https://portal.liferay.dev/docs/7-2/tutorials/-/knowledge_base/t" +
-			"/upgrading-code-to-product-ver";
-
-	public final String UPGRADING_CODE_TO_PRODUCT_VER_URL =
-		"https://portal.liferay.dev/docs/7-2/tutorials/-/knowledge_base/t/upgrading-code-to-product-ver";
-
-	public final String UPGRADING_TO_PRODUCT_VER =
-		"upgrading-to-product-ver - https://portal.liferay.dev/docs/7-2/deploy/-/knowledge_base/d" +
-			"/upgrading-to-product-ver";
-
-	public final String UPGRADING_TO_PRODUCT_VER_URL =
-		"https://portal.liferay.dev/docs/7-2/deploy/-/knowledge_base/d/upgrading-to-product-ver";
 
 	public final String UPLOAD_NEW_WORKFLOW = "Upload new workflow...";
 

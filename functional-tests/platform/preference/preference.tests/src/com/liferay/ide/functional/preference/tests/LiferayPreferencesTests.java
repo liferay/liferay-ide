@@ -19,6 +19,7 @@ import com.liferay.ide.functional.liferay.SwtbotBase;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -35,8 +36,7 @@ public class LiferayPreferencesTests extends SwtbotBase {
 		dialogAction.liferay.expandLiferay(LIFERAY);
 
 		String[] expectedLiferay = {
-			KALEO_DESIGNER, KALEO_WORKFLOW_VALIDATION, MAVEN, PLUGIN_VALIDATION, UPGRADE_PLANNER, UPGRADE_PROBLEMS,
-			XML_SEARCH
+			KALEO_DESIGNER, KALEO_WORKFLOW_VALIDATION, MAVEN, PLUGIN_VALIDATION, UPGRADE_PROBLEMS, XML_SEARCH
 		};
 
 		List<String> liferayItems = dialogAction.liferay.expandLiferay(LIFERAY);
@@ -217,6 +217,7 @@ public class LiferayPreferencesTests extends SwtbotBase {
 		dialogAction.cancel();
 	}
 
+	@Ignore("IDE-4613 upgrade planner in preferences has been removed because of offline support")
 	@Test
 	public void checkUpgradePlannerInitialState() {
 		dialogAction.openPreferencesDialog();
@@ -229,9 +230,9 @@ public class LiferayPreferencesTests extends SwtbotBase {
 
 		validationAction.assertEnabledTrue(dialogAction.upgradePlanner.getRemoveBtn());
 
-		validationAction.assertTableContains(dialogAction.upgradePlanner.getUrl(), UPGRADING_CODE_TO_PRODUCT_VER_URL);
+		validationAction.assertTableContains(dialogAction.upgradePlanner.getUrl(), CODE_UPGRADE);
 
-		validationAction.assertTableContains(dialogAction.upgradePlanner.getUrl(), UPGRADING_TO_PRODUCT_VER_URL);
+		validationAction.assertTableContains(dialogAction.upgradePlanner.getUrl(), CODE_UPGRADE);
 
 		dialogAction.cancel();
 	}

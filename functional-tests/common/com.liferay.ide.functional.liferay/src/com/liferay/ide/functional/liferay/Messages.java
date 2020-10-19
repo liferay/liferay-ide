@@ -313,8 +313,6 @@ public interface Messages {
 	public static final String UNABLE_TO_IDENTIFY_ORIGINAL_MODULE_IN_CURRENT_CONTEXT =
 		"Unable to identify original module source in current context.";
 
-	public static final String UPGRADE_PLAN_OUTLINE_MUST_BE_SPECIFIED = "Upgrade plan outline must be specified";
-
 	public static final String VALIDATION_SERVICE_WRAPPER_MESSAGE = "Service Name must be specified";
 
 	public static final String VALUE_MUST_BE_SPECIFIED = "Value must be specified";
