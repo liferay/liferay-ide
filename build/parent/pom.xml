@@ -33,7 +33,7 @@
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://dl.bintray.com/gamerson/liferay-ide-files/docs/code-upgrade-docs-20200923-2.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>7e3cf149ecb31855e3fd0bfdde9e3724</upgrade-plan-content-zip-md5>
-        <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/</bndtools-site>
+        <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/libs-release-local/org/bndtools/org.bndtools.p2/5.2.0/org.bndtools.p2-5.2.0.jar!</bndtools-site>
         <eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gmaven.runtime>1.8</gmaven.runtime>

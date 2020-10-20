@@ -124,10 +124,11 @@ public class ProjectCoreBase extends ServerCoreBase
 
         workspaceOp.setWorkspaceName( "test-liferay-workspace" );
         workspaceOp.setUseDefaultLocation( true );
-        workspaceOp.setProductVersion("portal-7.3-ga5");
-        
+        workspaceOp.setProductVersion("portal-7.3-ga6");
+        workspaceOp.setShowAllProductVersions(true);
+
         waitForBuildAndValidation();
-        
+
         if( workspaceOp.validation().ok() )
         {
             NewLiferayWorkspaceOpMethods.execute( workspaceOp, ProgressMonitorBridge.create( new NullProgressMonitor() ) );

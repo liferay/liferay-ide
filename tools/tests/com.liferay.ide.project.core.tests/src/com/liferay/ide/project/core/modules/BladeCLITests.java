@@ -71,7 +71,7 @@ public class BladeCLITests
         StringBuilder sbWorkspace = new StringBuilder();
         sbWorkspace.append("init ");
         sbWorkspace.append("-v ");
-        sbWorkspace.append("portal-7.3-ga5 ");
+        sbWorkspace.append("portal-7.3-ga6 ");
         sbWorkspace.append("testWorkspace ");
         sbWorkspace.append("--base ");
         sbWorkspace.append("\"");
