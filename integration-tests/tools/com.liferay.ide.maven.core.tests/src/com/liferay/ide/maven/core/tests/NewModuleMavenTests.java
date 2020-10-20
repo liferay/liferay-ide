@@ -79,7 +79,7 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 	public static void createLiferayWorkspace() {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga4");
+		op.setProductVersion("portal-7.3-ga6");
 
 		JobUtil.waitForLiferayProjectJob();
 

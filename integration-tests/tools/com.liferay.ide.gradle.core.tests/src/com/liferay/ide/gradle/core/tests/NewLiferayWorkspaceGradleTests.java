@@ -35,7 +35,7 @@ public class NewLiferayWorkspaceGradleTests extends ProjectOpBase<NewLiferayWork
 
 		op.setWorkspaceName(workspace.getName());
 		op.setProjectProvider(provider());
-		op.setProductVersion("dxp-7.2-sp2");
+		op.setProductVersion("dxp-7.2-sp3");
 
 		waitForBuildAndValidation();
 

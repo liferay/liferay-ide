@@ -51,7 +51,7 @@ public class NewModuleNpm71MavenTests extends NewModuleMavenBase {
 
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga4");
+		op.setProductVersion("portal-7.3-ga6");
 
 		JobUtil.waitForLiferayProjectJob();
 
