@@ -14,12 +14,20 @@
 
 package com.liferay.ide.functional.liferay.page.editor;
 
+import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.allOf;
+import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
+import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withMnemonic;
+
 import com.liferay.ide.functional.swtbot.page.CheckBox;
 import com.liferay.ide.functional.swtbot.page.Editor;
 import com.liferay.ide.functional.swtbot.page.Radio;
 import com.liferay.ide.functional.swtbot.page.Text;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.forms.finder.widgets.SWTBotHyperlink;
+import org.eclipse.ui.forms.widgets.Hyperlink;
+
+import org.hamcrest.Matcher;
 
 /**
  * @author Terry Jia
@@ -39,6 +47,16 @@ public class ServerEditor extends Editor {
 		getDefaultLaunchSettings().click();
 	}
 
+	public void clickHyperLink(String label, int hyperLinkIndex) {
+		Matcher<Hyperlink> hyperLink = allOf(widgetOfType(Hyperlink.class), withMnemonic(label));
+
+		Hyperlink link = (Hyperlink)bot.widget(hyperLink, hyperLinkIndex);
+
+		SWTBotHyperlink selectHyperLink = new SWTBotHyperlink(link);
+
+		selectHyperLink.click();
+	}
+
 	public void clickUseDeveloperMode() {
 		getUseDeveloperMode().select();
 	}
@@ -51,20 +69,56 @@ public class ServerEditor extends Editor {
 		return new Radio(getPart().bot(), "Default Launch Settings");
 	}
 
+	public Text getExternalProperties() {
+		return new Text(getPart().bot(), "External properties:");
+	}
+
+	public Text getHostName() {
+		return new Text(getPart().bot(), "Host name:");
+	}
+
 	public Text getHttpPort() {
 		return new Text(getPart().bot(), "Http Port:");
+	}
+
+	public boolean getHyperLink(String label) {
+		Matcher<Hyperlink> hyperLink = allOf(widgetOfType(Hyperlink.class), withMnemonic(label));
+
+		Hyperlink link = (Hyperlink)bot.widget(hyperLink);
+
+		SWTBotHyperlink getHyperLink = new SWTBotHyperlink(link);
+
+		getHyperLink.isEnabled();
+
+		return getHyperLink.isEnabled();
+	}
+
+	public Text getMemoryArgs() {
+		return new Text(getPart().bot(), "Memory args:");
 	}
 
 	public Text getPassword() {
 		return new Text(getPart().bot(), "Password:");
 	}
 
+	public Text getServerName() {
+		return new Text(getPart().bot(), "Server name:");
+	}
+
 	public CheckBox getUseDeveloperMode() {
 		return new CheckBox(getPart().bot(), "Use developer mode");
 	}
 
+	public Text getUserName() {
+		return new Text(getPart().bot(), "Username:");
+	}
+
 	public void setHttpPort(String port) {
 		getHttpPort().setText(port);
+	}
+
+	public void setMemoryArgs(String memoryArgs) {
+		getMemoryArgs().setText(memoryArgs);
 	}
 
 	public void setPassword(String password) {

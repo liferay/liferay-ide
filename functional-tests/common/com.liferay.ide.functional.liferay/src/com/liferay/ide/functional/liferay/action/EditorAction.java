@@ -20,7 +20,10 @@ import com.liferay.ide.functional.liferay.page.editor.PomXmlEditor;
 import com.liferay.ide.functional.liferay.page.editor.ServerEditor;
 import com.liferay.ide.functional.liferay.page.editor.ServiceXmlEditor;
 import com.liferay.ide.functional.liferay.page.editor.WorkflowXmlEditor;
+import com.liferay.ide.functional.swtbot.page.CheckBox;
 import com.liferay.ide.functional.swtbot.page.Editor;
+import com.liferay.ide.functional.swtbot.page.Radio;
+import com.liferay.ide.functional.swtbot.page.Text;
 
 import java.util.List;
 
@@ -140,6 +143,58 @@ public class EditorAction extends UIAction {
 
 	public class ServerEditorAction {
 
+		public void clickLiferayLaunchRestoreDefaults() {
+			_serverEditor.clickHyperLink(RESTORE_DEFAULTS, 0);
+		}
+
+		public void clickPortsRestoreDefaults() {
+			_serverEditor.clickHyperLink(RESTORE_DEFAULTS, 2);
+		}
+
+		public Radio getCustomLaunchSettings() {
+			return _serverEditor.getCustomLaunchSettings();
+		}
+
+		public Radio getDefaultLaunchSettings() {
+			return _serverEditor.getDefaultLaunchSettings();
+		}
+
+		public Text getExternalProperties() {
+			return _serverEditor.getExternalProperties();
+		}
+
+		public Text getHostName() {
+			return _serverEditor.getHostName();
+		}
+
+		public Text getHttpPort() {
+			return _serverEditor.getHttpPort();
+		}
+
+		public Text getMemoryArgs() {
+			return _serverEditor.getMemoryArgs();
+		}
+
+		public boolean getOpenLauchConfiguration(String hyperlink) {
+			return _serverEditor.getHyperLink(OPEN_LAUNCH_CONFIGURATION);
+		}
+
+		public Text getPassword() {
+			return _serverEditor.getPassword();
+		}
+
+		public Text getServerName() {
+			return _serverEditor.getServerName();
+		}
+
+		public CheckBox getUseDeveloperMode() {
+			return _serverEditor.getUseDeveloperMode();
+		}
+
+		public Text getUserName() {
+			return _serverEditor.getUserName();
+		}
+
 		public void selectCustomLaunchSettings() {
 			_serverEditor.clickCustomLaunchSettings();
 		}
@@ -154,6 +209,10 @@ public class EditorAction extends UIAction {
 
 		public void setHttpPort(String port) {
 			_serverEditor.setHttpPort(port);
+		}
+
+		public void setMemoryArgs(String memoryArgs) {
+			_serverEditor.setMemoryArgs(memoryArgs);
 		}
 
 		public void setPassword(String password) {

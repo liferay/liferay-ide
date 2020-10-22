@@ -635,6 +635,8 @@ public interface UI {
 
 	public final String OPEN_GOGO_SHELL = "Open Gogo Shell";
 
+	public final String OPEN_LAUNCH_CONFIGURATION = "Open launch configuration";
+
 	public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
 
 	public final String OPEN_LIFERAY_PORTAL_HOME = "Open Liferay Portal Home";
@@ -770,6 +772,8 @@ public interface UI {
 	public final String REST_UPCASE = "Rest";
 
 	public final String RESTART_UPGRADE_PLAN = "Restart Upgrade Plan";
+
+	public final String RESTORE_DEFAULTS = "Restore defaults.";
 
 	public final String RICHFACES = "RichFaces";
 
