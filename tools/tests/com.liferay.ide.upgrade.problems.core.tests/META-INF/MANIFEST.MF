@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Upgrade Problems Core Tests
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core.tests
-Bundle-Version: 3.9.0.qualifier
+Bundle-Version: 3.9.1.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
