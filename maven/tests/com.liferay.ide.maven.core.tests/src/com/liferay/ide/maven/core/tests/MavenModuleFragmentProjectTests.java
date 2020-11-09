@@ -132,20 +132,15 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
     public static void createLiferayWorkspaceProject() throws Exception {
         NewLiferayWorkspaceOp workspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
 
+        workspaceOp.setProjectProvider("maven-liferay-workspace");
         workspaceOp.setWorkspaceName( "test-maven-liferay-workspace" );
         workspaceOp.setUseDefaultLocation( true );
-        workspaceOp.setProductVersion("portal-7.3-ga5");
         workspaceOp.setProvisionLiferayBundle(true);
         workspaceOp.setServerName("test-maven-liferay-workspace");
         
         TestUtil.waitForBuildAndValidation();
 
-        if( workspaceOp.validation().ok() )
-        {
-            workspaceOp.setProjectProvider("maven-liferay-workspace");
-
-            NewLiferayWorkspaceOpMethods.execute( workspaceOp, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        }
+        NewLiferayWorkspaceOpMethods.execute( workspaceOp, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         IProject workspaceProject = CoreUtil.getProject( "test-maven-liferay-workspace" );
 

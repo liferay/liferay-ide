@@ -250,7 +250,9 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 					if ((hasLiferayNature ||
 						 MavenUtil.hasDependency(project, "com.liferay.portal", "com.liferay.portal.kernel") ||
-						 MavenUtil.hasDependency(project, "com.liferay.faces", "com.liferay.faces.bridge.ext")) &&
+						 MavenUtil.hasDependency(project, "com.liferay.faces", "com.liferay.faces.bridge.ext") ||
+						 MavenUtil.hasDependency(project, "com.liferay.portal", "release.dxp.api") ||
+						 MavenUtil.hasDependency(project, "com.liferay.portal", "release.portal.api")) &&
 						hasLiferayFacet && ((type == null) || type.isAssignableFrom(FacetedMavenBundleProject.class))) {
 
 						return new FacetedMavenBundleProject(project);
