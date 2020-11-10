@@ -127,4 +127,9 @@ public class DeployModuleLiferayWorkspaceGradleTomcat71Tests extends DeployModul
 		return server.getStartedLabel();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.1";
+	}
+
 }
