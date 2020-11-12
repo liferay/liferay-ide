@@ -54,10 +54,7 @@ public abstract class ProjectOpBase<T extends ExecutableElement> extends Project
 
 		Status status = op.validation();
 
-		if (expectedWarningMessage == null) {
-			Assert.assertTrue(status.message(), status.ok());
-		}
-		else {
+		if (expectedWarningMessage != null) {
 			Assert.assertFalse(status.message(), status.ok());
 			Assert.assertEquals(expectedWarningMessage, status.message());
 		}
