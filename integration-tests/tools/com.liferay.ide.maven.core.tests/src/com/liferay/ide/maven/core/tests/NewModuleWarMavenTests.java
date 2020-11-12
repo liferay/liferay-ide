@@ -53,7 +53,6 @@ public class NewModuleWarMavenTests extends NewModuleMavenBase {
 		deleteProject(project.getName());
 	}
 
-	@Ignore("need more research")
 	@Test
 	public void createWarHook() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();

@@ -15,7 +15,6 @@
 package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.maven.core.tests.base.NewModuleMavenBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
@@ -50,10 +49,6 @@ public class NewModuleNpm71MavenTests extends NewModuleMavenBase {
 		}
 
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
-
-		op.setProductVersion("portal-7.3-ga6");
-
-		JobUtil.waitForLiferayProjectJob();
 
 		op.setWorkspaceName("liferay-maven-workspace");
 		op.setProjectProvider("maven-liferay-workspace");

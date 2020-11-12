@@ -79,8 +79,6 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 	public static void createLiferayWorkspace() {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga6");
-
 		JobUtil.waitForLiferayProjectJob();
 
 		op.setWorkspaceName("test-maven-workspace");
@@ -773,6 +771,8 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 
 		IProject parent = MavenTestUtil.create(op);
 
+		JobUtil.waitForLiferayProjectJob();
+		
 		Assert.assertTrue(parent != null && parent.exists());
 
 		IProject api = CoreUtil.getProject("service-builder-test-api");

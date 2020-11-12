@@ -322,6 +322,8 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("simulation-panel-entry");
 
+		waitForBuildAndValidation();
+
 		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());

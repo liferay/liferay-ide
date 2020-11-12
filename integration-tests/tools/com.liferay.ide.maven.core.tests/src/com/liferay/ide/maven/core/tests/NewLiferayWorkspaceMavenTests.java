@@ -53,9 +53,6 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		op.setWorkspaceName(workspace.getName());
-		op.setProductVersion("portal-7.3-ga6");
-
-		waitForBuildAndValidation();
 
 		op.setProjectProvider(provider());
 		op.setLiferayVersion("7.3");
@@ -81,9 +78,6 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		op.setWorkspaceName(workspace.getName());
-		op.setProductVersion("portal-7.3-ga6");
-
-		waitForBuildAndValidation();
 
 		op.setProjectProvider(provider());
 
@@ -119,10 +113,6 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewLiferayWorkspaceOpWithInvalidBundleUrl() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga6");
-
-		waitForBuildAndValidation();
-
 		op.setWorkspaceName(workspace.getName());
 
 		op.setProjectProvider(provider());
@@ -150,10 +140,6 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	@Test
 	public void testNewMavenLiferayWorkspaceInitBundle() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
-
-		op.setProductVersion("portal-7.3-ga6");
-
-		waitForBuildAndValidation();
 
 		String defaultBundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_2;
 
@@ -197,10 +183,6 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewMavenLiferayWorkspaceOpWithBundle70() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga6");
-
-		waitForBuildAndValidation();
-
 		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
 
 		IPath workspaceLocation = wsRoot.getLocation();
@@ -239,10 +221,6 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewMavenLiferayWorkspaceOpWithBundle71() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setProductVersion("portal-7.3-ga6");
-
-		waitForBuildAndValidation();
-
 		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
 
 		IPath workspaceLocation = wsRoot.getLocation();
@@ -280,10 +258,6 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	@Test
 	public void testNewMavenLiferayWorkspaceSetUrl() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
-
-		op.setProductVersion("portal-7.3-ga6");
-
-		waitForBuildAndValidation();
 
 		String bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
 
