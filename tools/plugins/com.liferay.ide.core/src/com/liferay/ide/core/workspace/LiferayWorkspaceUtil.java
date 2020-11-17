@@ -548,13 +548,10 @@ public class LiferayWorkspaceUtil {
 	public static boolean isValidGradleWorkspaceLocation(String location) {
 		File workspaceDir = new File(location);
 
-		File buildGradle = new File(workspaceDir, _BUILD_GRADLE_FILE_NAME);
 		File settingsGradle = new File(workspaceDir, _SETTINGS_GRADLE_FILE_NAME);
 		File gradleProperties = new File(workspaceDir, _GRADLE_PROPERTIES_FILE_NAME);
 
-		if (FileUtil.notExists(buildGradle) || FileUtil.notExists(settingsGradle) ||
-			FileUtil.notExists(gradleProperties)) {
-
+		if (FileUtil.notExists(settingsGradle) || FileUtil.notExists(gradleProperties)) {
 			return false;
 		}
 
@@ -644,8 +641,6 @@ public class LiferayWorkspaceUtil {
 
 		return false;
 	}
-
-	private static final String _BUILD_GRADLE_FILE_NAME = "build.gradle";
 
 	private static final String _GRADLE_PROPERTIES_FILE_NAME = "gradle.properties";
 
