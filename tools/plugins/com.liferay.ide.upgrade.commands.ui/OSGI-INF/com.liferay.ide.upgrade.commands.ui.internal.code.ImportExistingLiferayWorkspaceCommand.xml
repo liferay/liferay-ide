@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.commands.ui.internal.code.ImportExistingLiferayWorkspaceCommand">
+   <property name="id" value="import_existing_liferay_workspace"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.commands.ui.internal.code.ImportExistingLiferayWorkspaceCommand"/>
+</scr:component>
