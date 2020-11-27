@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.UpgradeCommandsCorePlugin;
+import com.liferay.ide.upgrade.commands.core.code.ImportExistingLiferayWorkspaceCommandKeys;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 
 import java.util.concurrent.atomic.AtomicInteger;
