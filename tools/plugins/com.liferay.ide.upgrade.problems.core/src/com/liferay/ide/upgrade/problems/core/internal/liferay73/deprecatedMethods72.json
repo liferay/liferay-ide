@@ -5,7 +5,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x)",
 		"methodName": "getExample",
 		"packageName": "com.liferay.portal.tools.rest.builder.internal.yaml.openapi",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Schema",
@@ -33,7 +34,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getSearchResponse()} and {@link SearchResponse#getTotalHits()}",
 		"methodName": "getTotalHits",
 		"packageName": "com.liferay.portal.search.web.portlet.shared.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexDocumentRequest",
@@ -64,7 +66,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by getDocument",
 		"methodName": "getDocument71",
 		"packageName": "com.liferay.portal.search.engine.adapter.document",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UpdateDocumentRequest",
@@ -84,7 +87,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by getDocument",
 		"methodName": "getDocument71",
 		"packageName": "com.liferay.portal.search.engine.adapter.document",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchSearchRequest",
@@ -92,7 +96,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by GroupByRequest",
 		"methodName": "getGroupBy",
 		"packageName": "com.liferay.portal.search.engine.adapter.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchSearchRequest",
@@ -100,7 +105,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by Sort",
 		"methodName": "getSorts71",
 		"packageName": "com.liferay.portal.search.engine.adapter.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchSearchRequest",
@@ -108,7 +114,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced bycom.liferay.portal.search.stats.StatsRequest",
 		"methodName": "getStats",
 		"packageName": "com.liferay.portal.search.engine.adapter.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchSearchRequest",
@@ -185,7 +192,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getOutputStreamContainerFactory(String)}",
 		"methodName": "getOutputStreamContainerFactory",
 		"packageName": "com.liferay.portal.output.stream.container.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OutputStreamContainerFactoryTrackerImpl",
@@ -216,7 +224,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getOutputStreamContainerFactory(String)}",
 		"methodName": "getOutputStreamContainerFactory",
 		"packageName": "com.liferay.portal.output.stream.container",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OutputStreamContainerFactoryTracker",
@@ -356,7 +365,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "getDDMFormRenderer",
 		"packageName": "com.liferay.dynamic.data.mapping.render",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormRendererUtil",
@@ -374,7 +384,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getErrorMessageLocalizedValue()}",
 		"methodName": "getErrorMessage",
 		"packageName": "com.liferay.dynamic.data.mapping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormFieldValidation",
@@ -382,7 +393,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getDDMFormFieldValidationExpression()}",
 		"methodName": "getExpression",
 		"packageName": "com.liferay.dynamic.data.mapping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormFieldValidation",
@@ -803,7 +815,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getVirtualHostnames()}",
 		"methodName": "getVirtualHostname",
 		"packageName": "com.liferay.layout.internal.model.adapter",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StagedLayoutSetImpl",
@@ -857,7 +870,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "getAllTemplateResources",
 		"packageName": "com.liferay.portal.template.soy.internal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SoyDataFactoryImpl",
@@ -875,7 +889,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "getAllTemplateResources",
 		"packageName": "com.liferay.portal.template.soy.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SoyDataFactory",
@@ -893,7 +908,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "getMediaWikiEditor",
 		"packageName": "com.liferay.wiki.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TestTrashHandler",
@@ -901,7 +917,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #isDeletable(long)}",
 		"methodName": "isDeletable",
 		"packageName": "com.liferay.trash.service.test.trashhandlerresgistryutil",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TestTrashHandler",
@@ -909,7 +926,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #isMovable(long)}",
 		"methodName": "isMovable",
 		"packageName": "com.liferay.trash.service.test.trashhandlerresgistryutil",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "NPMRegistry",
@@ -1043,7 +1061,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "enableConfiguration",
 		"packageName": "com.liferay.fragment.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FragmentCollectionContributorTracker",
@@ -1051,7 +1070,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by #getFragmentEntries",
 		"methodName": "getFragmentCollectionContributorEntries",
 		"packageName": "com.liferay.fragment.contributor",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FragmentCollectionContributorTrackerImpl",
@@ -1059,7 +1079,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by #getFragmentEntries",
 		"methodName": "getFragmentCollectionContributorEntries",
 		"packageName": "com.liferay.fragment.internal.contributor",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ElasticsearchDocumentFactory",
@@ -1107,7 +1128,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no replacement",
 		"methodName": "deactivate",
 		"packageName": "org.eclipse.core.runtime",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Schema",
@@ -1115,7 +1137,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x)",
 		"methodName": "getExample",
 		"packageName": "com.liferay.portal.vulcan.yaml.openapi",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Schema",
@@ -1166,7 +1189,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "fetchKaleoDefinition",
 		"packageName": "com.liferay.portal.workflow.kaleo.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "KaleoDefinitionVersionImpl",
@@ -1174,7 +1198,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "hasIncompleteKaleoInstances",
 		"packageName": "com.liferay.portal.workflow.kaleo.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "KaleoInstanceLocalServiceImpl",
@@ -1215,7 +1240,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "fetchKaleoDefinition",
 		"packageName": "com.liferay.portal.workflow.kaleo.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "KaleoDefinitionVersion",
@@ -1223,7 +1249,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "hasIncompleteKaleoInstances",
 		"packageName": "com.liferay.portal.workflow.kaleo.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "KaleoDefinitionVersionWrapper",
@@ -1231,7 +1258,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "fetchKaleoDefinition",
 		"packageName": "com.liferay.portal.workflow.kaleo.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "KaleoDefinitionVersionWrapper",
@@ -1239,7 +1267,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "hasIncompleteKaleoInstances",
 		"packageName": "com.liferay.portal.workflow.kaleo.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "KaleoInstanceLocalService",
@@ -2005,7 +2034,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x)",
 		"methodName": "OAuth2ApplicationClientCredentialUserIdException",
 		"packageName": "com.liferay.oauth2.provider.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OAuth2ApplicationClientCredentialUserIdException",
@@ -2263,7 +2293,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link DLFileEntryConfiguration#previewableProcessorMaxSize()}",
 		"methodName": "imageMaxSize",
 		"packageName": "com.liferay.adaptive.media.image.internal.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ToolDependencies",
@@ -2424,7 +2455,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "isSendPassword",
 		"packageName": "com.liferay.portal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetImpl",
@@ -2432,7 +2464,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getVirtualHostnames()}",
 		"methodName": "getVirtualHostname",
 		"packageName": "com.liferay.portal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetImpl",
@@ -2729,7 +2762,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "getItemSize",
 		"packageName": "com.liferay.portal.upload",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ConvertProcess",
@@ -2737,7 +2771,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "getPath",
 		"packageName": "com.liferay.portal.convert",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLImpl",
@@ -2990,7 +3025,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "getVariables",
 		"packageName": "com.liferay.portal.kernel.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "InvokerFilter",
@@ -3193,7 +3229,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "isGlassfish",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServerDetector",
@@ -3201,7 +3238,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "isJetty",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServerDetector",
@@ -3209,7 +3247,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "isJOnAS",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServerDetector",
@@ -3217,7 +3256,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "isOC4J",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServerDetector",
@@ -3225,7 +3265,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "isResin",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -3347,7 +3388,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #isDeletable(long)}",
 		"methodName": "isDeletable",
 		"packageName": "com.liferay.portal.kernel.trash",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseTrashHandler",
@@ -3355,7 +3397,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #isMovable(long)}",
 		"methodName": "isMovable",
 		"packageName": "com.liferay.portal.kernel.trash",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashHandler",
@@ -3363,7 +3406,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #isDeletable(long)}",
 		"methodName": "isDeletable",
 		"packageName": "com.liferay.portal.kernel.trash",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashHandler",
@@ -3371,7 +3415,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #isMovable(long)}",
 		"methodName": "isMovable",
 		"packageName": "com.liferay.portal.kernel.trash",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashRenderer",
@@ -3476,7 +3521,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getVirtualHostnames()}",
 		"methodName": "getVirtualHostname",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetWrapper",
@@ -3494,7 +3540,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "isSendPassword",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Company",
@@ -3502,7 +3549,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), with no direct replacement",
 		"methodName": "isSendPassword",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSet",
@@ -3510,7 +3558,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getVirtualHostnames()}",
 		"methodName": "getVirtualHostname",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSet",
@@ -4598,7 +4647,8 @@
 		"javadoc": "@deprecated As of Mueller (7.2.x), replaced by {@link #getStagedModelPrimaryKeyObj()}",
 		"methodName": "getStagedModelClassPK",
 		"packageName": "com.liferay.exportimport.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExportImportContentValidationException",

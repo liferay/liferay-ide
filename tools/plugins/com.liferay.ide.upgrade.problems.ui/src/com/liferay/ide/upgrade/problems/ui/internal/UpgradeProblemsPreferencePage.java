@@ -93,17 +93,12 @@ public class UpgradeProblemsPreferencePage
 
 		pageComposite.setLayoutData(gridData);
 
-		gridData = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
-
 		Label label = new Label(pageComposite, SWT.LEFT);
 
 		label.setText(
 			"These are ignored breaking change problems.\n You can remove them if you want to show this type of " +
 				"problem next time.");
 
-		gridData = new GridData();
-
-		gridData.horizontalAlignment = GridData.FILL;
 		gridData.horizontalSpan = 2;
 
 		label.setLayoutData(gridData);

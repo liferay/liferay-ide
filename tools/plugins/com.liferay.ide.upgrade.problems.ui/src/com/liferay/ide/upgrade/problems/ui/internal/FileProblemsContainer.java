@@ -80,9 +80,7 @@ public class FileProblemsContainer {
 			0, Integer::sum
 		).intValue();
 
-		hash = 31 * hash + problemsHashCodes;
-
-		return hash;
+		return 31 * hash + problemsHashCodes;
 	}
 
 	public void setFile(File file) {

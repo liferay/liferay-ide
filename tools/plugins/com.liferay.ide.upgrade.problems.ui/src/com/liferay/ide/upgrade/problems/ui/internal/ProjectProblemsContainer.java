@@ -89,9 +89,7 @@ public class ProjectProblemsContainer {
 			0, Integer::sum
 		).intValue();
 
-		hash = 31 * hash + fileProblemsHashCodes;
-
-		return hash;
+		return 31 * hash + fileProblemsHashCodes;
 	}
 
 	public boolean isEmpty() {

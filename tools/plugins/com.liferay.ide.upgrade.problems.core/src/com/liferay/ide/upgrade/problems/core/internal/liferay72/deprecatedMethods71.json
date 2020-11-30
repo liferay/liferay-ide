@@ -16,7 +16,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getUserInitialsGenerator",
 		"packageName": "com.liferay.users.admin.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLAppServiceWrapper",
@@ -143,7 +144,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getMisversionedFileEntries",
 		"packageName": "com.liferay.document.library.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalServiceUtil",
@@ -151,7 +153,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getOrphanedFileEntries",
 		"packageName": "com.liferay.document.library.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalServiceUtil",
@@ -208,7 +211,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getMisversionedFileEntries",
 		"packageName": "com.liferay.document.library.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalService",
@@ -216,7 +220,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getOrphanedFileEntries",
 		"packageName": "com.liferay.document.library.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalService",
@@ -351,7 +356,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getMisversionedFileEntries",
 		"packageName": "com.liferay.document.library.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalServiceWrapper",
@@ -359,7 +365,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getOrphanedFileEntries",
 		"packageName": "com.liferay.document.library.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalServiceWrapper",
@@ -959,7 +966,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDLValidator",
 		"packageName": "com.liferay.document.library.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLValidatorUtil",
@@ -977,7 +985,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDLProcessorRegistry",
 		"packageName": "com.liferay.document.library.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLProcessorRegistryUtil",
@@ -1045,7 +1054,8 @@
 		"javadoc": "Returns the trash handler for this document library folder.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.document.library.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutWrapper",
@@ -1053,7 +1063,8 @@
 		"javadoc": "Returns the trash handler for this document library file shortcut.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.document.library.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryModel",
@@ -1061,7 +1072,8 @@
 		"javadoc": "Returns the trash handler for this document library file entry.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.document.library.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFolderWrapper",
@@ -1069,7 +1081,8 @@
 		"javadoc": "Returns the trash handler for this document library folder.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.document.library.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryWrapper",
@@ -1077,7 +1090,8 @@
 		"javadoc": "Returns the trash handler for this document library file entry.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.document.library.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutModel",
@@ -1085,7 +1099,8 @@
 		"javadoc": "Returns the trash handler for this document library file shortcut.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.document.library.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoBridgeIndexer",
@@ -1503,7 +1518,8 @@
 		"javadoc": "Returns the trash handler for this export import configuration.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.exportimport.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExportImportConfigurationModel",
@@ -1511,7 +1527,8 @@
 		"javadoc": "Returns the trash handler for this export import configuration.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.exportimport.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExportImportProcessCallbackRegistry",
@@ -1702,7 +1719,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getPortletDataHandlerStatusMessageSender()}",
 		"methodName": "getPortletDataHandlerStatusMessageSender",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BasePortletDataHandler",
@@ -2402,7 +2420,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getUserBagFactory",
 		"packageName": "com.liferay.portal.kernel.security.permission",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PermissionChecker",
@@ -2437,7 +2456,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getInlineSQLHelper",
 		"packageName": "com.liferay.portal.kernel.security.permission",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "InlineSQLHelperUtil",
@@ -2513,7 +2533,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getFriendlyURLResolversAsCollection()}",
 		"methodName": "getFriendlyURLResolvers",
 		"packageName": "com.liferay.portal.kernel.portlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BasePortletProvider",
@@ -2541,7 +2562,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isStrutsBridgePortlet",
 		"packageName": "com.liferay.portal.kernel.portlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "InvokerPortlet",
@@ -2549,7 +2571,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isStrutsPortlet",
 		"packageName": "com.liferay.portal.kernel.portlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MVCCommandCache",
@@ -2714,7 +2737,8 @@
 		"javadoc": "Returns the specific group permissions for a resource if this service context is being passed as a parameter to a method which manipulates the resource.",
 		"methodName": "getGroupPermissions",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServiceContext",
@@ -2722,7 +2746,8 @@
 		"javadoc": "Returns the specific guest permissions for a resource if this service context is being passed as a parameter to a method which manipulates the resource.",
 		"methodName": "getGuestPermissions",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServiceContext",
@@ -2771,7 +2796,8 @@
 		"javadoc": "Returns all the layouts whose friendly URLs are <code>null</code>",
 		"methodName": "getNullFriendlyURLLayouts",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GroupLocalServiceWrapper",
@@ -2779,7 +2805,8 @@
 		"javadoc": "Returns all non-system groups having <code>null</code> or empty friendly URLs.",
 		"methodName": "getNullFriendlyURLGroups",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLocalService",
@@ -2787,7 +2814,8 @@
 		"javadoc": "Returns all the users who do not have any contacts.",
 		"methodName": "getNoContacts",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLocalService",
@@ -2805,7 +2833,8 @@
 		"javadoc": "Returns all non-system groups having <code>null</code> or empty friendly URLs.",
 		"methodName": "getNullFriendlyURLGroups",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RoleLocalServiceUtil",
@@ -2825,7 +2854,8 @@
 		"javadoc": "Returns all non-system groups having <code>null</code> or empty friendly URLs.",
 		"methodName": "getNullFriendlyURLGroups",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutRevisionLocalServiceWrapper",
@@ -2881,7 +2911,8 @@
 		"javadoc": "Returns all the users who do not have any contacts.",
 		"methodName": "getNoContacts",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLocalServiceUtil",
@@ -2899,7 +2930,8 @@
 		"javadoc": "Returns all the users who do not have any contacts.",
 		"methodName": "getNoContacts",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLocalServiceWrapper",
@@ -2938,7 +2970,8 @@
 		"javadoc": "Returns all the layouts whose friendly URLs are <code>null</code>",
 		"methodName": "getNullFriendlyURLLayouts",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BasePersistenceImpl",
@@ -3002,7 +3035,8 @@
 		"javadoc": "Returns all the layouts whose friendly URLs are <code>null</code>",
 		"methodName": "getNullFriendlyURLLayouts",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServiceComponentLocalServiceUtil",
@@ -3164,7 +3198,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getBackgroundTaskStatusRegistry()}",
 		"methodName": "getBackgroundTaskStatusRegistry",
 		"packageName": "com.liferay.portal.kernel.backgroundtask",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BackgroundTaskDisplayFactoryUtil",
@@ -3172,7 +3207,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getBackgroundTaskDisplayFactory()}",
 		"methodName": "getBackgroundTaskDisplayFactory",
 		"packageName": "com.liferay.portal.kernel.backgroundtask.display",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Language",
@@ -3300,7 +3336,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getCallerKey",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PrefsPropsUtil",
@@ -3885,7 +3922,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {MethodKey#resetCache()}",
 		"methodName": "reset",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Http",
@@ -3925,7 +3963,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getFriendlyURLNormalizer",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ReflectionUtil",
@@ -4021,7 +4060,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getToStringLength",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StreamUtil",
@@ -4671,7 +4711,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getInstance",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServerDetector",
@@ -4689,7 +4730,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isSupportsHotDeploy",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServerDetector",
@@ -4717,7 +4759,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getConnection()}",
 		"methodName": "getUpgradeOptimizedConnection",
 		"packageName": "com.liferay.portal.kernel.dao.jdbc",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DynamicDataSourceTargetSource",
@@ -4725,7 +4768,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getMethodStack",
 		"packageName": "com.liferay.portal.kernel.dao.jdbc.aop",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DynamicDataSourceTargetSource",
@@ -4733,7 +4777,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "popMethod",
 		"packageName": "com.liferay.portal.kernel.dao.jdbc.aop",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DynamicDataSourceTargetSource",
@@ -4863,7 +4908,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#commit(boolean)}",
 		"methodName": "commit",
 		"packageName": "com.liferay.portal.kernel.cache.transactional",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TransactionalPortalCacheHelper",
@@ -4905,7 +4951,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getId()}",
 		"methodName": "getName",
 		"packageName": "com.liferay.portal.kernel.cache.thread.local",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexerRegistryUtil",
@@ -4913,7 +4960,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getIndexerRegistry",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "HitsProcessorRegistryUtil",
@@ -4921,7 +4969,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getHitsProcessorRegistry",
 		"packageName": "com.liferay.portal.kernel.search.hits",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexWriterHelper",
@@ -4950,7 +4999,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getFacetedSearcherManager",
 		"packageName": "com.liferay.portal.kernel.search.facet.faceted.searcher",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefaultSearchResultPermissionFilter",
@@ -4969,7 +5019,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getSortFactory()}",
 		"methodName": "getSortFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Indexer",
@@ -5030,7 +5081,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getReindexStatusMessageSender()}",
 		"methodName": "getReindexStatusMessageSender",
 		"packageName": "com.liferay.portal.kernel.search.background.task",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchContext",
@@ -5189,7 +5241,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getPortletDependencyFactory",
 		"packageName": "com.liferay.portal.kernel.model.portlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutWrapper",
@@ -5197,7 +5250,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isTypeSharedPortlet",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Layout",
@@ -5205,7 +5259,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isTypeSharedPortlet",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VersionedModel",
@@ -5213,7 +5268,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by the inverse of {#isHead()}",
 		"methodName": "isDraft",
 		"packageName": "com.liferay.portal.kernel.model.version",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletWrapper",
@@ -5221,7 +5277,8 @@
 		"javadoc": "Returns the Facebook integration method of the portlet.",
 		"methodName": "getFacebookIntegration",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletWrapper",
@@ -5273,7 +5330,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {PortletIdCodec#generateInstanceId()}",
 		"methodName": "generateInstanceId",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletConstants",
@@ -5342,7 +5400,8 @@
 		"javadoc": "Returns the Facebook integration method of the portlet.",
 		"methodName": "getFacebookIntegration",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Portlet",
@@ -5434,7 +5493,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#SchedulerEntryImpl(String,Trigger,String)}",
 		"methodName": "SchedulerEntryImpl",
 		"packageName": "com.liferay.portal.kernel.scheduler",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SchedulerEntryImpl",
@@ -5472,7 +5532,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getSchedulerEngineHelper()}",
 		"methodName": "getSchedulerEngineHelper",
 		"packageName": "com.liferay.portal.kernel.scheduler",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -5480,7 +5541,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), as of 7.1.x, with no direct replacement",
 		"methodName": "isFreeformLayout",
 		"packageName": "com.liferay.portal.kernel.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -5498,7 +5560,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getClusterMasterExecutor",
 		"packageName": "com.liferay.portal.kernel.cluster",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ClusterLinkUtil",
@@ -5506,7 +5569,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getClusterLink()}",
 		"methodName": "getClusterLink",
 		"packageName": "com.liferay.portal.kernel.cluster",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ClusterExecutorUtil",
@@ -5514,7 +5578,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getClusterExecutor()}",
 		"methodName": "getClusterExecutor",
 		"packageName": "com.liferay.portal.kernel.cluster",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ConfigurationProvider",
@@ -5546,7 +5611,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getDescendantComments()}",
 		"methodName": "getThreadComments",
 		"packageName": "com.liferay.portal.kernel.comment",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DiscussionComment",
@@ -5554,7 +5620,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getDescendantCommentsCount()}",
 		"methodName": "getThreadCommentsCount",
 		"packageName": "com.liferay.portal.kernel.comment",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CommentManagerUtil",
@@ -5562,7 +5629,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#_getCommentManager()}",
 		"methodName": "getCommentManager",
 		"packageName": "com.liferay.portal.kernel.comment",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TransactionStatus",
@@ -5570,7 +5638,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getPlatformTransactionManager",
 		"packageName": "com.liferay.portal.kernel.transaction",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WorkflowDefinitionManager",
@@ -5636,7 +5705,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "createRejectionExecutionHandler",
 		"packageName": "com.liferay.portal.kernel.messaging",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAsyncDestination",
@@ -5644,7 +5714,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getThreadPoolExecutor",
 		"packageName": "com.liferay.portal.kernel.messaging",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DestinationFactoryUtil",
@@ -5652,7 +5723,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDestinationFactory",
 		"packageName": "com.liferay.portal.kernel.messaging",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseMessageStatusMessageListener",
@@ -5670,7 +5742,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getRejectedExecutionHandler",
 		"packageName": "com.liferay.portal.kernel.messaging",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DestinationConfiguration",
@@ -5688,7 +5761,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getInstance",
 		"packageName": "com.liferay.portal.kernel.messaging",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SettingsFactory",
@@ -5717,7 +5791,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getPortalPropertiesSettings",
 		"packageName": "com.liferay.portal.kernel.settings",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletInstanceSettingsLocator",
@@ -5767,7 +5842,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getPortalPropertiesSettings",
 		"packageName": "com.liferay.portal.kernel.settings",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MicrosoftTranslatorFactory",
@@ -5817,7 +5893,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getCapabilities",
 		"packageName": "com.liferay.portal.kernel.mobile.device",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Device",
@@ -5835,7 +5912,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDeviceIds",
 		"packageName": "com.liferay.portal.kernel.mobile.device",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "NoKnownDevices",
@@ -5843,7 +5921,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDeviceIds",
 		"packageName": "com.liferay.portal.kernel.mobile.device",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UnknownDevice",
@@ -5851,7 +5930,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getCapabilities",
 		"packageName": "com.liferay.portal.kernel.mobile.device",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UnknownDevice",
@@ -6408,7 +6488,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getKey",
 		"packageName": "com.liferay.asset.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetEntryQueryProcessor",
@@ -6437,7 +6518,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getKey",
 		"packageName": "com.liferay.asset.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAssetEntryQueryProcessor",
@@ -6466,7 +6548,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.asset.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetRenderer",
@@ -6474,7 +6557,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.asset.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MailTemplateFactoryUtil",
@@ -6482,7 +6566,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getMailTemplateFactory",
 		"packageName": "com.liferay.mail.kernel.template",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PipingServletResponse",
@@ -6514,7 +6599,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "addRequiredValidatorTag",
 		"packageName": "com.liferay.taglib.aui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SelectTag",
@@ -6533,7 +6619,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "doEndTag",
 		"packageName": "com.liferay.taglib.aui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SelectTag",
@@ -6541,7 +6628,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "updateFormValidators",
 		"packageName": "com.liferay.taglib.aui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OutputTag",
@@ -6702,7 +6790,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getScopedAttributes",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AttributesTagSupport",
@@ -6819,7 +6908,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getLinkTitle",
 		"packageName": "com.liferay.taglib.ui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IconTag",
@@ -6837,7 +6927,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getData",
 		"packageName": "com.liferay.taglib.ui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IconTag",
@@ -6845,7 +6936,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDetails",
 		"packageName": "com.liferay.taglib.ui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IconTag",
@@ -6853,7 +6945,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSrc",
 		"packageName": "com.liferay.taglib.ui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IconTag",
@@ -6861,7 +6954,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSrcHover",
 		"packageName": "com.liferay.taglib.ui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PageIteratorTag",
@@ -6939,7 +7033,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getParameterMap",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletRequestImpl",
@@ -6947,7 +7042,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getParameterNames",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletRequestImpl",
@@ -6965,7 +7061,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getPrivateParameterMap",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletRequestImpl",
@@ -6973,7 +7070,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getPublicParameterMap",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "InvokerPortletImpl",
@@ -6981,7 +7079,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isStrutsBridgePortlet",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "InvokerPortletImpl",
@@ -6989,7 +7088,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isStrutsPortlet",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletURLImpl",
@@ -7007,7 +7107,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getParameterMap",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletURLImpl",
@@ -7081,7 +7182,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {javax.portlet.RenderState#getRenderParameters()}",
 		"methodName": "getPrivateRenderParameterMap",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StateAwareResponseImpl",
@@ -7089,7 +7191,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getRenderParameterMap",
 		"packageName": "com.liferay.portlet.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StateAwareResponseImpl",
@@ -7362,7 +7465,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getMisversionedFileEntries",
 		"packageName": "com.liferay.portlet.documentlibrary.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalServiceImpl",
@@ -7370,7 +7474,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getOrphanedFileEntries",
 		"packageName": "com.liferay.portlet.documentlibrary.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalServiceImpl",
@@ -7584,7 +7689,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "findByMisversioned",
 		"packageName": "com.liferay.portlet.documentlibrary.service.persistence.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLImpl",
@@ -7642,7 +7748,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFolderModelImpl",
@@ -7650,7 +7757,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutModelImpl",
@@ -7658,7 +7766,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExportImportLocalServiceImpl",
@@ -7720,7 +7829,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.portlet.exportimport.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsEntryServiceSoap",
@@ -8637,7 +8747,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "updateTreePath",
 		"packageName": "com.liferay.portal.upgrade.v7_0_5",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UpgradePortletDisplayTemplatePreferences",
@@ -8682,7 +8793,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "updateFileEntryTypeFileEntryTypeKeys",
 		"packageName": "com.liferay.portal.upgrade.v7_0_0",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UpgradeSocial",
@@ -8690,7 +8802,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getCounterIncrement",
 		"packageName": "com.liferay.portal.upgrade.v7_0_0",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UpgradePostgreSQL",
@@ -8698,7 +8811,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getCurrentSchema",
 		"packageName": "com.liferay.portal.upgrade.v7_0_0",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UpgradePostgreSQL",
@@ -8706,7 +8820,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getOidColumnNames",
 		"packageName": "com.liferay.portal.upgrade.v7_0_0",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UpgradePostgreSQL",
@@ -8745,7 +8860,8 @@
 		"javadoc": "Returns all the layouts whose friendly URLs are <code>null</code>",
 		"methodName": "getNullFriendlyURLLayouts",
 		"packageName": "com.liferay.portal.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLocalServiceImpl",
@@ -8753,7 +8869,8 @@
 		"javadoc": "Returns all the users who do not have any contacts.",
 		"methodName": "getNoContacts",
 		"packageName": "com.liferay.portal.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLocalServiceImpl",
@@ -8793,7 +8910,8 @@
 		"javadoc": "Returns all non-system groups having <code>null</code> or empty friendly URLs.",
 		"methodName": "getNullFriendlyURLGroups",
 		"packageName": "com.liferay.portal.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutRevisionLocalServiceImpl",
@@ -8912,7 +9030,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "findByNullFriendlyURL",
 		"packageName": "com.liferay.portal.service.persistence.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutFinderImpl",
@@ -8930,7 +9049,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "findByNoContacts",
 		"packageName": "com.liferay.portal.service.persistence.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrganizationFinderImpl",
@@ -9028,7 +9148,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#findO_ByNoAssets()}",
 		"methodName": "findByNoAssets",
 		"packageName": "com.liferay.portal.service.persistence.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrganizationFinderImpl",
@@ -9708,7 +9829,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "init",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MimeTypesImpl",
@@ -9736,7 +9858,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "reload",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -10051,7 +10174,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getMethodStack",
 		"packageName": "com.liferay.portal.dao.jdbc.aop",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefaultDynamicDataSourceTargetSource",
@@ -10059,7 +10183,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "popMethod",
 		"packageName": "com.liferay.portal.dao.jdbc.aop",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefaultDynamicDataSourceTargetSource",
@@ -10087,7 +10212,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "inOperation",
 		"packageName": "com.liferay.portal.dao.jdbc.aop",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletSessionFactoryImpl",
@@ -10115,7 +10241,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDataSource",
 		"packageName": "com.liferay.portal.dao.orm.hibernate",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletSessionFactoryImpl",
@@ -10123,7 +10250,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSessionFactory",
 		"packageName": "com.liferay.portal.dao.orm.hibernate",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PropertyImpl",
@@ -10141,7 +10269,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSessionFactoryClassLoader",
 		"packageName": "com.liferay.portal.dao.orm.hibernate",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SQLTransformer",
@@ -10228,7 +10357,8 @@
 		"javadoc": "Returns the Facebook integration method of the portlet.",
 		"methodName": "getFacebookIntegration",
 		"packageName": "com.liferay.portal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletImpl",
@@ -10246,7 +10376,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isTypeSharedPortlet",
 		"packageName": "com.liferay.portal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ToolsUtil",
@@ -10264,7 +10395,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getPlatformTransactionManager",
 		"packageName": "com.liferay.portal.spring.transaction",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModuleFrameworkAdapterHelper",
@@ -10753,7 +10885,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isStrutsBridgePortlet",
 		"packageName": "com.liferay.bean.portlet.cdi.extension.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BeanPortletInvokerPortlet",
@@ -10761,7 +10894,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isStrutsPortlet",
 		"packageName": "com.liferay.bean.portlet.cdi.extension.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutPageTemplateEntryServiceSoap",
@@ -11165,7 +11299,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {ExportImportConfigurationParameterMapFactory#buildParameterMap()}",
 		"methodName": "getStagingParameters",
 		"packageName": "com.liferay.exportimport.internal.staging",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StagingImpl",
@@ -11872,7 +12007,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "popCallbackList",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExportImportProcessCallbackUtil",
@@ -11880,7 +12016,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "pushCallbackList",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExportImportProcessCallbackUtil",
@@ -12002,7 +12139,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getAssetCategoryIdsMap",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12010,7 +12148,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getAssetCategoryUuidsMap",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12018,7 +12157,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getAssetLinkIds()}",
 		"methodName": "getAssetLinksMap",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12059,7 +12199,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getNewPrimaryKeysMap(String)}",
 		"methodName": "getNewLayouts",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12067,7 +12208,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getOldPlid",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12075,7 +12217,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getRatingsEntries",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12140,7 +12283,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getScopedPrimaryKeys",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12148,7 +12292,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getZipEntries",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12156,7 +12301,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getZipFolderEntries",
 		"packageName": "com.liferay.exportimport.internal.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContextImpl",
@@ -12802,7 +12948,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "createRecordSetDynamicQuery",
 		"packageName": "com.liferay.dynamic.data.lists.web.internal.exportimport.data.handler",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLPortletDataHandler",
@@ -12810,7 +12957,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "createRecordVersionDynamicQuery",
 		"packageName": "com.liferay.dynamic.data.lists.web.internal.exportimport.data.handler",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLPortletDataHandler",
@@ -13359,7 +13507,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.calendar.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CalendarBookingLocalServiceWrapper",
@@ -13907,7 +14056,8 @@
 		"javadoc": "Returns the trash handler for this calendar booking.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.calendar.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CalendarBookingWrapper",
@@ -13915,7 +14065,8 @@
 		"javadoc": "Returns the trash handler for this calendar booking.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.calendar.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Recurrence",
@@ -13958,7 +14109,8 @@
 		"javadoc": "Returns the member expression's resource path.",
 		"methodName": "getResourcePath",
 		"packageName": "com.liferay.portal.odata.filter.expression",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Encryptor",
@@ -13987,7 +14139,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getProvider",
 		"packageName": "com.liferay.petra.encryptor",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JSONWebServiceClient",
@@ -14150,7 +14303,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#INSTANCE_ASCENDING}",
 		"methodName": "RuleGroupInstancePriorityComparator",
 		"packageName": "com.liferay.mobile.device.rules.util.comparator",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RuleGroupInstancePriorityComparator",
@@ -14168,7 +14322,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.reading.time.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ReadingTimeEntryModel",
@@ -14176,7 +14331,8 @@
 		"javadoc": "Returns the trash handler for this reading time entry.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.reading.time.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ReadingTimeEntryWrapper",
@@ -14184,7 +14340,8 @@
 		"javadoc": "Returns the trash handler for this reading time entry.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.reading.time.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SoyPortlet",
@@ -14192,7 +14349,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), use {SoyPortlet#init(PortletConfig)}} instead",
 		"methodName": "init",
 		"packageName": "com.liferay.portal.portlet.bridge.soy.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SiteNavigationMenuPortletInstanceConfiguration",
@@ -14200,7 +14358,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#rootMenuItemType()}",
 		"methodName": "rootLayoutType",
 		"packageName": "com.liferay.site.navigation.menu.web.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SiteNavigationMenuPortletInstanceConfiguration",
@@ -14208,7 +14367,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#rootMenuItemLevel()}",
 		"methodName": "rootLayoutLevel",
 		"packageName": "com.liferay.site.navigation.menu.web.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SiteNavigationMenuPortletInstanceConfiguration",
@@ -14216,7 +14376,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "rootLayoutUuid",
 		"packageName": "com.liferay.site.navigation.menu.web.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SiteNavigationMenuPortletInstanceConfiguration",
@@ -14224,7 +14385,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#expandedLevels()}",
 		"methodName": "includedLayouts",
 		"packageName": "com.liferay.site.navigation.menu.web.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SiteNavigationLanguageViewPortletProvider",
@@ -14252,7 +14414,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getMenuItems",
 		"packageName": "com.liferay.site.navigation.taglib.servlet.taglib",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "NavigationMenuTag",
@@ -14291,7 +14454,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getPortalPropertiesSettings",
 		"packageName": "com.liferay.portal.configuration.settings.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SettingsFactoryImpl",
@@ -14333,7 +14497,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getThreadComments",
 		"packageName": "com.liferay.message.boards.comment.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBDiscussionCommentImpl",
@@ -14341,7 +14506,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getThreadCommentsCount",
 		"packageName": "com.liferay.message.boards.comment.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadLocalServiceWrapper",
@@ -14349,7 +14515,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetThreads",
 		"packageName": "com.liferay.message.boards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageServiceUtil",
@@ -14374,7 +14541,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetMessages",
 		"packageName": "com.liferay.message.boards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageLocalServiceWrapper",
@@ -14438,7 +14606,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetThreads",
 		"packageName": "com.liferay.message.boards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageLocalServiceUtil",
@@ -14446,7 +14615,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetMessages",
 		"packageName": "com.liferay.message.boards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageLocalServiceUtil",
@@ -14544,7 +14714,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetMessages",
 		"packageName": "com.liferay.message.boards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageLocalService",
@@ -14608,7 +14779,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetThreads",
 		"packageName": "com.liferay.message.boards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBCategoryModel",
@@ -14616,7 +14788,8 @@
 		"javadoc": "Returns the trash handler for this message boards category.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageModel",
@@ -14624,7 +14797,8 @@
 		"javadoc": "Returns the trash handler for this message-boards message.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadModel",
@@ -14632,7 +14806,8 @@
 		"javadoc": "Returns the trash handler for this message boards thread.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBCategoryWrapper",
@@ -14640,7 +14815,8 @@
 		"javadoc": "Returns the trash handler for this message boards category.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageWrapper",
@@ -14648,7 +14824,8 @@
 		"javadoc": "Returns the trash handler for this message-boards message.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadWrapper",
@@ -14656,7 +14833,8 @@
 		"javadoc": "Returns the trash handler for this message boards thread.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseMBListDisplayContext",
@@ -14701,7 +14879,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetThreads",
 		"packageName": "com.liferay.message.boards.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageLocalServiceImpl",
@@ -14709,7 +14888,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetMessages",
 		"packageName": "com.liferay.message.boards.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageLocalServiceImpl",
@@ -14790,7 +14970,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "findByNoAssets",
 		"packageName": "com.liferay.message.boards.service.persistence.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageFinderImpl",
@@ -14798,7 +14979,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "findByNoAssets",
 		"packageName": "com.liferay.message.boards.service.persistence.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadModelImpl",
@@ -14806,7 +14988,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBCategoryModelImpl",
@@ -14814,7 +14997,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageModelImpl",
@@ -14822,7 +15006,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.message.boards.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefaultMBListDisplayContext",
@@ -14840,7 +15025,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.message.boards.web.internal.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalServiceConfiguration",
@@ -14848,7 +15034,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "articleViewPermissionsCheckEnabled",
 		"packageName": "com.liferay.journal.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedLocalServiceWrapper",
@@ -14880,7 +15067,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSubscriptionLocalService",
 		"packageName": "com.liferay.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderLocalServiceUtil",
@@ -14997,7 +15185,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSubscriptionLocalService",
 		"packageName": "com.liferay.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleLocalServiceUtil",
@@ -15054,7 +15243,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSubscriptionLocalService",
 		"packageName": "com.liferay.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleLocalService",
@@ -15111,7 +15301,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSubscriptionLocalService",
 		"packageName": "com.liferay.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleLocalServiceWrapper",
@@ -15143,7 +15334,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSubscriptionLocalService",
 		"packageName": "com.liferay.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderLocalServiceWrapper",
@@ -15185,7 +15377,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSubscriptionLocalService",
 		"packageName": "com.liferay.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderLocalService",
@@ -15269,7 +15462,8 @@
 		"javadoc": "Returns the trash handler for this journal folder.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticle",
@@ -15277,7 +15471,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getLegacyDescription",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticle",
@@ -15285,7 +15480,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getLegacyTitle",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticle",
@@ -15313,7 +15509,8 @@
 		"javadoc": "Returns the trash handler for this journal article.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderWrapper",
@@ -15321,7 +15518,8 @@
 		"javadoc": "Returns the trash handler for this journal folder.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -15329,7 +15527,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getLegacyDescription",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -15337,7 +15536,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getLegacyTitle",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -15345,7 +15545,8 @@
 		"javadoc": "Returns the trash handler for this journal article.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -15514,7 +15715,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSubscriptionLocalService",
 		"packageName": "com.liferay.journal.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderLocalServiceImpl",
@@ -15557,7 +15759,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSubscriptionLocalService",
 		"packageName": "com.liferay.journal.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleLocalServiceImpl",
@@ -15854,7 +16057,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getLegacyDescription",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleImpl",
@@ -15862,7 +16066,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getLegacyTitle",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleImpl",
@@ -15890,7 +16095,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleModelImpl",
@@ -15898,7 +16104,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalContentAddPortletProvider",
@@ -15916,7 +16123,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "journalArticlesSearchWithIndex",
 		"packageName": "com.liferay.journal.web.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalRSSUtil",
@@ -15949,7 +16157,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.journal.web.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleAssetRenderer",
@@ -15957,7 +16166,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.journal.web.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleAssetRenderer",
@@ -15965,7 +16175,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "setJournalServiceConfiguration",
 		"packageName": "com.liferay.journal.web.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletConfigurationViewPortletProvider",
@@ -15983,7 +16194,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getStatusString",
 		"packageName": "com.liferay.portal.search.solr7.internal.engine",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GroupSearchProvider",
@@ -16153,7 +16365,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {DDMDataProviderRequest#getParameters()}",
 		"methodName": "getParameters",
 		"packageName": "com.liferay.dynamic.data.mapping.data.provider",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormInstanceLocalService",
@@ -16239,7 +16452,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#isShowAddButton(Group)}",
 		"methodName": "isShowAddStructureButton",
 		"packageName": "com.liferay.dynamic.data.mapping.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StructureStructureKeyComparator",
@@ -16247,7 +16461,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#INSTANCE_DESCENDING}",
 		"methodName": "StructureStructureKeyComparator",
 		"packageName": "com.liferay.dynamic.data.mapping.util.comparator",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StructureStructureKeyComparator",
@@ -16295,7 +16510,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getChildElementsHTML",
 		"packageName": "com.liferay.dynamic.data.mapping.render",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormFieldRenderingContext",
@@ -16323,7 +16539,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDDMFormFieldRules",
 		"packageName": "com.liferay.dynamic.data.mapping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormField",
@@ -16341,7 +16558,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "visibilityExpression",
 		"packageName": "com.liferay.dynamic.data.mapping.form.field.type",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormFieldEvaluationResult",
@@ -16349,7 +16567,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNestedDDMFormFieldEvaluationResults",
 		"packageName": "com.liferay.dynamic.data.mapping.form.evaluator",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormFieldEvaluationResult",
@@ -16457,7 +16676,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getVariableDependenciesMap",
 		"packageName": "com.liferay.dynamic.data.mapping.expression",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMExpression",
@@ -16575,7 +16795,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getRandomNamespace",
 		"packageName": "com.liferay.dynamic.data.mapping.taglib.servlet.taglib",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMFormInstanceLocalServiceImpl",
@@ -16641,7 +16862,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetPages",
 		"packageName": "com.liferay.wiki.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageLocalServiceWrapper",
@@ -16674,7 +16896,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetPages",
 		"packageName": "com.liferay.wiki.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageLocalServiceUtil",
@@ -16707,7 +16930,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetPages",
 		"packageName": "com.liferay.wiki.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageServiceWrapper",
@@ -16820,7 +17044,8 @@
 		"javadoc": "Returns the trash handler for this wiki page.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiNodeModel",
@@ -16828,7 +17053,8 @@
 		"javadoc": "Returns the trash handler for this wiki node.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageWrapper",
@@ -16836,7 +17062,8 @@
 		"javadoc": "Returns the trash handler for this wiki page.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiNodeWrapper",
@@ -16844,7 +17071,8 @@
 		"javadoc": "Returns the trash handler for this wiki node.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageServiceSoap",
@@ -16923,7 +17151,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetPages",
 		"packageName": "com.liferay.wiki.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageFinderImpl",
@@ -16946,7 +17175,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.wiki.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageModelImpl",
@@ -16954,7 +17184,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.wiki.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefaultPortalLDAP",
@@ -16996,7 +17227,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getStatusString",
 		"packageName": "com.liferay.portal.search.elasticsearch6.internal.information",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ElasticsearchConfiguration",
@@ -17004,7 +17236,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "httpEnabled",
 		"packageName": "com.liferay.portal.search.elasticsearch6.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WorkflowDefinitionManagerImpl",
@@ -17199,7 +17432,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isCss",
 		"packageName": "com.liferay.fragment.entry.processor.editable.parser",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AlloyServiceInvoker",
@@ -17247,7 +17481,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDeviceIds",
 		"packageName": "com.liferay.portal.mobile.device.detection.fiftyonedegrees.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FiftyOneDegreesDevice",
@@ -17255,7 +17490,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getCapabilities",
 		"packageName": "com.liferay.portal.mobile.device.detection.fiftyonedegrees.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FiftyOneDegreesDevice",
@@ -17380,7 +17616,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "doEndTag",
 		"packageName": "com.liferay.staging.taglib.servlet.taglib",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "EditUserMVCActionCommand",
@@ -17456,7 +17693,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isStrutsBridgePortlet",
 		"packageName": "com.liferay.portal.monitoring.internal.portlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MonitoringInvokerPortlet",
@@ -17464,7 +17702,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "isStrutsPortlet",
 		"packageName": "com.liferay.portal.monitoring.internal.portlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BasePortalInstanceLifecycleListener",
@@ -18418,7 +18657,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.document.library.web.internal.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LoginUtil",
@@ -18485,7 +18725,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "entriesPerPage",
 		"packageName": "com.liferay.bookmarks.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksGroupServiceConfiguration",
@@ -18493,7 +18734,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "foldersPerPage",
 		"packageName": "com.liferay.bookmarks.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryLocalServiceWrapper",
@@ -18501,7 +18743,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetEntries",
 		"packageName": "com.liferay.bookmarks.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryLocalServiceUtil",
@@ -18509,7 +18752,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetEntries",
 		"packageName": "com.liferay.bookmarks.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryLocalService",
@@ -18517,7 +18761,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetEntries",
 		"packageName": "com.liferay.bookmarks.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderModel",
@@ -18525,7 +18770,8 @@
 		"javadoc": "Returns the trash handler for this bookmarks folder.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryModel",
@@ -18533,7 +18779,8 @@
 		"javadoc": "Returns the trash handler for this bookmarks entry.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderWrapper",
@@ -18541,7 +18788,8 @@
 		"javadoc": "Returns the trash handler for this bookmarks folder.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryWrapper",
@@ -18549,7 +18797,8 @@
 		"javadoc": "Returns the trash handler for this bookmarks entry.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryAssetRenderer",
@@ -18557,7 +18806,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.bookmarks.web.internal.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderAssetRenderer",
@@ -18565,7 +18815,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.bookmarks.web.internal.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryLocalServiceImpl",
@@ -18573,7 +18824,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetEntries",
 		"packageName": "com.liferay.bookmarks.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderModelImpl",
@@ -18581,7 +18833,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.bookmarks.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryModelImpl",
@@ -18589,7 +18842,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.bookmarks.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefineObjectsTag",
@@ -18597,7 +18851,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getCurrentURLObj",
 		"packageName": "com.liferay.frontend.taglib.servlet.taglib",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefineObjectsTag",
@@ -18605,7 +18860,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getLiferayPortletRequest",
 		"packageName": "com.liferay.frontend.taglib.servlet.taglib",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefineObjectsTag",
@@ -18613,7 +18869,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getLiferayPortletResponse",
 		"packageName": "com.liferay.frontend.taglib.servlet.taglib",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefineObjectsTag",
@@ -18621,7 +18878,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getResourceBundle",
 		"packageName": "com.liferay.frontend.taglib.servlet.taglib",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DefineObjectsTag",
@@ -18629,7 +18887,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getWindowState",
 		"packageName": "com.liferay.frontend.taglib.servlet.taglib",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ManagementBarSidenavTogglerButtonTag",
@@ -18657,7 +18916,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getStickerLabel",
 		"packageName": "com.liferay.frontend.taglib.clay.servlet.taglib.soy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseClayCardTag",
@@ -18685,7 +18945,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getInitials",
 		"packageName": "com.liferay.frontend.taglib.clay.servlet.taglib.soy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ManagementToolbarTag",
@@ -19375,7 +19636,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.comment.web.internal.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAssetDisplayContributor",
@@ -19383,7 +19645,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getAssetEntryModelFieldsMap()}",
 		"methodName": "getAssetEntryModelFields",
 		"packageName": "com.liferay.asset.display.contributor",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAssetDisplayContributor",
@@ -19391,7 +19654,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), }",
 		"methodName": "getAssetEntryModelFieldsMap",
 		"packageName": "com.liferay.asset.display.contributor",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAssetDisplayContributor",
@@ -19567,7 +19831,8 @@
 		"javadoc": "@return",
 		"methodName": "getQueryConfig",
 		"packageName": "com.liferay.portal.search.engine.adapter.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UpdateIndexSettingsIndexRequest",
@@ -19575,7 +19840,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CreateIndexRequest",
@@ -19583,7 +19849,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CloseIndexRequest",
@@ -19591,7 +19858,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnalyzeIndexRequest",
@@ -19599,7 +19867,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FlushIndexRequest",
@@ -19607,7 +19876,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RefreshIndexRequest",
@@ -19615,7 +19885,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OpenIndexRequest",
@@ -19623,7 +19894,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexRequest",
@@ -19631,7 +19903,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndicesExistsIndexRequest",
@@ -19639,7 +19912,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DeleteIndexRequest",
@@ -19647,7 +19921,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GetIndexIndexRequest",
@@ -19655,7 +19930,8 @@
 		"javadoc": "@return",
 		"methodName": "getMappingName",
 		"packageName": "com.liferay.portal.search.engine.adapter.index",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchPermissionCheckerConfiguration",
@@ -19663,7 +19939,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "includeInheritedPermissions",
 		"packageName": "com.liferay.portal.search.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngineInformation",
@@ -19671,7 +19948,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getStatusString",
 		"packageName": "com.liferay.portal.search.engine",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexerRequestBuffer",
@@ -19689,7 +19967,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getHighlights",
 		"packageName": "com.liferay.portal.search.web.portlet.shared.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletSharedSearchResponse",
@@ -19697,7 +19976,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getSearchResponse()} and {SearchResponse#getRequestString()}",
 		"methodName": "getQueryString",
 		"packageName": "com.liferay.portal.search.web.portlet.shared.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchResponse",
@@ -19705,7 +19985,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x)",
 		"methodName": "getHighlights",
 		"packageName": "com.liferay.portal.search.web.search.request",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchResponse",
@@ -19713,7 +19994,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), replaced by {#getSearchResponse()} and {com.liferay.portal.search.searcher.SearchResponse#getRequestString()}",
 		"methodName": "getQueryString",
 		"packageName": "com.liferay.portal.search.web.search.request",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SortFieldBuilderImpl",
@@ -19830,7 +20112,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetEntries",
 		"packageName": "com.liferay.blogs.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryLocalServiceImpl",
@@ -19914,7 +20197,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "findByNoAssets",
 		"packageName": "com.liferay.blogs.service.persistence.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryImpl",
@@ -19932,7 +20216,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSmallImageType",
 		"packageName": "com.liferay.blogs.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryModelImpl",
@@ -19940,7 +20225,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.blogs.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryAssetRenderer",
@@ -19958,7 +20244,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getDisplayDate",
 		"packageName": "com.liferay.blogs.web.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryServiceWrapper",
@@ -20094,7 +20381,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetEntries",
 		"packageName": "com.liferay.blogs.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryLocalServiceWrapper",
@@ -20219,7 +20507,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetEntries",
 		"packageName": "com.liferay.blogs.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryLocalService",
@@ -20293,7 +20582,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getNoAssetEntries",
 		"packageName": "com.liferay.blogs.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryLocalServiceUtil",
@@ -20351,7 +20641,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSmallImageType",
 		"packageName": "com.liferay.blogs.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryWrapper",
@@ -20369,7 +20660,8 @@
 		"javadoc": "@deprecated As of Judson (7.1.x), with no direct replacement",
 		"methodName": "getSmallImageType",
 		"packageName": "com.liferay.blogs.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryWrapper",
@@ -20377,7 +20669,8 @@
 		"javadoc": "Returns the trash handler for this blogs entry.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.blogs.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryModel",
@@ -20385,7 +20678,8 @@
 		"javadoc": "Returns the trash handler for this blogs entry.",
 		"methodName": "getTrashHandler",
 		"packageName": "com.liferay.blogs.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UploadItemSelectorCriterion",
@@ -20439,6 +20733,7 @@
 		"javadoc": "Returns whether the item selector view should show the search field. If the view supports search, this method should return <code>true</code>.",
 		"methodName": "isShowSearch",
 		"packageName": "com.liferay.item.selector",
-		"parameters": []
+		"parameters": [
+		]
 	}
 ]

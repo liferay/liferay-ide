@@ -15,7 +15,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getValueNames",
 		"packageName": "com.liferay.util.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "NullSession",
@@ -865,7 +866,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#AntivirusScannerException(int)}",
 		"methodName": "AntivirusScannerException",
 		"packageName": "com.liferay.document.library.kernel.antivirus",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AntivirusScannerException",
@@ -1166,7 +1168,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {com.liferay.exportimport.kernel.configuration.ExportImportConfigurationParameterMapFactory#buildParameterMap()}",
 		"methodName": "getStagingParameters",
 		"packageName": "com.liferay.exportimport.kernel.staging",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Staging",
@@ -1418,7 +1421,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {com.liferay.exportimport.kernel.configuration.ExportImportConfigurationParameterMapFactory#buildParameterMap()}",
 		"methodName": "getStagingParameters",
 		"packageName": "com.liferay.exportimport.kernel.staging",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StagingUtil",
@@ -1670,7 +1674,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getAssetCategoryIdsMap",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1678,7 +1683,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getAssetCategoryUuidsMap",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1686,7 +1692,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getAssetLinkIds()}",
 		"methodName": "getAssetLinksMap",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1694,7 +1701,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getComments",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1713,7 +1721,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getNewPrimaryKeysMap(String)}",
 		"methodName": "getNewLayouts",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1721,7 +1730,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getOldPlid",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1729,7 +1739,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getRatingsEntries",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1748,7 +1759,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getScopedPrimaryKeys",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1756,7 +1768,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getZipEntries",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1764,7 +1777,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getZipFolderEntries",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1838,7 +1852,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getAllModelDeletionCounts()}",
 		"methodName": "getModelDeletionCount",
 		"packageName": "com.liferay.exportimport.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ManifestSummary",
@@ -2815,7 +2830,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getAuthTokenWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2823,7 +2839,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getPortletCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2831,7 +2848,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getPortletCSRFWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2839,7 +2857,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getPortletInvocationWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2847,7 +2866,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getPortletInvocationWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2890,7 +2910,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "resetOriginCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2898,7 +2919,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "resetPortletCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2906,7 +2928,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "resetPortletInvocationWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2914,7 +2937,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "resetPortletInvocationWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtil",
@@ -2932,7 +2956,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getOriginCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelist",
@@ -2940,7 +2965,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getPortletCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelist",
@@ -2948,7 +2974,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getPortletCSRFWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelist",
@@ -2956,7 +2983,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getPortletInvocationWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelist",
@@ -2964,7 +2992,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getPortletInvocationWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelist",
@@ -2996,7 +3025,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "resetOriginCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelist",
@@ -3004,7 +3034,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "resetPortletCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelist",
@@ -3012,7 +3043,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "resetPortletInvocationWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelist",
@@ -3020,7 +3052,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "resetPortletInvocationWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3028,7 +3061,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getOriginCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3036,7 +3070,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getPortletCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3044,7 +3079,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getPortletCSRFWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3052,7 +3088,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getPortletInvocationWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3060,7 +3097,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getPortletInvocationWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3092,7 +3130,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "resetOriginCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3100,7 +3139,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "resetPortletCSRFWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3108,7 +3148,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "resetPortletInvocationWhitelist",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAuthTokenWhitelist",
@@ -3116,7 +3157,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "resetPortletInvocationWhitelistActions",
 		"packageName": "com.liferay.portal.kernel.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthToken",
@@ -5143,7 +5185,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#clearPortletsMap)}",
 		"methodName": "clearCompanyPortletsPool",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletLocalServiceWrapper",
@@ -5471,7 +5514,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#clearPortletsMap)}",
 		"methodName": "clearCompanyPortletsPool",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletLocalService",
@@ -8706,7 +8750,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#clearPortletsMap)}",
 		"methodName": "clearCompanyPortletsPool",
 		"packageName": "com.liferay.portal.kernel.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletLocalServiceUtil",
@@ -8929,7 +8974,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getCurrentUserId()}",
 		"methodName": "getUserId",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SubscriptionSender",
@@ -8993,7 +9039,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#toString}",
 		"methodName": "toSortedString",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "HttpUtil",
@@ -9520,7 +9567,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#isExceededUploadRequestSizeLimit()}",
 		"methodName": "isExceededSizeLimit",
 		"packageName": "com.liferay.portal.kernel.upload",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UploadException",
@@ -9538,7 +9586,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheName()}",
 		"methodName": "getName",
 		"packageName": "com.liferay.portal.kernel.cache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SingleVMPoolUtil",
@@ -9567,7 +9616,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheManager()}",
 		"methodName": "getCacheManager",
 		"packageName": "com.liferay.portal.kernel.cache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SingleVMPoolUtil",
@@ -9606,7 +9656,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheManager()}",
 		"methodName": "getCacheManager",
 		"packageName": "com.liferay.portal.kernel.cache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MultiVMPoolUtil",
@@ -9645,7 +9696,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheManager()}",
 		"methodName": "getCacheManager",
 		"packageName": "com.liferay.portal.kernel.cache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MultiVMPool",
@@ -9684,7 +9736,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheManager()}",
 		"methodName": "getCacheManager",
 		"packageName": "com.liferay.portal.kernel.cache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SingleVMPool",
@@ -9702,7 +9755,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheName()}",
 		"methodName": "getName",
 		"packageName": "com.liferay.portal.kernel.cache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexerRegistryUtil",
@@ -9743,7 +9797,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getBooleanClauseFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseSearchEngine",
@@ -9751,7 +9806,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getBooleanQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseSearchEngine",
@@ -9759,7 +9815,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getTermQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseSearchEngine",
@@ -9767,7 +9824,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getTermRangeQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseSearchEngine",
@@ -9815,7 +9873,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getWrappedQuery",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexSearcher",
@@ -9850,7 +9909,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {com.liferay.portal.search.index.IndexStatusManager#isIndexReadOnly}",
 		"methodName": "isIndexReadOnly",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexWriterHelper",
@@ -9868,7 +9928,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getDisplayStyle",
 		"packageName": "com.liferay.portal.kernel.search.facet.config",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FacetConfiguration",
@@ -9898,7 +9959,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getFacetFilterBooleanClause}",
 		"methodName": "getFacetClause",
 		"packageName": "com.liferay.portal.kernel.search.facet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseFacet",
@@ -9906,7 +9968,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#doGetFacetFilterBooleanClause}",
 		"methodName": "doGetFacetClause",
 		"packageName": "com.liferay.portal.kernel.search.facet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Facet",
@@ -9914,7 +9977,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getFacetFilterBooleanClause}",
 		"methodName": "getFacetClause",
 		"packageName": "com.liferay.portal.kernel.search.facet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngine",
@@ -9922,7 +9986,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {BooleanClauseFactoryUtil}",
 		"methodName": "getBooleanClauseFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngine",
@@ -9930,7 +9995,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getBooleanQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngine",
@@ -9938,7 +10004,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getTermQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngine",
@@ -9946,7 +10013,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getTermRangeQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyIndexer",
@@ -9954,7 +10022,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getSearchClassNames}",
 		"methodName": "getClassNames",
 		"packageName": "com.liferay.portal.kernel.search.dummy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyIndexer",
@@ -9962,7 +10031,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getClassName}",
 		"methodName": "getPortletId",
 		"packageName": "com.liferay.portal.kernel.search.dummy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyIndexer",
@@ -10054,7 +10124,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getSearchClassNames}",
 		"methodName": "getClassNames",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Indexer",
@@ -10062,7 +10133,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getClassName}",
 		"methodName": "getPortletId",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Indexer",
@@ -10104,7 +10176,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getWrappedQuery",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexWriterHelperUtil",
@@ -10112,7 +10185,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {com.liferay.portal.search.index.IndexStatusManager#isIndexReadOnly}",
 		"methodName": "isIndexReadOnly",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexWriterHelperUtil",
@@ -10130,7 +10204,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {Query#getBoost}",
 		"methodName": "getBoost",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Field",
@@ -10225,7 +10300,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getClause}",
 		"methodName": "getQuery",
 		"packageName": "com.liferay.portal.kernel.search.generic",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchResult",
@@ -10253,7 +10329,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getBooleanClauseFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngineProxyWrapper",
@@ -10261,7 +10338,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getBooleanQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngineProxyWrapper",
@@ -10269,7 +10347,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getTermQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngineProxyWrapper",
@@ -10277,7 +10356,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getTermRangeQueryFactory",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BooleanClause",
@@ -10285,7 +10365,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getClause}",
 		"methodName": "getQuery",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BooleanClauseFactory",
@@ -10318,7 +10399,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getSearchClassNames}",
 		"methodName": "getClassNames",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseIndexer",
@@ -10326,7 +10408,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getClassName}",
 		"methodName": "getPortletId",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseIndexer",
@@ -10688,7 +10771,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {IndexWriterHelperUtil#isIndexReadOnly()}",
 		"methodName": "isIndexReadOnly",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngineUtil",
@@ -10901,7 +10985,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isTypeArticle",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Layout",
@@ -10909,7 +10994,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isTypeArticle",
 		"packageName": "com.liferay.portal.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserWrapper",
@@ -11063,7 +11149,8 @@
 		"javadoc": "Returns the parent container model's class name.",
 		"methodName": "getContainerModelClassName",
 		"packageName": "com.liferay.portal.kernel.trash",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashHandler",
@@ -11115,7 +11202,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getContainerModel(long)}",
 		"methodName": "getContainerModelClassName",
 		"packageName": "com.liferay.portal.kernel.trash",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseTrashHandler",
@@ -11153,7 +11241,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isAccess",
 		"packageName": "com.liferay.portal.kernel.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDisplay",
@@ -11171,7 +11260,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getURLAddContent",
 		"packageName": "com.liferay.portal.kernel.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -11179,7 +11269,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getURLLayoutTemplates",
 		"packageName": "com.liferay.portal.kernel.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -11187,7 +11278,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getURLPageSettings",
 		"packageName": "com.liferay.portal.kernel.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -11195,7 +11287,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isShowAddContentIcon",
 		"packageName": "com.liferay.portal.kernel.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -11203,7 +11296,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isShowAddContentIconPermission",
 		"packageName": "com.liferay.portal.kernel.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -11489,7 +11583,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getSanitizer",
 		"packageName": "com.liferay.portal.kernel.sanitizer",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SanitizerUtil",
@@ -11651,7 +11746,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "SendPasswordException",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SendPasswordException",
@@ -11680,7 +11776,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "getType",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLockoutException",
@@ -11688,7 +11785,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "UserLockoutException",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLockoutException",
@@ -11727,7 +11825,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "UserEmailAddressException",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserEmailAddressException",
@@ -11766,7 +11865,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "UserScreenNameException",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserScreenNameException",
@@ -11815,7 +11915,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "getType",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserIdException",
@@ -11823,7 +11924,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "UserIdException",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserIdException",
@@ -11862,7 +11964,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "UserSmsException",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserSmsException",
@@ -11901,7 +12004,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "GroupParentException",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GroupParentException",
@@ -11950,7 +12054,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by the inner classes",
 		"methodName": "getType",
 		"packageName": "com.liferay.portal.kernel.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseRepositoryImpl",
@@ -12054,7 +12159,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getSupportedConfigurations",
 		"packageName": "com.liferay.portal.kernel.repository",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseRepositoryImpl",
@@ -12062,7 +12168,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getSupportedParameters",
 		"packageName": "com.liferay.portal.kernel.repository",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseRepositoryImpl",
@@ -12158,7 +12265,8 @@
 		"javadoc": "See {BaseServiceImpl#getUserId()}",
 		"methodName": "getUserId",
 		"packageName": "com.liferay.portal.kernel.repository.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Repository",
@@ -12411,7 +12519,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getSupportedConfigurations",
 		"packageName": "com.liferay.portal.kernel.repository.proxy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseRepositoryProxyBean",
@@ -12419,7 +12528,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getSupportedParameters",
 		"packageName": "com.liferay.portal.kernel.repository.proxy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseRepositoryProxyBean",
@@ -12500,7 +12610,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {FileVersionProxyBean#getUserId()}",
 		"methodName": "getVersionUserId",
 		"packageName": "com.liferay.portal.kernel.repository.proxy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FileEntryProxyBean",
@@ -12508,7 +12619,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {FileVersionProxyBean#getUserName()}",
 		"methodName": "getVersionUserName",
 		"packageName": "com.liferay.portal.kernel.repository.proxy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FileEntryProxyBean",
@@ -12516,7 +12628,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {FileVersionProxyBean#getUserUuid()}",
 		"methodName": "getVersionUserUuid",
 		"packageName": "com.liferay.portal.kernel.repository.proxy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LocalRepositoryProxyBean",
@@ -12539,7 +12652,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {com.liferay.portal.kernel.repository.registry.RepositoryDefiner#getSupportedConfigurations()}",
 		"methodName": "getSupportedConfigurations",
 		"packageName": "com.liferay.portal.kernel.repository",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseRepository",
@@ -12547,7 +12661,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {com.liferay.portal.kernel.repository.registry.RepositoryDefiner#getSupportedParameters()}",
 		"methodName": "getSupportedParameters",
 		"packageName": "com.liferay.portal.kernel.repository",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LocalRepository",
@@ -13183,7 +13298,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getSettingsProperties",
 		"packageName": "com.liferay.asset.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetVocabularyWrapper",
@@ -13211,7 +13327,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getAddToPagePortletId",
 		"packageName": "com.liferay.asset.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAssetRenderer",
@@ -13262,7 +13379,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getSettingsProperties",
 		"packageName": "com.liferay.asset.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetVocabulary",
@@ -13380,7 +13498,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getAddToPagePortletId",
 		"packageName": "com.liferay.asset.kernel.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetRenderer",
@@ -13452,7 +13571,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getExpressionEvaluator",
 		"packageName": "com.liferay.taglib.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PageContextWrapper",
@@ -13460,7 +13580,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getVariableResolver",
 		"packageName": "com.liferay.taglib.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -13468,7 +13589,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "staging",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -13476,7 +13598,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "portletIconBack",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -13484,7 +13607,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "staging",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -13492,7 +13616,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "staging",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TabsTag",
@@ -14381,7 +14506,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "getSettingsProperties",
 		"packageName": "com.liferay.portlet.asset.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetVocabularyImpl",
@@ -14429,7 +14555,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getValueNames",
 		"packageName": "com.liferay.portal.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SharedSessionWrapper",
@@ -14492,7 +14619,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getPortletCSRFWhitelistActions",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StrutsPortletAuthTokenWhitelist",
@@ -14500,7 +14628,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getPortletInvocationWhitelistActions",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistImpl",
@@ -14508,7 +14637,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getOriginCSRFWhitelist",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistImpl",
@@ -14516,7 +14646,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getPortletCSRFWhitelist",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistImpl",
@@ -14524,7 +14655,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getPortletInvocationWhitelist",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SessionAuthToken",
@@ -15754,7 +15886,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#clearPortletsMap)}",
 		"methodName": "clearCompanyPortletsPool",
 		"packageName": "com.liferay.portal.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletLocalServiceImpl",
@@ -17130,7 +17263,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isTypeArticle",
 		"packageName": "com.liferay.portal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "InitializedRepository",
@@ -17645,7 +17779,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {com.liferay.portal.repository.registry.RepositoryDefinitionCatalogUtil#getExternalRepositoryClassNames()}",
 		"methodName": "getExternalRepositoryClassNames",
 		"packageName": "com.liferay.portal.repository.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CapabilityRepository",
@@ -17866,7 +18001,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "testGetPortletCSRFWhitelistActionsFromBundle",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtilTest",
@@ -17874,7 +18010,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "testGetPortletCSRFWhitelistActionsFromPortalProperties",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtilTest",
@@ -17882,7 +18019,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "testGetPortletCSRFWhitelistFromBundle",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtilTest",
@@ -17890,7 +18028,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "testGetPortletCSRFWhitelistFromProperties",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtilTest",
@@ -17898,7 +18037,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "testGetPortletInvocationWhitelistActionsFromBundle",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtilTest",
@@ -17906,7 +18046,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "testGetPortletInvocationWhitelistActionsFromPortalProperties",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtilTest",
@@ -17914,7 +18055,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "testGetPortletInvocationWhitelistFromBundle",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AuthTokenWhitelistUtilTest",
@@ -17922,7 +18064,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "testGetPortletInvocationWhitelistFromPortalProperties",
 		"packageName": "com.liferay.portal.security.auth",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TestGroup",
@@ -19627,7 +19770,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMRendererTemplateKey()}",
 		"methodName": "getRendererTemplateId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeed",
@@ -19635,7 +19779,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMStructureKey()}",
 		"methodName": "getStructureId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeed",
@@ -19643,7 +19788,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMTemplateKey()}",
 		"methodName": "getTemplateId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeed",
@@ -19681,7 +19827,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMStructureKey()}",
 		"methodName": "getStructureId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticle",
@@ -19689,7 +19836,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMTemplateKey()}",
 		"methodName": "getTemplateId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticle",
@@ -19697,7 +19845,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isTemplateDriven",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticle",
@@ -19725,7 +19874,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMRendererTemplateKey()}",
 		"methodName": "getRendererTemplateId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedWrapper",
@@ -19733,7 +19883,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMStructureKey()}",
 		"methodName": "getStructureId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedWrapper",
@@ -19741,7 +19892,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMTemplateKey()}",
 		"methodName": "getTemplateId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedWrapper",
@@ -19779,7 +19931,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMStructureKey()}",
 		"methodName": "getStructureId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -19787,7 +19940,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMTemplateKey()}",
 		"methodName": "getTemplateId",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -19795,7 +19949,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isTemplateDriven",
 		"packageName": "com.liferay.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -20049,7 +20204,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMStructureKey()}",
 		"methodName": "getStructureId",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleImpl",
@@ -20057,7 +20213,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMTemplateKey()}",
 		"methodName": "getTemplateId",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleImpl",
@@ -20065,7 +20222,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), with no direct replacement",
 		"methodName": "isTemplateDriven",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleImpl",
@@ -20093,7 +20251,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMRendererTemplateKey()}",
 		"methodName": "getRendererTemplateId",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedImpl",
@@ -20101,7 +20260,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMStructureKey()}",
 		"methodName": "getStructureId",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedImpl",
@@ -20109,7 +20269,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getDDMTemplateKey()}",
 		"methodName": "getTemplateId",
 		"packageName": "com.liferay.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedImpl",
@@ -20147,7 +20308,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "shutdown",
 		"packageName": "com.liferay.portal.search.solr7.internal.connection",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureService",
@@ -20750,7 +20912,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getType",
 		"packageName": "com.liferay.dynamic.data.mapping.exception",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureServiceSoap",
@@ -21496,7 +21659,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheName()}",
 		"methodName": "getName",
 		"packageName": "com.liferay.portal.cache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalCacheWrapper",
@@ -21504,7 +21668,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getName",
 		"packageName": "com.liferay.portal.cache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TestPortalCache",
@@ -21512,7 +21677,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheName()}",
 		"methodName": "getName",
 		"packageName": "com.liferay.portal.cache.test.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MultiVMPoolImpl",
@@ -21541,7 +21707,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheManager()}",
 		"methodName": "getCacheManager",
 		"packageName": "com.liferay.portal.cache.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MultiVMPoolImpl",
@@ -21580,7 +21747,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getPortalCacheManager()}",
 		"methodName": "getCacheManager",
 		"packageName": "com.liferay.portal.cache.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SingleVMPoolImpl",
@@ -21598,7 +21766,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getSupportedConfigurations",
 		"packageName": "com.liferay.document.library.repository.cmis.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CMISRepository",
@@ -21606,7 +21775,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x)",
 		"methodName": "getSupportedParameters",
 		"packageName": "com.liferay.document.library.repository.cmis.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CMISFileEntry",
@@ -21614,7 +21784,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {CMISFileVersion#getUserId()}",
 		"methodName": "getVersionUserId",
 		"packageName": "com.liferay.document.library.repository.cmis.internal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CMISFileEntry",
@@ -21622,7 +21793,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {CMISFileVersion#getUserName()}",
 		"methodName": "getVersionUserName",
 		"packageName": "com.liferay.document.library.repository.cmis.internal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CMISFileEntry",
@@ -21630,7 +21802,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {CMISFileVersion#getUserUuid()}",
 		"methodName": "getVersionUserUuid",
 		"packageName": "com.liferay.document.library.repository.cmis.internal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderLocalServiceUtil",
@@ -21900,7 +22073,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {IndexStatusManagerConfiguration#indexReadOnly}",
 		"methodName": "indexReadOnly",
 		"packageName": "com.liferay.portal.search.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "NoAutoCommitIndexer",
@@ -21908,7 +22082,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getSearchClassNames}",
 		"methodName": "getClassNames",
 		"packageName": "com.liferay.portal.search.buffer",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "NoAutoCommitIndexer",
@@ -21916,7 +22091,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {#getClassName}",
 		"methodName": "getPortletId",
 		"packageName": "com.liferay.portal.search.buffer",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "NoAutoCommitIndexer",
@@ -21958,7 +22134,8 @@
 		"javadoc": "@deprecated As of Wilberforce (7.0.x), replaced by {IndexStatusManager#isIndexReadWrite}",
 		"methodName": "isIndexReadOnly",
 		"packageName": "com.liferay.portal.search.internal",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "IndexWriterHelperImpl",
