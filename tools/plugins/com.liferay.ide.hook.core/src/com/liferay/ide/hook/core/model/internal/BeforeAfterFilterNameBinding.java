@@ -29,7 +29,6 @@ public class BeforeAfterFilterNameBinding extends XmlValueBindingImpl {
 	@Override
 	public String read() {
 		String retval = null;
-		XmlElement filterElement = null;
 
 		XmlElement xmlElement = xml();
 
@@ -37,7 +36,7 @@ public class BeforeAfterFilterNameBinding extends XmlValueBindingImpl {
 
 		String filterTypeText = filterType.getText();
 
-		filterElement = xmlElement.getChildElement(filterTypeText, false);
+		XmlElement filterElement = xmlElement.getChildElement(filterTypeText, false);
 
 		if (filterElement != null) {
 			retval = filterElement.getText();

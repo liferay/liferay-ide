@@ -185,9 +185,7 @@ public class HookUtil {
 
 				IPath pathValue = docFolder.getFullPath();
 
-				pathValue = pathValue.append(newPath);
-
-				return pathValue;
+				return pathValue.append(newPath);
 			}
 		}
 
