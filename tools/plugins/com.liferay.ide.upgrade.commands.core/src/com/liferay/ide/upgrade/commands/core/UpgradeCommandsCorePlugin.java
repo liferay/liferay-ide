@@ -26,7 +26,7 @@ import org.osgi.framework.BundleContext;
  */
 public class UpgradeCommandsCorePlugin extends Plugin {
 
-	public static final String ID = "com.liferay.ide.upgrade.steps.core";
+	public static final String ID = "com.liferay.ide.upgrade.commands.core";
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, ID, msg);

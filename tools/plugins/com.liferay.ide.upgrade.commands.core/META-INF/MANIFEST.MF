@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.liferay.ide.upgrade.commands.core.UpgradeCommandsCorePlugin
 Bundle-ClassPath: .
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Upgrade Plan Commands Core
