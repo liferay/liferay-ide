@@ -39,7 +39,7 @@ public class PortletStyleValidationService extends ValidationService implements 
 	protected Status compute() {
 		Element modelElement = context(Element.class);
 
-		if (!modelElement.disposed() && modelElement instanceof PortletStyleElement) {
+		if (!modelElement.disposed() && (modelElement instanceof PortletStyleElement)) {
 			Path path = get(modelElement.property(context(ValueProperty.class)));
 
 			if (path != null) {

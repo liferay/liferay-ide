@@ -29,7 +29,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Simon Jiang
  */
-@CustomXmlRootBinding(value = LiferayPortletRootElementController.class)
+@CustomXmlRootBinding(LiferayPortletRootElementController.class)
 @Image(path = "images/eview16/portlet_app_hi.gif")
 @XmlBinding(path = "liferay-portlet-app")
 public interface LiferayPortletXml extends Element {

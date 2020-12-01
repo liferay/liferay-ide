@@ -161,9 +161,8 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		if (exludeJars != null) {
 			return exludeJars.split(",");
 		}
-		else {
-			return new String[0];
-		}
+
+		return new String[0];
 	}
 
 	public String[] getPortalDependencyJars() {
@@ -172,9 +171,8 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		if (portalJars != null) {
 			return portalJars.split(",");
 		}
-		else {
-			return new String[0];
-		}
+
+		return new String[0];
 	}
 
 	public String[] getPortalDependencyTlds() {
@@ -183,9 +181,8 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		if (portalTlds != null) {
 			return portalTlds.split(",");
 		}
-		else {
-			return new String[0];
-		}
+
+		return new String[0];
 	}
 
 	public String[] getRequiredDeploymentContexts() {
@@ -194,9 +191,8 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		if (contexts != null) {
 			return contexts.split(",");
 		}
-		else {
-			return new String[0];
-		}
+
+		return new String[0];
 	}
 
 	public String getShortDescription() {
@@ -204,10 +200,8 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	}
 
 	public String getStringProperty(String propertyName) {
-		if (pluginPackageProperties != null) {
-			if (pluginPackageProperties.getProperty(propertyName) != null) {
-				return pluginPackageProperties.getString(propertyName);
-			}
+		if ((pluginPackageProperties != null) && (pluginPackageProperties.getProperty(propertyName) != null)) {
+			return pluginPackageProperties.getString(propertyName);
 		}
 
 		return null;

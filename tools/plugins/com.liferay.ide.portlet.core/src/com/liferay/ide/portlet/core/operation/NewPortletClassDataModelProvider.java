@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
@@ -139,22 +140,20 @@ public class NewPortletClassDataModelProvider
 			Object portletName = getProperty(PORTLET_NAME);
 
 			if (CREATE_JSPS_FOLDER.equals(propertyName)) {
+				String tempStr = null;
+
 				if (getBooleanProperty(CREATE_NEW_PORTLET_CLASS)) {
 					Object className = getProperty(CLASS_NAME);
 
-					String tempStr = className.toString();
-
-					String property = tempStr.toLowerCase();
-
-					return "/html/" + property.replaceAll(_PORTLET_SUFFIX_PATTERN, "");
+					tempStr = className.toString();
 				}
 				else {
-					String tempStr = portletName.toString();
-
-					String property = tempStr.toLowerCase();
-
-					return "/html/" + property.replaceAll(_PORTLET_SUFFIX_PATTERN, "");
+					tempStr = portletName.toString();
 				}
+
+				String property = tempStr.toLowerCase();
+
+				return "/html/" + property.replaceAll(_PORTLET_SUFFIX_PATTERN, "");
 			}
 			else if (ICON_FILE.equals(propertyName)) {
 				return "/icon.png";
@@ -286,9 +285,7 @@ public class NewPortletClassDataModelProvider
 			if ((entryCategory != null) && (entryCategories != null) && (entryCategories.get(entryCategory) != null)) {
 				Object o = entryCategories.get(entryCategory);
 
-				DataModelPropertyDescriptor descriptor = new DataModelPropertyDescriptor(entryCategory, o.toString());
-
-				return descriptor;
+				return new DataModelPropertyDescriptor(entryCategory, o.toString());
 			}
 
 			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
@@ -623,21 +620,21 @@ public class NewPortletClassDataModelProvider
 				return Status.OK_STATUS;
 			}
 
-			boolean validPath = false;
-			boolean validFileName = false;
-
 			String val = getStringProperty(propertyName);
 
 			if (CoreUtil.isNullOrEmpty(val)) {
 				return PortletCore.createErrorStatus(Msgs.resourceBundleFilePathValid);
 			}
 
+			boolean validPath = false;
+			boolean validFileName = false;
+
 			try {
 				IPath path = new Path(val);
 
 				validPath = path.isValidPath(val);
 
-				if ("properties".equals(path.getFileExtension())) {
+				if (Objects.equals("properties", path.getFileExtension())) {
 					validFileName = true;
 				}
 			}
@@ -654,9 +651,8 @@ public class NewPortletClassDataModelProvider
 			if (validFileName) {
 				return super.validate(propertyName);
 			}
-			else {
-				return PortletCore.createWarningStatus(Msgs.resourceBundleFilePathEndWithProperties);
-			}
+
+			return PortletCore.createWarningStatus(Msgs.resourceBundleFilePathEndWithProperties);
 		}
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
 			if (!getBooleanProperty(CREATE_JSPS)) {
@@ -860,9 +856,8 @@ public class NewPortletClassDataModelProvider
 		if (portal != null) {
 			return portal.getPortletEntryCategories();
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	protected Object getInitParams() {
@@ -881,9 +876,7 @@ public class NewPortletClassDataModelProvider
 
 				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-				String version = portal.getVersion();
-
-				Version portalVersion = Version.parseVersion(version);
+				Version portalVersion = Version.parseVersion(portal.getVersion());
 
 				if (CoreUtil.compareVersions(portalVersion, ILiferayConstants.V610) >= 0) {
 					paramVals = createDefaultParamValuesForModes(modes, INIT_NAME_61, INIT_VALUES);

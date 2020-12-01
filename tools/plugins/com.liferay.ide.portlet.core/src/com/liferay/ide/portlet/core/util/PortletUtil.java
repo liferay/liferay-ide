@@ -114,7 +114,6 @@ public class PortletUtil {
 	 *            - the extension that needs to be attached to the file
 	 * @param locales
 	 *            - the locale String
-	 * @return - actual io file name like value.<extension>
 	 */
 	public static String convertJavaToIoFileName(String value, String extension, String... locales) {
 
@@ -128,9 +127,7 @@ public class PortletUtil {
 			strFileName = strFileName + "_" + locales[0];
 		}
 
-		strFileName = strFileName + "." + extension;
-
-		return strFileName;
+		return strFileName + "." + extension;
 	}
 
 	/**
@@ -173,12 +170,9 @@ public class PortletUtil {
 	}
 
 	/**
-	 * This method will return the first source folder of the Java project
-	 *
 	 * @param javaProject
 	 *            - the java project where the source folder needs to be indentified
 	 * @return
-	 * @throws JavaModelException
 	 */
 	public static IPackageFragmentRoot getResourcesFolderPackageFragmentRoot(IJavaProject javaProject)
 		throws JavaModelException {
@@ -191,9 +185,8 @@ public class PortletUtil {
 					if (packageFragmentRoot.getKind() == IPackageFragmentRoot.K_SOURCE) {
 						return true;
 					}
-					else {
-						return false;
-					}
+
+					return false;
 				}
 				catch (JavaModelException jme) {
 					return false;

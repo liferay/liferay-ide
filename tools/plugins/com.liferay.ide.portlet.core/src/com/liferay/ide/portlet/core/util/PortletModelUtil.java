@@ -44,8 +44,6 @@ public class PortletModelUtil {
 	 * @return
 	 */
 	public static String defineNS(XmlElement element, QName currValueAsQName) {
-		String qualifiedNodeValue = null;
-
 		String namespaceURI = currValueAsQName.getNamespaceURI();
 
 		String defaultPrefix = PortletAppModelConstants.DEFAULT_QNAME_PREFIX;
@@ -81,10 +79,8 @@ public class PortletModelUtil {
 
 		// remove the exisiting attribute
 
-		if (nsDefined) {
-			if (attrib != null) {
-				domNode.removeAttributeNode(attrib);
-			}
+		if (nsDefined && (attrib != null)) {
+			domNode.removeAttributeNode(attrib);
 		}
 
 		// update the element
@@ -96,9 +92,7 @@ public class PortletModelUtil {
 			domNode.setAttributeNS(namespaceURI, qualifiedName, namespaceURI);
 		}
 
-		qualifiedNodeValue = defaultPrefix + ":" + currValueAsQName.getLocalPart();
-
-		return qualifiedNodeValue;
+		return defaultPrefix + ":" + currValueAsQName.getLocalPart();
 	}
 
 	/**

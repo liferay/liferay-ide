@@ -76,9 +76,7 @@ public class JSFLiferayPortletDescriptorHelper
 
 						domModel = (IDOMModel)modelManager.getModelForEdit(descriptorFile);
 
-						IDOMDocument document = domModel.getDocument();
-
-						IStatus status = _downgradeJSFLiferayPortletXMLTo61(document);
+						IStatus status = _downgradeJSFLiferayPortletXMLTo61(domModel.getDocument());
 
 						if (!status.isOK()) {
 							return status;
@@ -111,9 +109,7 @@ public class JSFLiferayPortletDescriptorHelper
 
 	@Override
 	protected IStatus doAddNewPortlet(IDOMDocument document, IDataModel model) {
-		IStatus status = Status.OK_STATUS;
-
-		status = super.doAddNewPortlet(document, model);
+		IStatus status = super.doAddNewPortlet(document, model);
 
 		if (!status.isOK()) {
 			return status;
@@ -143,11 +139,11 @@ public class JSFLiferayPortletDescriptorHelper
 
 				};
 
-				status = op.execute();
+				return op.execute();
 			}
 		}
 
-		return status;
+		return Status.OK_STATUS;
 	}
 
 	private IStatus _downgradeJSFLiferayPortletXMLTo61(IDOMDocument document) {

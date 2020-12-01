@@ -35,7 +35,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Kamesh Sampath <br/>
  * @author Gregory Amerson
  */
-@CustomXmlRootBinding(value = PortletDefinitionRootElementController.class)
+@CustomXmlRootBinding(PortletDefinitionRootElementController.class)
 @Image(path = "images/obj16/portlet_model_obj.gif")
 @XmlBinding(path = "portlet-app")
 public interface PortletApp extends Identifiable, ResourceBundle {

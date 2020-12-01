@@ -50,11 +50,8 @@ public class LocaleBundleValidationService extends ValidationService implements 
 	public Status compute() {
 		Element modelElement = context(Element.class);
 
-		if (!modelElement.disposed() && modelElement instanceof SupportedLocales) {
+		if (!modelElement.disposed() && (modelElement instanceof SupportedLocales)) {
 			IProject project = modelElement.adapt(IProject.class);
-			Portlet portlet = modelElement.nearest(Portlet.class);
-
-			IWorkspaceRoot wroot = CoreUtil.getWorkspaceRoot();
 
 			IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries(project);
 
@@ -64,11 +61,15 @@ public class LocaleBundleValidationService extends ValidationService implements 
 
 			String locale = getText(modelElement.property(context(ValueProperty.class)), false);
 
-			Value<Path> resourceBundle = portlet.getResourceBundle();
-
 			if (locale == null) {
 				return Status.createErrorStatus(Resources.localeMustNotEmpty);
 			}
+
+			Portlet portlet = modelElement.nearest(Portlet.class);
+
+			IWorkspaceRoot wroot = CoreUtil.getWorkspaceRoot();
+
+			Value<Path> resourceBundle = portlet.getResourceBundle();
 
 			String bundleName = resourceBundle.text();
 
@@ -91,12 +92,11 @@ public class LocaleBundleValidationService extends ValidationService implements 
 						if (FileUtil.exists(resourceBundleFile)) {
 							return Status.createOkStatus();
 						}
-						else {
-							Object[] objects = {locale, bundleName, localeString};
 
-							return Status.createWarningStatus(
-								Resources.bind(StringEscapeUtils.unescapeJava(Resources.noResourceBundle), objects));
-						}
+						Object[] objects = {locale, bundleName, localeString};
+
+						return Status.createWarningStatus(
+							Resources.bind(StringEscapeUtils.unescapeJava(Resources.noResourceBundle), objects));
 					}
 				}
 			}

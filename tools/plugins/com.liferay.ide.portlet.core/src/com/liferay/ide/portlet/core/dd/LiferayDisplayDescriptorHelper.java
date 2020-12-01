@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -57,7 +58,7 @@ public class LiferayDisplayDescriptorHelper
 	}
 
 	public IStatus configureLiferayDisplayXml(String newPortletName) {
-		IStatus status = new DOMModelEditOperation(
+		return new DOMModelEditOperation(
 			getDescriptorFile()
 		) {
 
@@ -78,8 +79,6 @@ public class LiferayDisplayDescriptorHelper
 			}
 
 		}.execute();
-
-		return status;
 	}
 
 	public String[] getAllPortletCategories() {
@@ -190,7 +189,7 @@ public class LiferayDisplayDescriptorHelper
 		String modelCategory = model.getStringProperty(CATEGORY);
 
 		for (Element child : getChildElements(rootElement)) {
-			if ("category".equals(child.getNodeName()) && modelCategory.equals(child.getAttribute("name"))) {
+			if (Objects.equals("category", child.getNodeName()) && modelCategory.equals(child.getAttribute("name"))) {
 				category = child;
 
 				break;
@@ -207,7 +206,7 @@ public class LiferayDisplayDescriptorHelper
 			// this category
 
 			for (Element child : getChildElements(category)) {
-				if ("portlet".equals(child.getNodeName()) && modelId.equals(child.getAttribute("id"))) {
+				if (Objects.equals("portlet", child.getNodeName()) && modelId.equals(child.getAttribute("id"))) {
 					id = child;
 
 					break;
@@ -252,9 +251,7 @@ public class LiferayDisplayDescriptorHelper
 
 		};
 
-		IStatus status = domModelOperation.execute();
-
-		return status;
+		return domModelOperation.execute();
 	}
 
 	private static final String _DESCRIPTOR_TEMPLATE =

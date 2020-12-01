@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -47,7 +48,7 @@ import org.eclipse.jst.common.project.facet.core.libprov.LibraryInstallDelegate;
 import org.eclipse.jst.jsf.core.IJSFCoreConstants;
 import org.eclipse.jst.jsf.core.internal.project.facet.IJSFFacetInstallDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -79,7 +80,7 @@ public class JSFPortletFramework
 			facetedProject.addProjectFacet(jsfFacetVersion);
 		}
 
-		Action action = facetedProject.getProjectFacetAction(jsfFacet);
+		IFacetedProject.Action action = facetedProject.getProjectFacetAction(jsfFacet);
 
 		IDataModel jsfFacetDataModel = (IDataModel)action.getConfig();
 
@@ -96,7 +97,7 @@ public class JSFPortletFramework
 		ILibraryProvider noOpProvider = null;
 
 		for (ILibraryProvider provider : providers) {
-			if ("jsf-no-op-library-provider".equals(provider.getId())) {
+			if (Objects.equals("jsf-no-op-library-provider", provider.getId())) {
 				noOpProvider = provider;
 
 				break;
@@ -195,7 +196,9 @@ public class JSFPortletFramework
 
 	@Override
 	public boolean supports(ILiferayProjectProvider provider) {
-		if ((provider != null) && ("ant".equals(provider.getShortName()) || "maven".equals(provider.getShortName()))) {
+		if (((provider != null) && Objects.equals("ant", provider.getShortName())) ||
+			Objects.equals("maven", provider.getShortName())) {
+
 			return true;
 		}
 
