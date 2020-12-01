@@ -332,14 +332,13 @@ public class PropertiesFileLookup {
 			LineReader lr = new LineReader(reader);
 
 			char[] convtBuf = new char[1024];
-			int[] limit;
 			int keyLen;
 			int valueStart;
 			char c;
 			boolean hasSep;
 			boolean precedingBackslash;
 
-			limit = lr.readLine();
+			int[] limit = lr.readLine();
 
 			while (limit[0] >= 0) {
 				c = 0;

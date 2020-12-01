@@ -35,11 +35,9 @@ public class NodeUtil {
 			return null;
 		}
 
-		Element newChildElement = null;
-
 		Document ownerDocument = parentElement.getOwnerDocument();
 
-		newChildElement = ownerDocument.createElement(newElementName);
+		Element newChildElement = ownerDocument.createElement(newElementName);
 
 		if (initialTextContent != null) {
 			newChildElement.appendChild(ownerDocument.createTextNode(initialTextContent));

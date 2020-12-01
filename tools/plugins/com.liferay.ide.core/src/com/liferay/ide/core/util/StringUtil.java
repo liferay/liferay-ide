@@ -191,9 +191,9 @@ public class StringUtil {
 	}
 
 	public static String[] stringToArray(String input, String delimiter) {
-		return Arrays.stream(
-			input.split(delimiter)
-		).map(
+		Stream<String> inputStream = Arrays.stream(input.split(delimiter));
+
+		return inputStream.map(
 			String::trim
 		).toArray(
 			String[]::new
@@ -201,9 +201,9 @@ public class StringUtil {
 	}
 
 	public static List<String> stringToList(String input, String delimiter) {
-		return Arrays.stream(
-			input.split(Pattern.quote(delimiter))
-		).map(
+		Stream<String> inputStream = Arrays.stream(input.split(Pattern.quote(delimiter)));
+
+		return inputStream.map(
 			String::trim
 		).collect(
 			Collectors.toList()
