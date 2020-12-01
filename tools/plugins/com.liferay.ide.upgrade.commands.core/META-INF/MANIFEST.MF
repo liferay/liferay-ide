@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.liferay.ide.upgrade.commands.core.UpgradeCommandsCorePlugin
 Bundle-ClassPath: .
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Upgrade Plan Commands Core
@@ -34,5 +35,4 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.sdk.P
  OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.prerequisite.CheckInstalledJDKsCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.sdk.ImportExistingPluginsSDKCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.code.InitializeServerBundleCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.buildservice.RebuildServicesCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.code.ImportExistingLiferayWorkspaceCommand.xml
+ OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.buildservice.RebuildServicesCommand.xml

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.core.internal;
+package com.liferay.ide.upgrade.commands.core;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
@@ -26,7 +26,7 @@ import org.osgi.framework.BundleContext;
  */
 public class UpgradeCommandsCorePlugin extends Plugin {
 
-	public static final String ID = "com.liferay.ide.upgrade.steps.core";
+	public static final String ID = "com.liferay.ide.upgrade.commands.core";
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, ID, msg);

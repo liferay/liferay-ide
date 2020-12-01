@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.commands.core.internal.sdk;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.commands.core.ProjectImporter;
-import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
+import com.liferay.ide.upgrade.commands.core.UpgradeCommandsCorePlugin;
 
 import java.io.File;
 

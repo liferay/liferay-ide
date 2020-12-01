@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.commands.core.internal.prerequisite;
 
-import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
+import com.liferay.ide.upgrade.commands.core.UpgradeCommandsCorePlugin;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
