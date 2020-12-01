@@ -366,11 +366,9 @@ public class MavenUtil {
 	}
 
 	public static String getVersion(String version) {
-		String retval = null;
-
 		DefaultArtifactVersion v = new DefaultArtifactVersion(version);
 
-		retval = v.getMajorVersion() + "." + v.getMinorVersion() + "." + v.getIncrementalVersion();
+		String retval = v.getMajorVersion() + "." + v.getMinorVersion() + "." + v.getIncrementalVersion();
 
 		if (retval.equals("0.0.0")) {
 			retval = v.getQualifier();

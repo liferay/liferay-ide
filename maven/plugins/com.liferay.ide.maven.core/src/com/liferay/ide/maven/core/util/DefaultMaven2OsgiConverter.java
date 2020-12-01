@@ -146,11 +146,9 @@ public class DefaultMaven2OsgiConverter {
 
 		// TODO need a regexp guru here
 
-		Matcher m;
-
 		// if it's already OSGi compliant don't touch it
 
-		m = _osgiVersionPattern.matcher(version);
+		Matcher m = _osgiVersionPattern.matcher(version);
 
 		if (m.matches()) {
 			return version;

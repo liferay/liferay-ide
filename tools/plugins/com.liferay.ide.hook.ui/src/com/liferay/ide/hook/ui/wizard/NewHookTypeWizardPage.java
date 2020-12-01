@@ -23,7 +23,6 @@ import com.liferay.ide.project.ui.wizard.LiferayDataModelWizardPage;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +43,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-
 import org.osgi.framework.Bundle;
 
 /**
