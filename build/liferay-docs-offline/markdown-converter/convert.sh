@@ -6,12 +6,12 @@ classpathDir=$(dirname "${scriptDir}")/markdown-converter/lib
 if [ $# -eq 2 ]; then
 	mdFile=$1
 	targetDir=$2
-	java -jar "${classpathDir}/com.liferay.knowledge.base.markdown.converter.cli-1.0.0.jar" "${mdFile}" "${targetDir}" --offline
+	java -jar "${classpathDir}/com.liferay.knowledge.base.markdown.converter.cli-1.1.0.jar" "${mdFile}" "${targetDir}" --offline
 elif [ $# -eq 3 ]; then
   mdFile=$1
   targetDir=$2
   imageDir=$3
-	java -jar "${classpathDir}/com.liferay.knowledge.base.markdown.converter.cli-1.0.0.jar" "${mdFile}" "${targetDir}" "${imageDir}" --offline
+	java -jar "${classpathDir}/com.liferay.knowledge.base.markdown.converter.cli-1.1.0.jar" "${mdFile}" "${targetDir}" "${imageDir}" --offline
 else
 	echo
 	echo Usage: ./convert.sh \[Markdown file or directory to convert\] \[The target directory of the generated html file\] \[The image resources that markdown files may need\]
