@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import org.eclipse.core.runtime.Adapters;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -60,9 +59,7 @@ public class UpgradeStep {
 
 		Bundle bundle = FrameworkUtil.getBundle(UpgradeStep.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		_serviceTracker.open();
 	}

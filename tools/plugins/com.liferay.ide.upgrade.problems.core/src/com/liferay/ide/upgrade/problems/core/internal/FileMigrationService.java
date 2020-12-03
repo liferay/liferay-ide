@@ -143,9 +143,8 @@ public class FileMigrationService implements FileMigration {
 							).isPresent()
 						).isPresent();
 					}
-					else {
-						return true;
-					}
+
+					return true;
 				}
 			).filter(
 				serviceReference -> {
@@ -390,9 +389,7 @@ public class FileMigrationService implements FileMigration {
 
 		@Override
 		public BiConsumer<Set<UpgradeProblem>, FileMigrator> accumulator() {
-			return (container, migrator) -> {
-				container.addAll(migrator.analyze(_file));
-			};
+			return (container, migrator) -> container.addAll(migrator.analyze(_file));
 		}
 
 		@Override

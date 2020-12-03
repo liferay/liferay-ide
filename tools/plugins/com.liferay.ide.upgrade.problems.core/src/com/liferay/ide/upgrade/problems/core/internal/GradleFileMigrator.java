@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
@@ -117,12 +118,11 @@ public abstract class GradleFileMigrator implements FileMigrator {
 		final AtomicReference<String> gradleFileContentString = new AtomicReference<>();
 
 		try {
-			Files.readAllLines(
-				file.toPath()
-			).stream(
-			).forEach(
-				gradleFileContents::add
-			);
+			List<String> allLines = Files.readAllLines(file.toPath());
+
+			Stream<String> readAllLinesStream = allLines.stream();
+
+			readAllLinesStream.forEach(gradleFileContents::add);
 
 			gradleFileContentString.set(new String(Files.readAllBytes(file.toPath())));
 		}
@@ -131,8 +131,9 @@ public abstract class GradleFileMigrator implements FileMigrator {
 
 		List<GradleDependency> dependencies = gradleBuildScript.getDependencies();
 
-		return dependencies.stream(
-		).filter(
+		Stream<GradleDependency> dependenciesStreamStream = dependencies.stream();
+
+		return dependenciesStreamStream.filter(
 			dep -> artifactId.equals(dep.getName())
 		).map(
 			dep -> {
@@ -168,8 +169,9 @@ public abstract class GradleFileMigrator implements FileMigrator {
 	public List<GradleDependency> findDependenciesByName(GradleBuildScript gradleBuildScript, String name) {
 		List<GradleDependency> gradleDependencies = gradleBuildScript.getDependencies();
 
-		return gradleDependencies.stream(
-		).filter(
+		Stream<GradleDependency> gradleDependenciesStream = gradleDependencies.stream();
+
+		return gradleDependenciesStream.filter(
 			dep -> Objects.equals(name, dep.getName())
 		).collect(
 			Collectors.toList()

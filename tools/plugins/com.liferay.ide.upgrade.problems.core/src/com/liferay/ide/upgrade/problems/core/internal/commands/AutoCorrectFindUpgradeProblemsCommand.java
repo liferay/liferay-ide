@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -78,10 +79,9 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 			return Status.OK_STATUS;
 		}
 
-		autoCorrectableUpgradeProblems.stream(
-		).forEach(
-			this::_autoCorrectProblem
-		);
+		Stream<UpgradeProblem> autoCorrectableUpgradeProblemsStream = autoCorrectableUpgradeProblems.stream();
+
+		autoCorrectableUpgradeProblemsStream.forEach(this::_autoCorrectProblem);
 
 		refreshProjects(autoCorrectableUpgradeProblems, progressMonitor);
 
@@ -129,8 +129,9 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 
 			File file = upgradeProblem.getResource();
 
-			serviceReferences.stream(
-			).filter(
+			Stream<ServiceReference<AutoFileMigrator>> serviceReferencesStream = serviceReferences.stream();
+
+			serviceReferencesStream.filter(
 				ref -> {
 					Dictionary<String, Object> serviceProperties = ref.getProperties();
 
@@ -184,14 +185,15 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select projects to search for upgrade problems.", true, ResourceSelection.JAVA_PROJECTS);
 
-		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
-
 		if (projects.isEmpty()) {
 			return Collections.emptyList();
 		}
 
-		List<UpgradeProblem> autoCorrectProblems = projects.stream(
-		).map(
+		Stream<IProject> autoCorrectProblemsStream = projects.stream();
+
+		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
+
+		List<UpgradeProblem> autoCorrectProblems = autoCorrectProblemsStream.map(
 			FileUtil::getFile
 		).map(
 			projectFile -> _fileMigration.findUpgradeProblems(

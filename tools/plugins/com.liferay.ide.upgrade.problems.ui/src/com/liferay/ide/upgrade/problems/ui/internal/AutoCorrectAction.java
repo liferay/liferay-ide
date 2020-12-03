@@ -23,12 +23,10 @@ import java.io.File;
 
 import java.util.Collection;
 
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -44,18 +42,14 @@ public class AutoCorrectAction extends BaseAutoCorrectAction implements UpgradeP
 
 		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		_serviceTracker.open();
 	}
 
 	@Override
 	public void run() {
-		ISelection selection = getSelection();
-
-		UpgradeProblem upgradeProblem = getUpgradeProblem(selection);
+		UpgradeProblem upgradeProblem = getUpgradeProblem(getSelection());
 
 		File file = upgradeProblem.getResource();
 
@@ -71,7 +65,7 @@ public class AutoCorrectAction extends BaseAutoCorrectAction implements UpgradeP
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 
-		UIUtil.async(() -> viewer.refresh());
+		UIUtil.async(viewer::refresh);
 	}
 
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;

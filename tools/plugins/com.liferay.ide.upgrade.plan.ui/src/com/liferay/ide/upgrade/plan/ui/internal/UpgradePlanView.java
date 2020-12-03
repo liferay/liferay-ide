@@ -53,7 +53,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -69,9 +68,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 	public UpgradePlanView() {
 		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanView.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		_serviceTracker.open();
 

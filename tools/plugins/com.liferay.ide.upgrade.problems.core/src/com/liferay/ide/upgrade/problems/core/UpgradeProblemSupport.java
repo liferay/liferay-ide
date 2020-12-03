@@ -20,6 +20,7 @@ import java.io.File;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -40,8 +41,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface UpgradeProblemSupport {
 
 	public default void addMarkers(Collection<UpgradeProblem> upgradeProblems) {
-		upgradeProblems.stream(
-		).filter(
+		Stream<UpgradeProblem> upgradeProblemsStream = upgradeProblems.stream();
+
+		upgradeProblemsStream.filter(
 			upgradeProblem -> Objects.nonNull(upgradeProblem.getResource())
 		).filter(
 			upgradeProblem -> {
@@ -171,8 +173,9 @@ public interface UpgradeProblemSupport {
 	}
 
 	public default void refreshProjects(Collection<UpgradeProblem> upgradeProblems, IProgressMonitor progressMonitor) {
-		upgradeProblems.stream(
-		).map(
+		Stream<UpgradeProblem> upgradeProblemsStream = upgradeProblems.stream();
+
+		upgradeProblemsStream.map(
 			UpgradeProblem::getResource
 		).map(
 			this::getProject
@@ -191,8 +194,9 @@ public interface UpgradeProblemSupport {
 	}
 
 	public default void removeMarkers(Collection<UpgradeProblem> upgradeProblems) {
-		upgradeProblems.stream(
-		).map(
+		Stream<UpgradeProblem> upgradeProblemsStream = upgradeProblems.stream();
+
+		upgradeProblemsStream.map(
 			this::findMarker
 		).filter(
 			this::markerExists

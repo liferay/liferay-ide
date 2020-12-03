@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Path;
 
@@ -140,8 +141,9 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 		sourceFile.setFile(file);
 
-		return upgradeProblems.stream(
-		).map(
+		Stream<UpgradeProblem> upgradeProblemsStream = upgradeProblems.stream();
+
+		return upgradeProblemsStream.map(
 			problem -> {
 				try {
 					sourceFile.appendComment(problem.getLineNumber(), "FIXME: " + problem.getTitle());

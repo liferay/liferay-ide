@@ -26,6 +26,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -77,7 +78,7 @@ public class UpgradeStepsBuilder {
 
 			String attributeName = root.attr("class");
 
-			if ("root".equals(attributeName)) {
+			if (Objects.equals("root", attributeName)) {
 				_loopChildren(upgradeSteps, null, root);
 
 				break;
@@ -127,7 +128,7 @@ public class UpgradeStepsBuilder {
 
 				Element titleNextElement = titleElement.nextElementSibling();
 
-				if ((titleNextElement != null) && "p".equals(titleNextElement.nodeName())) {
+				if ((titleNextElement != null) && Objects.equals("p", titleNextElement.nodeName())) {
 					summary = titleNextElement.text();
 				}
 				else {
@@ -147,11 +148,11 @@ public class UpgradeStepsBuilder {
 				}
 
 				if (titleNextElement != null) {
-					if ("p".equals(titleNextElement.nodeName())) {
+					if (Objects.equals("p", titleNextElement.nodeName())) {
 						titleNextElement = titleNextElement.nextElementSibling();
 					}
 
-					if ((titleNextElement != null) && "ol".equals(titleNextElement.nodeName())) {
+					if ((titleNextElement != null) && Objects.equals("ol", titleNextElement.nodeName())) {
 						_loopChildren(upgradeSteps, upgradeStep, titleNextElement);
 					}
 				}

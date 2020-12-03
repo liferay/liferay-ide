@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -68,8 +69,9 @@ public class BaseAutoCorrectAction extends SelectionProviderAction implements Up
 			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = bundleContext.getServiceReferences(
 				AutoFileMigrator.class, "(auto.correct=" + autoCorrectContext + ")");
 
-			serviceReferences.stream(
-			).filter(
+			Stream<ServiceReference<AutoFileMigrator>> migratorStream = serviceReferences.stream();
+
+			migratorStream.filter(
 				ref -> {
 					Dictionary<String, Object> serviceProperties = ref.getProperties();
 

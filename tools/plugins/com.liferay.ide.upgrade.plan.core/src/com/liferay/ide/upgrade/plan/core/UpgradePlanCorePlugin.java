@@ -135,12 +135,6 @@ public class UpgradePlanCorePlugin extends Plugin {
 	}
 
 	private void _initOfflineOutlines() {
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		IPath pluginStateLocation = _instance.getStateLocation();
-
-		IPath offlineOutlinePath = pluginStateLocation.append(OFFLINE_UNZIP_FOLDER);
-
 		Bundle bundle = Platform.getBundle(UpgradePlanCorePlugin.ID);
 
 		Enumeration<URL> entryUrls = bundle.findEntries("resources/", "*.zip", true);
@@ -148,6 +142,12 @@ public class UpgradePlanCorePlugin extends Plugin {
 		if (ListUtil.isEmpty(entryUrls)) {
 			return;
 		}
+
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		IPath pluginStateLocation = _instance.getStateLocation();
+
+		IPath offlineOutlinePath = pluginStateLocation.append(OFFLINE_UNZIP_FOLDER);
 
 		try {
 			while (entryUrls.hasMoreElements()) {

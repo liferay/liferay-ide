@@ -16,6 +16,8 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
@@ -58,7 +60,7 @@ public class NewUpgradePlanWizard extends SapphireWizard<NewUpgradePlanOp> {
 
 			@Override
 			public String getAttribute(String name) {
-				if ("finalPerspective".equals(name)) {
+				if (Objects.equals("finalPerspective", name)) {
 					return UpgradePlannerPerspectiveFactory.ID;
 				}
 

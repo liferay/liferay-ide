@@ -22,11 +22,9 @@ import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -41,18 +39,14 @@ public class AutoCorrectPreviewAction extends BaseAutoCorrectAction implements U
 
 		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectPreviewAction.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradeCompare.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradeCompare.class, null);
 
 		_serviceTracker.open();
 	}
 
 	@Override
 	public void run() {
-		ISelection selection = getSelection();
-
-		UpgradeProblem upgradeProblem = getUpgradeProblem(selection);
+		UpgradeProblem upgradeProblem = getUpgradeProblem(getSelection());
 
 		File file = upgradeProblem.getResource();
 
@@ -72,10 +66,7 @@ public class AutoCorrectPreviewAction extends BaseAutoCorrectAction implements U
 
 		UpgradeCompare upgradeCompare = _serviceTracker.getService();
 
-		UIUtil.async(
-			() -> {
-				upgradeCompare.openCompareEditor(file, tempFile);
-			});
+		UIUtil.async(() -> upgradeCompare.openCompareEditor(file, tempFile));
 	}
 
 	private File _getTempDir() {

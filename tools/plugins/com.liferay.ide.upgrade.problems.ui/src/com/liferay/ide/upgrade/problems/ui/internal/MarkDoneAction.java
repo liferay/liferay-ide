@@ -46,7 +46,7 @@ public class MarkDoneAction extends SelectionProviderAction implements UpgradePr
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 
-		UIUtil.async(() -> viewer.refresh());
+		UIUtil.async(viewer::refresh);
 	}
 
 	private void _resolve(UpgradeProblem upgradeProblem) {

@@ -103,7 +103,7 @@ public class UpdateRepositoryURLCommand implements UpgradeCommand, UpgradePrevie
 	private IStatus _updateRepositoryURL(File settingsGradle) {
 		String contents = FileUtil.readContents(settingsGradle, true);
 
-		String oldRepositoryURLPrefix = "https://repository-cdn.liferay.com/";
+		String oldRepositoryURLPrefix = "https://cdn.lfrs.sl/repository.liferay.com/";
 
 		if (contents.contains(oldRepositoryURLPrefix)) {
 			contents = contents.replaceAll(oldRepositoryURLPrefix, "https://repository-cdn.liferay.com/");

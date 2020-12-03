@@ -59,7 +59,7 @@ public class PluginPackageFormPage extends IDEFormPage {
 			PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png");
 
 		form.setImage(descriptor.createImage());
-		
+
 		Composite body = form.getBody();
 
 		body.setLayout(FormLayoutFactory.createFormGridLayout(true, 2));

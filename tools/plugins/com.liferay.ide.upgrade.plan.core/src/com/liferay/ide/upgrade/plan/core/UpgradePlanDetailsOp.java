@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
@@ -28,7 +29,6 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -89,9 +89,7 @@ public interface UpgradePlanDetailsOp extends Element {
 		public UpgradePlanInitialValueService() {
 			Bundle bundle = FrameworkUtil.getBundle(UpgradePlanDetailsOp.class);
 
-			BundleContext bundleContext = bundle.getBundleContext();
-
-			_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+			_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 			_serviceTracker.open();
 		}
@@ -136,18 +134,16 @@ public interface UpgradePlanDetailsOp extends Element {
 				_initialValue = upgradePlanOutline.getName();
 			}
 			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_TOTAL_STEP_COUNT)) {
-				List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
 				List<UpgradeStep> allUpgradeSteps = new ArrayList<>();
 
-				_computeUpgradeSteps(upgradeSteps, allUpgradeSteps, false);
+				_computeUpgradeSteps(upgradePlan.getUpgradeSteps(), allUpgradeSteps, false);
 
 				_initialValue = String.valueOf(allUpgradeSteps.size());
 			}
 			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_COMPLETED_STEP_COUNT)) {
-				List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
 				List<UpgradeStep> allUpgradeSteps = new ArrayList<>();
 
-				_computeUpgradeSteps(upgradeSteps, allUpgradeSteps, true);
+				_computeUpgradeSteps(upgradePlan.getUpgradeSteps(), allUpgradeSteps, true);
 
 				_initialValue = String.valueOf(allUpgradeSteps.size());
 			}
@@ -157,9 +153,10 @@ public interface UpgradePlanDetailsOp extends Element {
 			List<UpgradeStep> upgradeSteps, List<UpgradeStep> allUpgradeSteps, boolean statusCompleted) {
 
 			if (statusCompleted) {
+				Stream<UpgradeStep> upgradeStepsStream = upgradeSteps.stream();
+
 				allUpgradeSteps.addAll(
-					upgradeSteps.stream(
-					).filter(
+					upgradeStepsStream.filter(
 						UpgradeStep::completed
 					).collect(
 						Collectors.toList()

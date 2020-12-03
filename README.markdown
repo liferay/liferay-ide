@@ -17,7 +17,7 @@ To install the Liferay IDE plugins into your Eclipse install using either the st
 
 To get up and running quickly, *download* a [pre-built Liferay IDE
 release](http://www.liferay.com/downloads/liferay-projects/liferay-ide) and install it into
-your Eclipse install.  Follow the [Installation Guide](https://dev.liferay.com/develop/learning-paths/-/knowledge_base/6-2/developing-apps-with-liferay-ide)
+your Eclipse install. Follow the [Installation Guide](https://dev.liferay.com/develop/learning-paths/-/knowledge_base/6-2/developing-apps-with-liferay-ide)
 for instructions. Then use the Getting Started Tutorial for how to create and deploy a Liferay Project using Liferay IDE.
 
 ## Building from source
@@ -38,7 +38,7 @@ You can install this using _Help > Install New Software... > Add > Archive > Poi
 
 ## Debug a fix? Send a pull request?
 
-If you want to help submit a bug fix or just step through the code to see what we are doing wrong :) you are going to need to import the source and launch a test eclipse with your fix and then step through the code.  Here is the process you can follow
+If you want to help submit a bug fix or just step through the code to see what we are doing wrong :) you are going to need to import the source and launch a test eclipse with your fix and then step through the code. Here is the process you can follow
 
 1. Download [Eclipse for Committers package](https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers-451/mars1)
 2. Run this eclipse with 2048M memory setting (set -Xmx2048m in eclipse.ini)

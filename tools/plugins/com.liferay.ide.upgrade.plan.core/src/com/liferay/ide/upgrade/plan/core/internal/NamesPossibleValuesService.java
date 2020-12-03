@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.PossibleValuesService;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -45,9 +44,7 @@ public class NamesPossibleValuesService extends PossibleValuesService implements
 	public NamesPossibleValuesService() {
 		Bundle bundle = FrameworkUtil.getBundle(NamesPossibleValuesService.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		_serviceTracker.open();
 	}

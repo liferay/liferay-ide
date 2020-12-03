@@ -21,6 +21,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.sapphire.PossibleValuesService;
 
@@ -39,8 +40,9 @@ public class OutlinePossibleValuesService extends PossibleValuesService implemen
 	protected void initPossibleValuesService() {
 		List<IUpgradePlanOutline> outlines = UpgradePlanCorePlugin.getAllOutlines();
 
-		_possibleValues = outlines.stream(
-		).map(
+		Stream<IUpgradePlanOutline> outlinesStream = outlines.stream();
+
+		_possibleValues = outlinesStream.map(
 			IUpgradePlanOutline::getName
 		).sorted(
 		).collect(

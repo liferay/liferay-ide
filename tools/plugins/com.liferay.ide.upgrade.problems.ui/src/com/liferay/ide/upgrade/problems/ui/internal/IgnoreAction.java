@@ -24,7 +24,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -39,9 +38,7 @@ public class IgnoreAction extends SelectionProviderAction implements UpgradeProb
 
 		Bundle bundle = FrameworkUtil.getBundle(IgnoreAlwaysAction.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		_serviceTracker.open();
 	}
@@ -60,7 +57,7 @@ public class IgnoreAction extends SelectionProviderAction implements UpgradeProb
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 
-		UIUtil.async(() -> viewer.refresh());
+		UIUtil.async(viewer::refresh);
 	}
 
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;

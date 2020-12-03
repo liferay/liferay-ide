@@ -43,13 +43,13 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		Deferred<String> deferred = _promiseFactory.deferred();
 
 		if (element instanceof FileProblemsContainer) {
-			_doFileProblemsContainerDetail((FileProblemsContainer)element, deferred);
+			_fileProblemsContainerDetail((FileProblemsContainer)element, deferred);
 		}
 		else if (element instanceof ProjectProblemsContainer) {
-			_doProjectProblemsContainerDetail((ProjectProblemsContainer)element, deferred);
+			_projectProblemsContainerDetail((ProjectProblemsContainer)element, deferred);
 		}
 		else if (element instanceof UpgradeProblem) {
-			_doUpgradeProblemsDetail((UpgradeProblem)element, deferred);
+			_upgradeProblemsDetail((UpgradeProblem)element, deferred);
 		}
 		else {
 			deferred.fail(new NoSuchElementException());
@@ -63,16 +63,16 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		if (element instanceof FileProblemsContainer) {
 			FileProblemsContainer fileProblemsContainer = (FileProblemsContainer)element;
 
-			return _doFileProblemsContainerLabel(fileProblemsContainer);
+			return _fileProblemsContainerLabel(fileProblemsContainer);
 		}
 		else if (element instanceof UpgradeProblemsContainer) {
 			return "Liferay Upgrade Problems";
 		}
 		else if (element instanceof ProjectProblemsContainer) {
-			return _doProjectProblemsContainerLabel((ProjectProblemsContainer)element);
+			return _projectProblemsContainerLabel((ProjectProblemsContainer)element);
 		}
 		else if (element instanceof UpgradeProblem) {
-			return _doProblemLabel((UpgradeProblem)element);
+			return _problemLabel((UpgradeProblem)element);
 		}
 
 		return null;
@@ -89,9 +89,7 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		return false;
 	}
 
-	private void _doFileProblemsContainerDetail(
-		FileProblemsContainer fileProblemsContainer, Deferred<String> deferred) {
-
+	private void _fileProblemsContainerDetail(FileProblemsContainer fileProblemsContainer, Deferred<String> deferred) {
 		StringBuffer sb = new StringBuffer();
 
 		File file = fileProblemsContainer.getFile();
@@ -111,7 +109,7 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		deferred.resolve(sb.toString());
 	}
 
-	private String _doFileProblemsContainerLabel(FileProblemsContainer fileProblemsContainer) {
+	private String _fileProblemsContainerLabel(FileProblemsContainer fileProblemsContainer) {
 		File file = fileProblemsContainer.getFile();
 
 		String fileName = file.getName();
@@ -120,7 +118,7 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		return fileName + " [" + path + "]";
 	}
 
-	private String _doProblemLabel(UpgradeProblem problem) {
+	private String _problemLabel(UpgradeProblem problem) {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("[");
@@ -137,7 +135,7 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		return sb.toString();
 	}
 
-	private void _doProjectProblemsContainerDetail(
+	private void _projectProblemsContainerDetail(
 		ProjectProblemsContainer projectProblemsContainer, Deferred<String> deferred) {
 
 		StringBuffer sb = new StringBuffer();
@@ -157,14 +155,12 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		deferred.resolve(sb.toString());
 	}
 
-	private String _doProjectProblemsContainerLabel(ProjectProblemsContainer projectProblems) {
+	private String _projectProblemsContainerLabel(ProjectProblemsContainer projectProblems) {
 		return projectProblems.getProjectName();
 	}
 
-	private void _doUpgradeProblemsDetail(UpgradeProblem upgradeProblem, Deferred<String> deferred) {
-		String html = upgradeProblem.getHtml();
-
-		deferred.resolve(html);
+	private void _upgradeProblemsDetail(UpgradeProblem upgradeProblem, Deferred<String> deferred) {
+		deferred.resolve(upgradeProblem.getHtml());
 	}
 
 	private final PromiseFactory _promiseFactory;

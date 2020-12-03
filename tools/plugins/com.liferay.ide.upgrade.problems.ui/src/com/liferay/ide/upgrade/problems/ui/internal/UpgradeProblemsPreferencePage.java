@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -50,7 +49,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -67,9 +65,7 @@ public class UpgradeProblemsPreferencePage
 
 		Bundle bundle = FrameworkUtil.getBundle(UpgradeProblemsPreferencePage.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		_serviceTracker.open();
 	}
@@ -161,11 +157,7 @@ public class UpgradeProblemsPreferencePage
 
 							_ignoredProblemsTableViewer.setInput(_ignoreProblems.toArray(new UpgradeProblem[0]));
 
-							UIUtil.async(
-								() -> {
-									_browser.setText("");
-								},
-								50);
+							UIUtil.async(() -> _browser.setText(""), 50);
 						}
 						catch (Exception e) {
 							UpgradeProblemsUIPlugin.logError(e);
@@ -178,7 +170,6 @@ public class UpgradeProblemsPreferencePage
 		setButtonLayoutData(_removeButton);
 
 		label = new Label(pageComposite, SWT.LEFT);
-		gridData = new GridData();
 
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.horizontalSpan = 2;
@@ -220,14 +211,7 @@ public class UpgradeProblemsPreferencePage
 
 		_ignoredProblemsTableViewer.setInput(_ignoreProblems.toArray(new UpgradeProblem[0]));
 
-		_ignoredProblemsTableViewer.addSelectionChangedListener(
-			event -> {
-				UIUtil.async(
-					() -> {
-						_updateForm(event);
-					},
-					50);
-			});
+		_ignoredProblemsTableViewer.addSelectionChangedListener(event -> UIUtil.async(() -> _updateForm(event), 50));
 
 		return pageComposite;
 	}
@@ -344,9 +328,7 @@ public class UpgradeProblemsPreferencePage
 		sb.append(problem.getSummary());
 		sb.append("<br/><br/>");
 
-		String autoCorrectContext = problem.getAutoCorrectContext();
-
-		if (CoreUtil.isNotNullOrEmpty(autoCorrectContext)) {
+		if (CoreUtil.isNotNullOrEmpty(problem.getAutoCorrectContext())) {
 			sb.append("<a href='autoCorrect'>Correct this problem automatically</a><br/><br/>");
 		}
 
@@ -392,9 +374,8 @@ public class UpgradeProblemsPreferencePage
 	}
 
 	private void _updateForm(SelectionChangedEvent selectionChangedEvent) {
-		ISelection selection = selectionChangedEvent.getSelection();
-
-		IStructuredSelection structuredSelection = Adapters.adapt(selection, IStructuredSelection.class);
+		IStructuredSelection structuredSelection = Adapters.adapt(
+			selectionChangedEvent.getSelection(), IStructuredSelection.class);
 
 		if (structuredSelection == null) {
 			return;

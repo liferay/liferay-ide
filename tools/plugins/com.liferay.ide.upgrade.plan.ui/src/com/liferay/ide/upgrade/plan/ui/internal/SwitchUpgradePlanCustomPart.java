@@ -53,7 +53,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -65,9 +64,7 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 	public SwitchUpgradePlanCustomPart() {
 		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanViewer.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		_serviceTracker.open();
 
@@ -296,13 +293,13 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 		ISelection selection = _tableViewer.getSelection();
 
 		if (selection != null) {
-			IStructuredSelection selected = (IStructuredSelection)selection;
-
-			UpgradePlan upgradePlan = (UpgradePlan)selected.getFirstElement();
-
 			if (_currentUpgradePlan == null) {
 				return;
 			}
+
+			IStructuredSelection selected = (IStructuredSelection)selection;
+
+			UpgradePlan upgradePlan = (UpgradePlan)selected.getFirstElement();
 
 			if (upgradePlan.equals(_currentUpgradePlan)) {
 				return;
@@ -348,7 +345,7 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 						return;
 					}
 
-					_tableViewer.setInput(loadUpgradePlans.toArray(new UpgradePlan[loadUpgradePlans.size()]));
+					_tableViewer.setInput(loadUpgradePlans.toArray(new UpgradePlan[0]));
 
 					Stream.of(
 						upgradePlanTable.getColumns()

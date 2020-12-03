@@ -80,19 +80,17 @@ public interface ResourceSelection {
 				return false;
 			}
 
-			boolean result = Optional.ofNullable(
-				project
-			).filter(
-				p -> LiferayCore.create(IWorkspaceProject.class, project) == null
-			).map(
-				p -> LiferayCore.create(ILiferayProject.class, p)
-			).filter(
-				Objects::nonNull
-			).filter(
-				p -> !(p instanceof NoopLiferayProject)
-			).isPresent();
+			if (Optional.ofNullable(
+					project).filter(
+						p -> LiferayCore.create(IWorkspaceProject.class, project) == null).map(
+							p -> LiferayCore.create(ILiferayProject.class, p)).filter(
+								Objects::nonNull).filter(
+									p -> !(p instanceof NoopLiferayProject)).isPresent()) {
 
-			return result;
+				return true;
+			}
+
+			return false;
 		}
 
 	};

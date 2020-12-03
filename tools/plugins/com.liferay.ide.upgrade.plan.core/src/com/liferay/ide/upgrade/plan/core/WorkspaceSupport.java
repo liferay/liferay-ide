@@ -52,9 +52,7 @@ public interface WorkspaceSupport {
 	}
 
 	public default IPath getHomeLocation(Path path) {
-		String homeDirName = getHomeDirName(path);
-
-		Path homeLocation = path.resolve(homeDirName);
+		Path homeLocation = path.resolve(getHomeDirName(path));
 
 		return new org.eclipse.core.runtime.Path(homeLocation.toString());
 	}
@@ -64,9 +62,7 @@ public interface WorkspaceSupport {
 	}
 
 	public default IPath getPluginsSDKLocation(Path path) {
-		String pluginsSDKDirName = getPluginsSDKDirName(path);
-
-		Path pluginsSDKLocation = path.resolve(pluginsSDKDirName);
+		Path pluginsSDKLocation = path.resolve(getPluginsSDKDirName(path));
 
 		return new org.eclipse.core.runtime.Path(pluginsSDKLocation.toString());
 	}
