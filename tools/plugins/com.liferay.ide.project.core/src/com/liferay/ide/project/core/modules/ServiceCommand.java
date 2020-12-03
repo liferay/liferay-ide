@@ -57,9 +57,7 @@ public class ServiceCommand {
 		PortalServerBehavior serverBehavior = (PortalServerBehavior)_server.loadAdapter(
 			PortalServerBehavior.class, null);
 
-		GogoBundleDeployer bundleDeployer = null;
-
-		bundleDeployer = serverBehavior.createBundleDeployer();
+		GogoBundleDeployer bundleDeployer = serverBehavior.createBundleDeployer();
 
 		if (bundleDeployer == null) {
 			return _getServiceFromTargetPlatform();
@@ -84,8 +82,6 @@ public class ServiceCommand {
 	private String[] _getServiceBundle() throws Exception {
 		String[] serviceBundleInfo;
 		String bundleGroup = "";
-		String bundleName;
-		String bundleVersion;
 
 		// String result  = supervisor.packages("packages " + serviceName.substring(0, serviceName.lastIndexOf(".")));
 
@@ -101,8 +97,8 @@ public class ServiceCommand {
 			serviceBundleInfo = _parseSymbolicName(result);
 		}
 
-		bundleName = serviceBundleInfo[0];
-		bundleVersion = serviceBundleInfo[1];
+		String bundleName = (serviceBundleInfo != null) ? serviceBundleInfo[0] : "";
+		String bundleVersion = (serviceBundleInfo != null) ? serviceBundleInfo[1] : "";
 
 		if (bundleName.equals("org.eclipse.osgi,system.bundle")) {
 			bundleGroup = "com.liferay.portal";

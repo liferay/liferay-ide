@@ -155,9 +155,7 @@ public class LiferayVersionDefaultValueService extends DefaultValueService imple
 	}
 
 	private String _checkForSnapshots(String[] values) {
-		String retval = null;
-
-		retval = values[values.length - 1];
+		String retval = values[values.length - 1];
 
 		if (retval.endsWith("SNAPSHOT") && (values.length > 1)) {
 			retval = values[values.length - 2];

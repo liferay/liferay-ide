@@ -57,9 +57,7 @@ public class WorkspaceNameValidationService extends ValidationService implements
 		Status retval = Status.createOkStatus();
 
 		if (LiferayWorkspaceUtil.hasWorkspace()) {
-			retval = Status.createErrorStatus(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg);
-
-			return retval;
+			return Status.createErrorStatus(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg);
 		}
 
 		String currentWorkspaceName = get(_op().getWorkspaceName());
