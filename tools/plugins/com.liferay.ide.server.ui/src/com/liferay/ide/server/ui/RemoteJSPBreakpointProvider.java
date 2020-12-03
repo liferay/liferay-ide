@@ -271,9 +271,7 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 
 					// get all partitions for current line
 
-					ITypedRegion[] partitions = null;
-
-					partitions = idoc.computePartitioning(startOffset, endOffset - startOffset);
+					ITypedRegion[] partitions = idoc.computePartitioning(startOffset, endOffset - startOffset);
 
 					for (int i = 0; i < partitions.length; ++i) {
 						String type = partitions[i].getType();

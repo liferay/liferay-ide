@@ -99,13 +99,11 @@ public class PortalServerLaunchEditorSection
 
 	@Override
 	protected void createEditorSection(FormToolkit toolkit, Composite composite) {
-		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
-
 		defaultLaunchSettings = new Button(composite, SWT.RADIO);
 
 		defaultLaunchSettings.setText(Msgs.defaultLaunchSettings);
 
-		data = new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 3, 1);
+		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 3, 1);
 
 		defaultLaunchSettings.setLayoutData(data);
 
