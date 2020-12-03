@@ -150,15 +150,10 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
 						IWorkbenchPage page = UIUtil.getActivePage();
 
 						IDE.openEditor(page, viewFile, true);
-
-						return;
 					}
 				}
 			}
 			catch (Exception e) {
-
-				// best effort
-
 			}
 		}
 	}

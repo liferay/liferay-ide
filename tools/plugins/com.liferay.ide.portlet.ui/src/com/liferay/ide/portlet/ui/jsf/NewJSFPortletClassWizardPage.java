@@ -118,19 +118,18 @@ public class NewJSFPortletClassWizardPage
 	}
 
 	protected String[] getValidationPropertyNames() {
-		List<String> validationPropertyNames = new ArrayList<>();
-
 		if (fragment) {
 			return new String[] {
 				IArtifactEditOperationDataModelProperties.COMPONENT_NAME, INewJavaClassDataModelProperties.JAVA_PACKAGE,
 				JSF_PORTLET_CLASS
 			};
 		}
-		else {
-			validationPropertyNames.add(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
-			validationPropertyNames.add(INewJavaClassDataModelProperties.SOURCE_FOLDER);
-			validationPropertyNames.add(JSF_PORTLET_CLASS);
-		}
+
+		List<String> validationPropertyNames = new ArrayList<>();
+
+		validationPropertyNames.add(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+		validationPropertyNames.add(INewJavaClassDataModelProperties.SOURCE_FOLDER);
+		validationPropertyNames.add(JSF_PORTLET_CLASS);
 
 		return validationPropertyNames.toArray(new String[0]);
 	}

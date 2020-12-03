@@ -194,67 +194,47 @@ public class PortalDeployExcludesSection
 		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE) {
 			refresh();
 			_updateButtons();
-
-			return;
 		}
 
 		/**
-		 
 		 if (event.getChangedProperty() == IPluginBase.P_IMPORT_ORDER) {
 		 refresh();
 		 updateButtons();
-		 
 		 return;
 		 }
-		 
 		 Object[] changedObjects = event.getChangedObjects();
-		 
 		 if (changedObjects[0] instanceof IPluginImport) {
 		 int index = 0;
-		 
 		 for (Object changeObject : changedObjects) {
 		 IPluginImport iimport = (IPluginImport)changeObject;
-		 
 		 if (event.getChangeType() == IModelChangedEvent.INSERT) {
 		 ImportObject iobj = new ImportObject(iimport);
-		 
 		 if (fImports == null) {
-		 
 		 // createImportObjects method will find new addition
-		 
 		 createImportObjects();
 		 }
 		 else {
 		 int insertIndex = getImportInsertIndex();
-		 
 		 if (insertIndex < 0) {
-		 
 		 // Add Button
-		 
 		 fImports.add(iobj);
 		 }
 		 else {
-		 
 		 // DND
-		 
 		 fImports.add(insertIndex, iobj);
 		 }
 		 }
 		 }
 		 else {
 		 ImportObject iobj = findImportObject(iimport);
-		 
 		 if (iobj != null) {
 		 if (event.getChangeType() == IModelChangedEvent.REMOVE) {
 		 if (fImports == null) {
-		 
 		 // createImportObjects method will not include the removed import
-		 
 		 createImportObjects();
 		 }
 		 else fImports.remove(iobj);
 		 Table table = fImportViewer.getTable();
-		 
 		 index = table.getSelectionIndex();
 		 fImportViewer.remove(iobj);
 		 }
@@ -264,38 +244,28 @@ public class PortalDeployExcludesSection
 		 }
 		 }
 		 }
-		 
 		 if (event.getChangeType() == IModelChangedEvent.INSERT) {
 		 if (changedObjects.length > 0) {
-		 
 		 // Refresh the viewer
-		 
 		 fImportViewer.refresh();
-		 
 		 // Get the last import added to the viewer
-		 
 		 IPluginImport lastImport = (IPluginImport)changedObjects[changedObjects.length - 1];
-		 
 		 //Find the corresponding bundle object for the plugin import
 		 ImportObject lastImportObject = findImportObject(lastImport);
-		 
 		 if (lastImportObject != null) {
 		 fImportViewer.setSelection(new StructuredSelection(lastImportObject));
 		 }
-		 
 		 fImportViewer.getTable().setFocus();
 		 }
 		 }
 		 else if (event.getChangeType() == IModelChangedEvent.REMOVE) {
 		 Table table = fImportViewer.getTable();
-		 
 		 table.setSelection(index < table.getItemCount() ? index : table.getItemCount() - 1);
 		 }
 		 }
 		 else {
 		 fImportViewer.update(((IStructuredSelection)fImportViewer.getSelection()).toArray(), null);
 		 }
-		 
 		 */
 	}
 
@@ -417,11 +387,6 @@ public class PortalDeployExcludesSection
 	}
 
 	protected void createJarsArray() {
-		_fJars = new Vector<>();
-		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
-
-		String[] excludeJars = model.getPortalDeloyExcludesJars();
-
 		IProject project = getProject();
 
 		IFolder docroot = CoreUtil.getDefaultDocrootFolder(project);
@@ -433,6 +398,12 @@ public class PortalDeployExcludesSection
 
 			return;
 		}
+
+		_fJars = new Vector<>();
+
+		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
+
+		String[] excludeJars = model.getPortalDeloyExcludesJars();
 
 		SDK sdk = SDKUtil.getSDK(project);
 
@@ -621,7 +592,9 @@ public class PortalDeployExcludesSection
 		String[] removedFiles = new String[ssel.size()];
 
 		for (Iterator iter = ssel.iterator(); iter.hasNext(); i++) {
-			removedFiles[i] = ((File)iter.next()).getName();
+			File iterFile = (File)iter.next();
+
+			removedFiles[i] = iterFile.getName();
 		}
 
 		model.removePortalDeployExcludeJar(removedFiles);
@@ -713,7 +686,7 @@ public class PortalDeployExcludesSection
 			_UP_INDEX, canMove && isEditable() && hasSelection && (table.getSelectionIndex() > 0));
 		tablePart.setButtonEnabled(
 			_DOWN_INDEX,
-			canMove && hasSelection && isEditable() && (table.getSelectionIndex() < table.getItemCount() - 1));
+			canMove && hasSelection && isEditable() && (table.getSelectionIndex() < (table.getItemCount() - 1)));
 	}
 
 	private static final int _ADD_INDEX = 0;

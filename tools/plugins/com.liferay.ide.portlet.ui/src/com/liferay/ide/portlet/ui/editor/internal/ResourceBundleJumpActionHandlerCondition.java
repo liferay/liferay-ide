@@ -33,7 +33,7 @@ public class ResourceBundleJumpActionHandlerCondition extends PropertyEditorCond
 
 		PropertyDef propertyDef = property.definition();
 
-		if (propertyDef instanceof ValueProperty && Path.class.isAssignableFrom(propertyDef.getTypeClass()) &&
+		if ((propertyDef instanceof ValueProperty) && Path.class.isAssignableFrom(propertyDef.getTypeClass()) &&
 			(property.service(RelativePathService.class) != null)) {
 
 			return true;

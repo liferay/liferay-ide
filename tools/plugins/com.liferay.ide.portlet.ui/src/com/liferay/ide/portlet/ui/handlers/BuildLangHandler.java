@@ -22,6 +22,7 @@ import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -70,15 +71,21 @@ public class BuildLangHandler extends AbstractHandler {
 			Object selected = structuredSelection.getFirstElement();
 
 			if (selected instanceof IResource) {
-				project = ((IResource)selected).getProject();
+				IResource resource = (IResource)selected;
+
+				project = resource.getProject();
 			}
 			else if (selected instanceof IJavaElement) {
-				IJavaProject javaProject = ((IJavaElement)selected).getJavaProject();
+				IJavaElement javaElement = (IJavaElement)selected;
+
+				IJavaProject javaProject = javaElement.getJavaProject();
 
 				project = javaProject.getProject();
 			}
 			else if (selected instanceof PackageFragmentRootContainer) {
-				IJavaProject javaProject = ((PackageFragmentRootContainer)selected).getJavaProject();
+				PackageFragmentRootContainer packageFragmentRootContainer = (PackageFragmentRootContainer)selected;
+
+				IJavaProject javaProject = packageFragmentRootContainer.getJavaProject();
 
 				project = javaProject.getProject();
 			}
@@ -140,7 +147,7 @@ public class BuildLangHandler extends AbstractHandler {
 
 		String charset = langFile.getCharset(true);
 
-		if (!"UTF-8".equals(charset)) {
+		if (!Objects.equals("UTF-8", charset)) {
 			String dialogMessage = NLS.bind(Msgs.languageFileCharacterSet, charset);
 
 			Shell shell = UIUtil.getActiveShell();

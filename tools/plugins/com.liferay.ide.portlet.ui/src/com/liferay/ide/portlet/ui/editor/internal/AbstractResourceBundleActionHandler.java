@@ -66,8 +66,7 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 	/**
 	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#
-	 * computeEnablementState()
+	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#computeEnablementState()
 	 */
 	@Override
 	protected boolean computeEnablementState() {
@@ -155,9 +154,11 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 		};
 
 		try {
-			(new ProgressMonitorDialog(
-				((SwtPresentation)context).shell()
-			)).run(
+			SwtPresentation swtPresentation = (SwtPresentation)context;
+
+			new ProgressMonitorDialog(
+				swtPresentation.shell()
+			).run(
 				false, false, rbCreationProc
 			);
 
@@ -191,9 +192,8 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 			if (FileUtil.exists(resourceBundleFile)) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		return false;

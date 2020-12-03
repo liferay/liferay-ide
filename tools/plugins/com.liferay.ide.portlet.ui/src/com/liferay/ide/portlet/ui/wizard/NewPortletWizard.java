@@ -34,6 +34,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
@@ -106,7 +107,7 @@ public class NewPortletWizard
 		Object selected = selection.getFirstElement();
 
 		if (selected instanceof IProject) {
-			IProject project = ((IProject)selected).getProject();
+			IProject project = Adapters.adapt(selected, IProject.class);
 
 			getDataModel().setStringProperty(
 				IArtifactEditOperationDataModelProperties.COMPONENT_NAME, project.getName());
@@ -202,15 +203,10 @@ public class NewPortletWizard
 						IWorkbenchPage page = UIUtil.getActivePage();
 
 						IDE.openEditor(page, viewFile, true);
-
-						return;
 					}
 				}
 			}
 			catch (Exception e) {
-
-				// eat this exception this is just best effort
-
 			}
 		}
 		else {
@@ -256,9 +252,8 @@ public class NewPortletWizard
 
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	protected void setupWizard() {

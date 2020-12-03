@@ -48,7 +48,9 @@ public class HasLangFilePropertyTester extends PropertyTester {
 							if ((member.getType() == IResource.FOLDER) &&
 								StringUtil.equals(member.getName(), "content")) {
 
-								IResource[] content = ((IFolder)member).members();
+								IFolder folder = (IFolder)member;
+
+								IResource[] content = folder.members();
 
 								for (IResource res : content) {
 									String fileName = res.getName();

@@ -57,7 +57,11 @@ public class MessageKeyHyperlinkDetector extends AbstractHyperlinkDetector {
 			if (keyNode != null) {
 				IRegion nodeRegion = new Region(
 					currentNode.getStartOffset(), currentNode.getEndOffset() - currentNode.getStartOffset());
-				long modStamp = ((IDocumentExtension4)document).getModificationStamp();
+
+				IDocumentExtension4 docExtension = (IDocumentExtension4)document;
+
+				long modStamp = docExtension.getModificationStamp();
+
 				IFile file = DOMUtils.getFile(document);
 
 				MessageKey[] messageKeys = null;

@@ -136,8 +136,6 @@ public class NewVaadinApplicationClassWizardPage
 	}
 
 	protected String[] getValidationPropertyNames() {
-		List<String> validationPropertyNames = new ArrayList<>();
-
 		if (fragment) {
 			return new String[] {
 				IArtifactEditOperationDataModelProperties.COMPONENT_NAME, INewJavaClassDataModelProperties.JAVA_PACKAGE,
@@ -145,14 +143,15 @@ public class NewVaadinApplicationClassWizardPage
 				VAADIN_PORTLET_CLASS
 			};
 		}
-		else {
-			validationPropertyNames.add(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
-			validationPropertyNames.add(INewJavaClassDataModelProperties.SOURCE_FOLDER);
-			validationPropertyNames.add(INewJavaClassDataModelProperties.CLASS_NAME);
-			validationPropertyNames.add(INewJavaClassDataModelProperties.JAVA_PACKAGE);
-			validationPropertyNames.add(INewJavaClassDataModelProperties.SUPERCLASS);
-			validationPropertyNames.add(VAADIN_PORTLET_CLASS);
-		}
+
+		List<String> validationPropertyNames = new ArrayList<>();
+
+		validationPropertyNames.add(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+		validationPropertyNames.add(INewJavaClassDataModelProperties.SOURCE_FOLDER);
+		validationPropertyNames.add(INewJavaClassDataModelProperties.CLASS_NAME);
+		validationPropertyNames.add(INewJavaClassDataModelProperties.JAVA_PACKAGE);
+		validationPropertyNames.add(INewJavaClassDataModelProperties.SUPERCLASS);
+		validationPropertyNames.add(VAADIN_PORTLET_CLASS);
 
 		return validationPropertyNames.toArray(new String[0]);
 	}

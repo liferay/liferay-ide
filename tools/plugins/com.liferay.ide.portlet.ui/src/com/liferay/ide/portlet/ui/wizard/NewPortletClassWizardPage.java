@@ -516,14 +516,18 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 				return (IPackageFragment)element;
 			}
 			else if (element.getElementType() == IJavaElement.COMPILATION_UNIT) {
-				IJavaElement parent = ((ICompilationUnit)element).getParent();
+				ICompilationUnit compilationUnit = (ICompilationUnit)element;
+
+				IJavaElement parent = compilationUnit.getParent();
 
 				if (parent.getElementType() == IJavaElement.PACKAGE_FRAGMENT) {
 					return (IPackageFragment)parent;
 				}
 			}
 			else if (element.getElementType() == IJavaElement.TYPE) {
-				return ((IType)element).getPackageFragment();
+				IType elementType = (IType)element;
+
+				return elementType.getPackageFragment();
 			}
 		}
 
@@ -550,10 +554,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		IJavaElement element = getInitialJavaElement(selection);
 
-		if (element != null) {
-			if (element.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT) {
-				return (IPackageFragmentRoot)element;
-			}
+		if ((element != null) && (element.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT)) {
+			return (IPackageFragmentRoot)element;
 		}
 
 		return null;
@@ -596,20 +598,19 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	}
 
 	protected String[] getValidationPropertyNames() {
-		List<String> validationPropertyNames = new ArrayList<>();
-
 		if (fragment) {
 			return new String[] {
 				IArtifactEditOperationDataModelProperties.COMPONENT_NAME, INewJavaClassDataModelProperties.JAVA_PACKAGE,
 				INewJavaClassDataModelProperties.CLASS_NAME, INewJavaClassDataModelProperties.SUPERCLASS
 			};
 		}
-		else {
-			validationPropertyNames.add(CREATE_NEW_PORTLET_CLASS);
-			validationPropertyNames.add(USE_DEFAULT_PORTLET_CLASS);
 
-			Collections.addAll(validationPropertyNames, super.getValidationPropertyNames());
-		}
+		List<String> validationPropertyNames = new ArrayList<>();
+
+		validationPropertyNames.add(CREATE_NEW_PORTLET_CLASS);
+		validationPropertyNames.add(USE_DEFAULT_PORTLET_CLASS);
+
+		Collections.addAll(validationPropertyNames, super.getValidationPropertyNames());
 
 		return validationPropertyNames.toArray(new String[0]);
 	}
@@ -670,10 +671,14 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 			}
 
 			if (control instanceof Text) {
-				((Text)control).setText(classFullPath);
+				Text textControl = (Text)control;
+
+				textControl.setText(classFullPath);
 			}
 			else if (control instanceof Combo) {
-				((Combo)control).setText(classFullPath);
+				Combo comboControl = (Combo)control;
+
+				comboControl.setText(classFullPath);
 			}
 
 			getControl().setCursor(null);
@@ -776,7 +781,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		String[] names = new String[items.size()];
 
 		for (int i = 0; i < items.size(); i++) {
-			names[i] = (String)items.get(i);
+			names[i] = items.get(i);
 		}
 
 		projectNameCombo.setItems(names);

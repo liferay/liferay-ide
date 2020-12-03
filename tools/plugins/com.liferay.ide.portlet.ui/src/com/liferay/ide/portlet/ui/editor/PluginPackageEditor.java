@@ -103,11 +103,12 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		IEditorInput editorInput = getEditorInput();
 
 		if (editorInput instanceof FileEditorInput) {
-			return ((FileEditorInput)editorInput).getFile();
+			FileEditorInput fileEditorInput = (FileEditorInput)editorInput;
+
+			return fileEditorInput.getFile();
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	public IPath getPortalDir() {
@@ -290,7 +291,9 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 				ignoreModelChanges = true;
 
 				if (getLastDirtyState()) {
-					((PluginPackageModel)getModel()).load(inputStream, false);
+					PluginPackageModel pluginModel = (PluginPackageModel)getModel();
+
+					pluginModel.load(inputStream, false);
 				}
 
 				ignoreModelChanges = false;
@@ -317,7 +320,9 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 	private void _addPropertiesEditorPage() {
 		editor = new PropertiesFileEditor();
 
-		((PluginPackageModel)getModel()).addModelChangedListener(this);
+		PluginPackageModel pluginModel = (PluginPackageModel)getModel();
+
+		pluginModel.addModelChangedListener(this);
 
 		// editor.setEditorPart(this);
 

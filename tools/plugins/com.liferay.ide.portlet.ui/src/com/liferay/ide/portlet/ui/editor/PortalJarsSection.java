@@ -64,6 +64,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -189,19 +190,15 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 			refresh();
 
 			_updateButtons();
-
-			return;
 		}
 	}
 
 	public void propertyChange(PropertyChangeEvent event) {
 
 		/**
-		 
 		 if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
 		 updateUpDownButtons();
 		 }
-		 
 		 */
 	}
 
@@ -224,15 +221,11 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	public boolean setFormInput(Object object) {
 
 		/**
-		 
 		 if (object instanceof IPluginImport) {
 		 ImportObject iobj = new ImportObject((IPluginImport)object);
-		 
 		 fImportViewer.setSelection(new StructuredSelection(iobj), true);
-		 
 		 return true;
 		 }
-		 
 		 */
 		return false;
 	}
@@ -241,21 +234,16 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 
 		/**
 		 Table table = getTablePart().getTableViewer().getTable();
-		 
 		 IPluginImport dep1 = ((ImportObject)table.getItem(index1).getData()).getImport();
 		 IPluginImport dep2 = ((ImportObject)table.getItem(index2).getData()).getImport();
-		 
 		 try {
 		 IPluginModelBase model = (IPluginModelBase)getPage().getModel();
-		 
 		 IPluginBase pluginBase = model.getPluginBase();
-		 
 		 pluginBase.swap(dep1, dep2);
 		 }
 		 catch (CoreException ce) {
 		 PDEPlugin.logException(ce);
 		 }
-		 
 		 */
 	}
 
@@ -329,13 +317,17 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 
 		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
 
-		String[] portalJars = model.getPortalDependencyJars();
+		FormEditor editor = getPage().getEditor();
 
-		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
+		PluginPackageEditor pluginEditor = (PluginPackageEditor)editor;
+
+		IPath portalDir = pluginEditor.getPortalDir();
 
 		if (portalDir == null) {
 			return;
 		}
+
+		String[] portalJars = model.getPortalDependencyJars();
 
 		for (String portalJar : portalJars) {
 			File libFolder = FileUtil.getFile(portalDir.append("WEB-INF/lib"));
@@ -477,7 +469,9 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		String[] removedFiles = new String[ssel.size()];
 
 		for (Iterator iter = ssel.iterator(); iter.hasNext(); i++) {
-			removedFiles[i] = ((File)iter.next()).getName();
+			File iterFile = (File)iter.next();
+
+			removedFiles[i] = iterFile.getName();
 		}
 
 		model.removePortalDependencyJars(removedFiles);
@@ -562,7 +556,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 			_UP_INDEX, canMove && isEditable() && hasSelection && (table.getSelectionIndex() > 0));
 		tablePart.setButtonEnabled(
 			_DOWN_INDEX,
-			canMove && hasSelection && isEditable() && (table.getSelectionIndex() < table.getItemCount() - 1));
+			canMove && hasSelection && isEditable() && (table.getSelectionIndex() < (table.getItemCount() - 1)));
 	}
 
 	private static final int _ADD_INDEX = 0;

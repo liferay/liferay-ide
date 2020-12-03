@@ -59,7 +59,9 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 
 		DefinitionLoader loader = DefinitionLoader.sdef(PortletXmlEditor.class);
 
-		SapphireDialog dialog = new SapphireDialog(((SwtPresentation)context).shell(), portlet, loader.dialog());
+		SwtPresentation swtPresentation = (SwtPresentation)context;
+
+		SapphireDialog dialog = new SapphireDialog(swtPresentation.shell(), portlet, loader.dialog());
 
 		Resource resource = rootModel.resource();
 
@@ -90,22 +92,21 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 
 			return portlet;
 		}
-		else {
-			portlets.remove(portlet);
 
-			portlet = null;
+		portlets.remove(portlet);
 
-			try {
-				resource.save();
-			}
-			catch (ResourceStoreException rse) {
+		portlet = null;
 
-				// Log it in PorletUI Plugin
-
-			}
-
-			return null;
+		try {
+			resource.save();
 		}
+		catch (ResourceStoreException rse) {
+
+			// Log it in PorletUI Plugin
+
+		}
+
+		return null;
 	}
 
 }

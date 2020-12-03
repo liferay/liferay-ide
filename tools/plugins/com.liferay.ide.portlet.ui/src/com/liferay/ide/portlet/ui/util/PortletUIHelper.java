@@ -58,7 +58,7 @@ public class PortletUIHelper {
 		catch (JavaModelException jme) {
 		}
 
-		return (IPackageFragmentRoot[])result.toArray(new IPackageFragmentRoot[result.size()]);
+		return (IPackageFragmentRoot[])result.toArray(new IPackageFragmentRoot[0]);
 	}
 
 	public static IProject getProject(ISapphirePart sapphirePart) {

@@ -55,17 +55,14 @@ public class DependenciesFormPage extends IDEFormPage {
 
 		body.setLayout(FormLayoutFactory.createFormGridLayout(true, 2));
 
-		Composite left;
-		Composite right;
-
 		FormToolkit toolkit = managedForm.getToolkit();
 
-		left = toolkit.createComposite(body, SWT.NONE);
+		Composite left = toolkit.createComposite(body, SWT.NONE);
 
 		left.setLayout(FormLayoutFactory.createFormPaneGridLayout(false, 1));
 		left.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		right = toolkit.createComposite(body, SWT.NONE);
+		Composite right = toolkit.createComposite(body, SWT.NONE);
 
 		right.setLayout(FormLayoutFactory.createFormPaneGridLayout(false, 1));
 		right.setLayoutData(new GridData(GridData.FILL_BOTH));

@@ -70,7 +70,9 @@ public class PluginPackageInputContext extends InputContext {
 		if (input instanceof IFileEditorInput) {
 			IDocument document = getDocumentProvider().getDocument(input);
 
-			IFile file = ((IFileEditorInput)input).getFile();
+			IFileEditorInput editorInput = (IFileEditorInput)input;
+
+			IFile file = editorInput.getFile();
 
 			model = new PluginPackageModel(file, document, true);
 

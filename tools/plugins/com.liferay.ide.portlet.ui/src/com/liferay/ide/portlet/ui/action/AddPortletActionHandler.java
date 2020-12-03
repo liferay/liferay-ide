@@ -37,7 +37,9 @@ public class AddPortletActionHandler extends SapphireActionHandler {
 	protected Object run(Presentation context) {
 		NewPortletWizard newPortletWizard = new NewPortletWizard();
 
-		WizardDialog wizardDialog = new WizardDialog(((SwtPresentation)context).shell(), newPortletWizard);
+		SwtPresentation swtPresentation = (SwtPresentation)context;
+
+		WizardDialog wizardDialog = new WizardDialog(swtPresentation.shell(), newPortletWizard);
 
 		wizardDialog.create();
 		wizardDialog.open();
