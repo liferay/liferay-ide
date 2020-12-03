@@ -105,12 +105,7 @@ public class MarkerResolutionProposal implements ICompletionProposal {
 
 	@Override
 	public int hashCode() {
-		int prime = 31;
-		int result = 1;
-
-		result = prime * result + ((_resolution == null) ? 0 : _resolution.hashCode());
-
-		return result;
+		return 31 + ((_resolution == null) ? 0 : _resolution.hashCode());
 	}
 
 	private final IMarker _marker;
