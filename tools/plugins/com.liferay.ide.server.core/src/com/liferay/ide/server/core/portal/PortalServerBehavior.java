@@ -270,9 +270,7 @@ public class PortalServerBehavior
 
 		};
 
-		List<IModule[]> modules = new ArrayList<>();
-
-		modules.add(module);
+		List<IModule[]> modules = Lists.newArrayList(new IModule[][] {module});
 
 		publish(IServer.PUBLISH_FULL, modules, null, info);
 	}
