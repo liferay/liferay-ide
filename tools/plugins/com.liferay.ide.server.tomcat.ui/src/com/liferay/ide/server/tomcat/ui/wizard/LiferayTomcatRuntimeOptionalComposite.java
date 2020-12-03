@@ -331,7 +331,6 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 		String retval = null;
 
 		try {
-			String rootEntryName = null;
 			ZipEntry javadocEntry = null;
 
 			File javadocFile = new File(selectedFile);
@@ -342,7 +341,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 			ZipEntry rootEntry = zipEntries.nextElement();
 
-			rootEntryName = new Path(
+			String rootEntryName = new Path(
 				rootEntry.getName()
 			).segment(
 				0
