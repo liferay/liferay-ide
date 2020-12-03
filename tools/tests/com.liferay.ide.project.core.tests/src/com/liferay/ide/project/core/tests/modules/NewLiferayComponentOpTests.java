@@ -21,6 +21,7 @@ import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOpMethods;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
@@ -30,6 +31,7 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -48,6 +50,8 @@ public class NewLiferayComponentOpTests extends BaseTests
 		IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace" );
 
 		workspaceProject.delete(true, null);
+
+		deleteAllWorkspaceProjects();
 	}
 
     @Test
@@ -138,11 +142,6 @@ public class NewLiferayComponentOpTests extends BaseTests
         TestUtil.waitForBuildAndValidation();
     }
 
-    @AfterClass
-    public static void deleteLiferayWorkspace() throws Exception {
-        deleteAllWorkspaceProjects();
-    }
-
     @Test
     public void testNewLiferayComponentBndAndGradleForPortleActionCommandAndRest() throws Exception
     {
@@ -158,8 +157,8 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         TestUtil.waitForBuildAndValidation();
 
-        IProject modPorject = CoreUtil.getProject( pop.getProjectName().content() );
-        modPorject.open( new NullProgressMonitor() );
+        IProject modProject = CoreUtil.getProject( pop.getProjectName().content() );
+        modProject.open( new NullProgressMonitor() );
 
         NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
         cop.setProjectName( pop.getProjectName().content() );
@@ -167,7 +166,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         NewLiferayComponentOpMethods.execute( cop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        IFile bgd = modPorject.getFile( "bnd.bnd" );
+        IFile bgd = modProject.getFile( "bnd.bnd" );
         String bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
 
         String bndConfig = "-includeresource: \\" + System.getProperty( "line.separator" ) +
@@ -176,7 +175,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         assertTrue( bndcontent.contains( bndConfig ) );
 
-        IFile buildgrade = modPorject.getFile( "build.gradle" );
+        IFile buildgrade = modProject.getFile( "build.gradle" );
         String buildgradeContent = FileUtil.readContents( buildgrade.getLocation().toFile(),true );
         assertTrue( buildgradeContent.contains( "compileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.bridges\", version: \"2.0.0\"" ) );
         assertTrue( buildgradeContent.contains( "compileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"" ) );
@@ -187,14 +186,14 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         NewLiferayComponentOpMethods.execute( copRest, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        bgd = modPorject.getFile( "bnd.bnd" );
+        bgd = modProject.getFile( "bnd.bnd" );
         bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
         assertTrue( bndcontent.contains( bndConfig ) );
 
         final String restConfig = "Require-Capability: osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"";
         assertTrue( bndcontent.contains( restConfig ) );
 
-        buildgrade = modPorject.getFile( "build.gradle" );
+        buildgrade = modProject.getFile( "build.gradle" );
         buildgradeContent = FileUtil.readContents( buildgrade.getLocation().toFile(),true );
         assertTrue( buildgradeContent.contains( "compileOnly group: \"javax.ws.rs\", name: \"javax.ws.rs-api\", version: \"2.0.1\"" ) );
 
@@ -204,7 +203,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         NewLiferayComponentOpMethods.execute( copAuth, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        bgd = modPorject.getFile( "bnd.bnd" );
+        bgd = modProject.getFile( "bnd.bnd" );
         bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
 
         bndConfig = "-includeresource: \\" + System.getProperty( "line.separator" ) +
@@ -214,7 +213,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         assertTrue( bndcontent.contains( bndConfig ) );
 
-        buildgrade = modPorject.getFile( "build.gradle" );
+        buildgrade = modProject.getFile( "build.gradle" );
         buildgradeContent = FileUtil.readContents( buildgrade.getLocation().toFile() ,true);
         assertTrue( buildgradeContent.contains( "compileOnly group: \"org.apache.shiro\", name: \"shiro-core\", version: \"1.1.0\"" ) );
 
@@ -224,12 +223,16 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         NewLiferayComponentOpMethods.execute( copStruts, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        bgd = modPorject.getFile( "bnd.bnd" );
+        bgd = modProject.getFile( "bnd.bnd" );
         bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
 
         bndConfig = "Web-ContextPath: /TestgradlemodulecomponentbndStrutsAction";
 
         assertTrue( bndcontent.contains( bndConfig ) );
+
+        IProject testProject = CoreUtil.getProject( "testGradleModuleComponentBnd" );
+
+        testProject.delete(true, null);
     }
 
     @Test
@@ -247,6 +250,12 @@ public class NewLiferayComponentOpTests extends BaseTests
         TestUtil.waitForBuildAndValidation();
 
         assertTrue( op.getLocation().content().toFile().exists() );
+
+        IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace" );
+
+        workspaceProject.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
+
+        TestUtil.waitForBuildAndValidation();
 
         IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
 
@@ -277,6 +286,10 @@ public class NewLiferayComponentOpTests extends BaseTests
         IFile viewFile = modProject.getFile( "/src/main/resources/META-INF/resources/actioncommandtestportletactioncommand/view.ftl" );
 
         assertTrue( viewFile.exists() );
+
+        IProject testProject = CoreUtil.getProject( "action-command-test" );
+
+        testProject.delete(true, null);
     }
 
     @Test
@@ -290,6 +303,12 @@ public class NewLiferayComponentOpTests extends BaseTests
         Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         assertTrue( moduleProjectStatus.message(), moduleProjectStatus.ok() );
+
+        TestUtil.waitForBuildAndValidation();
+
+        IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace" );
+
+        workspaceProject.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
 
         TestUtil.waitForBuildAndValidation();
 
@@ -323,6 +342,10 @@ public class NewLiferayComponentOpTests extends BaseTests
         String jspFileContent = FileUtil.readContents( jspFile.getLocation().toFile(), true );
 
         assertTrue( jspFileContent.contains("/testgradlestrutsactioncomponentstrutsaction/html/init.jsp" ) );
+
+        IProject testProject = CoreUtil.getProject( "testGradleStrutsActionComponent" );
+
+        testProject.delete(true, null);
     }
 
     @Test
@@ -357,6 +380,10 @@ public class NewLiferayComponentOpTests extends BaseTests
         String gradleFileContent = FileUtil.readContents( gradleFile.getLocation().toFile() ,true );
 
         assertTrue( gradleFileContent.contains( "compileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"" ) );
+
+        IProject testProject = CoreUtil.getProject( "testGradlePortletFilterComponent" );
+
+        testProject.delete(true, null);
     }
 
     @Test
