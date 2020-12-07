@@ -78,11 +78,7 @@ public class LayoutTplUtil implements SapphireContentAccessor {
 			return null;
 		}
 
-		IDOMElement mainContentElement = null;
-
-		mainContentElement = (IDOMElement)rootDocument.getElementById("main-content");
-
-		return mainContentElement;
+		return (IDOMElement)rootDocument.getElementById("main-content");
 	}
 
 	public static List<Element> getChildElementsByTagName(IDOMElement parentElement, String childElementTag) {

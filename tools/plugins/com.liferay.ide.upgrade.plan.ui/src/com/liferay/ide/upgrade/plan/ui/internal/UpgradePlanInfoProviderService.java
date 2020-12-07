@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.ClientProtocolException;
@@ -75,7 +76,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					_doUpgradeStepDetail(upgradeStep, deferred);
+					_upgradeStepDetail(upgradeStep, deferred);
 
 					Promise<String> promise = deferred.getPromise();
 
@@ -105,7 +106,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	@Override
 	public String getLabel(Object element) {
 		if (element instanceof UpgradeStep) {
-			return _doUpgradeStepLabel((UpgradeStep)element);
+			return _upgradeStepLabel((UpgradeStep)element);
 		}
 
 		return null;
@@ -114,33 +115,6 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	@Override
 	public boolean provides(Object element) {
 		return element instanceof UpgradeStep;
-	}
-
-	private void _doUpgradeStepDetail(UpgradeStep upgradeStep, Deferred<String> deferred) {
-		String detail = "about:blank";
-
-		String upgradeStepUrl = upgradeStep.getUrl();
-
-		if (CoreUtil.isNotNullOrEmpty(upgradeStepUrl)) {
-			try {
-				UpgradePlan currentUpgradePlan = upgradeStep.getCurrentUpgradePlan();
-
-				IUpgradePlanOutline upgradePlanOutline = currentUpgradePlan.getUpgradePlanOutline();
-
-				detail = _renderArticleMainContent(upgradeStepUrl, upgradePlanOutline);
-			}
-			catch (Throwable t) {
-				deferred.fail(t);
-
-				return;
-			}
-		}
-
-		deferred.resolve(detail);
-	}
-
-	private String _doUpgradeStepLabel(UpgradeStep upgradeStep) {
-		return upgradeStep.getTitle();
 	}
 
 	private File _getEntryFile(File entryFile) {
@@ -170,9 +144,8 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		if (ListUtil.isNotEmpty(entryFiles)) {
 			return entryFiles[0];
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	private File _getEntryFile(String url, String splitor, File entryLocation) {
@@ -207,16 +180,14 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		if (entryFiles[0].isFile()) {
 			return entryFiles[0];
 		}
-		else {
-			urls.remove(0);
 
-			String retainedUrls = urls.stream(
-			).collect(
-				Collectors.joining(File.separator)
-			);
+		urls.remove(0);
 
-			return _getEntryFile(retainedUrls, splitor, entryFiles[0]);
-		}
+		Stream<String> urlStream = urls.stream();
+
+		String retainedUrls = urlStream.collect(Collectors.joining(File.separator));
+
+		return _getEntryFile(retainedUrls, splitor, entryFiles[0]);
 	}
 
 	private String _getFileContents(File inputFile) {
@@ -377,6 +348,31 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		}
 
 		return detail;
+	}
+
+	private void _upgradeStepDetail(UpgradeStep upgradeStep, Deferred<String> deferred) {
+		String detail = "about:blank";
+
+		String upgradeStepUrl = upgradeStep.getUrl();
+
+		if (CoreUtil.isNotNullOrEmpty(upgradeStepUrl)) {
+			try {
+				UpgradePlan currentUpgradePlan = upgradeStep.getCurrentUpgradePlan();
+
+				detail = _renderArticleMainContent(upgradeStepUrl, currentUpgradePlan.getUpgradePlanOutline());
+			}
+			catch (Throwable t) {
+				deferred.fail(t);
+
+				return;
+			}
+		}
+
+		deferred.resolve(detail);
+	}
+
+	private String _upgradeStepLabel(UpgradeStep upgradeStep) {
+		return upgradeStep.getTitle();
 	}
 
 	private final PromiseFactory _promiseFactory;

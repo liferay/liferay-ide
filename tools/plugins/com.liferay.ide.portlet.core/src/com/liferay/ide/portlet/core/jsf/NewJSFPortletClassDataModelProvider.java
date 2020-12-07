@@ -164,10 +164,8 @@ public class NewJSFPortletClassDataModelProvider
 
 			IFolder viewFolder = docrootFolder.getFolder(jspsFolder);
 
-			if (viewFolder.exists()) {
-				if (FileUtil.exists(viewFolder.getFile("view.xhtml"))) {
-					return PortletCore.createWarningStatus(Msgs.viewFileAlreadyExists);
-				}
+			if (viewFolder.exists() && FileUtil.exists(viewFolder.getFile("view.xhtml"))) {
+				return PortletCore.createWarningStatus(Msgs.viewFileAlreadyExists);
 			}
 		}
 

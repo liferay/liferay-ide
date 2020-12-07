@@ -45,7 +45,7 @@ public class PluginPackageEditorActionBarContributor extends IDEFormEditorContri
 		IActionBars actionBars = getActionBars();
 
 		if (actionBars != null) {
-			ITextEditor editor = (part instanceof ITextEditor) ? (ITextEditor)part : null;
+			ITextEditor editor = part instanceof ITextEditor ? (ITextEditor)part : null;
 
 			actionBars.setGlobalActionHandler(
 				ActionFactory.DELETE.getId(), getAction(editor, ITextEditorActionConstants.DELETE));

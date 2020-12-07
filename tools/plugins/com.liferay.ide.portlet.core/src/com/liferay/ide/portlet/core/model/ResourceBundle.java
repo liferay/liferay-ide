@@ -48,7 +48,7 @@ public interface ResourceBundle extends Element {
 
 	@FileExtensions(expr = "properties")
 	@Services(
-		value = {
+		{
 			@Service(impl = GenericResourceBundlePathService.class),
 			@Service(impl = ResourceBundleValidationService.class)
 		}

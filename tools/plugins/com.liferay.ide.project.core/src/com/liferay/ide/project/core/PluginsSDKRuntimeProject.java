@@ -169,7 +169,6 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 	}
 
 	protected SDK getSDK() {
-		SDK retval = null;
 
 		// try to determine SDK based on project location
 
@@ -179,7 +178,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 
 		SDKManager sdkManager = SDKManager.getInstance();
 
-		retval = sdkManager.getSDK(sdkLocation);
+		SDK retval = sdkManager.getSDK(sdkLocation);
 
 		if (retval == null) {
 			retval = SDKUtil.createSDKFromLocation(sdkLocation);

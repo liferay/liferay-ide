@@ -50,7 +50,9 @@ public class CreateLiferayPortletActionHandler extends SapphireActionHandler {
 
 		NewPortletWizard newPortletWizard = new NewPortletWizard(currentProject);
 
-		WizardDialog wizardDialog = new WizardDialog(((SwtPresentation)context).shell(), newPortletWizard);
+		SwtPresentation swtPresentation = (SwtPresentation)context;
+
+		WizardDialog wizardDialog = new WizardDialog(swtPresentation.shell(), newPortletWizard);
 
 		wizardDialog.create();
 		wizardDialog.open();

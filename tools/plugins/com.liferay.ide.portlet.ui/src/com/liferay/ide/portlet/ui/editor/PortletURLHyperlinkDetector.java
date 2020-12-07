@@ -62,9 +62,8 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 
 		if (_shouldDetectHyperlinks(textViewer, region)) {
 			IDocument document = textViewer.getDocument();
-			int offset = region.getOffset();
 
-			IDOMNode currentNode = DOMUtils.getNodeByOffset(document, offset);
+			IDOMNode currentNode = DOMUtils.getNodeByOffset(document, region.getOffset());
 
 			IRegion nodeRegion = new Region(
 				currentNode.getStartOffset(), currentNode.getEndOffset() - currentNode.getStartOffset());
@@ -75,7 +74,10 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 				Node name = attributes.getNamedItem("name");
 
 				if (name != null) {
-					long modStamp = ((IDocumentExtension4)document).getModificationStamp();
+					IDocumentExtension4 docExtension = (IDocumentExtension4)document;
+
+					long modStamp = docExtension.getModificationStamp();
+
 					IFile file = DOMUtils.getFile(document);
 
 					IMethod[] actionUrlMethods = null;
@@ -209,7 +211,7 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 		public void acceptSearchMatch(SearchMatch match) throws CoreException {
 			Object element = match.getElement();
 
-			if (element instanceof IMethod && _isActionMethod((IMethod)element)) {
+			if ((element instanceof IMethod) && _isActionMethod((IMethod)element)) {
 				this._results.add((IMethod)element);
 			}
 		}

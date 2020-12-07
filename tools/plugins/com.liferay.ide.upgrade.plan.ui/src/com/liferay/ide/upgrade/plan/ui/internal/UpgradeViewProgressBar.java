@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -101,9 +100,7 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 
 		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanViewer.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+		_serviceTracker = new ServiceTracker<>(bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		_serviceTracker.open();
 
@@ -223,13 +220,13 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 	}
 
 	private void _paint(PaintEvent paintEvent) {
-		GC gc = paintEvent.gc;
-
 		if (isDisposed()) {
 			return;
 		}
 
 		Rectangle rectangle = getClientArea();
+
+		GC gc = paintEvent.gc;
 
 		gc.fillRectangle(rectangle);
 

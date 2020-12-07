@@ -50,9 +50,7 @@ public class PortletCore extends Plugin {
 	// The shared instance
 
 	public static BuildLanguageJob createBuildLanguageJob(IFile file) {
-		BuildLanguageJob job = new BuildLanguageJob(file);
-
-		return job;
+		return new BuildLanguageJob(file);
 	}
 
 	public static IStatus createErrorStatus(Exception e) {

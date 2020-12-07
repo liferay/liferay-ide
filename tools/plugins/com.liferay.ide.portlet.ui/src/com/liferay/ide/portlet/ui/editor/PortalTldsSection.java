@@ -190,8 +190,6 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS) {
 			refresh();
 			_updateButtons();
-
-			return;
 		}
 	}
 
@@ -300,11 +298,16 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 
 	protected void createTldsArray() {
 		_fTlds = new Vector<>();
-		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
+
+		IDEFormPage idePage = (IDEFormPage)getPage();
+
+		PluginPackageModel model = (PluginPackageModel)idePage.getModel();
 
 		String[] portalTlds = model.getPortalDependencyTlds();
 
-		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
+		PluginPackageEditor packageEditor = (PluginPackageEditor)idePage.getEditor();
+
+		IPath portalDir = packageEditor.getPortalDir();
 
 		if (portalDir != null) {
 			for (String portalTld : portalTlds) {
@@ -444,7 +447,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		String[] removedFiles = new String[ssel.size()];
 
 		for (Iterator iter = ssel.iterator(); iter.hasNext(); i++) {
-			removedFiles[i] = ((File)iter.next()).getName();
+			File sselFile = (File)iter.next();
+
+			removedFiles[i] = sselFile.getName();
 		}
 
 		model.removePortalDependencyTlds(removedFiles);
@@ -536,7 +541,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 			_UP_INDEX, canMove && isEditable() && hasSelection && (table.getSelectionIndex() > 0));
 		tablePart.setButtonEnabled(
 			_DOWN_INDEX,
-			canMove && hasSelection && isEditable() && (table.getSelectionIndex() < table.getItemCount() - 1));
+			canMove && hasSelection && isEditable() && (table.getSelectionIndex() < (table.getItemCount() - 1)));
 	}
 
 	private static final int _ADD_INDEX = 0;
@@ -551,23 +556,18 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	 public void modelsChanged(PluginModelDelta delta) {
 	 fImports = null;
 	 final Control control = fImportViewer.getControl();
-	 
 	 if (!control.isDisposed()) {
 	 Runable run = new Runnable() {
 
-	 
 	 public void run() {
 	 if (!control.isDisposed()) {
 	 fImportViewer.refresh();
 	 }
 	 }
-	 
 	 };
-	 
 	 control.getDisplay().asyncExec(run);
 	 }
 	 }
-	 
 	 */
 	private Action _fAddAction;
 

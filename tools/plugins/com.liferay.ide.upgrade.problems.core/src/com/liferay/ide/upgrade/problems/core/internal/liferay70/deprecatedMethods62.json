@@ -45,7 +45,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getMySiteGroups}",
 		"methodName": "getMySites",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "User",
@@ -97,7 +98,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getMySiteGroups}",
 		"methodName": "getMySites",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserWrapper",
@@ -215,7 +217,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getCur}",
 		"methodName": "getCurValue",
 		"packageName": "com.liferay.portal.kernel.dao.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchContainer",
@@ -223,7 +226,8 @@
 		"javadoc": "@deprecated As of 6.2.0, see LPS-6312",
 		"methodName": "getMaxPages",
 		"packageName": "com.liferay.portal.kernel.dao.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchContainer",
@@ -319,7 +323,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getScreenResolution()}",
 		"methodName": "getScreenSize",
 		"packageName": "com.liferay.portal.kernel.mobile.device",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AbstractDevice",
@@ -327,7 +332,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getScreenResolution()}",
 		"methodName": "getScreenSize",
 		"packageName": "com.liferay.portal.kernel.mobile.device",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseIndexer",
@@ -433,7 +439,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getSearchEngine(String)}",
 		"methodName": "getSearchEngine",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchEngineUtil",
@@ -760,7 +767,8 @@
 		"javadoc": "@deprecated As of 6.2.0, renamed to {#getSAXReader}",
 		"methodName": "getSecureSAXReader",
 		"packageName": "com.liferay.portal.kernel.xml",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SAXReaderUtil",
@@ -768,7 +776,8 @@
 		"javadoc": "@deprecated As of 6.2.0, renamed to {UnsecureSAXReaderUtil#getSAXReader()}",
 		"methodName": "getUnsecureSAXReader",
 		"packageName": "com.liferay.portal.kernel.xml",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SAXReaderUtil",
@@ -996,7 +1005,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {ExportImportPathUtil#getRootPath(PortletDataContext)}",
 		"methodName": "getRootPath",
 		"packageName": "com.liferay.portal.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -1024,7 +1034,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {ExportImportPathUtil#getSourceRootPath(PortletDataContext)}",
 		"methodName": "getSourceRootPath",
 		"packageName": "com.liferay.portal.kernel.lar",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDataContext",
@@ -4671,7 +4682,8 @@
 		"javadoc": "@deprecated As of 6.2.0 with no direct replacement",
 		"methodName": "isAccess",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletDisplay",
@@ -4689,7 +4701,8 @@
 		"javadoc": "@deprecated As of 6.2.0 renamed to {#getSiteGroup}",
 		"methodName": "getParentGroup",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4697,7 +4710,8 @@
 		"javadoc": "@deprecated As of 6.2.0 renamed to {#getSiteGroupId}",
 		"methodName": "getParentGroupId",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4705,7 +4719,8 @@
 		"javadoc": "@deprecated As of 6.2.0 renamed to {#getSiteGroupName}",
 		"methodName": "getParentGroupName",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4713,7 +4728,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getPathThemeImages}",
 		"methodName": "getPathThemeImage",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4721,7 +4737,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getScopeGroupId}",
 		"methodName": "getPortletGroupId",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4729,7 +4746,8 @@
 		"javadoc": "@deprecated As of 6.2.0 renamed to {#getSiteGroupIdOrLiveGroupId}",
 		"methodName": "getScopeGroupIdOrLiveGroupId",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4737,7 +4755,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getURLSiteAdministration()}",
 		"methodName": "getURLManageSiteMemberships",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4745,7 +4764,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getURLSiteAdministration()}",
 		"methodName": "getURLSiteContent",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4753,7 +4773,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#isShowSiteAdministrationIcon()}",
 		"methodName": "getURLSiteMapSettings",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4761,7 +4782,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getURLSiteAdministration()}",
 		"methodName": "getURLSiteSettings",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4769,7 +4791,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#isShowSiteAdministrationIcon()}",
 		"methodName": "isShowManageSiteMembershipsIcon",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4777,7 +4800,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#isShowSiteAdministrationIcon()}",
 		"methodName": "isShowSiteContentIcon",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4785,7 +4809,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#isShowSiteAdministrationIcon()}",
 		"methodName": "isShowSiteMapSettingsIcon",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4793,7 +4818,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#isShowSiteAdministrationIcon()}",
 		"methodName": "isShowSiteSettingsIcon",
 		"packageName": "com.liferay.portal.theme",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeDisplay",
@@ -4864,7 +4890,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {FileVersionProxyBean#getUserId()}",
 		"methodName": "getVersionUserId",
 		"packageName": "com.liferay.portal.repository.proxy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FileEntryProxyBean",
@@ -4872,7 +4899,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {FileVersionProxyBean#getUserName()}",
 		"methodName": "getVersionUserName",
 		"packageName": "com.liferay.portal.repository.proxy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FileEntryProxyBean",
@@ -4880,7 +4908,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {FileVersionProxyBean#getUserUuid()}",
 		"methodName": "getVersionUserUuid",
 		"packageName": "com.liferay.portal.repository.proxy",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PermissionCheckerFactoryUtil",
@@ -4899,7 +4928,8 @@
 		"javadoc": "@deprecated As of 6.2.0, does nothing",
 		"methodName": "resetValues",
 		"packageName": "com.liferay.portal.security.permission",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PermissionChecker",
@@ -4967,7 +4997,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletCSRFWhitelistActions}",
 		"methodName": "getAuthTokenIgnoreActions",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -4975,7 +5006,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletCSRFWhitelist}",
 		"methodName": "getAuthTokenIgnorePortlets",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -4993,7 +5025,8 @@
 		"javadoc": "@deprecated As of 6.2.0 replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletInvocationWhitelist}",
 		"methodName": "getPortletAddDefaultResourceCheckWhitelist",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -5001,7 +5034,8 @@
 		"javadoc": "@deprecated As of 6.2.0 replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletInvocationWhitelistActions}",
 		"methodName": "getPortletAddDefaultResourceCheckWhitelistActions",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -5020,7 +5054,8 @@
 		"javadoc": "@deprecated As of 6.2.0 replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#resetPortletInvocationWhitelist}",
 		"methodName": "resetPortletAddDefaultResourceCheckWhitelist",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -5028,7 +5063,8 @@
 		"javadoc": "@deprecated As of 6.2.0 replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#resetPortletInvocationWhitelistActions}",
 		"methodName": "resetPortletAddDefaultResourceCheckWhitelistActions",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Portal",
@@ -5036,7 +5072,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by the more general {#getCDNHost(boolean)}",
 		"methodName": "getCDNHost",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Portal",
@@ -5054,7 +5091,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by the more general {#getPortalPort(boolean)}",
 		"methodName": "getPortalPort",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Portal",
@@ -5062,7 +5100,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletInvocationWhitelist}",
 		"methodName": "getPortletAddDefaultResourceCheckWhitelist",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Portal",
@@ -5070,7 +5109,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletInvocationWhitelistActions}",
 		"methodName": "getPortletAddDefaultResourceCheckWhitelistActions",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Portal",
@@ -5099,7 +5139,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#resetPortletInvocationWhitelist}",
 		"methodName": "resetPortletAddDefaultResourceCheckWhitelist",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Portal",
@@ -5107,7 +5148,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {com.liferay.portal.security.auth.AuthTokenWhitelistUtil#resetPortletInvocationWhitelistActions}",
 		"methodName": "resetPortletAddDefaultResourceCheckWhitelistActions",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SubscriptionSender",
@@ -5136,7 +5178,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getAvailableLanguageIds}",
 		"methodName": "getAvailableLocales",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -5144,7 +5187,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getDefaultLanguageId}",
 		"methodName": "getDefaultLocale",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticle",
@@ -5152,7 +5196,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getAvailableLanguageIds}",
 		"methodName": "getAvailableLocales",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticle",
@@ -5160,7 +5205,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getDefaultLanguageId}",
 		"methodName": "getDefaultLocale",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalTemplateLocalServiceUtil",
@@ -6551,7 +6597,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getStructures}",
 		"methodName": "getStructureEntries",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureLocalService",
@@ -6684,7 +6731,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getStructures}",
 		"methodName": "getStructureEntries",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureLocalServiceWrapper",
@@ -6747,7 +6795,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getStructures}",
 		"methodName": "getStructureEntries",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureLocalServiceUtil",
@@ -6863,7 +6912,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getAvailableLanguageIds}",
 		"methodName": "getAvailableLocales",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseAssetRenderer",
@@ -6871,7 +6921,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getAvailableLanguageIds}",
 		"methodName": "getAvailableLocales",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetEntryServiceWrapper",
@@ -7933,7 +7984,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getAssetRendererFactories(long)}",
 		"methodName": "getAssetRendererFactories",
 		"packageName": "com.liferay.portlet.asset",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetRendererFactoryRegistryUtil",
@@ -7941,7 +7993,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getClassNameIds(long)}",
 		"methodName": "getClassNameIds",
 		"packageName": "com.liferay.portlet.asset",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetRendererFactoryRegistry",
@@ -7949,7 +8002,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getAssetRendererFactories(long)}",
 		"methodName": "getAssetRendererFactories",
 		"packageName": "com.liferay.portlet.asset",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetRendererFactoryRegistry",
@@ -7957,7 +8011,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getClassNameIds(long)}",
 		"methodName": "getClassNameIds",
 		"packageName": "com.liferay.portlet.asset",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderLocalServiceUtil",
@@ -10714,7 +10769,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserId()}",
 		"methodName": "getVersionUserId",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryWrapper",
@@ -10722,7 +10778,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserName()}",
 		"methodName": "getVersionUserName",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryWrapper",
@@ -10730,7 +10787,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserUuid()}",
 		"methodName": "getVersionUserUuid",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntry",
@@ -10738,7 +10796,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserId()}",
 		"methodName": "getVersionUserId",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntry",
@@ -10746,7 +10805,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserName()}",
 		"methodName": "getVersionUserName",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntry",
@@ -10754,7 +10814,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserUuid()}",
 		"methodName": "getVersionUserUuid",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutServiceUtil",
@@ -11911,7 +11972,8 @@
 		"javadoc": "@deprecated As of 6.2.0, with no direct replacement. See LPS-41307.",
 		"methodName": "isHasResults",
 		"packageName": "com.liferay.taglib.ui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchContainerTag",
@@ -11929,7 +11991,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {SearchContainerTag#getTotal()}.",
 		"methodName": "getTotal",
 		"packageName": "com.liferay.taglib.ui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchContainerResultsTag",
@@ -11937,7 +12000,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {SearchContainerTag#getTotalVar()}.",
 		"methodName": "getTotalVar",
 		"packageName": "com.liferay.taglib.ui",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SearchContainerResultsTag",
@@ -11993,7 +12057,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#iconBack}",
 		"methodName": "iconBack",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12001,7 +12066,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconClose}",
 		"methodName": "iconClose",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12009,7 +12075,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconConfiguration}",
 		"methodName": "iconConfiguration",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12017,7 +12084,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEdit}",
 		"methodName": "iconEdit",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12025,7 +12093,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEditDefaults}",
 		"methodName": "iconEditDefaults",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12033,7 +12102,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEditGuest}",
 		"methodName": "iconEditGuest",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12041,7 +12111,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconHelp}",
 		"methodName": "iconHelp",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12049,7 +12120,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconMaximize}",
 		"methodName": "iconMaximize",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12057,7 +12129,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconMinimize}",
 		"methodName": "iconMinimize",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12065,7 +12138,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconOptions}",
 		"methodName": "iconOptions",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12073,7 +12147,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPortlet}",
 		"methodName": "iconPortlet",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12091,7 +12166,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPortletCss}",
 		"methodName": "iconPortletCss",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12099,7 +12175,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPrint}",
 		"methodName": "iconPrint",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12107,7 +12184,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconRefresh}",
 		"methodName": "iconRefresh",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -12171,7 +12249,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#iconBack}",
 		"methodName": "iconBack",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12179,7 +12258,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconClose}",
 		"methodName": "iconClose",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12187,7 +12267,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconConfiguration}",
 		"methodName": "iconConfiguration",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12195,7 +12276,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEdit}",
 		"methodName": "iconEdit",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12203,7 +12285,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEditDefaults}",
 		"methodName": "iconEditDefaults",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12211,7 +12294,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEditGuest}",
 		"methodName": "iconEditGuest",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12219,7 +12303,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconHelp}",
 		"methodName": "iconHelp",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12227,7 +12312,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconMaximize}",
 		"methodName": "iconMaximize",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12235,7 +12321,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconMinimize}",
 		"methodName": "iconMinimize",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12243,7 +12330,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconOptions}",
 		"methodName": "iconOptions",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12251,7 +12339,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPortlet}",
 		"methodName": "iconPortlet",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12269,7 +12358,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPortletCss}",
 		"methodName": "iconPortletCss",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12277,7 +12367,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPrint}",
 		"methodName": "iconPrint",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12285,7 +12376,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconRefresh}",
 		"methodName": "iconRefresh",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12293,7 +12385,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#mySites}",
 		"methodName": "myPlaces",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglibImpl",
@@ -12388,7 +12481,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#iconBack}",
 		"methodName": "iconBack",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12396,7 +12490,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconClose}",
 		"methodName": "iconClose",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12404,7 +12499,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconConfiguration}",
 		"methodName": "iconConfiguration",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12412,7 +12508,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEdit}",
 		"methodName": "iconEdit",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12420,7 +12517,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEditDefaults}",
 		"methodName": "iconEditDefaults",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12428,7 +12526,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconEditGuest}",
 		"methodName": "iconEditGuest",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12436,7 +12535,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconHelp}",
 		"methodName": "iconHelp",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12444,7 +12544,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconMaximize}",
 		"methodName": "iconMaximize",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12452,7 +12553,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconMinimize}",
 		"methodName": "iconMinimize",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12460,7 +12562,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconOptions}",
 		"methodName": "iconOptions",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12468,7 +12571,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPortlet}",
 		"methodName": "iconPortlet",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12486,7 +12590,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPortletCss}",
 		"methodName": "iconPortletCss",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12494,7 +12599,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconPrint}",
 		"methodName": "iconPrint",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12502,7 +12608,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#portletIconRefresh}",
 		"methodName": "iconRefresh",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12510,7 +12617,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#mySites}",
 		"methodName": "myPlaces",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DummyVelocityTaglib",
@@ -12584,7 +12692,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getMySiteGroups}",
 		"methodName": "getMySites",
 		"packageName": "com.liferay.portal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserImpl",
@@ -12673,7 +12782,8 @@
 		"javadoc": "@deprecated As of 6.2.0",
 		"methodName": "calculateInMemorySize",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModifiableEhcacheWrapper",
@@ -12681,7 +12791,8 @@
 		"javadoc": "@deprecated As of 6.2.0",
 		"methodName": "calculateOffHeapSize",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModifiableEhcacheWrapper",
@@ -12689,7 +12800,8 @@
 		"javadoc": "@deprecated As of 6.2.0",
 		"methodName": "calculateOnDiskSize",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModifiableEhcacheWrapper",
@@ -12697,7 +12809,8 @@
 		"javadoc": "@deprecated As of 6.2.0",
 		"methodName": "getDiskStoreSize",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModifiableEhcacheWrapper",
@@ -12705,7 +12818,8 @@
 		"javadoc": "@deprecated As of 6.2.0",
 		"methodName": "getKeysNoDuplicateCheck",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModifiableEhcacheWrapper",
@@ -12713,7 +12827,8 @@
 		"javadoc": "@deprecated As of 6.2.0",
 		"methodName": "getMemoryStoreSize",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModifiableEhcacheWrapper",
@@ -12721,7 +12836,8 @@
 		"javadoc": "@deprecated As of 6.2.0",
 		"methodName": "getOffHeapStoreSize",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserNotificationEventLocalServiceImpl",
@@ -13564,7 +13680,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {CMISFileVersion#getUserId()}",
 		"methodName": "getVersionUserId",
 		"packageName": "com.liferay.portal.repository.cmis.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CMISFileEntry",
@@ -13572,7 +13689,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {CMISFileVersion#getUserName()}",
 		"methodName": "getVersionUserName",
 		"packageName": "com.liferay.portal.repository.cmis.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CMISFileEntry",
@@ -13580,7 +13698,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {CMISFileVersion#getUserUuid()}",
 		"methodName": "getVersionUserUuid",
 		"packageName": "com.liferay.portal.repository.cmis.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LiferayFileEntry",
@@ -13588,7 +13707,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserId()}",
 		"methodName": "getVersionUserId",
 		"packageName": "com.liferay.portal.repository.liferayrepository.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LiferayFileEntry",
@@ -13596,7 +13716,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserName()}",
 		"methodName": "getVersionUserName",
 		"packageName": "com.liferay.portal.repository.liferayrepository.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LiferayFileEntry",
@@ -13604,7 +13725,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserUuid()}",
 		"methodName": "getVersionUserUuid",
 		"packageName": "com.liferay.portal.repository.liferayrepository.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LiferayRepository",
@@ -13682,7 +13804,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {PortalUtil#getComputerName()}",
 		"methodName": "getHostName",
 		"packageName": "com.liferay.portal.license.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetRendererFactoryRegistryImpl",
@@ -13690,7 +13813,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getAssetRendererFactories(long)}",
 		"methodName": "getAssetRendererFactories",
 		"packageName": "com.liferay.portal.asset",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetRendererFactoryRegistryImpl",
@@ -13698,7 +13822,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getClassNameIds(long)}",
 		"methodName": "getClassNameIds",
 		"packageName": "com.liferay.portal.asset",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServiceMonitorAdvice",
@@ -13810,7 +13935,8 @@
 		"javadoc": "@deprecated As of 6.2.0, with no direct replacement",
 		"methodName": "getInstance",
 		"packageName": "com.liferay.portal.xml",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FriendlyURLNormalizerImpl",
@@ -13839,7 +13965,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {AuthTokenWhitelistUtil#getPortletCSRFWhitelistActions}",
 		"methodName": "getAuthTokenIgnoreActions",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -13847,7 +13974,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {AuthTokenWhitelistUtil#getPortletCSRFWhitelist}",
 		"methodName": "getAuthTokenIgnorePortlets",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -13865,7 +13993,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {AuthTokenWhitelistUtil#getPortletInvocationWhitelist}",
 		"methodName": "getPortletAddDefaultResourceCheckWhitelist",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -13873,7 +14002,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {AuthTokenWhitelistUtil#getPortletInvocationWhitelistActions}",
 		"methodName": "getPortletAddDefaultResourceCheckWhitelistActions",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -13892,7 +14022,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {AuthTokenWhitelistUtil#resetPortletInvocationWhitelist}",
 		"methodName": "resetPortletAddDefaultResourceCheckWhitelist",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -13900,7 +14031,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {AuthTokenWhitelistUtil#resetPortletInvocationWhitelistActions}",
 		"methodName": "resetPortletAddDefaultResourceCheckWhitelistActions",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -14045,7 +14177,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getAvailableLanguageIds}",
 		"methodName": "getAvailableLocales",
 		"packageName": "com.liferay.portlet.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleImpl",
@@ -14053,7 +14186,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getDefaultLanguageId}",
 		"methodName": "getDefaultLocale",
 		"packageName": "com.liferay.portlet.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleServiceImpl",
@@ -14360,7 +14494,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {#getStructures}",
 		"methodName": "getStructureEntries",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureLocalServiceImpl",
@@ -15482,7 +15617,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserId()}",
 		"methodName": "getVersionUserId",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryImpl",
@@ -15490,7 +15626,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserName()}",
 		"methodName": "getVersionUserName",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryImpl",
@@ -15498,7 +15635,8 @@
 		"javadoc": "@deprecated As of 6.2.0, replaced by {DLFileVersion#getUserUuid()}",
 		"methodName": "getVersionUserUuid",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryMetadataLocalServiceImpl",

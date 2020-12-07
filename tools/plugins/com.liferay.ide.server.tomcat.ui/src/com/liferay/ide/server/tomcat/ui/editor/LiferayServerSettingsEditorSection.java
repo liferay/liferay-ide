@@ -120,13 +120,11 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 		toolkit.paintBordersFor(composite);
 		section.setClient(composite);
 
-		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
-
 		useDefaultPortalServerSettings = new Button(composite, SWT.CHECK);
 
 		useDefaultPortalServerSettings.setText(Msgs.useDefaultPortalServerSetting);
 
-		data = new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 3, 1);
+		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 3, 1);
 
 		useDefaultPortalServerSettings.setLayoutData(data);
 

@@ -163,7 +163,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		}
 
 		if (status.size() == 1) {
-			IStatus status2 = (IStatus)status.get(0);
+			IStatus status2 = status.get(0);
 
 			throw new CoreException(status2);
 		}

@@ -46,7 +46,9 @@ public class CheckInstalledJDKsCommand implements UpgradeCommand {
 		boolean java8Installed = false;
 
 		if (defaultVMInstall instanceof IVMInstall2) {
-			String jvmVersion = ((IVMInstall2)defaultVMInstall).getJavaVersion();
+			IVMInstall2 defaultVMInstall2 = (IVMInstall2)defaultVMInstall;
+
+			String jvmVersion = defaultVMInstall2.getJavaVersion();
 
 			String[] jvmVersionParts = jvmVersion.split("\\.");
 

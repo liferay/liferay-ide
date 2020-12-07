@@ -36,8 +36,6 @@ public abstract class SDKJob extends Job {
 			return null;
 		}
 
-		SDK retval = null;
-
 		// try to determine SDK based on project location
 
 		IPath rawLocation = project.getRawLocation();
@@ -46,7 +44,7 @@ public abstract class SDKJob extends Job {
 
 		SDKManager sdkManager = SDKManager.getInstance();
 
-		retval = sdkManager.getSDK(sdkLocation);
+		SDK retval = sdkManager.getSDK(sdkLocation);
 
 		if (retval == null) {
 			retval = SDKUtil.createSDKFromLocation(sdkLocation);

@@ -43,7 +43,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -224,8 +223,9 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 			}
 
 			try (FileOutputStream fileOutputStream = new FileOutputStream(_getUpgradePlannerStorageFile())) {
+				XMLMemento xmlMemento = (XMLMemento)rootMemento;
 
-				((XMLMemento)rootMemento).save(fileOutputStream);
+				xmlMemento.save(fileOutputStream);
 			}
 		}
 		catch (Exception e) {
@@ -246,11 +246,11 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 
 	@Override
 	public void saveUpgradePlan(UpgradePlan upgradePlan) {
-		XMLMemento xmlMemento = null;
-
 		if (ListUtil.isEmpty(upgradePlan.getUpgradeSteps())) {
 			return;
 		}
+
+		XMLMemento xmlMemento = null;
 
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			final IMemento rootMemento = Optional.ofNullable(
@@ -287,7 +287,7 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 
 			IMemento[] existingUpgradeContextEntries = upgradePlanMemento.getChildren("upgradeContext");
 
-			for (Entry<String, String> entry : upgradeContext.entrySet()) {
+			for (Map.Entry<String, String> entry : upgradeContext.entrySet()) {
 				String key = entry.getKey();
 
 				IMemento upgradeContextMemento = null;
@@ -529,10 +529,7 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 			upgradeProblemMemento.putString("version", upgradeProblem.getVersion());
 			upgradeProblemMemento.putInteger("endOffset", upgradeProblem.getEndOffset());
 			upgradeProblemMemento.putInteger("lineNumber", upgradeProblem.getLineNumber());
-
-			long markerId = upgradeProblem.getMarkerId();
-
-			upgradeProblemMemento.putString("markerId", String.valueOf(markerId));
+			upgradeProblemMemento.putString("markerId", String.valueOf(upgradeProblem.getMarkerId()));
 
 			upgradeProblemMemento.putInteger("markerType", upgradeProblem.getMarkerType());
 

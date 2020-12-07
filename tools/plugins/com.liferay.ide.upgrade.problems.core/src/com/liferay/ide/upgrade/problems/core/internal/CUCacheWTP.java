@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -162,8 +163,9 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 
 		List<String> newNatureIds = new ArrayList<>(existingNatureIds);
 
-		addNatureIds.stream(
-		).filter(
+		Stream<String> addNatureIdsStream = addNatureIds.stream();
+
+		addNatureIdsStream.filter(
 			id -> !existingNatureIds.contains(id)
 		).forEach(
 			newNatureIds::add

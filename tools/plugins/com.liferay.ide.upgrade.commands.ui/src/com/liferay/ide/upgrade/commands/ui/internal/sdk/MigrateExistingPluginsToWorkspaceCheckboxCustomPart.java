@@ -203,7 +203,7 @@ public class MigrateExistingPluginsToWorkspaceCheckboxCustomPart extends Project
 			projectRecords.add(project);
 		}
 
-		return projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
+		return projectRecords.toArray(new ProjectRecord[0]);
 	}
 
 	private boolean _isProjectInWorkspace(String projectName) {

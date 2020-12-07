@@ -30,14 +30,12 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -57,8 +55,6 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
-
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
 		Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
@@ -75,6 +71,8 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 				return Status.CANCEL_STATUS;
 			}
 		}
+
+		NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		switch (upgradePlan.getTargetVersion()) {
 			case "7.0":
@@ -108,9 +106,7 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 				IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 
-				Shell shell = workbenchWindow.getShell();
-
-				WizardDialog wizardDialog = new WizardDialog(shell, newLiferayWorkspaceWizard);
+				WizardDialog wizardDialog = new WizardDialog(workbenchWindow.getShell(), newLiferayWorkspaceWizard);
 
 				returnCode.set(wizardDialog.open());
 			});
@@ -126,15 +122,13 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 			upgradeContext.put("targetProjectLocation", path.toString());
 
-			IProject project = CoreUtil.getProject(workspaceName);
-
-			_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, Collections.singletonList(project)));
+			_upgradePlanner.dispatch(
+				new UpgradeCommandPerformedEvent(this, Collections.singletonList(CoreUtil.getProject(workspaceName))));
 
 			return Status.OK_STATUS;
 		}
-		else {
-			return UpgradeCommandsUIPlugin.createErrorStatus("New Liferay Workspace was not created.");
-		}
+
+		return UpgradeCommandsUIPlugin.createErrorStatus("New Liferay Workspace was not created.");
 	}
 
 	@Reference

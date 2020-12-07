@@ -61,8 +61,6 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 		final IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		final ISelection selection = HandlerUtil.getActiveMenuSelection(event);
 
-		IStatus retval = Status.OK_STATUS;
-
 		IFile currentFile = null;
 
 		if (selection instanceof ITreeSelection) {
@@ -84,9 +82,7 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 			currentFile = editorInput.getAdapter(IFile.class);
 		}
 
-		retval = _openCompareEditor(currentFile);
-
-		return retval;
+		return _openCompareEditor(currentFile);
 	}
 
 	protected abstract File getTemplateFile(IFile currentFile) throws Exception;

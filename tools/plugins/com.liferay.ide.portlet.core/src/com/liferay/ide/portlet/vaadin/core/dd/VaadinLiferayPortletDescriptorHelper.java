@@ -63,9 +63,7 @@ public class VaadinLiferayPortletDescriptorHelper
 
 	@Override
 	protected IStatus doAddNewPortlet(IDOMDocument document, IDataModel model) {
-		IStatus status = Status.OK_STATUS;
-
-		status = super.doAddNewPortlet(document, model);
+		IStatus status = super.doAddNewPortlet(document, model);
 
 		if (!status.isOK()) {
 			return status;
@@ -99,7 +97,7 @@ public class VaadinLiferayPortletDescriptorHelper
 			}
 		}
 
-		return status;
+		return Status.OK_STATUS;
 	}
 
 	private IStatus _updateVaadinLiferayPortletXMLTo62(IDOMDocument document) {

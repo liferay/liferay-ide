@@ -184,9 +184,8 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 					IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 
-					Shell shell = workbenchWindow.getShell();
-
-					AsyncStringFilteredDialog dialog = new AsyncStringFilteredDialog(shell, targetVersion);
+					AsyncStringFilteredDialog dialog = new AsyncStringFilteredDialog(
+						workbenchWindow.getShell(), targetVersion);
 
 					dialog.setInput(new String[] {"Loading Data......"});
 					dialog.setMessage("Liferay Product Key Selection");

@@ -49,7 +49,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ElementList;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -109,9 +108,7 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 
 				IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 
-				Shell shell = workbenchWindow.getShell();
-
-				WizardDialog wizardDialog = new WizardDialog(shell, importSDKProjectsWizard);
+				WizardDialog wizardDialog = new WizardDialog(workbenchWindow.getShell(), importSDKProjectsWizard);
 
 				returnCode.set(wizardDialog.open());
 			});

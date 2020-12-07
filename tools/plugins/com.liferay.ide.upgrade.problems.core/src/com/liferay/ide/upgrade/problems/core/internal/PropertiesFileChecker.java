@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Platform;
 
@@ -59,8 +60,9 @@ public class PropertiesFileChecker {
 		if (key.endsWith(".*")) {
 			Set<String> keyInfos = _keyInfos.keySet();
 
-			List<String> matches = keyInfos.stream(
-			).filter(
+			Stream<String> keyInfosStream = keyInfos.stream();
+
+			List<String> matches = keyInfosStream.filter(
 				keyInfo -> keyInfo.startsWith(key.substring(0, key.length() - 1))
 			).collect(
 				Collectors.toList()
@@ -211,7 +213,6 @@ public class PropertiesFileChecker {
 			LineReader lr = new LineReader(inputReader);
 
 			char[] convtBuf = new char[1024];
-			int[] limit;
 			int keyLen;
 			int valueStart;
 			char c;
@@ -219,7 +220,7 @@ public class PropertiesFileChecker {
 			boolean precedingBackslash;
 			int lineNumber = 0;
 
-			limit = lr.readLine();
+			int[] limit = lr.readLine();
 
 			while (limit[0] >= 0) {
 				lineNumber++;

@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.PropertiesConfiguration.PropertiesWriter;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -152,7 +151,7 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 		}
 	}
 
-	public static class PluginPropertiesWriter extends PropertiesWriter {
+	public static class PluginPropertiesWriter extends PropertiesConfiguration.PropertiesWriter {
 
 		public PluginPropertiesWriter(Writer writer, char delimiter) {
 			super(writer, delimiter);
@@ -270,9 +269,8 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 
 				return buf.toString();
 			}
-			else {
-				return null;
-			}
+
+			return null;
 		}
 
 		/**

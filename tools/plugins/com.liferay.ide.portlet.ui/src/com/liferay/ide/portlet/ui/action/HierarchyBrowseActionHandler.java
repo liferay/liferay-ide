@@ -60,9 +60,9 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 		try {
 			IJavaSearchScope scope = null;
 
-			TypeSelectionExtension extension = null;
-
 			String[] javaTypes = _getClassReferenceType(property);
+
+			SwtPresentation swtPresentation = (SwtPresentation)context;
 
 			if (javaTypes.length > 0) {
 				IJavaProject javaProject = JavaCore.create(project);
@@ -77,13 +77,15 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 			}
 			else {
 				MessageDialog.openInformation(
-					((SwtPresentation)context).shell(), Msgs.browseImplementation, Msgs.validClassImplProperty);
+					swtPresentation.shell(), Msgs.browseImplementation, Msgs.validClassImplProperty);
 
 				return null;
 			}
 
+			TypeSelectionExtension extension = null;
+
 			SelectionDialog dlg = JavaUI.createTypeDialog(
-				((SwtPresentation)context).shell(), null, scope, IJavaElementSearchConstants.CONSIDER_CLASSES, false,
+				swtPresentation.shell(), null, scope, IJavaElementSearchConstants.CONSIDER_CLASSES, false,
 				StringPool.DOUBLE_ASTERISK, extension);
 
 			PropertyDef propertyDef = property.definition();
@@ -98,7 +100,9 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 				assert (results != null) && (results.length == 1);
 
 				if (results[0] instanceof IType) {
-					return ((IType)results[0]).getFullyQualifiedName();
+					IType type = (IType)results[0];
+
+					return type.getFullyQualifiedName();
 				}
 			}
 		}

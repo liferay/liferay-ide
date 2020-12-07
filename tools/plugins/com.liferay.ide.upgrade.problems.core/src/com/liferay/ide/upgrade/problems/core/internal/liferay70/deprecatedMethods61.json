@@ -5,7 +5,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedCounter",
 		"packageName": "com.liferay.counter.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CounterLocalServiceWrapper",
@@ -13,7 +14,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedCounterLocalService",
 		"packageName": "com.liferay.counter.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CounterLocalServiceWrapper",
@@ -31,7 +33,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLayoutPrototype",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutBranchWrapper",
@@ -39,7 +42,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLayoutBranch",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LockWrapper",
@@ -47,7 +51,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLock",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PasswordPolicyWrapper",
@@ -55,7 +60,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPasswordPolicy",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PasswordTrackerWrapper",
@@ -63,7 +69,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPasswordTracker",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserNotificationDeliveryWrapper",
@@ -71,7 +78,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUserNotificationDelivery",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrgGroupRoleWrapper",
@@ -79,7 +87,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedOrgGroupRole",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletPreferencesWrapper",
@@ -87,7 +96,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPortletPreferences",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserWrapper",
@@ -95,7 +105,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUser",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourcePermissionWrapper",
@@ -103,7 +114,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedResourcePermission",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletItemWrapper",
@@ -111,7 +123,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPortletItem",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PluginSettingWrapper",
@@ -119,7 +132,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPluginSetting",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceTypePermissionWrapper",
@@ -127,7 +141,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedResourceTypePermission",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShardWrapper",
@@ -135,7 +150,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShard",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutWrapper",
@@ -143,7 +159,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLayout",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletWrapper",
@@ -151,7 +168,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPortlet",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ContactWrapper",
@@ -159,7 +177,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedContact",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutRevisionModel",
@@ -167,7 +186,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ClassNameWrapper",
@@ -175,7 +195,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedClassName",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetPrototypeWrapper",
@@ -183,7 +204,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLayoutSetPrototype",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PasswordPolicyRelWrapper",
@@ -191,7 +213,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPasswordPolicyRel",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceBlockWrapper",
@@ -199,7 +222,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedResourceBlock",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalPreferencesWrapper",
@@ -207,7 +231,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPortalPreferences",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AddressWrapper",
@@ -215,7 +240,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAddress",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WebDAVPropsWrapper",
@@ -223,7 +249,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedWebDAVProps",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VirtualHostWrapper",
@@ -231,7 +258,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedVirtualHost",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AccountWrapper",
@@ -239,7 +267,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAccount",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ReleaseWrapper",
@@ -247,7 +276,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedRelease",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MembershipRequestWrapper",
@@ -255,7 +285,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMembershipRequest",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TicketWrapper",
@@ -263,7 +294,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedTicket",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceBlockPermissionWrapper",
@@ -271,7 +303,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedResourceBlockPermission",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RepositoryWrapper",
@@ -279,7 +312,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedRepository",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ListTypeWrapper",
@@ -287,7 +321,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedListType",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrganizationWrapper",
@@ -295,7 +330,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedOrganization",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WorkflowInstanceLinkWrapper",
@@ -303,7 +339,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedWorkflowInstanceLink",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupGroupRoleWrapper",
@@ -311,7 +348,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUserGroupGroupRole",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ImageWrapper",
@@ -319,7 +357,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedImage",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrgLaborWrapper",
@@ -327,7 +366,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedOrgLabor",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutRevisionWrapper",
@@ -335,7 +375,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutRevisionWrapper",
@@ -343,7 +384,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLayoutRevision",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserIdMapperWrapper",
@@ -351,7 +393,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUserIdMapper",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetBranchWrapper",
@@ -359,7 +402,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLayoutSetBranch",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GroupWrapper",
@@ -367,7 +411,8 @@
 		"javadoc": "@deprecated As of 6.1.0, renamed to #isRegularSite",
 		"methodName": "isCommunity",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GroupWrapper",
@@ -375,7 +420,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedGroup",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RoleWrapper",
@@ -383,7 +429,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedRole",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WorkflowedModel",
@@ -391,7 +438,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserTrackerWrapper",
@@ -399,7 +447,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUserTracker",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutFriendlyURLWrapper",
@@ -407,7 +456,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLayoutFriendlyURL",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RegionWrapper",
@@ -415,7 +465,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedRegion",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserNotificationEventWrapper",
@@ -423,7 +474,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUserNotificationEvent",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ClusterGroupWrapper",
@@ -431,7 +483,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedClusterGroup",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserTrackerPathWrapper",
@@ -439,7 +492,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUserTrackerPath",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TeamWrapper",
@@ -447,7 +501,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedTeam",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PhoneWrapper",
@@ -455,7 +510,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPhone",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetWrapper",
@@ -463,7 +519,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedLayoutSet",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SystemEventWrapper",
@@ -471,7 +528,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSystemEvent",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WorkflowDefinitionLinkWrapper",
@@ -479,7 +537,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedWorkflowDefinitionLink",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CompanyWrapper",
@@ -487,7 +546,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedCompany",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WebsiteWrapper",
@@ -495,7 +555,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedWebsite",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SubscriptionWrapper",
@@ -503,7 +564,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSubscription",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "EmailAddressWrapper",
@@ -511,7 +573,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedEmailAddress",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RepositoryEntryWrapper",
@@ -519,7 +582,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedRepositoryEntry",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Group",
@@ -527,7 +591,8 @@
 		"javadoc": "@deprecated As of 6.1.0, renamed to #isRegularSite",
 		"methodName": "isCommunity",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupRoleWrapper",
@@ -535,7 +600,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUserGroupRole",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceActionWrapper",
@@ -543,7 +609,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedResourceAction",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BrowserTrackerWrapper",
@@ -551,7 +618,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedBrowserTracker",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CountryWrapper",
@@ -559,7 +627,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedCountry",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupWrapper",
@@ -567,7 +636,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedUserGroup",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServiceComponentWrapper",
@@ -575,7 +645,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedServiceComponent",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BackgroundTaskWrapper",
@@ -583,7 +654,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedBackgroundTask",
 		"packageName": "com.liferay.portal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RegistryAwareMBeanServer",
@@ -718,7 +790,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "getExpressionEvaluator",
 		"packageName": "com.liferay.portal.kernel.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PageContextWrapper",
@@ -726,7 +799,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "getVariableResolver",
 		"packageName": "com.liferay.portal.kernel.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "HttpSessionWrapper",
@@ -734,7 +808,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "getSessionContext",
 		"packageName": "com.liferay.portal.kernel.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "HttpSessionWrapper",
@@ -752,7 +827,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "getValueNames",
 		"packageName": "com.liferay.portal.kernel.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "HttpSessionWrapper",
@@ -845,7 +921,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "addModifiedDate",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "Document",
@@ -918,7 +995,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "addModifiedDate",
 		"packageName": "com.liferay.portal.kernel.search",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DocumentImpl",
@@ -947,7 +1025,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isEnabled",
 		"methodName": "isNotificationEnabled",
 		"packageName": "com.liferay.portal.kernel.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "NotificationThreadLocal",
@@ -1023,7 +1102,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #afterPropertiesSet",
 		"methodName": "init",
 		"packageName": "com.liferay.portal.kernel.messaging.jmx",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BaseMessageStatusMessageListener",
@@ -1129,7 +1209,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedQuartzLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "QuartzLocalServiceWrapper",
@@ -1147,7 +1228,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWebsiteService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WebsiteServiceWrapper",
@@ -1165,7 +1247,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedResourceLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceLocalServiceWrapper",
@@ -1183,7 +1266,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedServiceComponentLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServiceComponentLocalServiceWrapper",
@@ -1201,7 +1285,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBackgroundTaskLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BackgroundTaskLocalServiceWrapper",
@@ -1219,7 +1304,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRepositoryService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RepositoryServiceWrapper",
@@ -1237,7 +1323,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutLocalServiceWrapper",
@@ -1255,7 +1342,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserGroupRoleService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupRoleServiceWrapper",
@@ -1273,7 +1361,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRoleLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RoleLocalServiceWrapper",
@@ -1291,7 +1380,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPluginSettingLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PluginSettingLocalServiceWrapper",
@@ -1309,7 +1399,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedResourceBlockPermissionLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceBlockPermissionLocalServiceWrapper",
@@ -1327,7 +1418,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedResourceBlockService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceBlockServiceWrapper",
@@ -1345,7 +1437,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutBranchService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutBranchServiceWrapper",
@@ -1430,7 +1523,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedStagingService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StagingServiceWrapper",
@@ -1448,7 +1542,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPortalLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalLocalServiceWrapper",
@@ -1466,7 +1561,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRepositoryLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RepositoryLocalServiceWrapper",
@@ -1484,7 +1580,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPortalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalServiceWrapper",
@@ -1502,7 +1599,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutSetPrototypeService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetPrototypeServiceWrapper",
@@ -1531,7 +1629,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutServiceWrapper",
@@ -1549,7 +1648,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedImageService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ImageServiceWrapper",
@@ -1567,7 +1667,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedEmailAddressLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "EmailAddressLocalServiceWrapper",
@@ -1585,7 +1686,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedCountryService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CountryServiceWrapper",
@@ -1603,7 +1705,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedCompanyLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CompanyLocalServiceWrapper",
@@ -1621,7 +1724,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedTeamService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TeamServiceWrapper",
@@ -1651,7 +1755,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedResourceTypePermissionLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceTypePermissionLocalServiceWrapper",
@@ -1681,7 +1786,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedReleaseLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ReleaseLocalServiceWrapper",
@@ -1699,7 +1805,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAccountService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AccountServiceWrapper",
@@ -1717,7 +1824,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPhoneLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PhoneLocalServiceWrapper",
@@ -1735,7 +1843,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWorkflowDefinitionLinkLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WorkflowDefinitionLinkLocalServiceWrapper",
@@ -1753,7 +1862,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSubscriptionLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SubscriptionLocalServiceWrapper",
@@ -1771,7 +1881,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBrowserTrackerLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BrowserTrackerLocalServiceWrapper",
@@ -1789,7 +1900,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPortletService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletServiceWrapper",
@@ -1807,7 +1919,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutSetPrototypeLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetPrototypeLocalServiceWrapper",
@@ -1825,7 +1938,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserIdMapperLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserIdMapperLocalServiceWrapper",
@@ -1843,7 +1957,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedThemeService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeServiceWrapper",
@@ -1861,7 +1976,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutTemplateLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutTemplateLocalServiceWrapper",
@@ -1879,7 +1995,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserServiceWrapper",
@@ -1897,7 +2014,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutRevisionService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutRevisionServiceWrapper",
@@ -1915,7 +2033,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBackgroundTaskService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BackgroundTaskServiceWrapper",
@@ -1933,7 +2052,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedClusterGroupLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ClusterGroupLocalServiceWrapper",
@@ -1951,7 +2071,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPermissionService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PermissionServiceWrapper",
@@ -1969,7 +2090,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutSetLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetLocalServiceWrapper",
@@ -1987,7 +2109,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPortletPreferencesLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletPreferencesLocalServiceWrapper",
@@ -2005,7 +2128,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRepositoryEntryLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RepositoryEntryLocalServiceWrapper",
@@ -2023,7 +2147,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedVirtualHostLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VirtualHostLocalServiceWrapper",
@@ -2041,7 +2166,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserGroupGroupRoleLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupGroupRoleLocalServiceWrapper",
@@ -2059,7 +2185,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAddressService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AddressServiceWrapper",
@@ -2077,7 +2204,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutFriendlyURLLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutFriendlyURLLocalServiceWrapper",
@@ -2095,7 +2223,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPasswordPolicyService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PasswordPolicyServiceWrapper",
@@ -2113,7 +2242,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserGroupLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupLocalServiceWrapper",
@@ -2131,7 +2261,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserGroupRoleLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupRoleLocalServiceWrapper",
@@ -2149,7 +2280,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutRevisionLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutRevisionLocalServiceWrapper",
@@ -2167,7 +2299,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWebDAVPropsLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WebDAVPropsLocalServiceWrapper",
@@ -2185,7 +2318,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedResourcePermissionLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourcePermissionLocalServiceWrapper",
@@ -2203,7 +2337,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPortletItemLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletItemLocalServiceWrapper",
@@ -2221,7 +2356,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedTicketLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TicketLocalServiceWrapper",
@@ -2239,7 +2375,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWorkflowInstanceLinkLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WorkflowInstanceLinkLocalServiceWrapper",
@@ -2257,7 +2394,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPasswordPolicyRelLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PasswordPolicyRelLocalServiceWrapper",
@@ -2275,7 +2413,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedClassNameService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ClassNameServiceWrapper",
@@ -2293,7 +2432,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRoleService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RoleServiceWrapper",
@@ -2311,7 +2451,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedContactService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ContactServiceWrapper",
@@ -2329,7 +2470,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserTrackerPathLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserTrackerPathLocalServiceWrapper",
@@ -2347,7 +2489,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedResourceBlockLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceBlockLocalServiceWrapper",
@@ -2365,7 +2508,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRegionService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RegionServiceWrapper",
@@ -2383,7 +2527,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserNotificationDeliveryLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserNotificationDeliveryLocalServiceWrapper",
@@ -2401,7 +2546,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedResourcePermissionService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourcePermissionServiceWrapper",
@@ -2419,7 +2565,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedGroupLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GroupLocalServiceWrapper",
@@ -2437,7 +2584,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserGroupService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupServiceWrapper",
@@ -2455,7 +2603,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSystemEventLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SystemEventLocalServiceWrapper",
@@ -2473,7 +2622,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShardLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShardLocalServiceWrapper",
@@ -2491,7 +2641,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedResourceActionLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ResourceActionLocalServiceWrapper",
@@ -2521,7 +2672,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPasswordPolicyLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PasswordPolicyLocalServiceWrapper",
@@ -2539,7 +2691,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutSetBranchLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetBranchLocalServiceWrapper",
@@ -2557,7 +2710,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutPrototypeService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutPrototypeServiceWrapper",
@@ -2575,7 +2729,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedOrganizationService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrganizationServiceWrapper",
@@ -2593,7 +2748,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedContactLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ContactLocalServiceWrapper",
@@ -2611,7 +2767,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedStagingLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "StagingLocalServiceWrapper",
@@ -2629,7 +2786,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedTeamLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TeamLocalServiceWrapper",
@@ -2647,7 +2805,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLockLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LockLocalServiceWrapper",
@@ -2676,7 +2835,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPortletLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletLocalServiceWrapper",
@@ -2694,7 +2854,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutSetService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetServiceWrapper",
@@ -2712,7 +2873,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedEmailAddressService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "EmailAddressServiceWrapper",
@@ -2730,7 +2892,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedOrgLaborLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrgLaborLocalServiceWrapper",
@@ -2748,7 +2911,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserLocalServiceWrapper",
@@ -2766,7 +2930,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAccountLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AccountLocalServiceWrapper",
@@ -2784,7 +2949,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAddressLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AddressLocalServiceWrapper",
@@ -2802,7 +2968,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedCompanyService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CompanyServiceWrapper",
@@ -2820,7 +2987,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWebsiteLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WebsiteLocalServiceWrapper",
@@ -2838,7 +3006,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutBranchLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutBranchLocalServiceWrapper",
@@ -2856,7 +3025,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPortalPreferencesLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalPreferencesLocalServiceWrapper",
@@ -2874,7 +3044,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedCMISRepositoryLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CMISRepositoryLocalServiceWrapper",
@@ -2892,7 +3063,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMembershipRequestService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MembershipRequestServiceWrapper",
@@ -2910,7 +3082,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutPrototypeLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutPrototypeLocalServiceWrapper",
@@ -2928,7 +3101,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedClassNameLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ClassNameLocalServiceWrapper",
@@ -2946,7 +3120,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedImageLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ImageLocalServiceWrapper",
@@ -2964,7 +3139,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPortletPreferencesService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletPreferencesServiceWrapper",
@@ -2982,7 +3158,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedOrgLaborService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrgLaborServiceWrapper",
@@ -3000,7 +3177,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserTrackerLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserTrackerLocalServiceWrapper",
@@ -3018,7 +3196,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedLayoutSetBranchService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutSetBranchServiceWrapper",
@@ -3036,7 +3215,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedOrganizationLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "OrganizationLocalServiceWrapper",
@@ -3054,7 +3234,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedGroupService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GroupServiceWrapper",
@@ -3072,7 +3253,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPasswordTrackerLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PasswordTrackerLocalServiceWrapper",
@@ -3090,7 +3272,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPluginSettingService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PluginSettingServiceWrapper",
@@ -3108,7 +3291,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMembershipRequestLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MembershipRequestLocalServiceWrapper",
@@ -3126,7 +3310,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserNotificationEventLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserNotificationEventLocalServiceWrapper",
@@ -3144,7 +3329,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedListTypeService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ListTypeServiceWrapper",
@@ -3162,7 +3348,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedUserGroupGroupRoleService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "UserGroupGroupRoleServiceWrapper",
@@ -3180,7 +3367,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedThemeLocalService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ThemeLocalServiceWrapper",
@@ -3198,7 +3386,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPhoneService",
 		"packageName": "com.liferay.portal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PhoneServiceWrapper",
@@ -3260,7 +3449,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "init",
 		"packageName": "com.liferay.portal.security.permission",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PermissionCheckerBag",
@@ -3290,7 +3480,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getCDNHost(boolean)",
 		"methodName": "getCDNHost",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -3298,7 +3489,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by DBFactoryUtil#getDB()",
 		"methodName": "getDB",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -3327,7 +3519,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getPortalPort(boolean)",
 		"methodName": "getPortalPort",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalUtil",
@@ -3399,7 +3592,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedJournalFeed",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -3407,7 +3601,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleWrapper",
@@ -3415,7 +3610,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedJournalArticle",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleResourceWrapper",
@@ -3423,7 +3619,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedJournalArticleResource",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleImageWrapper",
@@ -3431,7 +3628,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedJournalArticleImage",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalContentSearchWrapper",
@@ -3439,7 +3637,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedJournalContentSearch",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderModel",
@@ -3447,7 +3646,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleModel",
@@ -3455,7 +3655,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderWrapper",
@@ -3463,7 +3664,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderWrapper",
@@ -3471,7 +3673,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedJournalFolder",
 		"packageName": "com.liferay.portlet.journal.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalStructureServiceWrapper",
@@ -3479,7 +3682,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalStructureService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalStructureServiceWrapper",
@@ -3497,7 +3701,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalFolderLocalService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderLocalServiceWrapper",
@@ -3515,7 +3720,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalTemplateService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalTemplateServiceWrapper",
@@ -3533,7 +3739,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalStructureLocalService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalStructureLocalServiceWrapper",
@@ -3551,7 +3758,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalFeedLocalService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedLocalServiceWrapper",
@@ -3569,7 +3777,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalArticleResourceLocalService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleResourceLocalServiceWrapper",
@@ -3587,7 +3796,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalFeedService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFeedServiceWrapper",
@@ -3605,7 +3815,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalFolderService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalFolderServiceWrapper",
@@ -3623,7 +3834,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalTemplateLocalService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalTemplateLocalServiceWrapper",
@@ -3641,7 +3853,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalContentSearchLocalService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalContentSearchLocalServiceWrapper",
@@ -3659,7 +3872,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalArticleService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleServiceWrapper",
@@ -3677,7 +3891,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalArticleImageLocalService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleImageLocalServiceWrapper",
@@ -3695,7 +3910,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedJournalArticleLocalService",
 		"packageName": "com.liferay.portlet.journal.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleLocalServiceWrapper",
@@ -3713,7 +3929,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSCProductScreenshot",
 		"packageName": "com.liferay.portlet.softwarecatalog.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCProductEntryWrapper",
@@ -3721,7 +3938,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSCProductEntry",
 		"packageName": "com.liferay.portlet.softwarecatalog.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCFrameworkVersionWrapper",
@@ -3729,7 +3947,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSCFrameworkVersion",
 		"packageName": "com.liferay.portlet.softwarecatalog.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCProductVersionWrapper",
@@ -3737,7 +3956,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSCProductVersion",
 		"packageName": "com.liferay.portlet.softwarecatalog.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCLicenseWrapper",
@@ -3745,7 +3965,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSCLicense",
 		"packageName": "com.liferay.portlet.softwarecatalog.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCProductEntryServiceWrapper",
@@ -3753,7 +3974,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCProductEntryService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCProductEntryServiceWrapper",
@@ -3771,7 +3993,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCFrameworkVersionLocalService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCFrameworkVersionLocalServiceWrapper",
@@ -3789,7 +4012,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCLicenseService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCLicenseServiceWrapper",
@@ -3807,7 +4031,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCProductVersionService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCProductVersionServiceWrapper",
@@ -3825,7 +4050,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCLicenseLocalService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCLicenseLocalServiceWrapper",
@@ -3843,7 +4069,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCProductEntryLocalService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCProductEntryLocalServiceWrapper",
@@ -3861,7 +4088,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCProductVersionLocalService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCProductVersionLocalServiceWrapper",
@@ -3879,7 +4107,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCFrameworkVersionService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCFrameworkVersionServiceWrapper",
@@ -3897,7 +4126,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSCProductScreenshotLocalService",
 		"packageName": "com.liferay.portlet.softwarecatalog.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SCProductScreenshotLocalServiceWrapper",
@@ -3915,7 +4145,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedExpandoValue",
 		"packageName": "com.liferay.portlet.expando.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoRowWrapper",
@@ -3923,7 +4154,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedExpandoRow",
 		"packageName": "com.liferay.portlet.expando.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoColumnWrapper",
@@ -3931,7 +4163,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedExpandoColumn",
 		"packageName": "com.liferay.portlet.expando.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoTableWrapper",
@@ -3939,7 +4172,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedExpandoTable",
 		"packageName": "com.liferay.portlet.expando.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoRowLocalServiceUtil",
@@ -4500,7 +4734,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedExpandoValueService",
 		"packageName": "com.liferay.portlet.expando.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoValueServiceWrapper",
@@ -4562,7 +4797,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedExpandoTableLocalService",
 		"packageName": "com.liferay.portlet.expando.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoTableLocalServiceWrapper",
@@ -4604,7 +4840,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedExpandoRowLocalService",
 		"packageName": "com.liferay.portlet.expando.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoRowLocalServiceWrapper",
@@ -4666,7 +4903,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedExpandoColumnLocalService",
 		"packageName": "com.liferay.portlet.expando.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoColumnLocalServiceWrapper",
@@ -4684,7 +4922,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedExpandoColumnService",
 		"packageName": "com.liferay.portlet.expando.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoColumnServiceWrapper",
@@ -5760,7 +5999,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedExpandoValueLocalService",
 		"packageName": "com.liferay.portlet.expando.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoValueLocalServiceWrapper",
@@ -5867,7 +6107,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSocialActivity",
 		"packageName": "com.liferay.portlet.social.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivitySetWrapper",
@@ -5875,7 +6116,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSocialActivitySet",
 		"packageName": "com.liferay.portlet.social.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialRelationWrapper",
@@ -5883,7 +6125,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSocialRelation",
 		"packageName": "com.liferay.portlet.social.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivitySettingWrapper",
@@ -5891,7 +6134,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSocialActivitySetting",
 		"packageName": "com.liferay.portlet.social.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialRequestWrapper",
@@ -5899,7 +6143,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSocialRequest",
 		"packageName": "com.liferay.portlet.social.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityAchievementWrapper",
@@ -5907,7 +6152,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSocialActivityAchievement",
 		"packageName": "com.liferay.portlet.social.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityCounterWrapper",
@@ -5915,7 +6161,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSocialActivityCounter",
 		"packageName": "com.liferay.portlet.social.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityLimitWrapper",
@@ -5923,7 +6170,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedSocialActivityLimit",
 		"packageName": "com.liferay.portlet.social.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityInterpreterLocalServiceWrapper",
@@ -5931,7 +6179,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivityInterpreterLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityInterpreterLocalServiceWrapper",
@@ -5949,7 +6198,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivitySetLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivitySetLocalServiceWrapper",
@@ -5967,7 +6217,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivityCounterLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityCounterLocalServiceWrapper",
@@ -5985,7 +6236,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialRequestLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialRequestLocalServiceWrapper",
@@ -6003,7 +6255,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivityService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityServiceWrapper",
@@ -6021,7 +6274,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivityLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityLocalServiceWrapper",
@@ -6039,7 +6293,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialRelationLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialRelationLocalServiceWrapper",
@@ -6057,7 +6312,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivitySettingLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivitySettingLocalServiceWrapper",
@@ -6075,7 +6331,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialRequestInterpreterLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialRequestInterpreterLocalServiceWrapper",
@@ -6093,7 +6350,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivityLimitLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityLimitLocalServiceWrapper",
@@ -6111,7 +6369,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivitySettingService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivitySettingServiceWrapper",
@@ -6129,7 +6388,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialRequestService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialRequestServiceWrapper",
@@ -6147,7 +6407,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedSocialActivityAchievementLocalService",
 		"packageName": "com.liferay.portlet.social.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SocialActivityAchievementLocalServiceWrapper",
@@ -6165,7 +6426,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAnnouncementsEntry",
 		"packageName": "com.liferay.portlet.announcements.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsDeliveryWrapper",
@@ -6173,7 +6435,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAnnouncementsDelivery",
 		"packageName": "com.liferay.portlet.announcements.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsFlagWrapper",
@@ -6181,7 +6444,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAnnouncementsFlag",
 		"packageName": "com.liferay.portlet.announcements.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsDeliveryLocalServiceWrapper",
@@ -6189,7 +6453,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAnnouncementsDeliveryLocalService",
 		"packageName": "com.liferay.portlet.announcements.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsDeliveryLocalServiceWrapper",
@@ -6207,7 +6472,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAnnouncementsFlagLocalService",
 		"packageName": "com.liferay.portlet.announcements.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsFlagLocalServiceWrapper",
@@ -6225,7 +6491,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAnnouncementsEntryLocalService",
 		"packageName": "com.liferay.portlet.announcements.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsEntryLocalServiceWrapper",
@@ -6243,7 +6510,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAnnouncementsFlagService",
 		"packageName": "com.liferay.portlet.announcements.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsFlagServiceWrapper",
@@ -6261,7 +6529,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAnnouncementsEntryService",
 		"packageName": "com.liferay.portlet.announcements.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsEntryServiceWrapper",
@@ -6279,7 +6548,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAnnouncementsDeliveryService",
 		"packageName": "com.liferay.portlet.announcements.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AnnouncementsDeliveryServiceWrapper",
@@ -6297,7 +6567,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDDMStructureLink",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMTemplateWrapper",
@@ -6305,7 +6576,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDDMTemplate",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMContentWrapper",
@@ -6313,7 +6585,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDDMContent",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStorageLinkWrapper",
@@ -6321,7 +6594,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDDMStorageLink",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureWrapper",
@@ -6329,7 +6603,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDDMStructure",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStorageLinkLocalServiceWrapper",
@@ -6337,7 +6612,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDMStorageLinkLocalService",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStorageLinkLocalServiceWrapper",
@@ -6355,7 +6631,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDMTemplateService",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMTemplateServiceWrapper",
@@ -6373,7 +6650,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDMStructureService",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureServiceWrapper",
@@ -6391,7 +6669,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDMTemplateLocalService",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMTemplateLocalServiceWrapper",
@@ -6409,7 +6688,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDMContentLocalService",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMContentLocalServiceWrapper",
@@ -6427,7 +6707,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDMStructureLocalService",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureLocalServiceWrapper",
@@ -6445,7 +6726,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDMStructureLinkLocalService",
 		"packageName": "com.liferay.portlet.dynamicdatamapping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDMStructureLinkLocalServiceWrapper",
@@ -6463,7 +6745,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAssetVocabulary",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetLinkWrapper",
@@ -6471,7 +6754,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAssetLink",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetTagWrapper",
@@ -6479,7 +6763,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAssetTag",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetTagPropertyWrapper",
@@ -6487,7 +6772,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAssetTagProperty",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetTagStatsWrapper",
@@ -6495,7 +6781,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAssetTagStats",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetCategoryWrapper",
@@ -6503,7 +6790,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAssetCategory",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetCategoryPropertyWrapper",
@@ -6511,7 +6799,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAssetCategoryProperty",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetEntryWrapper",
@@ -6519,7 +6808,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedAssetEntry",
 		"packageName": "com.liferay.portlet.asset.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetEntryServiceWrapper",
@@ -6527,7 +6817,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetEntryService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetEntryServiceWrapper",
@@ -6545,7 +6836,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetTagStatsLocalService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetTagStatsLocalServiceWrapper",
@@ -6590,7 +6882,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetVocabularyService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetVocabularyServiceWrapper",
@@ -6608,7 +6901,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetTagService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetTagServiceWrapper",
@@ -6654,7 +6948,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetVocabularyLocalService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetVocabularyLocalServiceWrapper",
@@ -6672,7 +6967,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetTagPropertyLocalService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetTagPropertyLocalServiceWrapper",
@@ -6717,7 +7013,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetEntryLocalService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetEntryLocalServiceWrapper",
@@ -6735,7 +7032,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetTagLocalService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetTagLocalServiceWrapper",
@@ -6753,7 +7051,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetCategoryPropertyService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetCategoryPropertyServiceWrapper",
@@ -6771,7 +7070,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetCategoryService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetCategoryServiceWrapper",
@@ -6789,7 +7089,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetLinkLocalService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetLinkLocalServiceWrapper",
@@ -6807,7 +7108,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetCategoryPropertyLocalService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetCategoryPropertyLocalServiceWrapper",
@@ -6853,7 +7155,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetCategoryLocalService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetCategoryLocalServiceWrapper",
@@ -6926,7 +7229,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedAssetTagPropertyService",
 		"packageName": "com.liferay.portlet.asset.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetTagPropertyServiceWrapper",
@@ -6944,7 +7248,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryModel",
@@ -6952,7 +7257,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderWrapper",
@@ -6960,7 +7266,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderWrapper",
@@ -6968,7 +7275,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedBookmarksFolder",
 		"packageName": "com.liferay.portlet.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryWrapper",
@@ -6976,7 +7284,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryWrapper",
@@ -6984,7 +7293,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedBookmarksEntry",
 		"packageName": "com.liferay.portlet.bookmarks.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderLocalServiceWrapper",
@@ -6992,7 +7302,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBookmarksFolderLocalService",
 		"packageName": "com.liferay.portlet.bookmarks.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderLocalServiceWrapper",
@@ -7010,7 +7321,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBookmarksEntryLocalService",
 		"packageName": "com.liferay.portlet.bookmarks.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryLocalServiceWrapper",
@@ -7028,7 +7340,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBookmarksEntryService",
 		"packageName": "com.liferay.portlet.bookmarks.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryServiceWrapper",
@@ -7046,7 +7359,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBookmarksFolderService",
 		"packageName": "com.liferay.portlet.bookmarks.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksFolderServiceWrapper",
@@ -7064,7 +7378,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPollsChoice",
 		"packageName": "com.liferay.portlet.polls.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsVoteWrapper",
@@ -7072,7 +7387,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPollsVote",
 		"packageName": "com.liferay.portlet.polls.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsQuestionWrapper",
@@ -7080,7 +7396,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedPollsQuestion",
 		"packageName": "com.liferay.portlet.polls.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsChoiceLocalServiceWrapper",
@@ -7088,7 +7405,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPollsChoiceLocalService",
 		"packageName": "com.liferay.portlet.polls.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsChoiceLocalServiceWrapper",
@@ -7106,7 +7424,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPollsVoteLocalService",
 		"packageName": "com.liferay.portlet.polls.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsVoteLocalServiceWrapper",
@@ -7124,7 +7443,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPollsQuestionService",
 		"packageName": "com.liferay.portlet.polls.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsQuestionServiceWrapper",
@@ -7142,7 +7462,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPollsVoteService",
 		"packageName": "com.liferay.portlet.polls.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsVoteServiceWrapper",
@@ -7160,7 +7481,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPollsQuestionLocalService",
 		"packageName": "com.liferay.portlet.polls.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsQuestionLocalServiceWrapper",
@@ -7178,7 +7500,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedPollsChoiceService",
 		"packageName": "com.liferay.portlet.polls.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PollsChoiceServiceWrapper",
@@ -7196,7 +7519,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiNodeWrapper",
@@ -7204,7 +7528,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiNodeWrapper",
@@ -7212,7 +7537,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedWikiNode",
 		"packageName": "com.liferay.portlet.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageModel",
@@ -7220,7 +7546,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageResourceWrapper",
@@ -7228,7 +7555,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedWikiPageResource",
 		"packageName": "com.liferay.portlet.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageWrapper",
@@ -7236,7 +7564,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageWrapper",
@@ -7244,7 +7573,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedWikiPage",
 		"packageName": "com.liferay.portlet.wiki.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageLocalServiceWrapper",
@@ -7252,7 +7582,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWikiPageLocalService",
 		"packageName": "com.liferay.portlet.wiki.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageLocalServiceWrapper",
@@ -7270,7 +7601,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWikiNodeService",
 		"packageName": "com.liferay.portlet.wiki.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiNodeServiceWrapper",
@@ -7288,7 +7620,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWikiPageService",
 		"packageName": "com.liferay.portlet.wiki.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageServiceWrapper",
@@ -7306,7 +7639,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWikiNodeLocalService",
 		"packageName": "com.liferay.portlet.wiki.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiNodeLocalServiceWrapper",
@@ -7324,7 +7658,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedWikiPageResourceLocalService",
 		"packageName": "com.liferay.portlet.wiki.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageResourceLocalServiceWrapper",
@@ -7342,7 +7677,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedCalEvent",
 		"packageName": "com.liferay.portlet.calendar.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CalEventLocalServiceWrapper",
@@ -7350,7 +7686,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedCalEventLocalService",
 		"packageName": "com.liferay.portlet.calendar.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "CalEventLocalServiceWrapper",
@@ -7368,7 +7705,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedTrashEntry",
 		"packageName": "com.liferay.portlet.trash.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashVersionWrapper",
@@ -7376,7 +7714,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedTrashVersion",
 		"packageName": "com.liferay.portlet.trash.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashEntryServiceWrapper",
@@ -7384,7 +7723,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedTrashEntryService",
 		"packageName": "com.liferay.portlet.trash.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashEntryServiceWrapper",
@@ -7402,7 +7742,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedTrashEntryLocalService",
 		"packageName": "com.liferay.portlet.trash.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashEntryLocalServiceWrapper",
@@ -7420,7 +7761,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedTrashVersionLocalService",
 		"packageName": "com.liferay.portlet.trash.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TrashVersionLocalServiceWrapper",
@@ -7438,7 +7780,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.dynamicdatalists.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordWrapper",
@@ -7446,7 +7789,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDDLRecord",
 		"packageName": "com.liferay.portlet.dynamicdatalists.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordVersionWrapper",
@@ -7454,7 +7798,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.dynamicdatalists.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordVersionWrapper",
@@ -7462,7 +7807,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDDLRecordVersion",
 		"packageName": "com.liferay.portlet.dynamicdatalists.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordSetWrapper",
@@ -7470,7 +7816,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDDLRecordSet",
 		"packageName": "com.liferay.portlet.dynamicdatalists.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordLocalServiceWrapper",
@@ -7478,7 +7825,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDLRecordLocalService",
 		"packageName": "com.liferay.portlet.dynamicdatalists.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordLocalServiceWrapper",
@@ -7496,7 +7844,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDLRecordSetLocalService",
 		"packageName": "com.liferay.portlet.dynamicdatalists.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordSetLocalServiceWrapper",
@@ -7514,7 +7863,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDLRecordSetService",
 		"packageName": "com.liferay.portlet.dynamicdatalists.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordSetServiceWrapper",
@@ -7532,7 +7882,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDDLRecordService",
 		"packageName": "com.liferay.portlet.dynamicdatalists.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordServiceWrapper",
@@ -7550,7 +7901,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.blogs.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryWrapper",
@@ -7558,7 +7910,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedBlogsEntry",
 		"packageName": "com.liferay.portlet.blogs.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryModel",
@@ -7566,7 +7919,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.blogs.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsStatsUserWrapper",
@@ -7574,7 +7928,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedBlogsStatsUser",
 		"packageName": "com.liferay.portlet.blogs.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsStatsUserLocalServiceWrapper",
@@ -7582,7 +7937,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBlogsStatsUserLocalService",
 		"packageName": "com.liferay.portlet.blogs.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsStatsUserLocalServiceWrapper",
@@ -7600,7 +7956,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBlogsEntryLocalService",
 		"packageName": "com.liferay.portlet.blogs.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryLocalServiceWrapper",
@@ -7618,7 +7975,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedBlogsEntryService",
 		"packageName": "com.liferay.portlet.blogs.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryServiceWrapper",
@@ -7636,7 +7994,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedRatingsStats",
 		"packageName": "com.liferay.portlet.ratings.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RatingsEntryWrapper",
@@ -7644,7 +8003,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedRatingsEntry",
 		"packageName": "com.liferay.portlet.ratings.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RatingsStatsLocalServiceWrapper",
@@ -7652,7 +8012,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRatingsStatsLocalService",
 		"packageName": "com.liferay.portlet.ratings.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RatingsStatsLocalServiceWrapper",
@@ -7670,7 +8031,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRatingsEntryService",
 		"packageName": "com.liferay.portlet.ratings.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RatingsEntryServiceWrapper",
@@ -7688,7 +8050,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedRatingsEntryLocalService",
 		"packageName": "com.liferay.portlet.ratings.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "RatingsEntryLocalServiceWrapper",
@@ -7706,7 +8069,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShoppingOrder",
 		"packageName": "com.liferay.portlet.shopping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingOrderItemWrapper",
@@ -7714,7 +8078,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShoppingOrderItem",
 		"packageName": "com.liferay.portlet.shopping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingItemFieldWrapper",
@@ -7722,7 +8087,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShoppingItemField",
 		"packageName": "com.liferay.portlet.shopping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingCategoryWrapper",
@@ -7730,7 +8096,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShoppingCategory",
 		"packageName": "com.liferay.portlet.shopping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingItemWrapper",
@@ -7738,7 +8105,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShoppingItem",
 		"packageName": "com.liferay.portlet.shopping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingCartWrapper",
@@ -7746,7 +8114,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShoppingCart",
 		"packageName": "com.liferay.portlet.shopping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingCouponWrapper",
@@ -7754,7 +8123,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShoppingCoupon",
 		"packageName": "com.liferay.portlet.shopping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingItemPriceWrapper",
@@ -7762,7 +8132,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedShoppingItemPrice",
 		"packageName": "com.liferay.portlet.shopping.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingItemPriceLocalServiceWrapper",
@@ -7770,7 +8141,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingItemPriceLocalService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingItemPriceLocalServiceWrapper",
@@ -7788,7 +8160,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingCartLocalService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingCartLocalServiceWrapper",
@@ -7806,7 +8179,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingCouponLocalService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingCouponLocalServiceWrapper",
@@ -7824,7 +8198,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingOrderLocalService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingOrderLocalServiceWrapper",
@@ -7842,7 +8217,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingCategoryService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingCategoryServiceWrapper",
@@ -7860,7 +8236,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingItemLocalService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingItemLocalServiceWrapper",
@@ -7878,7 +8255,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingItemService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingItemServiceWrapper",
@@ -7896,7 +8274,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingItemFieldLocalService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingItemFieldLocalServiceWrapper",
@@ -7914,7 +8293,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingOrderItemLocalService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingOrderItemLocalServiceWrapper",
@@ -7932,7 +8312,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingOrderService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingOrderServiceWrapper",
@@ -7950,7 +8331,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingCategoryLocalService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingCategoryLocalServiceWrapper",
@@ -7968,7 +8350,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedShoppingCouponService",
 		"packageName": "com.liferay.portlet.shopping.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ShoppingCouponServiceWrapper",
@@ -7986,7 +8369,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBDiscussionWrapper",
@@ -7994,7 +8378,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMBDiscussion",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadWrapper",
@@ -8002,7 +8387,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadWrapper",
@@ -8010,7 +8396,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMBThread",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBStatsUserWrapper",
@@ -8018,7 +8405,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMBStatsUser",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageWrapper",
@@ -8026,7 +8414,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageWrapper",
@@ -8034,7 +8423,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMBMessage",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBCategoryWrapper",
@@ -8042,7 +8432,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBCategoryWrapper",
@@ -8050,7 +8441,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMBCategory",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMailingListWrapper",
@@ -8058,7 +8450,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMBMailingList",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadModel",
@@ -8066,7 +8459,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadFlagWrapper",
@@ -8074,7 +8468,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMBThreadFlag",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBBanWrapper",
@@ -8082,7 +8477,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMBBan",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageModel",
@@ -8090,7 +8486,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadServiceWrapper",
@@ -8098,7 +8495,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBThreadService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadServiceWrapper",
@@ -8116,7 +8514,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBMessageService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageServiceWrapper",
@@ -8134,7 +8533,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBMailingListLocalService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMailingListLocalServiceWrapper",
@@ -8152,7 +8552,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBMessageLocalService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageLocalServiceWrapper",
@@ -8170,7 +8571,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBThreadFlagLocalService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadFlagLocalServiceWrapper",
@@ -8188,7 +8590,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBThreadLocalService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadLocalServiceWrapper",
@@ -8206,7 +8609,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBStatsUserLocalService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBStatsUserLocalServiceWrapper",
@@ -8224,7 +8628,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBCategoryService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBCategoryServiceWrapper",
@@ -8242,7 +8647,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBDiscussionLocalService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBDiscussionLocalServiceWrapper",
@@ -8260,7 +8666,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBBanService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBBanServiceWrapper",
@@ -8278,7 +8685,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBBanLocalService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBBanLocalServiceWrapper",
@@ -8296,7 +8704,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMBCategoryLocalService",
 		"packageName": "com.liferay.portlet.messageboards.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBCategoryLocalServiceWrapper",
@@ -8314,7 +8723,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedFlagsEntryService",
 		"packageName": "com.liferay.portlet.flags.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "FlagsEntryServiceWrapper",
@@ -8332,7 +8742,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMDRAction",
 		"packageName": "com.liferay.portlet.mobiledevicerules.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleWrapper",
@@ -8340,7 +8751,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMDRRule",
 		"packageName": "com.liferay.portlet.mobiledevicerules.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleGroupInstanceWrapper",
@@ -8348,7 +8760,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMDRRuleGroupInstance",
 		"packageName": "com.liferay.portlet.mobiledevicerules.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleGroupWrapper",
@@ -8356,7 +8769,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedMDRRuleGroup",
 		"packageName": "com.liferay.portlet.mobiledevicerules.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleGroupLocalServiceWrapper",
@@ -8364,7 +8778,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMDRRuleGroupLocalService",
 		"packageName": "com.liferay.portlet.mobiledevicerules.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleGroupLocalServiceWrapper",
@@ -8382,7 +8797,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMDRRuleGroupInstanceLocalService",
 		"packageName": "com.liferay.portlet.mobiledevicerules.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleGroupInstanceLocalServiceWrapper",
@@ -8400,7 +8816,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMDRRuleService",
 		"packageName": "com.liferay.portlet.mobiledevicerules.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleServiceWrapper",
@@ -8418,7 +8835,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMDRRuleLocalService",
 		"packageName": "com.liferay.portlet.mobiledevicerules.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleLocalServiceWrapper",
@@ -8436,7 +8854,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMDRRuleGroupInstanceService",
 		"packageName": "com.liferay.portlet.mobiledevicerules.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleGroupInstanceServiceWrapper",
@@ -8454,7 +8873,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMDRActionLocalService",
 		"packageName": "com.liferay.portlet.mobiledevicerules.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRActionLocalServiceWrapper",
@@ -8472,7 +8892,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMDRActionService",
 		"packageName": "com.liferay.portlet.mobiledevicerules.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRActionServiceWrapper",
@@ -8490,7 +8911,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedMDRRuleGroupService",
 		"packageName": "com.liferay.portlet.mobiledevicerules.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MDRRuleGroupServiceWrapper",
@@ -8508,7 +8930,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLFileEntryType",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileVersionWrapper",
@@ -8516,7 +8939,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileVersionWrapper",
@@ -8524,7 +8948,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLFileVersion",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFolderWrapper",
@@ -8532,7 +8957,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFolderWrapper",
@@ -8540,7 +8966,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLFolder",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryWrapper",
@@ -8548,7 +8975,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLFileEntry",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutWrapper",
@@ -8556,7 +8984,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutWrapper",
@@ -8564,7 +8993,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLFileShortcut",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLContentWrapper",
@@ -8572,7 +9002,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLContent",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileVersionModel",
@@ -8580,7 +9011,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLSyncEventWrapper",
@@ -8588,7 +9020,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLSyncEvent",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryMetadataWrapper",
@@ -8596,7 +9029,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLFileEntryMetadata",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileRankWrapper",
@@ -8604,7 +9038,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedModel",
 		"methodName": "getWrappedDLFileRank",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutModel",
@@ -8612,7 +9047,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFolderModel",
@@ -8620,7 +9056,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved()",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutServiceWrapper",
@@ -8628,7 +9065,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileShortcutService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutServiceWrapper",
@@ -8646,7 +9084,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileEntryService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryServiceWrapper",
@@ -8664,7 +9103,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileVersionService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileVersionServiceWrapper",
@@ -8682,7 +9122,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLAppService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLAppServiceWrapper",
@@ -8700,7 +9141,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLSyncEventLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLSyncEventLocalServiceWrapper",
@@ -8718,7 +9160,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileEntryTypeService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryTypeServiceWrapper",
@@ -8736,7 +9179,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileShortcutLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutLocalServiceWrapper",
@@ -8754,7 +9198,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileVersionLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileVersionLocalServiceWrapper",
@@ -8772,7 +9217,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFolderLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFolderLocalServiceWrapper",
@@ -8790,7 +9236,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLContentLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLContentLocalServiceWrapper",
@@ -8808,7 +9255,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileEntryTypeLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryTypeLocalServiceWrapper",
@@ -8826,7 +9274,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileRankLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileRankLocalServiceWrapper",
@@ -8844,7 +9293,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileEntryMetadataLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryMetadataLocalServiceWrapper",
@@ -8862,7 +9312,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFileEntryLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileEntryLocalServiceWrapper",
@@ -8880,7 +9331,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLFolderService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFolderServiceWrapper",
@@ -8898,7 +9350,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLAppLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLAppLocalServiceWrapper",
@@ -8916,7 +9369,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getWrappedService",
 		"methodName": "getWrappedDLAppHelperLocalService",
 		"packageName": "com.liferay.portlet.documentlibrary.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLAppHelperLocalServiceWrapper",
@@ -8969,7 +9423,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #mySites",
 		"methodName": "myPlaces",
 		"packageName": "com.liferay.taglib.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "VelocityTaglib",
@@ -9008,7 +9463,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "getSessionContext",
 		"packageName": "com.liferay.util.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "LayoutRevisionModelImpl",
@@ -9016,7 +9472,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "GroupImpl",
@@ -9024,7 +9481,8 @@
 		"javadoc": "@deprecated As of 6.1.0, renamed to #isRegularSite",
 		"methodName": "isCommunity",
 		"packageName": "com.liferay.portal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ServicePreAction",
@@ -9060,7 +9518,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isClusterBulkLoadEnabled",
 		"methodName": "isClusterCoherent",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModifiableEhcacheWrapper",
@@ -9068,7 +9527,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isNodeBulkLoadEnabled",
 		"methodName": "isNodeCoherent",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ModifiableEhcacheWrapper",
@@ -9086,7 +9546,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #waitUntilClusterBulkLoadComplete",
 		"methodName": "waitUntilClusterCoherent",
 		"packageName": "com.liferay.portal.cache.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PasswordPolicyLocalServiceImpl",
@@ -9129,7 +9590,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "getSessionContext",
 		"packageName": "com.liferay.portal.servlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PermissionCheckerBagImpl",
@@ -9191,7 +9653,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "getInstance",
 		"packageName": "com.liferay.portal.monitoring.statistics.service",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "TransactionInterceptor",
@@ -9220,7 +9683,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getCDNHost(boolean)",
 		"methodName": "getCDNHost",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -9228,7 +9692,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getPortalPort(boolean)",
 		"methodName": "getPortalPort",
 		"packageName": "com.liferay.portal.util",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortalImpl",
@@ -9300,7 +9765,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JournalArticleModelImpl",
@@ -9308,7 +9774,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.journal.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "PortletPreferencesWrapper",
@@ -9316,7 +9783,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #getPortletPreferencesImpl",
 		"methodName": "getPreferencesImpl",
 		"packageName": "com.liferay.portlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ExpandoTableLocalServiceImpl",
@@ -9943,7 +10411,8 @@
 		"javadoc": "@deprecated As of 6.1.0",
 		"methodName": "isRequestedSessionIdFromUrl",
 		"packageName": "com.liferay.portlet",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "AssetVocabularyLocalServiceImpl",
@@ -10037,7 +10506,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.bookmarks.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BookmarksEntryModelImpl",
@@ -10045,7 +10515,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.bookmarks.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiNodeModelImpl",
@@ -10053,7 +10524,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.wiki.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "WikiPageModelImpl",
@@ -10061,7 +10533,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.wiki.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DDLRecordVersionModelImpl",
@@ -10069,7 +10542,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.dynamicdatalists.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "BlogsEntryModelImpl",
@@ -10077,7 +10551,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.blogs.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBCategoryModelImpl",
@@ -10085,7 +10560,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBMessageModelImpl",
@@ -10093,7 +10569,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "MBThreadModelImpl",
@@ -10101,7 +10578,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.messageboards.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileShortcutModelImpl",
@@ -10109,7 +10587,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFolderModelImpl",
@@ -10117,7 +10596,8 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "DLFileVersionModelImpl",
@@ -10125,6 +10605,7 @@
 		"javadoc": "@deprecated As of 6.1.0, replaced by #isApproved",
 		"methodName": "getApproved",
 		"packageName": "com.liferay.portlet.documentlibrary.model.impl",
-		"parameters": []
+		"parameters": [
+		]
 	}
 ]

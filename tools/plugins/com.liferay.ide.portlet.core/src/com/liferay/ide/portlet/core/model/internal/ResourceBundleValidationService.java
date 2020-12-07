@@ -35,7 +35,7 @@ public class ResourceBundleValidationService extends ValidationService implement
 	public Status compute() {
 		Element modelElement = context(Element.class);
 
-		if (!modelElement.disposed() && modelElement instanceof ResourceBundle) {
+		if (!modelElement.disposed() && (modelElement instanceof ResourceBundle)) {
 			String bundle = getText(modelElement.property(context(ValueProperty.class)), false);
 
 			if ((bundle != null) && (bundle.indexOf("/") != -1)) {

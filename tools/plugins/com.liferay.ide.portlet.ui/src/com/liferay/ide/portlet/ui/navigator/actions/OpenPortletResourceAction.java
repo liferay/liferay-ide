@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -73,7 +72,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction imple
 			if (FileUtil.exists(file)) {
 				editorPart = openEditor(file);
 
-				if ((editorPart != null) && selectedNode instanceof PortletNode) {
+				if ((editorPart != null) && (selectedNode instanceof PortletNode)) {
 					selectAndRevealItem(editorPart);
 					openPortletJavaClass(file);
 				}
@@ -87,15 +86,8 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction imple
 	 */
 	protected IEditorDescriptor findEditor(IFile file) {
 		IEditorRegistry registry = UIUtil.getEditorRegistry();
-		IContentType contentType = IDE.getContentType(file);
 
-		IEditorDescriptor editorDescriptor = registry.getDefaultEditor(file.getName(), contentType);
-
-		if (editorDescriptor == null) {
-			return null; // no editor associated...
-		}
-
-		return editorDescriptor;
+		return registry.getDefaultEditor(file.getName(), IDE.getContentType(file));
 	}
 
 	protected IFile initEditorPart() {
@@ -163,7 +155,9 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction imple
 	 * @param file
 	 */
 	protected void openPortletJavaClass(IFile file) {
-		Element modelElement = ((PortletNode)selectedNode).getModel();
+		PortletNode portletNode = (PortletNode)selectedNode;
+
+		Element modelElement = portletNode.getModel();
 
 		if (modelElement instanceof Portlet) {
 			Portlet portlet = (Portlet)modelElement;
@@ -197,8 +191,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction imple
 										editorPart = page.findEditor(new FileEditorInput(javaFile));
 
 										if (editorPart == null) {
-											editorPart = page.openEditor(
-												new FileEditorInput(javaFile), editorDescriptor.getId());
+											page.openEditor(new FileEditorInput(javaFile), editorDescriptor.getId());
 										}
 									}
 									catch (Exception e) {
@@ -255,26 +248,24 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction imple
 
 						// TODO: Performance Check ???, cant we not have the shared model ?
 
-						if (portletsNode != null) {
-							if (selectedModelElement instanceof Portlet) {
-								Portlet selectedPortlet = (Portlet)selectedModelElement;
+						if ((portletsNode != null) && (selectedModelElement instanceof Portlet)) {
+							Portlet selectedPortlet = (Portlet)selectedModelElement;
 
-								MasterDetailsContentNodeList list = portletsNode.nodes();
+							MasterDetailsContentNodeList list = portletsNode.nodes();
 
-								for (MasterDetailsContentNodePart childNode : list.visible()) {
-									String selectedPortletName = get(selectedPortlet.getPortletName());
+							for (MasterDetailsContentNodePart childNode : list.visible()) {
+								String selectedPortletName = get(selectedPortlet.getPortletName());
 
-									if (childNode.getModelElement() instanceof Portlet) {
-										Portlet mpContentNodePortlet = (Portlet)childNode.getModelElement();
+								if (childNode.getModelElement() instanceof Portlet) {
+									Portlet mpContentNodePortlet = (Portlet)childNode.getModelElement();
 
-										String mpContentNodePortletName = get(mpContentNodePortlet.getPortletName());
+									String mpContentNodePortletName = get(mpContentNodePortlet.getPortletName());
 
-										if (selectedPortletName.equals(mpContentNodePortletName)) {
-											childNode.select();
-											childNode.setExpanded(true);
+									if (selectedPortletName.equals(mpContentNodePortletName)) {
+										childNode.select();
+										childNode.setExpanded(true);
 
-											break;
-										}
+										break;
 									}
 								}
 							}
@@ -294,7 +285,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction imple
 				initEditorPart();
 			}
 
-			if ((editorPart != null) && selectedNode instanceof PortletNode) {
+			if ((editorPart != null) && (selectedNode instanceof PortletNode)) {
 				selectAndRevealItem(editorPart);
 			}
 

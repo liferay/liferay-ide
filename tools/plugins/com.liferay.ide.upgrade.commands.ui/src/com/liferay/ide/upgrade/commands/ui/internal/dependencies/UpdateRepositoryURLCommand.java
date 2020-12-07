@@ -83,10 +83,7 @@ public class UpdateRepositoryURLCommand implements UpgradeCommand, UpgradePrevie
 		IStatus status = _updateRepositoryURL(tempFile);
 
 		if (status.isOK()) {
-			UIUtil.async(
-				() -> {
-					_upgradeCompare.openCompareEditor(settingsGradle, tempFile);
-				});
+			UIUtil.async(() -> _upgradeCompare.openCompareEditor(settingsGradle, tempFile));
 		}
 	}
 

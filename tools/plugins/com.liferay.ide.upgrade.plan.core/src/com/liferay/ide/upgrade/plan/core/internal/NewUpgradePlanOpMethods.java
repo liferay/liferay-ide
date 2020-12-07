@@ -32,7 +32,6 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -46,10 +45,8 @@ public class NewUpgradePlanOpMethods {
 	public static final Status execute(NewUpgradePlanOp newUpgradePlanOp, ProgressMonitor progressMonitor) {
 		Bundle bundle = FrameworkUtil.getBundle(NewUpgradePlanOpMethods.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
 		ServiceTracker<UpgradePlanner, UpgradePlanner> serviceTracker = new ServiceTracker<>(
-			bundleContext, UpgradePlanner.class, null);
+			bundle.getBundleContext(), UpgradePlanner.class, null);
 
 		serviceTracker.open();
 

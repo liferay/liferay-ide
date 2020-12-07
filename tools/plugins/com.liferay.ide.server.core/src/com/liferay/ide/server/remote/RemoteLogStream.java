@@ -135,7 +135,6 @@ public class RemoteLogStream extends BufferedInputStream {
 		String authStringEnc = new String(authEncBytes);
 
 		IProxyService proxyService = LiferayCore.getProxyService();
-		URLConnection conn = null;
 
 		try {
 			URI uri = new URI("HTTP://" + url.getHost() + ":" + url.getPort());
@@ -168,7 +167,7 @@ public class RemoteLogStream extends BufferedInputStream {
 			LiferayServerCore.logError("Could not read proxy data", urise);
 		}
 
-		conn = url.openConnection();
+		URLConnection conn = url.openConnection();
 
 		conn.setRequestProperty("Authorization", "Basic " + authStringEnc);
 

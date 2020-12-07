@@ -43,7 +43,7 @@ public interface PortletStyleElement extends Element {
 	public void setValue(String value);
 
 	@Services(
-		value = {
+		{
 			@Service(impl = LiferayScriptPossibleValuesService.class),
 			@Service(impl = PortletStyleValidationService.class)
 		}

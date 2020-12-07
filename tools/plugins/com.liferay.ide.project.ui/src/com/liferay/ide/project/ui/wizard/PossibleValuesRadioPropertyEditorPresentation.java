@@ -51,8 +51,6 @@ public final class PossibleValuesRadioPropertyEditorPresentation<T> extends Valu
 		final boolean showLabel = part.label() != null;
 		final int leftMargin = part.getMarginLeft();
 
-		PropertyEditorAssistDecorator decorator = null;
-
 		final Composite composite = createMainComposite(
 			parent,
 			new CreateMainCompositeDelegate(part) {
@@ -71,7 +69,7 @@ public final class PossibleValuesRadioPropertyEditorPresentation<T> extends Valu
 
 		composite.setLayout(GridLayoutUtil.glspacing(GridLayoutUtil.glayout(2, 0, 0), 2, 5));
 
-		decorator = createDecorator(composite);
+		PropertyEditorAssistDecorator decorator = createDecorator(composite);
 
 		decorator.addEditorControl(composite);
 

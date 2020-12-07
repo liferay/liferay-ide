@@ -102,10 +102,9 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 	protected void addExtModule(ServerBehaviourDelegate delegate, IModule module, IProgressMonitor monitor)
 		throws CoreException {
 
-		SDK sdk = null;
 		IProject project = module.getProject();
 
-		sdk = SDKUtil.getSDK(project);
+		SDK sdk = SDKUtil.getSDK(project);
 
 		if (sdk == null) {
 			throw new CoreException(

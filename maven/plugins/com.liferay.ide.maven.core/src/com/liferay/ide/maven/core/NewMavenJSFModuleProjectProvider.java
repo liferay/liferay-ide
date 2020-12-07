@@ -57,8 +57,6 @@ public class NewMavenJSFModuleProjectProvider
 	public IStatus createNewProject(NewLiferayJSFModuleProjectOp op, IProgressMonitor monitor)
 		throws CoreException, InterruptedException {
 
-		IStatus retval = null;
-
 		IPath projectLocation = createArchetypeProject(op, monitor);
 
 		FileUtil.delete(projectLocation.append("build.gradle"));
@@ -71,9 +69,7 @@ public class NewMavenJSFModuleProjectProvider
 
 		MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
 
-		retval = Status.OK_STATUS;
-
-		return retval;
+		return Status.OK_STATUS;
 	}
 
 	protected IPath createArchetypeProject(NewLiferayJSFModuleProjectOp op, IProgressMonitor monitor)

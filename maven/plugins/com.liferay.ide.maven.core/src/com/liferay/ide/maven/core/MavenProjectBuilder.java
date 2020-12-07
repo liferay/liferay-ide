@@ -166,8 +166,6 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 	}
 
 	public IStatus execGoals(List<String> goals, IProgressMonitor monitor) throws CoreException {
-		IStatus retval = null;
-
 		IMavenProjectFacade facade = MavenUtil.getProjectFacade(getProject(), monitor);
 
 		ICallable<IStatus> callable = new ICallable<IStatus>() {
@@ -191,14 +189,10 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 		};
 
-		retval = executeMaven(facade, callable, monitor);
-
-		return retval;
+		return executeMaven(facade, callable, monitor);
 	}
 
 	public IStatus execJarMojo(IMavenProjectFacade projectFacade, IProgressMonitor monitor) throws CoreException {
-		IStatus retval = null;
-
 		ICallable<IStatus> callable = new ICallable<IStatus>() {
 
 			public IStatus call(IMavenExecutionContext context, IProgressMonitor monitor) throws CoreException {
@@ -226,9 +220,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 		};
 
-		retval = executeMaven(projectFacade, callable, monitor);
-
-		return retval;
+		return executeMaven(projectFacade, callable, monitor);
 	}
 
 	public IProject getPortletProject(IMavenProjectFacade projectFacade, IProgressMonitor monitor) {

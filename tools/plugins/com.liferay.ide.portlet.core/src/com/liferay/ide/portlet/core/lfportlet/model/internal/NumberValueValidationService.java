@@ -54,20 +54,16 @@ public class NumberValueValidationService extends ValidationService implements S
 					StringEscapeUtils.unescapeJava(Resources.nonIntegerInvalid), new Object[] {triggerValue, ""}));
 		}
 
-		if (CoreUtil.isNotNullOrEmpty(_min)) {
-			if (_value < Integer.valueOf(_min)) {
-				return Status.createErrorStatus(
-					Resources.bind(
-						StringEscapeUtils.unescapeJava(Resources.minNumberValueInvalid), new Object[] {_value, _min}));
-			}
+		if (CoreUtil.isNotNullOrEmpty(_min) && (_value < Integer.valueOf(_min))) {
+			return Status.createErrorStatus(
+				Resources.bind(
+					StringEscapeUtils.unescapeJava(Resources.minNumberValueInvalid), new Object[] {_value, _min}));
 		}
 
-		if (CoreUtil.isNotNullOrEmpty(_max)) {
-			if (_value > Integer.valueOf(_max)) {
-				return Status.createErrorStatus(
-					Resources.bind(
-						StringEscapeUtils.unescapeJava(Resources.maxNumberValueInvalid), new Object[] {_value, _max}));
-			}
+		if (CoreUtil.isNotNullOrEmpty(_max) && (_value > Integer.valueOf(_max))) {
+			return Status.createErrorStatus(
+				Resources.bind(
+					StringEscapeUtils.unescapeJava(Resources.maxNumberValueInvalid), new Object[] {_value, _max}));
 		}
 
 		return Status.createOkStatus();

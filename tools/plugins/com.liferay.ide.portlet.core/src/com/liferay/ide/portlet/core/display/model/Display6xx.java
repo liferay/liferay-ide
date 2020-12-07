@@ -23,7 +23,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@CustomXmlRootBinding(value = DisplayRootElementController.class)
+@CustomXmlRootBinding(DisplayRootElementController.class)
 @XmlBinding(path = "display")
 public interface Display6xx extends Display {
 

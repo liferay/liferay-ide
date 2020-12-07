@@ -62,9 +62,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 	}
 
 	public IStatus addResourceBundle(String resourceBundle, String portletName) {
-		IFile descriptorFile = getDescriptorFile();
-
-		DOMModelOperation operation = new DOMModelEditOperation(descriptorFile) {
+		DOMModelOperation operation = new DOMModelEditOperation(getDescriptorFile()) {
 
 			@Override
 			protected IStatus doExecute(IDOMDocument document) {
@@ -81,10 +79,8 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 	}
 
 	public IStatus configurePortletXml(String newPortletName) {
-		IFile descriptorFile = getDescriptorFile();
-
-		IStatus status = new DOMModelEditOperation(
-			descriptorFile
+		return new DOMModelEditOperation(
+			getDescriptorFile()
 		) {
 
 			protected IStatus doExecute(IDOMDocument document) {
@@ -104,8 +100,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 			}
 
 		}.execute();
-
-		return status;
 	}
 
 	public IStatus doAddNewPortlet(IDOMDocument document, IDataModel model) {
@@ -231,9 +225,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
 		};
 
-		IStatus status = domModelOperation.execute();
-
-		return status;
+		return domModelOperation.execute();
 	}
 
 	public String[] getAllPortletNames() {
@@ -373,8 +365,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 				return Status.CANCEL_STATUS;
 			}
 
-			Element newResourceBundleElement = null;
-
 			Node portlet = portletNameNode.getParentNode();
 
 			Node refNode = null;
@@ -395,7 +385,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 				return Status.CANCEL_STATUS;
 			}
 
-			newResourceBundleElement = NodeUtil.insertChildElementAfter(
+			Element newResourceBundleElement = NodeUtil.insertChildElementAfter(
 				(Element)portlet, refNode, "resource-bundle", resourceBundle);
 
 			processor.formatNode(newResourceBundleElement);

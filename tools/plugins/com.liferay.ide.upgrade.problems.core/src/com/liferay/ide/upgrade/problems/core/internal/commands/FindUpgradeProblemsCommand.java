@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -64,8 +65,9 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		upgradeProblems.stream(
-		).map(
+		Stream<UpgradeProblem> upgradeProblemsStream = upgradeProblems.stream();
+
+		upgradeProblemsStream.map(
 			this::findMarker
 		).filter(
 			this::markerExists
@@ -79,8 +81,9 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 
 		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
 
-		List<UpgradeProblem> foundUpgradeProblems = projects.stream(
-		).map(
+		Stream<IProject> foundUpgradeProblemsStream = projects.stream();
+
+		List<UpgradeProblem> foundUpgradeProblems = foundUpgradeProblemsStream.map(
 			FileUtil::getFile
 		).map(
 			searchFile -> _fileMigration.findUpgradeProblems(searchFile, upgradeVersions, progressMonitor)

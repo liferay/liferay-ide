@@ -345,7 +345,7 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 		String[] names = new String[items.size()];
 
 		for (int i = 0; i < items.size(); i++) {
-			names[i] = (String)items.get(i);
+			names[i] = items.get(i);
 		}
 
 		projectCombo.setItems(names);

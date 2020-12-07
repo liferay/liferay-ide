@@ -23,7 +23,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -36,9 +35,8 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 	public UpgradeProblemsLabelProvider() {
 		Bundle bundle = FrameworkUtil.getBundle(UpgradeProblemsLabelProvider.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_upgradeInfoProviderServiceTracker = new ServiceTracker<>(bundleContext, UpgradeInfoProvider.class, null);
+		_upgradeInfoProviderServiceTracker = new ServiceTracker<>(
+			bundle.getBundleContext(), UpgradeInfoProvider.class, null);
 
 		_upgradeInfoProviderServiceTracker.open();
 	}

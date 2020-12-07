@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Simon Jiang
@@ -63,17 +64,15 @@ public class CfgToConfigFileConverter {
 			cfgLines.add(
 				0, MessageFormat.format(_configComment, cfgFileNamePath.toString(), cfgCommentFileName.toString()));
 
-			String cfgContent = cfgLines.stream(
-			).collect(
-				Collectors.joining(System.lineSeparator())
-			);
+			Stream<String> cfgLinesStream = cfgLines.stream();
+
+			String cfgContent = cfgLinesStream.collect(Collectors.joining(System.lineSeparator()));
 
 			Files.write(cfgPath, cfgContent.getBytes());
 
-			String cfgCommentContent = commentLines.stream(
-			).collect(
-				Collectors.joining(System.lineSeparator())
-			);
+			Stream<String> commentLinesStream = commentLines.stream();
+
+			String cfgCommentContent = commentLinesStream.collect(Collectors.joining(System.lineSeparator()));
 
 			Files.write(cfgCommentPath, cfgCommentContent.getBytes());
 

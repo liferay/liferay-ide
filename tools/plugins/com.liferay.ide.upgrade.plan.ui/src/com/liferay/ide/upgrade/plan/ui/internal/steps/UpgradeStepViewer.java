@@ -61,17 +61,13 @@ public class UpgradeStepViewer implements ISelectionProvider {
 
 		composite.setLayoutData(gridDataFactory.create());
 
-		_disposables.add(() -> _formToolkit.dispose());
-		_disposables.add(() -> _scrolledForm.dispose());
+		_disposables.add(_formToolkit::dispose);
+		_disposables.add(_scrolledForm::dispose);
 
 		_updateFromSelection(upgradePlanViewer.getSelection());
 
 		upgradePlanViewer.addPostSelectionChangedListener(
-			selectionChangedEvent -> {
-				ISelection selection = selectionChangedEvent.getSelection();
-
-				_updateFromSelection(selection);
-			});
+			selectionChangedEvent -> _updateFromSelection(selectionChangedEvent.getSelection()));
 	}
 
 	@Override

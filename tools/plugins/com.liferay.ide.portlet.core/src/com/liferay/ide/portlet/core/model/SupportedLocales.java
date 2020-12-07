@@ -44,11 +44,7 @@ public interface SupportedLocales extends Element {
 
 	@CustomXmlValueBinding(impl = LocaleTextNodeValueBinding.class)
 	@Label(standard = "Locale")
-	@Services(
-		value = {
-			@Service(impl = LocalePossibleValueService.class), @Service(impl = LocaleBundleValidationService.class)
-		}
-	)
+	@Services({@Service(impl = LocalePossibleValueService.class), @Service(impl = LocaleBundleValidationService.class)})
 	@Unique
 	@XmlBinding(path = "")
 	public ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty(TYPE, "SupportedLocale");

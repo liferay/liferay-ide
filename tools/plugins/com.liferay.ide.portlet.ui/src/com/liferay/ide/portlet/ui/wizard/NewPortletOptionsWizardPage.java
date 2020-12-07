@@ -20,6 +20,7 @@ import com.liferay.ide.project.ui.wizard.LiferayDataModelWizardPage;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -64,7 +65,10 @@ public class NewPortletOptionsWizardPage
 
 		jspFolder = SWTUtil.createText(parent, 1);
 
-		((GridData)jspFolder.getLayoutData()).widthHint = 150;
+		GridData layoutData = Adapters.adapt(resourceBundleFilePath.getLayoutData(), GridData.class);
+
+		layoutData.widthHint = 150;
+
 		synchHelper.synchText(jspFolder, INewPortletClassDataModelProperties.CREATE_JSPS_FOLDER, null);
 
 		SelectionAdapter adapter = new SelectionAdapter() {
@@ -215,7 +219,10 @@ public class NewPortletOptionsWizardPage
 
 		resourceBundleFilePath = SWTUtil.createText(parent, 1);
 
-		((GridData)resourceBundleFilePath.getLayoutData()).widthHint = 150;
+		GridData layoutData = Adapters.adapt(resourceBundleFilePath.getLayoutData(), GridData.class);
+
+		layoutData.widthHint = 150;
+
 		synchHelper.synchText(
 			resourceBundleFilePath, INewPortletClassDataModelProperties.CREATE_RESOURCE_BUNDLE_FILE_PATH, null);
 

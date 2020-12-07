@@ -69,7 +69,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 		// dispose input contexts
 
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			_unhookUndo(context);
 			context.dispose();
@@ -81,7 +81,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 
 	public InputContext findContext(IResource resource) {
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			if (context.matches(resource)) {
 				return context;
@@ -93,7 +93,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 
 	public InputContext findContext(String id) {
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			if (StringUtil.equals(context.getId(), id)) {
 				return context;
@@ -105,7 +105,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 
 	public IProject getCommonProject() {
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			IEditorInput input = context.getInput();
 
@@ -129,7 +129,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 		ArrayList<InputContext> result = new ArrayList<>();
 
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			if (context.isModelCorrect() == false) {
 				result.add(context);
@@ -143,7 +143,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 
 	public InputContext getPrimaryContext() {
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			if (context.isPrimary()) {
 				return context;
@@ -170,7 +170,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 
 	public boolean isDirty() {
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			if (context.mustSave()) {
 				return true;
@@ -247,7 +247,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 	 */
 	public void save(IProgressMonitor monitor) {
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			if (context.mustSave()) {
 				context.doSave(monitor);
@@ -369,7 +369,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 
 	private void _removeContext(IFile file) {
 		for (Enumeration<InputContext> contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext)contexts.nextElement();
+			InputContext context = contexts.nextElement();
 
 			IEditorInput input = context.getInput();
 

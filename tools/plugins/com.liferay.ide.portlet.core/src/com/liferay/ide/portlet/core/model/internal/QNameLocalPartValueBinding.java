@@ -18,6 +18,8 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.util.PortletAppModelConstants;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 
+import java.util.Objects;
+
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
@@ -106,7 +108,7 @@ public class QNameLocalPartValueBinding extends XmlValueBindingImpl {
 
 			// update only local part
 
-			if ((_params.length == 2) && "localpart".equals(_params[1])) {
+			if ((_params.length == 2) && Objects.equals("localpart", _params[1])) {
 				String existingText = qNameElement.getText();
 
 				if ((existingText != null) && (existingText.indexOf(":") != -1)) {

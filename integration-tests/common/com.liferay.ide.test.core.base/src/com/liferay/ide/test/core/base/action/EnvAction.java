@@ -15,7 +15,6 @@
 package com.liferay.ide.test.core.base.action;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.test.core.base.util.BundleInfo;
 import com.liferay.ide.test.core.base.util.CSVReader;
 import com.liferay.ide.test.core.base.util.ValidationMessage;
@@ -136,9 +135,7 @@ public class EnvAction {
 	}
 
 	public String getUsername() {
-		String retval = StringPool.BLANK;
-
-		retval = System.getenv("USERNAME");
+		String retval = System.getenv("USERNAME");
 
 		if (CoreUtil.empty(retval)) {
 			retval = System.getenv("USER");

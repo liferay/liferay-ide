@@ -40,7 +40,6 @@ import org.eclipse.sapphire.PropertyEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphirePart;
@@ -104,7 +103,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 			if ((resourceBundle != null) && !resourceBundle.empty()) {
 				Status status = resourceBundle.validation();
 
-				if (status.severity() == Severity.ERROR) {
+				if (status.severity() == Status.Severity.ERROR) {
 					enabled = false;
 				}
 			}
@@ -120,7 +119,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 					 */
 					Status status = sl.validation();
 
-					if (status.severity() == Severity.ERROR) {
+					if (status.severity() == Status.Severity.ERROR) {
 						enabled = false;
 
 						break;
@@ -169,9 +168,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 
 		IPath entryPath = rbSourceFolder.getLocation();
 
-		PortletInfo portletInfo = portlet.getPortletInfo();
-
-		StringBuilder rbFileBuffer = _buildDefaultRBContent(portletInfo);
+		StringBuilder rbFileBuffer = _buildDefaultRBContent(portlet.getPortletInfo());
 
 		// Create the default Resource Bundle if it does not exist
 

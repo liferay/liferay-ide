@@ -69,9 +69,7 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 	public void create() {
 		super.create();
 
-		Object[] checkedElements = _tableViewer.getCheckedElements();
-
-		if (ListUtil.isEmpty(checkedElements)) {
+		if (ListUtil.isEmpty(_tableViewer.getCheckedElements())) {
 			getOkButton().setEnabled(false);
 		}
 	}
@@ -87,9 +85,7 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 	}
 
 	protected void computeResult() {
-		Object[] checkedElements = _tableViewer.getCheckedElements();
-
-		setSelectionResult(checkedElements);
+		setSelectionResult(_tableViewer.getCheckedElements());
 	}
 
 	protected Control createDialogArea(Composite parentComposite) {
@@ -110,7 +106,9 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 				public void selectionChanged(SelectionChangedEvent event) {
 					Object element = event.getSource();
 
-					Object[] checkedElements = ((CheckboxTableViewer)element).getCheckedElements();
+					CheckboxTableViewer checkboxTableViewer = (CheckboxTableViewer)element;
+
+					Object[] checkedElements = checkboxTableViewer.getCheckedElements();
 
 					getOkButton().setEnabled(checkedElements.length != 0);
 				}

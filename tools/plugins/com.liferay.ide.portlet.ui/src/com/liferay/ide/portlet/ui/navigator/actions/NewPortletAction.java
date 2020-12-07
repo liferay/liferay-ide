@@ -44,23 +44,21 @@ public class NewPortletAction extends BaseSelectionListenerAction {
 	 */
 	@Override
 	public void run() {
-		if (isEnabled()) {
-			if (selectedNode instanceof PortletsNode) {
-				PortletsNode portletsNode = (PortletsNode)selectedNode;
+		if (isEnabled() && (selectedNode instanceof PortletsNode)) {
+			PortletsNode portletsNode = (PortletsNode)selectedNode;
 
-				PortletResourcesRootNode parent = portletsNode.getParent();
+			PortletResourcesRootNode parent = portletsNode.getParent();
 
-				IProject currentProject = parent.getProject();
+			IProject currentProject = parent.getProject();
 
-				NewPortletWizard newPortletWizard = new NewPortletWizard(currentProject);
+			NewPortletWizard newPortletWizard = new NewPortletWizard(currentProject);
 
-				Display display = Display.getDefault();
+			Display display = Display.getDefault();
 
-				WizardDialog wizardDialog = new WizardDialog(display.getActiveShell(), newPortletWizard);
+			WizardDialog wizardDialog = new WizardDialog(display.getActiveShell(), newPortletWizard);
 
-				wizardDialog.create();
-				wizardDialog.open();
-			}
+			wizardDialog.create();
+			wizardDialog.open();
 		}
 	}
 

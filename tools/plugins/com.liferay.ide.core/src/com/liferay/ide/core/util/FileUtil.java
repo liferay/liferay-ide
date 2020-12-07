@@ -1084,9 +1084,8 @@ public class FileUtil {
 		if (isSystemWindows()) {
 			return separatorsToWindows(path);
 		}
-		else {
-			return separatorsToUnix(path);
-		}
+
+		return separatorsToUnix(path);
 	}
 
 	public static String separatorsToUnix(final String path) {

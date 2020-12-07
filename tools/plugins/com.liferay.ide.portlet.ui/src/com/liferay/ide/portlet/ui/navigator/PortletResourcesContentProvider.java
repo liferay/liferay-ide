@@ -52,7 +52,9 @@ public class PortletResourcesContentProvider extends AbstractNavigatorContentPro
 			return new Object[] {new PortletsNode((PortletResourcesRootNode)element)};
 		}
 		else if (element instanceof PortletsNode) {
-			return ((PortletsNode)element).getChildren();
+			PortletsNode portletsNode = (PortletsNode)element;
+
+			return portletsNode.getChildren();
 		}
 
 		return null;

@@ -385,9 +385,7 @@ public class LiferayGradleProject
 		try {
 			IJavaProject javaProject = JavaCore.create(project);
 
-			List<IClasspathEntry> existingRawClasspath;
-
-			existingRawClasspath = Arrays.asList(javaProject.getRawClasspath());
+			List<IClasspathEntry> existingRawClasspath = Arrays.asList(javaProject.getRawClasspath());
 
 			List<IClasspathEntry> newRawClasspath = new ArrayList<>();
 

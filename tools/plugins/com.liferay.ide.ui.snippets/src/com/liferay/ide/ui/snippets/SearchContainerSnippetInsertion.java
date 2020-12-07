@@ -57,10 +57,8 @@ public class SearchContainerSnippetInsertion extends ModelSnippetInsertion {
 
 		String columnsVal = columns.toString();
 
-		text = StringUtils.replace(
+		return StringUtils.replace(
 			text, "${columns}", CoreUtil.isNullOrEmpty(columnsVal) ? StringPool.EMPTY : columnsVal);
-
-		return text;
 	}
 
 }

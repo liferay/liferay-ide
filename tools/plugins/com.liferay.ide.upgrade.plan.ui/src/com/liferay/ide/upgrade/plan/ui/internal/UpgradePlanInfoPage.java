@@ -36,7 +36,6 @@ import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
@@ -52,9 +51,8 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanInfoPage.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_upgradeInfoProviderServiceTracker = new ServiceTracker<>(bundleContext, UpgradeInfoProvider.class, null);
+		_upgradeInfoProviderServiceTracker = new ServiceTracker<>(
+			bundle.getBundleContext(), UpgradeInfoProvider.class, null);
 
 		_upgradeInfoProviderServiceTracker.open();
 	}
@@ -116,32 +114,28 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 					Promise<String> detail = upgradeInfoProvider.getDetail(firstElement);
 
 					detail.onResolve(
-						() -> {
-							UIUtil.async(
-								() -> {
-									try {
-										if (detail.getFailure() != null) {
-											_browser.setText("about:blank");
+						() -> UIUtil.async(
+							() -> {
+								try {
+									if (detail.getFailure() != null) {
+										_browser.setText("about:blank");
+									}
+									else {
+										String detailValue = detail.getValue();
+
+										if (detailValue.startsWith("https://") || detailValue.equals("about:blank")) {
+											_browser.setUrl(detailValue);
 										}
 										else {
-											String detailValue = detail.getValue();
-
-											if (detailValue.startsWith("https://") ||
-												detailValue.equals("about:blank")) {
-
-												_browser.setUrl(detailValue);
-											}
-											else {
-												_browser.setText(detail.getValue(), true);
-											}
+											_browser.setText(detail.getValue(), true);
 										}
+									}
 
-										_composite.redraw();
-									}
-									catch (Exception e) {
-									}
-								});
-						});
+									_composite.redraw();
+								}
+								catch (Exception e) {
+								}
+							}));
 				}
 			);
 		}

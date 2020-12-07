@@ -46,7 +46,7 @@ public class MarkUndoneAction extends SelectionProviderAction implements Upgrade
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 
-		UIUtil.async(() -> viewer.refresh());
+		UIUtil.async(viewer::refresh);
 	}
 
 	private void _notResolved(UpgradeProblem upgradeProblem) {

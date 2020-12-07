@@ -118,28 +118,26 @@ public class ResourceBundleJumpActionHandler extends JumpActionHandler {
 
 				IFile resourceBundleFile = wroot.getFileForLocation(entryPath);
 
-				if (FileUtil.exists(resourceBundleFile)) {
-					if (window != null) {
-						IWorkbenchPage page = window.getActivePage();
+				if (FileUtil.exists(resourceBundleFile) && (window != null)) {
+					IWorkbenchPage page = window.getActivePage();
 
-						IEditorDescriptor editorDescriptor = null;
+					IEditorDescriptor editorDescriptor = null;
 
+					try {
+						editorDescriptor = IDE.getEditorDescriptor(resourceBundleFile.getName());
+					}
+					catch (PartInitException pie) {
+
+						// No editor was found for this file type.
+
+					}
+
+					if (editorDescriptor != null) {
 						try {
-							editorDescriptor = IDE.getEditorDescriptor(resourceBundleFile.getName());
+							IDE.openEditor(page, resourceBundleFile, editorDescriptor.getId(), true);
 						}
 						catch (PartInitException pie) {
-
-							// No editor was found for this file type.
-
-						}
-
-						if (editorDescriptor != null) {
-							try {
-								IDE.openEditor(page, resourceBundleFile, editorDescriptor.getId(), true);
-							}
-							catch (PartInitException pie) {
-								PortletUIPlugin.logError(pie);
-							}
+							PortletUIPlugin.logError(pie);
 						}
 					}
 				}

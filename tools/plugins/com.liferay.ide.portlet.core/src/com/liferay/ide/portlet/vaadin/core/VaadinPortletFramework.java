@@ -17,6 +17,8 @@ package com.liferay.ide.portlet.vaadin.core;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.portlet.core.BasePortletFramework;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -39,7 +41,9 @@ public class VaadinPortletFramework extends BasePortletFramework {
 	}
 
 	public boolean supports(ILiferayProjectProvider provider) {
-		if ((provider != null) && ("ant".equals(provider.getShortName()) || "maven".equals(provider.getShortName()))) {
+		if (((provider != null) && Objects.equals("ant", provider.getShortName())) ||
+			Objects.equals("maven", provider.getShortName())) {
+
 			return true;
 		}
 

@@ -76,9 +76,7 @@ public class UpgradePlannerPlugin extends AbstractUIPlugin implements IStartup {
 		IProduct product = Platform.getProduct();
 
 		if (product != null) {
-			String id = product.getId();
-
-			productRunning = PRODUCT_ID.equals(id);
+			productRunning = PRODUCT_ID.equals(product.getId());
 		}
 
 		return productRunning;
@@ -112,7 +110,7 @@ public class UpgradePlannerPlugin extends AbstractUIPlugin implements IStartup {
 
 	public void earlyStartup() {
 		if (!isProductRunning()) {
-			return;
+			//TODO
 		}
 	}
 

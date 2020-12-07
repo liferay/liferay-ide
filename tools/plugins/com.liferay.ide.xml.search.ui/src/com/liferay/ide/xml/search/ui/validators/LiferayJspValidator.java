@@ -141,9 +141,7 @@ public class LiferayJspValidator extends LiferayBaseValidator {
 				return null;
 			}
 
-			IPropertiesQuerySpecification querySpecification = null;
-
-			querySpecification = querySpecifications[0];
+			IPropertiesQuerySpecification querySpecification = querySpecifications[0];
 
 			IPropertiesRequestor requestor = querySpecification.getRequestor();
 

@@ -121,11 +121,9 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
 		description.setFont(pageContent.getFont());
 		description.setLayoutData(gd);
 
-		ExpandableComposite twistie;
-
 		int columns = 3;
 
-		twistie = createTwistie(body, Msgs.portletXMLDescriptor, columns);
+		ExpandableComposite twistie = createTwistie(body, Msgs.portletXMLDescriptor, columns);
 
 		twistie.setBackground(parent.getBackground());
 

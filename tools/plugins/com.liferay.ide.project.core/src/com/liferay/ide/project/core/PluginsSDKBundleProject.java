@@ -217,7 +217,6 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IBundleP
 	}
 
 	public SDK getSDK() {
-		SDK retval = null;
 
 		// try to determine SDK based on project location
 
@@ -227,7 +226,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IBundleP
 
 		IPath sdkLocation = rawLocation.removeLastSegments(2);
 
-		retval = sdkManager.getSDK(sdkLocation);
+		SDK retval = sdkManager.getSDK(sdkLocation);
 
 		if (retval == null) {
 			retval = SDKUtil.createSDKFromLocation(sdkLocation);

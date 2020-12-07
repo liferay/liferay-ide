@@ -52,9 +52,7 @@ public class AddModelEntitySnippetInsertion extends ModelSnippetInsertion {
 
 		String fieldsVal = fields.toString();
 
-		text = StringUtils.replace(text, "${fields}", CoreUtil.isNullOrEmpty(fieldsVal) ? StringPool.EMPTY : fieldsVal);
-
-		return text;
+		return StringUtils.replace(text, "${fields}", CoreUtil.isNullOrEmpty(fieldsVal) ? StringPool.EMPTY : fieldsVal);
 	}
 
 }

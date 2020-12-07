@@ -69,9 +69,7 @@ public class UpgradeProblemsContainer {
 			0, Integer::sum
 		).intValue();
 
-		hash = 31 * hash + projectProblemsHashCodes;
-
-		return hash;
+		return 31 * hash + projectProblemsHashCodes;
 	}
 
 	public boolean isEqualProjectProblem(

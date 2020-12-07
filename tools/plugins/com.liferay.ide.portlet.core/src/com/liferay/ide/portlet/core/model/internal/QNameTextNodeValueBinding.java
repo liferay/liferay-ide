@@ -18,6 +18,8 @@ import com.liferay.ide.portlet.core.util.PortletAppModelConstants;
 import com.liferay.ide.portlet.core.util.PortletModelUtil;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 
+import java.util.Objects;
+
 import javax.xml.namespace.QName;
 
 import org.eclipse.sapphire.Property;
@@ -74,8 +76,6 @@ public class QNameTextNodeValueBinding extends XmlValueBindingImpl {
 			return "";
 		}
 
-		Element domNode = qNamedElement.getDomNode();
-
 		String value = qNamedElement.getText();
 
 		if (value == null) {
@@ -83,6 +83,8 @@ public class QNameTextNodeValueBinding extends XmlValueBindingImpl {
 		}
 
 		String prefix = PortletUtil.stripSuffix(value.trim());
+
+		Element domNode = qNamedElement.getDomNode();
 
 		Attr attrib = domNode.getAttributeNode(String.format(PortletAppModelConstants.NS_DECL, prefix));
 
@@ -100,7 +102,7 @@ public class QNameTextNodeValueBinding extends XmlValueBindingImpl {
 		String qNameAsString = value;
 		XmlElement parent = xml(true);
 
-		if ((qNameAsString != null) && !"Q_NAME".equals(qNameAsString)) {
+		if (!Objects.equals("Q_NAME", qNameAsString)) {
 			qNameAsString = value.trim();
 
 			QName qName = QName.valueOf(qNameAsString);

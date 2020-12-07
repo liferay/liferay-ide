@@ -72,11 +72,9 @@ public class QNamesPossibleValuesService extends PossibleValuesService implement
 	}
 
 	private String _getQName(String nsURI, String localPart) {
-		QName qName = null;
-
-		qName = new QName(nsURI, localPart);
-
-		return qName.toString();
+		return new QName(
+			nsURI, localPart
+		).toString();
 	}
 
 }

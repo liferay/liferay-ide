@@ -26,10 +26,10 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
@@ -450,10 +450,11 @@ public class LiferayCore extends Plugin {
 			listenerRegistry.removeEventListener((EventListener)liferayProject);
 		}
 
-		Set<Entry<ProjectCacheKey<?>, ILiferayProject>> projectCachEentrySet = projectCache.entrySet();
+		Set<Map.Entry<ProjectCacheKey<?>, ILiferayProject>> projectCachEentrySet = projectCache.entrySet();
 
-		projectCachEentrySet.stream(
-		).forEach(
+		Stream<Map.Entry<ProjectCacheKey<?>, ILiferayProject>> cacheStream = projectCachEentrySet.stream();
+
+		cacheStream.forEach(
 			entry -> {
 				ProjectCacheKey<?> projectCacheKey = entry.getKey();
 
@@ -462,8 +463,7 @@ public class LiferayCore extends Plugin {
 				if (project.equals(liferayProject)) {
 					projectCache.remove(projectCacheKey);
 				}
-			}
-		);
+			});
 	}
 
 	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {

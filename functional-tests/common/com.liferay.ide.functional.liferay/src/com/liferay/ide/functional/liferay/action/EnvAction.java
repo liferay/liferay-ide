@@ -20,7 +20,6 @@ import com.liferay.ide.functional.liferay.util.CSVReader;
 import com.liferay.ide.functional.liferay.util.SdkInfo;
 import com.liferay.ide.functional.liferay.util.ValidationMsg;
 import com.liferay.ide.functional.swtbot.util.CoreUtil;
-import com.liferay.ide.functional.swtbot.util.StringPool;
 
 import java.io.File;
 import java.io.IOException;
@@ -140,9 +139,7 @@ public class EnvAction extends UIAction {
 	}
 
 	public String getUsername() {
-		String retval = StringPool.BLANK;
-
-		retval = System.getenv("USERNAME");
+		String retval = System.getenv("USERNAME");
 
 		if (CoreUtil.empty(retval)) {
 			retval = System.getenv("USER");

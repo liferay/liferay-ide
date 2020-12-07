@@ -25,6 +25,8 @@ import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.descriptor.RemoveAllPortletsOperation;
 import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
@@ -222,7 +224,7 @@ public class LiferayPortletDescriptorHelper
 		Element firstRoleMapper = null;
 
 		for (Element child : getChildElements(rootElement)) {
-			if ("role-mapper".equals(child.getNodeName())) {
+			if (Objects.equals("role-mapper", child.getNodeName())) {
 				firstRoleMapper = child;
 
 				break;
@@ -262,9 +264,7 @@ public class LiferayPortletDescriptorHelper
 
 		};
 
-		IStatus status = domModelOperation.execute();
-
-		return status;
+		return domModelOperation.execute();
 	}
 
 }

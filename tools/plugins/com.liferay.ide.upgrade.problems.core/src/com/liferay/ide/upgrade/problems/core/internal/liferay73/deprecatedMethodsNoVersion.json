@@ -16,7 +16,8 @@
 		"javadoc": "@deprecated As of 1.4.0, replaced by {@link #RootProjectConfigurator(Settings)}",
 		"methodName": "RootProjectConfigurator",
 		"packageName": "com.liferay.gradle.plugins.workspace.configurators",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SSLSocketFactory",
@@ -50,7 +51,8 @@
 		"javadoc": "",
 		"methodName": "createSocket",
 		"packageName": "org.apache.http.conn.ssl",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "SSLSocketFactory",
@@ -96,7 +98,8 @@
 		"javadoc": "@deprecated Only exists to not break backwards compatibility.Use {@link PropertiesConfiguration#isIncludesAllowed()} instead.",
 		"methodName": "getIncludesAllowed",
 		"packageName": "org.apache.commons.configuration",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "JUnitResultArchiver",
@@ -125,7 +128,8 @@
 		"javadoc": "@deprecated use {@link #removeAllCaches} instead",
 		"methodName": "removalAll",
 		"packageName": "net.sf.ehcache",
-		"parameters": []
+		"parameters": [
+		]
 	},
 	{
 		"className": "ArrayUtil_IW",

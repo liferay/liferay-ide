@@ -82,9 +82,7 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 				menuManager.add(new MarkDoneAction(selectionProvider));
 				menuManager.add(new MarkUndoneAction(selectionProvider));
 
-				String autoCorrectContext = upgradeProblem.getAutoCorrectContext();
-
-				if (CoreUtil.isNotNullOrEmpty(autoCorrectContext)) {
+				if (CoreUtil.isNotNullOrEmpty(upgradeProblem.getAutoCorrectContext())) {
 					menuManager.add(new AutoCorrectAction(selectionProvider));
 					menuManager.add(new AutoCorrectPreviewAction(selectionProvider));
 				}
