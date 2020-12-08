@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -60,9 +59,7 @@ public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 
 				IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 
-				Shell shell = workbenchWindow.getShell();
-
-				WizardDialog wizardDialog = new WizardDialog(shell, importLiferayWorkspaceWizard);
+				WizardDialog wizardDialog = new WizardDialog(workbenchWindow.getShell(), importLiferayWorkspaceWizard);
 
 				returnCode.set(wizardDialog.open());
 			});
