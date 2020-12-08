@@ -57,8 +57,6 @@
 		<import feature="org.eclipse.wst.common.fproj" match="greaterOrEqual" version="3.2.0" />
 		<import feature="org.eclipse.wst.common_ui.feature" match="greaterOrEqual" version="3.2.0" />
 		<import feature="org.eclipse.wst.server_adapters.feature" match="greaterOrEqual" version="3.2.0" />
-		<import feature="org.eclipse.wst.server_ui.feature" match="greaterOrEqual" version="3.2.0" />
-		<import feature="org.eclipse.wst.web_ui.feature" match="greaterOrEqual" version="3.2.0" />
 		<import feature="org.eclipse.wst.xml_ui.feature" match="greaterOrEqual" version="3.2.0" />
 		<import feature="org.eclipse.wst.xml.search.core-feature" match="greaterOrEqual" version="1.0.0" />
 		<import feature="org.eclipse.tm.terminal.connector.telnet.feature" match="greaterOrEqual" version="4.0.0" />
