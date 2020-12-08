@@ -27,6 +27,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.core.workspace.ProjectDeletedEvent;
@@ -279,14 +280,10 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 			if (Objects.nonNull(workspaceProductInfo)) {
 				targetplatformVersion = workspaceProductInfo.getTargetPlatformVersion();
-
-				if (targetplatformVersion.contains("-")) {
-					targetplatformVersion = targetplatformVersion.substring(0, targetplatformVersion.indexOf("-"));
-				}
 			}
 		}
 
-		return targetplatformVersion;
+		return VersionUtil.simplifyTargetPlatformVersion(targetplatformVersion);
 	}
 
 	@Override

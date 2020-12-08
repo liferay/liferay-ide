@@ -19,6 +19,7 @@ import aQute.bnd.version.Version;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import java.util.Objects;
@@ -69,7 +70,7 @@ public class HasWorkspaceLiferayVersionDefaultValueService extends DefaultValueS
 		int dashPostion = targetPlatformVersion.indexOf("-");
 
 		if (dashPostion != -1) {
-			return Version.isVersion(targetPlatformVersion.substring(0, dashPostion));
+			return Version.isVersion(VersionUtil.simplifyTargetPlatformVersion(targetPlatformVersion));
 		}
 
 		return Version.isVersion(targetPlatformVersion);
