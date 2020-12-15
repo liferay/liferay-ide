@@ -22,6 +22,7 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
@@ -32,6 +33,7 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Andy Wu
+ * @author Simon Jiang
  */
 public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
@@ -45,6 +47,8 @@ public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public Value<Boolean> getHasBundlesDir();
 
+	public Value<Boolean> getShowDownloadBundle();
+
 	public Value<Path> getWorkspaceLocation();
 
 	public void setBuildType(String value);
@@ -52,6 +56,10 @@ public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	public void setHasBundlesDir(Boolean value);
 
 	public void setHasBundlesDir(String value);
+
+	public void setShowDownloadBundle(Boolean value);
+
+	public void setShowDownloadBundle(String value);
 
 	public void setWorkspaceLocation(Path value);
 
@@ -71,6 +79,10 @@ public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	@Service(impl = ImportLiferayWorkspaceServerNameService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
+
+	@DefaultValue(text = "true")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_SHOW_DOWNLOAD_BUNDLE = new ValueProperty(TYPE, "showDownloadBundle");
 
 	@AbsolutePath
 	@Label(standard = "workspace location")
