@@ -35,7 +35,7 @@
                 <property-editor>buildType</property-editor>
                 <spacer></spacer>
                 <property-editor>
-                    <visible-when>${ Severity(Validation(workspaceLocation)) == 'OK' &amp;&amp; hasBundlesDir == 'false' }</visible-when>
+                    <visible-when>${ Severity(Validation(workspaceLocation)) == 'OK' &amp;&amp; hasBundlesDir == 'false' &amp;&amp; showDownloadBundle == 'true' }</visible-when>
                     <property>provisionLiferayBundle</property>
                 </property-editor>
                 <property-editor>

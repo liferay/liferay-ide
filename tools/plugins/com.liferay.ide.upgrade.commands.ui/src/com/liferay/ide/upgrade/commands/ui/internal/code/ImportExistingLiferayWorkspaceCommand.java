@@ -40,6 +40,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Ethan Sun
+ * @author Simon Jiang
  */
 @Component(
 	property = "id=" + ImportExistingLiferayWorkspaceCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
@@ -53,7 +54,13 @@ public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 
 		UIUtil.sync(
 			() -> {
-				ImportLiferayWorkspaceWizard importLiferayWorkspaceWizard = new ImportLiferayWorkspaceWizard();
+				ImportLiferayWorkspaceWizard importLiferayWorkspaceWizard = new ImportLiferayWorkspaceWizard(false) {
+
+					@Override
+					protected void openLiferayPerspective(IProject newProject) {
+					}
+
+				};
 
 				IWorkbench workbench = PlatformUI.getWorkbench();
 
