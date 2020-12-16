@@ -18,7 +18,6 @@ import aQute.bnd.version.Version;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.ProductInfo;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import java.util.Objects;
@@ -41,7 +40,7 @@ public class HasWorkspaceLiferayVersionDefaultValueService extends DefaultValueS
 		try {
 			String gradlePropertyTargetPlatformVersion = liferayWorkspaceProject.getTargetPlatformVersion();
 
-			if (_verfiyTargetPlatformVersion(gradlePropertyTargetPlatformVersion)) {
+			if (Version.isVersion(gradlePropertyTargetPlatformVersion)) {
 				return Boolean.toString(true);
 			}
 
@@ -50,7 +49,7 @@ public class HasWorkspaceLiferayVersionDefaultValueService extends DefaultValueS
 			if (Objects.nonNull(workspaceProductInfo)) {
 				String workspaceProductTargetPlatformVersion = workspaceProductInfo.getTargetPlatformVersion();
 
-				if (_verfiyTargetPlatformVersion(workspaceProductTargetPlatformVersion)) {
+				if (Version.isVersion(workspaceProductTargetPlatformVersion)) {
 					return Boolean.toString(true);
 				}
 			}
@@ -60,19 +59,4 @@ public class HasWorkspaceLiferayVersionDefaultValueService extends DefaultValueS
 
 		return Boolean.toString(false);
 	}
-
-	private boolean _verfiyTargetPlatformVersion(String targetPlatformVersion) {
-		if (CoreUtil.isNullOrEmpty(targetPlatformVersion)) {
-			return false;
-		}
-
-		int dashPostion = targetPlatformVersion.indexOf("-");
-
-		if (dashPostion != -1) {
-			return Version.isVersion(targetPlatformVersion.substring(0, dashPostion));
-		}
-
-		return Version.isVersion(targetPlatformVersion);
-	}
-
 }
