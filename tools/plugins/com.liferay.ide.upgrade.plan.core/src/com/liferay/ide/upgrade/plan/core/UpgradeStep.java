@@ -50,7 +50,6 @@ public class UpgradeStep {
 		}
 
 		_summary = summary;
-		_icon = imagePath;
 		_url = url;
 		_requirement = requirement;
 		_status = status;
@@ -292,7 +291,6 @@ public class UpgradeStep {
 
 	private List<UpgradeStep> _children = new ArrayList<>();
 	private String _commandId;
-	private String _icon;
 	private UpgradeStep _parentUpgradeStep;
 	private String _requirement;
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;

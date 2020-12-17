@@ -43,6 +43,7 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -50,6 +51,7 @@ import org.junit.rules.TemporaryFolder;
 /**
  * @author Gregory Amerson
  */
+@Ignore
 public class PortalSourceLookupTests
 {
     @Rule

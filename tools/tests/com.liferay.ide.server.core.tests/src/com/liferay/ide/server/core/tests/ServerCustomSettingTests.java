@@ -27,11 +27,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Simon Jiang
  */
+@Ignore
 public class ServerCustomSettingTests extends ServerCoreBase
 {
 
