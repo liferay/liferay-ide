@@ -26,6 +26,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCompare;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
+import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -229,7 +231,9 @@ public class UpgradeCfgToConfigCommand implements UpgradeCommand {
 			_cfgFiles.forEach(
 				cfgFile -> {
 					try {
-						new CfgToConfigFileConverter(FileUtil.getFile(cfgFile));
+						File originCfgFile = FileUtil.getFile(cfgFile);
+
+						new CfgToConfigFileConverter(originCfgFile);
 
 						IContainer parentContainer = cfgFile.getParent();
 

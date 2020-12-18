@@ -58,7 +58,7 @@ public class VersionUtil {
 
 			Matcher matcher = _microPattern.matcher(qualifier);
 
-			if (matcher.matches() && (matcher.groupCount() >= 5) ) {
+			if (matcher.matches() && (matcher.groupCount() >= 5)) {
 				qualifier = matcher.group(5);
 			}
 

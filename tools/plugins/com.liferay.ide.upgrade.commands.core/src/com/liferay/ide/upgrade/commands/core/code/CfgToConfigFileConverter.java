@@ -16,15 +16,22 @@ package com.liferay.ide.upgrade.commands.core.code;
 
 import static com.google.common.io.Files.getNameWithoutExtension;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 import java.text.MessageFormat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -64,12 +71,6 @@ public class CfgToConfigFileConverter {
 			cfgLines.add(
 				0, MessageFormat.format(_configComment, cfgFileNamePath.toString(), cfgCommentFileName.toString()));
 
-			Stream<String> cfgLinesStream = cfgLines.stream();
-
-			String cfgContent = cfgLinesStream.collect(Collectors.joining(System.lineSeparator()));
-
-			Files.write(cfgPath, cfgContent.getBytes());
-
 			Stream<String> commentLinesStream = commentLines.stream();
 
 			String cfgCommentContent = commentLinesStream.collect(Collectors.joining(System.lineSeparator()));
@@ -77,6 +78,32 @@ public class CfgToConfigFileConverter {
 			Files.write(cfgCommentPath, cfgCommentContent.getBytes());
 
 			_modifiedPaths.add(cfgCommentPath);
+		}
+
+		Stream<String> cfgLinesStream = cfgLines.stream();
+
+		String cfgContent = cfgLinesStream.collect(Collectors.joining(System.lineSeparator()));
+
+		Properties properties = new Properties();
+
+		try (InputStream inputStream = new ByteArrayInputStream(cfgContent.getBytes());
+			OutputStream outputStream = Files.newOutputStream(cfgPath, StandardOpenOption.WRITE)) {
+
+			properties.load(inputStream);
+
+			Set<Object> keySet = properties.keySet();
+
+			for (Object key : keySet) {
+				String keyValue = properties.getProperty(String.valueOf(key));
+
+				if (!keyValue.startsWith("\"")) {
+					properties.put(key, "\"" + keyValue + "\"");
+				}
+			}
+
+			properties.store(outputStream, null);
+		}
+		catch (IOException ioe) {
 		}
 
 		Path configPath = cfgParentPath.resolve(baseName + ".config");

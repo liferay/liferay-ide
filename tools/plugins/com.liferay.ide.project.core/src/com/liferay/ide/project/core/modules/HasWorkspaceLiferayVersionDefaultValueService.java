@@ -59,4 +59,5 @@ public class HasWorkspaceLiferayVersionDefaultValueService extends DefaultValueS
 
 		return Boolean.toString(false);
 	}
+
 }
