@@ -15,15 +15,21 @@
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.UpgradeCommandsCorePlugin;
 import com.liferay.ide.upgrade.commands.core.code.ImportExistingLiferayWorkspaceCommandKeys;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -34,6 +40,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -77,9 +84,28 @@ public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 			if (projects.length == 0) {
 				return UpgradeCommandsCorePlugin.createErrorStatus("A Liferay Workspace Needs To Be Specified");
 			}
+
+			return Status.OK_STATUS;
 		}
+
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (Objects.isNull(workspaceProject) || !workspaceProject.exists()) {
+			return UpgradeCommandsCorePlugin.createErrorStatus("A Liferay Workspace Needs To Be Specified");
+		}
+
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
+
+		IPath workspaceProjectLocation = workspaceProject.getLocation();
+
+		upgradeContext.put("targetProjectLocation", workspaceProjectLocation.toOSString());
 
 		return Status.OK_STATUS;
 	}
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }
