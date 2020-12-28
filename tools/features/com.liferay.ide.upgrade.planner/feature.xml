@@ -3,7 +3,7 @@
 	id="com.liferay.ide.upgrade.planner"
 	label="Liferay Upgrade Planner"
 	provider-name="Liferay, Inc."
-	version="3.9.1.qualifier"
+	version="3.9.2.qualifier"
 >
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">

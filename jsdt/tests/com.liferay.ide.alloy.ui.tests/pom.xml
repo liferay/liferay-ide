@@ -24,7 +24,7 @@
 
 	<groupId>com.liferay.ide.jstl.tests</groupId>
 	<artifactId>com.liferay.ide.alloy.ui.tests</artifactId>
-	<version>3.9.1-SNAPSHOT</version>
+	<version>3.9.2-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<name>Liferay IDE Alloy UI Tests</name>
