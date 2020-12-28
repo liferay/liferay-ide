@@ -21,7 +21,9 @@ import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -86,7 +88,11 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 		_browser.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		List<UpgradeStep> upgradeStepList = _upgradePlan.getUpgradeSteps();
+		List<UpgradeStep> upgradeStepList = new ArrayList<>();
+
+		if (!Objects.isNull(_upgradePlan)) {
+			upgradeStepList.addAll(_upgradePlan.getUpgradeSteps());
+		}
 
 		_browser.addLocationListener(
 			new LocationListener() {
