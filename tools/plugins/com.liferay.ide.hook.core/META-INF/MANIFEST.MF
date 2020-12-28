@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.hook.core;singleton:=true
-Bundle-Version: 3.9.1.qualifier
+Bundle-Version: 3.9.2.qualifier
 Bundle-Activator: com.liferay.ide.hook.core.HookCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,
