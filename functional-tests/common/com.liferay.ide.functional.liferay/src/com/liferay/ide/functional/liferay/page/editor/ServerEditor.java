@@ -109,7 +109,7 @@ public class ServerEditor extends Editor {
 		return new CheckBox(getPart().bot(), "Use developer mode");
 	}
 
-	public Text getUserName() {
+	public Text getUsername() {
 		return new Text(getPart().bot(), "Username:");
 	}
 

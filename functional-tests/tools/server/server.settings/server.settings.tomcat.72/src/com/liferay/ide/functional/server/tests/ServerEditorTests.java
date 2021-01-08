@@ -27,7 +27,7 @@ import org.junit.rules.RuleChain;
 /**
  * @author Rui Wang
  */
-public class ServerEditorTest extends ServerTomcat7xBase {
+public class ServerEditorTests extends ServerTomcat7xBase {
 
 	public static PureTomcat72Support tomcat = new PureTomcat72Support(bot);
 
@@ -54,7 +54,7 @@ public class ServerEditorTest extends ServerTomcat7xBase {
 
 		validationAction.assertCheckedTrue(editorAction.server.getUseDeveloperMode());
 
-		validationAction.assertTextEquals("test@liferay.com", editorAction.server.getUserName());
+		validationAction.assertTextEquals("test@liferay.com", editorAction.server.getUsername());
 
 		validationAction.assertTextEquals(StringPool.BLANK, editorAction.server.getPassword());
 
@@ -81,7 +81,7 @@ public class ServerEditorTest extends ServerTomcat7xBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		jobAction.waitForConsoleContent(tomcat.getServerName(), "-Xmx5120m", M1);
+		jobAction.waitForConsoleContent(tomcat.getServerName(), "-Xmx5120m", M2);
 
 		viewAction.servers.stop(tomcat.getStartedLabel());
 
@@ -90,6 +90,8 @@ public class ServerEditorTest extends ServerTomcat7xBase {
 		editorAction.server.clickLiferayLaunchRestoreDefaults();
 
 		editorAction.save();
+
+		//validationAction.assertTextEquals("-Xmx2560m", editorAction.server.getMemoryArgs());
 
 		editorAction.close();
 	}
@@ -103,8 +105,6 @@ public class ServerEditorTest extends ServerTomcat7xBase {
 		editorAction.save();
 
 		editorAction.server.clickPortsRestoreDefaults();
-
-		validationAction.assertTextEquals("8080", editorAction.server.getHttpPort());
 
 		editorAction.close();
 	}
