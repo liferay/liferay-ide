@@ -164,7 +164,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 				public boolean accept(File file) {
 					String fileName = FilenameUtils.removeExtension(file.getName());
 
-					if (urlsArray[0].contains(fileName)) {
+					if (!fileName.isEmpty() && urlsArray[0].contains(fileName)) {
 						return true;
 					}
 
