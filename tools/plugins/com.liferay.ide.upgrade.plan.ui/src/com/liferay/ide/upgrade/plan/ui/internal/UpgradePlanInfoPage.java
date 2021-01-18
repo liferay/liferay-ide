@@ -15,17 +15,29 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
+
+import java.io.File;
+import java.io.IOException;
+
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -76,6 +88,16 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 		UpgradePlanner upgradePlannerService = _upgradePlannerServiceTracker.getService();
 
 		_upgradePlan = upgradePlannerService.getCurrentUpgradePlan();
+
+		UpgradePlanCorePlugin instance = UpgradePlanCorePlugin.getInstance();
+
+		IPath pluginStateLocation = instance.getStateLocation();
+
+		IPath offlineOutlinePath = pluginStateLocation.append(UpgradePlanCorePlugin.OFFLINE_UNZIP_FOLDER);
+
+		offlineOutlinePath = offlineOutlinePath.append("code-upgrade");
+
+		_offlineOutlineFile = offlineOutlinePath.toFile();
 	}
 
 	@Override
@@ -108,7 +130,7 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 					if (!url.startsWith("about:blank") && !url.startsWith("http")) {
 						_browser.setUrl("about:blank");
 
-						String replacement = "";
+						String replacement;
 
 						if (CoreUtil.isWindows()) {
 							replacement = "about:";
@@ -117,30 +139,37 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 							replacement = "file:///";
 						}
 
-						final String targetUrl = url.replaceFirst(replacement, "");
+						url = url.replaceFirst(replacement, "");
 
-						Stream<UpgradeStep> upgradeStepStream = upgradeStepList.stream();
+						String[] urlSegments = url.split("/");
 
-						upgradeStepStream.forEach(
-							upgradeStep -> {
-								List<UpgradeStep> childrenStepList = upgradeStep.getChildren();
+						String htmlName = urlSegments[urlSegments.length - 1];
 
-								Stream<UpgradeStep> childStepStream = childrenStepList.stream();
+						UIUtil.async(
+							() -> {
+								try {
+									Files.walkFileTree(
+										_offlineOutlineFile.toPath(),
+										new SimpleFileVisitor<Path>() {
 
-								childStepStream.filter(
-									currentStep -> {
-										String stepUrl = currentStep.getUrl();
+											@Override
+											public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+												if (path.endsWith(htmlName)) {
+													_browser.setText(FileUtil.readContents(path.toFile()));
 
-										if (CoreUtil.isWindows()) {
-											stepUrl = stepUrl.replace('\\', '/');
-										}
+													_composite.redraw();
 
-										return stepUrl.endsWith(targetUrl);
-									}
-								).findFirst(
-								).ifPresent(
-									UpgradePlanInfoPage.this::renderBrowser
-								);
+													return FileVisitResult.TERMINATE;
+												}
+
+												return FileVisitResult.CONTINUE;
+											}
+
+										});
+								}
+								catch (IOException e) {
+									e.printStackTrace();
+								}
 							});
 					}
 				}
@@ -236,6 +265,7 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 	private Browser _browser;
 	private Composite _composite;
+	private File _offlineOutlineFile;
 	private final ServiceTracker<UpgradeInfoProvider, UpgradeInfoProvider> _upgradeInfoProviderServiceTracker;
 	private UpgradePlan _upgradePlan;
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
