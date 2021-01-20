@@ -94,22 +94,31 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		if (!searchResults.isEmpty()) {
 			String fileName = "BREAKING_CHANGES.markdown";
 
-			if (Objects.equals("7.0", version)) {
-				fileName = "liferay70/" + fileName;
-			}
-			else if (Objects.equals("7.1", version)) {
-				fileName = "liferay71/" + fileName;
-			}
-			else if (Objects.equals("7.2", version)) {
-				fileName = "liferay72/" + fileName;
-			}
-			else if (Objects.equals("7.3", version)) {
-				fileName = "liferay73/" + fileName;
-			}
-			else {
-				Optional<String> nullableVersion = Optional.ofNullable(version);
+			switch (version) {
+				case "7.0":
+					fileName = "liferay70/" + fileName;
 
-				throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
+					break;
+				case "7.1":
+					fileName = "liferay71/" + fileName;
+
+					break;
+				case "7.2":
+					fileName = "liferay72/" + fileName;
+
+					break;
+				case "7.3":
+					fileName = "liferay73/" + fileName;
+
+					break;
+				case "7.4":
+					fileName = "liferay74/" + fileName;
+
+					break;
+				default:
+					Optional<String> nullableVersion = Optional.ofNullable(version);
+
+					throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 			}
 
 			String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);

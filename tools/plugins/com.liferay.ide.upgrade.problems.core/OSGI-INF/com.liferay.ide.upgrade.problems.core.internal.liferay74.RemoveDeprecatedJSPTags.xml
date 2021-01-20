@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveDeprecatedJSPTags">
+   <property name="file.extensions" value="jsp,jspf"/>
+   <property name="problem.title" value="Previously unused and deprecated JSP tags are no longer available"/>
+   <property name="problem.section" value="#remove-deprecated-jsp-tags"/>
+   <property name="problem.summary" value="Previously unused and deprecated JSP tags are no longer available"/>
+   <property name="problem.tickets" value="LPS-112476"/>
+   <property name="version" value="7.4"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveDeprecatedJSPTags"/>
+</scr:component>
