@@ -383,7 +383,7 @@ away from Soy:
 
 ---------------------------------------
 
-### Server-side Closure Templates (Soy) Support has been removed [](id=#)
+### Server-side Closure Templates (Soy) Support has been removed [](id=server-side-closure-templates-support-has-been-removed)
 - **Date:** 2020-Dec-14
 - **JIRA Ticket:** [LPS-122956](https://issues.liferay.com/browse/LPS-122956)
 

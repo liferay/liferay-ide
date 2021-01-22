@@ -195,3 +195,4 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.Liferay72DeprecatedMethodsMigrator.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay73.Liferay73DeprecatedMethodsMigrator.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveDeprecatedJSPTags.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveServerSideClosureTemplatesSupport.xml
