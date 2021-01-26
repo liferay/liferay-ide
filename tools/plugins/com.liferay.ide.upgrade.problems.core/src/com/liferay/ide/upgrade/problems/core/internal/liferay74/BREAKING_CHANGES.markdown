@@ -70,7 +70,7 @@ in ascending chronological order.
 
 ## Breaking Changes List
 
-### The tag liferay-ui:flash is no longer available [](id=#)
+### The tag liferay-ui:flash is no longer available [](id=removed-liferay-ui-flash)
 - **Date:** 2020-Oct-13
 - **JIRA Ticket:** [LPS-121732](https://issues.liferay.com/browse/LPS-121732)
 
@@ -95,7 +95,7 @@ in December 31, 2020 and browsers removing Flash support in upcoming versions.
 
 ---------------------------------------
 
-### The /portal/flash path is no longer available [](id=#)
+### The /portal/flash path is no longer available [](id=removed-portal-flash-support)
 - **Date:** 2020-Oct-13
 - **JIRA Ticket:** [LPS-121733](https://issues.liferay.com/browse/LPS-121733)
 
@@ -189,7 +189,7 @@ to do OSGi integration.
 
 ---------------------------------------
 
-### The AssetEntries_AssetCategories table and its corresponding code have been removed from the portal [](id=#)
+### The AssetEntries_AssetCategories table and its corresponding code have been removed from the portal [](id=removed-assetentries-assetcatagories-table)
 - **Date:** 2020-Oct-16
 - **JIRA Ticket:** [LPS-89065](https://issues.liferay.com/browse/LPS-89065)
 
