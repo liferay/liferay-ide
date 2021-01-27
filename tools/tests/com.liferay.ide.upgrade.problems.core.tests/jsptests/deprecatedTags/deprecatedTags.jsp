@@ -81,6 +81,6 @@
 </liferay-ui:toggle>
 
 <liferay-ui:user-search-container-results>
-	<liferay-ui:user-search>
-	</liferay-ui:user-search>
+	<liferay-ui:user-search-form>
+	</liferay-ui:user-search-form>
 </liferay-ui:user-search-container-results>

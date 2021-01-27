@@ -41,7 +41,8 @@ public class RemoveDeprecatedJSPTags extends JSPTagMigrator {
 		"clay:table", "liferay-ui:alert", "liferay-ui:input-scheduler",
 		"liferay-ui:organization-search-container-results", "liferay-ui:organization-search-form", "liferay-ui:ratings",
 		"liferay-ui:search-speed", "liferay-ui:table-iterator", "liferay-ui:toggle-area", "liferay-ui:toggle",
-		"liferay-ui:user-search-container-results", "liferay-ui:user-search"
+		"liferay-ui:user-search-container-results", "liferay-ui:user-search-form", "liferay-theme:layout-icon",
+		"liferay-theme:param"
 	};
 
 }

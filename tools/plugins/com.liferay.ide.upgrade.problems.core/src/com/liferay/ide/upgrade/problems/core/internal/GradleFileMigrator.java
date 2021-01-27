@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -83,11 +84,31 @@ public abstract class GradleFileMigrator implements FileMigrator {
 			if (results != null) {
 				String fileName = "BREAKING_CHANGES.markdown";
 
-				if (Objects.equals("7.0", version)) {
-					fileName = "liferay70/" + fileName;
-				}
-				else if (Objects.equals("7.1", version)) {
-					fileName = "liferay71/" + fileName;
+				switch (version) {
+					case "7.0":
+						fileName = "liferay70/" + fileName;
+
+						break;
+					case "7.1":
+						fileName = "liferay71/" + fileName;
+
+						break;
+					case "7.2":
+						fileName = "liferay72/" + fileName;
+
+						break;
+					case "7.3":
+						fileName = "liferay73/" + fileName;
+
+						break;
+					case "7.4":
+						fileName = "liferay74/" + fileName;
+
+						break;
+					default:
+						Optional<String> nullableVersion = Optional.ofNullable(version);
+
+						throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 				}
 
 				String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
