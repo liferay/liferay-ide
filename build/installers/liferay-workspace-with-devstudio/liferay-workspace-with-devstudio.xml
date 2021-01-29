@@ -1,6 +1,7 @@
 <project>
     <shortName>LiferayWorkspacewithDevStudio</shortName>
     <fullName>Liferay Workspace with DevStudio</fullName>
+    <version></version>
     <logoImage>../shared/images/studio_logo.png</logoImage>
     <componentList>
         <component>
@@ -484,6 +485,83 @@ ${java_executable}
                         </runProgram>
                     </elseActionList>
                 </if>
+                <if>
+                    <explanation>need to configured Blade CLI with proxy settings</explanation>
+                    <actionList>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>bladeProxyHostArg</name>
+                                    <value> -Dhttp.proxyHost=${bladehttpproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>bladeProxyPortArg</name>
+                                    <value> -Dhttp.proxyPort=${bladehttpproxyport}</value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareText>
+                                    <logic>equals</logic>
+                                    <text>${bladeproxysetting}</text>
+                                    <value>bladehttpProxy</value>
+                                </compareText>
+                            </ruleList>
+                        </if>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>bladeProxyHostArg</name>
+                                    <value> -Dhttps.proxyHost=${bladehttpsproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>bladeProxyPortArg</name>
+                                    <value> -Dhttps.proxyPort=${bladehttpsproxyport}</value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareText>
+                                    <logic>equals</logic>
+                                    <text>${bladeproxysetting}</text>
+                                    <value>bladehttpsProxy</value>
+                                </compareText>
+                            </ruleList>
+                        </if>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>bladeProxyHostArg</name>
+                                    <value> -DsystemProp.socks.proxyHost=${bladesocksproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>bladeProxyPortArg</name>
+                                    <value> -DsystemProp.socks.proxyPort=${bladesocksproxyport}</value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareText>
+                                    <logic>equals</logic>
+                                    <text>${bladeproxysetting}</text>
+                                    <value>bladesocksProxy</value>
+                                </compareText>
+                            </ruleList>
+                        </if>
+                        <runProgram>
+                            <program>${java_executable}</program>
+                            <programArguments> -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" command --jvmargs "${bladeProxyHostArg} ${bladeProxyPortArg}" jpm</programArguments>
+                        </runProgram>
+                        <runProgram>
+                            <program>${java_executable}</program>
+                            <programArguments> -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" command --jvmargs "${bladeProxyHostArg} ${bladeProxyPortArg}" blade</programArguments>
+                        </runProgram>
+                    </actionList>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${bladeproxy}</value1>
+                            <value2>bladeproxysetting</value2>
+                        </compareValues>
+                    </ruleList>
+                </if>
                 <createDirectory>
                     <path>${userHome}${platform_path_separator}.gradle</path>
                 </createDirectory>
@@ -805,6 +883,174 @@ ${java_executable}
             </ruleList>
         </fileParameter>
         <choiceParameterGroup>
+            <name>bladeproxy</name>
+            <description>Config proxy for JPM and Blade CLI</description>
+            <explanation>If you have proxy server requirements and want to use Blade CLI, you must configure your proxy for it using JPM. And please note that Blade CLI’s proxy settings are sometimes reset when executing blade update.</explanation>
+            <value></value>
+            <default>skipbladeproxysetting</default>
+            <parameterList>
+                <labelParameter>
+                    <name>skipbladeproxysetting</name>
+                    <description>Skip proxy configuration</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <choiceParameter>
+                    <name>bladeproxysetting</name>
+                    <description>Configure proxy settings</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <displayType>combobox</displayType>
+                    <ordering>default</ordering>
+                    <width>30</width>
+                    <optionList>
+                        <option>
+                            <description></description>
+                            <image></image>
+                            <text>HTTP Proxy</text>
+                            <value>bladehttpProxy</value>
+                        </option>
+                        <option>
+                            <description></description>
+                            <image></image>
+                            <text>HTTPS Proxy</text>
+                            <value>bladehttpsProxy</value>
+                        </option>
+                        <option>
+                            <description></description>
+                            <image></image>
+                            <text>SOCKS5 Proxy</text>
+                            <value>bladesocksProxy</value>
+                        </option>
+                    </optionList>
+                </choiceParameter>
+            </parameterList>
+            <ruleList>
+                <isTrue>
+                    <value>${clitools}</value>
+                </isTrue>
+            </ruleList>
+        </choiceParameterGroup>
+        <parameterGroup>
+            <name>bladehttpproxyinfo</name>
+            <title>HTTP Proxy Information</title>
+            <explanation></explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <stringParameter>
+                    <name>bladehttpproxyhost</name>
+                    <description>Proxy Host</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>bladehttpproxyport</name>
+                    <description>Proxy Port</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+            </parameterList>
+            <ruleList>
+                <compareText>
+                    <logic>equals</logic>
+                    <text>${bladeproxy}</text>
+                    <value>bladeproxysetting</value>
+                </compareText>
+                <compareText>
+                    <logic>equals</logic>
+                    <text>${bladeproxysetting}</text>
+                    <value>bladehttpProxy</value>
+                </compareText>
+            </ruleList>
+        </parameterGroup>
+        <parameterGroup>
+            <name>bladehttpsproxyinfo</name>
+            <title>HTTPS Proxy Information</title>
+            <explanation></explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <stringParameter>
+                    <name>bladehttpsproxyhost</name>
+                    <description>Proxy Host</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>bladehttpsproxyport</name>
+                    <description>Proxy Port</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+            </parameterList>
+            <ruleList>
+                <compareText>
+                    <logic>equals</logic>
+                    <text>${bladeproxy}</text>
+                    <value>bladeproxysetting</value>
+                </compareText>
+                <compareText>
+                    <logic>equals</logic>
+                    <text>${bladeproxysetting}</text>
+                    <value>bladehttpsProxy</value>
+                </compareText>
+            </ruleList>
+        </parameterGroup>
+        <parameterGroup>
+            <name>bladesocksproxyinfo</name>
+            <title>SOCKS5 Proxy Information</title>
+            <explanation></explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <stringParameter>
+                    <name>bladesocksproxyhost</name>
+                    <description>Proxy Host</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>bladesocksproxyport</name>
+                    <description>Proxy Port</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+            </parameterList>
+            <ruleList>
+                <compareText>
+                    <logic>equals</logic>
+                    <text>${bladeproxy}</text>
+                    <value>bladeproxysetting</value>
+                </compareText>
+                <compareText>
+                    <logic>equals</logic>
+                    <text>${bladeproxysetting}</text>
+                    <value>bladesocksProxy</value>
+                </compareText>
+            </ruleList>
+        </parameterGroup>
+        <choiceParameterGroup>
             <name>proxy</name>
             <description>Proxy Configuration</description>
             <explanation>To configure the proxy settings for Liferay workspace, select "Configure proxy settings" below.  These settings will be saved in ~/.gradle/gradle.properties.</explanation>
@@ -1017,3 +1263,4 @@ ${java_executable}
         </parameterGroup>
     </parameterList>
 </project>
+
