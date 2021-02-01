@@ -152,7 +152,7 @@ in December 31, 2020 and browsers removing Flash support in upcoming versions.
 
 ---------------------------------------
 
-### Refactor Clamd integration to use Clamd remote service and remove portal [](id=#)
+### Refactor Clamd integration to use Clamd remote service and remove portal [](id=remove-clamd-integration-antivirusscanner-properties)
 properties configuration for AntivirusScanner selection and hook support for
 AntivirusScanner registration in favor of AntivirusScanner OSGi integration.
 
