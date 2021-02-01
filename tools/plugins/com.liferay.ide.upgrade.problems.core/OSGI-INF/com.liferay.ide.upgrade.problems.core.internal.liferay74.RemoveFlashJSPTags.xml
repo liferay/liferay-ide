@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveFlashJSPTags">
+   <property name="file.extensions" value="jsp,jspf"/>
+   <property name="problem.title" value="The tag liferay-ui:flash is no longer available"/>
+   <property name="problem.section" value="#removed-liferay-ui-flash"/>
+   <property name="problem.summary" value="The tag liferay-ui:flash is no longer available"/>
+   <property name="problem.tickets" value="LPS-121732"/>
+   <property name="problem.version" value="7.4"/>
+   <property name="version" value="7.4"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveFlashJSPTags"/>
+</scr:component>

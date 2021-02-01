@@ -198,5 +198,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveDeprecatedJSPTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.DeprecatedComponentAndTemplateRenderTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveAssetEntriesAssetCategoriesTable.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveServerSideClosureTemplatesSupport.xml
-
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveServerSideClosureTemplatesSupport.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemovePortalFlashSupport.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveFlashJSPTags.xml
