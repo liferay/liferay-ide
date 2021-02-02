@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.problems.test.apichanges73;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
+import com.liferay.ide.upgrade.problems.core.test.UpgradePlanProblemsTestConstants;
 import com.liferay.ide.upgrade.problems.core.test.Util;
 
 import java.io.File;
@@ -40,10 +41,8 @@ public class JqueryNoLongerDefaultIncludeTest {
 
 		FileMigration m = _context.getService(sr);
 
-		List<String> versions = Arrays.asList("7.0", "7.1", "7.2", "7.3");
-
 		List<UpgradeProblem> problems = m.findUpgradeProblems(
-				new File("jsptests/jqueryNoLongerDefaultInclude/"), versions, new NullProgressMonitor());
+				new File("jsptests/jqueryNoLongerDefaultInclude/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
 
 		Assert.assertEquals("", 1, problems.size());
 

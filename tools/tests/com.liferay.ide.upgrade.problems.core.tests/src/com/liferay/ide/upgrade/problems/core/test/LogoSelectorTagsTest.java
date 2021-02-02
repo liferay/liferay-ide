@@ -40,9 +40,7 @@ public class LogoSelectorTagsTest {
 
 		FileMigration m = _context.getService(sr);
 
-		List<String> versions = Arrays.asList("7.0", "7.1", "7.2");
-
-		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/logo-selector/"), versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/logo-selector/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
 
 		Assert.assertEquals("", 1, problems.size());
 

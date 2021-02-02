@@ -43,8 +43,6 @@ public class JSPTagImportsTest {
 
 		FileMigration migration = _context.getService(sr);
 
-		List<String> versions = Arrays.asList("7.0", "7.1", "7.2");
-
 		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
 
 		File testFile = new File(tempFolder, "jsptaglist.jsp");
@@ -55,7 +53,7 @@ public class JSPTagImportsTest {
 
 		Files.copy(originalTestfile.toPath(), testFile.toPath());
 
-		List<UpgradeProblem> problems = migration.findUpgradeProblems(testFile, versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems = migration.findUpgradeProblems(testFile, UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
 
 		Assert.assertEquals("", 6, problems.size());
 
@@ -72,7 +70,7 @@ public class JSPTagImportsTest {
 
 		Assert.assertTrue(testFile.renameTo(dest));
 
-		List<UpgradeProblem> problems2 = migration.findUpgradeProblems(dest, versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems2 = migration.findUpgradeProblems(dest, UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
 
 		Assert.assertEquals("", 0, problems2.size());
 	}
