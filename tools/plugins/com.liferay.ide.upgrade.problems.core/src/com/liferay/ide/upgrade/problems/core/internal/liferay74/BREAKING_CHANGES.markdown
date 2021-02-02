@@ -342,7 +342,7 @@ technologies available within the frontend ecosystem.
 
 ---------------------------------------
 
-### SoyPortlet is no longer available [](id=#)
+### SoyPortlet is no longer available [](id=#removed-soy-portlet)
 - **Date:** 2020-Dec-9
 - **JIRA Ticket:** [LPS-122955](https://issues.liferay.com/browse/LPS-122955)
 
