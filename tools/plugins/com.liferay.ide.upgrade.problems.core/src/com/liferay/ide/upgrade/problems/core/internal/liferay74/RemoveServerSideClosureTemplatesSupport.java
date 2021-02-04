@@ -48,10 +48,12 @@ public class RemoveServerSideClosureTemplatesSupport extends JavaFileMigrator {
 		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.BadgeTag"));
 		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.ButtonTag"));
 		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.CheckboxTag"));
-		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.DropdownActionsTag"));
+		results.add(
+			javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.DropdownActionsTag"));
 		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.DropdownMenuTag"));
 		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.FileCardTag"));
-		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.HorizontalCardTag"));
+		results.add(
+			javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.HorizontalCardTag"));
 		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.IconTag"));
 		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.ImageCardTag"));
 		results.add(javaFileChecker.findImport("com.liferay.frontend.taglib.clay.servlet.taglib.soy.LabelTag"));
