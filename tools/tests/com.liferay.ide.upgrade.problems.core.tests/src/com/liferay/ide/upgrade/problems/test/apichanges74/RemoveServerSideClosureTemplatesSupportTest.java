@@ -25,7 +25,7 @@ public class RemoveServerSideClosureTemplatesSupportTest extends APITestBase {
 
 	@Override
 	public int getExpectedNumber() {
-		return 69;
+		return 70;
 	}
 
 	@Override

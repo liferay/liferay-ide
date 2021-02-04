@@ -162,20 +162,24 @@ public class JavaFileJDT implements JavaFile {
 						ITypeBinding[] superInterfaces = typeBinding.getInterfaces();
 
 						if ((superInterfaces != null) && (superInterfaces.length != 0)) {
-							String searchContext = superInterfaces[0].getName();
-
 							SimpleName nodeName = node.getName();
 
-							if (searchContext.equals(interfaceName)) {
-								int startLine = _astRoot.getLineNumber(nodeName.getStartPosition());
-								int startOffset = nodeName.getStartPosition();
-								int endLine = _astRoot.getLineNumber(
-									nodeName.getStartPosition() + nodeName.getLength());
-								int endOffset = nodeName.getStartPosition() + nodeName.getLength();
+							for (ITypeBinding superInterface : superInterfaces) {
+								String searchContext = superInterface.getName();
 
-								searchResults.add(
-									createSearchResult(
-										searchContext, startOffset, endOffset, startLine, endLine, true));
+								if (searchContext.equals(interfaceName)) {
+									int startLine = _astRoot.getLineNumber(nodeName.getStartPosition());
+									int startOffset = nodeName.getStartPosition();
+									int endLine = _astRoot.getLineNumber(
+										nodeName.getStartPosition() + nodeName.getLength());
+									int endOffset = nodeName.getStartPosition() + nodeName.getLength();
+
+									searchResults.add(
+										createSearchResult(
+											searchContext, startOffset, endOffset, startLine, endLine, true));
+
+									break;
+								}
 							}
 						}
 					}
