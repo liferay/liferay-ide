@@ -14,11 +14,18 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.util.JavaUtil;
 
+import java.io.File;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -62,18 +69,26 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 		Version jdk8Version = Version.parseVersion("1.8");
 
 		if (jdkVersion.compareTo(jdk8Version) <= 0) {
-			args.add(
-				"-Xbootclasspath/p:\"" + bundlePath +
-					"/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.3.Final.jar\"");
-			args.add(
-				"-Xbootclasspath/p:\"" + bundlePath +
-					"/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-" +
-						"1.1.2.Final.jar\"");
-		}
+			File jbossLogmanagerJarFile = _getJbossLib(
+				bundlePath, "/modules/system/layers/base/org/jboss/logmanager/main/");
 
-		args.add(
-			"-Xbootclasspath/p:\"" + bundlePath +
-				"/modules/system/layers/base/org/wildfly/common/main/wildfly-common-1.4.0.Final.jar\"");
+			if (Objects.nonNull(jbossLogmanagerJarFile)) {
+				args.add("-Xbootclasspath/p:\"" + jbossLogmanagerJarFile.getAbsolutePath() + "\"");
+			}
+
+			File jbosslog4jJarFile = _getJbossLib(
+				bundlePath, "/modules/system/layers/base/org/jboss/log4j/logmanager/main/");
+
+			if (Objects.nonNull(jbosslog4jJarFile)) {
+				args.add("-Xbootclasspath/p:\"" + jbosslog4jJarFile.getAbsolutePath() + "\"");
+			}
+
+			File jbossCommonJarFile = _getJbossLib(bundlePath, "/modules/system/layers/base/org/wildfly/common/main/");
+
+			if (Objects.nonNull(jbossCommonJarFile)) {
+				args.add("-Xbootclasspath/p:\"" + jbossCommonJarFile.getAbsolutePath() + "\"");
+			}
+		}
 
 		args.add("-Dorg.jboss.boot.log.file=\"" + bundlePath.append("/standalone/log/boot.log") + "\"");
 		args.add("-Dlogging.configuration=file:\"" + bundlePath + "/standalone/configuration/logging.properties\"");
@@ -101,6 +116,20 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 	@Override
 	public String getType() {
 		return "wildfly";
+	}
+
+	private File _getJbossLib(IPath bundlePath, String libPathValue) {
+		IPath libIPath = bundlePath.append(libPathValue);
+
+		Collection<File> libJars = FileUtils.listFiles(libIPath.toFile(), new String[] {"jar"}, true);
+
+		File[] jarArray = libJars.toArray(new File[0]);
+
+		if (ListUtil.isNotEmpty(jarArray)) {
+			return jarArray[0];
+		}
+
+		return null;
 	}
 
 }
