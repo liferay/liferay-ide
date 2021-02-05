@@ -46,7 +46,7 @@ public class TargetLiferayVersionDefaultValueService extends DefaultValueService
 
 		String[] versions = liferayTargetPlatformVersions.toArray(new String[0]);
 
-		String defaultValue = versions[versions.length - 2];
+		String defaultValue = versions[versions.length - 1];
 
 		IScopeContext[] scopeContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
