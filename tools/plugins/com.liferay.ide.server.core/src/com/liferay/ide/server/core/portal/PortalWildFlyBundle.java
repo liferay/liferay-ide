@@ -14,18 +14,14 @@
 
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.util.JavaUtil;
 
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -69,24 +65,31 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 		Version jdk8Version = Version.parseVersion("1.8");
 
 		if (jdkVersion.compareTo(jdk8Version) <= 0) {
-			File jbossLogmanagerJarFile = _getJbossLib(
+			File jbossLogmanagerJarFile = getJbossLib(
 				bundlePath, "/modules/system/layers/base/org/jboss/logmanager/main/");
 
 			if (Objects.nonNull(jbossLogmanagerJarFile)) {
 				args.add("-Xbootclasspath/p:\"" + jbossLogmanagerJarFile.getAbsolutePath() + "\"");
 			}
 
-			File jbosslog4jJarFile = _getJbossLib(
+			File jbosslog4jJarFile = getJbossLib(
 				bundlePath, "/modules/system/layers/base/org/jboss/log4j/logmanager/main/");
 
 			if (Objects.nonNull(jbosslog4jJarFile)) {
 				args.add("-Xbootclasspath/p:\"" + jbosslog4jJarFile.getAbsolutePath() + "\"");
 			}
 
-			File jbossCommonJarFile = _getJbossLib(bundlePath, "/modules/system/layers/base/org/wildfly/common/main/");
+			File jbossCommonJarFile = getJbossLib(bundlePath, "/modules/system/layers/base/org/wildfly/common/main/");
 
 			if (Objects.nonNull(jbossCommonJarFile)) {
 				args.add("-Xbootclasspath/p:\"" + jbossCommonJarFile.getAbsolutePath() + "\"");
+			}
+		}
+		else {
+			File jbossCommonJarFile = getJbossLib(bundlePath, "/modules/system/layers/base/org/wildfly/common/main/");
+
+			if (Objects.nonNull(jbossCommonJarFile)) {
+				args.add("-Xbootclasspath/a:\"" + jbossCommonJarFile.getAbsolutePath() + "\"");
 			}
 		}
 
@@ -106,8 +109,8 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 
 		args.add("-mp \"" + this.bundlePath.toPortableString() + "/modules\"");
 		args.add("org.jboss.as.cli");
+		args.add("--controller=localhost");
 		args.add("--connect");
-		args.add("--controller=localhost:" + 9990);
 		args.add("--command=:shutdown");
 
 		return args.toArray(new String[0]);
@@ -116,20 +119,6 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 	@Override
 	public String getType() {
 		return "wildfly";
-	}
-
-	private File _getJbossLib(IPath bundlePath, String libPathValue) {
-		IPath libIPath = bundlePath.append(libPathValue);
-
-		Collection<File> libJars = FileUtils.listFiles(libIPath.toFile(), new String[] {"jar"}, true);
-
-		File[] jarArray = libJars.toArray(new File[0]);
-
-		if (ListUtil.isNotEmpty(jarArray)) {
-			return jarArray[0];
-		}
-
-		return null;
 	}
 
 }

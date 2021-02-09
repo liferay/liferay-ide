@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.JavaUtil;
 
@@ -25,8 +26,10 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,6 +37,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -190,13 +195,23 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 		Version jdk8Version = Version.parseVersion("1.8");
 
 		if (jdkVersion.compareTo(jdk8Version) <= 0) {
-			args.add(
-				"-Xbootclasspath/p:\"" + bundlePath +
-					"/modules/org/jboss/logmanager/main/jboss-logmanager-1.2.2.GA.jar\"");
-			args.add(
-				"-Xbootclasspath/p:\"" + bundlePath +
-					"/modules/org/jboss/logmanager/log4j/main/jboss-logmanager-log4j-1.0.0.GA.jar\"");
-			args.add("-Xbootclasspath/p:\"" + bundlePath + "/modules/org/apache/log4j/main/log4j-1.2.16.jar\"");
+			File jbossLogmanagerJarFile = getJbossLib(bundlePath, "/modules/org/jboss/logmanager/main/");
+
+			if (Objects.nonNull(jbossLogmanagerJarFile)) {
+				args.add("-Xbootclasspath/p:\"" + jbossLogmanagerJarFile.getAbsolutePath() + "\"");
+			}
+
+			File jbossLogmanagerLog4jJarFile = getJbossLib(bundlePath, "/modules/org/jboss/logmanager/log4j/main/");
+
+			if (Objects.nonNull(jbossLogmanagerLog4jJarFile)) {
+				args.add("-Xbootclasspath/p:\"" + jbossLogmanagerLog4jJarFile.getAbsolutePath() + "\"");
+			}
+
+			File jbosslog4jJarFile = getJbossLib(bundlePath, "/modules/org/apache/log4j/main/");
+
+			if (Objects.nonNull(jbosslog4jJarFile)) {
+				args.add("-Xbootclasspath/p:\"" + jbosslog4jJarFile.getAbsolutePath() + "\"");
+			}
 		}
 
 		args.add("-Djboss.modules.system.pkgs=org.jboss.logmanager");
@@ -293,6 +308,20 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 	@Override
 	protected int getDefaultJMXRemotePort() {
 		return DEFAULT_JMX_PORT;
+	}
+
+	protected File getJbossLib(IPath bundlePath, String libPathValue) {
+		IPath libIPath = bundlePath.append(libPathValue);
+
+		Collection<File> libJars = FileUtils.listFiles(libIPath.toFile(), new String[] {"jar"}, true);
+
+		File[] jarArray = libJars.toArray(new File[0]);
+
+		if (ListUtil.isNotEmpty(jarArray)) {
+			return jarArray[0];
+		}
+
+		return null;
 	}
 
 	private void _setHttpPortValue(
