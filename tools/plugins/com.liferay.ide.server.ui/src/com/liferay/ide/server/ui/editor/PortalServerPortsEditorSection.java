@@ -17,20 +17,31 @@ package com.liferay.ide.server.ui.editor;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.core.portal.PortalServerConstants;
+import com.liferay.ide.server.ui.cmd.SetGogoShellPortCommand;
 import com.liferay.ide.server.ui.cmd.SetPortalServerHttpPortCommand;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.beans.PropertyChangeEvent;
 
+import java.util.Objects;
+
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.IMessageManager;
+import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.wst.server.core.IRuntime;
 
 /**
@@ -49,14 +60,22 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 
 			validate();
 		}
+
+		if (PortalServer.PROPERTY_GOGOSHELL_PORT.equals(event.getPropertyName())) {
+			String s = (String)event.getNewValue();
+
+			PortalServerPortsEditorSection.this.gogoShellPort.setText(s);
+
+			validate();
+		}
 	}
 
 	protected void createEditorSection(FormToolkit toolkit, Composite composite) {
-		Label label = createLabel(toolkit, composite, Msgs.httpPort);
+		Label httpPortLabel = createLabel(toolkit, composite, Msgs.httpPort);
 
-		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 2, 1);
 
-		label.setLayoutData(data);
+		httpPortLabel.setLayoutData(data);
 
 		httpPort = toolkit.createText(composite, null);
 
@@ -76,9 +95,61 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 					execute(new SetPortalServerHttpPortCommand(server, hp.trim()));
 
 					updating = false;
+
+					validate();
 				}
 
 			});
+
+		Label gogoShellPortLabel = createLabel(toolkit, composite, Msgs.gogoShellPort);
+
+		gogoShellPortLabel.setLayoutData(data);
+
+		gogoShellPort = toolkit.createText(composite, null);
+
+		gogoShellPort.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		gogoShellPort.addModifyListener(
+			new ModifyListener() {
+
+				public void modifyText(ModifyEvent e) {
+					if (updating) {
+						return;
+					}
+
+					updating = true;
+
+					String gogoPort = gogoShellPort.getText();
+
+					execute(new SetGogoShellPortCommand(server, gogoPort.trim()));
+
+					updating = false;
+
+					validate();
+				}
+
+			});
+	}
+
+	protected void doValidate() {
+		String gogoShellPort = portalServer.getGogoShellPort();
+
+		String extGogoShellPort = ServerUtil.getGogoShellPort(server.getOriginal());
+
+		_modifyFormHeadHeight();
+
+		IMessageManager messageManager = getManagedForm().getMessageManager();
+
+		if (!Objects.equals(gogoShellPort, extGogoShellPort)) {
+			String errorMessage =
+				"The customized gogo-shell port is not equals defined value in portal-ext.properties.";
+
+			messageManager.addMessage(
+				PortalServerPortsEditorSection.this.gogoShellPort, errorMessage, Status.WARNING, IStatus.WARNING);
+		}
+		else {
+			messageManager.removeMessage(PortalServerPortsEditorSection.this.gogoShellPort);
+		}
 	}
 
 	protected String getSectionLabel() {
@@ -87,6 +158,9 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 
 	protected void initProperties() {
 		httpPort.setText(portalBundle.getHttpPort());
+		gogoShellPort.setText(portalServer.getGogoShellPort());
+
+		validate();
 	}
 
 	@Override
@@ -107,12 +181,32 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 		execute(new SetPortalServerHttpPortCommand(server, PortalServerConstants.DEFAULT_HTTP_PORT));
 
 		httpPort.setText(PortalServerConstants.DEFAULT_HTTP_PORT);
+
+		execute(new SetGogoShellPortCommand(server, PortalServerConstants.DEFAULT_GOGOSHELL_PORT));
+
+		gogoShellPort.setText(PortalServerConstants.DEFAULT_GOGOSHELL_PORT);
 	}
 
+	protected Text gogoShellPort;
 	protected Text httpPort;
+
+	private void _modifyFormHeadHeight() {
+		IManagedForm managedForm = getManagedForm();
+
+		ScrolledForm scrolledForm = managedForm.getForm();
+
+		Form form = scrolledForm.getForm();
+
+		Composite head = form.getHead();
+
+		Rectangle bounds = head.getBounds();
+
+		head.setBounds(bounds.x, bounds.y, bounds.width, bounds.height + 5);
+	}
 
 	private static class Msgs extends NLS {
 
+		public static String gogoShellPort;
 		public static String httpPort;
 		public static String ports;
 

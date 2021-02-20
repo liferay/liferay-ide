@@ -167,7 +167,7 @@ public class PortalServerBehavior
 	}
 
 	public GogoBundleDeployer createBundleDeployer() throws Exception {
-		return ServerUtil.createBundleDeployer(_getPortalRuntime(), getServer());
+		return ServerUtil.createBundleDeployer(getServer());
 	}
 
 	public String getClassToLaunch() {
@@ -364,12 +364,7 @@ public class PortalServerBehavior
 				);
 			}
 			else if (_needHandle(event, IServer.STATE_STARTED)) {
-				IRuntime runtime = server.getRuntime();
-
-				PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
-					PortalRuntime.class, new NullProgressMonitor());
-
-				GogoBundleDeployer deployer = ServerUtil.createBundleDeployer(portalRuntime, server);
+				GogoBundleDeployer deployer = ServerUtil.createBundleDeployer(server);
 
 				Stream.of(
 					server.getModules()
@@ -1018,7 +1013,7 @@ public class PortalServerBehavior
 				try {
 					String symbolicName = bundleProject.getSymbolicName();
 
-					GogoBundleDeployer helper = new GogoBundleDeployer();
+					GogoBundleDeployer helper = ServerUtil.createBundleDeployer(getServer());
 
 					long bundleId = helper.getBundleId(symbolicName);
 

@@ -31,6 +31,8 @@ public interface PortalServer extends ILiferayServer {
 
 	public String getExternalProperties();
 
+	public String getGogoShellPort();
+
 	public String[] getMemoryArgs();
 
 	public String DEFAULT_HTTP_PORT = defaultPrefs.get("default.http.port", StringPool.EMPTY);
@@ -42,6 +44,8 @@ public interface PortalServer extends ILiferayServer {
 	public String PROPERTY_DEVELOPER_MODE = "developerMode";
 
 	public String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
+
+	public String PROPERTY_GOGOSHELL_PORT = "gogoShellPort";
 
 	public String PROPERTY_MEMORY_ARGS = "memoryArgs";
 

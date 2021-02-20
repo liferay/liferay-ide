@@ -27,6 +27,8 @@ public interface PortalServerWorkingCopy extends ILiferayServerWorkingCopy, Port
 
 	public void setExternalProperties(String externalProperties);
 
+	public void setGogoShellPort(String gogoShellPort);
+
 	public void setMemoryArgs(String memoryArgs);
 
 }

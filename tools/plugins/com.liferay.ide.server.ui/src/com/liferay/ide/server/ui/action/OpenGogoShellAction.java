@@ -15,10 +15,12 @@
 package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.server.core.ILiferayServer;
+import com.liferay.ide.server.core.portal.PortalServer;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.tm.terminal.view.core.interfaces.ITerminalService;
 import org.eclipse.tm.terminal.view.core.interfaces.constants.ITerminalsConnectorConstants;
@@ -48,9 +50,13 @@ public class OpenGogoShellAction extends AbstractServerRunningAction {
 			properties.put(
 				ITerminalsConnectorConstants.PROP_DELEGATE_ID,
 				"org.eclipse.tm.terminal.connector.telnet.launcher.telnet");
+
+			PortalServer portalServer = (PortalServer)selectedServer.loadAdapter(
+				PortalServer.class, new NullProgressMonitor());
+
 			properties.put(ITerminalsConnectorConstants.PROP_ENCODING, null);
 			properties.put(ITerminalsConnectorConstants.PROP_IP_HOST, host);
-			properties.put(ITerminalsConnectorConstants.PROP_IP_PORT, 11311);
+			properties.put(ITerminalsConnectorConstants.PROP_IP_PORT, portalServer.getGogoShellPort());
 			properties.put(
 				ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID,
 				"org.eclipse.tm.terminal.connector.telnet.TelnetConnector");

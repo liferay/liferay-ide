@@ -19,6 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.lang.reflect.Constructor;
 
@@ -195,7 +196,9 @@ public class PortalPublishTask extends PublishTaskDelegate {
 
 		if (server.getServerState() == IServer.STATE_STARTED) {
 			try {
-				deployed = new GogoBundleDeployer().getBundleId(bsn) > 0;
+				GogoBundleDeployer bundleDeployer = ServerUtil.createBundleDeployer(server);
+
+				deployed = bundleDeployer.getBundleId(bsn) > 0;
 			}
 			catch (Exception e) {
 			}

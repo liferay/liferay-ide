@@ -36,6 +36,7 @@ import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.core.portal.PortalServer;
+import com.liferay.ide.server.core.portal.PortalServerConstants;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
@@ -228,10 +229,19 @@ public class ServerUtil {
 		}
 	}
 
-	public static GogoBundleDeployer createBundleDeployer(PortalRuntime portalRuntime, IServer server)
-		throws Exception {
+	public static GogoBundleDeployer createBundleDeployer(IServer server) throws Exception {
+		int gogoPort;
 
-		return new GogoBundleDeployer(server.getHost(), 11311);
+		try {
+			PortalServer portalServer = (PortalServer)server.loadAdapter(PortalServer.class, null);
+
+			gogoPort = Integer.parseInt(portalServer.getGogoShellPort());
+		}
+		catch (NumberFormatException npe) {
+			gogoPort = Integer.parseInt(PortalServerConstants.DEFAULT_GOGOSHELL_PORT);
+		}
+
+		return new GogoBundleDeployer(server.getHost(), gogoPort);
 	}
 
 	public static IStatus createErrorStatus(String msg) {
@@ -538,6 +548,41 @@ public class ServerUtil {
 		}
 
 		return fragmentHostName;
+	}
+
+	public static String getGogoShellPort(IServer server) {
+		IRuntime runtime = server.getRuntime();
+
+		String gogoShellPortValue = PortalServerConstants.DEFAULT_GOGOSHELL_PORT;
+
+		PortalRuntime liferayRuntime = (PortalRuntime)runtime.loadAdapter(PortalRuntime.class, null);
+
+		if (Objects.nonNull(liferayRuntime)) {
+			File[] extPropertiesFiles = _getPortalExtraPropertiesFiles(liferayRuntime, "portal-ext.properties");
+			File[] developerPropertiesFiles = _getPortalExtraPropertiesFiles(
+				liferayRuntime, "portal-developer.properties");
+			File[] setupWizardPropertiesFiles = _getPortalExtraPropertiesFiles(
+				liferayRuntime, "portal-setup-wizard.properties");
+
+			Properties poralExtraProperties = new Properties();
+
+			_loadProperties(poralExtraProperties, extPropertiesFiles);
+			_loadProperties(poralExtraProperties, developerPropertiesFiles);
+			_loadProperties(poralExtraProperties, setupWizardPropertiesFiles);
+
+			String gogoShellConnectString = poralExtraProperties.getProperty(
+				"module.framework.properties.osgi.console");
+
+			if (Objects.nonNull(gogoShellConnectString)) {
+				String[] gogoShellConnectStrings = gogoShellConnectString.split(":");
+
+				if (Objects.nonNull(gogoShellConnectStrings) && (gogoShellConnectStrings.length > 1)) {
+					gogoShellPortValue = gogoShellConnectStrings[1];
+				}
+			}
+		}
+
+		return gogoShellPortValue;
 	}
 
 	public static IProjectFacet getLiferayFacet(IFacetedProject facetedProject) {
@@ -1310,6 +1355,35 @@ public class ServerUtil {
 		}
 
 		return MessageFormat.format("{0}", runtimeName);
+	}
+
+	private static File[] _getPortalExtraPropertiesFiles(ILiferayRuntime liferayRuntime, String propertyFileName) {
+		File[] retVal = new File[0];
+
+		IPath liferayHome = liferayRuntime.getLiferayHome();
+
+		if (liferayHome != null) {
+			File liferayHomeDir = liferayHome.toFile();
+
+			File[] files = liferayHomeDir.listFiles(
+				(dir, name) -> dir.equals(liferayHomeDir) && Objects.equals(name, propertyFileName));
+
+			if (files != null) {
+				retVal = files;
+			}
+		}
+
+		return retVal;
+	}
+
+	private static void _loadProperties(Properties poralExtraPropertiesFiles, File[] propertyFiles) {
+		if (ListUtil.isNotEmpty(propertyFiles)) {
+			try (InputStream stream = Files.newInputStream(propertyFiles[0].toPath())) {
+				poralExtraPropertiesFiles.load(stream);
+			}
+			catch (IOException ioe) {
+			}
+		}
 	}
 
 	private static String _setRuntimeName(IRuntimeWorkingCopy runtime, String runtimeName, int suffix) {

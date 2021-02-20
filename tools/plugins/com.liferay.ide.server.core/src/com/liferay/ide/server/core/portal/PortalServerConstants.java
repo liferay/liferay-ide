@@ -29,9 +29,13 @@ public interface PortalServerConstants {
 
 	public boolean DEFAULT_DEVELOPER_MODE = true;
 
+	public String DEFAULT_GOGOSHELL_PORT = "11311";
+
 	public String DEFAULT_HTTP_PORT = "8080";
 
 	public IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode(LiferayServerCore.PLUGIN_ID);
+
+	public String DEFAULT_HOST = "localhost";
 
 	public String DEFAULT_MEMORY_ARGS = defaultPrefs.get("default.memory.args", "-Xmx2560m");
 

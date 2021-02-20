@@ -37,11 +37,6 @@ import org.osgi.framework.dto.BundleDTO;
  */
 public class GogoBundleDeployer {
 
-	public GogoBundleDeployer() {
-		_host = "localhost";
-		_port = 11311;
-	}
-
 	public GogoBundleDeployer(String host, int port) {
 		_host = host;
 		_port = port;

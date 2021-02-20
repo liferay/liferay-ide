@@ -19,12 +19,10 @@ import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.server.core.portal.PortalBundle;
-import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -74,13 +72,8 @@ public class LiferayModuleDecorator extends LabelProvider implements ILightweigh
 				}
 
 				if (server != null) {
-					IRuntime runtime = server.getRuntime();
-
-					PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
-						PortalRuntime.class, new NullProgressMonitor());
-
 					try {
-						GogoBundleDeployer deployer = ServerUtil.createBundleDeployer(portalRuntime, server);
+						GogoBundleDeployer deployer = ServerUtil.createBundleDeployer(server);
 
 						if (bundleProject != null) {
 							int bundleState = deployer.getBundleState(bundleProject.getSymbolicName());

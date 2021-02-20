@@ -219,6 +219,9 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 		return label;
 	}
 
+	protected void doValidate() {
+	}
+
 	protected abstract String getSectionLabel();
 
 	protected void initialize() {
@@ -245,6 +248,8 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 		if (portalServer != null) {
 			setErrorMessage(null);
 		}
+
+		doValidate();
 	}
 
 	protected boolean allowRestrictedEditing;

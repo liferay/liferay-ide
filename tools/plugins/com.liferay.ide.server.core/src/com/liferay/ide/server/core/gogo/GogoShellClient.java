@@ -34,10 +34,6 @@ import java.util.List;
  */
 public class GogoShellClient implements AutoCloseable {
 
-	public GogoShellClient() throws IOException {
-		this("localhost", 11311);
-	}
-
 	public GogoShellClient(String host, int port) throws IOException {
 		_socket = new Socket(host, port);
 

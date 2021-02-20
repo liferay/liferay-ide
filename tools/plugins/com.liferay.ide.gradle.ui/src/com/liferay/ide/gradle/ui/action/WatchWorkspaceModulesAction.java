@@ -23,6 +23,7 @@ import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
+import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
@@ -75,14 +76,14 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 		ISelection selection = selectionProvider.getSelection();
 
-		if (_action.equals("watch") && (selection instanceof TreeSelection)) {
+		if (selection instanceof TreeSelection) {
 			TreeSelection tSelection = (TreeSelection)selection;
 
 			TreePath treePath = tSelection.getPaths()[0];
 
 			IServer server = (IServer)treePath.getFirstSegment();
 
-			if (server.getServerState() == IServer.STATE_STOPPED) {
+			if (_action.equals("watch") && (server.getServerState() == IServer.STATE_STOPPED)) {
 				MessageDialog dialog = new MessageDialog(
 					UIUtil.getActiveShell(), "Watch Task.", null,
 					"In order to watch this project, the server must be started. Do you want to start the server?",
@@ -105,6 +106,15 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 				catch (CoreException ce) {
 					LiferayGradleUI.logError(ce);
 				}
+			}
+
+			try {
+				_gogoBundleDeployer = ServerUtil.createBundleDeployer(server);
+			}
+			catch (Exception exception) {
+				LiferayGradleUI.logError(exception);
+
+				return;
 			}
 		}
 
@@ -183,6 +193,7 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 	}
 
 	private String _action;
+	private GogoBundleDeployer _gogoBundleDeployer;
 
 	private class StopWatchBundleJob extends Job {
 
@@ -206,7 +217,6 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 			return Status.OK_STATUS;
 		}
 
-		private GogoBundleDeployer _gogoBundleDeployer = new GogoBundleDeployer();
 		private Set<IProject> _stopWatchBundleProjects;
 
 	}

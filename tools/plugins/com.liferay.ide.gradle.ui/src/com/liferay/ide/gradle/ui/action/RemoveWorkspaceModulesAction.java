@@ -17,7 +17,9 @@ package com.liferay.ide.gradle.ui.action;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
+import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Iterator;
 
@@ -52,9 +54,16 @@ public class RemoveWorkspaceModulesAction extends SelectionProviderAction {
 			if (IServer.STATE_STARTED != server.getServerState()) {
 				return;
 			}
-		}
 
-		GogoBundleDeployer deployer = new GogoBundleDeployer();
+			try {
+				_gogoBundleDeployer = ServerUtil.createBundleDeployer(server);
+			}
+			catch (Exception exception) {
+				LiferayGradleUI.logError(exception);
+
+				return;
+			}
+		}
 
 		Iterator<?> iterator = selection.iterator();
 
@@ -68,7 +77,7 @@ public class RemoveWorkspaceModulesAction extends SelectionProviderAction {
 
 				if (bundleProject != null) {
 					try {
-						deployer.uninstall(bundleProject);
+						_gogoBundleDeployer.uninstall(bundleProject);
 					}
 					catch (Exception e) {
 						LiferayGradleCore.logError(e);
@@ -77,5 +86,7 @@ public class RemoveWorkspaceModulesAction extends SelectionProviderAction {
 			}
 		}
 	}
+
+	private GogoBundleDeployer _gogoBundleDeployer;
 
 }
