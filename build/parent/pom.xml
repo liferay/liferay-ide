@@ -27,8 +27,8 @@
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <blade-latest-download-url>https://repository.liferay.com/nexus/content/groups/public/com/liferay/blade/com.liferay.blade.cli/4.0.7-SNAPSHOT/com.liferay.blade.cli-4.0.7-20210115.221628-4.jar</blade-latest-download-url>
-        <blade-latest-md5>2af6f97b9e666dd879f62c4ba41d069b</blade-latest-md5>
+        <blade-latest-download-url>https://repository.liferay.com/nexus/content/groups/public/com/liferay/blade/com.liferay.blade.cli/4.0.7-SNAPSHOT/com.liferay.blade.cli-4.0.7-20210216.195716-5.jar</blade-latest-download-url>
+        <blade-latest-md5>979c355a7d139e7e13e33f9ea7da9d90</blade-latest-md5>
         <blade-392-download-url>https://repository.liferay.com/nexus/content/repositories/public/com/liferay/blade/com.liferay.blade.cli/3.9.2/com.liferay.blade.cli-3.9.2.jar</blade-392-download-url>
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://dl.bintray.com/gamerson/liferay-ide-files/docs/code-upgrade-docs-20201215.zip</upgrade-plan-content-zip-url>
