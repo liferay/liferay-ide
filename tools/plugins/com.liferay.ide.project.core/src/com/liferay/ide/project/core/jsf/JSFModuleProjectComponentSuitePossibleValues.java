@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.jsf;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.IOException;
 
@@ -96,7 +97,7 @@ public class JSFModuleProjectComponentSuitePossibleValues
 
 			connection = connection.timeout(10000);
 
-			connection = connection.validateTLSCertificates(false);
+			connection = connection.validateTLSCertificates(true);
 
 			Document document = connection.get();
 
@@ -109,12 +110,14 @@ public class JSFModuleProjectComponentSuitePossibleValues
 
 				possibleValues.add(value);
 			}
+
+			return possibleValues;
 		}
 		catch (IOException ioe) {
-			return Collections.emptyList();
+			ProjectCore.logError(ioe);
 		}
 
-		return possibleValues;
+		return Collections.emptyList();
 	}
 
 	private NewLiferayJSFModuleProjectOp _op() {

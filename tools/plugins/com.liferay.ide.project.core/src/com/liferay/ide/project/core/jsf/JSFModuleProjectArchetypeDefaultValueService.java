@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.jsf;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
@@ -70,7 +71,7 @@ public class JSFModuleProjectArchetypeDefaultValueService
 
 			connection = connection.timeout(10000);
 
-			connection = connection.validateTLSCertificates(false);
+			connection = connection.validateTLSCertificates(true);
 
 			Document document = connection.get();
 
@@ -123,8 +124,10 @@ public class JSFModuleProjectArchetypeDefaultValueService
 			return sb.toString();
 		}
 		catch (Exception e) {
-			return null;
+			ProjectCore.logError(e);
 		}
+
+		return null;
 	}
 
 	private String _getDefaultValue() {
