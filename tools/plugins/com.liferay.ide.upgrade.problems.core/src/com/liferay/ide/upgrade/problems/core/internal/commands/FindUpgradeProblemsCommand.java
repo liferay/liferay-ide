@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
@@ -24,6 +25,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
+import com.liferay.ide.upgrade.problems.core.LegacyFileMigration;
 import com.liferay.ide.upgrade.problems.core.commands.FindUpgradeProblemsCommandKeys;
 
 import java.util.ArrayList;
@@ -95,6 +97,24 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 			Collectors.toList()
 		);
 
+		foundUpgradeProblemsStream = projects.stream();
+
+		List<UpgradeProblem> legacyUpgradeProblem = foundUpgradeProblemsStream.filter(
+			ProjectUtil::isServiceBuilderProject
+		).map(
+			FileUtil::getFile
+		).map(
+			searchFile -> _legacyFileMigration.findUpgradeProblems(searchFile, upgradeVersions, progressMonitor)
+		).flatMap(
+			findProblems -> findProblems.stream()
+		).filter(
+			findProblem -> ListUtil.notContains((Set<UpgradeProblem>)ignoredProblems, findProblem)
+		).collect(
+			Collectors.toList()
+		);
+
+		foundUpgradeProblems.addAll(legacyUpgradeProblem);
+
 		refreshProjects(foundUpgradeProblems, progressMonitor);
 
 		upgradePlan.addUpgradeProblems(foundUpgradeProblems);
@@ -108,6 +128,9 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 
 	@Reference
 	private FileMigration _fileMigration;
+
+	@Reference
+	private LegacyFileMigration _legacyFileMigration;
 
 	@Reference
 	private ResourceSelection _resourceSelection;

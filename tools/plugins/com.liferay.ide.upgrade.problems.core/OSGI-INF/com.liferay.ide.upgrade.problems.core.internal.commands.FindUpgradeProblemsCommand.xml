@@ -5,6 +5,7 @@
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand"/>
    </service>
    <reference cardinality="1..1" field="_fileMigration" interface="com.liferay.ide.upgrade.problems.core.FileMigration" name="_fileMigration"/>
+   <reference cardinality="1..1" field="_legacyFileMigration" interface="com.liferay.ide.upgrade.problems.core.LegacyFileMigration" name="_legacyFileMigration"/>
    <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.plan.core.ResourceSelection" name="_resourceSelection"/>
    <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.problems.core.internal.commands.FindUpgradeProblemsCommand"/>

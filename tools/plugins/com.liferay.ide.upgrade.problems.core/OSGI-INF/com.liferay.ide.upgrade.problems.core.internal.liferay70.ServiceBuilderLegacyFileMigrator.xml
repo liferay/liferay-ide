@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.ServiceBuilderLegacyFileMigrator">
+   <property name="file.extensions" value="none"/>
+   <property name="problem.type" value="legacy"/>
+   <property name="problem.title" value="Legacy File should be removed"/>
+   <property name="problem.summary" value="Remove Legacy File"/>
+   <property name="version" value="7.0"/>
+   <property name="auto.correct" value="delete-legacy-file"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.ServiceBuilderLegacyFileMigrator"/>
+</scr:component>

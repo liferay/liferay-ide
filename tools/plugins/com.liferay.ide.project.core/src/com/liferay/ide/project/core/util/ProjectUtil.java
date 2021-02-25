@@ -25,6 +25,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.ProductInfo;
+import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
@@ -67,6 +68,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -1530,6 +1532,39 @@ public class ProjectUtil {
 
 	public static boolean isPortletProject(IProject project) {
 		return hasFacet(project, IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET);
+	}
+
+	public static boolean isServiceBuilderProject(IProject project) {
+		if (project == null) {
+			return false;
+		}
+
+		if (!project.isOpen()) {
+			return false;
+		}
+
+		try {
+			if (project.hasNature("org.eclipse.jdt.core.javanature") &&
+				!LiferayWorkspaceUtil.isValidWorkspace(project) &&
+				Optional.ofNullable(
+					project).filter(
+						p -> LiferayCore.create(IWorkspaceProject.class, project) == null).map(
+							p -> LiferayCore.create(ILiferayProject.class, p)).filter(
+								Objects::nonNull).filter(
+									p -> !(p instanceof NoopLiferayProject)).isPresent()) {
+
+				SearchFilesVisitor searchFilesVisitor = new SearchFilesVisitor();
+
+				List<IFile> serviceXmls = searchFilesVisitor.searchFiles(project, "service.xml");
+
+				return !serviceXmls.isEmpty();
+			}
+
+			return false;
+		}
+		catch (CoreException ce) {
+			return false;
+		}
 	}
 
 	public static boolean isThemeProject(IProject project) {

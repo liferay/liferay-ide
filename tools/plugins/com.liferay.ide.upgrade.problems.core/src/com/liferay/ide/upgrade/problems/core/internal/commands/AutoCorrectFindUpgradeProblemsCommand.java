@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.upgrade.plan.core.MessagePrompt;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
@@ -28,6 +29,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
+import com.liferay.ide.upgrade.problems.core.LegacyFileMigration;
 import com.liferay.ide.upgrade.problems.core.commands.AutoCorrectFindUpgradeProblemsCommandKeys;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
@@ -205,6 +207,25 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 			Collectors.toList()
 		);
 
+		autoCorrectProblemsStream = projects.stream();
+
+		List<UpgradeProblem> legacyAutoCorrectProblems = autoCorrectProblemsStream.filter(
+			ProjectUtil::isServiceBuilderProject
+		).map(
+			FileUtil::getFile
+		).map(
+			projectFile -> _legacyFileMigration.findUpgradeProblems(
+				projectFile, upgradeVersions, Collections.singleton("auto.correct"), progressMonitor)
+		).flatMap(
+			findProblems -> findProblems.stream()
+		).filter(
+			findProblem -> ListUtil.notContains((Set<UpgradeProblem>)upgradePlan.getIgnoredProblems(), findProblem)
+		).collect(
+			Collectors.toList()
+		);
+
+		autoCorrectProblems.addAll(legacyAutoCorrectProblems);
+
 		autoCorrectProblems.sort(
 			(problem1, problem2) -> {
 				Version version1 = new Version(problem1.getVersion());
@@ -218,6 +239,9 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 
 	@Reference
 	private FileMigration _fileMigration;
+
+	@Reference
+	private LegacyFileMigration _legacyFileMigration;
 
 	@Reference
 	private MessagePrompt _messagePrompt;

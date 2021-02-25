@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" name="com.liferay.ide.upgrade.problems.core.internal.LegacyFileMigrationService">
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.LegacyFileMigration"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.LegacyFileMigrationService"/>
+</scr:component>
