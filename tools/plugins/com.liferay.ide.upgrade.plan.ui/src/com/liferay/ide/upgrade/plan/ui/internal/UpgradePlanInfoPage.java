@@ -16,6 +16,8 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
@@ -139,11 +141,15 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 							replacement = "file:///";
 						}
 
-						url = url.replaceFirst(replacement, "");
+						url = url.replaceFirst(replacement, StringPool.EMPTY);
 
 						String[] urlSegments = url.split("/");
 
-						String htmlName = urlSegments[urlSegments.length - 1];
+						if (ListUtil.isEmpty(urlSegments)) {
+							return;
+						}
+
+						String htmlFileName = urlSegments[urlSegments.length - 1];
 
 						UIUtil.async(
 							() -> {
@@ -154,8 +160,10 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 											@Override
 											public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
-												if (path.endsWith(htmlName)) {
-													_browser.setText(FileUtil.readContents(path.toFile()));
+												File visitedFile = path.toFile();
+
+												if (path.endsWith(htmlFileName) && visitedFile.isFile()) {
+													_browser.setText(FileUtil.readContents(visitedFile));
 
 													_composite.redraw();
 
@@ -168,7 +176,6 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 										});
 								}
 								catch (IOException e) {
-									e.printStackTrace();
 								}
 							});
 					}
