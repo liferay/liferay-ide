@@ -33,7 +33,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.title=Switched to Use JDK Function and Supplier",
 		"problem.summary=The Function and Supplier interfaces in package com.liferay.portal.kernel.util were removed. Their usages were replaced with java.util.function.Function and java.util.function.Supplier.",
-		"problem.tickets=LPS-88911", "problem.section=#switched-to-use-jdk-function-and-supplier", "version=7.2"
+		"problem.tickets=LPS-88911", "problem.section=#switched-to-use-jdk-function-and-supplier",
+		"problem.version=7.2", "version=7.2"
 	},
 	service = FileMigrator.class
 )

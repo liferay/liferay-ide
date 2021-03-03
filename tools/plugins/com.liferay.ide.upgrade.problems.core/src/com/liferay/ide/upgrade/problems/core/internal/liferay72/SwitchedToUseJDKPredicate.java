@@ -33,7 +33,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.title=Switched to Use JDK Predicate",
 		"problem.summary=The interface com.liferay.portal.kernel.util.PredicateFilter was removed and replaced with java.util.function.Predicate. And these implementations were removed. The com.liferay.portal.kernel.util.ArrayUtil_IW class was regenerated.",
-		"problem.tickets=LPS-89139", "problem.section=#switched-to-use-jdk-predicate", "version=7.2"
+		"problem.tickets=LPS-89139", "problem.section=#switched-to-use-jdk-predicate", "problem.version=7.2",
+		"version=7.2"
 	},
 	service = FileMigrator.class
 )

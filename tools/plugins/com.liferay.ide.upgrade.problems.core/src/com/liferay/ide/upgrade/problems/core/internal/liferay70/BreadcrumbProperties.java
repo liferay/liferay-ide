@@ -28,7 +28,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Breadcrumb Portlet's Display Styles Changes",
 		"problem.summary=Replaced the Breadcrumb Portlet's Display Styles with ADTs", "problem.tickets=LPS-53577",
-		"problem.section=#replaced-the-breadcrumb-portlets-display-styles-with-adts", "version=7.0"
+		"problem.section=#replaced-the-breadcrumb-portlets-display-styles-with-adts", "problem.version=7.0",
+		"version=7.0"
 	},
 	service = FileMigrator.class
 )

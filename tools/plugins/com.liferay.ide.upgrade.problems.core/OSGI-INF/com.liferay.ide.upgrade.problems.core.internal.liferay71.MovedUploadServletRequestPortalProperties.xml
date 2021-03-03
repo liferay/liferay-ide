@@ -5,6 +5,7 @@
    <property name="problem.summary" value="The Upload Servlet Request properties have been moved from the portal.properties file and Server Administration"/>
    <property name="problem.tickets" value="LPS-69102"/>
    <property name="problem.section" value="#moved-upload-servlet-request-portal-properties"/>
+   <property name="problem.version" value="7.1"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

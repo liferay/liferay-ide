@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=jsp,jspf", "problem.title=Removed liferay-frontend:contextual-sidebar Tag",
 		"problem.section=#removed-liferay-frontend-contextual-sidebar-tag",
 		"problem.summary=The `liferay-frontend:contextual-sidebar` tag was removed.", "problem.tickets=LPS-100146",
-		"version=7.3"
+		"problem.version=7.3", "version=7.3"
 	},
 	service = FileMigrator.class
 )

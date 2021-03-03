@@ -58,7 +58,7 @@ import org.w3c.dom.Text;
 		"problem.tickets=LPS-50156",
 		"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
 		"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
-		"auto.correct=portlet-xml-portlet-class", "version=7.0"
+		"auto.correct=portlet-xml-portlet-class", "problem.version=7.0", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

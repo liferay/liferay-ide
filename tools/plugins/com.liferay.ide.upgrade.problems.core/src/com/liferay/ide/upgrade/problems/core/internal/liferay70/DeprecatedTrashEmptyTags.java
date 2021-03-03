@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
 		"problem.section=#removed-the-liferay-uitrash-empty-tag-and-replaced-with-liferay-trashempty",
 		"problem.summary=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
-		"problem.tickets=LPS-60779", "auto.correct=jsptag", "version=7.0"
+		"problem.tickets=LPS-60779", "auto.correct=jsptag", "problem.version=7.0", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

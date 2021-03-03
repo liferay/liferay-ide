@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.title=Moved TermsOfUseContentProvider out of kernel.util",
 		"problem.summary=The TermsOfUseContentProvider interface's package changed.", "problem.tickets=LPS-88869",
-		"problem.section=#moved-termsofusecontentprovider-out-of-kernel-uitl", "version=7.2"
+		"problem.section=#moved-termsofusecontentprovider-out-of-kernel-uitl", "problem.version=7.2", "version=7.2"
 	},
 	service = FileMigrator.class
 )

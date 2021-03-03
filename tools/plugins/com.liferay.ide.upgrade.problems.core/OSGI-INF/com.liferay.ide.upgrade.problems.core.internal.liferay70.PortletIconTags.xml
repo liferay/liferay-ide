@@ -5,6 +5,7 @@
    <property name="problem.section" value="#removed-the-tags-that-start-with-portleticon-"/>
    <property name="problem.summary" value="Removed the Tags that Start with portlet:icon-"/>
    <property name="problem.tickets" value="LPS-54620"/>
+   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

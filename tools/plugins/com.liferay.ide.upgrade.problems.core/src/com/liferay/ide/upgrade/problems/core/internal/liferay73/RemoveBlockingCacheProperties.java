@@ -28,7 +28,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Remove Support for Blocking Cache",
 		"problem.summary=Blocking cache support was removed. These related properties can no longer be used to enable blocking cache.",
-		"problem.tickets=LPS-115687", "problem.section=#remove-support-for-blocking-cache", "version=7.3"
+		"problem.tickets=LPS-115687", "problem.section=#remove-support-for-blocking-cache", "problem.version=7.3",
+		"version=7.3"
 	},
 	service = FileMigrator.class
 )

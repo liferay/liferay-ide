@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.summary=Removed java class AssetTagsSelectorTag",
 		"problem.tickets=LPS-100144", "problem.title=Removed java class AssetTagsSelectorTag",
-		"problem.section=#removed-soy-assettagselectortag", "version=7.3"
+		"problem.section=#removed-soy-assettagselectortag", "problem.version=7.3", "version=7.3"
 	},
 	service = FileMigrator.class
 )

@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=jsp,jspf", "problem.title=Changed Usage of the liferay-ui:ddm-template-selector Tag",
 		"problem.section=#changed-usage-of-the-liferay-uiddm-template-selector-tag",
 		"problem.summary=The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed className",
-		"problem.tickets=LPS-53790", "auto.correct=jsptag", "version=7.0"
+		"problem.tickets=LPS-53790", "auto.correct=jsptag", "problem.version=7.0", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

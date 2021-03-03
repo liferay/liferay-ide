@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf", "problem.title=Moved Recycle Bin Logic Into a New DLTrashService Interface",
 		"problem.section=#moved-recycle-bin-logic-into-a-new-dltrashservice-interface",
 		"problem.summary=Moved Recycle Bin Logic Into a New DLTrashService Interface", "problem.tickets=LPS-60810",
-		"version=7.0"
+		"problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )

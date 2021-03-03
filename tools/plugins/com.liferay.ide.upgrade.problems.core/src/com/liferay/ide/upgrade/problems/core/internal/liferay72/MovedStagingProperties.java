@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Moved Two Staging Properties to OSGi Configuration",
 		"problem.summary=Two Staging properties have been moved from portal.properties to an OSGi configuration named ExportImportServiceConfiguration.java in the export-import-service module.",
-		"problem.tickets=LPS-88018", "problem.section=#moved-staging-properties", "version=7.2"
+		"problem.tickets=LPS-88018", "problem.section=#moved-staging-properties", "problem.version=7.2", "version=7.2"
 	},
 	service = FileMigrator.class
 )

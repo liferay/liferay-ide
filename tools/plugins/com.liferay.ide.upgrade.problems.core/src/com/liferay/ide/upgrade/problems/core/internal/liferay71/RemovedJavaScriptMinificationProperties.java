@@ -29,7 +29,8 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=properties", "problem.title=Removed JavaScript Minification Properties From Portal Properties",
 		"problem.summary=Removed JavaScript Minification Properties From Portal Properties",
 		"problem.tickets= LPS-74375",
-		"problem.section=#removed-javascript-minification-properties-from-portal-properties", "version=7.1"
+		"problem.section=#removed-javascript-minification-properties-from-portal-properties", "problem.version=7.1",
+		"version=7.1"
 	},
 	service = FileMigrator.class
 )

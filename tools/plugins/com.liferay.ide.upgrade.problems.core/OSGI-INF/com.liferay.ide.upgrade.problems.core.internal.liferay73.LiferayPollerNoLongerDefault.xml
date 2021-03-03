@@ -5,6 +5,7 @@
    <property name="problem.section" value="#liferaypoller-is-no-longer-initialized-by-default"/>
    <property name="problem.summary" value="Liferay.Poller Is No Longer Initialized by Default"/>
    <property name="problem.tickets" value="LPS-112942"/>
+   <property name="problem.version" value="7.3"/>
    <property name="version" value="7.3"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

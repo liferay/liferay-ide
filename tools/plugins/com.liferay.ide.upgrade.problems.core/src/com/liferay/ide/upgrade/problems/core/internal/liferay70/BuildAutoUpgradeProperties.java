@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	property = {
 		"file.extensions=properties", "problem.title=Build Auto Upgrade", "problem.summary=Build Auto Upgrade",
-		"problem.tickets=LPS-73967", "problem.section=#build-auto-upgrade", "version=7.0"
+		"problem.tickets=LPS-73967", "problem.section=#build-auto-upgrade", "problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )

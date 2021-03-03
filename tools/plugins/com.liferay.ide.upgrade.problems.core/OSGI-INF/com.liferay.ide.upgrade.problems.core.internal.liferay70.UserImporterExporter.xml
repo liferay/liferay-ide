@@ -5,6 +5,7 @@
    <property name="problem.section" value="#user-operation-and-importer-exporter-classes-and-utilities-have-been-moved-"/>
    <property name="problem.summary" value="=User Operation and Importer/Exporter Classes and Utilities Moved or Removed"/>
    <property name="problem.tickets" value="LPS-63205"/>
+   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

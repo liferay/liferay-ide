@@ -29,7 +29,8 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=properties",
 		"problem.title=Moved Upload Servlet Request Portal Properties to OSGi Configuration",
 		"problem.summary=The Upload Servlet Request properties have been moved from the portal.properties file and Server Administration",
-		"problem.tickets=LPS-69102", "problem.section=#moved-upload-servlet-request-portal-properties", "version=7.1"
+		"problem.tickets=LPS-69102", "problem.section=#moved-upload-servlet-request-portal-properties",
+		"problem.version=7.1", "version=7.1"
 	},
 	service = FileMigrator.class
 )

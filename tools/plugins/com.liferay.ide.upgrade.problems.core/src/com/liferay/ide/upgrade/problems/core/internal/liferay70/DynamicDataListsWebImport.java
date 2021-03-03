@@ -33,7 +33,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.title=Removed Exports from Dynamic Data Lists Web",
 		"problem.summary=The `Dynamic Data Lists Web` module no longer exports the `com.liferay.dynamic.data.lists.web.asset` package.",
-		"problem.tickets=LPS-75778", "problem.section=#removed-exports-from-dynamic-data-lists-web", "version=7.0"
+		"problem.tickets=LPS-75778", "problem.section=#removed-exports-from-dynamic-data-lists-web",
+		"problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )

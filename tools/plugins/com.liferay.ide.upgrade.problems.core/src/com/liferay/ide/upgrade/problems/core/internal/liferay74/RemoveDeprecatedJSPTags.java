@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=jsp,jspf", "problem.title=Previously unused and deprecated JSP tags are no longer available",
 		"problem.section=#remove-deprecated-jsp-tags",
 		"problem.summary=Previously unused and deprecated JSP tags are no longer available",
-		"problem.tickets=LPS-112476", "version=7.4"
+		"problem.tickets=LPS-112476", "problem.version=7.4", "version=7.4"
 	},
 	service = FileMigrator.class
 )

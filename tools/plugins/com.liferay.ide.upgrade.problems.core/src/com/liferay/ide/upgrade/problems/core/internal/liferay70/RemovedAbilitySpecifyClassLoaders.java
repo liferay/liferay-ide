@@ -33,7 +33,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java", "problem.title=Removed the Ability to Specify Class Loaders in Scripting",
 		"problem.summary=Removed the Ability to Specify Class Loaders in Scripting.", "problem.tickets=LPS-63180",
-		"problem.section=#removed-the-ability-to-specify-class-loaders-in-scripting", "version=7.0"
+		"problem.section=#removed-the-ability-to-specify-class-loaders-in-scripting", "problem.version=7.0",
+		"version=7.0"
 	},
 	service = FileMigrator.class
 )

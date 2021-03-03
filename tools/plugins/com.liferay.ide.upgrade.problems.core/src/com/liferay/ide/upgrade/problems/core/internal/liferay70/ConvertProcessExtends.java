@@ -34,7 +34,8 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Convert Process Classes do not support convert.processes Portal Property",
 		"problem.summary=The implementation class com.liferay.portal.convert.ConvertProcess was renamed com.liferay.portal. convert.BaseConvertProcess. An interface named com.liferay.portal.convert.ConvertProcess was created for it. The convert.processes key was removed from portal.properties. Consequentially, ConvertProcess implementations must register as OSGi components.",
 		"problem.tickets=LPS-50604",
-		"problem.section=#convert-process-classes-are-no-longer-specified-via-the-convert-processes-p", "version=7.0"
+		"problem.section=#convert-process-classes-are-no-longer-specified-via-the-convert-processes-p",
+		"problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )

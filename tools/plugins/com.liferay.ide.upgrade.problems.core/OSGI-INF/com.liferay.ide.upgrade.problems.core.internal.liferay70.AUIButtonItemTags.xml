@@ -6,6 +6,7 @@
    <property name="problem.summary" value="Removed the aui:button-item Tag and Replaced with aui:button"/>
    <property name="problem.tickets" value="LPS-62922"/>
    <property name="auto.correct" value="jsptag"/>
+   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>

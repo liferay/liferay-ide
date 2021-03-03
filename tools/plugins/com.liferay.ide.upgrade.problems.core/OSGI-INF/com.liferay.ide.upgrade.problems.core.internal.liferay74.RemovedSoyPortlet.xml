@@ -5,6 +5,7 @@
    <property name="problem.title" value="Remove SoyPortlet and related code"/>
    <property name="problem.summary" value="SoyPortlet is no longer available"/>
    <property name="problem.section" value="#removed-soy-portlet"/>
+   <property name="problem.version" value="7.4"/>
    <property name="version" value="7.4"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

@@ -5,6 +5,7 @@
    <property name="problem.summary" value="Three bootstrap cache properties have been moved from portal.properties to an OSGi configuration."/>
    <property name="problem.tickets" value="LPS-96563"/>
    <property name="problem.section" value="#moved-bootstrap-cache-properties"/>
+   <property name="problem.version" value="7.3"/>
    <property name="version" value="7.3"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

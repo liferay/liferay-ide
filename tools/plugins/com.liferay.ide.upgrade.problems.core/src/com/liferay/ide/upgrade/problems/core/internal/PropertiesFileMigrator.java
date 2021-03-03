@@ -49,17 +49,17 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		problemTickets = safeGet(serviceProperties, "problem.tickets");
 		sectionKey = safeGet(serviceProperties, "problem.section");
 
-		String versionValue = safeGet(serviceProperties, "version");
+		String problemVersionValue = safeGet(serviceProperties, "problem.version");
 
-		if (versionValue.isEmpty()) {
-			version = versionValue;
+		if (problemVersionValue.isEmpty()) {
+			problemVersion = problemVersionValue;
 		}
 		else {
-			VersionRange versionRange = new VersionRange(versionValue);
+			VersionRange versionRange = new VersionRange(problemVersionValue);
 
 			Version left = versionRange.getLeft();
 
-			version = left.getMajor() + "." + left.getMinor();
+			problemVersion = left.getMajor() + "." + left.getMinor();
 		}
 
 		addPropertiesToSearch(properties);
@@ -77,7 +77,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 			if (!results.isEmpty()) {
 				String fileName = "BREAKING_CHANGES.markdown";
 
-				switch (version) {
+				switch (problemVersion) {
 					case "7.0":
 						fileName = "liferay70/" + fileName;
 
@@ -99,7 +99,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 
 						break;
 					default:
-						Optional<String> nullableVersion = Optional.ofNullable(version);
+						Optional<String> nullableVersion = Optional.ofNullable(problemVersion);
 
 						throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 				}
@@ -109,7 +109,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 				for (FileSearchResult searchResult : results) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, problemType, problemTickets, version, file,
+							problemTitle, problemSummary, problemType, problemTickets, problemVersion, file,
 							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
 							searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 							UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
@@ -132,8 +132,8 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 	protected String problemTickets;
 	protected String problemTitle;
 	protected String problemType;
+	protected String problemVersion = "";
 	protected final List<String> properties = new ArrayList<>();
 	protected String sectionKey = "";
-	protected String version = "";
 
 }

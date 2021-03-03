@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf", "problem.title=Web Content Articles Now Require a Structure and Template",
 		"problem.summary=Web content is now required to use a structure and template. A default structure and template named Basic Web Content was added to the global scope, and can be modified or deleted.",
 		"problem.tickets=LPS-45107", "problem.section=#web-content-articles-now-require-a-structure-and-template",
-		"version=7.0"
+		"problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )

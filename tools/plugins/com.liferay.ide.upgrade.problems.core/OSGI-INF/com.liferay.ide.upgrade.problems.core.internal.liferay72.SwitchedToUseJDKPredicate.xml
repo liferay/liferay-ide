@@ -5,6 +5,7 @@
    <property name="problem.summary" value="The interface com.liferay.portal.kernel.util.PredicateFilter was removed and replaced with java.util.function.Predicate. And these implementations were removed. The com.liferay.portal.kernel.util.ArrayUtil_IW class was regenerated."/>
    <property name="problem.tickets" value="LPS-89139"/>
    <property name="problem.section" value="#switched-to-use-jdk-predicate"/>
+   <property name="problem.version" value="7.2"/>
    <property name="version" value="7.2"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

@@ -29,7 +29,8 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=properties", "problem.title=Email Signature Properties BBCode",
 		"problem.summary=Removed Liferay Frontend Editor BBCode Web, Previously Known as Liferay BBCode Editor",
 		"problem.tickets=LPS-48334",
-		"problem.section=#removed-liferay-frontend-editor-bbcode-web-previously-known-as-liferay-bbco", "version=7.0"
+		"problem.section=#removed-liferay-frontend-editor-bbcode-web-previously-known-as-liferay-bbco",
+		"problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )

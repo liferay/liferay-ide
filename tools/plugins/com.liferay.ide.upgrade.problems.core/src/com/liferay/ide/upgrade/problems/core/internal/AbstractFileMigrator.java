@@ -67,17 +67,17 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		problemTickets = safeGet(properties, "problem.tickets");
 		sectionKey = safeGet(properties, "problem.section");
 
-		String versionValue = safeGet(properties, "version");
+		String problemVersionValue = safeGet(properties, "problem.version");
 
-		if (versionValue.isEmpty()) {
-			version = versionValue;
+		if (problemVersionValue.isEmpty()) {
+			problemVersion = problemVersionValue;
 		}
 		else {
-			VersionRange versionRange = new VersionRange(versionValue);
+			VersionRange versionRange = new VersionRange(problemVersionValue);
 
 			Version left = versionRange.getLeft();
 
-			version = left.getMajor() + "." + left.getMinor();
+			problemVersion = left.getMajor() + "." + left.getMinor();
 		}
 	}
 
@@ -94,7 +94,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		if (!searchResults.isEmpty()) {
 			String fileName = "BREAKING_CHANGES.markdown";
 
-			switch (version) {
+			switch (problemVersion) {
 				case "7.0":
 					fileName = "liferay70/" + fileName;
 
@@ -116,7 +116,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 					break;
 				default:
-					Optional<String> nullableVersion = Optional.ofNullable(version);
+					Optional<String> nullableVersion = Optional.ofNullable(problemVersion);
 
 					throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 			}
@@ -131,7 +131,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 				if (searchResult != null) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, fileExtension, problemTickets, version, file,
+							problemTitle, problemSummary, fileExtension, problemTickets, problemVersion, file,
 							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
 							searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 							UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
@@ -205,8 +205,8 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 	protected String problemSummary;
 	protected String problemTickets;
 	protected String problemTitle;
+	protected String problemVersion;
 	protected String sectionKey;
 	protected final Class<T> type;
-	protected String version;
 
 }

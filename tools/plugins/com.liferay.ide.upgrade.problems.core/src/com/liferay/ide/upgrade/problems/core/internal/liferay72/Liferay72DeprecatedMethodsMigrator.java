@@ -30,7 +30,9 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Simon Jiang
  */
-@Component(property = {"file.extensions=java,jsp,jspf", "version=7.2"}, service = FileMigrator.class)
+@Component(
+	property = {"file.extensions=java,jsp,jspf", "problem.version=7.2", "version=7.2"}, service = FileMigrator.class
+)
 public class Liferay72DeprecatedMethodsMigrator extends DeprecatedMethodsMigrator {
 
 	public Liferay72DeprecatedMethodsMigrator() {

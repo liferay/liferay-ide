@@ -51,7 +51,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=xml", "problem.title=Deprecated wap-template-path tag on 7.x for layout templates",
 		"problem.summary=The <wap-template-path> tag was deprecated on 7.x for layout-templates.",
 		"auto.correct=wap-template-path", "problem.section=#deprecated-wap-template-path-for-layout-templates",
-		"version=7.0"
+		"problem.version=7.0", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

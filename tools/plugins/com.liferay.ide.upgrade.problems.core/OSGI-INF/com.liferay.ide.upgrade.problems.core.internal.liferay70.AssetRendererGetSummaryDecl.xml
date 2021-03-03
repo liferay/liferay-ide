@@ -5,6 +5,7 @@
    <property name="problem.tickets" value="LPS-44639,LPS-44894"/>
    <property name="problem.title" value="AssetRenderer API Changes getSummary"/>
    <property name="problem.section" value="#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an"/>
+   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

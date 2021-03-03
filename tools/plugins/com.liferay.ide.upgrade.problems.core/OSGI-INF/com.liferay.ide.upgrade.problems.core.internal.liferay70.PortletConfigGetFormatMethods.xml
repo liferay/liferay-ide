@@ -5,6 +5,7 @@
    <property name="problem.tickets" value="LPS-44342"/>
    <property name="problem.title" value="PortletConfig get/format methods"/>
    <property name="problem.section" value="#removed-get-and-format-methods-that-used-portletconfig-parameters"/>
+   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

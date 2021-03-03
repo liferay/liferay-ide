@@ -6,6 +6,7 @@
    <property name="problem.tickets" value=""/>
    <property name="problem.section" value=""/>
    <property name="auto.correct" value="property"/>
+   <property name="problem.version" value="7.1"/>
    <property name="version" value="[7.1,7.1]"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>

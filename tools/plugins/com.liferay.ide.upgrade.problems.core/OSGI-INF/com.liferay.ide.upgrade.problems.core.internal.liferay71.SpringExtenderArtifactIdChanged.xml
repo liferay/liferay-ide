@@ -5,6 +5,7 @@
    <property name="problem.tickets" value="LPS-85710"/>
    <property name="problem.summary" value="The artifactid of spring extender has been changed"/>
    <property name="problem.section" value="#spring-extender-artifactid-changed"/>
+   <property name="problem.version" value="7.1"/>
    <property name="version" value="7.1"/>
    <property name="auto.correct" value="dependency"/>
    <service>

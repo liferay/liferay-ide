@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=xml",
 		"problem.summary=Themes can no longer leverage JSP templates. Also, related logic has been removed from the public APIs com.liferay.portal.kernel.util.ThemeHelper and com.liferay.taglib.util.ThemeUtil.",
 		"problem.tickets=LPS-87064", "problem.title=Removed Support for JSP Templates in Themes",
-		"problem.section=#removed-support-for-jsp-templates-in-themes", "version=7.2"
+		"problem.section=#removed-support-for-jsp-templates-in-themes", "problem.version=7.2", "version=7.2"
 	},
 	service = FileMigrator.class
 )

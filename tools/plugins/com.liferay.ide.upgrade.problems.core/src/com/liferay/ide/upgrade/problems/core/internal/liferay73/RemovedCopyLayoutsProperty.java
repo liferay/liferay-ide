@@ -30,7 +30,8 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Removed Portal Property user.groups.copy.layouts.to.user.personal.site",
 		"problem.summary=The portal property user.groups.copy.layouts.to.user.personal.site and the behavior associated with it were removed.",
 		"problem.tickets=LPS-106339",
-		"problem.section=#removed-portal-property-user-groups-copy-layouts-to-user-personal-site", "version=7.3"
+		"problem.section=#removed-portal-property-user-groups-copy-layouts-to-user-personal-site",
+		"problem.version=7.3", "version=7.3"
 	},
 	service = FileMigrator.class
 )

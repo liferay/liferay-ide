@@ -51,7 +51,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=tpl", "problem.title=Layout Template breaking change",
 		"problem.summary=The breaking change of Layout Template.", "problem.section=#layout-template",
-		"auto.correct=layout-template", "version=7.0"
+		"auto.correct=layout-template", "problem.version=7.0", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

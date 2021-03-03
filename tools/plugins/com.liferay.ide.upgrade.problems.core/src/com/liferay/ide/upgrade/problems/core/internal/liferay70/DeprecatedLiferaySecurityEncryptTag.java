@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Deprecated the liferay-security:encrypt Tag with No Direct Replacement",
 		"problem.section=#deprecated-the-liferay-securityencrypt-tag-with-no-direct-replacement",
 		"problem.summary=Deprecated the liferay-security:encrypt Tag with No Direct Replacement",
-		"problem.tickets=LPS-63106", "version=7.0"
+		"problem.tickets=LPS-63106", "problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )

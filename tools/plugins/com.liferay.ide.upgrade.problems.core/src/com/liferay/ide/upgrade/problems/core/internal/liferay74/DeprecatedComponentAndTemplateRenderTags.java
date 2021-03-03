@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=jsp,jspf", "problem.summary= Deprecate soy:component and soy:template renderer tags",
 		"problem.tickets=LPS-122966", "problem.title=Deprecate soy:component and soy:template renderer tags",
-		"problem.section=#server-side-closure-templates-support-has-been-removed", "version=7.4"
+		"problem.section=#server-side-closure-templates-support-has-been-removed", "problem.version=7.4", "version=7.4"
 	},
 	service = FileMigrator.class
 )

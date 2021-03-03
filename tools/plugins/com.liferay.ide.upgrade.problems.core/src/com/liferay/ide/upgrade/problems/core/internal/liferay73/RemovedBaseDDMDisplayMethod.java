@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.summary=Removed com.liferay.dynamic.data.mapping.util.BaseDDMDisplay Method",
 		"problem.tickets=LPS-103549",
 		"problem.title=Removed com.liferay.dynamic.data.mapping.util.BaseDDMDisplay Method",
-		"problem.section=#removed-BaseDDMDisplay-method", "version=7.3"
+		"problem.section=#removed-BaseDDMDisplay-method", "problem.version=7.3", "version=7.3"
 	},
 	service = FileMigrator.class
 )

@@ -40,7 +40,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=gradle", "problem.title=The artifactId of Spring Extender has changed",
 		"problem.tickets=LPS-85710", "problem.summary=The artifactid of spring extender has been changed",
-		"problem.section=#spring-extender-artifactid-changed", "version=7.1", "auto.correct=dependency"
+		"problem.section=#spring-extender-artifactid-changed", "problem.version=7.1", "version=7.1",
+		"auto.correct=dependency"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

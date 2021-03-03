@@ -5,6 +5,7 @@
    <property name="problem.summary" value="Blocking cache support was removed. These related properties can no longer be used to enable blocking cache."/>
    <property name="problem.tickets" value="LPS-115687"/>
    <property name="problem.section" value="#remove-support-for-blocking-cache"/>
+   <property name="problem.version" value="7.3"/>
    <property name="version" value="7.3"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

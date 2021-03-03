@@ -30,7 +30,8 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
 		"problem.summary=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
 		"problem.tickets=LPS-69210",
-		"problem.section=#moved-shopping-file-uploads-portlet-properties-to-osgi-configuration", "version=7.0"
+		"problem.section=#moved-shopping-file-uploads-portlet-properties-to-osgi-configuration", "problem.version=7.0",
+		"version=7.0"
 	},
 	service = FileMigrator.class
 )

@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Moved CAPTCHA Portal Properties to OSGi Configuration",
 		"problem.summary=The CAPTCHA properties have been moved from portal.properties", "problem.tickets=LPS-67830",
-		"problem.section=#moved-captcha-portal-properties", "version=7.1"
+		"problem.section=#moved-captcha-portal-properties", "problem.version=7.1", "version=7.1"
 	},
 	service = FileMigrator.class
 )

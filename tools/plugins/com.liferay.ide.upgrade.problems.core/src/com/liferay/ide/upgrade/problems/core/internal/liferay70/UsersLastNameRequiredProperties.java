@@ -29,7 +29,8 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=properties", "problem.title=Removed USERS_LAST_NAME_REQUIRED from portal.properties",
 		"problem.summary=The USERS_LAST_NAME_REQUIRED property has been removed from portal.properties and the corresponding UI. Required names are now handled on a per-language basis via the language.properties files. It has also been removed as an option from the Portal Settings section of the Control Panel.",
 		"problem.tickets=LPS-54956",
-		"problem.section=#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p", "version=7.0"
+		"problem.section=#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p",
+		"problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )

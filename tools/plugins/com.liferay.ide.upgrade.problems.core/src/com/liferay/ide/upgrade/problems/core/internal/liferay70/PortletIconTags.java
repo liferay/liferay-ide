@@ -26,7 +26,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=jsp,jspf", "problem.title=Removed the Tags that Start with portlet:icon-",
 		"problem.section=#removed-the-tags-that-start-with-portleticon-",
-		"problem.summary=Removed the Tags that Start with portlet:icon-", "problem.tickets=LPS-54620", "version=7.0"
+		"problem.summary=Removed the Tags that Start with portlet:icon-", "problem.tickets=LPS-54620",
+		"problem.version=7.0", "version=7.0"
 	},
 	service = FileMigrator.class
 )
