@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core.test;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,9 +40,9 @@ public class AllJSPTagProblemsTest {
 
 		FileMigration fileMigration = _context.getService(sr);
 
-		List<UpgradeProblem> upgradeProblems = fileMigration.findUpgradeProblems(new File("jsptests/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor()).stream().sorted().collect(Collectors.toList());
+		List<UpgradeProblem> upgradeProblems = fileMigration.findUpgradeProblems(new File("jsptests/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor()).stream().sorted().collect(Collectors.toList());
 
-		final int expectedSize = 489;
+		final int expectedSize = 492;
 		final int size = upgradeProblems.size();
 
 		if (size != expectedSize) {

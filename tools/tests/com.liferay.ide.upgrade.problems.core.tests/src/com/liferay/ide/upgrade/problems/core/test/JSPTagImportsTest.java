@@ -16,7 +16,6 @@ package com.liferay.ide.upgrade.problems.core.test;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class JSPTagImportsTest {
 
 		Files.copy(originalTestfile.toPath(), testFile.toPath());
 
-		List<UpgradeProblem> problems = migration.findUpgradeProblems(testFile, UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems = migration.findUpgradeProblems(testFile, UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		Assert.assertEquals("", 6, problems.size());
 
@@ -70,7 +69,7 @@ public class JSPTagImportsTest {
 
 		Assert.assertTrue(testFile.renameTo(dest));
 
-		List<UpgradeProblem> problems2 = migration.findUpgradeProblems(dest, UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems2 = migration.findUpgradeProblems(dest, UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		Assert.assertEquals("", 0, problems2.size());
 	}

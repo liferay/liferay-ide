@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core.test;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -43,7 +42,7 @@ public class AllProblemsTest {
 		FileMigration m = _context.getService(sr);
 
 		List<UpgradeProblem> problems = m.findUpgradeProblems(
-			new File("projects/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
+			new File("projects/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		int expectedSize = 304;
 		int size = problems.size();

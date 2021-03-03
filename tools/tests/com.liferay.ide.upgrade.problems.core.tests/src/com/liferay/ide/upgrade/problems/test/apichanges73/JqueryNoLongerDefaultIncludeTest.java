@@ -20,7 +20,6 @@ import com.liferay.ide.upgrade.problems.core.test.UpgradePlanProblemsTestConstan
 import com.liferay.ide.upgrade.problems.core.test.Util;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -42,7 +41,7 @@ public class JqueryNoLongerDefaultIncludeTest {
 		FileMigration m = _context.getService(sr);
 
 		List<UpgradeProblem> problems = m.findUpgradeProblems(
-				new File("jsptests/jqueryNoLongerDefaultInclude/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
+				new File("jsptests/jqueryNoLongerDefaultInclude/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		Assert.assertEquals("", 1, problems.size());
 

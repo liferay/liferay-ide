@@ -19,7 +19,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -41,7 +40,7 @@ public class CustomAUIValidatorsTagsTest {
 
 		FileMigration m = _context.getService(sr);
 
-		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/custom-aui-validators/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/custom-aui-validators/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		Assert.assertEquals("", 10, problems.size());
 

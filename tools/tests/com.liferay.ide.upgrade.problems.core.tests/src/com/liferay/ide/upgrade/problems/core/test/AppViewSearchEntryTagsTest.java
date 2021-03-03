@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core.test;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -40,7 +39,7 @@ public class AppViewSearchEntryTagsTest {
 
 		FileMigration m = _context.getService(sr);
 
-		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/app-view-search-entry/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/app-view-search-entry/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		Assert.assertEquals("", 3, problems.size());
 	}

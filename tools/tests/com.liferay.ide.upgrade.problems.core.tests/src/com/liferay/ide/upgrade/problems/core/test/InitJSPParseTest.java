@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core.test;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,7 @@ public class InitJSPParseTest {
 
 		FileMigration fileMigration = _context.getService(sr);
 
-		List<UpgradeProblem> upgradeProblems = fileMigration.findUpgradeProblems(new File("jsptests/jukebox-portlet/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor()).stream().sorted().collect(Collectors.toList());
+		List<UpgradeProblem> upgradeProblems = fileMigration.findUpgradeProblems(new File("jsptests/jukebox-portlet/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor()).stream().sorted().collect(Collectors.toList());
 
 		Assert.assertEquals("", 397, upgradeProblems.size());
 

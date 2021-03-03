@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.test.apichanges73;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -41,7 +40,7 @@ public class FontAwesomeNoLongerIncludeDefaultTest {
 
 		FileMigration m = _context.getService(sr);
 
-		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/liferayui-icon/"), UpgradePlanProblemsTestConstants.versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/liferayui-icon/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		Assert.assertEquals("", 1, problems.size());
 
