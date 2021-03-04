@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Replaced the ReservedUserEmailAddressException with UserEmailAddressException",
 		"problem.section=#replaced-the-reserveduseremailaddressexception-with-useremailaddressexcepti",
 		"problem.summary=Replaced the ReservedUserEmailAddressException with UserEmailAddressException Inner Classes in User Services",
-		"problem.tickets=LPS-53279", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-53279", "version=7.0"
 	},
 	service = FileMigrator.class
 )

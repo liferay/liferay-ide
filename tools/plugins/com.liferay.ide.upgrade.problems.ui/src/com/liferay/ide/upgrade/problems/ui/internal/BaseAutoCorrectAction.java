@@ -36,7 +36,6 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
 
 /**
  * @author Terry Jia
@@ -82,9 +81,9 @@ public class BaseAutoCorrectAction extends SelectionProviderAction implements Up
 					).map(
 						Object::toString
 					).map(
-						VersionRange::valueOf
+						Version::valueOf
 					).filter(
-						range -> range.includes(version)
+						v -> v.equals(version)
 					).isPresent();
 				}
 			).map(

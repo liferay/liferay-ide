@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The Asset Tag Properties have been removed. The service no longer exists and the Asset Tag Service API no longer has this parameter. The behavior associated with tag properties in the Asset Publisher and XSL portlets has also been removed."/>
    <property name="problem.tickets" value="LPS-52588"/>
    <property name="problem.section" value="#removed-asset-tag-properties"/>
-   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

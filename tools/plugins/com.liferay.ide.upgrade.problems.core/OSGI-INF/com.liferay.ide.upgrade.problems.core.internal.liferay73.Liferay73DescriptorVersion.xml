@@ -5,8 +5,7 @@
    <property name="problem.summary" value="The descriptor XML DTD versions should be matched with version 7.3."/>
    <property name="problem.section" value="#descriptor-XML-DTD-version"/>
    <property name="auto.correct" value="descriptor"/>
-   <property name="problem.version" value="7.3"/>
-   <property name="version" value="[7.3,7.3]"/>
+   <property name="version" value="7.3"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

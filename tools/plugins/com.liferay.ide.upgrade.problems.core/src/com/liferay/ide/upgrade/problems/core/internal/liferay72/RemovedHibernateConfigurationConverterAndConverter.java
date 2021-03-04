@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf", "problem.title=Removed HibernateConfigurationConverter and Converter",
 		"problem.summary=The interface com.liferay.portal.kernel.util.Converter and its implementation com.liferay.portal.spring.hibernate.HibernateConfigurationConverter were removed.",
 		"problem.tickets=LPS-88870", "problem.section=#removed-hibernateconfigurationconverter-and-converter",
-		"problem.version=7.2", "version=7.2"
+		"version=7.2"
 	},
 	service = FileMigrator.class
 )

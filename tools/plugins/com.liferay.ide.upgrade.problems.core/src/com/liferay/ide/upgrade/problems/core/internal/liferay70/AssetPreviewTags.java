@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.title=Changed the Usage of Asset Preview",
 		"problem.section=#changed-the-usage-of-asset-preview", "problem.summary=Changed the Usage of Asset Preview",
-		"problem.tickets=LPS-53972", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-53972", "version=7.0"
 	},
 	service = FileMigrator.class
 )

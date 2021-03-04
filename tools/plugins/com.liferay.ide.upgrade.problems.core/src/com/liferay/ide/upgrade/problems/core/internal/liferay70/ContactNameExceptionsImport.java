@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.summary=The use of classes ContactFirstNameException, ContactFullNameException, and ContactLastNameException has been moved to inner classes in a new class called ContactNameException.",
 		"problem.tickets=LPS-55364",
 		"problem.section=#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc",
-		"auto.correct=import", "problem.version=7.0", "version=7.0"
+		"auto.correct=import", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

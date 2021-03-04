@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=jsp,jspf", "problem.title=The tag liferay-ui:flash is no longer available",
 		"problem.section=#removed-liferay-ui-flash", "problem.summary=The tag liferay-ui:flash is no longer available",
-		"problem.tickets=LPS-121732", "problem.version=7.4", "version=7.4"
+		"problem.tickets=LPS-121732", "version=7.4"
 	},
 	service = FileMigrator.class
 )

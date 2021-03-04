@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Changed Default Value for Browser Cache Properties"/>
    <property name="problem.tickets" value="LPS-74452"/>
    <property name="problem.section" value="#changed-default-value-for-browser-cache-properties"/>
-   <property name="problem.version" value="7.1"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

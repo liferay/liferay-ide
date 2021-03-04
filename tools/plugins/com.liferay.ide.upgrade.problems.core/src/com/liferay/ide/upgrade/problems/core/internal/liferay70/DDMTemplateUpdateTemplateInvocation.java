@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf", "problem.title=DDMTemplateLocalService add new param userId",
 		"problem.section=#added-userid-parameter-to-update-operations-of-ddmstructurelocalservice-and",
 		"problem.summary=Added userId Parameter to Update Operations of DDMStructureLocalService and DDMTemplateLocalService",
-		"problem.tickets=LPS-50939", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-50939", "version=7.0"
 	},
 	service = FileMigrator.class
 )

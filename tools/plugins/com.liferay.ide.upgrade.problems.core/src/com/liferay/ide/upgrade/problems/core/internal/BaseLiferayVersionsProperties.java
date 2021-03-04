@@ -64,7 +64,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 							problems.add(
 								new UpgradeProblem(
-									problemTitle, problemSummary, problemType, problemTickets, problemVersion, file,
+									problemTitle, problemSummary, problemType, problemTickets, version, file,
 									searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
 									sectionHtml, searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 									UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));

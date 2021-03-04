@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
 		"problem.section=#deprecated-the-liferay-uicaptcha-tag-and-replaced-with-liferay-captchacaptc",
 		"problem.summary=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
-		"problem.tickets=LPS-69383", "auto.correct=jsptag", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-69383", "auto.correct=jsptag", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

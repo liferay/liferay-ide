@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Two Staging properties have been moved from portal.properties to an OSGi configuration named ExportImportServiceConfiguration.java in the export-import-service module."/>
    <property name="problem.tickets" value="LPS-88018"/>
    <property name="problem.section" value="#moved-staging-properties"/>
-   <property name="problem.version" value="7.2"/>
    <property name="version" value="7.2"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

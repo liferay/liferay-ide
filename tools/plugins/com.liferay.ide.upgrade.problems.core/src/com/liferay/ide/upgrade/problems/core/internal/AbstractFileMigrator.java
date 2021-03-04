@@ -38,7 +38,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -67,17 +66,15 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		problemTickets = safeGet(properties, "problem.tickets");
 		sectionKey = safeGet(properties, "problem.section");
 
-		String problemVersionValue = safeGet(properties, "problem.version");
+		String versionValue = safeGet(properties, "version");
 
-		if (problemVersionValue.isEmpty()) {
-			problemVersion = problemVersionValue;
+		if (versionValue.isEmpty()) {
+			version = versionValue;
 		}
 		else {
-			VersionRange versionRange = new VersionRange(problemVersionValue);
+			Version v = new Version(versionValue);
 
-			Version left = versionRange.getLeft();
-
-			problemVersion = left.getMajor() + "." + left.getMinor();
+			version = v.getMajor() + "." + v.getMinor();
 		}
 	}
 
@@ -94,7 +91,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		if (!searchResults.isEmpty()) {
 			String fileName = "BREAKING_CHANGES.markdown";
 
-			switch (problemVersion) {
+			switch (version) {
 				case "7.0":
 					fileName = "liferay70/" + fileName;
 
@@ -116,7 +113,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 					break;
 				default:
-					Optional<String> nullableVersion = Optional.ofNullable(problemVersion);
+					Optional<String> nullableVersion = Optional.ofNullable(version);
 
 					throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 			}
@@ -131,7 +128,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 				if (searchResult != null) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, fileExtension, problemTickets, problemVersion, file,
+							problemTitle, problemSummary, fileExtension, problemTickets, version, file,
 							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
 							searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 							UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
@@ -205,8 +202,8 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 	protected String problemSummary;
 	protected String problemTickets;
 	protected String problemTitle;
-	protected String problemVersion;
 	protected String sectionKey;
 	protected final Class<T> type;
+	protected String version;
 
 }

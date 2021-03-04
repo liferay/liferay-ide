@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Social Activity Properties Deprecated",
 		"problem.summary=Deprecated the social.activity.sets.enabled Property", "problem.tickets=LPS-63635",
-		"problem.section=#deprecated-the-social-activity-sets-enabled-Property", "problem.version=7.0", "version=7.0"
+		"problem.section=#deprecated-the-social-activity-sets-enabled-Property", "version=7.0"
 	},
 	service = FileMigrator.class
 )

@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=jsp,jspf", "problem.title=Moved the Expando Custom Field Tags to liferay-expando Taglib",
 		"problem.section=#moved-the-expando-custom-field-tags-to-liferay-expando-taglib",
 		"problem.summary=Moved the Expando Custom Field Tags to liferay-expando Taglib", "problem.tickets=LPS-69400",
-		"auto.correct=jsptag", "problem.version=7.0", "version=7.0"
+		"auto.correct=jsptag", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

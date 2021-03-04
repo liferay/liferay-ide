@@ -34,8 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf",
 		"problem.title=Deprecated com.liferay.portal.service.InvokableService Interface",
 		"problem.summary=The InvokableService and InvokableLocalService interfaces in package com.liferay.portal.kernel.service were removed.",
-		"problem.tickets=LPS-88912", "problem.section=#deprecated-invokableservice-interface", "problem.version=7.2",
-		"version=7.2"
+		"problem.tickets=LPS-88912", "problem.section=#deprecated-invokableservice-interface", "version=7.2"
 	},
 	service = FileMigrator.class
 )

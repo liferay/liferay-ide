@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The CAPTCHA properties have been moved from portal.properties"/>
    <property name="problem.tickets" value="LPS-67830"/>
    <property name="problem.section" value="#moved-captcha-portal-properties"/>
-   <property name="problem.version" value="7.1"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

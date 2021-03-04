@@ -6,7 +6,6 @@
    <property name="problem.tickets" value="LPS-53021"/>
    <property name="problem.type" value="java"/>
    <property name="problem.section" value="#removed-operations-that-used-the-fields-class-from-the-storageadapter-inter"/>
-   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

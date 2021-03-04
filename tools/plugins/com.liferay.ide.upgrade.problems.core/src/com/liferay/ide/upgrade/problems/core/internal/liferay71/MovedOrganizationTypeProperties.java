@@ -28,8 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Moved Organization Type Properties to OSGi Configuration",
 		"problem.summary=The organization type properties have been moved from portal.properties",
-		"problem.tickets=LPS-77183", "problem.section=#moved-organization-type-properties", "problem.version=7.1",
-		"version=7.1"
+		"problem.tickets=LPS-77183", "problem.section=#moved-organization-type-properties", "version=7.1"
 	},
 	service = FileMigrator.class
 )

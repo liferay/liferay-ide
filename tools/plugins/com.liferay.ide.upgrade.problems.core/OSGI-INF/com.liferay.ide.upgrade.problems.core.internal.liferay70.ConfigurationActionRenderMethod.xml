@@ -5,7 +5,6 @@
    <property name="problem.tickets" value="LPS-56300"/>
    <property name="problem.title" value="ConfigurationAction render method"/>
    <property name="problem.section" value="#removed-render-method-from-configurationaction-api"/>
-   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

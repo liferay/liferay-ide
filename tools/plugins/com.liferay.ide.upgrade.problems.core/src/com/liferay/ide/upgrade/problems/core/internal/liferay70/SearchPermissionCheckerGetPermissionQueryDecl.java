@@ -33,8 +33,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf",
 		"problem.summary=Replaced Method getPermissionQuery with getPermissionFilter in SearchPermissionChecker",
 		"problem.tickets=LPS-56064", "problem.title=Replaced Method getPermissionQuery",
-		"problem.section=#replaced-method-getpermissionquery-with-getpermissionfilter-in-searchpermis",
-		"problem.version=7.0", "version=7.0"
+		"problem.section=#replaced-method-getpermissionquery-with-getpermissionfilter-in-searchpermis", "version=7.0"
 	},
 	service = FileMigrator.class
 )

@@ -28,8 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Server-side Parallel Rendering Is No Longer Supported",
 		"problem.summary=Properties with the prefix layout.parallel.render were removed, which means parallel rendering is only supported when AJAX rendering is enabled.",
-		"problem.tickets=LPS-110359", "problem.section=#removed-portal-property-layout-parallel-render",
-		"problem.version=7.3", "version=7.3"
+		"problem.tickets=LPS-110359", "problem.section=#removed-portal-property-layout-parallel-render", "version=7.3"
 	},
 	service = FileMigrator.class
 )

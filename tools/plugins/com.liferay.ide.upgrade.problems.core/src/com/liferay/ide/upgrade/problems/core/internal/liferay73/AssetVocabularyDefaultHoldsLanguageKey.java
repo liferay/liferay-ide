@@ -29,8 +29,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=properties",
 		"problem.title=Add breaking change: asset.vocabulary.default Now Holds a Language Key",
 		"problem.summary=asset.vocabulary.default is now a language key and no longer has a fixed value of Topic.",
-		"problem.tickets=LPS-112334", "problem.section=#asset-vocabulary-default-now-holds-language-key",
-		"problem.version=7.3", "version=7.3"
+		"problem.tickets=LPS-112334", "problem.section=#asset-vocabulary-default-now-holds-language-key", "version=7.3"
 	},
 	service = FileMigrator.class
 )

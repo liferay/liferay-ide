@@ -35,8 +35,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Removed Unsafe Functional Interfaces in Package com.liferay.portal.kernel.util",
 		"problem.summary=The com.liferay.portal.osgi.util.test.OSGiServiceUtil class was removed. Also, the following interfaces were removed from the com.liferay.portal.kernel.util package: UnsafeConsumer, UnsafeFunction, UnsafeRunnable.",
 		"problem.tickets=LPS-89223",
-		"problem.section=#removed-unsafe-functional-interfaces-in-package-com-liferay-portal-kernel-util",
-		"problem.version=7.2", "version=7.2"
+		"problem.section=#removed-unsafe-functional-interfaces-in-package-com-liferay-portal-kernel-util", "version=7.2"
 	},
 	service = FileMigrator.class
 )

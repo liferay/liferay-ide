@@ -76,9 +76,9 @@ public abstract class AutoCorrectLiferayVersionPropertiesTestBase {
 				).map(
 					Object::toString
 				).map(
-					VersionRange::valueOf
+					Version::valueOf
 				).filter(
-					range -> Objects.equals(version, range.getLeft())
+					v -> v.equals(version)
 				).isPresent();
 			}
 		).collect(

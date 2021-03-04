@@ -5,7 +5,6 @@
    <property name="problem.section" value="#removed-liferay-ui-flash"/>
    <property name="problem.summary" value="The tag liferay-ui:flash is no longer available"/>
    <property name="problem.tickets" value="LPS-121732"/>
-   <property name="problem.version" value="7.4"/>
    <property name="version" value="7.4"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

@@ -30,8 +30,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Moved Journal File Uploads Portlet Properties to OSGi Configuration",
 		"problem.summary=Moved Journal File Uploads Portlet Properties to OSGi Configuration",
 		"problem.tickets=LPS-69209",
-		"problem.section=#moved-journal-file-uploads-portlet-properties-to-osgi-configuration", "problem.version=7.0",
-		"version=7.0"
+		"problem.section=#moved-journal-file-uploads-portlet-properties-to-osgi-configuration", "version=7.0"
 	},
 	service = FileMigrator.class
 )

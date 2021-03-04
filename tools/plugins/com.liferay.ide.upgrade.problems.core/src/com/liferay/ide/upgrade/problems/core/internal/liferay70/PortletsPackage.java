@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf", "problem.title=Changed Java Package Names for Portlets Extracted as Modules",
 		"problem.summary=The Java package names changed for portlets that were extracted as OSGi modules in 7.0.",
 		"problem.tickets=LPS-56383", "problem.section=#changed-java-package-names-for-portlets-extracted-as-modules",
-		"problem.version=7.0", "version=7.0"
+		"version=7.0"
 	},
 	service = FileMigrator.class
 )

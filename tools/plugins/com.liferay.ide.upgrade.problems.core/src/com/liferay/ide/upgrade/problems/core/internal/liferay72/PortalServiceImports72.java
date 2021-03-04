@@ -35,8 +35,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.title=Classes in portal-service.jar moved 7.2",
 		"problem.summary=Many classes from former portal-service.jar from Liferay Portal 6.x have been moved into application and framework API modules.",
-		"problem.tickets=", "problem.section=#classes-in-portal-service-jar-moved", "auto.correct=import",
-		"problem.version=7.2", "version=7.2"
+		"problem.tickets=", "problem.section=#classes-in-portal-service-jar-moved", "auto.correct=import", "version=7.2"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

@@ -64,7 +64,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 						for (FileSearchResult searchResult : searchResults) {
 							int makerType = UpgradeProblem.MARKER_ERROR;
 
-							if (Objects.equals(problemVersion, _searchMethod.getString("deprecatedVersion"))) {
+							if (Objects.equals(version, _searchMethod.getString("deprecatedVersion"))) {
 								makerType = UpgradeProblem.MARKER_WARNING;
 							}
 

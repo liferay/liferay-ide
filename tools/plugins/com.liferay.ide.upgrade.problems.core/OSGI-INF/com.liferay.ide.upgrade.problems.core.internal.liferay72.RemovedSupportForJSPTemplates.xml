@@ -5,7 +5,6 @@
    <property name="problem.tickets" value="LPS-87064"/>
    <property name="problem.title" value="Removed Support for JSP Templates in Themes"/>
    <property name="problem.section" value="#removed-support-for-jsp-templates-in-themes"/>
-   <property name="problem.version" value="7.2"/>
    <property name="version" value="7.2"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

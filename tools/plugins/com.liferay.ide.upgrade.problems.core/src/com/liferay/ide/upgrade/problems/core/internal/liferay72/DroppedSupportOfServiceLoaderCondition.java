@@ -33,8 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.title=Dropped Support of ServiceLoaderCondition",
 		"problem.summary=The interface ServiceLoaderCondition and its implementation DefaultServiceLoaderCondition in package com.liferay.portal.kernel.util were removed.",
-		"problem.tickets=LPS-88913", "problem.section=#dropped-support-of-serviceloadercondition",
-		"problem.version=7.2", "version=7.2"
+		"problem.tickets=LPS-88913", "problem.section=#dropped-support-of-serviceloadercondition", "version=7.2"
 	},
 	service = FileMigrator.class
 )

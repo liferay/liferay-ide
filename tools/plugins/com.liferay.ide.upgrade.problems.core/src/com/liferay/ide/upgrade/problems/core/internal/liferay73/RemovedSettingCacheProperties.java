@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=properties", "problem.title=Remove Support for Setting Cache Properties for Each Entity Model",
 		"problem.summary=Remove Support for Setting Cache Properties for Each Entity Model.",
 		"problem.tickets=LPS-116049", "problem.section=#removed-setting-cache-properties-for-each-entity-model",
-		"problem.version=7.3", "version=7.3"
+		"version=7.3"
 	},
 	service = FileMigrator.class
 )

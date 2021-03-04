@@ -65,9 +65,9 @@ public abstract class AutoCorrectDescriptorTestBase {
 				).map(
 					Object::toString
 				).map(
-					VersionRange::valueOf
+					Version::valueOf
 				).filter(
-					range -> range.includes(version)
+					v -> v.equals(version)
 				).isPresent();
 			}
 		).collect(

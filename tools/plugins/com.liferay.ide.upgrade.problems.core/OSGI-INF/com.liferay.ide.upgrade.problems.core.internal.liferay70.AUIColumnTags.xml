@@ -6,7 +6,6 @@
    <property name="problem.summary" value="The aui:column taglib has been removed and replaced with aui:col taglib"/>
    <property name="problem.tickets" value="LPS-62208"/>
    <property name="auto.correct" value="jsptag"/>
-   <property name="problem.version" value="7.0"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>

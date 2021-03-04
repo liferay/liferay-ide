@@ -5,7 +5,6 @@
    <property name="problem.tickets" value="LPS-103549"/>
    <property name="problem.title" value="Removed com.liferay.dynamic.data.mapping.util.BaseDDMDisplay Method"/>
    <property name="problem.section" value="#removed-BaseDDMDisplay-method"/>
-   <property name="problem.version" value="7.3"/>
    <property name="version" value="7.3"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=jsp,jspf", "problem.title=Liferay.Poller Is No Longer Initialized by Default",
 		"problem.section=#liferaypoller-is-no-longer-initialized-by-default",
 		"problem.summary=Liferay.Poller Is No Longer Initialized by Default", "problem.tickets=LPS-112942",
-		"problem.version=7.3", "version=7.3"
+		"version=7.3"
 	},
 	service = FileMigrator.class
 )

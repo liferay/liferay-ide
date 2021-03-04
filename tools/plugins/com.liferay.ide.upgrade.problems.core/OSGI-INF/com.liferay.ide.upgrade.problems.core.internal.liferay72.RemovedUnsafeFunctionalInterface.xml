@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The com.liferay.portal.osgi.util.test.OSGiServiceUtil class was removed. Also, the following interfaces were removed from the com.liferay.portal.kernel.util package: UnsafeConsumer, UnsafeFunction, UnsafeRunnable."/>
    <property name="problem.tickets" value="LPS-89223"/>
    <property name="problem.section" value="#removed-unsafe-functional-interfaces-in-package-com-liferay-portal-kernel-util"/>
-   <property name="problem.version" value="7.2"/>
    <property name="version" value="7.2"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

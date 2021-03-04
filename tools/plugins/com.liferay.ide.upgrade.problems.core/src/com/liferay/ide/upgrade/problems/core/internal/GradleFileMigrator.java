@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -58,17 +57,15 @@ public abstract class GradleFileMigrator implements FileMigrator {
 		problemTickets = safeGet(properties, "problem.tickets");
 		sectionKey = safeGet(properties, "problem.section");
 
-		String problemVersionValue = safeGet(properties, "problem.version");
+		String versionValue = safeGet(properties, "version");
 
-		if (problemVersionValue.isEmpty()) {
-			problemVersion = problemVersionValue;
+		if (versionValue.isEmpty()) {
+			version = versionValue;
 		}
 		else {
-			VersionRange versionRange = new VersionRange(problemVersionValue);
+			Version v = new Version(versionValue);
 
-			Version left = versionRange.getLeft();
-
-			problemVersion = left.getMajor() + "." + left.getMinor();
+			version = v.getMajor() + "." + v.getMinor();
 		}
 
 		addDependenciesToSearch(artifactIds);
@@ -84,7 +81,7 @@ public abstract class GradleFileMigrator implements FileMigrator {
 			if (results != null) {
 				String fileName = "BREAKING_CHANGES.markdown";
 
-				switch (problemVersion) {
+				switch (version) {
 					case "7.0":
 						fileName = "liferay70/" + fileName;
 
@@ -106,7 +103,7 @@ public abstract class GradleFileMigrator implements FileMigrator {
 
 						break;
 					default:
-						Optional<String> nullableVersion = Optional.ofNullable(problemVersion);
+						Optional<String> nullableVersion = Optional.ofNullable(version);
 
 						throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 				}
@@ -116,7 +113,7 @@ public abstract class GradleFileMigrator implements FileMigrator {
 				for (FileSearchResult searchResult : results) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, problemType, problemTickets, problemVersion, file,
+							problemTitle, problemSummary, problemType, problemTickets, version, file,
 							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
 							searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 							UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
@@ -227,7 +224,7 @@ public abstract class GradleFileMigrator implements FileMigrator {
 	protected String problemTickets;
 	protected String problemTitle;
 	protected String problemType;
-	protected String problemVersion = "";
 	protected String sectionKey = "";
+	protected String version = "";
 
 }

@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Deprecated the liferay-portlet:icon-back Tag with No Direct Replacement",
 		"problem.section=#deprecated-the-liferay-portleticon-back-tag-with-no-direct-replacement",
 		"problem.summary=Deprecated the liferay-portlet:icon-back Tag with No Direct Replacement",
-		"problem.tickets=LPS-63101", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-63101", "version=7.0"
 	},
 	service = FileMigrator.class
 )

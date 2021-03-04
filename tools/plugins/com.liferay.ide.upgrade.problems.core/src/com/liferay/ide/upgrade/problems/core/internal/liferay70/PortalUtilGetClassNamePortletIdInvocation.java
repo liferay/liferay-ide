@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Removed the getClassNamePortletId(String) Method from PortalUtil Class",
 		"problem.section=#removed-the-getclassnameportletidstring-method-from-portalutil-class",
 		"problem.summary=Removed the getClassNamePortletId(String) Method from PortalUtil Class",
-		"problem.tickets=LPS-50604", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-50604", "version=7.0"
 	},
 	service = FileMigrator.class
 )

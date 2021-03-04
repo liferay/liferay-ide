@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.tickets=LPS-122955",
 		"problem.title=Remove SoyPortlet and related code", "problem.summary=SoyPortlet is no longer available",
-		"problem.section=#removed-soy-portlet", "problem.version=7.4", "version=7.4"
+		"problem.section=#removed-soy-portlet", "version=7.4"
 	},
 	service = FileMigrator.class
 )

@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java", "problem.title=Decoupled Several Classes from PortletURLImpl",
 		"problem.summary=Decoupled Implementing BaseURL Classes", "problem.tickets=LPS-82119",
-		"problem.section=#decoupled-implementing-baseurl-classes", "problem.version=7.1", "version=7.1"
+		"problem.section=#decoupled-implementing-baseurl-classes", "version=7.1"
 	},
 	service = FileMigrator.class
 )

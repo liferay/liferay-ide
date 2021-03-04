@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=The aui:column taglib has been removed and replaced with aui:col taglib",
 		"problem.section=#removed-the-auicolumn-tag-and-replaced-with-auicol",
 		"problem.summary=The aui:column taglib has been removed and replaced with aui:col taglib",
-		"problem.tickets=LPS-62208", "auto.correct=jsptag", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-62208", "auto.correct=jsptag", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

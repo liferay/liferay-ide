@@ -53,7 +53,6 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.util.tracker.ServiceTracker;
@@ -134,11 +133,11 @@ public class FileMigrationService implements FileMigration {
 						).map(
 							Object::toString
 						).map(
-							VersionRange::valueOf
+							Version::valueOf
 						).filter(
-							range -> versions.stream(
+							version -> versions.stream(
 							).filter(
-								v -> range.includes(new Version(v))
+								v -> version.equals(new Version(v))
 							).findFirst(
 							).isPresent()
 						).isPresent();

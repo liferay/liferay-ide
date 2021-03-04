@@ -34,8 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java", "problem.title=Adding Tags, Categories, Vocabularies API Changes",
 		"problem.summary=The API for adding tags, categories, and vocabularies now requires passing the groupId parameter. Previously, it had to be included in the ServiceContext parameter passed to the method.",
 		"problem.tickets=LPS-54570",
-		"problem.section=#added-required-parameter-groupid-for-adding-tags-categories-and-vocabularie",
-		"problem.version=7.0", "version=7.0"
+		"problem.section=#added-required-parameter-groupid-for-adding-tags-categories-and-vocabularie", "version=7.0"
 	},
 	service = FileMigrator.class
 )

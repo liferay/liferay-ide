@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Language Display Style Properties",
 		"problem.summary=Replaced the Language Portlet's Display Styles with ADTs", "problem.tickets=LPS-54419",
-		"problem.section=#replaced-the-language-portlets-display-styles-with-adts", "problem.version=7.0", "version=7.0"
+		"problem.section=#replaced-the-language-portlets-display-styles-with-adts", "version=7.0"
 	},
 	service = FileMigrator.class
 )

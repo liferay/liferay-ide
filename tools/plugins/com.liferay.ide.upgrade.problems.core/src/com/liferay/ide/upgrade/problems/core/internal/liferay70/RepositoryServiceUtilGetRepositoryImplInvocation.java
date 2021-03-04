@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf", "problem.title=RepositoryLocalServiceUtil changes",
 		"problem.section=#removed-methods-getgrouplocalrepositoryimpl-and-getlocalrepositoryimpl-from",
 		"problem.summary=Removed Methods getGroupLocalRepositoryImpl and getLocalRepositoryImpl from RepositoryLocalService and RepositoryService",
-		"problem.tickets=LPS-55566", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-55566", "version=7.0"
 	},
 	service = FileMigrator.class
 )

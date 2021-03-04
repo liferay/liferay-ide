@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -49,17 +48,15 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		problemTickets = safeGet(serviceProperties, "problem.tickets");
 		sectionKey = safeGet(serviceProperties, "problem.section");
 
-		String problemVersionValue = safeGet(serviceProperties, "problem.version");
+		String versionValue = safeGet(serviceProperties, "version");
 
-		if (problemVersionValue.isEmpty()) {
-			problemVersion = problemVersionValue;
+		if (versionValue.isEmpty()) {
+			version = versionValue;
 		}
 		else {
-			VersionRange versionRange = new VersionRange(problemVersionValue);
+			Version v = new Version(versionValue);
 
-			Version left = versionRange.getLeft();
-
-			problemVersion = left.getMajor() + "." + left.getMinor();
+			version = v.getMajor() + "." + v.getMinor();
 		}
 
 		addPropertiesToSearch(properties);
@@ -77,7 +74,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 			if (!results.isEmpty()) {
 				String fileName = "BREAKING_CHANGES.markdown";
 
-				switch (problemVersion) {
+				switch (version) {
 					case "7.0":
 						fileName = "liferay70/" + fileName;
 
@@ -99,7 +96,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 
 						break;
 					default:
-						Optional<String> nullableVersion = Optional.ofNullable(problemVersion);
+						Optional<String> nullableVersion = Optional.ofNullable(version);
 
 						throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 				}
@@ -109,7 +106,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 				for (FileSearchResult searchResult : results) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, problemType, problemTickets, problemVersion, file,
+							problemTitle, problemSummary, problemType, problemTickets, version, file,
 							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
 							searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 							UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
@@ -132,8 +129,8 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 	protected String problemTickets;
 	protected String problemTitle;
 	protected String problemType;
-	protected String problemVersion = "";
 	protected final List<String> properties = new ArrayList<>();
 	protected String sectionKey = "";
+	protected String version = "";
 
 }

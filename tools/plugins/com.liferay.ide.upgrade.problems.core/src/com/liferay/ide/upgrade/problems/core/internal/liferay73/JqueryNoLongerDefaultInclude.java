@@ -26,8 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=jsp,jspf", "problem.title=jQuery is no longer included by default",
 		"problem.section=#jquery-is-no-longer-included-by-default",
-		"problem.summary=jQuery Is No Longer Included by Default", "problem.tickets=LPS-95726", "problem.version=7.3",
-		"version=7.3"
+		"problem.summary=jQuery Is No Longer Included by Default", "problem.tickets=LPS-95726", "version=7.3"
 	},
 	service = FileMigrator.class
 )

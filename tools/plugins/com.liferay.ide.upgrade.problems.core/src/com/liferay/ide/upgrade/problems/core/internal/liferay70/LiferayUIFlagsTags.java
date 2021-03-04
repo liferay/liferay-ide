@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Deprecated the liferay-ui:flags Tag and Replaced with liferay-flags:flags",
 		"problem.section=#deprecated-the-liferay-uiflags-tag-and-replaced-with-liferay-flagsflags",
 		"problem.summary=Deprecated the liferay-ui:flags Tag and Replaced with liferay-flags:flags",
-		"problem.tickets=LPS-60967", "auto.correct=jsptag", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-60967", "auto.correct=jsptag", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

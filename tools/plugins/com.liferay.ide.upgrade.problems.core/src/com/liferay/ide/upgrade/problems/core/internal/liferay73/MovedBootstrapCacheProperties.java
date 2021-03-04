@@ -28,8 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=properties", "problem.title=Removed cache bootstrap feature",
 		"problem.summary=Three bootstrap cache properties have been moved from portal.properties to an OSGi configuration.",
-		"problem.tickets=LPS-96563", "problem.section=#moved-bootstrap-cache-properties", "problem.version=7.3",
-		"version=7.3"
+		"problem.tickets=LPS-96563", "problem.section=#moved-bootstrap-cache-properties", "version=7.3"
 	},
 	service = FileMigrator.class
 )

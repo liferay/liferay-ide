@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 		"problem.title=Removed mbMessages and fileEntryTuples Attributes from app-view-search-entry Tag",
 		"problem.section=#removed-mbmessages-and-fileentrytuples-attributes-from-app-view-search-entr",
 		"problem.summary=Removed mbMessages and fileEntryTuples Attributes from app-view-search-entry Tag",
-		"problem.tickets=LPS-55886", "problem.version=7.0", "version=7.0"
+		"problem.tickets=LPS-55886", "version=7.0"
 	},
 	service = FileMigrator.class
 )

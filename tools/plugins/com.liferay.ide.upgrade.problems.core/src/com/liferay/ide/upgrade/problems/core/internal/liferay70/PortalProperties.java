@@ -29,8 +29,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=properties", "problem.title=Portal Property Changes",
 		"problem.summary=Removed Portal Properties Used to Display Sections in Form Navigators",
 		"problem.tickets=LPS-54903",
-		"problem.section=#removed-portal-properties-used-to-display-sections-in-form-navigators", "problem.version=7.0",
-		"version=7.0"
+		"problem.section=#removed-portal-properties-used-to-display-sections-in-form-navigators", "version=7.0"
 	},
 	service = FileMigrator.class
 )

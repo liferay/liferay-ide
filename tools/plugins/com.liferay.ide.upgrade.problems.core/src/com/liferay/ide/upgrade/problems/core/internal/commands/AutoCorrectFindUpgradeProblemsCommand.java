@@ -55,7 +55,6 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -140,9 +139,9 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 					).map(
 						Object::toString
 					).map(
-						VersionRange::valueOf
+						Version::valueOf
 					).filter(
-						range -> range.includes(new Version(upgradeProblem.getVersion()))
+						v -> v.equals(new Version(upgradeProblem.getVersion()))
 					).isPresent();
 				}
 			).map(

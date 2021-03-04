@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"file.extensions=java", "problem.title=Changed the From Last Publish Date Option in Staging",
 		"problem.summary=Changed Last Publish Date Option", "problem.tickets=LPS-81695",
-		"problem.section=#changed-the-from-last-publish-date-option-in-staging", "problem.version=7.1", "version=7.1"
+		"problem.section=#changed-the-from-last-publish-date-option-in-staging", "version=7.1"
 	},
 	service = FileMigrator.class
 )

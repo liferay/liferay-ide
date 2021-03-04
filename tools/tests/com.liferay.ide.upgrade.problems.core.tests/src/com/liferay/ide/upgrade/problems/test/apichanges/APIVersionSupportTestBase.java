@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
 
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 
@@ -51,9 +50,9 @@ public abstract class APIVersionSupportTestBase extends APITestBase {
 				).map(
 					Object::toString
 				).map(
-					VersionRange::valueOf
+					Version::valueOf
 				).filter(
-					range -> range.includes(version)
+					v -> v.equals(version)
 				).isPresent();
 			}
 		).collect(

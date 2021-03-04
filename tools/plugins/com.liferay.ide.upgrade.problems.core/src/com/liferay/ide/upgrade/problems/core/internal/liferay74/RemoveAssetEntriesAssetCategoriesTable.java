@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf", "problem.tickets=LPS-89065",
 		"problem.title=Remove AssetEntries_AssetCategories table and related code",
 		"problem.summary=The AssetEntries_AssetCategories table and its corresponding code have been removed from the portal",
-		"problem.section=#removed-assetentries-assetcatagories-table", "problem.version=7.4", "version=7.4"
+		"problem.section=#removed-assetentries-assetcatagories-table", "version=7.4"
 	},
 	service = FileMigrator.class
 )

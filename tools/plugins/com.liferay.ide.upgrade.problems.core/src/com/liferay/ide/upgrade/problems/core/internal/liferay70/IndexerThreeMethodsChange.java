@@ -34,8 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=java,jsp,jspf", "problem.title=Changes to Indexer methods",
 		"problem.summary=Method Indexer.addRelatedEntryFields(Document, Object) has been moved into RelatedEntryIndexer. Indexer.reindexDDMStructures(List<Long>) has been moved into DDMStructureIndexer. Indexer.getQueryString(SearchContext, Query) has been removed, in favor of calling SearchEngineUtil.getQueryString(SearchContext, Query)",
 		"problem.tickets=LPS-55928",
-		"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re",
-		"problem.version=7.0", "version=7.0"
+		"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re", "version=7.0"
 	},
 	service = FileMigrator.class
 )
