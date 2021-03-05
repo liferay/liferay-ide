@@ -14,8 +14,11 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
+import com.google.common.base.Objects;
+
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.upgrade.plan.core.MessagePrompt;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
@@ -28,7 +31,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
-import com.liferay.ide.upgrade.problems.core.commands.AutoCorrectFindUpgradeProblemsCommandKeys;
+import com.liferay.ide.upgrade.problems.core.LegacyFileMigration;
+import com.liferay.ide.upgrade.problems.core.commands.RemoveServiceBuilderLegacyFileCommandKeys;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
 import java.io.File;
@@ -55,46 +59,51 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Gregory Amerson
  * @author Simon Jiang
- * @author Terry Jia
  */
 @Component(
-	property = "id=" + AutoCorrectFindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
+	property = "id=" + RemoveServiceBuilderLegacyFileCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = {UpgradeCommand.class, UpgradePreview.class}
 )
-public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, UpgradePreview, UpgradeProblemSupport {
+public class RemoveServiceBuilderLegacyFileCommand implements UpgradeCommand, UpgradePreview, UpgradeProblemSupport {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		List<UpgradeProblem> autoCorrectableUpgradeProblems = _findAutoCorrectableUpgradeProblems(progressMonitor);
+		List<UpgradeProblem> removeServiceBuilderLegacyFilesProblems = _findServiceBuilderLegacyFilesProblems(
+			progressMonitor);
 
-		if (ListUtil.isEmpty(autoCorrectableUpgradeProblems)) {
+		if (ListUtil.isEmpty(removeServiceBuilderLegacyFilesProblems)) {
+			_upgradePlanner.dispatch(
+				new UpgradeCommandPerformedEvent(this, new ArrayList<>(removeServiceBuilderLegacyFilesProblems)));
+
 			return Status.OK_STATUS;
 		}
 
-		Stream<UpgradeProblem> autoCorrectableUpgradeProblemsStream = autoCorrectableUpgradeProblems.stream();
+		Stream<UpgradeProblem> removeServiceBuilderLegacyFilesProblemsStream =
+			removeServiceBuilderLegacyFilesProblems.stream();
 
-		autoCorrectableUpgradeProblemsStream.forEach(this::_autoCorrectProblem);
+		removeServiceBuilderLegacyFilesProblemsStream.forEach(this::_autoCorrectProblem);
 
-		refreshProjects(autoCorrectableUpgradeProblems, progressMonitor);
+		refreshProjects(removeServiceBuilderLegacyFilesProblems, progressMonitor);
 
 		_upgradePlanner.dispatch(
-			new UpgradeCommandPerformedEvent(this, new ArrayList<>(autoCorrectableUpgradeProblems)));
+			new UpgradeCommandPerformedEvent(this, new ArrayList<>(removeServiceBuilderLegacyFilesProblems)));
 
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public void preview(IProgressMonitor progressMonitor) {
-		List<UpgradeProblem> autoCorrectableUpgradeProblems = _findAutoCorrectableUpgradeProblems(progressMonitor);
+		List<UpgradeProblem> removeServiceBuilderLegacyFilesProblems = _findServiceBuilderLegacyFilesProblems(
+			progressMonitor);
 
-		if (ListUtil.isEmpty(autoCorrectableUpgradeProblems)) {
+		if (ListUtil.isEmpty(removeServiceBuilderLegacyFilesProblems)) {
 			return;
 		}
 
@@ -102,17 +111,25 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		upgradeProblems.addAll(autoCorrectableUpgradeProblems);
+		Stream<UpgradeProblem> upgradeProblemsStream = upgradeProblems.stream();
 
-		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(upgradeProblems)));
+		List<UpgradeProblem> removeLeacyFileProblemList = upgradeProblemsStream.filter(
+			problem -> Objects.equal(problem.getType(), "legacy")
+		).collect(
+			Collectors.toList()
+		);
+
+		upgradeProblems.addAll(removeServiceBuilderLegacyFilesProblems);
+
+		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(removeLeacyFileProblemList)));
 	}
 
-	private void _autoCorrectProblem(UpgradeProblem upgradeProblem) {
-		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectFindUpgradeProblemsCommand.class);
+	private void _autoCorrectProblem(UpgradeProblem legacyUpgradeProblem) {
+		Bundle bundle = FrameworkUtil.getBundle(RemoveServiceBuilderLegacyFileCommand.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
-		String autoCorrectContext = upgradeProblem.getAutoCorrectContext();
+		String autoCorrectContext = legacyUpgradeProblem.getAutoCorrectContext();
 
 		String autoCorrectKey = autoCorrectContext;
 
@@ -126,7 +143,7 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = bundleContext.getServiceReferences(
 				AutoFileMigrator.class, "(auto.correct=" + autoCorrectKey + ")");
 
-			File file = upgradeProblem.getResource();
+			File file = legacyUpgradeProblem.getResource();
 
 			Stream<ServiceReference<AutoFileMigrator>> serviceReferencesStream = serviceReferences.stream();
 
@@ -139,9 +156,19 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 					).map(
 						Object::toString
 					).map(
-						Version::valueOf
+						VersionRange::valueOf
 					).filter(
-						v -> v.equals(new Version(upgradeProblem.getVersion()))
+						range -> range.includes(new Version(legacyUpgradeProblem.getVersion()))
+					).isPresent();
+				}
+			).filter(
+				ref -> {
+					Dictionary<String, Object> serviceProperties = ref.getProperties();
+
+					return Optional.ofNullable(
+						serviceProperties.get("problem.type")
+					).filter(
+						type -> Objects.equal(type, "legacy")
 					).isPresent();
 				}
 			).map(
@@ -149,7 +176,7 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 			).forEach(
 				autoFileMigrator -> {
 					try {
-						autoFileMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
+						autoFileMigrator.correctProblems(file, Arrays.asList(legacyUpgradeProblem));
 					}
 					catch (AutoFileMigratorException afme) {
 						UpgradeProblemsCorePlugin.logError(
@@ -162,12 +189,20 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 		}
 	}
 
-	private List<UpgradeProblem> _findAutoCorrectableUpgradeProblems(IProgressMonitor progressMonitor) {
+	private List<UpgradeProblem> _findServiceBuilderLegacyFilesProblems(IProgressMonitor progressMonitor) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		if (ListUtil.isNotEmpty(upgradeProblems)) {
+		Stream<UpgradeProblem> removeLegacyFileProblems = upgradeProblems.stream();
+
+		List<UpgradeProblem> removeLeacyFileProblemList = removeLegacyFileProblems.filter(
+			problem -> Objects.equal(problem.getType(), "legacy")
+		).collect(
+			Collectors.toList()
+		);
+
+		if (ListUtil.isNotEmpty(removeLeacyFileProblemList)) {
 			boolean result = _messagePrompt.promptQuestion(
 				"Remove the found results?",
 				"The found results will be removed if you do this, do you want to continue?");
@@ -176,26 +211,28 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 				return Collections.emptyList();
 			}
 
-			removeMarkers(upgradeProblems);
+			removeMarkers(removeLeacyFileProblemList);
 
-			upgradeProblems.clear();
+			removeLeacyFileProblemList.clear();
 		}
 
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"Select projects to search for upgrade problems.", true, ResourceSelection.JAVA_PROJECTS);
+			"Select projects to search for finding legacy file to remove.", true, ResourceSelection.JAVA_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Collections.emptyList();
 		}
 
-		Stream<IProject> autoCorrectProblemsStream = projects.stream();
+		Stream<IProject> removeServiceBulderLegacyFileStream = projects.stream();
 
 		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
 
-		List<UpgradeProblem> autoCorrectProblems = autoCorrectProblemsStream.map(
+		List<UpgradeProblem> legacyAutoCorrectProblems = removeServiceBulderLegacyFileStream.filter(
+			ProjectUtil::isServiceBuilderProject
+		).map(
 			FileUtil::getFile
 		).map(
-			projectFile -> _fileMigration.findUpgradeProblems(
+			projectFile -> _legacyFileMigration.findUpgradeProblems(
 				projectFile, upgradeVersions, Collections.singleton("auto.correct"), progressMonitor)
 		).flatMap(
 			findProblems -> findProblems.stream()
@@ -205,7 +242,7 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 			Collectors.toList()
 		);
 
-		autoCorrectProblems.sort(
+		legacyAutoCorrectProblems.sort(
 			(problem1, problem2) -> {
 				Version version1 = new Version(problem1.getVersion());
 				Version version2 = new Version(problem2.getVersion());
@@ -213,11 +250,14 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 				return version1.compareTo(version2);
 			});
 
-		return autoCorrectProblems;
+		return legacyAutoCorrectProblems;
 	}
 
 	@Reference
 	private FileMigration _fileMigration;
+
+	@Reference
+	private LegacyFileMigration _legacyFileMigration;
 
 	@Reference
 	private MessagePrompt _messagePrompt;

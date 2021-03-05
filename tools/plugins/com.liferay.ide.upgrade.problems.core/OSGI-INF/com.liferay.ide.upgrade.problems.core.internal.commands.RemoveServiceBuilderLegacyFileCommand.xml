@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.commands.AutoCorrectFindUpgradeProblemsCommand">
-   <property name="id" value="auto_correct_find_upgrade_problems"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.commands.RemoveServiceBuilderLegacyFileCommand">
+   <property name="id" value="remove_legacy_files"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand"/>
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradePreview"/>
    </service>
    <reference cardinality="1..1" field="_fileMigration" interface="com.liferay.ide.upgrade.problems.core.FileMigration" name="_fileMigration"/>
+   <reference cardinality="1..1" field="_legacyFileMigration" interface="com.liferay.ide.upgrade.problems.core.LegacyFileMigration" name="_legacyFileMigration"/>
    <reference cardinality="1..1" field="_messagePrompt" interface="com.liferay.ide.upgrade.plan.core.MessagePrompt" name="_messagePrompt"/>
    <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.plan.core.ResourceSelection" name="_resourceSelection"/>
    <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
-   <implementation class="com.liferay.ide.upgrade.problems.core.internal.commands.AutoCorrectFindUpgradeProblemsCommand"/>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.commands.RemoveServiceBuilderLegacyFileCommand"/>
 </scr:component>
