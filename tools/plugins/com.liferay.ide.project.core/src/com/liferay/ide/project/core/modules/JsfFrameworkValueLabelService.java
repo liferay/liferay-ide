@@ -29,6 +29,8 @@ public class JsfFrameworkValueLabelService extends ValueLabelService {
 	@Override
 	public String provide(String value) {
 		switch (value) {
+			case "adf":
+				return "ADF Faces";
 			case "jsf":
 				return "JSF Standard";
 			case "alloy":

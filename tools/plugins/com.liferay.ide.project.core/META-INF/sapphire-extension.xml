@@ -110,7 +110,7 @@
 	</service>
 
 	<service>
-		<id>Sapphire.ValueLabelService.jsf.templateNmae</id>
+		<id>Sapphire.ValueLabelService.jsf.templateName</id>
 		<context>Sapphire.Property.MetaModel</context>
 		<implementation>com.liferay.ide.project.core.modules.JsfFrameworkValueLabelService</implementation>
 		<condition>com.liferay.ide.project.core.modules.JsfFrameworkValueLabelService$Condition</condition>
