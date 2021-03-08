@@ -22,8 +22,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -61,6 +63,36 @@ public class GradleBuildScript {
 		else {
 			_astNodes = Collections.emptyList();
 		}
+	}
+
+	public BuildScriptVisitor deleteDependency(List<GradleDependency> dependencies) throws IOException {
+		BuildScriptVisitor buildScriptVisitor = new BuildScriptVisitor();
+
+		_walkScript(buildScriptVisitor);
+
+		_fileContents = Files.readAllLines(_path);
+
+		List<String> delDependencies = new ArrayList<>();
+
+		for (GradleDependency dependency : dependencies) {
+			String dep = _toGradleDependencyString(dependency);
+
+			dep = dep.trim();
+
+			Iterator<String> iterator = _fileContents.iterator();
+
+			while (iterator.hasNext()) {
+				String line = iterator.next();
+
+				if (dep.equals(line.trim())) {
+					delDependencies.add(line);
+				}
+			}
+		}
+
+		_fileContents.removeAll(delDependencies);
+
+		return buildScriptVisitor;
 	}
 
 	public List<GradleDependency> getBuildScriptDependencies() {

@@ -17,16 +17,25 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 
@@ -36,7 +45,9 @@ import org.eclipse.buildship.core.GradleBuild;
 import org.eclipse.buildship.core.GradleCore;
 import org.eclipse.buildship.core.GradleDistribution;
 import org.eclipse.buildship.core.GradleWorkspace;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -59,8 +70,51 @@ import org.osgi.framework.Version;
  * @author Lovett Li
  * @author Charles Wu
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class GradleUtil {
+
+	public static Collection<File> getBuildGradleFiles() {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		List<String> ignoreFolders = new ArrayList<>(
+			Arrays.asList(".gradle", ".settings", "configs", "gradle", "libs"));
+
+		Set<IFolder> searchableFolders;
+
+		try {
+			searchableFolders = Stream.of(
+				workspaceProject.members()
+			).filter(
+				member -> member instanceof IFolder
+			).map(
+				member -> (IFolder)member
+			).filter(
+				folder -> !ignoreFolders.contains(folder.getName())
+			).collect(
+				Collectors.toSet()
+			);
+		}
+		catch (CoreException e) {
+			return null;
+		}
+
+		return getBuildGradleFiles(searchableFolders);
+	}
+
+	public static Collection<File> getBuildGradleFiles(Collection<? extends IContainer> containers) {
+		Stream<? extends IContainer> stream = containers.stream();
+
+		return stream.map(
+			container -> new SearchFilesVisitor().searchFiles(container, "build.gradle")
+		).flatMap(
+			gradleFiles -> gradleFiles.stream()
+		).map(
+			buildGradleFile -> FileUtil.getFile(buildGradleFile)
+		).collect(
+			Collectors.toSet()
+		);
+	}
 
 	public static GradleProject getGradleProject(IProject project) {
 		if (project == null) {

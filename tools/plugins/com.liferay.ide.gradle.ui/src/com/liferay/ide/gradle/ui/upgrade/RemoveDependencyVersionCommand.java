@@ -22,7 +22,6 @@ import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
-import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.RemoveDependencyVersionKeys;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
@@ -39,7 +38,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -67,7 +65,7 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 			return Status.CANCEL_STATUS;
 		}
 
-		Collection<File> buildGradleFiles = _getBuildGradleFiles();
+		Collection<File> buildGradleFiles = GradleUtil.getBuildGradleFiles();
 
 		if (buildGradleFiles == null) {
 			return Status.CANCEL_STATUS;
@@ -88,23 +86,6 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 		return new Artifact(
 			gradleDependency.getGroup(), gradleDependency.getName(), gradleDependency.getVersion(),
 			gradleDependency.getConfiguration(), null);
-	}
-
-	private Collection<File> _getBuildGradleFiles() {
-		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
-
-		return Stream.of(
-			_searchableFolders
-		).map(
-			searchFolder -> new SearchFilesVisitor().searchFiles(
-				FileUtil.getFolder(workspaceProject, searchFolder), "build.gradle")
-		).flatMap(
-			gradleFiles -> gradleFiles.stream()
-		).map(
-			buildGradleFile -> FileUtil.getFile(buildGradleFile)
-		).collect(
-			Collectors.toSet()
-		);
 	}
 
 	private void _removeDependencyVersion(File buildGradleFile) {
@@ -144,8 +125,6 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 
 	@Reference
 	private ResourceSelection _resourceSelection;
-
-	private String[] _searchableFolders = {"modules", "wars", "themes", "ext"};
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;

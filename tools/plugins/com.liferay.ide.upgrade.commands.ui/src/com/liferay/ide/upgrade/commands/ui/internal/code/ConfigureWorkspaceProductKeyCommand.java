@@ -70,7 +70,7 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		File gradleProperties = _getGradlePropertiesFile();
 
-		if (gradleProperties == null) {
+		if (Objects.isNull(gradleProperties)) {
 			return Status.CANCEL_STATUS;
 		}
 

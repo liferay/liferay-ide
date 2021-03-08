@@ -127,6 +127,13 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 	}
 
 	@Override
+	public String getProperty(String key, String defaultValue) {
+		_readGradleWorkspaceProperties();
+
+		return properties.getProperty(key, defaultValue);
+	}
+
+	@Override
 	public List<Artifact> getTargetPlatformArtifacts() {
 		if (_targetPlatformArtifacts.isEmpty()) {
 			GradleProject workspaceGradleProject = GradleUtil.getGradleProject(getProject());

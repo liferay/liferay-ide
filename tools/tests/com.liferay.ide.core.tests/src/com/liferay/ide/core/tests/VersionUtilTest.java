@@ -14,10 +14,10 @@
 
 package com.liferay.ide.core.tests;
 
+import com.liferay.ide.core.util.VersionUtil;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.liferay.ide.core.util.VersionUtil;
 
 /**
  * @author Seiphon Wang
