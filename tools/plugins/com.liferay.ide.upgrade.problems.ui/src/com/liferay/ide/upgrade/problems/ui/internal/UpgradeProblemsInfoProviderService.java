@@ -68,6 +68,9 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		else if (element instanceof UpgradeProblemsContainer) {
 			return "Liferay Upgrade Problems";
 		}
+		else if (element instanceof LegacyProblemsContainer) {
+			return "Liferay Legacy File Problems";
+		}
 		else if (element instanceof ProjectProblemsContainer) {
 			return _projectProblemsContainerLabel((ProjectProblemsContainer)element);
 		}
@@ -80,8 +83,9 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 
 	@Override
 	public boolean provides(Object element) {
-		if (element instanceof FileProblemsContainer || element instanceof ProjectProblemsContainer ||
-			element instanceof UpgradeProblem || element instanceof UpgradeProblemsContainer) {
+		if (element instanceof FileProblemsContainer || element instanceof LegacyProblemsContainer ||
+			element instanceof ProjectProblemsContainer || element instanceof UpgradeProblem ||
+			element instanceof UpgradeProblemsContainer) {
 
 			return true;
 		}

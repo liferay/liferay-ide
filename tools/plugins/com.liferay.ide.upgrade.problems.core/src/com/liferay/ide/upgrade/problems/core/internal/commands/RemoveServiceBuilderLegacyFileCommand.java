@@ -30,7 +30,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
-import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.LegacyFileMigration;
 import com.liferay.ide.upgrade.problems.core.commands.RemoveServiceBuilderLegacyFileCommandKeys;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
@@ -252,9 +251,6 @@ public class RemoveServiceBuilderLegacyFileCommand implements UpgradeCommand, Up
 
 		return legacyAutoCorrectProblems;
 	}
-
-	@Reference
-	private FileMigration _fileMigration;
 
 	@Reference
 	private LegacyFileMigration _legacyFileMigration;

@@ -40,6 +40,10 @@
 					>
 					</instanceof>
 					<instanceof
+						value="com.liferay.ide.upgrade.problems.ui.internal.LegacyProblemsContainer"
+					>
+					</instanceof>
+					<instanceof
 						value="org.eclipse.core.resources.IProject"
 					>
 					</instanceof>
@@ -66,6 +70,10 @@
 						</instanceof>
 						<instanceof
 							value="com.liferay.ide.upgrade.problems.ui.internal.UpgradeProblemsContainer"
+						>
+						</instanceof>
+						<instanceof
+							value="com.liferay.ide.upgrade.problems.ui.internal.LegacyProblemsContainer"
 						>
 						</instanceof>
 						<instanceof

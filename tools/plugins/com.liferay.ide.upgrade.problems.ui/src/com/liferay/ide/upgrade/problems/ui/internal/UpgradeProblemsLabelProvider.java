@@ -62,6 +62,9 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 		else if (element instanceof UpgradeProblemsContainer) {
 			return getImageRegistry().get("UpgradeProblemsContainer");
 		}
+		else if (element instanceof LegacyProblemsContainer) {
+			return getImageRegistry().get("LegacyProblemsContainer");
+		}
 
 		return null;
 	}
@@ -100,6 +103,10 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 			"UpgradeProblemsContainer",
 			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
 				UpgradeProblemsUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png"));
+		imageRegistry.put(
+			"LegacyProblemsContainer",
+			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
+				UpgradeProblemsUIPlugin.PLUGIN_ID, "icons/plugin_logo_16.png"));
 	}
 
 	private ServiceTracker<UpgradeInfoProvider, UpgradeInfoProvider> _upgradeInfoProviderServiceTracker;

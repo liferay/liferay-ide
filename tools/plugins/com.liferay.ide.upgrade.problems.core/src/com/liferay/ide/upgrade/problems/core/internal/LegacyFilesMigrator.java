@@ -82,7 +82,7 @@ public abstract class LegacyFilesMigrator implements FileMigrator {
 			for (FileSearchResult searchResult : results) {
 				problems.add(
 					new UpgradeProblem(
-						problemTitle, problemSummary, fileExtension, problemTickets, version, searchResult.file,
+						problemTitle, problemSummary, problemType, problemTickets, version, searchResult.file,
 						searchResult.startLine, searchResult.startOffset, searchResult.endOffset, "",
 						"delete-legacy-file", UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,
 						UpgradeProblem.MARKER_ERROR));

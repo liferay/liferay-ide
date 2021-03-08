@@ -25,8 +25,10 @@ import com.liferay.ide.upgrade.plan.ui.navigator.AbstractNavigatorContentProvide
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,6 +44,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Terry Jia
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProvider {
 
@@ -66,6 +69,18 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 
 			List<ProjectProblemsContainer> projectProblemsContainers =
 				upgradeProblemsContainer.getProjectProblemsConatiners();
+
+			Stream<ProjectProblemsContainer> stream = projectProblemsContainers.stream();
+
+			return stream.filter(
+				projectProblemsContainer -> !projectProblemsContainer.isEmpty()
+			).toArray();
+		}
+		else if (element instanceof LegacyProblemsContainer) {
+			LegacyProblemsContainer legacyFileProblemsContainer = (LegacyProblemsContainer)element;
+
+			List<ProjectProblemsContainer> projectProblemsContainers =
+				legacyFileProblemsContainer.getProjectProblemsConatiners();
 
 			Stream<ProjectProblemsContainer> stream = projectProblemsContainers.stream();
 
@@ -112,6 +127,8 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 
 		UpgradeProblemsContainer upgradeProblemsContainer = new UpgradeProblemsContainer();
 
+		LegacyProblemsContainer legacyProblemsContainer = new LegacyProblemsContainer();
+
 		for (IProject project : CoreUtil.getAllProjects()) {
 			try {
 				if (!project.hasNature("org.eclipse.jdt.core.javanature") ||
@@ -126,7 +143,11 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 
 			ProjectProblemsContainer projectProblemsContainer = new ProjectProblemsContainer();
 
+			ProjectProblemsContainer legacyProjectProblemsContainer = new ProjectProblemsContainer();
+
 			projectProblemsContainer.setProjectName(project.getName());
+
+			legacyProjectProblemsContainer.setProjectName(project.getName());
 
 			for (UpgradeProblem upgradeProblem : upgradeProblems) {
 				File file = upgradeProblem.getResource();
@@ -143,6 +164,23 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 					continue;
 				}
 
+				FileProblemsContainer legacyFileProblemsContainer = projectProblemsContainer.getFileProblemsContainer(
+					file);
+
+				if ((upgradeProblem.getType() != null) && Objects.equals(upgradeProblem.getType(), "legacy")) {
+					if (legacyFileProblemsContainer == null) {
+						legacyFileProblemsContainer = new FileProblemsContainer();
+
+						legacyFileProblemsContainer.setFile(file);
+
+						legacyProjectProblemsContainer.addFileProblemsContainer(legacyFileProblemsContainer);
+					}
+
+					legacyFileProblemsContainer.addUpgradeProblem(upgradeProblem);
+
+					continue;
+				}
+
 				FileProblemsContainer fileProblemsContainer = projectProblemsContainer.getFileProblemsContainer(file);
 
 				if (fileProblemsContainer == null) {
@@ -156,18 +194,33 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 				fileProblemsContainer.addUpgradeProblem(upgradeProblem);
 			}
 
+			legacyProblemsContainer.addProjectProblemsContainer(legacyProjectProblemsContainer);
+
 			upgradeProblemsContainer.addProjectProblemsContainer(projectProblemsContainer);
 		}
 
+		List<Object> retVal = new ArrayList<>();
+
 		if (upgradeProblemsContainer.isNotEmpty()) {
-			return new Object[] {upgradeProblemsContainer};
+			retVal.add(upgradeProblemsContainer);
 		}
 
-		return null;
+		if (legacyProblemsContainer.isNotEmpty()) {
+			retVal.add(legacyProblemsContainer);
+		}
+
+		if (retVal.isEmpty()) {
+			return null;
+		}
+
+		return retVal.toArray();
 	}
 
 	public boolean hasChildren(Object element) {
 		if (element instanceof UpgradeProblemsContainer) {
+			return true;
+		}
+		else if (element instanceof LegacyProblemsContainer) {
 			return true;
 		}
 		else if (element instanceof ProjectProblemsContainer) {
