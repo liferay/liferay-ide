@@ -201,4 +201,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveServerSideClosureTemplatesSupport.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemovePortalFlashSupport.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveFlashJSPTags.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RefactorClamdIntegrationAntivirusScanner.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RefactorClamdIntegrationAntivirusScanner.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.SwitchToUseReleaseAPIDependencyCommand.xml
