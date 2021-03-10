@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
@@ -23,19 +24,13 @@ import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.internal.LegacyFilesMigrator;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -54,29 +49,14 @@ public class ServiceBuilderLegacyFileMigrator extends LegacyFilesMigrator implem
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigratorException {
 		int correctCount = 0;
 
-		for (IFile legacyFile : legacyFiles) {
-			IPath legacyFileLocation = legacyFile.getLocation();
-
-			if (Objects.equals(legacyFileLocation.toOSString(), file.getAbsolutePath()) && legacyFile.exists()) {
-				try {
-					legacyFile.delete(true, null);
-
-					correctCount++;
-				}
-				catch (CoreException e) {
-				}
-
-				break;
+		for (UpgradeProblem problem : upgradeProblems) {
+			File resource = problem.getResource();
+			
+			try {
+				FileUtil.delete(resource);
+				correctCount++;
 			}
-		}
-
-		for (IFolder legacyFolder : legacyFolders) {
-			if (legacyFolder.exists()) {
-				try {
-					_deleteEmptyFolder(legacyFolder);
-				}
-				catch (CoreException e) {
-				}
+			catch (Exception e) {
 			}
 		}
 
@@ -113,24 +93,6 @@ public class ServiceBuilderLegacyFileMigrator extends LegacyFilesMigrator implem
 		}
 
 		return findLegacyFiles();
-	}
-
-	private void _deleteEmptyFolder(IFolder folder) throws CoreException {
-		IResource[] members = folder.members();
-
-		if (members.length < 1) {
-			folder.delete(true, null);
-		}
-		else {
-			for (IResource member : members) {
-				if (member instanceof IFile) {
-					return;
-				}
-				else if (member instanceof IFolder) {
-					_deleteEmptyFolder((IFolder)member);
-				}
-			}
-		}
 	}
 
 }
