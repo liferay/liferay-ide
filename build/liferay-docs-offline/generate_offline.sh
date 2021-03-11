@@ -50,7 +50,7 @@ if [ -d "${unzip_dir}" ]; then
     rm -rf "${unzip_dir}" "${zipfile}" "output"
 
     if [ -s "code-upgrade-docs-${tag}.zip" ]; then
-      curl -X PUT -T code-upgrade-docs-${tag}.zip -u $BINTRAY_USER:$BINTRAY_API_KEY "https://api.bintray.com/content/gamerson/liferay-ide-files/docs/code-upgrade-docs-${tag}.zip;bt_package=contents;bt_version=1;publish=1"
+      curl -X PUT -T code-upgrade-docs-${tag}.zip -u $BINTRAY_USER:$BINTRAY_API_KEY "https://api.bintray.com/content/gamerson/liferay-ide-files/docs/code-upgrade-docs-${tag}.zip;bt_package=contents;bt_version=2;publish=1"
 
       if [ $? -ne 0 ]; then
         echo "Failed to publish to bintray."
