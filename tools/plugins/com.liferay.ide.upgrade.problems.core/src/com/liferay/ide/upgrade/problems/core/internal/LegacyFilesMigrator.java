@@ -29,12 +29,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 import org.osgi.service.component.ComponentContext;
@@ -92,38 +86,28 @@ public abstract class LegacyFilesMigrator implements FileMigrator {
 		return problems;
 	}
 
-	public List<FileSearchResult> findLegacyFiles() {
+	public List<FileSearchResult> findLegacyFiles(List<File> legacyFiles) {
 		List<FileSearchResult> fileSearchResult = new ArrayList<>();
 
 		if (!legacyFiles.isEmpty()) {
-			Stream<IFile> legacyFilesStream = legacyFiles.stream();
+			Stream<File> legacyFilesStream = legacyFiles.stream();
 
 			fileSearchResult.addAll(
-				legacyFilesStream.map(
+				legacyFilesStream.filter(
+					file -> file.isFile()
+				).map(
 					this::_getFileSearchResult
 				).collect(
 					Collectors.toList()
 				));
-		}
 
-		if (!legacyFolders.isEmpty()) {
-			Stream<IFolder> legacyFolderStream = legacyFolders.stream();
+			legacyFilesStream = legacyFiles.stream();
 
 			fileSearchResult.addAll(
-				legacyFolderStream.map(
-					legacyFolder -> {
-						List<IFile> allFiles = new ArrayList<>();
-
-						try {
-							allFiles.addAll(_getAllFiles(legacyFolder));
-						}
-						catch (CoreException e) {
-						}
-
-						legacyFiles.addAll(allFiles);
-
-						return allFiles;
-					}
+				legacyFilesStream.filter(
+					file -> file.isDirectory()
+				).map(
+					dir -> _getAllFiles(dir)
 				).flatMap(
 					files -> files.stream()
 				).map(
@@ -146,8 +130,6 @@ public abstract class LegacyFilesMigrator implements FileMigrator {
 	protected final List<String> artifactIds = new ArrayList<>();
 	protected ComponentContext context;
 	protected String fileExtension;
-	protected List<IFile> legacyFiles = new ArrayList<>();
-	protected List<IFolder> legacyFolders = new ArrayList<>();
 	protected String problemSummary;
 	protected String problemTickets;
 	protected String problemTitle;
@@ -155,36 +137,32 @@ public abstract class LegacyFilesMigrator implements FileMigrator {
 	protected String sectionKey = "";
 	protected String version = "";
 
-	private List<IFile> _getAllFiles(IFolder folder) throws CoreException {
-		List<IFile> fileList = new ArrayList<>();
+	private List<File> _getAllFiles(File folder) {
+		List<File> fileList = new ArrayList<>();
 
-		IResource[] members = folder.members();
+		File[] members = folder.listFiles();
 
-		for (IResource member : members) {
-			if (member instanceof IFile) {
-				fileList.add((IFile)member);
+		for (File member : members) {
+			if (member.isFile()) {
+				fileList.add(member);
 			}
-			else if (member instanceof IFolder) {
-				fileList.addAll(_getAllFiles((IFolder)member));
+			else if (member.isDirectory()) {
+				fileList.addAll(_getAllFiles(member));
 			}
 		}
 
 		return fileList;
 	}
 
-	private FileSearchResult _getFileSearchResult(IFile legacyFile) {
-		IPath path = legacyFile.getLocation();
-
-		File file = path.toFile();
-
+	private FileSearchResult _getFileSearchResult(File legacyFile) {
 		int startOffset = 0;
-		int endOffset = (int)file.length();
+		int endOffset = (int)legacyFile.length();
 
 		int startLine = 1;
 
 		int endLine = startLine;
 
-		try (FileReader fileReader = new FileReader(file);
+		try (FileReader fileReader = new FileReader(legacyFile);
 			LineNumberReader lineNumberReader = new LineNumberReader(fileReader)) {
 
 			lineNumberReader.skip(Long.MAX_VALUE);
@@ -194,7 +172,7 @@ public abstract class LegacyFilesMigrator implements FileMigrator {
 		catch (Exception e) {
 		}
 
-		return new FileSearchResult(path.toFile(), startOffset, endOffset, startLine, endLine, true);
+		return new FileSearchResult(legacyFile, startOffset, endOffset, startLine, endLine, true);
 	}
 
 }

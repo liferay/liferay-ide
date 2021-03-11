@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -24,13 +23,11 @@ import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.internal.LegacyFilesMigrator;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -51,7 +48,7 @@ public class ServiceBuilderLegacyFileMigrator extends LegacyFilesMigrator implem
 
 		for (UpgradeProblem problem : upgradeProblems) {
 			File resource = problem.getResource();
-			
+
 			try {
 				FileUtil.delete(resource);
 				correctCount++;
@@ -60,39 +57,47 @@ public class ServiceBuilderLegacyFileMigrator extends LegacyFilesMigrator implem
 			}
 		}
 
+		if ((_legacyFiles != null) && !_legacyFiles.isEmpty()) {
+			for (File legacyFile : _legacyFiles) {
+				if (legacyFile.isDirectory()) {
+					FileUtil.deleteDir(legacyFile, true);
+				}
+			}
+		}
+
 		return correctCount;
 	}
 
 	@Override
-	protected List<FileSearchResult> searchFile(File file) {
-		IProject project = CoreUtil.getProject(file);
-
-		legacyFiles = new ArrayList<>();
-		legacyFolders = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File projectDir) {
+		_legacyFiles = new ArrayList<>();
 
 		String relativePath = "/docroot/WEB-INF/src/META-INF";
 
-		IFile portletSpringXML = project.getFile(relativePath + "/portlet-spring.xml");
+		File portletSpringXML = new File(projectDir.getAbsolutePath() + relativePath + "/portlet-spring.xml");
 
 		if (portletSpringXML.exists()) {
-			legacyFiles.add(portletSpringXML);
+			_legacyFiles.add(portletSpringXML);
 		}
 
-		IFile shardDataSourceSpringXML = project.getFile(relativePath + "/shard-data-source-spring.xml");
+		File shardDataSourceSpringXML = new File(
+			projectDir.getAbsolutePath() + relativePath + "/shard-data-source-spring.xml");
 
 		if (shardDataSourceSpringXML.exists()) {
-			legacyFiles.add(shardDataSourceSpringXML);
+			_legacyFiles.add(shardDataSourceSpringXML);
 		}
 
 		// for 6.2 maven project
 
-		IFolder metaInfFolder = project.getFolder("/src/main/resources/META-INF/");
+		File metaInfFolder = new File(projectDir.getAbsolutePath() + "/src/main/resources/META-INF/");
 
 		if (metaInfFolder.exists()) {
-			legacyFolders.add(metaInfFolder);
+			_legacyFiles.add(metaInfFolder);
 		}
 
-		return findLegacyFiles();
+		return findLegacyFiles(_legacyFiles);
 	}
+
+	private List<File> _legacyFiles;
 
 }
