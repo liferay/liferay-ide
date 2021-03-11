@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -56,9 +57,11 @@ public class JSFModuleProjectComponentSuitePossibleValues
 		}
 
 		for (String value : _newPossibleValues) {
-			if (!possibleValues.contains(value)) {
-				values.add(value);
+			if (possibleValues.contains(value) || Objects.equals("adf", value)) {
+				continue;
 			}
+
+			values.add(value);
 		}
 	}
 
