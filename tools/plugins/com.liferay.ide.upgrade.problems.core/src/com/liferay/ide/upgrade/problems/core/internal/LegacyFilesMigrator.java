@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -58,11 +57,9 @@ public abstract class LegacyFilesMigrator implements FileMigrator {
 			version = versionValue;
 		}
 		else {
-			VersionRange versionRange = new VersionRange(versionValue);
+			Version v = new Version(versionValue);
 
-			Version left = versionRange.getLeft();
-
-			version = left.getMajor() + "." + left.getMinor();
+			version = v.getMajor() + "." + v.getMinor();
 		}
 	}
 
