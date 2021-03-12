@@ -58,7 +58,7 @@ public class RemoveUpgradeProblemMarkersCommand implements UpgradeCommand, Upgra
 
 			_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 
-			upgradeProblems.clear();
+			clearUpgradeProblems(upgradeProblems);
 		}
 
 		return Status.OK_STATUS;

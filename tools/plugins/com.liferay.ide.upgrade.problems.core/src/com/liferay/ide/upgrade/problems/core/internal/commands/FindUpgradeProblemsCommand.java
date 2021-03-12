@@ -65,17 +65,9 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		Stream<UpgradeProblem> upgradeProblemsStream = upgradeProblems.stream();
+		removeMarkers(upgradeProblems);
 
-		upgradeProblemsStream.map(
-			this::findMarker
-		).filter(
-			this::markerExists
-		).forEach(
-			this::deleteMarker
-		);
-
-		upgradeProblems.clear();
+		clearUpgradeProblems(upgradeProblems);
 
 		Collection<UpgradeProblem> ignoredProblems = upgradePlan.getIgnoredProblems();
 

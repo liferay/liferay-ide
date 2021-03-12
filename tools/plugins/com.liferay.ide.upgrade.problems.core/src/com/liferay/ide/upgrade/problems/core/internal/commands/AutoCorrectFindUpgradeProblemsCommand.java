@@ -178,7 +178,7 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 
 			removeMarkers(upgradeProblems);
 
-			upgradeProblems.clear();
+			clearUpgradeProblems(upgradeProblems);
 		}
 
 		List<IProject> projects = _resourceSelection.selectProjects(

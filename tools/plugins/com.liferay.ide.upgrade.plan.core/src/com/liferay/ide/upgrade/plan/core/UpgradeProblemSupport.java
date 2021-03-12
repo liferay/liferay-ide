@@ -77,6 +77,10 @@ public interface UpgradeProblemSupport {
 		);
 	}
 
+	public default void clearUpgradeProblems(Collection<UpgradeProblem> upgradeProblems) {
+		upgradeProblems.removeIf(problem -> !Objects.equals(problem.getType(), "legacy"));
+	}
+
 	public default void deleteMarker(IMarker marker) {
 		try {
 			marker.delete();
@@ -195,7 +199,9 @@ public interface UpgradeProblemSupport {
 	public default void removeMarkers(Collection<UpgradeProblem> upgradeProblems) {
 		Stream<UpgradeProblem> upgradeProblemsStream = upgradeProblems.stream();
 
-		upgradeProblemsStream.map(
+		upgradeProblemsStream.filter(
+			problem -> !Objects.equals(problem.getType(), "legacy")
+		).map(
 			this::findMarker
 		).filter(
 			this::markerExists
