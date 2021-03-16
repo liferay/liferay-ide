@@ -418,13 +418,6 @@
                                     </elseActionList>
                                 </if>
                             </elseActionList>
-                            <ruleList>
-                                <compareText>
-                                    <logic>equals</logic>
-                                    <text>${bladeproxysetting}</text>
-                                    <value>bladehttpProxy</value>
-                                </compareText>
-                            </ruleList>
                         </if>
                     </elseActionList>
                 </if>
