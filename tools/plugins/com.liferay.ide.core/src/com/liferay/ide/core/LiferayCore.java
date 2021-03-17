@@ -14,6 +14,7 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
@@ -348,50 +349,53 @@ public class LiferayCore extends Plugin {
 		try {
 			Properties gradleProperties = PropertiesUtil.loadProperties(gradlePropertyFile);
 
-			String httpProxyHost = gradleProperties.getProperty("systemProp.http.proxyHost", null);
-
-			int httpProxyPort = Integer.valueOf(gradleProperties.getProperty("systemProp.http.proxyPort", "-1"));
-
-			String httpsProxyHost = gradleProperties.getProperty("systemProp.https.proxyHost", null);
-
-			int httpsProxyPort = Integer.valueOf(gradleProperties.getProperty("systemProp.https.proxyPort", "-1"));
-
-			String socksProxyHost = gradleProperties.getProperty("systemProp.socks.proxyHost", null);
-
-			int socksProxyPort = Integer.valueOf(gradleProperties.getProperty("systemProp.socks.proxyPort", "-1"));
-
 			IProxyService proxyService = getProxyService();
 
 			IProxyData[] proxyData = proxyService.getProxyData();
 
 			for (IProxyData data : proxyData) {
-				switch (data.getType()) {
-					case IProxyData.HTTP_PROXY_TYPE:
-						if (httpProxyHost != null) {
-							data.setHost(httpProxyHost);
+				try {
+					switch (data.getType()) {
+						case IProxyData.HTTP_PROXY_TYPE:
+							String httpProxyPort = gradleProperties.getProperty("systemProp.http.proxyPort");
+							String httpProxyHost = gradleProperties.getProperty("systemProp.http.proxyHost");
 
-							data.setPort(httpProxyPort);
-						}
+							if (CoreUtil.isNotNullOrEmpty(httpProxyHost) && CoreUtil.isNotNullOrEmpty(httpProxyPort)) {
+								data.setHost(httpProxyHost);
+								data.setPort(Integer.parseInt(httpProxyPort));
+							}
 
-						break;
+							break;
 
-					case IProxyData.HTTPS_PROXY_TYPE:
-						if (httpsProxyHost != null) {
-							data.setHost(httpsProxyHost);
+						case IProxyData.HTTPS_PROXY_TYPE:
+							String httpsProxyHost = gradleProperties.getProperty("systemProp.https.proxyHost");
+							String httpsProxyPort = gradleProperties.getProperty("systemProp.https.proxyPort");
 
-							data.setPort(httpsProxyPort);
-						}
+							if (CoreUtil.isNotNullOrEmpty(httpsProxyHost) &&
+								CoreUtil.isNotNullOrEmpty(httpsProxyPort)) {
 
-						break;
+								data.setHost(httpsProxyHost);
+								data.setPort(Integer.parseInt(httpsProxyPort));
+							}
 
-					case IProxyData.SOCKS_PROXY_TYPE:
-						if (socksProxyHost != null) {
-							data.setHost(socksProxyHost);
+							break;
 
-							data.setPort(socksProxyPort);
-						}
+						case IProxyData.SOCKS_PROXY_TYPE:
+							String socksProxyHost = gradleProperties.getProperty("systemProp.socks.proxyHost");
+							String socksProxyPort = gradleProperties.getProperty("systemProp.socks.proxyPort");
 
-						break;
+							if (CoreUtil.isNotNullOrEmpty(socksProxyHost) &&
+								CoreUtil.isNotNullOrEmpty(socksProxyPort)) {
+
+								data.setHost(socksProxyHost);
+								data.setPort(Integer.parseInt(socksProxyPort));
+							}
+
+							break;
+					}
+				}
+				catch (NumberFormatException numberException) {
+					logError("Failed to convert proxy port to integer.", numberException);
 				}
 			}
 
