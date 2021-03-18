@@ -264,11 +264,21 @@
                 <dirName>
                     <path>${java_executable}</path>
                     <variable>find_in_path</variable>
+                    <ruleList>
+                        <isFalse>
+                            <value>${java_autodetected}</value>
+                        </isFalse>
+                    </ruleList>
                 </dirName>
                 <findFile>
                     <baseDirectory>${find_in_path}/../</baseDirectory>
                     <pattern>libjli.dylib</pattern>
                     <variable>libjli_path</variable>
+                    <ruleList>
+                        <isFalse>
+                            <value>${java_autodetected}</value>
+                        </isFalse>
+                    </ruleList>
                 </findFile>
                 <addTextToFile>
                     <file>${installdir}/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</file>
