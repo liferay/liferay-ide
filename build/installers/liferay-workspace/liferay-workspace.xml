@@ -414,7 +414,7 @@
                                         </compareText>
                                     </conditionRuleList>
                                     <elseActionList>
-                                        <setInstallerVariable name="selectbundleversion" value="portal-7.3-ga6"/>
+                                        <setInstallerVariable name="selectbundleversion" value="portal-7.3-ga7"/>
                                     </elseActionList>
                                 </if>
                             </elseActionList>
