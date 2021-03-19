@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Layouttpl Deploy Tomcat 70 Tests
 Bundle-SymbolicName: com.liferay.ide.functional.layouttpl.deploy.tomcat.70.tests
-Bundle-Version: 3.9.2.qualifier
+Bundle-Version: 3.9.3.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.functional.layouttpl.deploy.base,
  com.liferay.ide.functional.liferay,

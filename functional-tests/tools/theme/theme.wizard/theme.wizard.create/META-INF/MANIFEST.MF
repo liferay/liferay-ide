@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Theme Wizard Create Tests
 Bundle-SymbolicName: com.liferay.ide.functional.theme.wizard.create.tests
-Bundle-Version: 3.9.2.qualifier
+Bundle-Version: 3.9.3.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.functional.liferay,
  com.liferay.ide.functional.swtbot,

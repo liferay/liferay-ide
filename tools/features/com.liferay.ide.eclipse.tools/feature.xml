@@ -4,7 +4,7 @@
 	label="Liferay IDE"
 	plugin="com.liferay.ide.ui"
 	provider-name="Liferay, Inc."
-	version="3.9.2.qualifier"
+	version="3.9.3.qualifier"
 >
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">

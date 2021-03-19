@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>com.liferay.ide.tools.plugins</groupId>
 		<artifactId>tools-plugins</artifactId>
-		<version>3.9.2-SNAPSHOT</version>
+		<version>3.9.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.layouttpl.core</artifactId>

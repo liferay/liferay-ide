@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.service.builder.editor</groupId>
 		<artifactId>service-builder-editor-tests</artifactId>
-		<version>3.9.2-SNAPSHOT</version>
+		<version>3.9.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.service.builder.editor.operation.tests</artifactId>
