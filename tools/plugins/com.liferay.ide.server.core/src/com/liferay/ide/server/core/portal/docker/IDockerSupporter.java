@@ -14,6 +14,10 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
+import com.liferay.ide.server.core.portal.docker.PortalDockerServerStreamsProxy.LiferayTaskProgressListener;
+
+import java.io.OutputStream;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
@@ -32,7 +36,7 @@ public interface IDockerSupporter {
 
 	public void dockerDeploy(IProject project, IProgressMonitor monitor);
 
-	public void logDockerContainer(IProgressMonitor monitor);
+	public void logDockerContainer(IProject project, LiferayTaskProgressListener listener,OutputStream outputStream, IProgressMonitor monitor);
 
 	public void removeDockerContainer(IProgressMonitor monitor);
 

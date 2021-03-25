@@ -14,10 +14,22 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.model.IStreamMonitor;
+import org.gradle.tooling.events.ProgressEvent;
+import org.gradle.tooling.events.ProgressListener;
 
 /**
  * @author Simon Jiang
@@ -43,9 +55,8 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 	public void terminate() {
 		try {
 			isTerminated = true;
-			//			_attachContainerCmd.close();
-		}
-		catch (Exception e) {
+			// _attachContainerCmd.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -74,28 +85,38 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 
 			public void run() {
 
-				/**
-				 * IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
-				 *
-				 * if (dockerSupporter == null) { return; }
-				 *
-				 * try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-				 * _attachContainerCmd =
-				 * dockerClient.attachContainerCmd(portalServer.getContainerId());
-				 *
-				 * _attachContainerCmd.withFollowStream(true);
-				 * _attachContainerCmd.withLogs(false); _attachContainerCmd.withStdOut(true);
-				 * _attachContainerCmd.withStdErr(true);
-				 *
-				 * LiferayAttachCallback liferayAttachCallback = new
-				 * LiferayAttachCallback(sysOut); isTerminated = false;
-				 * _attachContainerCmd.exec(liferayAttachCallback);
-				 *
-				 * liferayAttachCallback.awaitCompletion(); } catch (Exception ie) {
-				 * LiferayServerCore.logError(ie); }
-				 */
-			}
+//				IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+//
+//				if (dockerSupporter == null) {
+//					return;
+//				}
+//
+//				try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
+//					_attachContainerCmd = dockerClient.attachContainerCmd(portalServer.getContainerId());
+//
+//					_attachContainerCmd.withFollowStream(true);
+//					_attachContainerCmd.withLogs(false);
+//					_attachContainerCmd.withStdOut(true);
+//					_attachContainerCmd.withStdErr(true);
+//
+//					LiferayAttachCallback liferayAttachCallback = new LiferayAttachCallback(sysOut);
+//					isTerminated = false;
+//					_attachContainerCmd.exec(liferayAttachCallback);
+//
+//					liferayAttachCallback.awaitCompletion();
+//				} catch (Exception ie) {
+//					LiferayServerCore.logError(ie);
+//				}
 
+						IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+
+						OutputStream outputStream = new ByteArrayOutputStream();
+						
+						IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+						
+						dockerSupporter.logDockerContainer(workspaceProject, new LiferayTaskProgressListener(sysOut, outputStream) , outputStream, new NullProgressMonitor());
+						
+			}
 		};
 
 		_streamThread.setPriority(1);
@@ -107,34 +128,87 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 	protected PortalDockerServerOutputStreamMonitor sysErr;
 	protected PortalDockerServerOutputStreamMonitor sysOut;
 
-	//	private AttachContainerCmd _attachContainerCmd;
+//	private AttachContainerCmd _attachContainerCmd;
 	private boolean _monitorStopping = false;
 	private Thread _streamThread;
 
-	/**
-	 * private class LiferayAttachCallback extends AttachContainerResultCallback {
-	 *
-	 * public LiferayAttachCallback(PortalDockerServerOutputStreamMonitor sysOut) {
-	 * _sysOut = sysOut; }
-	 *
-	 * @Override public void onNext(Frame item) { try (InputStreamReader reader =
-	 * new InputStreamReader(new ByteArrayInputStream(item.getPayload()))) { int
-	 * read = 0;
-	 *
-	 * final int buffer_size = 8192;
-	 *
-	 * char[] chars = new char[buffer_size];
-	 *
-	 * while (read >= 0) { try { read = reader.read(chars);
-	 *
-	 * if (read > 0) { String text = new String(chars, 0, read);
-	 *
-	 * synchronized (this) { _sysOut.append(text); } } } catch (IOException ioe) { }
-	 * catch (NullPointerException npe) { } } } catch (IOException ioe) { } }
-	 *
-	 * private PortalDockerServerOutputStreamMonitor _sysOut;
-	 *
-	 * }
-	 */
+//	private class LiferayAttachCallback extends AttachContainerResultCallback {
+//
+//		public LiferayAttachCallback(PortalDockerServerOutputStreamMonitor sysOut) {
+//			_sysOut = sysOut;
+//		}
+//
+//		@Override
+//		public void onNext(Frame item) {
+//			try (InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(item.getPayload()))) {
+//				int read = 0;
+//
+//				final int buffer_size = 8192;
+//
+//				char[] chars = new char[buffer_size];
+//
+//				while (read >= 0) {
+//					try {
+//						read = reader.read(chars);
+//
+//						if (read > 0) {
+//							String text = new String(chars, 0, read);
+//
+//							synchronized (this) {
+//								_sysOut.append(text);
+//							}
+//						}
+//					} catch (IOException ioe) {
+//					} catch (NullPointerException npe) {
+//					}
+//				}
+//			} catch (IOException ioe) {
+//			}
+//		}
+//
+//		private PortalDockerServerOutputStreamMonitor _sysOut;
+//
+//	}
+	
+	public class LiferayTaskProgressListener implements ProgressListener {
+
+		public LiferayTaskProgressListener(PortalDockerServerOutputStreamMonitor sysOut, OutputStream outputStream) {
+			_sysOut = sysOut;
+			_outputStream = (ByteArrayOutputStream)outputStream;
+		}
+
+		private PortalDockerServerOutputStreamMonitor _sysOut;
+		private ByteArrayOutputStream _outputStream;
+
+		@Override
+		public void statusChanged(ProgressEvent event) {
+			try (InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(_outputStream.toByteArray()))) {
+				int read = 0;
+
+				final int buffer_size = 8192;
+
+				char[] chars = new char[buffer_size];
+
+				while (read >= 0) {
+					try {
+						read = reader.read(chars);
+
+						if (read > 0) {
+							String text = new String(chars, 0, read);
+
+							synchronized (this) {
+								_sysOut.append(text);
+							}
+						}
+					} catch (IOException ioe) {
+					} catch (NullPointerException npe) {
+					}
+				}
+			} catch (IOException ioe) {
+			}
+			
+		}
+
+	}
 
 }

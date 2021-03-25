@@ -14,7 +14,6 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
@@ -27,9 +26,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
@@ -177,22 +173,22 @@ public class PortalDockerServerBehavior
 		try {
 			startedThread = new PortalDockerServerStateStartThread(getServer(), this);
 
-			Job job = new Job("Logs the Docker container") {
-
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
-
-					dockerSupporter.logDockerContainer(new NullProgressMonitor());
-
-					return Status.OK_STATUS;
-				}
-
-			};
-
-			job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
-
-			job.schedule();
+//			Job job = new Job("Logs the Docker container") {
+//
+//				@Override
+//				protected IStatus run(IProgressMonitor monitor) {
+//					IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+//
+//					dockerSupporter.logDockerContainer(new NullProgressMonitor());
+//
+//					return Status.OK_STATUS;
+//				}
+//
+//			};
+//
+//			job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
+//
+//			job.schedule();
 		}
 		catch (Exception e) {
 			LiferayServerCore.logError("Can not ping for portal startup.");

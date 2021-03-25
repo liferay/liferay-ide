@@ -179,16 +179,15 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 				return null;
 			}
 
-			/**
-			 * IPortalDockerStreamsProxy streamsProxy = new
-			 * PortalDockerServerLogStreamsProxy( portalServer, poratlServerBehaviour,
-			 * launch);
-			 */
+			
+			IPortalDockerStreamsProxy streamsProxy = new PortalDockerServerLogStreamsProxy( portalServer, poratlServerBehaviour,
+			launch);
+			
 			IProcess retvalProcess = poratlServerBehaviour.getProcess();
 
 			if (retvalProcess == null) {
 				retvalProcess = new PortalDockerServerMonitorProcess(
-					server, poratlServerBehaviour, launch, debug, null, config, this, monitor);
+					server, poratlServerBehaviour, launch, debug, streamsProxy, config, this, monitor);
 
 				launch.addProcess(retvalProcess);
 			}
