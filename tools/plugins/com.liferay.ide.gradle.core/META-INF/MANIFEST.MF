@@ -29,7 +29,7 @@ Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6)",
  org.eclipse.sapphire.platform;bundle-version="[9,10)",
  org.eclipse.wst.common.project.facet.core,
  org.eclipse.wst.server.core,
- org.gradle.toolingapi;bundle-version="5.0.0"
+ org.gradle.toolingapi
 Service-Component: OSGI-INF/com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectProvider.xml,
  OSGI-INF/com.liferay.ide.gradle.core.GradleProjectSynchronizer.xml,
  OSGI-INF/com.liferay.ide.gradle.core.GradleProjectBuilder.xml

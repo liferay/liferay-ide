@@ -16,12 +16,17 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
+import com.liferay.ide.server.core.portal.docker.PortalDockerServerStreamsProxy.LiferayTaskProgressListener;
+
+import java.io.OutputStream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.gradle.tooling.GradleConnector;
+import org.gradle.tooling.ProjectConnection;
 
 /**
  * @author Simon Jiang
@@ -70,13 +75,15 @@ public class LiferayGradleDockerSupporter implements IDockerSupporter {
 	}
 
 	@Override
-	public void logDockerContainer(IProgressMonitor monitor) {
+	public void logDockerContainer(IProject project, LiferayTaskProgressListener listener, OutputStream outputStream, IProgressMonitor monitor) {
 		try {
-			GradleUtil.runGradleTask(
-				LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"logDockerContainer"}, new String[0], false,
-				monitor);
+			GradleConnector connector = GradleConnector.newConnector().forProjectDirectory(project.getLocation().toFile());
+			
+			ProjectConnection connection = connector.connect();
+
+			connection.newBuild().addProgressListener(listener).setStandardOutput(outputStream).forTasks("logDcokerContainer").run();
 		}
-		catch (CoreException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
