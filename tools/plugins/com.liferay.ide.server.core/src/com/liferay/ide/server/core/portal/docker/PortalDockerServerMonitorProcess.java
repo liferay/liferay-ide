@@ -69,7 +69,7 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 	}
 
 	public boolean canTerminate() {
-		return true; //!_streamsProxy.isTerminated();
+		return !_streamsProxy.isTerminated();
 	}
 
 	/**

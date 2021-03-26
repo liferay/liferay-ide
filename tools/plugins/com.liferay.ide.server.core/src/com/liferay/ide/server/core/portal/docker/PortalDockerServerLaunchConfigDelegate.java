@@ -180,8 +180,8 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 			}
 
 			
-			IPortalDockerStreamsProxy streamsProxy = new PortalDockerServerLogStreamsProxy( portalServer, poratlServerBehaviour,
-			launch);
+			IPortalDockerStreamsProxy streamsProxy = 
+				new PortalDockerServerLogStreamsProxy( portalServer, poratlServerBehaviour,	launch);
 			
 			IProcess retvalProcess = poratlServerBehaviour.getProcess();
 
