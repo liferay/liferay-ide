@@ -18,7 +18,7 @@ import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServerStreamsProxy.LiferayTaskProgressListener;
 
-import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -75,13 +75,17 @@ public class LiferayGradleDockerSupporter implements IDockerSupporter {
 	}
 
 	@Override
-	public void logDockerContainer(IProject project, LiferayTaskProgressListener listener, OutputStream outputStream, IProgressMonitor monitor) {
+	public void logDockerContainer(IProject project, LiferayTaskProgressListener listener, IProgressMonitor monitor) {
 		try {
 			GradleConnector connector = GradleConnector.newConnector().forProjectDirectory(project.getLocation().toFile());
 			
 			ProjectConnection connection = connector.connect();
 
-			connection.newBuild().addProgressListener(listener).setStandardOutput(outputStream).forTasks("logDcokerContainer").run();
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			
+			listener.setOutputStream(outputStream);
+			
+			connection.newBuild().addProgressListener(listener).setStandardOutput(outputStream).forTasks("logsDockerContainer").run();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

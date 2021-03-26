@@ -20,11 +20,11 @@ import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.model.IStreamMonitor;
@@ -85,12 +85,12 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 
 			public void run() {
 
-//				IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
-//
-//				if (dockerSupporter == null) {
-//					return;
-//				}
-//
+				IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+
+				if (dockerSupporter == null) {
+					return;
+				}
+
 //				try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
 //					_attachContainerCmd = dockerClient.attachContainerCmd(portalServer.getContainerId());
 //
@@ -107,14 +107,10 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 //				} catch (Exception ie) {
 //					LiferayServerCore.logError(ie);
 //				}
-
-						IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
-
-						OutputStream outputStream = new ByteArrayOutputStream();
-						
-						IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
-						
-						dockerSupporter.logDockerContainer(workspaceProject, new LiferayTaskProgressListener(sysOut, outputStream) , outputStream, new NullProgressMonitor());
+				
+				IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+				
+				dockerSupporter.logDockerContainer(workspaceProject, new LiferayTaskProgressListener(sysOut) , new NullProgressMonitor());
 						
 			}
 		};
@@ -128,7 +124,7 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 	protected PortalDockerServerOutputStreamMonitor sysErr;
 	protected PortalDockerServerOutputStreamMonitor sysOut;
 
-//	private AttachContainerCmd _attachContainerCmd;
+	private AttachContainerCmd _attachContainerCmd;
 	private boolean _monitorStopping = false;
 	private Thread _streamThread;
 
@@ -172,14 +168,17 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 	
 	public class LiferayTaskProgressListener implements ProgressListener {
 
-		public LiferayTaskProgressListener(PortalDockerServerOutputStreamMonitor sysOut, OutputStream outputStream) {
+		public LiferayTaskProgressListener(PortalDockerServerOutputStreamMonitor sysOut) {
 			_sysOut = sysOut;
-			_outputStream = (ByteArrayOutputStream)outputStream;
 		}
 
 		private PortalDockerServerOutputStreamMonitor _sysOut;
 		private ByteArrayOutputStream _outputStream;
 
+		public void setOutputStream(OutputStream outputStream) {
+			_outputStream = (ByteArrayOutputStream)outputStream;
+		}
+		
 		@Override
 		public void statusChanged(ProgressEvent event) {
 			try (InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(_outputStream.toByteArray()))) {
