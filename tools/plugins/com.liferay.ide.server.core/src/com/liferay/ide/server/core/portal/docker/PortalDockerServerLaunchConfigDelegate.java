@@ -96,8 +96,7 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 		}
 	}
 
-	public void startDebugLaunch(
-			IServer server, ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor)
+	public void startDebugLaunch(IServer server, ILaunchConfiguration config, ILaunch launch, IProgressMonitor monitor)
 		throws CoreException {
 
 		if (monitor == null) {
@@ -106,7 +105,7 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 
 		// setup the run launch so we get console monitor
 
-		String connectorId = getVMConnectorId(configuration);
+		String connectorId = getVMConnectorId(config);
 
 		IVMConnector connector = null;
 
@@ -123,13 +122,13 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 				IJavaLaunchConfigurationConstants.ERR_CONNECTOR_NOT_AVAILABLE);
 		}
 
-		Map<String, String> connectMap = configuration.getAttribute(
+		Map<String, String> connectMap = config.getAttribute(
 			IJavaLaunchConfigurationConstants.ATTR_CONNECT_MAP, new HashMap<String, String>());
 
-		String host = configuration.getAttribute("hostname", server.getHost());
-		String port = configuration.getAttribute("port", "8000");
+		String hostname = server.getHost();
+		String port = config.getAttribute("port", "8000");
 
-		connectMap.put("hostname", host);
+		connectMap.put("hostname", hostname);
 		connectMap.put("port", port);
 
 		IPreferencesService preferencesService = Platform.getPreferencesService();
@@ -146,7 +145,7 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 		}
 
 		if (!launch.isTerminated()) {
-			IStatus canConnect = SocketUtil.canConnect(host, port);
+			IStatus canConnect = SocketUtil.canConnect(hostname, port);
 
 			if (canConnect.isOK()) {
 				connector.connect(connectMap, monitor, launch);
@@ -179,10 +178,9 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 				return null;
 			}
 
-			
-			IPortalDockerStreamsProxy streamsProxy = 
-				new PortalDockerServerLogStreamsProxy( portalServer, poratlServerBehaviour,	launch);
-			
+			IPortalDockerStreamsProxy streamsProxy = new PortalDockerServerLogStreamsProxy(
+				portalServer, poratlServerBehaviour, launch);
+
 			IProcess retvalProcess = poratlServerBehaviour.getProcess();
 
 			if (retvalProcess == null) {

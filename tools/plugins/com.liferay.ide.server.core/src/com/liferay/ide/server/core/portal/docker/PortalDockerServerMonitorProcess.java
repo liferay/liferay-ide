@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.debug.core.DebugEvent;
@@ -43,6 +44,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.wst.server.core.IServer;
@@ -185,8 +187,20 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 
 	protected void startContainer(IProgressMonitor monitor) {
 		if (_dockerServer != null) {
+			if (_dockerServer.getGogoShellPort() == null) {
+				LiferayServerCore.logError("The Gogo shell port you configured in Dockerfile.ext is in used.");
+
+				return;
+			}
+
 			try {
 				IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+
+				if (dockerSupporter == null) {
+					LiferayServerCore.logError("Failed to get docker supporter");
+
+					return;
+				}
 
 				dockerSupporter.startDockerContainer(monitor);
 
@@ -217,11 +231,30 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 									try {
 										boolean debugPortStarted = false;
 
-										String host = _config.getAttribute("hostname", _server.getHost());
-										String port = _config.getAttribute("port", "8000");
+										Stream.of(
+											containerEnv
+										).filter(
+											env -> env.contains("JPDA_ADDRESS")
+										).findFirst(
+										).ifPresent(
+											value -> {
+												try {
+													ILaunchConfigurationWorkingCopy workingCopy =
+														_config.getWorkingCopy();
+
+													workingCopy.setAttribute("port", value.split(":")[1]);
+
+													_config = workingCopy.doSave();
+												}
+												catch (CoreException e) {
+													e.printStackTrace();
+												}
+											}
+										);
 
 										do {
-											IStatus canConnect = SocketUtil.canConnect(host, port);
+											IStatus canConnect = SocketUtil.canConnect(
+												_server.getHost(), _config.getAttribute("port", "8000"));
 
 											try {
 												if (canConnect.isOK()) {

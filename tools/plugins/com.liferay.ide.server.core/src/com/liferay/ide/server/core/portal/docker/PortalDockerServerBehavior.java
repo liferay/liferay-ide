@@ -26,15 +26,14 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
-import org.eclipse.jdt.launching.SocketUtil;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 
@@ -162,7 +161,7 @@ public class PortalDockerServerBehavior
 
 		IStatus status = getPortalRuntime().validate();
 
-		if ((status != null) && (status.getSeverity() == IStatus.ERROR)) {
+		if (status.getSeverity() == IStatus.ERROR) {
 			throw new CoreException(status);
 		}
 
@@ -172,23 +171,6 @@ public class PortalDockerServerBehavior
 
 		try {
 			startedThread = new PortalDockerServerStateStartThread(getServer(), this);
-
-//			Job job = new Job("Logs the Docker container") {
-//
-//				@Override
-//				protected IStatus run(IProgressMonitor monitor) {
-//					IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
-//
-//					dockerSupporter.logDockerContainer(new NullProgressMonitor());
-//
-//					return Status.OK_STATUS;
-//				}
-//
-//			};
-//
-//			job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
-//
-//			job.schedule();
 		}
 		catch (Exception e) {
 			LiferayServerCore.logError("Can not ping for portal startup.");
@@ -226,21 +208,6 @@ public class PortalDockerServerBehavior
 
 	public void setServerStoped() {
 		setServerState(IServer.STATE_STOPPED);
-	}
-
-	@Override
-	public void setupLaunchConfiguration(ILaunchConfigurationWorkingCopy workingCopy, IProgressMonitor monitor)
-		throws CoreException {
-
-		super.setupLaunchConfiguration(workingCopy, monitor);
-
-		workingCopy.setAttribute("hostname", getServer().getHost());
-
-		int port = SocketUtil.findFreePort();
-
-		if (port != -1) {
-			workingCopy.setAttribute("port", port);
-		}
 	}
 
 	@Override
@@ -374,7 +341,13 @@ public class PortalDockerServerBehavior
 		try {
 			IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
 
-			dockerSupporter.stopDockerContainer(null);
+			if (dockerSupporter == null) {
+				LiferayServerCore.logError("Failed to get docker supporter");
+
+				return;
+			}
+
+			dockerSupporter.stopDockerContainer(new NullProgressMonitor());
 		}
 		catch (Exception e) {
 			LiferayServerCore.logError("Failed to stop docker server", e);
