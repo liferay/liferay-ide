@@ -14,6 +14,9 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.wst.server.core.IServer;
 
@@ -45,7 +48,9 @@ public class PortalDockerServerStateStopThread {
 			_timeout = serverStopTimeout * 1000;
 		}
 
-		Thread t = new Thread("Liferay Portal Docker Server Stop Thread") {
+		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		Thread t = new Thread(project.getName() + "- stopDockerServerThread") {
 
 			public void run() {
 				_startedTime = System.currentTimeMillis();

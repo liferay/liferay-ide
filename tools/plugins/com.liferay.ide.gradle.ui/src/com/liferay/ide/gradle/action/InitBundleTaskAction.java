@@ -38,7 +38,6 @@ public class InitBundleTaskAction extends GradleTaskAction {
 		ServerUtil.addPortalRuntime();
 	}
 
-	@Override
 	protected void beforeAction() {
 		ServerUtil.deleteWorkspaceServerAndRuntime(project);
 	}

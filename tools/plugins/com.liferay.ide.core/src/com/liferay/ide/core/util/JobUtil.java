@@ -17,13 +17,26 @@ package com.liferay.ide.core.util;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Charles Wu
+ * @author Ethan Sun
  */
 public class JobUtil {
+
+	public static void awaitForLiferayJob() {
+		_awaitJob();
+	}
+
+	public static void signalForLiferayJob() {
+		_signalJob();
+	}
 
 	public static void waitForLiferayProjectJob() {
 		IJobManager jobManager = Job.getJobManager();
@@ -41,5 +54,34 @@ public class JobUtil {
 			}
 		}
 	}
+
+	private static void _awaitJob() {
+		try {
+			_blockLock.lockInterruptibly();
+			_condition.await();
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		finally {
+			_blockLock.unlock();
+		}
+	}
+
+	private static void _signalJob() {
+		try {
+			_blockLock.lockInterruptibly();
+			_condition.signal();
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		finally {
+			_blockLock.unlock();
+		}
+	}
+
+	private static Lock _blockLock = new ReentrantLock();
+	private static Condition _condition = _blockLock.newCondition();
 
 }

@@ -218,7 +218,7 @@ public class CoreUtil {
 
 		IFile[] files = root.findFilesForLocationURI(file.toURI());
 
-		return _filterIResouece(files);
+		return _filterIResource(files);
 	}
 
 	public static IProject[] getAllProjects() {
@@ -380,7 +380,7 @@ public class CoreUtil {
 
 		IResource[] containers = ws.findContainersForLocationURI(file.toURI());
 
-		IResource resource = _filterIResouece(containers);
+		IResource resource = _filterIResource(containers);
 
 		if (resource == null) {
 			return null;
@@ -707,7 +707,7 @@ public class CoreUtil {
 		}
 	}
 
-	private static IResource _filterIResouece(IResource[] resources) {
+	private static IResource _filterIResource(IResource[] resources) {
 		IResource result = null;
 
 		for (IResource resource : resources) {

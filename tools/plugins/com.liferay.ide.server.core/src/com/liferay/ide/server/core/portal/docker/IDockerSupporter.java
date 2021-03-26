@@ -14,8 +14,6 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import com.liferay.ide.server.core.portal.docker.PortalDockerServerStreamsProxy.LiferayTaskProgressListener;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
@@ -23,6 +21,7 @@ import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Simon Jiang
+ * @author Ethan Sun
  */
 public interface IDockerSupporter {
 
@@ -30,11 +29,11 @@ public interface IDockerSupporter {
 
 	public boolean canPublishModule(IServer server, IModule module);
 
+	public void cleanDockerImage(IProgressMonitor monitor);
+
 	public void createDockerContainer(IProgressMonitor monitor);
 
 	public void dockerDeploy(IProject project, IProgressMonitor monitor);
-
-	public void logDockerContainer(IProject project, LiferayTaskProgressListener listener, IProgressMonitor monitor);
 
 	public void removeDockerContainer(IProgressMonitor monitor);
 
