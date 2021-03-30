@@ -1,4 +1,5 @@
 # Liferay IDE
+# Liferay IDE
 
 [Liferay IDE](http://www.liferay.com/community/liferay-projects/liferay-ide) is a
 collection of Eclipse plugins created by Liferay, Inc. to support developing
