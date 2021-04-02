@@ -30,7 +30,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigratorException;
-import com.liferay.ide.upgrade.problems.core.LegacyFileMigration;
+import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.commands.RemoveServiceBuilderLegacyFileCommandKeys;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
@@ -231,7 +231,7 @@ public class RemoveServiceBuilderLegacyFileCommand implements UpgradeCommand, Up
 		).map(
 			FileUtil::getFile
 		).map(
-			projectFile -> _legacyFileMigration.findUpgradeProblems(
+			projectFile -> _fileMigration.findLegacyFileUpgradeProblems(
 				projectFile, upgradeVersions, Collections.singleton("auto.correct"), progressMonitor)
 		).flatMap(
 			findProblems -> findProblems.stream()
@@ -253,7 +253,7 @@ public class RemoveServiceBuilderLegacyFileCommand implements UpgradeCommand, Up
 	}
 
 	@Reference
-	private LegacyFileMigration _legacyFileMigration;
+	private FileMigration _fileMigration;
 
 	@Reference
 	private MessagePrompt _messagePrompt;

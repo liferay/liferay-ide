@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.google.common.collect.ImmutableSet;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
@@ -36,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -61,6 +63,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 @Component
 public class FileMigrationService implements FileMigration {
@@ -72,6 +75,23 @@ public class FileMigrationService implements FileMigration {
 		_fileMigratorTracker = new ServiceTracker<>(context, FileMigrator.class, null);
 
 		_fileMigratorTracker.open();
+	}
+
+	@Override
+	public List<UpgradeProblem> findLegacyFileUpgradeProblems(
+		File dir, List<String> versions, Set<String> requiredProperties, IProgressMonitor monitor) {
+
+		monitor.beginTask("Searching for migration problems in " + dir, -1);
+
+		List<UpgradeProblem> upgradeProblems = Collections.synchronizedList(new ArrayList<UpgradeProblem>());
+
+		monitor.beginTask("Analyzing files", -1);
+
+		_findLegacyFiles(dir, upgradeProblems, versions, requiredProperties, monitor);
+
+		monitor.done();
+
+		return upgradeProblems;
 	}
 
 	@Override
@@ -295,6 +315,69 @@ public class FileMigrationService implements FileMigration {
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
+		}
+	}
+
+	private void _findLegacyFiles(
+		File startDir, List<UpgradeProblem> upgradeProblems, List<String> versions, Set<String> requiredProperties,
+		IProgressMonitor monitor) {
+
+		ServiceReference<FileMigrator>[] fileMigratorsServiceReferences = _fileMigratorTracker.getServiceReferences();
+
+		monitor.setTaskName("Analyzing legacy file from " + startDir);
+
+		if (ListUtil.isNotEmpty(fileMigratorsServiceReferences)) {
+			List<ServiceReference<FileMigrator>> fileMigrators = Stream.of(
+				fileMigratorsServiceReferences
+			).filter(
+				serviceReference -> {
+					String version = (String)serviceReference.getProperty("version");
+
+					return versions.contains(version);
+				}
+			).filter(
+				serviceReference -> {
+					String problemType = (String)serviceReference.getProperty("problem.type");
+
+					return CoreUtil.isNotNullOrEmpty(problemType) && Objects.equals(problemType, "legacy");
+				}
+			).filter(
+				serviceReference -> {
+					if (requiredProperties == null) {
+						return true;
+					}
+
+					Dictionary<String, Object> properties = serviceReference.getProperties();
+
+					for (String key : requiredProperties) {
+						Object value = properties.get(key);
+
+						if (value == null) {
+							return false;
+						}
+					}
+
+					return true;
+				}
+			).collect(
+				Collectors.toList()
+			);
+
+			if (ListUtil.isNotEmpty(fileMigrators)) {
+				try {
+					Stream<ServiceReference<FileMigrator>> migratorStream = fileMigrators.parallelStream();
+
+					upgradeProblems.addAll(
+						migratorStream.map(
+							_context::getService
+						).unordered(
+						).collect(
+							new ProblemsCollector(startDir)
+						));
+				}
+				catch (Exception e) {
+				}
+			}
 		}
 	}
 

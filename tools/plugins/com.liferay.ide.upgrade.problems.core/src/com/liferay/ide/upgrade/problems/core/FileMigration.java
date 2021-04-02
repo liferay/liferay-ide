@@ -26,8 +26,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public interface FileMigration {
+
+	public List<UpgradeProblem> findLegacyFileUpgradeProblems(
+		File dir, List<String> versions, Set<String> requiredProperties, IProgressMonitor monitor);
 
 	public default List<UpgradeProblem> findUpgradeProblems(
 		File dir, List<String> versions, IProgressMonitor progressMonitor) {
