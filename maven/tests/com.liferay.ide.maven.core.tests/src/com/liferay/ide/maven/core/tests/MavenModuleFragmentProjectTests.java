@@ -137,6 +137,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
         workspaceOp.setUseDefaultLocation( true );
         workspaceOp.setProvisionLiferayBundle(true);
         workspaceOp.setServerName("test-maven-liferay-workspace");
+        workspaceOp.setLiferayVersion("7.3");
         
         TestUtil.waitForBuildAndValidation();
 

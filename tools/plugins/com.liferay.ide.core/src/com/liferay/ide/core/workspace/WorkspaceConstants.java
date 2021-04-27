@@ -37,6 +37,9 @@ public class WorkspaceConstants {
 	public static final String BUNDLE_URL_CE_7_3 =
 		"https://releases-cdn.liferay.com/portal/7.3.2-ga3/liferay-ce-portal-tomcat-7.3.2-ga3-20200519164024819.tar.gz";
 
+	public static final String BUNDLE_URL_CE_7_4 =
+			"https://releases-cdn.liferay.com/portal/7.4.0-ga1/liferay-ce-portal-tomcat-7.4.0-ga1-20210419204607406.tar.gz";
+
 	public static final String BUNDLE_URL_PROPERTY = "liferay.workspace.bundle.url";
 
 	public static final String DEFAULT_BUNDLE_ARTIFACT_NAME = "portal-tomcat-bundle";
@@ -61,7 +64,7 @@ public class WorkspaceConstants {
 
 	public static final String LIFERAY_PORTAL_URL = "https://releases-cdn.liferay.com/portal/";
 
-	public static final String[] LIFERAY_VERSIONS = {"7.0", "7.1", "7.2", "7.3"};
+	public static final String[] LIFERAY_VERSIONS = {"7.0", "7.1", "7.2", "7.3", "7.4"};
 
 	public static final String MODULES_DIR_PROPERTY = "liferay.workspace.modules.dir";
 
@@ -103,6 +106,7 @@ public class WorkspaceConstants {
 			put("7.3.4", LIFERAY_PORTAL_URL + "7.3.4-ga5/liferay-ce-portal-tomcat-7.3.4-ga5-20200811154319029.tar.gz");
 			put("7.3.5", LIFERAY_PORTAL_URL + "7.3.5-ga6/liferay-ce-portal-tomcat-7.3.5-ga6-20200930172312275.tar.gz");
 			put("7.3.6", LIFERAY_PORTAL_URL + "7.3.6-ga7/liferay-ce-portal-tomcat-7.3.6-ga7-20210301155526191.tar.gz");
+			put("7.4.0", LIFERAY_PORTAL_URL + "7.4.0-ga1/liferay-ce-portal-tomcat-7.4.0-ga1-20210419204607406.tar.gz");
 		}
 	};
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
@@ -111,6 +115,7 @@ public class WorkspaceConstants {
 			put("7.1", new String[] {"7.1.3-1", "7.1.2", "7.1.1", "7.1.0"});
 			put("7.2", new String[] {"7.2.1-1", "7.2.0"});
 			put("7.3", new String[] {"7.3.6", "7.3.5", "7.3.4", "7.3.3-1", "7.3.2-1", "7.3.1-1", "7.3.0-1"});
+			put("7.4", new String[] {"7.4.0"});
 		}
 	};
 
