@@ -72,16 +72,16 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	@DefaultValue(text = "6.2")
 	@Label(standard = "Current Liferay Version")
-	@PossibleValues(values = {"6.2", "7.0", "7.1", "7.2"})
+	@PossibleValues(values = {"6.2", "7.0", "7.1", "7.2", "7.3"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@Required
 	@Service(impl = NameValidationService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-	@DefaultValue(text = "7.3")
+	@DefaultValue(text = "7.4")
 	@Label(standard = "Target Liferay Version")
-	@PossibleValues(values = {"7.0", "7.1", "7.2", "7.3"})
+	@PossibleValues(values = {"7.0", "7.1", "7.2", "7.3", "7.4"})
 	@Service(impl = TargetVersionValidationService.class)
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
