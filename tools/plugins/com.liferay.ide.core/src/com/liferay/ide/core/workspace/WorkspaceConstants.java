@@ -38,7 +38,7 @@ public class WorkspaceConstants {
 		"https://releases-cdn.liferay.com/portal/7.3.2-ga3/liferay-ce-portal-tomcat-7.3.2-ga3-20200519164024819.tar.gz";
 
 	public static final String BUNDLE_URL_CE_7_4 =
-			"https://releases-cdn.liferay.com/portal/7.4.0-ga1/liferay-ce-portal-tomcat-7.4.0-ga1-20210419204607406.tar.gz";
+		"https://releases-cdn.liferay.com/portal/7.4.0-ga1/liferay-ce-portal-tomcat-7.4.0-ga1-20210419204607406.tar.gz";
 
 	public static final String BUNDLE_URL_PROPERTY = "liferay.workspace.bundle.url";
 
