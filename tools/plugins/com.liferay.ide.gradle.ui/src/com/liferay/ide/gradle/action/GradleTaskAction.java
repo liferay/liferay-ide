@@ -56,6 +56,14 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 	public GradleTaskAction() {
 	}
 
+	public GradleTask getCheckedTask(GradleTask gradleTask, GradleProject gradleProject, String taskName) {
+		return null;
+	}
+
+	public boolean needCheckTask() {
+		return false;
+	}
+
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
 			final List<String> gradleTasks = getGradleTasks();
@@ -173,10 +181,20 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 		for (GradleTask gradleTask : gradleTasks) {
 			if (taskName.equals(gradleTask.getName())) {
-				tasks.add(gradleTask);
-				parentHasTask = true;
+				if (needCheckTask()) {
+					GradleTask checkedTask = getCheckedTask(gradleTask, gradleProject, taskName);
 
-				break;
+					if (checkedTask != null) {
+						tasks.add(checkedTask);
+					}
+				}
+				else {
+					tasks.add(gradleTask);
+
+					parentHasTask = true;
+
+					break;
+				}
 			}
 		}
 

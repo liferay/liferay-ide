@@ -48,6 +48,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
+import org.gradle.tooling.model.GradleProject;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -73,7 +75,9 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 
 	@Override
 	public IStatus buildService(IProgressMonitor monitor) throws CoreException {
-		return _runGradleTask("buildService", monitor);
+		GradleProject gradleProject = GradleUtil.getGradleProject(getProject());
+
+		return _runGradleTask(gradleProject.getPath() + ":buildService", monitor);
 	}
 
 	@Override
