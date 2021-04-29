@@ -491,7 +491,7 @@ ${java_executable}
                     <elseActionList>
                         <runProgram>
                             <program>${java_executable}</program>
-                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "portal-7.3-ga7"</programArguments>
+                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "portal-7.4-ga1"</programArguments>
                         </runProgram>
                     </elseActionList>
                 </if>

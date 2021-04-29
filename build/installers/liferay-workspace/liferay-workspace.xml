@@ -414,7 +414,21 @@
                                         </compareText>
                                     </conditionRuleList>
                                     <elseActionList>
-                                        <setInstallerVariable name="selectbundleversion" value="portal-7.3-ga7"/>
+                                        <if>
+                                            <actionList>
+                                                <setInstallerVariable name="selectbundleversion" value="portal-7.3-ga7"/>
+                                            </actionList>
+                                            <conditionRuleList>
+                                                <compareText>
+                                                    <logic>contains</logic>
+                                                    <text>${bundleversion}</text>
+                                                    <value>7_3</value>
+                                                </compareText>
+                                            </conditionRuleList>
+                                            <elseActionList>
+                                                <setInstallerVariable name="selectbundleversion" value="portal-7.4-ga1"/>
+                                            </elseActionList>
+                                        </if>
                                     </elseActionList>
                                 </if>
                             </elseActionList>
@@ -746,7 +760,7 @@
             <description></description>
             <explanation>Specify initialized liferay bundle version.</explanation>
             <value></value>
-            <default>7_3</default>
+            <default>7_4</default>
             <parameterList>
                 <labelParameter>
                     <name>7_0</name>
@@ -773,6 +787,13 @@
                     <name>7_3</name>
                     <title>7.3</title>
                     <description>Liferay Bundle 7.3</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>7_4</name>
+                    <title>7.4</title>
+                    <description>Liferay Bundle 7.4</description>
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>
