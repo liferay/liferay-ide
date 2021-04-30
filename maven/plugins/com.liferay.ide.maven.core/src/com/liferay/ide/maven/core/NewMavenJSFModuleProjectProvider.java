@@ -21,6 +21,9 @@ import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
+import com.liferay.ide.project.core.modules.BaseModuleOp;
+
+import java.io.File;
 
 import java.util.Properties;
 
@@ -28,6 +31,8 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Parent;
 
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -37,6 +42,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.sapphire.Value;
@@ -60,6 +66,33 @@ public class NewMavenJSFModuleProjectProvider
 		IPath projectLocation = createArchetypeProject(op, monitor);
 
 		FileUtil.delete(projectLocation.append("build.gradle"));
+
+		NewLiferayProjectProvider<BaseModuleOp> projectProvider = get(op.getProjectProvider());
+
+		String projectType = projectProvider.getShortName();
+
+		if (projectType.equals("maven-jsf")) {
+			IPath pomPath = projectLocation.append(IMavenConstants.POM_FILE_NAME);
+
+			File pomFile = FileUtil.getFile(pomPath);
+
+			try {
+				Model mavenModel = MavenUtil.getMavenModel(pomFile);
+
+				Parent parent = mavenModel.getParent();
+
+				String parentArtifactId = parent.getArtifactId();
+
+				if (parentArtifactId.equals("com.liferay.faces.archetype.parent")) {
+					mavenModel.setParent(null);
+
+					MavenUtil.updateMavenPom(mavenModel, pomPath.toFile());
+				}
+			}
+			catch (Exception exception) {
+				LiferayMavenCore.logError(exception);
+			}
+		}
 
 		Value<String> projectNameValue = op.getProjectName();
 
