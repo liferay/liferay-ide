@@ -23,6 +23,7 @@ import com.liferay.ide.ui.action.AbstractObjectAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,14 +55,6 @@ import org.gradle.tooling.model.GradleTask;
 public abstract class GradleTaskAction extends AbstractObjectAction {
 
 	public GradleTaskAction() {
-	}
-
-	public GradleTask getCheckedTask(GradleTask gradleTask, GradleProject gradleProject, String taskName) {
-		return null;
-	}
-
-	public boolean needCheckTask() {
-		return false;
 	}
 
 	public void run(IAction action) {
@@ -148,7 +141,7 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 	protected abstract String getGradleTaskName();
 
 	protected List<String> getGradleTasks() {
-		GradleProject gradleProject = _getGradleProjectModel();
+		GradleProject gradleProject = GradleUtil.getGradleProject(project);
 
 		if (gradleProject == null) {
 			return Collections.emptyList();
@@ -167,6 +160,10 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 		);
 	}
 
+	protected boolean verifyTask(GradleTask gradleTask) {
+		return true;
+	}
+
 	protected IFile gradleBuildFile = null;
 	protected IProject project = null;
 
@@ -180,21 +177,12 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 		boolean parentHasTask = false;
 
 		for (GradleTask gradleTask : gradleTasks) {
-			if (taskName.equals(gradleTask.getName())) {
-				if (needCheckTask()) {
-					GradleTask checkedTask = getCheckedTask(gradleTask, gradleProject, taskName);
+			if (Objects.equals(gradleTask.getName(), taskName) && verifyTask(gradleTask)) {
+				tasks.add(gradleTask);
 
-					if (checkedTask != null) {
-						tasks.add(checkedTask);
-					}
-				}
-				else {
-					tasks.add(gradleTask);
+				parentHasTask = true;
 
-					parentHasTask = true;
-
-					break;
-				}
+				break;
 			}
 		}
 
@@ -207,20 +195,6 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 		for (GradleProject childGradleProject : childGradleProjects) {
 			_fetchModelTasks(childGradleProject, taskName, tasks);
 		}
-	}
-
-	private GradleProject _getGradleProjectModel() {
-		if (project == null) {
-			return null;
-		}
-
-		GradleProject workspaceGradleModel = GradleUtil.getWorkspaceGradleProject(project);
-
-		if (workspaceGradleModel == null) {
-			return null;
-		}
-
-		return GradleUtil.getNestedGradleModel(workspaceGradleModel, project.getName());
 	}
 
 }

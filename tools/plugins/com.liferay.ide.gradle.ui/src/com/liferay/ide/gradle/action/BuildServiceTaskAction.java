@@ -14,14 +14,15 @@
 
 package com.liferay.ide.gradle.action;
 
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.gradle.core.LiferayGradleWorkspaceProject;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,6 +34,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.JavaCore;
 
+import org.gradle.tooling.model.DomainObjectSet;
 import org.gradle.tooling.model.GradleProject;
 import org.gradle.tooling.model.GradleTask;
 
@@ -44,19 +46,15 @@ import org.gradle.tooling.model.GradleTask;
 public class BuildServiceTaskAction extends GradleTaskAction {
 
 	@Override
-	public GradleTask getCheckedTask(GradleTask gradleTask, GradleProject gradleProject, String taskName) {
-		Set<String> projectNameSet = _getServiceBuilderProjects();
+	public boolean verifyTask(GradleTask gradleTask) {
+		Set<GradleTask> serviceBuilderTasks = _getServiceBuilderProjectTasks();
 
-		if (projectNameSet.contains(gradleProject.getName())) {
-			return gradleTask;
-		}
+		Stream<GradleTask> taskStream = serviceBuilderTasks.stream();
 
-		return null;
-	}
-
-	@Override
-	public boolean needCheckTask() {
-		return true;
+		return taskStream.filter(
+			task -> Objects.equals(task.getPath(), gradleTask.getPath())
+		).findFirst(
+		).isPresent();
 	}
 
 	protected void afterAction() {
@@ -98,30 +96,33 @@ public class BuildServiceTaskAction extends GradleTaskAction {
 		return "buildService";
 	}
 
-	private Set<String> _getServiceBuilderProjects() {
-		IPath projectLocation = project.getLocation();
+	private Set<GradleTask> _getServiceBuilderProjectTasks() {
+		IWorkspaceProject gradleWorkspaceProject = LiferayWorkspaceUtil.getGradleWorkspaceProject();
 
-		String projectPath = projectLocation.toString();
-
-		LiferayGradleWorkspaceProject liferayGradleWorkspaceProject = new LiferayGradleWorkspaceProject(
-			LiferayWorkspaceUtil.getWorkspaceProject());
-
-		Set<IProject> childProjects = liferayGradleWorkspaceProject.getChildProjects();
+		Set<IProject> childProjects = gradleWorkspaceProject.getChildProjects();
 
 		Stream<IProject> projectStream = childProjects.stream();
 
+		IPath projectLocation = project.getLocation();
+
 		return projectStream.filter(
-			project -> ProjectUtil.isServiceBuilderProject(project)
+			serviceProject -> ProjectUtil.isServiceBuilderProject(serviceProject)
 		).filter(
-			project -> {
-				IPath location = project.getLocation();
+			serviceProject -> {
+				IPath serviceProjectLocation = serviceProject.getLocation();
 
-				String path = location.toString();
-
-				return path.startsWith(projectPath);
+				return projectLocation.isPrefixOf(serviceProjectLocation);
 			}
-		).map(
-			project -> project.getName()
+		).flatMap(
+			serviceProject -> {
+				GradleProject serviceGradleProject = GradleUtil.getGradleProject(serviceProject);
+
+				DomainObjectSet<? extends GradleTask> serviceGradleProjectTasks = serviceGradleProject.getTasks();
+
+				Stream<? extends GradleTask> buildServiceTaskStream = serviceGradleProjectTasks.stream();
+
+				return buildServiceTaskStream.filter(task -> Objects.equals(task.getName(), getGradleTaskName()));
+			}
 		).collect(
 			Collectors.toSet()
 		);
