@@ -25,6 +25,7 @@ import com.liferay.ide.project.core.modules.BaseModuleOp;
 
 import java.io.File;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -69,12 +70,8 @@ public class NewMavenJSFModuleProjectProvider
 
 		NewLiferayProjectProvider<BaseModuleOp> projectProvider = get(op.getProjectProvider());
 
-		String projectType = projectProvider.getShortName();
-
-		if (projectType.equals("maven-jsf")) {
-			IPath pomPath = projectLocation.append(IMavenConstants.POM_FILE_NAME);
-
-			File pomFile = FileUtil.getFile(pomPath);
+		if (Objects.equals("maven-jsf", projectProvider.getShortName())) {
+			File pomFile = FileUtil.getFile(projectLocation.append(IMavenConstants.POM_FILE_NAME));
 
 			try {
 				Model mavenModel = MavenUtil.getMavenModel(pomFile);
@@ -83,10 +80,10 @@ public class NewMavenJSFModuleProjectProvider
 
 				String parentArtifactId = parent.getArtifactId();
 
-				if (parentArtifactId.equals("com.liferay.faces.archetype.parent")) {
+				if (Objects.equals(parentArtifactId, "com.liferay.faces.archetype.parent")) {
 					mavenModel.setParent(null);
 
-					MavenUtil.updateMavenPom(mavenModel, pomPath.toFile());
+					MavenUtil.updateMavenPom(mavenModel, pomFile);
 				}
 			}
 			catch (Exception exception) {

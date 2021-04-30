@@ -80,7 +80,6 @@ import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.LocalProjectScanner;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
-import org.eclipse.m2e.core.project.MavenUpdateRequest;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
@@ -597,8 +596,7 @@ public class MavenUtil {
 
 					projectConfigurationManager.importProjects(projectsToImport, importConfiguration, monitor);
 
-					projectConfigurationManager.updateProjectConfiguration(
-						new MavenUpdateRequest(project, false, true), monitor);
+					projectConfigurationManager.updateProjectConfiguration(project, monitor);
 				}
 				catch (Exception e) {
 					return LiferayMavenCore.createErrorStatus("Error Updating project:" + project.getName(), e);
