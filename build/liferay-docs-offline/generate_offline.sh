@@ -5,16 +5,6 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-if [ -z "$BINTRAY_USER" ]; then
-  echo "Must provide env vars BINTRAY_USER BINTRAY_API_KEY"
-  exit 1
-fi
-
-if [ -z "$BINTRAY_API_KEY" ]; then
-  echo "Must provide env vars BINTRAY_USER BINTRAY_API_KEY"
-  exit 1
-fi
-
 github_repo="https://github.com/gamerson/liferay-docs/archive/"
 pwd=$PWD
 tag=$1
@@ -50,10 +40,10 @@ if [ -d "${unzip_dir}" ]; then
     rm -rf "${unzip_dir}" "${zipfile}" "output"
 
     if [ -s "code-upgrade-docs-${tag}.zip" ]; then
-      curl -X PUT -T code-upgrade-docs-${tag}.zip -u $BINTRAY_USER:$BINTRAY_API_KEY "https://api.bintray.com/content/gamerson/liferay-ide-files/docs/code-upgrade-docs-${tag}.zip;bt_package=contents;bt_version=2;publish=1"
+      s3cmd --no-mime-magic --acl-public --delete-removed --delete-after sync code-upgrade-docs-${tag}.zip s3://devtools-s3.liferay.com/liferay-ide-files/docs/
 
       if [ $? -ne 0 ]; then
-        echo "Failed to publish to bintray."
+        echo "Failed to upload code-upgrade-docs-${tag}.zip file."
         exit 1
       fi
     else
