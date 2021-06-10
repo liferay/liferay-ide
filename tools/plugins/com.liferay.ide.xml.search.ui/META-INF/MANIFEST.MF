@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: com.liferay.ide.xml.search.ui;singleton:=true
-Bundle-Version: 3.9.3.qualifier
+Bundle-Version: 3.10.0.qualifier
 Bundle-Activator: com.liferay.ide.xml.search.ui.LiferayXMLSearchUI
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.xml.search.core,
