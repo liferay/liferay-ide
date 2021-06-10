@@ -1,5 +1,5 @@
-def oldVersion = "3.9.2"
-def newVersion = "3.9.3"
+def oldVersion = "3.9.3"
+def newVersion = "3.10.0"
 
 def oldQualVersion = "${oldVersion}.qualifier"
 def newQualVersion = "${newVersion}.qualifier"
