@@ -24,10 +24,12 @@ import com.google.common.collect.Lists;
 
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleDockerSupporter;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
@@ -35,9 +37,11 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.IOException;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.wst.server.core.IRuntime;
@@ -98,10 +102,14 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 
 			List<Image> images = listImagesCmd.exec();
 
-			for (Image image : images) {
+			Iterator<Image> iterator = images.iterator();
+
+			while (iterator.hasNext()) {
+				Image image = iterator.next();
+
 				String imageRepoTag = image.getRepoTags()[0];
 
-				if (imageRepoTag.equals(_projectInfo.getDockerImageId())) {
+				if ((imageRepoTag != null) && imageRepoTag.equals(_projectInfo.getDockerImageId())) {
 					IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalDockerRuntime.ID);
 
 					IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(portalRuntimeType.getName(), null);
@@ -150,6 +158,8 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 					portalDockerServer.setImageId(portalDockerRuntime.getImageId());
 
 					serverWC.save(true, null);
+
+					break;
 				}
 			}
 		}
@@ -179,13 +189,9 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 
 					server.delete();
 
-					JobUtil.awaitForLiferayJob();
-
 					if (runtime != null) {
 						runtime.delete();
 					}
-
-					JobUtil.awaitForLiferayJob();
 				}
 			}
 		}
@@ -196,6 +202,17 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 			else if (e instanceof CoreException) {
 				LiferayGradleCore.logError("Failed to cleanup server and runtime", e);
 			}
+		}
+
+		IDockerSupporter dockerSupporter = new LiferayGradleDockerSupporter();
+
+		try {
+			dockerSupporter.removeDockerContainer(new NullProgressMonitor());
+
+			dockerSupporter.cleanDockerImage(new NullProgressMonitor());
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError("Failed to remove clean docker environment", e);
 		}
 	}
 

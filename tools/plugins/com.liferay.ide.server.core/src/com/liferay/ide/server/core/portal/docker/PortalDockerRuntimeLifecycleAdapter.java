@@ -14,7 +14,6 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
@@ -54,8 +53,6 @@ public class PortalDockerRuntimeLifecycleAdapter extends RuntimeLifecycleAdapter
 
 				try {
 					dockerSupporter.cleanDockerImage(monitor);
-
-					JobUtil.signalForLiferayJob();
 				}
 				catch (Exception e) {
 					LiferayServerCore.logError("Failed to remove runtime", e);

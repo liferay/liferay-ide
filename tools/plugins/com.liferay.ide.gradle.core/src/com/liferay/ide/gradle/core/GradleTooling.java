@@ -23,16 +23,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.util.Optional;
-
-import org.eclipse.buildship.core.GradleBuild;
-import org.eclipse.buildship.core.GradleCore;
-import org.eclipse.buildship.core.GradleWorkspace;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.IPath;
 
+import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
+import org.gradle.tooling.ProjectConnection;
 
 import org.osgi.framework.Bundle;
 
@@ -45,8 +42,6 @@ import org.osgi.framework.Bundle;
 public class GradleTooling {
 
 	public static <T> T getModel(Class<T> modelClass, File cacheDir, IProject project) throws Exception {
-		T retval = null;
-
 		try {
 			File depsDir = new File(cacheDir, "deps");
 
@@ -73,28 +68,26 @@ public class GradleTooling {
 				FileUtil.writeFileFromStream(scriptFile, inputStream);
 			}
 
-			GradleWorkspace gradleWorkspace = GradleCore.getWorkspace();
+			GradleConnector newConnector = GradleConnector.newConnector();
 
-			Optional<GradleBuild> buildOptional = gradleWorkspace.getBuild(project);
+			IPath projectLocation = project.getLocation();
 
-			GradleBuild gradleBuild = buildOptional.get();
+			newConnector.forProjectDirectory(projectLocation.toFile());
 
-			retval = gradleBuild.withConnection(
-				connection -> {
-					ModelBuilder<T> model = connection.model(modelClass);
+			ProjectConnection connect = newConnector.connect();
 
-					ModelBuilder<T> withArguments = model.withArguments(
-						"--init-script", scriptFile.getAbsolutePath(), "--stacktrace");
+			ModelBuilder<T> model = connect.model(modelClass);
 
-					return withArguments.get();
-				},
-				new NullProgressMonitor());
+			ModelBuilder<T> withArguments = model.withArguments(
+				"--init-script", scriptFile.getAbsolutePath(), "--stacktrace");
+
+			return withArguments.get();
 		}
 		catch (Exception e) {
 			LiferayGradleCore.logError("get gradle custom model error", e);
 		}
 
-		return retval;
+		return null;
 	}
 
 	private static void _extractJar(File depsDir, String jarName) throws IOException {
