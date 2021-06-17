@@ -14,30 +14,23 @@
 
 package com.liferay.ide.gradle.ui.portal.docker;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
-
-import com.google.common.collect.Lists;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.gradle.core.LiferayGradleDockerSupporter;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
-import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
 import java.io.File;
-import java.io.IOException;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -172,41 +165,20 @@ public class DockerServerWizard extends WizardFragment {
 
 		PortalDockerRuntime dockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(PortalDockerRuntime.class, null);
 
-		IDockerSupporter dockerSupporter = new LiferayGradleDockerSupporter();
+		String imageRepoTag = String.join(":", dockerRuntime.getImageRepo(), dockerRuntime.getImageTag());
 
-		dockerSupporter.removeDockerContainer(monitor);
+		Image dockerImage = LiferayDockerClient.getDockerImageByName(imageRepoTag);
 
-		dockerSupporter.createDockerContainer(monitor);
+		GradleUtil.runGradleTask(
+			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"createDockerContainer"}, monitor);
 
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			dockerClient.listImagesCmd();
+		Container dockerContainer = LiferayDockerClient.getDockerContainerByName(dockerServer.getContainerName());
 
-			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
-
-			listImagesCmd.withShowAll(true);
-			listImagesCmd.withImageNameFilter(dockerRuntime.getImageTag());
-
-			List<Image> images = listImagesCmd.exec();
-
-			ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
-
-			listContainersCmd.withShowAll(true);
-			listContainersCmd.withLimit(1);
-			listContainersCmd.withNameFilter(Lists.newArrayList(dockerServer.getContainerName()));
-
-			List<Container> containers = listContainersCmd.exec();
-
-			if (ListUtil.isNotEmpty(containers) && ListUtil.isNotEmpty(images)) {
-				Container container = containers.get(0);
-
-				dockerServer.setContainerId(container.getId());
-			}
-			else {
-				throw new CoreException(LiferayGradleUI.createErrorStatus("Can not create container and image."));
-			}
+		if (Objects.nonNull(dockerContainer) && Objects.nonNull(dockerImage)) {
+			dockerServer.setContainerId(dockerContainer.getId());
 		}
-		catch (IOException ioe) {
-			LiferayGradleUI.logError(ioe);
+		else {
+			throw new CoreException(LiferayGradleUI.createErrorStatus("Can not create container and image."));
 		}
 	}
 

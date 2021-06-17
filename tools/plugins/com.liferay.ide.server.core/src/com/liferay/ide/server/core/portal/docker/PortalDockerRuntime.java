@@ -14,8 +14,6 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -23,9 +21,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -88,31 +84,12 @@ public class PortalDockerRuntime extends PortalRuntime implements IPortalDockerR
 			return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, _nullRuntimeName, null);
 		}
 
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
+		String imageRepoTag = String.join(":", getImageRepo(), getImageTag());
 
-			listImagesCmd.withShowAll(true);
+		Image dockerImage = LiferayDockerClient.getDockerImageByName(imageRepoTag);
 
-			List<Image> images = listImagesCmd.exec();
-
-			String imageRepoTag = String.join(":", getImageRepo(), getImageTag());
-
-			Stream<Image> imageStream = images.stream();
-
-			Optional<Image> dockerImage = imageStream.filter(
-				image -> {
-					String imageRepoTagDocker = image.getRepoTags()[0];
-
-					return imageRepoTagDocker.equals(imageRepoTag);
-				}
-			).findFirst();
-
-			if (!dockerImage.isPresent()) {
-				return LiferayServerCore.createErrorStatus("Image is not existed");
-			}
-		}
-		catch (Exception e) {
-			LiferayServerCore.logError(e);
+		if (Objects.isNull(dockerImage)) {
+			return LiferayServerCore.createErrorStatus("Image is not existed");
 		}
 
 		return Status.OK_STATUS;

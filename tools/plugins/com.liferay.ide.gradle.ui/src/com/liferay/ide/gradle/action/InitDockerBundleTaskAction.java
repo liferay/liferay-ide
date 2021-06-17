@@ -14,9 +14,6 @@
 
 package com.liferay.ide.gradle.action;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 
@@ -27,21 +24,15 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
-import com.liferay.ide.gradle.core.LiferayGradleDockerSupporter;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.io.IOException;
-
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.wst.server.core.IRuntime;
@@ -59,17 +50,25 @@ import org.eclipse.wst.server.core.ServerCore;
 public class InitDockerBundleTaskAction extends GradleTaskAction {
 
 	public void run(IAction action) {
-		_projectInfo = LiferayGradleCore.getToolingModel(ProjectInfo.class, project);
+		CompletableFuture<ProjectInfo> projectInfoAsync = CompletableFuture.supplyAsync(
+			() -> {
+				_projectInfo = LiferayGradleCore.getToolingModel(ProjectInfo.class, project);
 
-		if ((_projectInfo != null) && CoreUtil.isNotNullOrEmpty(_projectInfo.getDockerImageId()) &&
-			CoreUtil.isNotNullOrEmpty(_projectInfo.getDockerContainerId())) {
+				return _projectInfo;
+			});
 
-			super.run(action);
-		}
-		else {
-			LiferayGradleCore.log(
-				LiferayGradleCore.createErrorStatus("Please check liferay gradle workspace plugin setting."));
-		}
+		projectInfoAsync.thenAcceptAsync(
+			projectInfo -> {
+				if ((projectInfo != null) && CoreUtil.isNotNullOrEmpty(projectInfo.getDockerImageId()) &&
+					CoreUtil.isNotNullOrEmpty(projectInfo.getDockerContainerId())) {
+
+					super.run(action);
+				}
+				else {
+					LiferayGradleCore.log(
+						LiferayGradleCore.createErrorStatus("Please check liferay gradle workspace plugin setting."));
+				}
+			});
 	}
 
 	@Override
@@ -94,73 +93,55 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 		return "createDockerContainer";
 	}
 
+	@Override
+	protected List<String> getGradleTasks() {
+		return Lists.newArrayList("removeDockerContainer", "cleanDockerImage", "createDockerContainer");
+	}
+
 	private void _buildUpWorkspaceDockerServerAndRuntime() {
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
+		try {
+			Image image = LiferayDockerClient.getDockerImageByName(_projectInfo.getDockerImageId());
 
-			listImagesCmd.withShowAll(true);
+			String imageRepoTag = image.getRepoTags()[0];
 
-			List<Image> images = listImagesCmd.exec();
+			if ((imageRepoTag != null) && imageRepoTag.equals(_projectInfo.getDockerImageId())) {
+				IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalDockerRuntime.ID);
 
-			Iterator<Image> iterator = images.iterator();
+				IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(portalRuntimeType.getName(), null);
 
-			while (iterator.hasNext()) {
-				Image image = iterator.next();
+				ServerUtil.setRuntimeName(runtimeWC, -1, project.getName());
 
-				String imageRepoTag = image.getRepoTags()[0];
+				PortalDockerRuntime portalDockerRuntime = (PortalDockerRuntime)runtimeWC.loadAdapter(
+					PortalDockerRuntime.class, null);
 
-				if ((imageRepoTag != null) && imageRepoTag.equals(_projectInfo.getDockerImageId())) {
-					IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalDockerRuntime.ID);
+				String dockerImageId = _projectInfo.getDockerImageId();
 
-					IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(portalRuntimeType.getName(), null);
+				portalDockerRuntime.setImageRepo(dockerImageId.split(":")[0]);
 
-					ServerUtil.setRuntimeName(runtimeWC, -1, project.getName());
+				portalDockerRuntime.setImageId(image.getId());
 
-					PortalDockerRuntime portalDockerRuntime = (PortalDockerRuntime)runtimeWC.loadAdapter(
-						PortalDockerRuntime.class, null);
+				portalDockerRuntime.setImageTag(dockerImageId.split(":")[1]);
 
-					String dockerImageId = _projectInfo.getDockerImageId();
+				runtimeWC.save(true, null);
 
-					portalDockerRuntime.setImageRepo(dockerImageId.split(":")[0]);
+				IServerType serverType = ServerCore.findServerType(PortalDockerServer.ID);
 
-					portalDockerRuntime.setImageId(image.getId());
+				IServerWorkingCopy serverWC = serverType.createServer(serverType.getName(), null, runtimeWC, null);
 
-					portalDockerRuntime.setImageTag(dockerImageId.split(":")[1]);
+				serverWC.setName(serverType.getName() + " " + project.getName());
 
-					runtimeWC.save(true, null);
+				Container container = LiferayDockerClient.getDockerContainerByName(_projectInfo.getDockerContainerId());
 
-					IServerType serverType = ServerCore.findServerType(PortalDockerServer.ID);
+				PortalDockerServer portalDockerServer = (PortalDockerServer)serverWC.loadAdapter(
+					PortalDockerServer.class, null);
 
-					IServerWorkingCopy serverWC = serverType.createServer(serverType.getName(), null, runtimeWC, null);
+				portalDockerServer.setContainerName(_projectInfo.getDockerContainerId());
 
-					serverWC.setName(serverType.getName() + " " + project.getName());
+				portalDockerServer.setContainerId(container.getId());
 
-					ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
+				portalDockerServer.setImageId(portalDockerRuntime.getImageId());
 
-					listContainersCmd.withNameFilter(Lists.newArrayList(_projectInfo.getDockerContainerId()));
-					listContainersCmd.withLimit(1);
-
-					List<Container> containers = listContainersCmd.exec();
-
-					if (ListUtil.isEmpty(containers)) {
-						return;
-					}
-
-					Container container = containers.get(0);
-
-					PortalDockerServer portalDockerServer = (PortalDockerServer)serverWC.loadAdapter(
-						PortalDockerServer.class, null);
-
-					portalDockerServer.setContainerName(_projectInfo.getDockerContainerId());
-
-					portalDockerServer.setContainerId(container.getId());
-
-					portalDockerServer.setImageId(portalDockerRuntime.getImageId());
-
-					serverWC.save(true, null);
-
-					break;
-				}
+				serverWC.save(true, null);
 			}
 		}
 		catch (Exception e) {
@@ -171,10 +152,10 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 	private void _cleanUpWorkspaceDockerServerAndRuntime() {
 		String dockerContainerName = _projectInfo.getDockerContainerId();
 
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			IServer[] servers = ServerCore.getServers();
+		IServer[] servers = ServerCore.getServers();
 
-			if (ListUtil.isNotEmpty(servers)) {
+		if (ListUtil.isNotEmpty(servers)) {
+			try {
 				for (IServer server : servers) {
 					PortalDockerServer portalDockerServer = (PortalDockerServer)server.loadAdapter(
 						PortalDockerServer.class, null);
@@ -194,25 +175,9 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 					}
 				}
 			}
-		}
-		catch (Exception e) {
-			if (e instanceof IOException) {
-				LiferayGradleCore.logError("Failed to connect docker daemon", e);
+			catch (Exception exception) {
+				LiferayServerCore.logError("Failed to remove docker server", exception);
 			}
-			else if (e instanceof CoreException) {
-				LiferayGradleCore.logError("Failed to cleanup server and runtime", e);
-			}
-		}
-
-		IDockerSupporter dockerSupporter = new LiferayGradleDockerSupporter();
-
-		try {
-			dockerSupporter.removeDockerContainer(new NullProgressMonitor());
-
-			dockerSupporter.cleanDockerImage(new NullProgressMonitor());
-		}
-		catch (Exception e) {
-			LiferayServerCore.logError("Failed to remove clean docker environment", e);
 		}
 	}
 

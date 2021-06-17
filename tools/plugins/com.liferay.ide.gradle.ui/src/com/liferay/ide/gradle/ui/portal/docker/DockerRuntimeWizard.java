@@ -14,18 +14,13 @@
 
 package com.liferay.ide.gradle.ui.portal.docker;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListImagesCmd;
-import com.github.dockerjava.api.model.Image;
-
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -76,26 +71,14 @@ public class DockerRuntimeWizard extends WizardFragment {
 		GradleUtil.runGradleTask(
 			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"buildDockerImage"}, monitor);
 
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
+		PortalDockerRuntime portalDockerRuntime = getPortalDockerRuntime(runtime);
 
-			listImagesCmd.withShowAll(true);
-			listImagesCmd.withDanglingFilter(false);
+		String imageRepoTag = String.join(":", portalDockerRuntime.getImageRepo(), portalDockerRuntime.getImageTag());
 
-			PortalDockerRuntime portalDockerRuntime = getPortalDockerRuntime(runtime);
+		String dockerImageId = LiferayDockerClient.getDockerImageId(imageRepoTag);
 
-			listImagesCmd.withImageNameFilter(portalDockerRuntime.getImageTag());
-
-			List<Image> imagetList = listImagesCmd.exec();
-
-			if (ListUtil.isNotEmpty(imagetList)) {
-				Image image = imagetList.get(0);
-
-				portalDockerRuntime.setImageId(image.getId());
-			}
-		}
-		catch (Exception e) {
-			LiferayGradleUI.logError("Failed to create docker runtime", e);
+		if (Objects.nonNull(dockerImageId)) {
+			portalDockerRuntime.setImageId(dockerImageId);
 		}
 	}
 
