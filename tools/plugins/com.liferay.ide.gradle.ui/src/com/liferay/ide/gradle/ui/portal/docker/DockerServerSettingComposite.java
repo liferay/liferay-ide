@@ -14,15 +14,10 @@
 
 package com.liferay.ide.gradle.ui.portal.docker;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
-
-import com.google.common.collect.Lists;
 
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
@@ -30,8 +25,10 @@ import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
+import com.liferay.ide.ui.util.UIUtil;
 
-import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.Dialog;
@@ -65,6 +62,8 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 	public DockerServerSettingComposite(Composite parent, IWizardHandle wizard) {
 		super(parent, SWT.NONE);
 
+		_complete = false;
+
 		_wizard = wizard;
 
 		wizard.setTitle(Msgs.dockerContainerTitle);
@@ -72,8 +71,6 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 		wizard.setImageDescriptor(LiferayGradleUI.getImageDescriptor(LiferayGradleUI.IMG_WIZ_RUNTIME));
 
 		_project = LiferayWorkspaceUtil.getWorkspaceProject();
-
-		_toolingModel = LiferayGradleCore.getToolingModel(ProjectInfo.class, _project);
 
 		createControl(parent);
 
@@ -179,8 +176,6 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 	}
 
 	protected void validate() {
-		_complete = true;
-
 		String containerName = _nameField.getText();
 
 		if (CoreUtil.isNullOrEmpty(containerName)) {
@@ -191,31 +186,17 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 			return;
 		}
 
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
+		Container container = LiferayDockerClient.getDockerContainerByName(_nameField.getText());
 
-			listContainersCmd.withNameFilter(Lists.newArrayList(_nameField.getText()));
-			listContainersCmd.withLimit(1);
-
-			List<Container> containers = listContainersCmd.exec();
-
-			if (ListUtil.isNotEmpty(containers)) {
-				_wizard.setMessage("Container name is existed, Please change it to another.", IMessageProvider.ERROR);
-				_wizard.update();
-				_complete = false;
-
-				return;
-			}
-		}
-		catch (Exception e) {
-			LiferayGradleUI.logError(e);
-
-			_wizard.setMessage("Failed to validate container.", IMessageProvider.ERROR);
+		if (Objects.nonNull(container)) {
+			_wizard.setMessage("Container name is existed, Please change it to another.", IMessageProvider.ERROR);
 			_wizard.update();
 			_complete = false;
 
 			return;
 		}
+
+		_complete = true;
 
 		_wizard.setMessage(null, IMessageProvider.NONE);
 		_wizard.update();
@@ -232,14 +213,28 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 	}
 
 	private void _updateFields() {
-		setFieldValue(_nameField, _toolingModel.getDockerContainerId());
+		CompletableFuture<ProjectInfo> projectInfoAsync = CompletableFuture.supplyAsync(
+			() -> LiferayGradleCore.getToolingModel(ProjectInfo.class, _project));
+
+		projectInfoAsync.thenAcceptAsync(
+			projectInfo -> {
+				if (projectInfo != null) {
+					UIUtil.async(
+						() -> {
+							setFieldValue(_nameField, projectInfo.getDockerContainerId());
+
+							_complete = true;
+
+							validate();
+						});
+				}
+			});
 	}
 
 	private boolean _complete;
 	private Text _nameField;
 	private IProject _project;
 	private IServerWorkingCopy _serverWC;
-	private ProjectInfo _toolingModel;
 	private final IWizardHandle _wizard;
 
 	private static class Msgs extends NLS {

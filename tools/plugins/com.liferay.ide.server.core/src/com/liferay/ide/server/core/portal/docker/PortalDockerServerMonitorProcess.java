@@ -17,11 +17,7 @@ package com.liferay.ide.server.core.portal.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.ContainerConfig;
-
-import com.google.common.collect.Lists;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -31,7 +27,6 @@ import com.liferay.ide.server.util.SocketUtil;
 import java.io.IOException;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
@@ -123,31 +118,7 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 	}
 
 	public boolean isTerminated() {
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
-
-			listContainersCmd.withLimit(1);
-			listContainersCmd.withNameFilter(Lists.newArrayList(_dockerServer.getContainerName()));
-
-			List<Container> containers = listContainersCmd.exec();
-
-			if (ListUtil.isNotEmpty(containers)) {
-				InspectContainerCmd inspectContainerCmd = dockerClient.inspectContainerCmd(
-					_dockerServer.getContainerId());
-
-				InspectContainerResponse response = inspectContainerCmd.exec();
-
-				return !response.getState(
-				).getRunning();
-			}
-
-			return true;
-		}
-		catch (Exception e) {
-			LiferayServerCore.logError(e);
-		}
-
-		return true;
+		return LiferayDockerClient.verifyDockerContainerTerminated(_dockerServer.getContainerId());
 	}
 
 	public void setAttribute(String key, String value) {

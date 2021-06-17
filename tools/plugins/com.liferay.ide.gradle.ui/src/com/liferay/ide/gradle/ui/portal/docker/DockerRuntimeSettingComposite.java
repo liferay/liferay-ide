@@ -14,10 +14,6 @@
 
 package com.liferay.ide.gradle.ui.portal.docker;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListImagesCmd;
-import com.github.dockerjava.api.model.Image;
-
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -27,9 +23,9 @@ import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
@@ -75,8 +71,6 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 
 		_project = LiferayWorkspaceUtil.getWorkspaceProject();
 
-		_toolingModel = LiferayGradleCore.getToolingModel(ProjectInfo.class, _project);
-
 		createControl(parent);
 	}
 
@@ -89,7 +83,14 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 		Object source = e.getSource();
 
 		if (source.equals(_dockerImageId)) {
-			getPortalDockerRuntime().setImageTag(_dockerImageId.getText());
+			String dockerImageIdValue = _dockerImageId.getText();
+
+			String[] imageValue = dockerImageIdValue.split(":");
+
+			if (ListUtil.isNotEmpty(imageValue)) {
+				getPortalDockerRuntime().setImageRepo(imageValue[0]);
+				getPortalDockerRuntime().setImageTag(imageValue[1]);
+			}
 		}
 
 		try {
@@ -172,36 +173,18 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 	protected void validate() {
 		_complete = false;
 
-		List<Image> existedImages = Collections.emptyList();
-
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
-
-			listImagesCmd.withShowAll(true);
-			listImagesCmd.withDanglingFilter(false);
-			listImagesCmd.withImageNameFilter(_dockerImageId.getText());
-
-			existedImages = listImagesCmd.exec();
-		}
-		catch (Exception e) {
-			LiferayGradleUI.logError(e);
-
-			_wizard.setMessage("Failed to validate docker image.", IMessageProvider.ERROR);
-			_wizard.update();
-
-			return;
-		}
-
 		IStatus status = Status.OK_STATUS;
 
-		if ((status == null) || (status.isOK() && ListUtil.isNotEmpty(existedImages))) {
+		boolean dockerImageExisted = LiferayDockerClient.verifyDockerImageByName(_dockerImageId.getText());
+
+		if ((status == null) || (status.isOK() && dockerImageExisted)) {
 			_wizard.setMessage("Another docker image has the same image id", IMessageProvider.ERROR);
 			_wizard.update();
 
 			return;
 		}
 
-		if ((status == null) || (status.isOK() && ((_project == null) || (_toolingModel == null)))) {
+		if ((status == null) || (status.isOK() && (_project == null))) {
 			_wizard.setMessage("You must have a gradle liferay workspace.", IMessageProvider.ERROR);
 			_wizard.update();
 
@@ -262,8 +245,19 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 
 		setFieldValue(_workspaceProjectField, _project.getName());
 		setFieldValue(_runtimeNameField, getRuntime().getName());
-		setFieldValue(_dockerImageId, _toolingModel.getDockerImageId());
-		setFieldValue(_dockerImageLiferay, _toolingModel.getDockerImageLiferay());
+		CompletableFuture<ProjectInfo> projectInfoAsync = CompletableFuture.supplyAsync(
+			() -> LiferayGradleCore.getToolingModel(ProjectInfo.class, _project));
+
+		projectInfoAsync.thenAcceptAsync(
+			projectInfo -> {
+				if (projectInfo != null) {
+					UIUtil.async(
+						() -> {
+							setFieldValue(_dockerImageId, projectInfo.getDockerImageId());
+							setFieldValue(_dockerImageLiferay, projectInfo.getDockerImageLiferay());
+						});
+				}
+			});
 	}
 
 	private boolean _complete = false;
@@ -272,7 +266,6 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 	private IProject _project;
 	private Text _runtimeNameField;
 	private IRuntimeWorkingCopy _runtimeWC;
-	private ProjectInfo _toolingModel;
 	private final IWizardHandle _wizard;
 	private Text _workspaceProjectField;
 

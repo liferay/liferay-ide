@@ -15,17 +15,31 @@
 package com.liferay.ide.server.util;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 
+import com.google.common.collect.Lists;
+
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 
 import java.net.InetAddress;
 import java.net.URI;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.SystemUtils;
 
@@ -72,6 +86,121 @@ public class LiferayDockerClient {
 		dockerClientBuilder.withDockerCmdExecFactory(cmdFactory);
 
 		return dockerClientBuilder.build();
+	}
+
+	public static Container getDockerContainerByName(String dockerContainerId) {
+		try (DockerClient dockerClient = getDockerClient()) {
+			ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
+
+			listContainersCmd.withNameFilter(Lists.newArrayList(dockerContainerId));
+			listContainersCmd.withLimit(1);
+
+			List<Container> containers = listContainersCmd.exec();
+
+			if (ListUtil.isEmpty(containers)) {
+				return null;
+			}
+
+			return containers.get(0);
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError("Failed to create docker runtime", e);
+		}
+
+		return null;
+	}
+
+	public static Image getDockerImageByName(String dockerImageRepo) {
+		try (DockerClient dockerClient = getDockerClient()) {
+			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
+
+			listImagesCmd.withShowAll(true);
+			listImagesCmd.withDanglingFilter(false);
+
+			listImagesCmd.withImageNameFilter(dockerImageRepo);
+
+			List<Image> imagetList = listImagesCmd.exec();
+
+			Stream<Image> imageStream = imagetList.stream();
+
+			Optional<Image> dockerImage = imageStream.filter(
+				image -> {
+					String imageRepoTagDocker = image.getRepoTags()[0];
+
+					return imageRepoTagDocker.equals(dockerImageRepo);
+				}
+			).findFirst();
+
+			if (dockerImage.isPresent()) {
+				return dockerImage.get();
+			}
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError("Failed to create docker runtime", e);
+		}
+
+		return null;
+	}
+
+	public static String getDockerImageId(String dockerImageRepo) {
+		Image dockerImage = getDockerImageByName(dockerImageRepo);
+
+		if (Objects.nonNull(dockerImage)) {
+			return dockerImage.getId();
+		}
+
+		return null;
+	}
+
+	public static boolean verifyDockerContainer(String dockerContainerId) {
+		return false;
+	}
+
+	public static boolean verifyDockerContainerTerminated(String dockerContainerId) {
+		try (DockerClient dockerClient = getDockerClient()) {
+			InspectContainerCmd inspectContainerCmd = dockerClient.inspectContainerCmd(dockerContainerId);
+
+			InspectContainerResponse response = inspectContainerCmd.exec();
+
+			InspectContainerResponse.ContainerState containerState = response.getState();
+
+			return !containerState.getRunning();
+		}
+		catch (Exception execption) {
+			LiferayServerCore.logError(execption);
+		}
+
+		return false;
+	}
+
+	public static boolean verifyDockerImageByName(String dockerImageRepo) {
+		try (DockerClient dockerClient = getDockerClient()) {
+			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
+
+			listImagesCmd.withShowAll(true);
+			listImagesCmd.withDanglingFilter(false);
+
+			listImagesCmd.withImageNameFilter(dockerImageRepo);
+
+			List<Image> imagetList = listImagesCmd.exec();
+
+			Stream<Image> imageStream = imagetList.stream();
+
+			Optional<Image> dockerImage = imageStream.filter(
+				image -> {
+					String imageRepoTagDocker = image.getRepoTags()[0];
+
+					return imageRepoTagDocker.equals(dockerImageRepo);
+				}
+			).findFirst();
+
+			return dockerImage.isPresent();
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError("Failed to create docker runtime", e);
+		}
+
+		return false;
 	}
 
 	private static String _getDefaultDockerUrl() {
