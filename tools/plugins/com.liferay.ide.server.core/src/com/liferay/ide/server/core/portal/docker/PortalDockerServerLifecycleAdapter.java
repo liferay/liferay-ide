@@ -45,14 +45,14 @@ public class PortalDockerServerLifecycleAdapter extends ServerLifecycleAdapter {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+				IDockerServer dockerServer = LiferayServerCore.getDockerServer();
 
-				if (dockerSupporter == null) {
+				if (dockerServer == null) {
 					return LiferayServerCore.createErrorStatus("Failed to get docker supporter");
 				}
 
 				try {
-					dockerSupporter.removeDockerContainer(monitor);
+					dockerServer.removeDockerContainer(monitor);
 				}
 				catch (Exception e) {
 					LiferayServerCore.logError("Failed to remove server", e);

@@ -45,14 +45,14 @@ public class PortalDockerRuntimeLifecycleAdapter extends RuntimeLifecycleAdapter
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+				IDockerServer dockerServer = LiferayServerCore.getDockerServer();
 
-				if (dockerSupporter == null) {
-					return LiferayServerCore.createErrorStatus("Failed to get docker supporter");
+				if (dockerServer == null) {
+					return LiferayServerCore.createErrorStatus("Failed to get docker server");
 				}
 
 				try {
-					dockerSupporter.cleanDockerImage(monitor);
+					dockerServer.cleanDockerImage(monitor);
 				}
 				catch (Exception e) {
 					LiferayServerCore.logError("Failed to remove runtime", e);

@@ -23,9 +23,9 @@ import org.eclipse.wst.server.core.IServer;
  * @author Simon Jiang
  * @author Ethan Sun
  */
-public interface IDockerSupporter {
+public interface IDockerServer {
 
-	public static final String ID = "com.liferay.ide.server.core.dockerSupporters";
+	public static final String ID = "com.liferay.ide.server.core.dockerServers";
 
 	public boolean canPublishModule(IServer server, IModule module);
 

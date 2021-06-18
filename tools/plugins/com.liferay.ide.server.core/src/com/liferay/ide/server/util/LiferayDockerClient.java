@@ -58,6 +58,7 @@ public class LiferayDockerClient {
 		createDefaultConfigBuilder.withDockerHost(_getDefaultDockerUrl());
 
 		createDefaultConfigBuilder.withRegistryUrl("https://registry.hub.docker.com/v2/repositories/liferay/portal");
+		createDefaultConfigBuilder.withRegistryUrl("https://registry.hub.docker.com/v2/repositories/liferay/dxp");
 
 		String dockerCertPath = System.getenv("DOCKER_CERT_PATH");
 

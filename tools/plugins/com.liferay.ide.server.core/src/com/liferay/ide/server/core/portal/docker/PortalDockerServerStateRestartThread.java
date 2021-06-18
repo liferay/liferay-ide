@@ -28,7 +28,7 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Simon Jiang
  */
-public class PortalDockerServeStateRestartThread {
+public class PortalDockerServerStateRestartThread {
 
 	/**
 	 * Create a new PingThread.
@@ -39,7 +39,7 @@ public class PortalDockerServeStateRestartThread {
 	 *                  continue forever
 	 * @param behaviour
 	 */
-	public PortalDockerServeStateRestartThread(
+	public PortalDockerServerStateRestartThread(
 		IServer server, PortalDockerServerBehavior behaviour, String launchMode) {
 
 		_server = server;

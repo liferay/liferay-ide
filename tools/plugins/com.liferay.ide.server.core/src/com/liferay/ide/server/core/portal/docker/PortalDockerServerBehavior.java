@@ -187,7 +187,7 @@ public class PortalDockerServerBehavior
 				@Override
 				public void done(IStatus result) {
 					try {
-						restartThread = new PortalDockerServeStateRestartThread(
+						restartThread = new PortalDockerServerStateRestartThread(
 							getServer(), PortalDockerServerBehavior.this, launchMode);
 					}
 					catch (Exception e) {
@@ -332,22 +332,22 @@ public class PortalDockerServerBehavior
 		}
 	}
 
-	protected transient PortalDockerServeStateRestartThread restartThread = null;
+	protected transient PortalDockerServerStateRestartThread restartThread = null;
 	protected boolean serverRestarting = false;
 	protected transient PortalDockerServerStateStartThread startedThread = null;
 	protected transient PortalDockerServerStateStopThread stopedThread = null;
 
 	private void _executStopCommand() throws Exception {
 		try {
-			IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+			IDockerServer dockerServer = LiferayServerCore.getDockerServer();
 
-			if (dockerSupporter == null) {
+			if (dockerServer == null) {
 				LiferayServerCore.logError("Failed to get docker supporter");
 
 				return;
 			}
 
-			dockerSupporter.stopDockerContainer(new NullProgressMonitor());
+			dockerServer.stopDockerContainer(new NullProgressMonitor());
 		}
 		catch (Exception e) {
 			LiferayServerCore.logError("Failed to stop docker server", e);
