@@ -14,52 +14,38 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.command.RemoveContainerCmd;
-import com.github.dockerjava.api.model.Container;
-
-import com.google.common.collect.Lists;
-
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.LiferayDockerClient;
-
-import java.util.List;
 
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.util.ServerLifecycleAdapter;
 
 /**
  * @author Simon Jiang
+ * @author Ethan Sun
  */
 public class PortalDockerServerLifecycleAdapter extends ServerLifecycleAdapter {
 
 	@Override
 	public void serverRemoved(IServer server) {
-		PortalDockerServer dockerServer = (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, null);
+		PortalDockerServer portalDockerServer = (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, null);
 
-		if (dockerServer == null) {
+		if (portalDockerServer == null) {
 			return;
 		}
 
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
+		IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
 
-			listContainersCmd.withNameFilter(Lists.newArrayList(dockerServer.getContainerName()));
-			listContainersCmd.withShowAll(true);
-			listContainersCmd.withLimit(1);
+		if (dockerSupporter == null) {
+			return;
+		}
 
-			List<Container> conatiners = listContainersCmd.exec();
+		try {
+			dockerSupporter.stopDockerContainer(null);
 
-			if (ListUtil.isNotEmpty(conatiners)) {
-				RemoveContainerCmd removeContainerCmd = dockerClient.removeContainerCmd(dockerServer.getContainerId());
-
-				removeContainerCmd.exec();
-			}
+			dockerSupporter.removeDockerContainer(null);
 		}
 		catch (Exception e) {
-			LiferayServerCore.logError(e);
+			LiferayServerCore.logError("Failed to remove server", e);
 		}
 	}
 

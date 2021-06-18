@@ -17,7 +17,9 @@ package com.liferay.ide.gradle.ui.portal.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
+
 import com.google.common.collect.Lists;
+
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;

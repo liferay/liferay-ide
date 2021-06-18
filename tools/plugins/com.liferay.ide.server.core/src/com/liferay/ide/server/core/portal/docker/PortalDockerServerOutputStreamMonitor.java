@@ -96,7 +96,8 @@ public class PortalDockerServerOutputStreamMonitor implements IFlushableStreamMo
 			}
 
 			_text = text;
-			Object[] listeners = _listeners.toArray(new IStreamListener[_listeners.size()]);
+
+			Object[] listeners = _listeners.toArray(new IStreamListener[0]);
 
 			for (int i = 0; i < listeners.length; ++i) {
 				_listener = (IStreamListener)listeners[i];

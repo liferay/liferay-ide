@@ -19,7 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
-import com.liferay.ide.server.core.portal.docker.IDockerPublisher;
+import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 
 import java.io.File;
@@ -84,13 +84,13 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 								PortalDockerServer.class, monitor);
 
 							if (dockerSever != null) {
-								IDockerPublisher[] dockerPublishers = LiferayServerCore.getDockerPublishers();
+								IDockerSupporter[] dockerSupporters = LiferayServerCore.getDockerSupporters();
 
-								for (IDockerPublisher dockerPublisher : dockerPublishers) {
-									boolean canPublish = dockerPublisher.canPublishModule(server, module);
+								for (IDockerSupporter dockerSupporter : dockerSupporters) {
+									boolean canPublish = dockerSupporter.canPublishModule(server, module);
 
 									if (canPublish) {
-										dockerPublisher.dockerDeploy(project, monitor);
+										dockerSupporter.dockerDeploy(project, monitor);
 									}
 								}
 							}

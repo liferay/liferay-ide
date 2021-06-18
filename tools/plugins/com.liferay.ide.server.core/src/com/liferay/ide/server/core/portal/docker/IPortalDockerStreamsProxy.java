@@ -21,8 +21,8 @@ import org.eclipse.debug.core.model.IStreamsProxy;
  */
 public interface IPortalDockerStreamsProxy extends IStreamsProxy {
 
-	public abstract boolean isTerminated();
+	public boolean isTerminated();
 
-	public abstract void terminate();
+	public void terminate();
 
 }

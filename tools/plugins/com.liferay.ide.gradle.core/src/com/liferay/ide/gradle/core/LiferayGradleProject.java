@@ -38,6 +38,7 @@ import com.liferay.ide.server.core.portal.PortalBundle;
 
 import java.io.File;
 import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +63,7 @@ import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+
 import org.gradle.tooling.model.GradleProject;
 
 /**
@@ -228,7 +230,7 @@ public class LiferayGradleProject
 		Set<String> pluginClassNames = model.getPluginClassNames();
 
 		GradleProject gradleModel = LiferayGradleCore.getToolingModel(GradleProject.class, gradleProject);
-		
+
 		Map<String, Set<File>> projectOutputFilesMap = model.getProjectOutputFiles();
 
 		Set<File> outputFiles = projectOutputFilesMap.get(gradleModel.getPath());

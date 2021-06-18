@@ -3,7 +3,7 @@
 <schema targetNamespace="com.liferay.ide.server.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.liferay.ide.server.core" id="dockerPublisher" name="Liferay Docker Publisher"/>
+         <meta.schema plugin="com.liferay.ide.server.core" id="dockerSupport" name="Liferay Docker Support"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="liferayDockerPublisher"/>
+            <element ref="liferayDockerSupporter"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -30,7 +30,7 @@
       </complexType>
    </element>
 
-   <element name="liferayDockerPublisher">
+   <element name="liferayDockerSupporter">
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -38,7 +38,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":com.liferay.ide.server.core.portal.docker.IDockerPublisher"/>
+                  <meta.attribute kind="java" basedOn=":com.liferay.ide.server.core.portal.docker.IDockerSupporter"/>
                </appinfo>
             </annotation>
          </attribute>

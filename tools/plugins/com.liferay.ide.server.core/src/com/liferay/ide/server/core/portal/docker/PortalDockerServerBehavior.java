@@ -14,21 +14,22 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.StopContainerCmd;
-
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
-import com.liferay.ide.server.util.LiferayDockerClient;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
@@ -37,9 +38,9 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.jdt.launching.SocketUtil;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.IServer.IOperationListener;
 
 /**
  * @author Simon Jiang
@@ -159,7 +160,7 @@ public class PortalDockerServerBehavior
 	public void launchServer(ILaunch launch, String mode, IProgressMonitor monitor) throws CoreException {
 		ILaunchConfiguration launchConfiguration = launch.getLaunchConfiguration();
 
-		if ("true".equals(launchConfiguration.getAttribute(ATTR_STOP, "false"))) {
+		if (Objects.equals(launchConfiguration.getAttribute(ATTR_STOP, "false"), "true")) {
 			return;
 		}
 
@@ -175,6 +176,23 @@ public class PortalDockerServerBehavior
 
 		try {
 			startedThread = new PortalDockerServerStateStartThread(getServer(), this);
+
+			Job job = new Job("Logs the Docker container") {
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+
+					dockerSupporter.logDockerContainer(new NullProgressMonitor());
+
+					return Status.OK_STATUS;
+				}
+
+			};
+
+			job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
+
+			job.schedule();
 		}
 		catch (Exception e) {
 			LiferayServerCore.logError("Can not ping for portal startup.");
@@ -186,7 +204,7 @@ public class PortalDockerServerBehavior
 		setServerRestarting(true);
 		getServer().stop(
 			false,
-			new IOperationListener() {
+			new IServer.IOperationListener() {
 
 				@Override
 				public void done(IStatus result) {
@@ -221,7 +239,12 @@ public class PortalDockerServerBehavior
 		super.setupLaunchConfiguration(workingCopy, monitor);
 
 		workingCopy.setAttribute("hostname", getServer().getHost());
-		workingCopy.setAttribute("port", "8000");
+
+		int port = SocketUtil.findFreePort();
+
+		if (port != -1) {
+			workingCopy.setAttribute("port", port);
+		}
 	}
 
 	@Override
@@ -352,13 +375,10 @@ public class PortalDockerServerBehavior
 	protected transient PortalDockerServerStateStopThread stopedThread = null;
 
 	private void _executStopCommand() throws Exception {
-		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-			PortalDockerServer dockerServer = (PortalDockerServer)getServer().loadAdapter(
-				PortalDockerServer.class, null);
+		try {
+			IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
 
-			StopContainerCmd stopContainerCmd = dockerClient.stopContainerCmd(dockerServer.getContainerId());
-
-			stopContainerCmd.exec();
+			dockerSupporter.stopDockerContainer(null);
 		}
 		catch (Exception e) {
 			LiferayServerCore.logError("Failed to stop docker server", e);

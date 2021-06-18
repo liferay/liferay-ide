@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.ui.portal.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
+
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -169,7 +170,6 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 	}
 
 	protected void validate() {
-		IStatus status = Status.OK_STATUS;
 		_complete = false;
 
 		List<Image> existedImages = Collections.emptyList();
@@ -192,14 +192,16 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 			return;
 		}
 
-		if ((status == null) || status.isOK() && ListUtil.isNotEmpty(existedImages)) {
+		IStatus status = Status.OK_STATUS;
+
+		if ((status == null) || (status.isOK() && ListUtil.isNotEmpty(existedImages))) {
 			_wizard.setMessage("Another docker image has the same image id", IMessageProvider.ERROR);
 			_wizard.update();
 
 			return;
 		}
 
-		if ((status == null) || status.isOK() && ((_project == null) || (_toolingModel == null))) {
+		if ((status == null) || (status.isOK() && ((_project == null) || (_toolingModel == null)))) {
 			_wizard.setMessage("You must have a gradle liferay workspace.", IMessageProvider.ERROR);
 			_wizard.update();
 
@@ -212,13 +214,13 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 			IRuntimeType runtimeType = runtime.getRuntimeType();
 			String runtimeName = runtime.getName();
 
-			if (runtimeType.equals(_runtimeWC.getRuntimeType())) {
-				if (runtimeName.equalsIgnoreCase(getRuntime().getName()) && !runtime.equals(_runtimeWC)) {
-					_wizard.setMessage("This runtime was already existed", IMessageProvider.ERROR);
-					_wizard.update();
+			if (runtimeType.equals(_runtimeWC.getRuntimeType()) &&
+				runtimeName.equalsIgnoreCase(getRuntime().getName()) && !runtime.equals(_runtimeWC)) {
 
-					return;
-				}
+				_wizard.setMessage("This runtime was already existed", IMessageProvider.ERROR);
+				_wizard.update();
+
+				return;
 			}
 		}
 
@@ -226,14 +228,10 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 			_complete = true;
 			_wizard.setMessage(null, IMessageProvider.NONE);
 			_wizard.update();
-
-			return;
 		}
 		else if (status.getSeverity() == IStatus.WARNING) {
 			_wizard.setMessage(status.getMessage(), IMessageProvider.WARNING);
 			_wizard.update();
-
-			return;
 		}
 		else {
 			_wizard.setMessage(status.getMessage(), IMessageProvider.ERROR);

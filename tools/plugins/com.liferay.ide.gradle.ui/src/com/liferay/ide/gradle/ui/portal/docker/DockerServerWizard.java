@@ -19,21 +19,24 @@ import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
+
 import com.google.common.collect.Lists;
+
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.gradle.core.GradleUtil;
+import com.liferay.ide.gradle.core.LiferayGradleDockerSupporter;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
+import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -169,11 +172,11 @@ public class DockerServerWizard extends WizardFragment {
 
 		PortalDockerRuntime dockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(PortalDockerRuntime.class, null);
 
-		GradleUtil.runGradleTask(
-			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"removeDockerContainer"}, monitor);
+		IDockerSupporter dockerSupporter = new LiferayGradleDockerSupporter();
 
-		GradleUtil.runGradleTask(
-			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"createDockerContainer"}, monitor);
+		dockerSupporter.removeDockerContainer(monitor);
+
+		dockerSupporter.createDockerContainer(monitor);
 
 		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
 			dockerClient.listImagesCmd();
@@ -196,7 +199,7 @@ public class DockerServerWizard extends WizardFragment {
 			if (ListUtil.isNotEmpty(containers) && ListUtil.isNotEmpty(images)) {
 				Container container = containers.get(0);
 
-				dockerServer.settContainerId(container.getId());
+				dockerServer.setContainerId(container.getId());
 			}
 			else {
 				throw new CoreException(LiferayGradleUI.createErrorStatus("Can not create container and image."));

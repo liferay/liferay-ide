@@ -37,7 +37,7 @@ public class DockerServerLaunchTabGroup extends AbstractLaunchConfigurationTabGr
 
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		ServerLaunchConfigurationTab serverLaunchConfigurationTab = new ServerLaunchConfigurationTab(
-			new String[] {PortalDockerServer.id});
+			new String[] {PortalDockerServer.ID});
 
 		ILaunchConfigurationTab[] tabs = {
 			serverLaunchConfigurationTab, new SourceLookupTab(), new EnvironmentTab(), new CommonTab()

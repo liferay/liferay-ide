@@ -19,12 +19,12 @@ import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -90,13 +90,22 @@ public class PortalDockerRuntime extends PortalRuntime implements IPortalDockerR
 		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
 			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
 
-			listImagesCmd.withShowAll(true);
-			listImagesCmd.withDanglingFilter(false);
-			listImagesCmd.withImageNameFilter(getImageTag());
+			listImagesCmd.withShowAll(false);
 
-			CopyOnWriteArraySet<Image> dockerImages = new CopyOnWriteArraySet<>(listImagesCmd.exec());
+			List<Image> images = listImagesCmd.exec();
 
-			if (ListUtil.isNotEmpty(dockerImages) == true) {
+			Optional<Image> dockerImage = Optional.ofNullable(
+				images.stream(
+				).filter(
+					image -> {
+						String imageRepoTag = image.getRepoTags()[0];
+
+						return imageRepoTag.equals(String.join(":", getImageRepo(), getImageTag()));
+					}
+				).findFirst(
+				).get());
+
+			if (dockerImage.isPresent()) {
 				return Status.OK_STATUS;
 			}
 
@@ -110,10 +119,10 @@ public class PortalDockerRuntime extends PortalRuntime implements IPortalDockerR
 	}
 
 	private boolean _isNameInUse() {
-		IRuntime orig = getRuntime();
+		IRuntime originRuntime = getRuntime();
 
 		if (getRuntimeWorkingCopy() != null) {
-			orig = getRuntimeWorkingCopy().getOriginal();
+			originRuntime = getRuntimeWorkingCopy().getOriginal();
 		}
 
 		IRuntime[] runtimes = ServerCore.getRuntimes();
@@ -124,7 +133,7 @@ public class PortalDockerRuntime extends PortalRuntime implements IPortalDockerR
 			String runtimeName = getRuntime().getName();
 
 			for (int i = 0; i < size; i++) {
-				if ((orig != runtimes[i]) && runtimeName.equals(runtimes[i].getName())) {
+				if ((originRuntime != runtimes[i]) && runtimeName.equals(runtimes[i].getName())) {
 					return true;
 				}
 			}
