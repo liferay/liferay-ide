@@ -19,7 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
-import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
+import com.liferay.ide.server.core.portal.docker.IDockerServer;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 
 import java.io.File;
@@ -80,22 +80,22 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 							monitor.subTask(
 								"Remotely deploying " + module.getName() + " to Liferay module framework...");
 
-							PortalDockerServer dockerServer = (PortalDockerServer)server.loadAdapter(
+							PortalDockerServer portalDockerServer = (PortalDockerServer)server.loadAdapter(
 								PortalDockerServer.class, monitor);
 
-							if (dockerServer != null) {
-								IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+							if (portalDockerServer != null) {
+								IDockerServer dockerServer = LiferayServerCore.getDockerServer();
 
-								if (dockerSupporter == null) {
+								if (dockerServer == null) {
 									LiferayServerCore.logError("Failed to get docker supporter");
 
 									return;
 								}
 
-								boolean canPublish = dockerSupporter.canPublishModule(server, module);
+								boolean canPublish = dockerServer.canPublishModule(server, module);
 
 								if (canPublish) {
-									dockerSupporter.dockerDeploy(project, monitor);
+									dockerServer.dockerDeploy(project, monitor);
 								}
 							}
 							else {

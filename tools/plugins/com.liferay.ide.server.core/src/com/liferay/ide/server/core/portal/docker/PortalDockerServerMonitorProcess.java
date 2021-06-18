@@ -165,15 +165,15 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 			}
 
 			try {
-				IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
+				IDockerServer dockerServer = LiferayServerCore.getDockerServer();
 
-				if (dockerSupporter == null) {
+				if (dockerServer == null) {
 					LiferayServerCore.logError("Failed to get docker supporter");
 
 					return;
 				}
 
-				dockerSupporter.startDockerContainer(monitor);
+				dockerServer.startDockerContainer(monitor);
 
 				fireCreateEvent();
 

@@ -15,7 +15,7 @@
 package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
+import com.liferay.ide.server.core.portal.docker.IDockerServer;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -27,9 +27,9 @@ import org.eclipse.wst.server.core.IServer;
  * @author Simon Jiang
  * @author Ethan Sun
  */
-public class LiferayGradleDockerSupporter implements IDockerSupporter {
+public class LiferayGradleDockerServer implements IDockerServer {
 
-	public LiferayGradleDockerSupporter() {
+	public LiferayGradleDockerServer() {
 	}
 
 	@Override

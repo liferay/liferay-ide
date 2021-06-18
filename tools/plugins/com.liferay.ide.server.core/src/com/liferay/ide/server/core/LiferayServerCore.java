@@ -24,7 +24,7 @@ import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
-import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
+import com.liferay.ide.server.core.portal.docker.IDockerServer;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
@@ -135,15 +135,15 @@ public class LiferayServerCore extends Plugin {
 		return _plugin;
 	}
 
-	public static IDockerSupporter getDockerSupporter() {
-		IDockerSupporter retval = null;
+	public static IDockerServer getDockerServer() {
+		IDockerServer retval = null;
 
-		IDockerSupporter[] dockerSupporters = getDockerSupporters();
+		IDockerServer[] dockerServers = getDockerServers();
 
-		if (ListUtil.isNotEmpty(dockerSupporters)) {
-			for (IDockerSupporter dockerSupporter : dockerSupporters) {
-				if (dockerSupporter != null) {
-					retval = dockerSupporter;
+		if (ListUtil.isNotEmpty(dockerServers)) {
+			for (IDockerServer dockerServer : dockerServers) {
+				if (dockerServer != null) {
+					retval = dockerServer;
 
 					break;
 				}
@@ -153,33 +153,33 @@ public class LiferayServerCore extends Plugin {
 		return retval;
 	}
 
-	public static IDockerSupporter[] getDockerSupporters() {
-		if (_dockerSupporters == null) {
+	public static IDockerServer[] getDockerServers() {
+		if (_dockerServers == null) {
 			IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
 
-			IConfigurationElement[] elements = extensionRegistry.getConfigurationElementsFor(IDockerSupporter.ID);
+			IConfigurationElement[] elements = extensionRegistry.getConfigurationElementsFor(IDockerServer.ID);
 
 			try {
-				List<IDockerSupporter> deployers = new ArrayList<>();
+				List<IDockerServer> deployers = new ArrayList<>();
 
 				for (IConfigurationElement element : elements) {
 					Object o = element.createExecutableExtension("class");
 
-					if (o instanceof IDockerSupporter) {
-						IDockerSupporter dockerSupporter = (IDockerSupporter)o;
+					if (o instanceof IDockerServer) {
+						IDockerServer dockerServer = (IDockerServer)o;
 
-						deployers.add(dockerSupporter);
+						deployers.add(dockerServer);
 					}
 				}
 
-				_dockerSupporters = deployers.toArray(new IDockerSupporter[0]);
+				_dockerServers = deployers.toArray(new IDockerServer[0]);
 			}
 			catch (Exception e) {
 				logError("Unable to get docker deployer extensions", e);
 			}
 		}
 
-		return _dockerSupporters;
+		return _dockerServers;
 	}
 
 	public static URL getPluginEntry(String path) {
@@ -902,7 +902,7 @@ public class LiferayServerCore extends Plugin {
 	}
 
 	private static Map<String, IServerManagerConnection> _connections = null;
-	private static IDockerSupporter[] _dockerSupporters = null;
+	private static IDockerServer[] _dockerServers = null;
 	private static LiferayServerCore _plugin;
 	private static IPluginPublisher[] _pluginPublishers = null;
 	private static PortalBundleFactory[] _portalBundleFactories;

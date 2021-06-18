@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?eclipse version="3.4"?>
 <plugin>
-	<extension-point id="dockerSupporters" name="Liferay Docker Support" schema="schema/dockerSupporters.exsd" />
+	<extension-point id="dockerServers" name="Liferay Docker Server" schema="schema/dockerServers.exsd" />
 	<extension-point id="pluginPublishers" name="%plugin.publishers.extension.point.name" schema="schema/pluginPublishers.exsd" />
 	<extension-point id="portalLaunchParticipants" name="Portal Launch Participants" schema="schema/portalLaunchParticipants.exsd" />
 	<extension-point id="runtimeDelegateValidators" name="%runtime.delegate.validators.extension.point.name" schema="schema/runtimeDelegateValidators.exsd" />
