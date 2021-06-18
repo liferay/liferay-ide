@@ -18,7 +18,6 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.ContainerConfig;
 
@@ -28,6 +27,8 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.SocketUtil;
+
+import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,6 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.wst.server.core.IServer;
@@ -58,7 +58,7 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 		IProgressMonitor monitor) {
 
 		_server = server;
-		_portalServer = (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, null);
+		_dockerServer = (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, null);
 		_streamsProxy = proxy;
 		_launch = launch;
 		_debug = debug;
@@ -69,7 +69,7 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 	}
 
 	public boolean canTerminate() {
-		return !_streamsProxy.isTerminated();
+		return true; //!_streamsProxy.isTerminated();
 	}
 
 	/**
@@ -125,22 +125,21 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 			ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
 
 			listContainersCmd.withLimit(1);
-			listContainersCmd.withNameFilter(Lists.newArrayList(_portalServer.getContainerName()));
+			listContainersCmd.withNameFilter(Lists.newArrayList(_dockerServer.getContainerName()));
 
 			List<Container> containers = listContainersCmd.exec();
 
 			if (ListUtil.isNotEmpty(containers)) {
 				InspectContainerCmd inspectContainerCmd = dockerClient.inspectContainerCmd(
-					_portalServer.getContainerId());
+					_dockerServer.getContainerId());
 
 				InspectContainerResponse response = inspectContainerCmd.exec();
 
 				return !response.getState(
 				).getRunning();
 			}
-			else {
-				return true;
-			}
+
+			return true;
 		}
 		catch (Exception e) {
 			LiferayServerCore.logError(e);
@@ -159,7 +158,13 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 
 	public void terminate() throws DebugException {
 		try {
-			((IPortalDockerStreamsProxy)getStreamsProxy()).terminate();
+			IStreamsProxy streamsProxy = getStreamsProxy();
+
+			if (streamsProxy instanceof IPortalDockerStreamsProxy) {
+				IPortalDockerStreamsProxy portalDockerStreamsProxy = (IPortalDockerStreamsProxy)streamsProxy;
+
+				portalDockerStreamsProxy.terminate();
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -179,90 +184,93 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 	}
 
 	protected void startContainer(IProgressMonitor monitor) {
-		if (_portalServer != null) {
-			try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-				StartContainerCmd startContainerCmd = dockerClient.startContainerCmd(_portalServer.getContainerId());
+		if (_dockerServer != null) {
+			try {
+				IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
 
-				startContainerCmd.exec();
+				dockerSupporter.startDockerContainer(monitor);
 
 				fireCreateEvent();
 
 				if (_debug) {
-					InspectContainerCmd inspectContainerCmd = dockerClient.inspectContainerCmd(
-						_portalServer.getContainerId());
+					try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
+						InspectContainerCmd inspectContainerCmd = dockerClient.inspectContainerCmd(
+							_dockerServer.getContainerId());
 
-					InspectContainerResponse inspectContainerCmdResponse = inspectContainerCmd.exec();
+						InspectContainerResponse inspectContainerCmdResponse = inspectContainerCmd.exec();
 
-					ContainerConfig config = inspectContainerCmdResponse.getConfig();
+						ContainerConfig config = inspectContainerCmdResponse.getConfig();
 
-					String[] containerEnv = config.getEnv();
+						String[] containerEnv = config.getEnv();
 
-					boolean enableDebug = Stream.of(
-						containerEnv
-					).filter(
-						env -> env.contains("LIFERAY_JPDA_ENABLED=true")
-					).findAny(
-					).isPresent();
+						boolean enableDebug = Stream.of(
+							containerEnv
+						).filter(
+							env -> env.contains("LIFERAY_JPDA_ENABLED=true")
+						).findAny(
+						).isPresent();
 
-					if (enableDebug) {
-						Thread checkDebugThread = new Thread("Liferay Portal Docker Server Debug Checking Thread") {
+						if (enableDebug) {
+							Thread checkDebugThread = new Thread("Liferay Portal Docker Server Debug Checking Thread") {
 
-							public void run() {
-								try {
-									boolean debugPortStarted = false;
-									String host = _config.getAttribute("hostname", _server.getHost());
-									String port = _config.getAttribute("port", "8000");
+								public void run() {
+									try {
+										boolean debugPortStarted = false;
 
-									do {
-										IStatus canConnect = SocketUtil.canConnect(host, port);
+										String host = _config.getAttribute("hostname", _server.getHost());
+										String port = _config.getAttribute("port", "8000");
 
-										try {
-											if (canConnect.isOK()) {
-												_delegate.startDebugLaunch(_server, _config, _launch, monitor);
+										do {
+											IStatus canConnect = SocketUtil.canConnect(host, port);
 
-												IDebugTarget[] debugTargets = _launch.getDebugTargets();
+											try {
+												if (canConnect.isOK()) {
+													_delegate.startDebugLaunch(_server, _config, _launch, monitor);
 
-												if (ListUtil.isNotEmpty(debugTargets)) {
-													debugPortStarted = true;
+													if (ListUtil.isNotEmpty(_launch.getDebugTargets())) {
+														debugPortStarted = true;
+													}
 												}
+
+												sleep(500);
 											}
-
-											sleep(500);
+											catch (Exception e) {
+											}
 										}
-										catch (Exception e) {
-										}
+										while (!debugPortStarted);
 									}
-									while (!debugPortStarted);
+									catch (Exception e) {
+									}
 								}
-								catch (Exception e) {
+
+							};
+
+							checkDebugThread.setPriority(1);
+							checkDebugThread.setDaemon(true);
+							checkDebugThread.start();
+
+							try {
+								checkDebugThread.join(Integer.MAX_VALUE);
+
+								if (checkDebugThread.isAlive()) {
+									checkDebugThread.interrupt();
+
+									throw new TimeoutException();
 								}
 							}
-
-						};
-
-						checkDebugThread.setPriority(1);
-						checkDebugThread.setDaemon(true);
-						checkDebugThread.start();
-
-						try {
-							checkDebugThread.join(Integer.MAX_VALUE);
-
-							if (checkDebugThread.isAlive()) {
-								checkDebugThread.interrupt();
-
-								throw new TimeoutException();
+							catch (InterruptedException | TimeoutException e) {
+								e.printStackTrace();
 							}
 						}
-						catch (TimeoutException te) {
-						}
-						catch (InterruptedException ie) {
-						}
+					}
+					catch (IOException e) {
+						LiferayServerCore.logError("Failed to connect docker daemon", e);
 					}
 				}
 			}
 			catch (Exception e) {
 				fireTerminateEvent();
-				LiferayServerCore.logError(e);
+				LiferayServerCore.logError("Failed to start docker container", e);
 			}
 		}
 	}
@@ -271,9 +279,9 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 	private ILaunchConfiguration _config;
 	private boolean _debug;
 	private PortalDockerServerLaunchConfigDelegate _delegate;
+	private PortalDockerServer _dockerServer;
 	private String _label;
 	private ILaunch _launch;
-	private PortalDockerServer _portalServer;
 	private IServer _server;
 	private IPortalDockerStreamsProxy _streamsProxy;
 

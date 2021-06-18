@@ -15,24 +15,22 @@
 package com.liferay.ide.server.core.portal.docker;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
-import com.github.dockerjava.api.command.RemoveContainerCmd;
-import com.github.dockerjava.api.command.RemoveImageCmd;
-import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
 import java.util.List;
+import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.util.RuntimeLifecycleAdapter;
 
 /**
  * @author Simon Jiang
+ * @author Ethan Sun
  */
 public class PortalDockerRuntimeLifecycleAdapter extends RuntimeLifecycleAdapter {
 
@@ -44,38 +42,34 @@ public class PortalDockerRuntimeLifecycleAdapter extends RuntimeLifecycleAdapter
 			return;
 		}
 
+		String imageRepoTag = String.join(":", dockerRuntime.getImageRepo(), dockerRuntime.getImageTag());
+
 		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
 			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
 
-			listImagesCmd.withImageNameFilter(dockerRuntime.getImageTag());
-			listImagesCmd.withShowAll(true);
+			listImagesCmd.withShowAll(false);
 
 			List<Image> images = listImagesCmd.exec();
 
-			if (ListUtil.isNotEmpty(images)) {
-				ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
+			Stream<Image> imageStream = images.stream();
 
-				ListContainersCmd showContainerCmd = listContainersCmd.withShowAll(true);
+			imageStream.filter(
+				image -> {
+					String imageRepoTagDocker = image.getRepoTags()[0];
 
-				List<Container> containers = showContainerCmd.exec();
-
-				String imageId = dockerRuntime.getImageId();
-
-				for (Container container : containers) {
-					if (imageId.equals(container.getImageId())) {
-						RemoveContainerCmd removeContainerCmd = dockerClient.removeContainerCmd(container.getId());
-
-						removeContainerCmd.exec();
-					}
+					return imageRepoTagDocker.equals(imageRepoTag);
 				}
+			).findFirst(
+			).ifPresent(
+				image -> {
+					IDockerSupporter dockerSupporter = LiferayServerCore.getDockerSupporter();
 
-				RemoveImageCmd removeImageCmd = dockerClient.removeImageCmd(dockerRuntime.getImageId());
-
-				removeImageCmd.exec();
-			}
+					dockerSupporter.removeDockerContainer(new NullProgressMonitor());
+				}
+			);
 		}
 		catch (Exception e) {
-			LiferayServerCore.logError(e);
+			LiferayServerCore.logError("Failed to remove runtime", e);
 		}
 	}
 

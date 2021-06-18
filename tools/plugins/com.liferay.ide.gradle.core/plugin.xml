@@ -80,13 +80,13 @@
 		</configurator>
 	</extension>
 	<extension
-		point="com.liferay.ide.server.core.dockerPublishers"
+		point="com.liferay.ide.server.core.dockerSupporters"
 	>
-		<liferayDockerPublisher
-			class="com.liferay.ide.gradle.core.LiferayGradleDockerDeployer"
-			id="com.liferay.ide.gradle.core.dockerDeployer"
-			name="Liferay Gradle Docker Deployer"
+		<liferayDockerSupporter
+			class="com.liferay.ide.gradle.core.LiferayGradleDockerSupporter"
+			id="com.liferay.ide.gradle.core.dockerSupporter"
+			name="Liferay Gradle Docker Supporter"
 		>
-		</liferayDockerPublisher>
+		</liferayDockerSupporter>
 	</extension>
 </plugin>

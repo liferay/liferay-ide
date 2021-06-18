@@ -17,24 +17,29 @@ package com.liferay.ide.gradle.action;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
-import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
+
 import com.google.common.collect.Lists;
+
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleDockerSupporter;
+import com.liferay.ide.server.core.portal.docker.IDockerSupporter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.IOException;
+
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.wst.server.core.IRuntime;
@@ -71,13 +76,14 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 		action.setEnabled(LiferayWorkspaceUtil.isValidWorkspace(project));
 	}
 
+	@Override
 	protected void afterAction() {
-		_addPortalRuntimeAndServer(null);
+		_buildUpWorkspaceDockerServerAndRuntime();
 	}
 
 	@Override
 	protected void beforeAction() {
-		_deleteWorkspaceDockerServerAndRuntime();
+		_cleanUpWorkspaceDockerServerAndRuntime();
 	}
 
 	@Override
@@ -85,58 +91,67 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 		return "createDockerContainer";
 	}
 
-	private void _addPortalRuntimeAndServer(IProgressMonitor monitor) {
+	private void _buildUpWorkspaceDockerServerAndRuntime() {
 		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
 			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
 
-			listImagesCmd.withShowAll(true);
-			listImagesCmd.withImageNameFilter(_projectInfo.getDockerImageId());
+			listImagesCmd.withShowAll(false);
 
 			List<Image> images = listImagesCmd.exec();
 
 			for (Image image : images) {
-				IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalDockerRuntime.ID);
+				String imageRepoTag = image.getRepoTags()[0];
 
-				IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(portalRuntimeType.getName(), monitor);
+				if (imageRepoTag.equals(_projectInfo.getDockerImageId())) {
+					IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalDockerRuntime.ID);
 
-				ServerUtil.setRuntimeName(runtimeWC, -1, project.getName());
+					IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(portalRuntimeType.getName(), null);
 
-				PortalDockerRuntime portalDockerRuntime = (PortalDockerRuntime)runtimeWC.loadAdapter(
-					PortalDockerRuntime.class, null);
+					ServerUtil.setRuntimeName(runtimeWC, -1, project.getName());
 
-				portalDockerRuntime.setImageRepo(_projectInfo.getDockerImageLiferay());
-				portalDockerRuntime.setImageId(image.getId());
-				portalDockerRuntime.setImageTag(_projectInfo.getDockerImageId());
+					PortalDockerRuntime portalDockerRuntime = (PortalDockerRuntime)runtimeWC.loadAdapter(
+						PortalDockerRuntime.class, null);
 
-				runtimeWC.save(true, monitor);
+					String dockerImageId = _projectInfo.getDockerImageId();
 
-				IServerType serverType = ServerCore.findServerType(PortalDockerServer.id);
+					portalDockerRuntime.setImageRepo(dockerImageId.split(":")[0]);
 
-				IServerWorkingCopy serverWC = serverType.createServer(serverType.getName(), null, runtimeWC, monitor);
+					portalDockerRuntime.setImageId(image.getId());
 
-				serverWC.setName(serverType.getName() + " " + project.getName());
+					portalDockerRuntime.setImageTag(dockerImageId.split(":")[1]);
 
-				ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
+					runtimeWC.save(true, null);
 
-				listContainersCmd.withNameFilter(Lists.newArrayList(_projectInfo.getDockerContainerId()));
-				listContainersCmd.withLimit(1);
+					IServerType serverType = ServerCore.findServerType(PortalDockerServer.ID);
 
-				List<Container> containers = listContainersCmd.exec();
+					IServerWorkingCopy serverWC = serverType.createServer(serverType.getName(), null, runtimeWC, null);
 
-				if (ListUtil.isEmpty(containers)) {
-					return;
+					serverWC.setName(serverType.getName() + " " + project.getName());
+
+					ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
+
+					listContainersCmd.withNameFilter(Lists.newArrayList(_projectInfo.getDockerContainerId()));
+					listContainersCmd.withLimit(1);
+
+					List<Container> containers = listContainersCmd.exec();
+
+					if (ListUtil.isEmpty(containers)) {
+						return;
+					}
+
+					Container container = containers.get(0);
+
+					PortalDockerServer portalDockerServer = (PortalDockerServer)serverWC.loadAdapter(
+						PortalDockerServer.class, null);
+
+					portalDockerServer.setContainerName(_projectInfo.getDockerContainerId());
+
+					portalDockerServer.setContainerId(container.getId());
+
+					portalDockerServer.setImageId(portalDockerRuntime.getImageId());
+
+					serverWC.save(true, null);
 				}
-
-				Container container = containers.get(0);
-
-				PortalDockerServer portalDockerServer = (PortalDockerServer)serverWC.loadAdapter(
-					PortalDockerServer.class, null);
-
-				portalDockerServer.setContainerName(_projectInfo.getDockerContainerId());
-				portalDockerServer.settContainerId(container.getId());
-				portalDockerServer.setImageId(portalDockerRuntime.getImageId());
-
-				serverWC.save(true, monitor);
 			}
 		}
 		catch (Exception e) {
@@ -144,7 +159,7 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 		}
 	}
 
-	private void _deleteWorkspaceDockerServerAndRuntime() {
+	private void _cleanUpWorkspaceDockerServerAndRuntime() {
 		String dockerContainerName = _projectInfo.getDockerContainerId();
 
 		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
@@ -171,36 +186,36 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 				}
 			}
 			else {
-				ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
+				IDockerSupporter dockerSupporter = new LiferayGradleDockerSupporter();
 
-				listContainersCmd.withNameFilter(Lists.newArrayList(_projectInfo.getDockerContainerId()));
-				listContainersCmd.withLimit(1);
-				listContainersCmd.withShowAll(true);
+				dockerSupporter.stopDockerContainer(null);
 
-				List<Container> containers = listContainersCmd.exec();
-
-				for (Container container : containers) {
-					RemoveContainerCmd removeContainerCmd = dockerClient.removeContainerCmd(container.getId());
-
-					removeContainerCmd.exec();
-				}
+				dockerSupporter.removeDockerContainer(null);
 
 				ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
 
-				listImagesCmd.withShowAll(true);
-				listImagesCmd.withImageNameFilter(_projectInfo.getDockerImageId());
+				listImagesCmd.withShowAll(false);
 
 				List<Image> images = listImagesCmd.exec();
 
 				for (Image image : images) {
-					RemoveImageCmd removeImageCmd = dockerClient.removeImageCmd(image.getId());
+					String imageRepoTag = image.getRepoTags()[0];
 
-					removeImageCmd.exec();
+					if (imageRepoTag.equals(_projectInfo.getDockerImageId())) {
+						RemoveImageCmd removeImageCmd = dockerClient.removeImageCmd(image.getId());
+
+						removeImageCmd.exec();
+					}
 				}
 			}
 		}
 		catch (Exception e) {
-			LiferayGradleCore.logError("Failed to delete server and runtime", e);
+			if (e instanceof IOException) {
+				LiferayGradleCore.logError("Failed to connect docker daemon", e);
+			}
+			else if (e instanceof CoreException) {
+				LiferayGradleCore.logError("Failed to cleanup server and runtime", e);
+			}
 		}
 	}
 

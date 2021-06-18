@@ -16,7 +16,6 @@ package com.liferay.ide.server.util;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DefaultDockerClientConfig.Builder;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 
@@ -39,9 +38,11 @@ import org.eclipse.core.runtime.IStatus;
 public class LiferayDockerClient {
 
 	public static DockerClient getDockerClient() throws CoreException {
-		Builder createDefaultConfigBuilder = DefaultDockerClientConfig.createDefaultConfigBuilder();
+		DefaultDockerClientConfig.Builder createDefaultConfigBuilder =
+			DefaultDockerClientConfig.createDefaultConfigBuilder();
 
 		createDefaultConfigBuilder.withDockerHost(_getDefaultDockerUrl());
+
 		createDefaultConfigBuilder.withRegistryUrl("https://registry.hub.docker.com/v2/repositories/liferay/portal");
 
 		String dockerCertPath = System.getenv("DOCKER_CERT_PATH");
@@ -65,6 +66,7 @@ public class LiferayDockerClient {
 		}
 
 		NettyDockerCmdExecFactory cmdFactory = new NettyDockerCmdExecFactory();
+
 		DockerClientBuilder dockerClientBuilder = DockerClientBuilder.getInstance(config);
 
 		dockerClientBuilder.withDockerCmdExecFactory(cmdFactory);

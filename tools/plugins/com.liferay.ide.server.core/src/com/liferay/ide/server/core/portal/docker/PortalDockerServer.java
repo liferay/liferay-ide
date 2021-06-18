@@ -24,7 +24,7 @@ import org.eclipse.wst.server.core.ServerUtil;
  */
 public class PortalDockerServer extends PortalServerDelegate implements IPortalDockerServer {
 
-	public static String id = "com.liferay.ide.server.portal.docker";
+	public static final String ID = "com.liferay.ide.server.portal.docker";
 
 	@Override
 	public String getContainerId() {
@@ -46,6 +46,10 @@ public class PortalDockerServer extends PortalServerDelegate implements IPortalD
 		return getAttribute(docker_container_images_id, (String)null);
 	}
 
+	public void setContainerId(String containerId) {
+		setAttribute(docker_container_id, containerId);
+	}
+
 	public void setContainerName(String name) {
 		setAttribute(docker_container_name, name);
 	}
@@ -61,10 +65,6 @@ public class PortalDockerServer extends PortalServerDelegate implements IPortalD
 
 	public void setImageId(String imageId) {
 		setAttribute(docker_container_images_id, imageId);
-	}
-
-	public void settContainerId(String containerId) {
-		setAttribute(docker_container_id, containerId);
 	}
 
 	public final String docker_container_health_check_url = "docker-container-health-check-url";

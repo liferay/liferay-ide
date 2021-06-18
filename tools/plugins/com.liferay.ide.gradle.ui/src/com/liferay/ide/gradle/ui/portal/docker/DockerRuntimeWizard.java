@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.ui.portal.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
+
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
@@ -74,7 +75,7 @@ public class DockerRuntimeWizard extends WizardFragment {
 
 		GradleUtil.runGradleTask(
 			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"buildDockerImage"}, monitor);
-		    
+
 		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
 			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
 

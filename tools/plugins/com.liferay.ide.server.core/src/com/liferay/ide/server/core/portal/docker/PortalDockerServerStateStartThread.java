@@ -155,18 +155,23 @@ public class PortalDockerServerStateStartThread {
 
 				URLConnection conn = _liferayHomeUrl.openConnection();
 
-				conn.setReadTimeout(_pingInterval);
+				if (conn instanceof HttpURLConnection) {
+					HttpURLConnection connHttp = (HttpURLConnection)conn;
 
-				((HttpURLConnection)conn).setInstanceFollowRedirects(false);
-				int code = ((HttpURLConnection)conn).getResponseCode();
+					connHttp.setReadTimeout(_pingInterval);
 
-				if (!_stop && (code != 404)) {
-					Thread.sleep(200);
-					_behaviour.setServerStarted();
-					_stop = true;
+					connHttp.setInstanceFollowRedirects(false);
+
+					int code = connHttp.getResponseCode();
+
+					if (!_stop && (code != 404)) {
+						Thread.sleep(200);
+						_behaviour.setServerStarted();
+						_stop = true;
+					}
+
+					Thread.sleep(1000);
 				}
-
-				Thread.sleep(1000);
 			}
 			catch (Exception e) {
 				if (!_stop) {

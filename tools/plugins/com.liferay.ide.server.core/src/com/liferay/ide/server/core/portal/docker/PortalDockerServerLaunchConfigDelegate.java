@@ -14,20 +14,11 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.model.Container;
-
-import com.google.common.collect.Lists;
-
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.SocketUtil;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -96,20 +87,7 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 				throw new CoreException(LiferayServerCore.createErrorStatus("Server portal server is invalid."));
 			}
 
-			try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-				ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
-
-				listContainersCmd.withShowAll(true);
-				listContainersCmd.withNameFilter(Lists.newArrayList(portalDockerServer.getContainerName()));
-				listContainersCmd.withIdFilter(Lists.newArrayList(portalDockerServer.getContainerId()));
-
-				List<Container> containers = listContainersCmd.exec();
-
-				if (ListUtil.isEmpty(containers)) {
-					throw new CoreException(
-						LiferayServerCore.createErrorStatus("The container of Portal server is invalid."));
-				}
-
+			try {
 				_launchServer(server, config, mode, launch, monitor);
 			}
 			catch (Exception e) {
@@ -201,14 +179,16 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 				return null;
 			}
 
-			IPortalDockerStreamsProxy streamsProxy = new PortalDockerServerLogStreamsProxy(
-				portalServer, poratlServerBehaviour, launch);
-
+			/**
+			 * IPortalDockerStreamsProxy streamsProxy = new
+			 * PortalDockerServerLogStreamsProxy( portalServer, poratlServerBehaviour,
+			 * launch);
+			 */
 			IProcess retvalProcess = poratlServerBehaviour.getProcess();
 
 			if (retvalProcess == null) {
 				retvalProcess = new PortalDockerServerMonitorProcess(
-					server, poratlServerBehaviour, launch, debug, streamsProxy, config, this, monitor);
+					server, poratlServerBehaviour, launch, debug, null, config, this, monitor);
 
 				launch.addProcess(retvalProcess);
 			}

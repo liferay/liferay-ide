@@ -22,12 +22,22 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Simon Jiang
  */
-public interface IDockerPublisher {
+public interface IDockerSupporter {
 
-	public static final String ID = "com.liferay.ide.server.core.dockerPublishers";
+	public static final String ID = "com.liferay.ide.server.core.dockerSupporters";
 
 	public boolean canPublishModule(IServer server, IModule module);
 
+	public void createDockerContainer(IProgressMonitor monitor);
+
 	public void dockerDeploy(IProject project, IProgressMonitor monitor);
+
+	public void logDockerContainer(IProgressMonitor monitor);
+
+	public void removeDockerContainer(IProgressMonitor monitor);
+
+	public void startDockerContainer(IProgressMonitor monitor);
+
+	public void stopDockerContainer(IProgressMonitor monitor);
 
 }
