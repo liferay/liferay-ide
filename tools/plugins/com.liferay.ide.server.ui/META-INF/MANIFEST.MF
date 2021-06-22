@@ -52,6 +52,5 @@ Export-Package: com.liferay.ide.server.ui,
  com.liferay.ide.server.ui.navigator,
  com.liferay.ide.server.ui.portal,
  com.liferay.ide.server.ui.wizard
-Bundle-ClassPath: .,
- lib/docker-java-3.1.4.jar
+Bundle-ClassPath: .
 
