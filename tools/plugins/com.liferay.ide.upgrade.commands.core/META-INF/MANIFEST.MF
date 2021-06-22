@@ -28,7 +28,6 @@ Require-Bundle: com.google.guava,
  org.eclipse.sapphire.modeling,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core,
- org.jdom,
  org.json
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.sdk.PluginsSDKProjectImporter.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.prerequisite.CheckInstalledJDKsCommand.xml,
