@@ -23,7 +23,8 @@ import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
+import com.github.dockerjava.transport.DockerHttpClient;
+import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 
 import com.google.common.collect.Lists;
 
@@ -35,6 +36,8 @@ import java.io.File;
 
 import java.net.InetAddress;
 import java.net.URI;
+
+import java.time.Duration;
 
 import java.util.List;
 import java.util.Objects;
@@ -80,11 +83,18 @@ public class LiferayDockerClient {
 			}
 		}
 
-		NettyDockerCmdExecFactory cmdFactory = new NettyDockerCmdExecFactory();
+		ZerodepDockerHttpClient.Builder zerodepDockerHttpClientbuilder = new ZerodepDockerHttpClient.Builder();
+
+		zerodepDockerHttpClientbuilder.dockerHost(config.getDockerHost());
+		zerodepDockerHttpClientbuilder.maxConnections(100);
+		zerodepDockerHttpClientbuilder.connectionTimeout(Duration.ofSeconds(30));
+		zerodepDockerHttpClientbuilder.responseTimeout(Duration.ofSeconds(45));
+
+		DockerHttpClient httpClient = zerodepDockerHttpClientbuilder.build();
 
 		DockerClientBuilder dockerClientBuilder = DockerClientBuilder.getInstance(config);
 
-		dockerClientBuilder.withDockerCmdExecFactory(cmdFactory);
+		dockerClientBuilder.withDockerHttpClient(httpClient);
 
 		return dockerClientBuilder.build();
 	}
