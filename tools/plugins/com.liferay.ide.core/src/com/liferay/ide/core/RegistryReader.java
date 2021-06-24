@@ -26,7 +26,6 @@ import org.osgi.framework.Bundle;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings("deprecation")
 public abstract class RegistryReader {
 
 	public static boolean canCreateExecutableExtension(IConfigurationElement element) {
@@ -58,10 +57,6 @@ public abstract class RegistryReader {
 		}
 
 		return null;
-	}
-
-	public RegistryReader(IExtensionRegistry registry, String pluginID, String extensionPoint) {
-		this(pluginID, extensionPoint);
 	}
 
 	public RegistryReader(String pluginID, String extensionPoint) {
