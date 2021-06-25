@@ -31,6 +31,7 @@ import com.google.common.collect.Lists;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.docker.IDockerServer;
 
 import java.io.File;
 
@@ -42,15 +43,23 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang.SystemUtils;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.Property;
 
 /**
  * @author Simon Jiang
+ * @author Ethan Sun
  */
 public class LiferayDockerClient {
 
@@ -58,10 +67,35 @@ public class LiferayDockerClient {
 		DefaultDockerClientConfig.Builder createDefaultConfigBuilder =
 			DefaultDockerClientConfig.createDefaultConfigBuilder();
 
+		createDefaultConfigBuilder.withRegistryUrl(IDockerServer.PROP_REGISTRY_URL_PORTAL);
+
 		createDefaultConfigBuilder.withDockerHost(_getDefaultDockerUrl());
 
-		createDefaultConfigBuilder.withRegistryUrl("https://registry.hub.docker.com/v2/repositories/liferay/portal");
-		createDefaultConfigBuilder.withRegistryUrl("https://registry.hub.docker.com/v2/repositories/liferay/dxp");
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String configurations = preferencesService.getString(
+			"com.liferay.ide.gradle.ui", IDockerServer.DOCKER_REGISTRY_INFO, "", null);
+
+		String connection = preferencesService.getString(
+			"com.liferay.ide.gradle.ui", IDockerServer.DOCKER_DAEMON_CONNECTION, "", null);
+
+		if (CoreUtil.isNotNullOrEmpty(configurations)) {
+			JSONArray jsonArray = new JSONArray(configurations);
+
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+
+				Properties property = Property.toProperties(jsonObject);
+
+				if (Boolean.parseBoolean(property.getProperty(IDockerServer.PROP_STATE))) {
+					createDefaultConfigBuilder.withRegistryUrl(property.getProperty(IDockerServer.PROP_REGISTRY_URL));
+				}
+			}
+		}
+
+		if (CoreUtil.isNotNullOrEmpty(connection)) {
+			createDefaultConfigBuilder.withDockerHost(connection);
+		}
 
 		String dockerCertPath = System.getenv("DOCKER_CERT_PATH");
 
