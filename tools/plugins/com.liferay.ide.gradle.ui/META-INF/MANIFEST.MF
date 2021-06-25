@@ -15,6 +15,7 @@ Require-Bundle: com.google.guava,
  com.liferay.ide.upgrade.commands.core,
  com.liferay.ide.upgrade.plan.core,
  org.apache.commons.io,
+ org.apache.commons.lang,
  org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.core.expressions,
  org.eclipse.core.runtime,
@@ -40,3 +41,4 @@ Bundle-ClassPath: .
 Export-Package: com.liferay.ide.gradle.ui
 Service-Component: OSGI-INF/com.liferay.ide.gradle.ui.upgrade.UpdateWorkspacePluginVersionCommand.xml,
  OSGI-INF/com.liferay.ide.gradle.ui.upgrade.RemoveDependencyVersionCommand.xml
+Import-Package: org.json

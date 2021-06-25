@@ -25,7 +25,26 @@ import org.eclipse.wst.server.core.IServer;
  */
 public interface IDockerServer {
 
+	public static final String DOCKER_DAEMON_CONNECTION = "docker-daemon-connection";
+
+	public static final String DOCKER_REGISTRY_INFO = "docker-registry-info";
+
 	public static final String ID = "com.liferay.ide.server.core.dockerServers";
+
+	public static final String PROP_REGISTRY_URL = "registry.url";
+
+	public static final String PROP_REGISTRY_URL_DXP = "https://registry.hub.docker.com/v2/repositories/liferay/dxp";
+
+	public static final String PROP_REGISTRY_URL_PORTAL =
+		"https://registry.hub.docker.com/v2/repositories/liferay/portal";
+
+	public static final String PROP_REPO_DXP = "liferay/dxp";
+
+	public static final String PROP_REPO_NAME = "repo.name";
+
+	public static final String PROP_REPO_PORTAL = "liferay/portal";
+
+	public static final String PROP_STATE = "state";
 
 	public boolean canPublishModule(IServer server, IModule module);
 
