@@ -14,13 +14,15 @@
 
 package com.liferay.ide.server.ui.portal.docker;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
-import java.util.Collections;
+import com.liferay.ide.server.core.portal.docker.DockerRegistryConfiguration;
+import com.liferay.ide.server.core.portal.docker.IDockerServer;
+import com.liferay.ide.server.ui.LiferayServerUI;
+import com.liferay.ide.server.util.LiferayDockerClient;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -57,16 +59,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.json.JSONArray;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.portal.docker.IDockerServer;
-import com.liferay.ide.server.ui.LiferayServerUI;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.util.UIUtil;
+import org.json.JSONArray;
 
 /**
  * @author Ethan Sun
@@ -75,22 +69,24 @@ import com.liferay.ide.ui.util.UIUtil;
 public class DockerServerPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public static final Object[] NO_ELEMENTS = new Object[0];
-	
+
 	public void init(IWorkbench workbench) {
 		noDefaultAndApplyButton();
 
 		String configurations = _preferencesService.getString(
-				LiferayServerUI.PLUGIN_ID, IDockerServer.DOCKER_REGISTRY_INFO, "", null);
-			
-		_configurations =  _getDockerRegistryConfigurations(configurations);
+			LiferayServerUI.PLUGIN_ID, IDockerServer.DOCKER_REGISTRY_INFO, "", null);
+
+		_configurations = LiferayDockerClient.getDockerRegistryConfigurations(configurations);
+
+		_connection = _preferencesService.getString(
+			LiferayServerUI.PLUGIN_ID, IDockerServer.DOCKER_DAEMON_CONNECTION, "", null);
 	}
 
-	
 	@Override
 	public boolean performOk() {
 		_saveDockerConfigurations();
 		_saveDockerConnection();
-		
+
 		return true;
 	}
 
@@ -103,208 +99,54 @@ public class DockerServerPreferencePage extends PreferencePage implements IWorkb
 		GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
 
 		composite.setLayoutData(layoutData);
-		
-		Group registryGroup = new Group(composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL );
+
+		Group registryGroup = new Group(composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		registryGroup.setText("Docker Registry Host Information");
 
 		registryGroup.setLayout(new GridLayout(2, false));
 
 		registryGroup.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false));
-		
+
 		_createDockerRegistryView(registryGroup);
-		
+
 		_createDockerConnection(composite);
 
 		return composite;
 	}
 
-	
-	private void _createDockerConnection(Composite parent) {
-		final Composite composite = SWTUtil.createComposite(parent, 2, 2, GridData.FILL_BOTH);
-		
-		Label registryNamelabel = new Label(composite, SWT.LEFT);
+	private static Button _createButton(
+		Composite composite, String text, String tooltip, Listener listener, boolean enabled) {
 
-		registryNamelabel.setText("Registrl Name");
-		registryNamelabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		Button button = new Button(composite, SWT.PUSH | SWT.BORDER);
 
-		Text _repoName = new Text(composite, SWT.HORIZONTAL | SWT.SINGLE);
+		button.addListener(SWT.Selection, listener);
+		button.setEnabled(enabled);
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		button.setText(text);
+		button.setToolTipText(tooltip);
 
-		_repoName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		return button;
 	}
 
-	private void handleRegistryViewSelectionChangedEvent(SelectionChangedEvent event) {
-		if (_registryUrlViewer.equals(event.getSource())) {
-			final ISelection element = event.getSelection();
-
-			if (element instanceof DockerRegistryConfiguration) {
-				_registryUrlViewer.setGrayed(element, false);
-			}
-
-			_startCheckThread();
-		}
-	}
-	
-
-	private void handleRegistryViewCheckStateChangedEvent(CheckStateChangedEvent event) {
-		if (_registryUrlViewer.equals(event.getSource())) {
-			final Object element = event.getElement();
-
-			if (element instanceof DockerRegistryConfiguration) {
-				_registryUrlViewer.setGrayed(element, false);
-			}
-
-			DockerRegistryConfiguration registryConfiguration = (DockerRegistryConfiguration)element;
-			
-			registryConfiguration.setActivity(!registryConfiguration.isActivity());
-
-			_startCheckThread();
-		}
-	}
-
-	
-	private void _createDockerRegistryView(Composite parent) {
-		final Composite composite = SWTUtil.createComposite(parent, 2, 2, GridData.FILL_BOTH);
-		
-		String[] titles = {"Enabled", "Registr Repo Name", "RegistrlUrl"};
-
-		int[] bounds = {35, 100, 450};
-
-		_registryUrlViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.CHECK);
-				
-		final Table table = _registryUrlViewer.getTable();
-
-		final GridData tableData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4);
-
-		tableData.heightHint = 225;
-		
-		tableData.widthHint = 400;
-		
-		table.setLayoutData(tableData);
-
-		table.setLinesVisible(true);
-
-		table.setHeaderVisible(true);
-		
-		_registryUrlViewer.addCheckStateListener(
-			new ICheckStateListener() {
-
-				@Override
-				public void checkStateChanged(CheckStateChangedEvent event) {
-					handleRegistryViewCheckStateChangedEvent(event);
-				}
-
-			});
-
-		_registryUrlViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				handleRegistryViewSelectionChangedEvent(event);
-				
-			}
-			
-		});
-		
-		_registryUrlViewer.setContentProvider(new CheckboxContentProvider());
-		
-		_createRegistryTableViewerColumn(
-				titles[0], bounds[0], _registryUrlViewer,null);
-		
-
-		_createRegistryTableViewerColumn(titles[1], bounds[1], _registryUrlViewer, 
-				element -> {
-					DockerRegistryConfiguration registryConfiguration = (DockerRegistryConfiguration)element;
-
-					return registryConfiguration.getName();
-				});
-
-		
-		_createRegistryTableViewerColumn(titles[2], bounds[2], _registryUrlViewer,
-				element -> {
-					DockerRegistryConfiguration registryConfiguration = (DockerRegistryConfiguration)element;
-
-					return registryConfiguration.getRegitstryUrl();
-				});
-
-		_createButton(
-				composite, "Add...", "Add new private registry configuration.", event -> _handleAddRegistryEvent(), true);
-
-		_editButton = _createButton(
-				composite, "Edit...", "Edit private registry configuration.", event -> _handleEditRegistryEvent(), false);
-		
-		_removeButton = _createButton(
-				composite, "Remove...", "Remove private registry configuration.", event -> _handleRemoveRegistryEvent(), false);
-		
-		_startCheckThread();
-	}
-	
-	private void _handleAddRegistryEvent() {
-		DockerServerConfigurationDialog dialog = new DockerServerConfigurationDialog(
-				DockerServerPreferencePage.this.getShell(), null);
-
-			if (dialog.open() == Window.OK) {
-				DockerRegistryConfiguration configurationData = dialog.getConfigurationData();
-
-				if ((configurationData != null) && !_configurations.contains(configurationData)) {
-					_configurations.add(configurationData);
-
-					_startCheckThread();
-				}
-			}
-	}
-	
-	private void _handleEditRegistryEvent() {
-		ISelection selection = _registryUrlViewer.getSelection();
-		
-		if (selection != null) {
-			IStructuredSelection currentSelection = (IStructuredSelection)selection;
-
-			DockerRegistryConfiguration oldConfiguration = (DockerRegistryConfiguration)currentSelection.getFirstElement();
-		
-			DockerServerConfigurationDialog dialog = new DockerServerConfigurationDialog(
-					DockerServerPreferencePage.this.getShell(), oldConfiguration);
-	
-				if (dialog.open() == Window.OK) {
-					_startCheckThread();
-				}
-		}
-	}
-	
-	private void _handleRemoveRegistryEvent() {
-		ISelection selection = _registryUrlViewer.getSelection();
-		
-		if (selection != null) {
-			IStructuredSelection currentSelection = (IStructuredSelection)selection;
-
-			DockerRegistryConfiguration oldConfiguration = (DockerRegistryConfiguration)currentSelection.getFirstElement();
-			
-			_configurations.remove(oldConfiguration);
-
-			_startCheckThread();
-		}
-	}
-	
-	
-	private void checkAndUpdateRegistryView() {
+	private void _checkAndUpdateRegistryView() {
 		UIUtil.async(
 			new Runnable() {
 
 				@Override
 				public void run() {
 					_registryUrlViewer.setInput(_configurations.toArray(new DockerRegistryConfiguration[0]));
-					
+
 					Stream<DockerRegistryConfiguration> configurationStream = _configurations.stream();
-					
-					configurationStream.filter(
+
+					Object[] checkedElements = configurationStream.filter(
 						configuration -> configuration.isActivity()
-					).forEach(
-						configuration -> _registryUrlViewer.setChecked(configuration, true)
-					);
-					
+					).toArray();
+
+					_registryUrlViewer.setCheckedElements(checkedElements);
+
 					ISelection selection = _registryUrlViewer.getSelection();
-					
+
 					if (Objects.isNull(selection) || selection.isEmpty()) {
 						_editButton.setEnabled(false);
 						_removeButton.setEnabled(false);
@@ -317,30 +159,116 @@ public class DockerServerPreferencePage extends PreferencePage implements IWorkb
 
 			});
 	}
-	
-	private void _startCheckThread() {
-		final Thread t = new Thread() {
 
-			@Override
-			public void run() {
-				checkAndUpdateRegistryView();
-			}
+	private void _createDockerConnection(Composite parent) {
+		final Composite composite = SWTUtil.createComposite(parent, 2, 2, GridData.FILL_BOTH);
 
-		};
+		Label registryNamelabel = new Label(composite, SWT.LEFT);
 
-		t.start();
+		registryNamelabel.setText("Docker Dameon Connection:");
+		registryNamelabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+		Text repoName = new Text(composite, SWT.HORIZONTAL | SWT.SINGLE | SWT.BORDER);
+
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+
+		gridData.widthHint = 353;
+
+		repoName.setLayoutData(gridData);
+
+		repoName.setText(_connection);
 	}
-	
-	private void _createRegistryTableViewerColumn(String title, int bound, TableViewer viewer, Function<Object, String> textProvider) {
+
+	private void _createDockerRegistryView(Composite parent) {
+		final Composite composite = SWTUtil.createComposite(parent, 2, 2, GridData.FILL_BOTH);
+
+		String[] titles = {"Enabled", "Registry Repo Name", "Registry Url"};
+
+		int[] bounds = {35, 100, 450};
+
+		_registryUrlViewer = CheckboxTableViewer.newCheckList(
+			composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.CHECK);
+
+		final Table table = _registryUrlViewer.getTable();
+
+		final GridData tableData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4);
+
+		tableData.heightHint = 225;
+
+		tableData.widthHint = 400;
+
+		table.setLayoutData(tableData);
+
+		table.setLinesVisible(true);
+
+		table.setHeaderVisible(true);
+
+		_registryUrlViewer.addCheckStateListener(
+			new ICheckStateListener() {
+
+				@Override
+				public void checkStateChanged(CheckStateChangedEvent event) {
+					_handleRegistryViewCheckStateChangedEvent(event);
+				}
+
+			});
+
+		_registryUrlViewer.addSelectionChangedListener(
+			new ISelectionChangedListener() {
+
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					_handleRegistryViewSelectionChangedEvent(event);
+				}
+
+			});
+
+		_registryUrlViewer.setContentProvider(new CheckboxContentProvider());
+
+		_createRegistryTableViewerColumn(titles[0], bounds[0], _registryUrlViewer, null);
+
+		_createRegistryTableViewerColumn(
+			titles[1], bounds[1], _registryUrlViewer,
+			element -> {
+				DockerRegistryConfiguration registryConfiguration = (DockerRegistryConfiguration)element;
+
+				return registryConfiguration.getName();
+			});
+
+		_createRegistryTableViewerColumn(
+			titles[2], bounds[2], _registryUrlViewer,
+			element -> {
+				DockerRegistryConfiguration registryConfiguration = (DockerRegistryConfiguration)element;
+
+				return registryConfiguration.getRegitstryUrl();
+			});
+
+		_createButton(
+			composite, "Add...", "Add new private registry configuration.", event -> _handleAddRegistryEvent(), true);
+
+		_editButton = _createButton(
+			composite, "Edit...", "Edit private registry configuration.", event -> _handleEditRegistryEvent(), false);
+
+		_removeButton = _createButton(
+			composite, "Remove...", "Remove private registry configuration.", event -> _handleRemoveRegistryEvent(),
+			false);
+
+		_startCheckThread();
+	}
+
+	private void _createRegistryTableViewerColumn(
+		String title, int bound, TableViewer viewer, Function<Object, String> textProvider) {
+
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
 
 		TableColumn tableColumn = tableViewerColumn.getColumn();
 
 		tableColumn.setText(title);
-		
+
 		if (bound > -1) {
 			tableColumn.setWidth(bound);
 		}
+
 		tableColumn.setResizable(true);
 		tableColumn.setMoveable(true);
 		tableColumn.pack();
@@ -367,23 +295,96 @@ public class DockerServerPreferencePage extends PreferencePage implements IWorkb
 
 					tableColumn.pack();
 				}
-				
+
 			});
 	}
-	
-	private static Button _createButton(Composite composite, String text, String tooltip, Listener listener, boolean enabled) {
-		Button button = new Button(composite, SWT.PUSH | SWT.BORDER);
 
-		button.addListener(SWT.Selection, listener);
-		button.setEnabled(enabled);
-		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-		button.setText(text);
-		button.setToolTipText(tooltip);
+	private void _handleAddRegistryEvent() {
+		DockerServerConfigurationDialog dialog = new DockerServerConfigurationDialog(
+			DockerServerPreferencePage.this.getShell(), null);
 
-		return button;
+		if (dialog.open() == Window.OK) {
+			DockerRegistryConfiguration configurationData = dialog.getConfigurationData();
+
+			if ((configurationData != null) && !_configurations.contains(configurationData)) {
+				_configurations.add(configurationData);
+
+				_startCheckThread();
+			}
+		}
 	}
 
-	private void _saveDockerConfigurations()  {
+	private void _handleEditRegistryEvent() {
+		ISelection selection = _registryUrlViewer.getSelection();
+
+		if (selection != null) {
+			IStructuredSelection currentSelection = (IStructuredSelection)selection;
+
+			DockerRegistryConfiguration oldConfiguration =
+				(DockerRegistryConfiguration)currentSelection.getFirstElement();
+
+			DockerServerConfigurationDialog dialog = new DockerServerConfigurationDialog(
+				DockerServerPreferencePage.this.getShell(), oldConfiguration);
+
+			if (dialog.open() == Window.OK) {
+				_startCheckThread();
+			}
+		}
+	}
+
+	private void _handleRegistryViewCheckStateChangedEvent(CheckStateChangedEvent event) {
+		if (_registryUrlViewer.equals(event.getSource())) {
+			final Object element = event.getElement();
+
+			if (element instanceof DockerRegistryConfiguration) {
+				_registryUrlViewer.setGrayed(element, false);
+			}
+
+			Stream<DockerRegistryConfiguration> configurationsStream = _configurations.stream();
+
+			configurationsStream.filter(
+				configuration -> configuration.isActivity()
+			).findFirst(
+			).ifPresent(
+				configuration -> configuration.setActivity(false)
+			);
+
+			DockerRegistryConfiguration registryConfiguration = (DockerRegistryConfiguration)element;
+
+			registryConfiguration.setActivity(!registryConfiguration.isActivity());
+
+			_startCheckThread();
+		}
+	}
+
+	private void _handleRegistryViewSelectionChangedEvent(SelectionChangedEvent event) {
+		if (_registryUrlViewer.equals(event.getSource())) {
+			final ISelection element = event.getSelection();
+
+			if (element instanceof DockerRegistryConfiguration) {
+				_registryUrlViewer.setGrayed(element, false);
+			}
+
+			_startCheckThread();
+		}
+	}
+
+	private void _handleRemoveRegistryEvent() {
+		ISelection selection = _registryUrlViewer.getSelection();
+
+		if (selection != null) {
+			IStructuredSelection currentSelection = (IStructuredSelection)selection;
+
+			DockerRegistryConfiguration oldConfiguration =
+				(DockerRegistryConfiguration)currentSelection.getFirstElement();
+
+			_configurations.remove(oldConfiguration);
+
+			_startCheckThread();
+		}
+	}
+
+	private void _saveDockerConfigurations() {
 		try {
 			JSONArray jsonArray = new JSONArray(_configurations);
 
@@ -391,50 +392,43 @@ public class DockerServerPreferencePage extends PreferencePage implements IWorkb
 
 			_prefstore.flush();
 		}
-		catch(Exception exception) {
+		catch (Exception exception) {
 			LiferayServerUI.logError(exception);
 		}
 	}
 
-	private void _saveDockerConnection(){
+	private void _saveDockerConnection() {
 		try {
-		_prefstore.put(IDockerServer.DOCKER_DAEMON_CONNECTION, _connection);
+			_prefstore.put(IDockerServer.DOCKER_DAEMON_CONNECTION, _connection);
 
-		_prefstore.flush();
+			_prefstore.flush();
 		}
-		catch(Exception exception) {
+		catch (Exception exception) {
 			LiferayServerUI.logError(exception);
-		}		
+		}
+	}
+
+	private void _startCheckThread() {
+		final Thread t = new Thread() {
+
+			@Override
+			public void run() {
+				_checkAndUpdateRegistryView();
+			}
+
+		};
+
+		t.start();
 	}
 
 	private List<DockerRegistryConfiguration> _configurations;
-	private Button _editButton;
-	private Button _removeButton;
 	private String _connection = "";
+	private Button _editButton;
 	private IPreferencesService _preferencesService = Platform.getPreferencesService();
 	private IEclipsePreferences _prefstore = InstanceScope.INSTANCE.getNode(LiferayServerUI.PLUGIN_ID);
 	private CheckboxTableViewer _registryUrlViewer;
-	
-	
-	public List<DockerRegistryConfiguration> _getDockerRegistryConfigurations(String inputString) {
-		try (JsonReader jsonReader = new JsonReader(new BufferedReader(new StringReader(inputString)))) {
-			Gson gson = new Gson();
+	private Button _removeButton;
 
-			TypeToken<List<DockerRegistryConfiguration>> typeToken = new TypeToken<List<DockerRegistryConfiguration>>() {
-				private static final long serialVersionUID = 1L;				
-			};
-			
-			Optional<List<DockerRegistryConfiguration>> dockerConfigurationListOptional  = Optional.ofNullable(gson.fromJson(jsonReader, typeToken.getType()));
-			
-			return dockerConfigurationListOptional.orElse(new CopyOnWriteArrayList<>());
-		}
-		catch (Exception ce) {
-			ProjectCore.logError("Cannot Find Product Info", ce);
-		}
-
-		return Collections.emptyList();
-	}
-	
 	private class CheckboxContentProvider implements IStructuredContentProvider {
 
 		@Override

@@ -27,23 +27,30 @@ import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.docker.DockerRegistryConfiguration;
 import com.liferay.ide.server.core.portal.docker.IDockerServer;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.StringReader;
 
 import java.net.InetAddress;
 import java.net.URI;
 
 import java.time.Duration;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang.SystemUtils;
@@ -53,48 +60,75 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.Property;
-
 /**
  * @author Simon Jiang
  * @author Ethan Sun
  */
 public class LiferayDockerClient {
 
-	public static DockerClient getDockerClient() throws CoreException {
-		DefaultDockerClientConfig.Builder createDefaultConfigBuilder =
-			DefaultDockerClientConfig.createDefaultConfigBuilder();
+	public static String getDefaultDockerUrl() {
+		String dockerUrl = System.getenv("DOCKER_HOST");
 
-		createDefaultConfigBuilder.withRegistryUrl(IDockerServer.PROP_REGISTRY_URL_PORTAL);
+		if (CoreUtil.isNullOrEmpty(dockerUrl)) {
+			if (SystemUtils.IS_OS_UNIX && new File("/var/run/docker.sock").exists()) {
+				dockerUrl = new String("unix:///var/run/docker.sock");
+			}
+			else {
+				if (SystemUtils.IS_OS_WINDOWS) {
+					if (SystemUtils.IS_OS_WINDOWS_7) {
+						try {
+							InetAddress inetAddress = InetAddress.getLocalHost();
 
-		createDefaultConfigBuilder.withDockerHost(_getDefaultDockerUrl());
-
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		String configurations = preferencesService.getString(
-			"com.liferay.ide.gradle.ui", IDockerServer.DOCKER_REGISTRY_INFO, "", null);
-
-		String connection = preferencesService.getString(
-			"com.liferay.ide.gradle.ui", IDockerServer.DOCKER_DAEMON_CONNECTION, "", null);
-
-		if (CoreUtil.isNotNullOrEmpty(configurations)) {
-			JSONArray jsonArray = new JSONArray(configurations);
-
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject jsonObject = (JSONObject)jsonArray.get(i);
-
-				Properties property = Property.toProperties(jsonObject);
-
-				if (Boolean.parseBoolean(property.getProperty(IDockerServer.PROP_STATE))) {
-					createDefaultConfigBuilder.withRegistryUrl(property.getProperty(IDockerServer.PROP_REGISTRY_URL));
+							dockerUrl = "tcp://" + inetAddress.getHostAddress() + ":2376";
+						}
+						catch (Exception e) {
+							dockerUrl = "tcp://127.0.0.1:2376";
+						}
+					}
+					else {
+						dockerUrl = "tcp://127.0.0.1:2375";
+					}
+				}
+				else {
+					dockerUrl = "tcp://127.0.0.1:2375";
 				}
 			}
 		}
 
+		return dockerUrl;
+	}
+
+	public static DockerClient getDockerClient() throws CoreException {
+		DefaultDockerClientConfig.Builder createDefaultConfigBuilder =
+			DefaultDockerClientConfig.createDefaultConfigBuilder();
+
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String configurations = preferencesService.getString(
+			"com.liferay.ide.server.ui", IDockerServer.DOCKER_REGISTRY_INFO, "", null);
+
+		String connection = preferencesService.getString(
+			"com.liferay.ide.server.ui", IDockerServer.DOCKER_DAEMON_CONNECTION, "", null);
+
+		if (CoreUtil.isNotNullOrEmpty(configurations)) {
+			List<DockerRegistryConfiguration> dockerRegistryConfigurations = getDockerRegistryConfigurations(
+				configurations);
+
+			Stream<DockerRegistryConfiguration> registryConfigurationStream = dockerRegistryConfigurations.stream();
+
+			registryConfigurationStream.filter(
+				configuraion -> configuraion.isActivity()
+			).findFirst(
+			).ifPresent(
+				configuraion -> createDefaultConfigBuilder.withRegistryUrl(configuraion.getRegitstryUrl())
+			);
+		}
+
 		if (CoreUtil.isNotNullOrEmpty(connection)) {
 			createDefaultConfigBuilder.withDockerHost(connection);
+		}
+		else {
+			createDefaultConfigBuilder.withDockerHost(getDefaultDockerUrl());
 		}
 
 		String dockerCertPath = System.getenv("DOCKER_CERT_PATH");
@@ -197,6 +231,32 @@ public class LiferayDockerClient {
 		return null;
 	}
 
+	public static List<DockerRegistryConfiguration> getDockerRegistryConfigurations(String inputString) {
+		try (JsonReader jsonReader = new JsonReader(new BufferedReader(new StringReader(inputString)))) {
+			Gson gson = new Gson();
+
+			TypeToken<List<DockerRegistryConfiguration>> typeToken =
+				new TypeToken<List<DockerRegistryConfiguration>>() {
+
+					private static final long serialVersionUID = 1L;
+
+				};
+
+			List<DockerRegistryConfiguration> configurations = gson.fromJson(jsonReader, typeToken.getType());
+
+			return Optional.ofNullable(
+				configurations
+			).orElse(
+				new CopyOnWriteArrayList<>()
+			);
+		}
+		catch (Exception ce) {
+			LiferayServerCore.logError("Cannot Find Docker Registry Configuration", ce);
+		}
+
+		return Collections.emptyList();
+	}
+
 	public static boolean verifyDockerContainer(String dockerContainerId) {
 		return false;
 	}
@@ -246,38 +306,6 @@ public class LiferayDockerClient {
 		}
 
 		return false;
-	}
-
-	private static String _getDefaultDockerUrl() {
-		String dockerUrl = System.getenv("DOCKER_HOST");
-
-		if (CoreUtil.isNullOrEmpty(dockerUrl)) {
-			if (SystemUtils.IS_OS_UNIX && new File("/var/run/docker.sock").exists()) {
-				dockerUrl = new String("unix:///var/run/docker.sock");
-			}
-			else {
-				if (SystemUtils.IS_OS_WINDOWS) {
-					if (SystemUtils.IS_OS_WINDOWS_7) {
-						try {
-							InetAddress inetAddress = InetAddress.getLocalHost();
-
-							dockerUrl = "tcp://" + inetAddress.getHostAddress() + ":2376";
-						}
-						catch (Exception e) {
-							dockerUrl = "tcp://127.0.0.1:2376";
-						}
-					}
-					else {
-						dockerUrl = "tcp://127.0.0.1:2375";
-					}
-				}
-				else {
-					dockerUrl = "tcp://127.0.0.1:2375";
-				}
-			}
-		}
-
-		return dockerUrl;
 	}
 
 }

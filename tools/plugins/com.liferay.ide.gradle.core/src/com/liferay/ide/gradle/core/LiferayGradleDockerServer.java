@@ -14,15 +14,8 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.docker.IDockerServer;
-
-import java.io.File;
-
-import java.net.InetAddress;
-
-import org.apache.commons.lang.SystemUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -35,38 +28,6 @@ import org.eclipse.wst.server.core.IServer;
  * @author Ethan Sun
  */
 public class LiferayGradleDockerServer implements IDockerServer {
-
-	public static String getDefaultDockerUrl() {
-		String dockerUrl = System.getenv("DOCKER_HOST");
-
-		if (CoreUtil.isNullOrEmpty(dockerUrl)) {
-			if (SystemUtils.IS_OS_UNIX && new File("/var/run/docker.sock").exists()) {
-				dockerUrl = new String("unix:///var/run/docker.sock");
-			}
-			else {
-				if (SystemUtils.IS_OS_WINDOWS) {
-					if (SystemUtils.IS_OS_WINDOWS_7) {
-						try {
-							InetAddress inetAddress = InetAddress.getLocalHost();
-
-							dockerUrl = "tcp://" + inetAddress.getHostAddress() + ":2376";
-						}
-						catch (Exception e) {
-							dockerUrl = "tcp://127.0.0.1:2376";
-						}
-					}
-					else {
-						dockerUrl = "tcp://127.0.0.1:2375";
-					}
-				}
-				else {
-					dockerUrl = "tcp://127.0.0.1:2375";
-				}
-			}
-		}
-
-		return dockerUrl;
-	}
 
 	public LiferayGradleDockerServer() {
 	}
