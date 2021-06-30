@@ -810,7 +810,7 @@
 			</enablement>
 		</decorator>
 	</extension>
-		<extension
+	<extension
 		point="org.eclipse.ui.preferencePages"
 	>
 		<page
@@ -820,10 +820,5 @@
 			name="Docker Configuration"
 		>
 		</page>
-	</extension>
-	<extension
-		point="org.eclipse.core.runtime.preferences"
-	>
-		<initializer class="com.liferay.ide.server.ui.portal.docker.DockerServerPreferenceInitializer" />
 	</extension>
 </plugin>

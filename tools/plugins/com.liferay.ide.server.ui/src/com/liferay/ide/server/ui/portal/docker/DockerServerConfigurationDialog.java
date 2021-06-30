@@ -14,9 +14,14 @@
 
 package com.liferay.ide.server.ui.portal.docker;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.portal.docker.DockerRegistryConfiguration;
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.util.Objects;
 
 import org.apache.commons.validator.routines.UrlValidator;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -33,21 +38,18 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.ui.util.UIUtil;
-
 /**
  * @author Ethan Sun
  * @author Simon Jiang
  */
 public class DockerServerConfigurationDialog extends Dialog {
 
-	public DockerServerConfigurationDialog(Shell shell, DockerRegistryConfiguration _configuration) {
+	public DockerServerConfigurationDialog(Shell shell, DockerRegistryConfiguration configuration) {
 		super(shell);
 
-		_configurationData = _configuration;
-		
-		_edit = Objects.nonNull(_configuration);
+		_configurationData = configuration;
+
+		_edit = Objects.nonNull(configuration);
 	}
 
 	public DockerRegistryConfiguration getConfigurationData() {
@@ -62,47 +64,38 @@ public class DockerServerConfigurationDialog extends Dialog {
 		}
 	}
 
-	@Override
-	protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
-		if (IDialogConstants.OK_ID == id) {
-			Button button = super.createButton(parent, id, "Ok", defaultButton);
-
-			button.setEnabled(false);
-
-			return button;
-		}
-
-		return super.createButton(parent, id, label, defaultButton);
-	}
-	
 	public void validate() {
 		boolean validRegistryName = true;
 
 		if ((_repoName != null) && !_repoName.isDisposed()) {
 			validRegistryName = CoreUtil.isNotNullOrEmpty(_repoName.getText());
-			
+
 			if (!validRegistryName) {
 				errorMessageLabel.setText("Invalid registry name");
 			}
 		}
-			
+
 		boolean validRegistryUrl = true;
 
 		if ((_registryUrl != null) && !_registryUrl.isDisposed()) {
 			String value = _registryUrl.getText();
-			
-			UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS | UrlValidator.ALLOW_ALL_SCHEMES);
+
+			UrlValidator urlValidator = new UrlValidator(
+				UrlValidator.ALLOW_LOCAL_URLS | UrlValidator.ALLOW_ALL_SCHEMES);
 
 			validRegistryUrl = CoreUtil.isNotNullOrEmpty(value) && urlValidator.isValid(value);
-			
+
 			if (!validRegistryUrl) {
-				errorMessageLabel.setText("Invalid registry ulr value");
+				errorMessageLabel.setText("Invalid registry url value");
 			}
-			
 		}
-		
-		boolean validateValue = validRegistryName && validRegistryUrl;
-		
+
+		boolean validateValue = false;
+
+		if (validRegistryName && validRegistryUrl) {
+			validateValue = true;
+		}
+
 		errorMessageLabel.setVisible(!validateValue);
 
 		Button okButton = getButton(OK);
@@ -116,6 +109,19 @@ public class DockerServerConfigurationDialog extends Dialog {
 		_configurationData = null;
 
 		super.cancelPressed();
+	}
+
+	@Override
+	protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
+		if (IDialogConstants.OK_ID == id) {
+			Button button = super.createButton(parent, id, "Ok", defaultButton);
+
+			button.setEnabled(false);
+
+			return button;
+		}
+
+		return super.createButton(parent, id, label, defaultButton);
 	}
 
 	@Override
@@ -143,7 +149,7 @@ public class DockerServerConfigurationDialog extends Dialog {
 		_registryUrl = new Text(dialogArea, SWT.HORIZONTAL | SWT.SINGLE);
 
 		_registryUrl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		_createErrorMessageGroup(dialogArea);
 
 		if (_edit) {
@@ -161,8 +167,7 @@ public class DockerServerConfigurationDialog extends Dialog {
 				}
 
 			});
-		
-		
+
 		_registryUrl.addModifyListener(
 			new ModifyListener() {
 
@@ -172,7 +177,7 @@ public class DockerServerConfigurationDialog extends Dialog {
 				}
 
 			});
-		
+
 		if (_configurationData != null) {
 			String urlValue = _configurationData.getRegitstryUrl();
 
@@ -182,19 +187,6 @@ public class DockerServerConfigurationDialog extends Dialog {
 		return dialogArea;
 	}
 
-	protected CLabel errorMessageLabel;
-	
-	private void _createErrorMessageGroup(Composite parent) {
-		ISharedImages sharedImages = UIUtil.getSharedImages();
-
-		errorMessageLabel = new CLabel(parent, SWT.LEFT_TO_RIGHT);
-
-		errorMessageLabel.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
-		errorMessageLabel.setImage(sharedImages.getImage(ISharedImages.IMG_OBJS_ERROR_TSK));
-		errorMessageLabel.setVisible(false);
-	}
-
-	
 	protected void okPressed() {
 		if ((_repoName != null) && (_registryUrl != null)) {
 			if (_configurationData == null) {
@@ -216,6 +208,18 @@ public class DockerServerConfigurationDialog extends Dialog {
 		}
 
 		super.okPressed();
+	}
+
+	protected CLabel errorMessageLabel;
+
+	private void _createErrorMessageGroup(Composite parent) {
+		ISharedImages sharedImages = UIUtil.getSharedImages();
+
+		errorMessageLabel = new CLabel(parent, SWT.LEFT_TO_RIGHT);
+
+		errorMessageLabel.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
+		errorMessageLabel.setImage(sharedImages.getImage(ISharedImages.IMG_OBJS_ERROR_TSK));
+		errorMessageLabel.setVisible(false);
 	}
 
 	private DockerRegistryConfiguration _configurationData;

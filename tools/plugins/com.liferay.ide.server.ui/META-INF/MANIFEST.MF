@@ -43,8 +43,7 @@ Require-Bundle: com.liferay.ide.core,
  org.json,
  org.apache.commons.logging,
  com.google.guava,
- org.slf4j.api,
- com.google.gson;bundle-version="2.8.6"
+ org.slf4j.api
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.ui,
