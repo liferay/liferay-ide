@@ -88,11 +88,11 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 				break;
 			case "7.3":
-				newLiferayWorkspaceOp.setProductVersion("portal-7.3-ga6");
+				newLiferayWorkspaceOp.setProductVersion("portal-7.3-ga7");
 
 				break;
 			case "7.4":
-				newLiferayWorkspaceOp.setProductVersion("portal-7.4-ga1");
+				newLiferayWorkspaceOp.setProductVersion("portal-7.4-ga2");
 
 				break;
 		}
