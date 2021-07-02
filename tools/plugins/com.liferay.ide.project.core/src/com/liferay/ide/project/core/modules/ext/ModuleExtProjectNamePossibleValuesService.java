@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,7 +50,9 @@ public class ModuleExtProjectNamePossibleValuesService extends PossibleValuesSer
 				project -> {
 					IPath location = project.getLocation();
 
-					if (extDirLocation.isPrefixOf(location) && !location.equals(extDirLocation)) {
+					if (extDirLocation.isPrefixOf(location) && !location.equals(extDirLocation) &&
+						ProjectUtil.isModuleExtProject(project)) {
+
 						return true;
 					}
 
