@@ -14,22 +14,21 @@
 
 package com.liferay.ide.project.ui.modules.fragment;
 
-import java.util.Objects;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.sapphire.Value;
-import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
-import org.eclipse.ui.IWorkbench;
-
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.RequireLiferayWorkspaceProject;
+
+import java.util.Objects;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
+import org.eclipse.ui.IWorkbench;
 
 /**
  * @author Terry Jia
@@ -40,7 +39,25 @@ public class NewModuleFragmentWizard
 
 	public NewModuleFragmentWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleFragmentWizard.class).wizard());
+	}
 
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
+
+		if (wizardPages != null) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
+
+			if (Objects.isNull(SapphireUtil.getText(_op.getProjectName()))) {
+				wizardPage.setMessage(getFirstErrorMessage());
+			}
+			else {
+				wizardPage.setMessage(
+					"Docker Server can not be used for new Fragment Project Wizard", SapphireWizardPage.WARNING);
+			}
+		}
+
+		return wizardPages;
 	}
 
 	@Override
@@ -50,36 +67,6 @@ public class NewModuleFragmentWizard
 		promptIfLiferayWorkspaceNotExists("Liferay Module Fragment Project");
 	}
 
-	private static final String _INITIAL_MESSAGE = "Please select at least one project to import.";
-	private boolean _supressedFirstErrorMessage = false;
-	
-	
-	@Override
-	public IWizardPage[] getPages() {
-		final IWizardPage[] wizardPages = super.getPages();
-
-		if (wizardPages != null) {
-			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
-
-			Value<String> projectName = _op.getProjectName();
-			
-			if (CoreUtil.isNullOrEmpty(wizardPage.getMessage()) && Objects.isNull(projectName)) {
-				wizardPage.setMessage(_INITIAL_MESSAGE);
-			}
-			else {
-				wizardPage.setMessage("Docker Server can not be used for new Fragment Project Wizard", SapphireWizardPage.WARNING);
-			}
-
-			if ((wizardPage.getMessageType() == IMessageProvider.ERROR) && !_supressedFirstErrorMessage) {
-				_supressedFirstErrorMessage = true;
-
-				wizardPage.setMessage(_INITIAL_MESSAGE);
-			}
-		}
-
-		return wizardPages;
-	}
-	
 	@Override
 	protected void performPostFinish() {
 		super.performPostFinish();
@@ -99,11 +86,11 @@ public class NewModuleFragmentWizard
 	}
 
 	private static NewModuleFragmentOp _createDefaultOp() {
-		_op =  NewModuleFragmentOp.TYPE.instantiate();
-		
+		_op = NewModuleFragmentOp.TYPE.instantiate();
+
 		return _op;
 	}
-	
+
 	private static NewModuleFragmentOp _op;
 
 }
