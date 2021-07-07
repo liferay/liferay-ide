@@ -15,14 +15,19 @@
 package com.liferay.ide.project.ui.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.RequireLiferayWorkspaceProject;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.ui.IWorkbench;
 
 /**
@@ -34,6 +39,25 @@ public class NewModuleFragmentWizard
 
 	public NewModuleFragmentWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleFragmentWizard.class).wizard());
+	}
+
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
+
+		if (wizardPages != null) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
+
+			if (Objects.isNull(SapphireUtil.getText(_op.getProjectName()))) {
+				wizardPage.setMessage(getFirstErrorMessage());
+			}
+			else {
+				wizardPage.setMessage(
+					"Docker Server can not be used for new Fragment Project Wizard", SapphireWizardPage.WARNING);
+			}
+		}
+
+		return wizardPages;
 	}
 
 	@Override
@@ -62,7 +86,11 @@ public class NewModuleFragmentWizard
 	}
 
 	private static NewModuleFragmentOp _createDefaultOp() {
-		return NewModuleFragmentOp.TYPE.instantiate();
+		_op = NewModuleFragmentOp.TYPE.instantiate();
+
+		return _op;
 	}
+
+	private static NewModuleFragmentOp _op;
 
 }
