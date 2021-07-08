@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
@@ -178,23 +179,43 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 		if (gradleWorkspace != null) {
 			String productVersion = gradleWorkspace.getProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
 
-			if ((productVersion != null) && productVersion.startsWith("dxp")) {
-				artifactId = _dxpArtifactId;
+			gradleBuildScript = _getGradleBuildScript(buildGradleFile);
+
+			dependencyStream = gradleDependencies.stream();
+
+			dependencies = dependencyStream.filter(
+				dep -> StringUtil.equals(groupId, dep.getGroup()) && StringUtil.equals(_portalArtifactId, dep.getName())
+			).collect(
+				Collectors.toList()
+			);
+
+			GradleDependency newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0);
+
+			try {
+				if ((productVersion != null) && productVersion.startsWith("dxp")) {
+					artifactId = _dxpArtifactId;
+
+					newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0);
+
+					if (!dependencies.isEmpty()) {
+						GradleDependency oldDependency = dependencies.get(0);
+
+						newDependency = new GradleDependency(
+							configuration, groupId, artifactId, null, oldDependency.getLineNumber(),
+							oldDependency.getLastLineNumber());
+
+						gradleBuildScript.updateDependency(oldDependency, newDependency);
+					}
+				}
+
+				gradleBuildScript.insertDependency(newDependency);
+
+				FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
 			}
-		}
-
-		GradleDependency newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0);
-
-		gradleBuildScript = _getGradleBuildScript(buildGradleFile);
-
-		try {
-			gradleBuildScript.insertDependency(newDependency);
-
-			FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
-		}
-		catch (IOException e) {
-			UpgradeProblemsCorePlugin.logError(
-				"Replace dependencies failed when process " + buildGradleFile.getPath(), e);
+			catch (IOException e) {
+				UpgradeProblemsCorePlugin.logError(
+					"Replace dependencies failed when process " + buildGradleFile.getPath(), e);
+			}
 		}
 	}
 
