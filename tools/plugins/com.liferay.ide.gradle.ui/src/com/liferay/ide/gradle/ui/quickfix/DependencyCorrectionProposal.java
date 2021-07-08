@@ -21,9 +21,12 @@ import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.io.IOException;
+
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,23 +51,14 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 		try {
 			GradleBuildScript gradleBuildScript = new GradleBuildScript(FileUtil.getFile(_gradleFile));
 
-			StringBuilder sb = new StringBuilder();
-
-			sb.append("compileOnly '");
-			sb.append(_artifact.getGroupId());
-			sb.append(":");
-			sb.append(_artifact.getArtifactId());
-
 			IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
-			if (workspaceProject.getTargetPlatformVersion() == null) {
-				sb.append(":");
-				sb.append(_artifact.getVersion());
-			}
+			GradleDependency dependency = new GradleDependency(
+				"compileOnly", _artifact.getGroupId(), _artifact.getArtifactId(),
+				Objects.isNull(workspaceProject.getTargetPlatformVersion()) ? null : _artifact.getVersion(), -1, -1,
+				null);
 
-			sb.append("'");
-
-			gradleBuildScript.updateDependency(sb.toString());
+			gradleBuildScript.updateDependency(dependency);
 
 			GradleUtil.refreshProject(_gradleFile.getProject());
 		}

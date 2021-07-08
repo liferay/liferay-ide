@@ -15,12 +15,14 @@
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
@@ -46,6 +48,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -78,7 +81,17 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 
 		List<String> allArtifactIds = _getAllDependenciesArtifactIds();
 
-		buildGradleStrem.forEach(buildGradle -> _replaceDependencisWithReleaseAPI(buildGradle, allArtifactIds));
+		buildGradleStrem.forEach(
+			buildGradle -> {
+				try {
+					_replaceDependencisWithReleaseAPI(buildGradle, allArtifactIds);
+				}
+				catch (Exception exception) {
+					UpgradeProblemsCorePlugin.logError(
+						"Failed to switch to use release api dependency for project " + buildGradle.getAbsolutePath(),
+						exception);
+				}
+			});
 
 		GradleUtil.refreshProject(LiferayWorkspaceUtil.getWorkspaceProject());
 
@@ -94,12 +107,16 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 			return Collections.emptyList();
 		}
 
-		List<String> allArtifactIds = new ArrayList<>();
+		String simplifiedVersion = VersionUtil.simplifyTargetPlatformVersion(
+			gradleWorkspaceProject.getTargetPlatformVersion());
+
+		if (Objects.isNull(simplifiedVersion)) {
+			return Collections.emptyList();
+		}
 
 		String productKey = gradleWorkspaceProject.getProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
 
-		String simplifiedVersion = VersionUtil.simplifyTargetPlatformVersion(
-			gradleWorkspaceProject.getTargetPlatformVersion());
+		List<String> allArtifactIds = new ArrayList<>();
 
 		String[] versionParts = simplifiedVersion.split("\\.");
 
@@ -129,21 +146,19 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 		return allArtifactIds;
 	}
 
-	private GradleBuildScript _getGradleBuildScript(File file) {
+	private void _replaceDependencisWithReleaseAPI(File buildGradleFile, List<String> allArtifactIds)
+		throws CoreException {
+
 		GradleBuildScript gradleBuildScript = null;
 
 		try {
-			gradleBuildScript = new GradleBuildScript(file);
+			gradleBuildScript = new GradleBuildScript(buildGradleFile);
 		}
-		catch (IOException ioe) {
-			return null;
+		catch (Exception exception) {
+			throw new CoreException(
+				UpgradeProblemsCorePlugin.createErrorStatus(
+					"Failed to read build.gradle file" + buildGradleFile.getPath(), exception));
 		}
-
-		return gradleBuildScript;
-	}
-
-	private void _replaceDependencisWithReleaseAPI(File buildGradleFile, List<String> allArtifactIds) {
-		GradleBuildScript gradleBuildScript = _getGradleBuildScript(buildGradleFile);
 
 		if ((gradleBuildScript == null) || allArtifactIds.isEmpty()) {
 			return;
@@ -163,10 +178,14 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 			gradleBuildScript.deleteDependency(dependencies);
 
 			FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
+
+			ProjectUtil.refreshLocalProject(LiferayWorkspaceUtil.getWorkspaceProject());
+
+			gradleBuildScript = new GradleBuildScript(buildGradleFile);
 		}
-		catch (Exception e) {
-			UpgradeProblemsCorePlugin.logError(
-				"Replace dependencies failed when process " + buildGradleFile.getPath(), e);
+		catch (Exception exception) {
+			throw new CoreException(
+				UpgradeProblemsCorePlugin.createErrorStatus("Failed to remove old version dependency", exception));
 		}
 
 		String configuration = "compileOnly";
@@ -178,23 +197,57 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 		if (gradleWorkspace != null) {
 			String productVersion = gradleWorkspace.getProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
 
-			if ((productVersion != null) && productVersion.startsWith("dxp")) {
-				artifactId = _dxpArtifactId;
+			if (Objects.isNull(productVersion)) {
+				return;
 			}
-		}
 
-		GradleDependency newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0, null);
+			try {
+				gradleDependencies = gradleBuildScript.getDependencies();
 
-		gradleBuildScript = _getGradleBuildScript(buildGradleFile);
+				dependencyStream = gradleDependencies.stream();
 
-		try {
-			gradleBuildScript.insertDependency(newDependency);
+				dependencies = dependencyStream.filter(
+					dep ->
+						StringUtil.equals(groupId, dep.getGroup()) &&
+						StringUtil.equals(_portalArtifactId, dep.getName())
+				).collect(
+					Collectors.toList()
+				);
 
-			FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
-		}
-		catch (IOException e) {
-			UpgradeProblemsCorePlugin.logError(
-				"Replace dependencies failed when process " + buildGradleFile.getPath(), e);
+				GradleDependency newDependency = new GradleDependency(
+					configuration, groupId, artifactId, null, 0, 0, null);
+
+				if (productVersion.startsWith("dxp")) {
+					artifactId = _dxpArtifactId;
+
+					newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0, null);
+
+					if (!dependencies.isEmpty()) {
+						GradleDependency oldDependency = dependencies.get(0);
+
+						newDependency = new GradleDependency(
+							configuration, groupId, artifactId, null, oldDependency.getLineNumber(),
+							oldDependency.getLastLineNumber(), null);
+
+						gradleBuildScript.updateDependency(oldDependency, newDependency);
+
+						ProjectUtil.refreshLocalProject(LiferayWorkspaceUtil.getWorkspaceProject());
+
+						gradleBuildScript = new GradleBuildScript(buildGradleFile);
+					}
+				}
+
+				gradleBuildScript.insertDependency(newDependency);
+
+				FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
+
+				ProjectUtil.refreshLocalProject(LiferayWorkspaceUtil.getWorkspaceProject());
+			}
+			catch (IOException exception) {
+				throw new CoreException(
+					UpgradeProblemsCorePlugin.createErrorStatus(
+						"Failed to upgrade to new release api dependency" + buildGradleFile.getPath(), exception));
+			}
 		}
 	}
 
