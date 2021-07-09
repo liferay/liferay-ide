@@ -16,15 +16,20 @@ package com.liferay.ide.gradle.core.model;
 
 import java.text.MessageFormat;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Lovett Li
  * @author Vernon Singleton
  * @author Gregory Amerson
+ * @author Seiphon Wang
  */
 public class GradleDependency {
 
 	public GradleDependency(
-		String configuration, String group, String name, String version, int lineNumber, int lastLineNumber) {
+		String configuration, String group, String name, String version, int lineNumber, int lastLineNumber,
+		List<GradleDependency> arguments) {
 
 		_configuration = configuration;
 		_group = group;
@@ -32,6 +37,7 @@ public class GradleDependency {
 		_version = version;
 		_lineNumber = lineNumber;
 		_lastLineNumber = lastLineNumber;
+		_arguments = arguments;
 	}
 
 	@Override
@@ -86,7 +92,40 @@ public class GradleDependency {
 			return false;
 		}
 
+		if (_arguments == null) {
+			if (other._arguments != null) {
+				return false;
+			}
+		}
+		else {
+			List<GradleDependency> arguments = other._arguments;
+
+			if (_arguments.size() != arguments.size()) {
+				return false;
+			}
+
+			return _arguments.stream(
+			).map(
+				argument -> argument.toString()
+			).sorted(
+			).collect(
+				Collectors.joining()
+			).equals(
+				arguments.stream(
+				).map(
+					argument -> argument.toString()
+				).sorted(
+				).collect(
+					Collectors.joining()
+				)
+			);
+		}
+
 		return true;
+	}
+
+	public List<GradleDependency> getArguments() {
+		return _arguments;
 	}
 
 	public String getConfiguration() {
@@ -121,8 +160,17 @@ public class GradleDependency {
 		result = prime * result + ((_group == null) ? 0 : _group.hashCode());
 		result = prime * result + ((_name == null) ? 0 : _name.hashCode());
 		result = prime * result + ((_version == null) ? 0 : _version.hashCode());
+		result = prime * result + ((_arguments == null) ? 0 : _arguments.hashCode());
 
 		return result;
+	}
+
+	public void setArguments(List<GradleDependency> arguments) {
+		_arguments = arguments;
+	}
+
+	public void setLastLineNumber(int lastLineNumber) {
+		_lastLineNumber = lastLineNumber;
 	}
 
 	public void setVersion(String version) {
@@ -134,6 +182,7 @@ public class GradleDependency {
 		return MessageFormat.format("{0} group: {1}, name: {2}, version: {3}", _configuration, _group, _name, _version);
 	}
 
+	private List<GradleDependency> _arguments;
 	private String _configuration;
 	private String _group;
 	private int _lastLineNumber;
