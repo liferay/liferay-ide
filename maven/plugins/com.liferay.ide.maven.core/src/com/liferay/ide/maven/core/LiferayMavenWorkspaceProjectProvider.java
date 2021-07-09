@@ -57,7 +57,7 @@ public class LiferayMavenWorkspaceProjectProvider
 
 		IPath workspaceLocation = location.append(workspaceName);
 
-		String version = get(op.getLiferayVersion());
+		String version = get(op.getTargetPlatform());
 
 		StringBuilder sb = new StringBuilder();
 
