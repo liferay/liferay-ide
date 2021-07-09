@@ -164,6 +164,8 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 			gradleBuildScript.deleteDependency(dependencies);
 
 			FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
+
+			GradleUtil.refreshProject(LiferayWorkspaceUtil.getWorkspaceProject());
 		}
 		catch (Exception e) {
 			UpgradeProblemsCorePlugin.logError(
@@ -172,14 +174,19 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 
 		String configuration = "compileOnly";
 		String groupId = "com.liferay.portal";
-		String artifactId = _portalArtifactId;
 
 		IWorkspaceProject gradleWorkspace = LiferayWorkspaceUtil.getGradleWorkspaceProject();
 
 		if (gradleWorkspace != null) {
 			String productVersion = gradleWorkspace.getProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
 
+			if (Objects.isNull(productVersion)) {
+				return;
+			}
+
 			gradleBuildScript = _getGradleBuildScript(buildGradleFile);
+
+			gradleDependencies = gradleBuildScript.getDependencies();
 
 			dependencyStream = gradleDependencies.stream();
 
@@ -189,26 +196,32 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 				Collectors.toList()
 			);
 
-			GradleDependency newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0);
+			GradleDependency newDependency = null;
 
 			try {
-				if ((productVersion != null) && productVersion.startsWith("dxp")) {
-					artifactId = _dxpArtifactId;
-
-					newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0);
-
+				if (productVersion.startsWith("dxp")) {
 					if (!dependencies.isEmpty()) {
 						GradleDependency oldDependency = dependencies.get(0);
 
 						newDependency = new GradleDependency(
-							configuration, groupId, artifactId, null, oldDependency.getLineNumber(),
+							configuration, groupId, _dxpArtifactId, null, oldDependency.getLineNumber(),
 							oldDependency.getLastLineNumber());
 
 						gradleBuildScript.updateDependency(oldDependency, newDependency);
 					}
-				}
+					else {
+						newDependency = new GradleDependency(configuration, groupId, _dxpArtifactId, null, 0, 0);
 
-				gradleBuildScript.insertDependency(newDependency);
+						gradleBuildScript.insertDependency(newDependency);
+					}
+				}
+				else {
+					if (dependencies.isEmpty()) {
+						newDependency = new GradleDependency(configuration, groupId, _portalArtifactId, null, 0, 0);
+
+						gradleBuildScript.insertDependency(newDependency);
+					}
+				}
 
 				FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
 			}
