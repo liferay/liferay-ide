@@ -1152,6 +1152,28 @@ public class ServerUtil {
 		return retval;
 	}
 
+	public static boolean isDockerServerExist() {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		IPath workspaceLocation = workspaceProject.getLocation();
+
+		File buildFolder = new File(workspaceLocation.toOSString(), "build");
+
+		if (FileUtil.exists(buildFolder)) {
+			File dotDockerFolder = new File(buildFolder, ".docker");
+
+			if (FileUtil.exists(dotDockerFolder)) {
+				File imageIdFile = new File(dotDockerFolder, "buildDockerImage-imageId.txt");
+
+				if (FileUtil.exists(imageIdFile) && (imageIdFile.length() != 0)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public static boolean isExistingVMName(String name) {
 		IVMInstallType vmInstallType = JavaRuntime.getVMInstallType(StandardVMType.ID_STANDARD_VM_TYPE);
 

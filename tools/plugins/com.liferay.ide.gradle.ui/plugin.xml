@@ -42,6 +42,10 @@
 					name="init-docker-bundle"
 				>
 				</groupMarker>
+				<groupMarker
+					name="docker-deploy"
+				>
+				</groupMarker>
 			</menu>
 		</objectContribution>
 		<objectContribution
@@ -101,6 +105,15 @@
 				id="com.liferay.ide.gradle.popup.action.initDockerBundle"
 				label="Init Portal Docker Bundle"
 				menubarPath="liferayPopupMenuCategory/init-docker-bundle"
+			>
+			</action>
+			<action
+				class="com.liferay.ide.gradle.action.DockerDeployTaskAction"
+				enablesFor="1"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.popup.action.dockerDeploy"
+				label="Deploy Docker Module"
+				menubarPath="liferayPopupMenuCategory/docker-deploy"
 			>
 			</action>
 			<enablement>
