@@ -198,15 +198,23 @@ public class LiferayDockerClient {
 
 			listImagesCmd.withImageNameFilter(dockerImageRepo);
 
-			List<Image> imagetList = listImagesCmd.exec();
+			List<Image> imageList = listImagesCmd.exec();
 
-			Stream<Image> imageStream = imagetList.stream();
+			Stream<Image> imageStream = imageList.stream();
 
 			Optional<Image> dockerImage = imageStream.filter(
+				image -> image.getRepoTags() != null
+			).filter(
 				image -> {
-					String imageRepoTagDocker = image.getRepoTags()[0];
+					String[] repoTags = image.getRepoTags();
 
-					return imageRepoTagDocker.equals(dockerImageRepo);
+					for (String repoTag : repoTags) {
+						if (repoTag.equals(dockerImageRepo)) {
+							return true;
+						}
+					}
+
+					return false;
 				}
 			).findFirst();
 
@@ -293,9 +301,15 @@ public class LiferayDockerClient {
 
 			Optional<Image> dockerImage = imageStream.filter(
 				image -> {
-					String imageRepoTagDocker = image.getRepoTags()[0];
+					String[] repoTags = image.getRepoTags();
 
-					return imageRepoTagDocker.equals(dockerImageRepo);
+					for (String repoTag : repoTags) {
+						if (repoTag.equals(dockerImageRepo)) {
+							return true;
+						}
+					}
+
+					return false;
 				}
 			).findFirst();
 

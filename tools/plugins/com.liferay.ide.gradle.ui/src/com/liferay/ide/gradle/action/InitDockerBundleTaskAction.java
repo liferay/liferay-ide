@@ -30,8 +30,10 @@ import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -102,7 +104,12 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 		try {
 			Image image = LiferayDockerClient.getDockerImageByName(_projectInfo.getDockerImageId());
 
-			String imageRepoTag = image.getRepoTags()[0];
+			Stream<String> dockerRepoTagsStream = Arrays.stream(image.getRepoTags());
+
+			String imageRepoTag = dockerRepoTagsStream.filter(
+				repoTag -> repoTag.equals(_projectInfo.getDockerImageId())
+			).findFirst(
+			).get();
 
 			if ((imageRepoTag != null) && imageRepoTag.equals(_projectInfo.getDockerImageId())) {
 				IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalDockerRuntime.ID);
@@ -166,17 +173,33 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 						continue;
 					}
 
-					IRuntime runtime = server.getRuntime();
-
 					server.delete();
-
-					if (runtime != null) {
-						runtime.delete();
-					}
 				}
 			}
 			catch (Exception exception) {
 				LiferayServerCore.logError("Failed to remove docker server", exception);
+			}
+		}
+
+		String dockerImageName = _projectInfo.getDockerImageId();
+
+		IRuntime[] runtimes = ServerCore.getRuntimes();
+
+		if (ListUtil.isNotEmpty(servers)) {
+			try {
+				for (IRuntime runtime : runtimes) {
+					PortalDockerRuntime portalDockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(
+						PortalDockerRuntime.class, null);
+
+					if ((portalDockerRuntime == null) || !dockerImageName.equals(portalDockerRuntime.getImageId())) {
+						continue;
+					}
+
+					runtime.delete();
+				}
+			}
+			catch (Exception exception) {
+				LiferayServerCore.logError("Failed to remove docker runtime", exception);
 			}
 		}
 	}
