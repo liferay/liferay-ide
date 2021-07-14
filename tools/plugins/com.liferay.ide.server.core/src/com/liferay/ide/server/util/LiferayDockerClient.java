@@ -156,7 +156,7 @@ public class LiferayDockerClient {
 		zerodepDockerHttpClientbuilder.dockerHost(config.getDockerHost());
 		zerodepDockerHttpClientbuilder.maxConnections(100);
 		zerodepDockerHttpClientbuilder.connectionTimeout(Duration.ofSeconds(30));
-		zerodepDockerHttpClientbuilder.responseTimeout(Duration.ofSeconds(45));
+		zerodepDockerHttpClientbuilder.responseTimeout(Duration.ofSeconds(Integer.MAX_VALUE));
 
 		DockerHttpClient httpClient = zerodepDockerHttpClientbuilder.build();
 
