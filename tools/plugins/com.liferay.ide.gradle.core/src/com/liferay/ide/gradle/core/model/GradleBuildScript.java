@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.core.model;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -132,7 +133,7 @@ public class GradleBuildScript {
 	}
 
 	public BuildScriptVisitor insertDependency(GradleDependency gradleDependency) throws IOException {
-		return _insertDependency(_toGradleDependencyString(gradleDependency, "", false));
+		return _insertDependency(gradleDependency);
 	}
 
 	public void modifyDependencyVersion(GradleDependency oldDependency, GradleDependency newDependency)
@@ -190,6 +191,16 @@ public class GradleBuildScript {
 		Files.write(_path, content.getBytes());
 	}
 
+	public void updateDependency(GradleDependency dependency) throws IOException {
+		_insertDependency(dependency);
+
+		Stream<String> fileContentsStream = _fileContents.stream();
+
+		String content = fileContentsStream.collect(Collectors.joining(System.lineSeparator()));
+
+		Files.write(_path, content.getBytes());
+	}
+
 	public void updateDependency(GradleDependency oldArtifact, GradleDependency newArtifact) throws IOException {
 		_fileContents = Files.readAllLines(_path);
 
@@ -202,37 +213,27 @@ public class GradleBuildScript {
 		Files.write(_path, content.getBytes());
 	}
 
-	public void updateDependency(String dependency) throws IOException {
-		_insertDependency(dependency);
-
-		Stream<String> fileContentsStream = _fileContents.stream();
-
-		String content = fileContentsStream.collect(Collectors.joining(System.lineSeparator()));
-
-		Files.write(_path, content.getBytes());
-	}
-
-	private BuildScriptVisitor _insertDependency(String dependency) throws IOException {
+	private BuildScriptVisitor _insertDependency(GradleDependency gradleDependency) throws IOException {
 		BuildScriptVisitor buildScriptVisitor = new BuildScriptVisitor();
 
 		_walkScript(buildScriptVisitor);
 
-		_fileContents = Files.readAllLines(_path);
+		List<GradleDependency> dependencies = getDependencies();
 
-		String d = dependency.trim();
+		Stream<GradleDependency> dependenciesStream = dependencies.stream();
 
-		Stream<String> fileContentsStream = _fileContents.stream();
-
-		boolean exist = fileContentsStream.map(
-			line -> line.trim()
-		).filter(
-			line -> line.equals(d)
+		boolean exist = dependenciesStream.filter(
+			dependencyItem -> dependencyItem.equals(gradleDependency)
 		).findAny(
 		).isPresent();
+
+		_fileContents = Files.readAllLines(_path);
 
 		if (exist) {
 			return buildScriptVisitor;
 		}
+
+		String dependency = StringUtil.trim(_toGradleDependencyString(gradleDependency, "", false));
 
 		if (!dependency.startsWith("\t")) {
 			dependency = "\t" + dependency;

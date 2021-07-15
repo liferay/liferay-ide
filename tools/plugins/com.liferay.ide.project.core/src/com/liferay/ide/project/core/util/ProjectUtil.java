@@ -1637,6 +1637,14 @@ public class ProjectUtil {
 		return false;
 	}
 
+	public static void refreshLocalProject(IProject project) {
+		try {
+			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+		}
+		catch (Exception exception) {
+		}
+	}
+
 	public static String removePluginSuffix(String string) {
 		if (string == null) {
 			return null;
