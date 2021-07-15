@@ -19,7 +19,6 @@ import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.core.workspace.ProjectDeletedEvent;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
@@ -73,9 +72,7 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 	public String getTargetPlatformVersion() {
 		_readMavenWorkspaceProperties();
 
-		String targetPlatformVersion = getProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, null);
-
-		return VersionUtil.simplifyTargetPlatformVersion(targetPlatformVersion);
+		return getProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, null);
 	}
 
 	@Override

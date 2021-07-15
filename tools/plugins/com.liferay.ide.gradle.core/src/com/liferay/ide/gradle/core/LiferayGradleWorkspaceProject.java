@@ -27,7 +27,6 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.core.workspace.ProjectDeletedEvent;
@@ -290,7 +289,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 			}
 		}
 
-		return VersionUtil.simplifyTargetPlatformVersion(targetplatformVersion);
+		return targetplatformVersion;
 	}
 
 	@Override

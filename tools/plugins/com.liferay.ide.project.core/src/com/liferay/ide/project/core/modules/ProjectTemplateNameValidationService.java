@@ -23,6 +23,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -77,14 +78,15 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
-		String targetPlatformVersionString = liferayWorkspaceProject.getTargetPlatformVersion();
+		String targetPlatformVersionString = VersionUtil.simplifyTargetPlatformVersion(
+			liferayWorkspaceProject.getTargetPlatformVersion());
 
 		String liferayVersion = get(op.getLiferayVersion());
 
 		if (CoreUtil.isNotNullOrEmpty(targetPlatformVersionString)) {
-			Version tagetPlatformVerstion = Version.parseVersion(targetPlatformVersionString);
+			Version targetPlatformVersion = Version.parseVersion(targetPlatformVersionString);
 
-			liferayVersion = new String(tagetPlatformVerstion.getMajor() + "." + tagetPlatformVerstion.getMinor());
+			liferayVersion = new String(targetPlatformVersion.getMajor() + "." + targetPlatformVersion.getMinor());
 		}
 
 		String projectTemplateName = get(op.getProjectTemplateName());
