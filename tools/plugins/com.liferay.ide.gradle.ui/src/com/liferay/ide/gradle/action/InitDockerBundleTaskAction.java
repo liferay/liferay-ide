@@ -21,7 +21,6 @@ import com.google.common.collect.Lists;
 
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -30,8 +29,8 @@ import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
@@ -104,14 +103,16 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 		try {
 			Image image = LiferayDockerClient.getDockerImageByName(_projectInfo.getDockerImageId());
 
-			Stream<String> dockerRepoTagsStream = Arrays.stream(image.getRepoTags());
-
-			String imageRepoTag = dockerRepoTagsStream.filter(
+			String imageRepoTag = Stream.of(
+				image.getRepoTags()
+			).filter(
 				repoTag -> repoTag.equals(_projectInfo.getDockerImageId())
 			).findFirst(
-			).get();
+			).orElse(
+				null
+			);
 
-			if ((imageRepoTag != null) && imageRepoTag.equals(_projectInfo.getDockerImageId())) {
+			if (imageRepoTag != null) {
 				IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalDockerRuntime.ID);
 
 				IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(portalRuntimeType.getName(), null);
@@ -157,50 +158,42 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 	}
 
 	private void _cleanUpWorkspaceDockerServerAndRuntime() {
-		String dockerContainerName = _projectInfo.getDockerContainerId();
-
 		IServer[] servers = ServerCore.getServers();
 
-		if (ListUtil.isNotEmpty(servers)) {
-			try {
-				for (IServer server : servers) {
-					PortalDockerServer portalDockerServer = (PortalDockerServer)server.loadAdapter(
-						PortalDockerServer.class, null);
+		try {
+			for (IServer server : servers) {
+				PortalDockerServer portalDockerServer = (PortalDockerServer)server.loadAdapter(
+					PortalDockerServer.class, null);
 
-					if ((portalDockerServer == null) ||
-						!dockerContainerName.equals(portalDockerServer.getContainerName())) {
-
-						continue;
-					}
+				if (Objects.nonNull(portalDockerServer) &&
+					Objects.equals(_projectInfo.getDockerContainerId(), portalDockerServer.getContainerName())) {
 
 					server.delete();
 				}
 			}
-			catch (Exception exception) {
-				LiferayServerCore.logError("Failed to remove docker server", exception);
-			}
 		}
-
-		String dockerImageName = _projectInfo.getDockerImageId();
+		catch (Exception exception) {
+			LiferayServerCore.logError("Failed to remove docker server", exception);
+		}
 
 		IRuntime[] runtimes = ServerCore.getRuntimes();
 
-		if (ListUtil.isNotEmpty(servers)) {
-			try {
-				for (IRuntime runtime : runtimes) {
-					PortalDockerRuntime portalDockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(
-						PortalDockerRuntime.class, null);
+		try {
+			for (IRuntime runtime : runtimes) {
+				PortalDockerRuntime portalDockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(
+					PortalDockerRuntime.class, null);
 
-					if ((portalDockerRuntime == null) || !dockerImageName.equals(portalDockerRuntime.getImageId())) {
-						continue;
-					}
+				if (Objects.nonNull(portalDockerRuntime) &&
+					Objects.equals(
+						_projectInfo.getDockerImageId(),
+						String.join(":", portalDockerRuntime.getImageRepo(), portalDockerRuntime.getImageTag()))) {
 
 					runtime.delete();
 				}
 			}
-			catch (Exception exception) {
-				LiferayServerCore.logError("Failed to remove docker runtime", exception);
-			}
+		}
+		catch (Exception exception) {
+			LiferayServerCore.logError("Failed to remove docker runtime", exception);
 		}
 	}
 
