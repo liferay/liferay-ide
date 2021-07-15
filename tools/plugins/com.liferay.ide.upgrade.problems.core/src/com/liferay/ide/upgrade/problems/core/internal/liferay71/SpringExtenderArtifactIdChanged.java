@@ -62,7 +62,7 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 		for (GradleDependency dependency : gradleDependencies) {
 			GradleDependency newDependency = new GradleDependency(
 				dependency.getConfiguration(), dependency.getGroup(), _newSpringExtenderArtifactId, null,
-				dependency.getLineNumber(), dependency.getLastLineNumber());
+				dependency.getLineNumber(), dependency.getLastLineNumber(), null);
 
 			try {
 				gradleBuildScript.updateDependency(dependency, newDependency);

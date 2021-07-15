@@ -133,7 +133,7 @@ public abstract class JavaImportsMigrator extends JavaFileMigrator implements Au
 
 							if (s.length == 3) {
 								needToAddDependencies.add(
-									new GradleDependency("compileOnly", s[1], s[2], null, -1, -1));
+									new GradleDependency("compileOnly", s[1], s[2], null, -1, -1, null));
 							}
 						}
 					}

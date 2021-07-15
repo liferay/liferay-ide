@@ -75,7 +75,7 @@ public class GradleBuildScript {
 		List<String> delDependencies = new ArrayList<>();
 
 		for (GradleDependency dependency : dependencies) {
-			String dep = _toGradleDependencyString(dependency);
+			String dep = _toGradleDependencyString(dependency, "", false);
 
 			dep = dep.trim();
 
@@ -132,7 +132,7 @@ public class GradleBuildScript {
 	}
 
 	public BuildScriptVisitor insertDependency(GradleDependency gradleDependency) throws IOException {
-		return _insertDependency(_toGradleDependencyString(gradleDependency));
+		return _insertDependency(_toGradleDependencyString(gradleDependency, "", false));
 	}
 
 	public void modifyDependencyVersion(GradleDependency oldDependency, GradleDependency newDependency)
@@ -253,6 +253,16 @@ public class GradleBuildScript {
 		return buildScriptVisitor;
 	}
 
+	private void _insertPrefixString(String prefixString, StringBuilder dependencyBuilder) {
+		prefixString.chars(
+		).filter(
+			ch -> ch == '\t'
+		).asLongStream(
+		).forEach(
+			it -> dependencyBuilder.insert(0, "\t")
+		);
+	}
+
 	private void _save(List<String> contents) throws IOException {
 		Stream<String> contentStream = contents.stream();
 
@@ -261,13 +271,37 @@ public class GradleBuildScript {
 		Files.write(_path, content.getBytes());
 	}
 
-	private String _toGradleDependencyString(GradleDependency gradleDependency) {
+	private String _toGradleDependencyString(
+		GradleDependency gradleDependency, String prefixString, boolean isArgument) {
+
 		StringBuilder sb = new StringBuilder();
 
+		_insertPrefixString(prefixString, sb);
+
+		boolean hasArguments = false;
+
+		if (gradleDependency.getArguments() != null) {
+			hasArguments = true;
+		}
+
 		sb.append(gradleDependency.getConfiguration());
-		sb.append(" group: \"");
+
+		if (hasArguments) {
+			sb.append("(group: \"");
+		}
+		else {
+			sb.append(" group: \"");
+		}
+
 		sb.append(gradleDependency.getGroup());
-		sb.append("\", name: \"");
+
+		if (isArgument) {
+			sb.append("\", module: \"");
+		}
+		else {
+			sb.append("\", name: \"");
+		}
+
 		sb.append(gradleDependency.getName());
 
 		String version = gradleDependency.getVersion();
@@ -275,7 +309,24 @@ public class GradleBuildScript {
 		if ((version != null) && !version.isEmpty()) {
 			sb.append("\", version: \"");
 			sb.append(gradleDependency.getVersion());
-			sb.append("\"");
+
+			if (hasArguments) {
+				sb.append("\") {");
+				sb.append(System.lineSeparator());
+
+				List<GradleDependency> arguments = gradleDependency.getArguments();
+
+				for (GradleDependency argument : arguments) {
+					sb.append(_toGradleDependencyString(argument, prefixString + "\t", true));
+					sb.append(System.lineSeparator());
+				}
+
+				sb.append(prefixString);
+				sb.append("}");
+			}
+			else {
+				sb.append("\"");
+			}
 		}
 		else {
 			sb.append("\"");
@@ -303,17 +354,10 @@ public class GradleBuildScript {
 
 		int endLineNumber = lineNumbers[1];
 
-		StringBuilder dependencyBuilder = new StringBuilder(_toGradleDependencyString(newArtifact));
-
 		String prefixString = content.substring(0, startPos);
 
-		prefixString.chars(
-		).filter(
-			ch -> ch == '\t'
-		).asLongStream(
-		).forEach(
-			it -> dependencyBuilder.insert(0, "\t")
-		);
+		StringBuilder dependencyBuilder = new StringBuilder(
+			_toGradleDependencyString(newArtifact, prefixString, false));
 
 		_fileContents.set(startLineNumber - 1, dependencyBuilder.toString());
 

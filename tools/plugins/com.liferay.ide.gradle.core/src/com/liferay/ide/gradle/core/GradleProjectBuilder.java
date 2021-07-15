@@ -226,8 +226,8 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 
 	private GradleDependency _artifactToDependency(Artifact artifact) {
 		return new GradleDependency(
-			artifact.getConfiguration(), artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), -1,
-			-1);
+			artifact.getConfiguration(), artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), -1, -1,
+			null);
 	}
 
 	private Artifact _dependencyToArtifact(GradleDependency gradleDependency) {

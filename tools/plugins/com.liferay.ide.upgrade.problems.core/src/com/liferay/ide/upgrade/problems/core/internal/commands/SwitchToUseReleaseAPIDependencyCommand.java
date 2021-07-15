@@ -183,7 +183,7 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 			}
 		}
 
-		GradleDependency newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0);
+		GradleDependency newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0, null);
 
 		gradleBuildScript = _getGradleBuildScript(buildGradleFile);
 
