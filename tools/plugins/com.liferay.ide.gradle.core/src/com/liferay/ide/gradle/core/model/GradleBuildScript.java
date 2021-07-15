@@ -316,8 +316,8 @@ public class GradleBuildScript {
 
 				List<GradleDependency> arguments = gradleDependency.getArguments();
 
-				for (int i = 0; i < arguments.size(); i++) {
-					sb.append(_toGradleDependencyString(arguments.get(i), prefixString + "\t", true));
+				for (GradleDependency argument : arguments) {
+					sb.append(_toGradleDependencyString(argument, prefixString + "\t", true));
 					sb.append(System.lineSeparator());
 				}
 

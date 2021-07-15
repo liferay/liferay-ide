@@ -18,6 +18,7 @@ import java.text.MessageFormat;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Lovett Li
@@ -98,21 +99,23 @@ public class GradleDependency {
 			}
 		}
 		else {
-			List<GradleDependency> arguments = other._arguments;
+			List<GradleDependency> otherArguments = other._arguments;
 
-			if (_arguments.size() != arguments.size()) {
+			if (_arguments.size() != otherArguments.size()) {
 				return false;
 			}
 
-			return _arguments.stream(
-			).map(
+			Stream<GradleDependency> otherArgumentStream = otherArguments.stream();
+
+			Stream<GradleDependency> argumentStream = _arguments.stream();
+
+			return argumentStream.map(
 				argument -> argument.toString()
 			).sorted(
 			).collect(
 				Collectors.joining()
 			).equals(
-				arguments.stream(
-				).map(
+				otherArgumentStream.map(
 					argument -> argument.toString()
 				).sorted(
 				).collect(
