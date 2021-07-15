@@ -209,7 +209,7 @@ public class LiferayDockerClient {
 					String[] repoTags = image.getRepoTags();
 
 					for (String repoTag : repoTags) {
-						if (repoTag.equals(dockerImageRepo)) {
+						if (Objects.equals(repoTag, dockerImageRepo)) {
 							return true;
 						}
 					}
