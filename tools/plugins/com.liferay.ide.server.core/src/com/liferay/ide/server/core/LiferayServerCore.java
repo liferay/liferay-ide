@@ -25,10 +25,7 @@ import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
 import com.liferay.ide.server.core.portal.LiferayPortalRuntimeLifecycleListener;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
-<<<<<<< HEAD
-=======
 import com.liferay.ide.server.core.portal.docker.IDockerServer;
->>>>>>> IDE-4712 fix server and runtime lifecycle listener
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntimeLifecycleAdapter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServerLifecycleAdapter;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -139,6 +136,53 @@ public class LiferayServerCore extends Plugin {
 
 	public static LiferayServerCore getDefault() {
 		return _plugin;
+	}
+
+	public static IDockerServer getDockerServer() {
+		IDockerServer retval = null;
+
+		IDockerServer[] dockerServers = getDockerServers();
+
+		if (ListUtil.isNotEmpty(dockerServers)) {
+			for (IDockerServer dockerServer : dockerServers) {
+				if (dockerServer != null) {
+					retval = dockerServer;
+
+					break;
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	public static IDockerServer[] getDockerServers() {
+		if (_dockerServers == null) {
+			IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+
+			IConfigurationElement[] elements = extensionRegistry.getConfigurationElementsFor(IDockerServer.ID);
+
+			try {
+				List<IDockerServer> deployers = new ArrayList<>();
+
+				for (IConfigurationElement element : elements) {
+					Object o = element.createExecutableExtension("class");
+
+					if (o instanceof IDockerServer) {
+						IDockerServer dockerServer = (IDockerServer)o;
+
+						deployers.add(dockerServer);
+					}
+				}
+
+				_dockerServers = deployers.toArray(new IDockerServer[0]);
+			}
+			catch (Exception e) {
+				logError("Unable to get docker deployer extensions", e);
+			}
+		}
+
+		return _dockerServers;
 	}
 
 	public static URL getPluginEntry(String path) {
@@ -624,21 +668,14 @@ public class LiferayServerCore extends Plugin {
 		_runtimeLifecycleListener = new LiferayPortalRuntimeLifecycleListener();
 
 		ServerCore.addRuntimeLifecycleListener(_runtimeLifecycleListener);
-<<<<<<< HEAD
+
 		_dockerRuntimeListener = new PortalDockerRuntimeLifecycleAdapter();
+
 		_dockerServerListener = new PortalDockerServerLifecycleAdapter();
 
-=======
-		ServerCore.addServerLifecycleListener(_serverLifecycleListener);
+		ServerCore.addServerLifecycleListener(_dockerServerListener);
 
-		_dockerRuntimeLiferaycycleListener = new PortalDockerRuntimeLifecycleAdapter();
-
-		_dockerServerLiferaycycleListener = new PortalDockerServerLifecycleAdapter();
-
-		ServerCore.addServerLifecycleListener(_dockerServerLiferaycycleListener);
-
-		ServerCore.addRuntimeLifecycleListener(_dockerRuntimeLiferaycycleListener);
->>>>>>> IDE-4712 fix server and runtime lifecycle listener
+		ServerCore.addRuntimeLifecycleListener(_dockerRuntimeListener);
 	}
 
 	@Override
@@ -658,8 +695,8 @@ public class LiferayServerCore extends Plugin {
 		ServerCore.removeRuntimeLifecycleListener(_dockerRuntimeListener);
 		ServerCore.removeServerLifecycleListener(_dockerServerListener);
 
-		ServerCore.removeRuntimeLifecycleListener(_dockerRuntimeLiferaycycleListener);
-		ServerCore.removeServerLifecycleListener(_dockerServerLiferaycycleListener);
+		ServerCore.removeRuntimeLifecycleListener(_dockerRuntimeListener);
+		ServerCore.removeServerLifecycleListener(_dockerServerListener);
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -888,22 +925,17 @@ public class LiferayServerCore extends Plugin {
 	}
 
 	private static Map<String, IServerManagerConnection> _connections = null;
+	private static IDockerServer[] _dockerServers = null;
 	private static LiferayServerCore _plugin;
 	private static IPluginPublisher[] _pluginPublishers = null;
 	private static PortalBundleFactory[] _portalBundleFactories;
 	private static IRuntimeDelegateValidator[] _runtimeDelegateValidators;
 	private static ILiferayRuntimeStub[] _runtimeStubs;
 
-<<<<<<< HEAD
-
-	private IRuntimeLifecycleListener _globalRuntimeLifecycleListener;
-	private IServerLifecycleListener _globalServerLifecycleListener;
 	private IRuntimeLifecycleListener _dockerRuntimeListener;
 	private IServerLifecycleListener _dockerServerListener;
-=======
-	private IRuntimeLifecycleListener _dockerRuntimeLiferaycycleListener;
-	private IServerLifecycleListener _dockerServerLiferaycycleListener;
->>>>>>> IDE-4712 fix server and runtime lifecycle listener
+	private IRuntimeLifecycleListener _globalRuntimeLifecycleListener;
+	private IServerLifecycleListener _globalServerLifecycleListener;
 	private IRuntimeLifecycleListener _runtimeLifecycleListener;
 	private ISDKListener _sdkListener;
 

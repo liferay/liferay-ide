@@ -1227,7 +1227,6 @@ public class ServerUtil {
 		return true;
 	}
 
-
 	public static void removeConfigInfoFromCache(String portalDirKey) {
 		LiferayServerCore serverCore = LiferayServerCore.getDefault();
 
@@ -1243,7 +1242,7 @@ public class ServerUtil {
 			PropertiesUtil.saveProperties(configInfoProperties, configInfoPath.toFile());
 		}
 	}
-	
+
 	public static void setRuntimeName(IRuntimeWorkingCopy runtime, int suffix, String projectName) {
 		if (runtime == null) {
 			return;
