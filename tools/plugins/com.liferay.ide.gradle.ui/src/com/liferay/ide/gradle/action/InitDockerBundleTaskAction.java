@@ -103,6 +103,13 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 		try {
 			Image image = LiferayDockerClient.getDockerImageByName(_projectInfo.getDockerImageId());
 
+			if (Objects.isNull(image)) {
+				LiferayGradleCore.logError(
+					"Failed to verify docker image for project " + _projectInfo.getDockerImageId());
+
+				return;
+			}
+
 			String imageRepoTag = Stream.of(
 				image.getRepoTags()
 			).filter(

@@ -15,9 +15,9 @@
 package com.liferay.ide.server.core.portal.docker;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.core.command.AttachContainerResultCallback;
 
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayDockerClient;
@@ -117,7 +117,7 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 	private boolean _monitorStopping = false;
 	private Thread _streamThread;
 
-	private class LiferayAttachCallback extends AttachContainerResultCallback {
+	private class LiferayAttachCallback extends ResultCallback.Adapter<Frame> {
 
 		public LiferayAttachCallback(PortalDockerServerOutputStreamMonitor sysOut) {
 			_sysOut = sysOut;
