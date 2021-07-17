@@ -959,8 +959,8 @@ public class ServerUtil {
 
 			return runtimeWC;
 		}
-		catch (CoreException ce) {
-			ce.printStackTrace();
+		catch (CoreException exception) {
+			LiferayServerCore.logError("Failed to get runtime workcopy for runtime type " + runtimeType, exception);
 		}
 
 		return null;

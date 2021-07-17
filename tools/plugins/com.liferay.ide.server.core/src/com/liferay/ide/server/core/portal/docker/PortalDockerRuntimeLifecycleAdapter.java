@@ -14,14 +14,15 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
+import com.github.dockerjava.api.model.Image;
+
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.LiferayDockerClient;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import java.util.Objects;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.util.RuntimeLifecycleAdapter;
 
@@ -33,37 +34,35 @@ public class PortalDockerRuntimeLifecycleAdapter extends RuntimeLifecycleAdapter
 
 	@Override
 	public void runtimeRemoved(IRuntime runtime) {
-		PortalDockerRuntime dockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(PortalDockerRuntime.class, null);
+		PortalDockerRuntime dockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(
+			PortalDockerRuntime.class, new NullProgressMonitor());
 
 		if (dockerRuntime == null) {
 			return;
 		}
 
-		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+		IDockerServer dockerServer = LiferayServerCore.getDockerServer();
 
-		Job cleanDockerImageJob = new Job(project.getName() + " - cleanDockerImage") {
+		if (Objects.nonNull(dockerServer)) {
+			try {
+				Image dockerImage = LiferayDockerClient.getDockerImageByName(
+					String.join(":", dockerRuntime.getImageRepo(), dockerRuntime.getImageTag()));
 
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				IDockerServer dockerServer = LiferayServerCore.getDockerServer();
+				if (Objects.nonNull(LiferayWorkspaceUtil.getWorkspaceProject())) {
+					if (Objects.nonNull(dockerImage) &&
+						Objects.equals(dockerImage.getId(), dockerRuntime.getImageId())) {
 
-				if (dockerServer == null) {
-					return LiferayServerCore.createErrorStatus("Failed to get docker server");
+						dockerServer.removeDockerImage(new NullProgressMonitor());
+					}
 				}
-
-				try {
-					dockerServer.cleanDockerImage(monitor);
+				else {
+					LiferayDockerClient.removeDockerImage(dockerRuntime.getImageId());
 				}
-				catch (Exception e) {
-					LiferayServerCore.logError("Failed to remove runtime", e);
-				}
-
-				return Status.OK_STATUS;
 			}
-
-		};
-
-		cleanDockerImageJob.schedule();
+			catch (Exception e) {
+				LiferayServerCore.logError("Failed to remove server", e);
+			}
+		}
 	}
 
 }

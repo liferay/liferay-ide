@@ -90,8 +90,8 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 			try {
 				_launchServer(server, config, mode, launch, monitor);
 			}
-			catch (Exception e) {
-				e.printStackTrace();
+			catch (Exception exception) {
+				LiferayServerCore.logError("Failed to launch portal docker launch configuration", exception);
 			}
 		}
 	}

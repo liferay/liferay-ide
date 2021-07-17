@@ -25,6 +25,10 @@ import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
 import com.liferay.ide.server.core.portal.LiferayPortalRuntimeLifecycleListener;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
+<<<<<<< HEAD
+=======
+import com.liferay.ide.server.core.portal.docker.IDockerServer;
+>>>>>>> IDE-4712 fix server and runtime lifecycle listener
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntimeLifecycleAdapter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServerLifecycleAdapter;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -620,9 +624,21 @@ public class LiferayServerCore extends Plugin {
 		_runtimeLifecycleListener = new LiferayPortalRuntimeLifecycleListener();
 
 		ServerCore.addRuntimeLifecycleListener(_runtimeLifecycleListener);
+<<<<<<< HEAD
 		_dockerRuntimeListener = new PortalDockerRuntimeLifecycleAdapter();
 		_dockerServerListener = new PortalDockerServerLifecycleAdapter();
 
+=======
+		ServerCore.addServerLifecycleListener(_serverLifecycleListener);
+
+		_dockerRuntimeLiferaycycleListener = new PortalDockerRuntimeLifecycleAdapter();
+
+		_dockerServerLiferaycycleListener = new PortalDockerServerLifecycleAdapter();
+
+		ServerCore.addServerLifecycleListener(_dockerServerLiferaycycleListener);
+
+		ServerCore.addRuntimeLifecycleListener(_dockerRuntimeLiferaycycleListener);
+>>>>>>> IDE-4712 fix server and runtime lifecycle listener
 	}
 
 	@Override
@@ -641,6 +657,9 @@ public class LiferayServerCore extends Plugin {
 
 		ServerCore.removeRuntimeLifecycleListener(_dockerRuntimeListener);
 		ServerCore.removeServerLifecycleListener(_dockerServerListener);
+
+		ServerCore.removeRuntimeLifecycleListener(_dockerRuntimeLiferaycycleListener);
+		ServerCore.removeServerLifecycleListener(_dockerServerLiferaycycleListener);
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -875,11 +894,16 @@ public class LiferayServerCore extends Plugin {
 	private static IRuntimeDelegateValidator[] _runtimeDelegateValidators;
 	private static ILiferayRuntimeStub[] _runtimeStubs;
 
+<<<<<<< HEAD
 
 	private IRuntimeLifecycleListener _globalRuntimeLifecycleListener;
 	private IServerLifecycleListener _globalServerLifecycleListener;
 	private IRuntimeLifecycleListener _dockerRuntimeListener;
 	private IServerLifecycleListener _dockerServerListener;
+=======
+	private IRuntimeLifecycleListener _dockerRuntimeLiferaycycleListener;
+	private IServerLifecycleListener _dockerServerLiferaycycleListener;
+>>>>>>> IDE-4712 fix server and runtime lifecycle listener
 	private IRuntimeLifecycleListener _runtimeLifecycleListener;
 	private ISDKListener _sdkListener;
 

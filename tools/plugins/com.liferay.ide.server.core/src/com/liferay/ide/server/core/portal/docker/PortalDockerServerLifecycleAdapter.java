@@ -14,14 +14,15 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
+import com.github.dockerjava.api.model.Container;
+
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.LiferayDockerClient;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import java.util.Objects;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.util.ServerLifecycleAdapter;
 
@@ -33,37 +34,35 @@ public class PortalDockerServerLifecycleAdapter extends ServerLifecycleAdapter {
 
 	@Override
 	public void serverRemoved(IServer server) {
-		PortalDockerServer portalDockerServer = (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, null);
+		PortalDockerServer portalDockerServer = (PortalDockerServer)server.loadAdapter(
+			PortalDockerServer.class, new NullProgressMonitor());
 
 		if (portalDockerServer == null) {
 			return;
 		}
 
-		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+		IDockerServer dockerServer = LiferayServerCore.getDockerServer();
 
-		Job removeDockerContainerJob = new Job(project.getName() + " - removeDockerContainer") {
+		if (Objects.nonNull(dockerServer)) {
+			try {
+				Container dockerContainer = LiferayDockerClient.getDockerContainerByName(
+					portalDockerServer.getContainerName());
 
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				IDockerServer dockerServer = LiferayServerCore.getDockerServer();
+				if (Objects.nonNull(LiferayWorkspaceUtil.getWorkspaceProject())) {
+					if (Objects.nonNull(dockerContainer) &&
+						Objects.equals(dockerContainer.getId(), portalDockerServer.getContainerId())) {
 
-				if (dockerServer == null) {
-					return LiferayServerCore.createErrorStatus("Failed to get docker supporter");
+						dockerServer.removeDockerContainer(new NullProgressMonitor());
+					}
 				}
-
-				try {
-					dockerServer.removeDockerContainer(monitor);
+				else {
+					LiferayDockerClient.removeDockerContainer(portalDockerServer.getContainerId());
 				}
-				catch (Exception e) {
-					LiferayServerCore.logError("Failed to remove server", e);
-				}
-
-				return Status.OK_STATUS;
 			}
-
-		};
-
-		removeDockerContainerJob.schedule();
+			catch (Exception e) {
+				LiferayServerCore.logError("Failed to remove server", e);
+			}
+		}
 	}
 
 }

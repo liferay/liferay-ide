@@ -96,8 +96,7 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 		try {
 			validate();
 		}
-		catch (NullPointerException npe) {
-			npe.printStackTrace();
+		catch (NullPointerException nullException) {
 		}
 	}
 

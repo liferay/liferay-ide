@@ -33,13 +33,13 @@ public interface IDockerServer {
 
 	public boolean canPublishModule(IServer server, IModule module);
 
-	public void cleanDockerImage(IProgressMonitor monitor);
-
 	public void createDockerContainer(IProgressMonitor monitor);
 
 	public void dockerDeploy(IProject project, IProgressMonitor monitor);
 
 	public void removeDockerContainer(IProgressMonitor monitor);
+
+	public void removeDockerImage(IProgressMonitor monitor);
 
 	public void startDockerContainer(IProgressMonitor monitor);
 

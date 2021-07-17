@@ -19,6 +19,8 @@ import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
@@ -167,11 +169,11 @@ public class LiferayDockerClient {
 		return dockerClientBuilder.build();
 	}
 
-	public static Container getDockerContainerByName(String dockerContainerId) {
+	public static Container getDockerContainerByName(String dockerContainerName) {
 		try (DockerClient dockerClient = getDockerClient()) {
 			ListContainersCmd listContainersCmd = dockerClient.listContainersCmd();
 
-			listContainersCmd.withNameFilter(Lists.newArrayList(dockerContainerId));
+			listContainersCmd.withNameFilter(Lists.newArrayList(dockerContainerName));
 			listContainersCmd.withLimit(1);
 
 			List<Container> containers = listContainersCmd.exec();
@@ -263,6 +265,30 @@ public class LiferayDockerClient {
 		}
 
 		return Collections.emptyList();
+	}
+
+	public static void removeDockerContainer(String containerId) {
+		try (DockerClient dockerClient = getDockerClient()) {
+			RemoveContainerCmd removeContainerCmd = dockerClient.removeContainerCmd(containerId);
+
+			removeContainerCmd.exec();
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError("Failed to remove docker container", e);
+		}
+	}
+
+	public static void removeDockerImage(String imageId) {
+		try (DockerClient dockerClient = getDockerClient()) {
+			RemoveImageCmd removeImageCmd = dockerClient.removeImageCmd(imageId);
+
+			removeImageCmd.withForce(true);
+
+			removeImageCmd.exec();
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError("Failed to remove docker image", e);
+		}
 	}
 
 	public static boolean verifyDockerContainer(String dockerContainerId) {

@@ -17,6 +17,8 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.docker.IDockerServer;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,25 +50,19 @@ public class LiferayGradleDockerServer implements IDockerServer {
 	}
 
 	@Override
-	public void cleanDockerImage(IProgressMonitor monitor) {
-		try {
-			GradleUtil.runGradleTask(
-				LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"cleanDockerImage"},
-				new String[] {"-x", "removeDockerContainer"}, false, monitor);
-		}
-		catch (CoreException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
 	public void createDockerContainer(IProgressMonitor monitor) {
-		try {
-			GradleUtil.runGradleTask(
-				LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"createDockerContainer"}, monitor);
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (Objects.isNull(workspaceProject)) {
+			LiferayGradleCore.logError("Can not find valid liferay workspace project.");
 		}
-		catch (CoreException e) {
-			e.printStackTrace();
+
+		try {
+			GradleUtil.runGradleTask(workspaceProject, new String[] {"createDockerContainer"}, monitor);
+		}
+		catch (CoreException exception) {
+			LiferayGradleCore.logError(
+				"Failed to create liferay docker container for project " + workspaceProject.getName(), exception);
 		}
 	}
 
@@ -82,35 +78,74 @@ public class LiferayGradleDockerServer implements IDockerServer {
 
 	@Override
 	public void removeDockerContainer(IProgressMonitor monitor) {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (Objects.isNull(workspaceProject)) {
+			LiferayGradleCore.logError("Can not find valid liferay workspace project.");
+		}
+
+		try {
+			GradleUtil.runGradleTask(workspaceProject, new String[] {"removeDockerContainer"}, monitor);
+		}
+		catch (CoreException exception) {
+			LiferayGradleCore.logError(
+				"Failed to remove liferay docker container for project " + workspaceProject.getName(), exception);
+		}
+	}
+
+	@Override
+	public void removeDockerImage(IProgressMonitor monitor) {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (Objects.isNull(workspaceProject)) {
+			LiferayGradleCore.logError("Can not find valid liferay workspace project.");
+		}
+
 		try {
 			GradleUtil.runGradleTask(
-				LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"removeDockerContainer"}, monitor);
+				workspaceProject, new String[] {"cleanDockerImage"}, new String[] {"-x", "removeDockerContainer"},
+				false, monitor);
 		}
-		catch (CoreException e) {
-			e.printStackTrace();
+		catch (CoreException exception) {
+			LiferayGradleCore.logError(
+				"Failed to remove liferay docker image for project " + workspaceProject.getName(), exception);
 		}
 	}
 
 	@Override
 	public void startDockerContainer(IProgressMonitor monitor) {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (Objects.isNull(workspaceProject)) {
+			LiferayGradleCore.logError("Can not find valid liferay workspace project.");
+		}
+
 		try {
 			GradleUtil.runGradleTask(
-				LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"startDockerContainer"},
-				new String[] {"-x", "createDockerContainer"}, false, monitor);
+				workspaceProject, new String[] {"startDockerContainer"}, new String[] {"-x", "createDockerContainer"},
+				false, monitor);
 		}
-		catch (CoreException e) {
-			e.printStackTrace();
+		catch (CoreException exception) {
+			LiferayGradleCore.logError(
+				"Failed to start liferay docker container for project " + workspaceProject.getName(), exception);
 		}
 	}
 
 	@Override
 	public void stopDockerContainer(IProgressMonitor monitor) {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (Objects.isNull(workspaceProject)) {
+			LiferayGradleCore.logError("Can not find valid liferay workspace project.");
+		}
+
 		try {
 			GradleUtil.runGradleTask(
 				LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"stopDockerContainer"}, monitor);
 		}
-		catch (CoreException e) {
-			e.printStackTrace();
+		catch (CoreException exception) {
+			LiferayGradleCore.logError(
+				"Failed to stop liferay docker container for project " + workspaceProject.getName(), exception);
 		}
 	}
 

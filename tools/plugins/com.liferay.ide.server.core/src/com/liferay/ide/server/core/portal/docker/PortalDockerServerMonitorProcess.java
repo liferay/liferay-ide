@@ -139,8 +139,8 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 				portalDockerStreamsProxy.terminate();
 			}
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Exception exception) {
+			LiferayServerCore.logError("Failed to terminate portal docker server logging stream", exception);
 		}
 	}
 
@@ -217,8 +217,8 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 
 													_config = workingCopy.doSave();
 												}
-												catch (CoreException e) {
-													e.printStackTrace();
+												catch (CoreException exception) {
+													LiferayServerCore.logError("Failed to get debug port.", exception);
 												}
 											}
 										);
@@ -262,8 +262,8 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 									throw new TimeoutException();
 								}
 							}
-							catch (InterruptedException | TimeoutException e) {
-								e.printStackTrace();
+							catch (InterruptedException | TimeoutException exception) {
+								LiferayServerCore.logError("Failed to connect to debug port.", exception);
 							}
 						}
 					}

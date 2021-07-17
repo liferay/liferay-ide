@@ -55,8 +55,8 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 			isTerminated = true;
 			_attachContainerCmd.close();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Exception exception) {
+			LiferayServerCore.logError("Failed to terminate portal docker server logging proxy", exception);
 		}
 	}
 
