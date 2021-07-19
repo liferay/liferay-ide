@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
@@ -58,8 +59,6 @@ public class LiferayMavenModuleProjectProvider
 
 		String className = get(op.getComponentName());
 
-		String liferayVersion = get(op.getLiferayVersion());
-
 		String serviceName = get(op.getServiceName());
 
 		String packageName = get(op.getPackageName());
@@ -99,9 +98,18 @@ public class LiferayMavenModuleProjectProvider
 		sb.append("\" ");
 		sb.append("-b ");
 		sb.append("maven ");
-		sb.append("-v ");
-		sb.append(liferayVersion);
-		sb.append(" ");
+
+		LiferayMavenWorkspaceProject mavenWorkspaceProject = LiferayCore.create(
+			LiferayMavenWorkspaceProject.class, liferayWorkspaceProject);
+
+		String version = mavenWorkspaceProject.getTargetPlatformVersion();
+
+		if (version != null) {
+			sb.append("-v ");
+			sb.append(version);
+			sb.append(" ");
+		}
+
 		sb.append("-t ");
 		sb.append(projectTemplateName);
 		sb.append(" ");
@@ -153,7 +161,7 @@ public class LiferayMavenModuleProjectProvider
 				name.setName(projectName + "-service");
 			}
 
-			Job importMaveModuleJob = new Job("Import Maven Module Project") {
+			Job importMavenModuleJob = new Job("Import Maven Module Project") {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
@@ -179,8 +187,8 @@ public class LiferayMavenModuleProjectProvider
 
 			};
 
-			importMaveModuleJob.setUser(true);
-			importMaveModuleJob.schedule();
+			importMavenModuleJob.setUser(true);
+			importMavenModuleJob.schedule();
 		}
 		catch (Exception e) {
 			ProjectCore.logError(e);

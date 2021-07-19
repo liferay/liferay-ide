@@ -55,8 +55,6 @@ public class NewMavenSpringMVCPortletProjectProvider
 
 		String className = get(op.getComponentName());
 
-		String liferayVersion = get(op.getLiferayVersion());
-
 		String packageName = get(op.getPackageName());
 
 		String framework = get(op.getFramework());
@@ -97,11 +95,16 @@ public class NewMavenSpringMVCPortletProjectProvider
 
 				sb.append("\" ");
 			}
+
+			String version = mavenWorkspaceProject.getTargetPlatformVersion();
+
+			if (version != null) {
+				sb.append("-v ");
+				sb.append(version);
+				sb.append(" ");
+			}
 		}
 
-		sb.append("-v ");
-		sb.append(liferayVersion);
-		sb.append(" ");
 		sb.append("-t ");
 		sb.append(projectTemplateName);
 		sb.append(" ");

@@ -18,6 +18,7 @@ import aQute.bnd.version.Version;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.ProductInfo;
+import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import java.util.Objects;
@@ -38,9 +39,10 @@ public class HasWorkspaceLiferayVersionDefaultValueService extends DefaultValueS
 		}
 
 		try {
-			String gradlePropertyTargetPlatformVersion = liferayWorkspaceProject.getTargetPlatformVersion();
+			String simplifiedVersion = VersionUtil.simplifyTargetPlatformVersion(
+				liferayWorkspaceProject.getTargetPlatformVersion());
 
-			if (Version.isVersion(gradlePropertyTargetPlatformVersion)) {
+			if (Version.isVersion(simplifiedVersion)) {
 				return Boolean.toString(true);
 			}
 

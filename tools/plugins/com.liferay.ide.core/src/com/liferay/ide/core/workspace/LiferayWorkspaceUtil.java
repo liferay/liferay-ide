@@ -21,6 +21,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.VersionUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -224,11 +225,12 @@ public class LiferayWorkspaceUtil {
 			return null;
 		}
 
-		String targetPlatformVersion = liferayWorkspaceProject.getTargetPlatformVersion();
+		String simplifiedTargetPlatformVersion = VersionUtil.simplifyTargetPlatformVersion(
+			liferayWorkspaceProject.getTargetPlatformVersion());
 
-		if (CoreUtil.isNotNullOrEmpty(targetPlatformVersion)) {
+		if (CoreUtil.isNotNullOrEmpty(simplifiedTargetPlatformVersion)) {
 			try {
-				Version liferayVersion = new Version(targetPlatformVersion);
+				Version liferayVersion = new Version(simplifiedTargetPlatformVersion);
 
 				return new String(liferayVersion.getMajor() + "." + liferayVersion.getMinor());
 			}
