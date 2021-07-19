@@ -28,6 +28,8 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
 
+import org.osgi.framework.Version;
+
 /**
  * @author Joye Luo
  * @author Terry Jia
@@ -56,7 +58,9 @@ public class TargetLiferayVersionDefaultValueService extends DefaultValueService
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, scopeContexts);
 
 		if (defaultLiferayVersion != null) {
-			defaultValue = defaultLiferayVersion;
+			Version liferayVersion = new Version(defaultLiferayVersion);
+
+			defaultValue = new String(liferayVersion.getMajor() + "." + liferayVersion.getMinor());
 		}
 
 		return defaultValue;
