@@ -75,7 +75,8 @@ public class LiferayRuntimeNameValidationService extends ValidationService imple
 				return Status.createErrorStatus("Could not set invalid portal runtime");
 			}
 
-			Version workspaceVersion = Version.parseVersion(targetPlatformVersion);
+			Version workspaceVersion = Version.parseVersion(
+				VersionUtil.simplifyTargetPlatformVersion(targetPlatformVersion));
 
 			Version portalRuntimeVersion = Version.parseVersion(liferayRuntime.getPortalVersion());
 

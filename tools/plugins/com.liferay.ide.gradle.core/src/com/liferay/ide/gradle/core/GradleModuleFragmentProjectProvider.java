@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
@@ -64,6 +65,9 @@ public class GradleModuleFragmentProjectProvider
 
 		sb.append("create ");
 		sb.append("-q ");
+		sb.append("-d \"");
+		sb.append(locationFile.getAbsolutePath());
+		sb.append("\" ");
 
 		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
@@ -75,21 +79,23 @@ public class GradleModuleFragmentProjectProvider
 			sb.append(workspaceLocation.toOSString());
 
 			sb.append("\" ");
+
+			LiferayGradleWorkspaceProject gradleWorkspaceProject = LiferayCore.create(
+				LiferayGradleWorkspaceProject.class, liferayWorkspaceProject);
+
+			if (gradleWorkspaceProject != null) {
+				String liferayVersion = gradleWorkspaceProject.getTargetPlatformVersion();
+
+				if (version != null) {
+					sb.append("-v ");
+					sb.append(liferayVersion);
+					sb.append(" ");
+				}
+			}
 		}
 
-		sb.append("-d \"");
-		sb.append(locationFile.getAbsolutePath());
-		sb.append("\" ");
 		sb.append("-t ");
 		sb.append("fragment ");
-
-		String liferayVersion = get(op.getLiferayVersion());
-
-		if (CoreUtil.isNotNullOrEmpty(liferayVersion)) {
-			sb.append("-v ");
-			sb.append(liferayVersion);
-			sb.append(" ");
-		}
 
 		if (!bundleSymbolicName.equals("")) {
 			sb.append("-h ");

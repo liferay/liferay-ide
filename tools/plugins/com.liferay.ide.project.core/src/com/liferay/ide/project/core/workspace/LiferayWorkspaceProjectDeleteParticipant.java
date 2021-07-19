@@ -19,6 +19,9 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.LiferayServerCore;
+
+import java.io.File;
 
 import java.util.stream.Stream;
 
@@ -99,6 +102,8 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 			}
 		);
 
+		_cleanUpServerInfos();
+
 		return change;
 	}
 
@@ -123,6 +128,24 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 		}
 
 		return true;
+	}
+
+	private void _cleanUpServerInfos() {
+		LiferayServerCore serverCore = LiferayServerCore.getDefault();
+
+		IPath stateLocation = serverCore.getStateLocation();
+
+		String[] files = {"version.properties", "serverInfos.properties"};
+
+		for (String file : files) {
+			IPath configInfoPath = stateLocation.append(file);
+
+			File configInfoFile = configInfoPath.toFile();
+
+			if (configInfoFile.exists()) {
+				configInfoFile.delete();
+			}
+		}
 	}
 
 	private IProject _workspaceProject;
