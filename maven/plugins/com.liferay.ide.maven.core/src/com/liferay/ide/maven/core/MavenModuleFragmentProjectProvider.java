@@ -82,7 +82,7 @@ public class MavenModuleFragmentProjectProvider
 			if (mavenWorkspaceProject != null) {
 				String liferayVersion = mavenWorkspaceProject.getTargetPlatformVersion();
 
-				if (version != null) {
+				if (liferayVersion != null) {
 					sb.append("-v ");
 					sb.append(liferayVersion);
 					sb.append(" ");
