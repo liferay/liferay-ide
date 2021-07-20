@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -29,7 +30,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
@@ -45,7 +45,11 @@ public class MavenModuleFragmentProjectProvider
 
 		String projectName = get(op.getProjectName());
 
-		Path location = get(op.getLocation());
+		IPath location = PathBridge.create(get(op.getLocation()));
+
+		File targetDir = location.toFile();
+
+		targetDir.mkdirs();
 
 		String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion(op);
 
@@ -56,6 +60,10 @@ public class MavenModuleFragmentProjectProvider
 
 		sb.append("create ");
 		sb.append("-q ");
+		sb.append("-b maven ");
+		sb.append("-d \"");
+		sb.append(targetDir.getAbsolutePath());
+		sb.append("\" ");
 
 		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
@@ -67,17 +75,21 @@ public class MavenModuleFragmentProjectProvider
 			sb.append(workspaceLocation.toOSString());
 
 			sb.append("\" ");
+
+			LiferayMavenWorkspaceProject mavenWorkspaceProject = LiferayCore.create(
+				LiferayMavenWorkspaceProject.class, liferayWorkspaceProject);
+
+			if (mavenWorkspaceProject != null) {
+				String liferayVersion = mavenWorkspaceProject.getTargetPlatformVersion();
+
+				if (liferayVersion != null) {
+					sb.append("-v ");
+					sb.append(liferayVersion);
+					sb.append(" ");
+				}
+			}
 		}
 
-		sb.append("-d \"");
-
-		File file = location.toFile();
-
-		sb.append(file.getAbsolutePath());
-
-		sb.append("\" ");
-		sb.append("-b ");
-		sb.append("maven ");
 		sb.append("-t ");
 		sb.append("fragment ");
 
@@ -106,9 +118,7 @@ public class MavenModuleFragmentProjectProvider
 
 		NewModuleFragmentOpMethods.copyOverrideFiles(op);
 
-		IPath l = PathBridge.create(location);
-
-		IPath projectLocation = l.append(projectName);
+		IPath projectLocation = location.append(projectName);
 
 		NewModuleFragmentOpMethods.storeRuntimeInfo(op);
 
