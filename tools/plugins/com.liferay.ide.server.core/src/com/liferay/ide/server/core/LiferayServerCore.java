@@ -22,6 +22,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
+import com.liferay.ide.server.core.portal.LiferayPortalRuntimeLifecycleListener;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -569,7 +570,7 @@ public class LiferayServerCore extends Plugin {
 
 		_plugin = this;
 
-		_runtimeLifecycleListener = new IRuntimeLifecycleListener() {
+		_globalRuntimeLifecycleListener = new IRuntimeLifecycleListener() {
 
 			@Override
 			public void runtimeAdded(IRuntime runtime) {
@@ -588,7 +589,7 @@ public class LiferayServerCore extends Plugin {
 
 		};
 
-		_serverLifecycleListener = new IServerLifecycleListener() {
+		_globalServerLifecycleListener = new IServerLifecycleListener() {
 
 			@Override
 			public void serverAdded(IServer server) {
@@ -611,8 +612,12 @@ public class LiferayServerCore extends Plugin {
 
 		};
 
+		ServerCore.addRuntimeLifecycleListener(_globalRuntimeLifecycleListener);
+		ServerCore.addServerLifecycleListener(_globalServerLifecycleListener);
+
+		_runtimeLifecycleListener = new LiferayPortalRuntimeLifecycleListener();
+
 		ServerCore.addRuntimeLifecycleListener(_runtimeLifecycleListener);
-		ServerCore.addServerLifecycleListener(_serverLifecycleListener);
 	}
 
 	@Override
@@ -624,8 +629,10 @@ public class LiferayServerCore extends Plugin {
 
 		sdkManagerInstance.removeSDKListener(_sdkListener);
 
+		ServerCore.removeRuntimeLifecycleListener(_globalRuntimeLifecycleListener);
+		ServerCore.removeServerLifecycleListener(_globalServerLifecycleListener);
+
 		ServerCore.removeRuntimeLifecycleListener(_runtimeLifecycleListener);
-		ServerCore.removeServerLifecycleListener(_serverLifecycleListener);
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -860,8 +867,9 @@ public class LiferayServerCore extends Plugin {
 	private static IRuntimeDelegateValidator[] _runtimeDelegateValidators;
 	private static ILiferayRuntimeStub[] _runtimeStubs;
 
+	private IRuntimeLifecycleListener _globalRuntimeLifecycleListener;
+	private IServerLifecycleListener _globalServerLifecycleListener;
 	private IRuntimeLifecycleListener _runtimeLifecycleListener;
 	private ISDKListener _sdkListener;
-	private IServerLifecycleListener _serverLifecycleListener;
 
 }
