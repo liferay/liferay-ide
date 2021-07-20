@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: com.liferay.ide.xml.search.ui.tests
-Bundle-Version: 3.10.0.qualifier
+Bundle-Version: 3.9.4.qualifier
 Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.core.tests,
  com.liferay.ide.project.core,

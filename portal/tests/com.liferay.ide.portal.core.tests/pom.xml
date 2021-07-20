@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.liferay.ide.portal.tests</groupId>
         <artifactId>portal-tests</artifactId>
-        <version>3.10.0-SNAPSHOT</version>
+        <version>3.9.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.ide.portal.core.tests</artifactId>
