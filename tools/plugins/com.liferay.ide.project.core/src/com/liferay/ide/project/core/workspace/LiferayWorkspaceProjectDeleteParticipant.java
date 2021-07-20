@@ -19,7 +19,11 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.portal.PortalRuntime;
+import com.liferay.ide.server.core.portal.PortalServer;
+import com.liferay.ide.server.util.ServerUtil;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFolder;
@@ -27,6 +31,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -76,6 +81,8 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 		).filter(
 			server -> server != null
 		).filter(
+			server -> Objects.nonNull((PortalServer)server.loadAdapter(PortalServer.class, pm))
+		).filter(
 			server -> {
 				IRuntime runtime = server.getRuntime();
 
@@ -93,9 +100,41 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 			}
 		).forEach(
 			server -> {
-				RemoveServerRuntimeChange removeChange = new RemoveServerRuntimeChange(server);
+				RemoveServerChange removeChange = new RemoveServerChange(server);
 
 				change.add(removeChange);
+			}
+		);
+
+		Stream.of(
+			ServerCore.getRuntimes()
+		).filter(
+			runtime -> runtime != null
+		).filter(
+			runtime -> {
+				if (runtime != null) {
+					IPath bundleHomePath = Path.fromOSString(homeDir);
+
+					if (!bundleHomePath.isAbsolute()) {
+						bundleHomePath = projectLocation.append(homeDir);
+					}
+
+					return bundleHomePath.equals(runtime.getLocation());
+				}
+
+				return true;
+			}
+		).forEach(
+			runtime -> {
+				PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
+					PortalRuntime.class, new NullProgressMonitor());
+
+				if (Objects.nonNull(portalRuntime)) {
+					RemoveRuntimeChange removeChange = new RemoveRuntimeChange(
+						runtime, portalRuntime.getAppServerPortalDir());
+
+					change.add(removeChange);
+				}
 			}
 		);
 
@@ -127,20 +166,21 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 
 	private IProject _workspaceProject;
 
-	private class RemoveServerRuntimeChange extends Change {
+	private class RemoveRuntimeChange extends Change {
 
-		public RemoveServerRuntimeChange(IServer server) {
-			_server = server;
+		public RemoveRuntimeChange(IRuntime runtime, IPath appServerPortalDir) {
+			_runtime = runtime;
+			_appServerPortalDir = appServerPortalDir;
 		}
 
 		@Override
 		public Object getModifiedElement() {
-			return _server;
+			return _runtime;
 		}
 
 		@Override
 		public String getName() {
-			return "Delete runtime and server.";
+			return "Delete portal runtime.";
 		}
 
 		@Override
@@ -155,13 +195,55 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 		@Override
 		public Change perform(IProgressMonitor pm) throws CoreException {
 			try {
-				IRuntime runtime = _server.getRuntime();
+				if (_runtime != null) {
+					String portalDirKey = CoreUtil.createStringDigest(_appServerPortalDir.toPortableString());
 
-				_server.delete();
+					ServerUtil.removeConfigInfoFromCache(portalDirKey);
 
-				if (runtime != null) {
-					runtime.delete();
+					_runtime.delete();
 				}
+			}
+			catch (Exception e) {
+				ProjectCore.logError("Failed to delete runtime " + _runtime.getName(), e);
+			}
+
+			return null;
+		}
+
+		private IPath _appServerPortalDir;
+		private IRuntime _runtime;
+
+	}
+
+	private class RemoveServerChange extends Change {
+
+		public RemoveServerChange(IServer server) {
+			_server = server;
+		}
+
+		@Override
+		public Object getModifiedElement() {
+			return _server;
+		}
+
+		@Override
+		public String getName() {
+			return "Delete portal server.";
+		}
+
+		@Override
+		public void initializeValidationData(IProgressMonitor pm) {
+		}
+
+		@Override
+		public RefactoringStatus isValid(IProgressMonitor pm) throws CoreException, OperationCanceledException {
+			return new RefactoringStatus();
+		}
+
+		@Override
+		public Change perform(IProgressMonitor pm) throws CoreException {
+			try {
+				_server.delete();
 			}
 			catch (Exception e) {
 				ProjectCore.logError("Failed to delete server " + _server.getName(), e);

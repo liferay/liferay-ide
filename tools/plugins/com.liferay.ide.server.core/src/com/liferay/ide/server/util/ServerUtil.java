@@ -1227,6 +1227,22 @@ public class ServerUtil {
 		return true;
 	}
 
+	public static void removeConfigInfoFromCache(String portalDirKey) {
+		LiferayServerCore serverCore = LiferayServerCore.getDefault();
+
+		IPath stateLocation = serverCore.getStateLocation();
+
+		IPath configInfoPath = stateLocation.append("version.properties");
+
+		if (FileUtil.exists(configInfoPath)) {
+			Properties configInfoProperties = PropertiesUtil.loadProperties(configInfoPath);
+
+			configInfoProperties.remove(portalDirKey);
+
+			PropertiesUtil.saveProperties(configInfoProperties, configInfoPath.toFile());
+		}
+	}
+
 	public static void setupPortalDevelopModeConfiguration(PortalRuntime portalRuntime, PortalServer portalServer) {
 		boolean customLaunchSettings = portalServer.getCustomLaunchSettings();
 
