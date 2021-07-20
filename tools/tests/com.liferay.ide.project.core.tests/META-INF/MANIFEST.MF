@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Project Core Tests
 Bundle-SymbolicName: com.liferay.ide.project.core.tests
-Bundle-Version: 3.10.0.qualifier
+Bundle-Version: 3.9.4.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6)",
  com.liferay.ide.core,
