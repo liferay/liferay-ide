@@ -1493,11 +1493,6 @@
 			name="Liferay Docker"
 			vendor="Liferay, Inc."
 		>
-			<moduleType
-				types="liferay.bundle"
-				versions="*"
-			>
-			</moduleType>
 		</runtimeType>
 	</extension>
 	<extension

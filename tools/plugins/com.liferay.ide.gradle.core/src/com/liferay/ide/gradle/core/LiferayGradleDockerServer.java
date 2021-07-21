@@ -67,16 +67,6 @@ public class LiferayGradleDockerServer implements IDockerServer {
 	}
 
 	@Override
-	public void dockerDeploy(IProject project, IProgressMonitor monitor) {
-		try {
-			GradleUtil.runGradleTask(project, new String[] {"dockerDeploy"}, monitor);
-		}
-		catch (Exception e) {
-			LiferayGradleCore.logError(e);
-		}
-	}
-
-	@Override
 	public void removeDockerContainer(IProgressMonitor monitor) {
 		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 

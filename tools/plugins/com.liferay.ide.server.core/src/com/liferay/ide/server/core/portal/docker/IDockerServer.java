@@ -14,7 +14,6 @@
 
 package com.liferay.ide.server.core.portal.docker;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -34,8 +33,6 @@ public interface IDockerServer {
 	public boolean canPublishModule(IServer server, IModule module);
 
 	public void createDockerContainer(IProgressMonitor monitor);
-
-	public void dockerDeploy(IProject project, IProgressMonitor monitor);
 
 	public void removeDockerContainer(IProgressMonitor monitor);
 

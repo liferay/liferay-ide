@@ -19,8 +19,6 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
-import com.liferay.ide.server.core.portal.docker.IDockerServer;
-import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +68,9 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
 			if (bundleProject != null) {
+
+				// TODO catch error in getOutputJar and show a popup notification instead
+
 				monitor.subTask("Building " + module.getName() + " output bundle...");
 
 				try {
@@ -80,27 +81,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 							monitor.subTask(
 								"Remotely deploying " + module.getName() + " to Liferay module framework...");
 
-							PortalDockerServer portalDockerServer = (PortalDockerServer)server.loadAdapter(
-								PortalDockerServer.class, monitor);
-
-							if (portalDockerServer != null) {
-								IDockerServer dockerServer = LiferayServerCore.getDockerServer();
-
-								if (dockerServer == null) {
-									LiferayServerCore.logError("Failed to get docker supporter");
-
-									return;
-								}
-
-								boolean canPublish = dockerServer.canPublishModule(server, module);
-
-								if (canPublish) {
-									dockerServer.dockerDeploy(project, monitor);
-								}
-							}
-							else {
-								retval = _remoteDeploy(bundleProject.getSymbolicName(), outputJar);
-							}
+							retval = _remoteDeploy(bundleProject.getSymbolicName(), outputJar);
 						}
 						else {
 							retval = _autoDeploy(outputJar);
