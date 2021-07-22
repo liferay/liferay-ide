@@ -37,6 +37,7 @@ import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.core.portal.PortalServerConstants;
+import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
@@ -1153,19 +1154,13 @@ public class ServerUtil {
 	}
 
 	public static boolean isDockerServerExist() {
-		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		IServer[] servers = ServerCore.getServers();
 
-		IPath workspaceLocation = workspaceProject.getLocation();
+		if (ListUtil.isNotEmpty(servers)) {
+			for (IServer server : servers) {
+				IServerType serverType = server.getServerType();
 
-		File buildFolder = new File(workspaceLocation.toOSString(), "build");
-
-		if (FileUtil.exists(buildFolder)) {
-			File dotDockerFolder = new File(buildFolder, ".docker");
-
-			if (FileUtil.exists(dotDockerFolder)) {
-				File imageIdFile = new File(dotDockerFolder, "buildDockerImage-imageId.txt");
-
-				if (FileUtil.exists(imageIdFile) && (imageIdFile.length() != 0)) {
+				if (Objects.equals(serverType.getId(), PortalDockerServer.ID)) {
 					return true;
 				}
 			}

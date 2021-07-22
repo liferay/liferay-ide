@@ -112,7 +112,7 @@
 				enablesFor="1"
 				icon="icons/e16/liferay_logo_16.png"
 				id="com.liferay.ide.gradle.popup.action.dockerDeploy"
-				label="Deploy Docker Module"
+				label="Deploy Docker"
 				menubarPath="liferayPopupMenuCategory/docker-deploy"
 			>
 			</action>
