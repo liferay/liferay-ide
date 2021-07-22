@@ -16,7 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import aQute.bnd.osgi.Jar;
 
-import com.liferay.blade.gradle.tooling.DefaultModel;
+import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.Event;
 import com.liferay.ide.core.EventListener;
@@ -221,17 +221,17 @@ public class LiferayGradleProject
 
 		IPath retval = null;
 
-		DefaultModel model = LiferayGradleCore.getToolingModel(DefaultModel.class, gradleProject);
+		ProjectInfo projectInfo = LiferayGradleCore.getToolingModel(ProjectInfo.class, gradleProject);
 
-		if (model == null) {
+		if (projectInfo == null) {
 			return retval;
 		}
 
-		Set<String> pluginClassNames = model.getPluginClassNames();
+		Set<String> pluginClassNames = projectInfo.getPluginClassNames();
 
 		GradleProject gradleModel = LiferayGradleCore.getToolingModel(GradleProject.class, gradleProject);
 
-		Map<String, Set<File>> projectOutputFilesMap = model.getProjectOutputFiles();
+		Map<String, Set<File>> projectOutputFilesMap = projectInfo.getProjectOutputFiles();
 
 		Set<File> outputFiles = projectOutputFilesMap.get(gradleModel.getPath());
 
