@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Objects;
@@ -35,7 +36,7 @@ public class LiferayPortalRuntimeLifecycleListener extends RuntimeLifecycleAdapt
 		PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
 			PortalRuntime.class, new NullProgressMonitor());
 
-		if (Objects.isNull(portalRuntime)) {
+		if (Objects.isNull(portalRuntime) || (portalRuntime instanceof PortalDockerRuntime)) {
 			return;
 		}
 

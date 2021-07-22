@@ -312,27 +312,27 @@ public class LiferayDockerClient {
 		return false;
 	}
 
-	public static boolean verifyDockerImageByName(String dockerImageRepo) {
+	public static boolean verifyDockerImageByName(String dockerImageId) {
 		try (DockerClient dockerClient = getDockerClient()) {
 			ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
 
 			listImagesCmd.withShowAll(true);
 			listImagesCmd.withDanglingFilter(false);
 
-			listImagesCmd.withImageNameFilter(dockerImageRepo);
+			listImagesCmd.withImageNameFilter(dockerImageId);
 
 			List<Image> imagetList = listImagesCmd.exec();
 
 			Stream<Image> imageStream = imagetList.stream();
 
 			Optional<Image> dockerImage = imageStream.filter(
+				image -> Objects.nonNull(image)
+			).filter(
 				image -> {
-					String[] repoTags = image.getRepoTags();
+					String imageRepos = String.join(":", image.getRepoTags());
 
-					for (String repoTag : repoTags) {
-						if (repoTag.equals(dockerImageRepo)) {
-							return true;
-						}
+					if (Objects.equals(dockerImageId, imageRepos)) {
+						return true;
 					}
 
 					return false;

@@ -25,6 +25,7 @@ import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.core.resources.IProject;
@@ -173,6 +174,13 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 		_complete = false;
 
 		IStatus status = Status.OK_STATUS;
+
+		if ((status == null) || (status.isOK() && Objects.isNull(_dockerImageId))) {
+			_wizard.setMessage("Docker Image Id can not be null", IMessageProvider.ERROR);
+			_wizard.update();
+
+			return;
+		}
 
 		boolean dockerImageExisted = LiferayDockerClient.verifyDockerImageByName(_dockerImageId.getText());
 
