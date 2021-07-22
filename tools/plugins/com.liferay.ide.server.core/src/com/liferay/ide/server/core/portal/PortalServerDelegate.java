@@ -14,11 +14,16 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.google.common.primitives.Ints;
+
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.SocketUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -253,9 +258,9 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 	}
 
 	private String _getGogoShellPort(IServer server) {
-		IRuntime runtime = server.getRuntime();
-
 		String gogoShellPortValue = PortalServerConstants.DEFAULT_GOGOSHELL_PORT;
+
+		IRuntime runtime = server.getRuntime();
 
 		PortalRuntime liferayRuntime = (PortalRuntime)runtime.loadAdapter(PortalRuntime.class, null);
 
@@ -280,6 +285,39 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 
 				if (Objects.nonNull(gogoShellConnectStrings) && (gogoShellConnectStrings.length > 1)) {
 					gogoShellPortValue = gogoShellConnectStrings[1];
+				}
+			}
+		}
+		else {
+			File files = LiferayWorkspaceUtil.getWorkspaceProjectFile();
+
+			File[] dockerExtFile = files.listFiles((file, name) -> name.equals("Dockerfile.ext"));
+
+			if (dockerExtFile.length == 1) {
+				String[] lines = FileUtil.readLinesFromFile(dockerExtFile[0]);
+
+				String gogoEnv = "LIFERAY_MODULE_PERIOD_FRAMEWORK_PERIOD_PROPERTIES_PERIOD_OSGI_PERIOD_CONSOLE";
+
+				for (String line : lines) {
+					if (line.contains(gogoEnv) && line.contains(":")) {
+						String port = line.split(":")[1];
+
+						Integer portNum = Ints.tryParse(port);
+
+						if (Objects.isNull(portNum)) {
+							LiferayServerCore.logError("The Gogo shell port you configured is invalid, use default.");
+
+							break;
+						}
+
+						IStatus socketStatus = SocketUtil.canConnect(server.getHost(), portNum.toString());
+
+						if (!socketStatus.isOK()) {
+							return null;
+						}
+
+						gogoShellPortValue = portNum.toString();
+					}
 				}
 			}
 		}

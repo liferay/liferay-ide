@@ -16,7 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import aQute.bnd.osgi.Jar;
 
-import com.liferay.blade.gradle.model.CustomModel;
+import com.liferay.blade.gradle.tooling.DefaultModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.Event;
 import com.liferay.ide.core.EventListener;
@@ -42,6 +42,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -220,13 +221,19 @@ public class LiferayGradleProject
 
 		IPath retval = null;
 
-		CustomModel model = LiferayGradleCore.getToolingModel(CustomModel.class, gradleProject);
+		DefaultModel model = LiferayGradleCore.getToolingModel(DefaultModel.class, gradleProject);
 
 		if (model == null) {
 			return retval;
 		}
 
-		Set<File> outputFiles = model.getOutputFiles();
+		Set<String> pluginClassNames = model.getPluginClassNames();
+
+		GradleProject gradleModel = LiferayGradleCore.getToolingModel(GradleProject.class, gradleProject);
+
+		Map<String, Set<File>> projectOutputFilesMap = model.getProjectOutputFiles();
+
+		Set<File> outputFiles = projectOutputFilesMap.get(gradleModel.getPath());
 
 		if (ListUtil.isNotEmpty(outputFiles)) {
 
@@ -263,7 +270,7 @@ public class LiferayGradleProject
 				retval = new Path(bundleFile.getAbsolutePath());
 			}
 		}
-		else if (model.hasPlugin("com.liferay.gradle.plugins.gulp.GulpPlugin")) {
+		else if (pluginClassNames.contains("com.liferay.gradle.plugins.gulp.GulpPlugin")) {
 			retval = FileUtil.pathAppend(gradleProject.getLocation(), "dist", gradleProject.getName() + ".war");
 		}
 

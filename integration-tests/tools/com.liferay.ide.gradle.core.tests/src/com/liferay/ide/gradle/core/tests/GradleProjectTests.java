@@ -14,7 +14,7 @@
 
 package com.liferay.ide.gradle.core.tests;
 
-import com.liferay.blade.gradle.model.CustomModel;
+import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IProjectBuilder;
@@ -34,6 +34,7 @@ import java.nio.file.Files;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -157,13 +158,15 @@ public class GradleProjectTests extends ProjectBase {
 
 		assertProjectExists(ips);
 
-		CustomModel customModel = LiferayGradleCore.getToolingModel(CustomModel.class, gradleProject.getProject());
+		ProjectInfo customModel = LiferayGradleCore.getToolingModel(ProjectInfo.class, gradleProject.getProject());
+
+		Set<String> pluginClassNames = customModel.getPluginClassNames();
 
 		Assert.assertNotNull(customModel);
 
-		Assert.assertFalse(customModel.hasPlugin("not.a.plugin"));
+		Assert.assertFalse(pluginClassNames.contains("not.a.plugin"));
 
-		Assert.assertTrue(customModel.hasPlugin("aQute.bnd.gradle.BndWorkspacePlugin"));
+		Assert.assertTrue(pluginClassNames.contains("aQute.bnd.gradle.BndWorkspacePlugin"));
 
 		deleteProject(ips);
 	}

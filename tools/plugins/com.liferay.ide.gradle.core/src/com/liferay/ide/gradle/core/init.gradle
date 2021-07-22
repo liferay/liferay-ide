@@ -23,5 +23,5 @@ initscript {
 }
 
 allprojects {
-	apply plugin: com.liferay.blade.gradle.plugin.CustomModelPlugin
+	apply plugin: com.liferay.blade.gradle.tooling.ProjectInfoPlugin
 }

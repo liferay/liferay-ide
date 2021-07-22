@@ -91,6 +91,7 @@ import org.eclipse.jdt.internal.launching.StandardVMType;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
@@ -202,8 +203,7 @@ public class ServerUtil {
 
 		IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(null, monitor);
 
-		serverRuntimeName = _setRuntimeName(runtimeWC, serverRuntimeName, -1);
-
+		runtimeWC.setName(serverRuntimeName);
 		runtimeWC.setLocation(location);
 
 		runtimeWC.save(true, monitor);
@@ -959,8 +959,8 @@ public class ServerUtil {
 
 			return runtimeWC;
 		}
-		catch (CoreException ce) {
-			ce.printStackTrace();
+		catch (CoreException exception) {
+			LiferayServerCore.logError("Failed to get runtime workcopy for runtime type " + runtimeType, exception);
 		}
 
 		return null;
@@ -1152,6 +1152,28 @@ public class ServerUtil {
 		return retval;
 	}
 
+	public static boolean isDockerServerExist() {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		IPath workspaceLocation = workspaceProject.getLocation();
+
+		File buildFolder = new File(workspaceLocation.toOSString(), "build");
+
+		if (FileUtil.exists(buildFolder)) {
+			File dotDockerFolder = new File(buildFolder, ".docker");
+
+			if (FileUtil.exists(dotDockerFolder)) {
+				File imageIdFile = new File(dotDockerFolder, "buildDockerImage-imageId.txt");
+
+				if (FileUtil.exists(imageIdFile) && (imageIdFile.length() != 0)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public static boolean isExistingVMName(String name) {
 		IVMInstallType vmInstallType = JavaRuntime.getVMInstallType(StandardVMType.ID_STANDARD_VM_TYPE);
 
@@ -1241,6 +1263,28 @@ public class ServerUtil {
 
 			PropertiesUtil.saveProperties(configInfoProperties, configInfoPath.toFile());
 		}
+	}
+
+	public static void setRuntimeName(IRuntimeWorkingCopy runtime, int suffix, String projectName) {
+		if (runtime == null) {
+			return;
+		}
+
+		IRuntimeType runtimeType = runtime.getRuntimeType();
+
+		String runtimeName = runtimeType.getName() + " " + projectName;
+
+		if (suffix == -1) {
+			runtimeName = NLS.bind(Msgs.defaultRuntimeName, runtimeName);
+		}
+		else {
+			runtimeName = NLS.bind(
+				Msgs.defaultRuntimeNameWithSuffix, new String[] {runtimeName, String.valueOf(suffix)});
+		}
+
+		runtimeName = _verifyRuntimeName(runtime, runtimeName, suffix);
+
+		runtime.setName(runtimeName);
 	}
 
 	public static void setupPortalDevelopModeConfiguration(PortalRuntime portalRuntime, PortalServer portalServer) {
@@ -1367,7 +1411,7 @@ public class ServerUtil {
 
 	private static String _formateRuntimeName(String runtimeName, int suffix) {
 		if (suffix != -1) {
-			return MessageFormat.format("{0}({1})", runtimeName, String.valueOf(suffix));
+			return NLS.bind(Msgs.defaultRuntimeNameWithSuffix, new String[] {runtimeName, String.valueOf(suffix)});
 		}
 
 		return MessageFormat.format("{0}", runtimeName);
@@ -1402,25 +1446,6 @@ public class ServerUtil {
 		}
 	}
 
-	private static String _setRuntimeName(IRuntimeWorkingCopy runtime, String runtimeName, int suffix) {
-		if (runtime == null) {
-			return null;
-		}
-
-		if (suffix == -1) {
-			runtimeName = MessageFormat.format("{0}", runtimeName);
-		}
-		else {
-			runtimeName = MessageFormat.format("{0}({1})", runtimeName, String.valueOf(suffix));
-		}
-
-		runtimeName = _verifyRuntimeName(runtime, runtimeName, suffix);
-
-		runtime.setName(runtimeName);
-
-		return runtimeName;
-	}
-
 	private static String _verifyRuntimeName(IRuntimeWorkingCopy runtime, String runtimeName, int suffix) {
 		String name = null;
 
@@ -1448,6 +1473,17 @@ public class ServerUtil {
 		}
 
 		return name;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String defaultRuntimeName;
+		public static String defaultRuntimeNameWithSuffix;
+
+		static {
+			initializeMessages(ServerUtil.class.getName(), Msgs.class);
+		}
+
 	}
 
 }

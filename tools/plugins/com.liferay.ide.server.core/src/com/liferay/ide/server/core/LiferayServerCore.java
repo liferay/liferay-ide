@@ -25,6 +25,9 @@ import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
 import com.liferay.ide.server.core.portal.LiferayPortalRuntimeLifecycleListener;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
+import com.liferay.ide.server.core.portal.docker.IDockerServer;
+import com.liferay.ide.server.core.portal.docker.PortalDockerRuntimeLifecycleAdapter;
+import com.liferay.ide.server.core.portal.docker.PortalDockerServerLifecycleAdapter;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
@@ -133,6 +136,53 @@ public class LiferayServerCore extends Plugin {
 
 	public static LiferayServerCore getDefault() {
 		return _plugin;
+	}
+
+	public static IDockerServer getDockerServer() {
+		IDockerServer retval = null;
+
+		IDockerServer[] dockerServers = getDockerServers();
+
+		if (ListUtil.isNotEmpty(dockerServers)) {
+			for (IDockerServer dockerServer : dockerServers) {
+				if (dockerServer != null) {
+					retval = dockerServer;
+
+					break;
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	public static IDockerServer[] getDockerServers() {
+		if (_dockerServers == null) {
+			IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+
+			IConfigurationElement[] elements = extensionRegistry.getConfigurationElementsFor(IDockerServer.ID);
+
+			try {
+				List<IDockerServer> deployers = new ArrayList<>();
+
+				for (IConfigurationElement element : elements) {
+					Object o = element.createExecutableExtension("class");
+
+					if (o instanceof IDockerServer) {
+						IDockerServer dockerServer = (IDockerServer)o;
+
+						deployers.add(dockerServer);
+					}
+				}
+
+				_dockerServers = deployers.toArray(new IDockerServer[0]);
+			}
+			catch (Exception e) {
+				logError("Unable to get docker deployer extensions", e);
+			}
+		}
+
+		return _dockerServers;
 	}
 
 	public static URL getPluginEntry(String path) {
@@ -618,6 +668,14 @@ public class LiferayServerCore extends Plugin {
 		_runtimeLifecycleListener = new LiferayPortalRuntimeLifecycleListener();
 
 		ServerCore.addRuntimeLifecycleListener(_runtimeLifecycleListener);
+
+		_dockerRuntimeListener = new PortalDockerRuntimeLifecycleAdapter();
+
+		_dockerServerListener = new PortalDockerServerLifecycleAdapter();
+
+		ServerCore.addServerLifecycleListener(_dockerServerListener);
+
+		ServerCore.addRuntimeLifecycleListener(_dockerRuntimeListener);
 	}
 
 	@Override
@@ -633,6 +691,12 @@ public class LiferayServerCore extends Plugin {
 		ServerCore.removeServerLifecycleListener(_globalServerLifecycleListener);
 
 		ServerCore.removeRuntimeLifecycleListener(_runtimeLifecycleListener);
+
+		ServerCore.removeRuntimeLifecycleListener(_dockerRuntimeListener);
+		ServerCore.removeServerLifecycleListener(_dockerServerListener);
+
+		ServerCore.removeRuntimeLifecycleListener(_dockerRuntimeListener);
+		ServerCore.removeServerLifecycleListener(_dockerServerListener);
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -861,12 +925,15 @@ public class LiferayServerCore extends Plugin {
 	}
 
 	private static Map<String, IServerManagerConnection> _connections = null;
+	private static IDockerServer[] _dockerServers = null;
 	private static LiferayServerCore _plugin;
 	private static IPluginPublisher[] _pluginPublishers = null;
 	private static PortalBundleFactory[] _portalBundleFactories;
 	private static IRuntimeDelegateValidator[] _runtimeDelegateValidators;
 	private static ILiferayRuntimeStub[] _runtimeStubs;
 
+	private IRuntimeLifecycleListener _dockerRuntimeListener;
+	private IServerLifecycleListener _dockerServerListener;
 	private IRuntimeLifecycleListener _globalRuntimeLifecycleListener;
 	private IServerLifecycleListener _globalServerLifecycleListener;
 	private IRuntimeLifecycleListener _runtimeLifecycleListener;

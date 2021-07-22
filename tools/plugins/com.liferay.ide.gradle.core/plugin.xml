@@ -79,4 +79,34 @@
 		>
 		</configurator>
 	</extension>
+	<extension
+		point="com.liferay.ide.server.core.dockerServers"
+	>
+		<liferayDockerServer
+			class="com.liferay.ide.gradle.core.LiferayGradleDockerServer"
+			id="com.liferay.ide.gradle.core.dockerServer"
+			name="Liferay Gradle Docker Server"
+		>
+		</liferayDockerServer>
+	</extension>
+	<extension
+		point="org.eclipse.ltk.core.refactoring.deleteParticipants"
+	>
+		<deleteParticipant
+			class="com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectDeleteParticipant"
+			id="com.liferay.ide.gradle.core.workspace.LiferayGradleWorkspaceProjectDeleteParticipant"
+			name="liferayGradleWorkspaceProjectDeleteParticipant"
+		>
+			<enablement>
+				<adapt
+					type="org.eclipse.core.resources.IProject"
+				>
+					<test
+						property="com.liferay.ide.project.core.isLiferayWorkspaceProject"
+					>
+					</test>
+				</adapt>
+			</enablement>
+		</deleteParticipant>
+	</extension>
 </plugin>

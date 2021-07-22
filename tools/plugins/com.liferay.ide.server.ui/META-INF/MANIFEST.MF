@@ -39,7 +39,11 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.ws,
  org.eclipse.wst.ws.explorer,
- org.eclipse.wst.ws.parser
+ org.eclipse.wst.ws.parser,
+ org.json,
+ org.apache.commons.logging,
+ com.google.guava,
+ org.slf4j.api
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.ui,
@@ -48,3 +52,5 @@ Export-Package: com.liferay.ide.server.ui,
  com.liferay.ide.server.ui.navigator,
  com.liferay.ide.server.ui.portal,
  com.liferay.ide.server.ui.wizard
+Bundle-ClassPath: .
+

@@ -22,15 +22,22 @@ import com.liferay.ide.core.workspace.ProjectCreatedEvent;
 import com.liferay.ide.core.workspace.ProjectDeletedEvent;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.net.URL;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -39,9 +46,11 @@ import org.osgi.framework.BundleContext;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class LiferayGradleUI extends Plugin {
+public class LiferayGradleUI extends AbstractUIPlugin {
 
 	// The plug-in ID
+
+	public static final String IMG_WIZ_RUNTIME = "imgWizRuntime";
 
 	public static final String LIFERAY_STANDALONE_WATCH_JOB_FAMILY = "standalone";
 
@@ -57,11 +66,11 @@ public class LiferayGradleUI extends Plugin {
 		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
 	}
 
+	// The shared instance
+
 	public static IStatus createInfoStatus(String msg) {
 		return new Status(IStatus.INFO, PLUGIN_ID, msg, null);
 	}
-
-	// The shared instance
 
 	/**
 	 * Returns the shared instance
@@ -74,6 +83,17 @@ public class LiferayGradleUI extends Plugin {
 
 	public static Bundle getDefaultBundle() {
 		return _plugin.getBundle();
+	}
+
+	public static ImageDescriptor getImageDescriptor(String key) {
+		try {
+			getDefault().getImageRegistry();
+
+			return (ImageDescriptor)getDefault().imageDescriptors.get(key);
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 
 	public static void logError(String msg, Throwable t) {
@@ -95,7 +115,7 @@ public class LiferayGradleUI extends Plugin {
 	/**
 	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
+	 * @see AbstractUIPlugin#start(BundleContext)
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -144,7 +164,7 @@ public class LiferayGradleUI extends Plugin {
 	/**
 	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
+	 * @see AbstractUIPlugin#stop(BundleContext)
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
@@ -157,6 +177,40 @@ public class LiferayGradleUI extends Plugin {
 		super.stop(context);
 	}
 
+	protected ImageRegistry createImageRegistry() {
+		ImageRegistry registry = new ImageRegistry();
+
+		_registerImage(registry, IMG_WIZ_RUNTIME, "wizban/liferay_wiz.png");
+
+		return registry;
+	}
+
+	protected Map<String, ImageDescriptor> imageDescriptors = new HashMap<>();
+
+	private void _registerImage(ImageRegistry registry, String key, String partialURL) {
+		if (_iconBaseUrl == null) {
+			String pathSuffix = "icons/";
+
+			Bundle bundle = _plugin.getBundle();
+
+			_iconBaseUrl = bundle.getEntry(pathSuffix);
+		}
+
+		try {
+			ImageDescriptor id = ImageDescriptor.createFromURL(new URL(_iconBaseUrl, partialURL));
+
+			registry.put(key, id);
+
+			imageDescriptors.put(key, id);
+		}
+		catch (Exception e) {
+			ILog log = _plugin.getLog();
+
+			log.log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage()));
+		}
+	}
+
+	private static URL _iconBaseUrl;
 	private static LiferayGradleUI _plugin;
 
 	private EventListener _projectListener;
