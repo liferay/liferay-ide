@@ -191,9 +191,9 @@ public class LiferayGradleProject
 
 	@Override
 	public IPath getOutputBundlePath() {
-		IProject gradleProject = getProject();
+		IProject project = getProject();
 
-		IPath buildLocation = FileUtil.pathAppend(gradleProject.getLocation(), "build", "libs");
+		IPath buildLocation = FileUtil.pathAppend(project.getLocation(), "build", "libs");
 
 		if (FileUtil.notExists(buildLocation)) {
 			return null;
@@ -211,7 +211,7 @@ public class LiferayGradleProject
 			return new Path(outputFile.getAbsolutePath());
 		}
 
-		IPath outputPath = FileUtil.pathAppend(gradleProject.getLocation(), "dist", gradleProject.getName() + ".war");
+		IPath outputPath = FileUtil.pathAppend(project.getLocation(), "dist", project.getName() + ".war");
 
 		if (FileUtil.exists(outputPath)) {
 			return outputPath;
@@ -221,7 +221,7 @@ public class LiferayGradleProject
 
 		IPath retval = null;
 
-		ProjectInfo projectInfo = LiferayGradleCore.getToolingModel(ProjectInfo.class, gradleProject);
+		ProjectInfo projectInfo = LiferayGradleCore.getToolingModel(ProjectInfo.class, project);
 
 		if (projectInfo == null) {
 			return retval;
@@ -229,11 +229,11 @@ public class LiferayGradleProject
 
 		Set<String> pluginClassNames = projectInfo.getPluginClassNames();
 
-		GradleProject gradleModel = LiferayGradleCore.getToolingModel(GradleProject.class, gradleProject);
+		GradleProject gradleProject = GradleUtil.getGradleProject(project);
 
 		Map<String, Set<File>> projectOutputFilesMap = projectInfo.getProjectOutputFiles();
 
-		Set<File> outputFiles = projectOutputFilesMap.get(gradleModel.getPath());
+		Set<File> outputFiles = projectOutputFilesMap.get(gradleProject.getPath());
 
 		if (ListUtil.isNotEmpty(outputFiles)) {
 
@@ -271,7 +271,7 @@ public class LiferayGradleProject
 			}
 		}
 		else if (pluginClassNames.contains("com.liferay.gradle.plugins.gulp.GulpPlugin")) {
-			retval = FileUtil.pathAppend(gradleProject.getLocation(), "dist", gradleProject.getName() + ".war");
+			retval = FileUtil.pathAppend(project.getLocation(), "dist", project.getName() + ".war");
 		}
 
 		return retval;
