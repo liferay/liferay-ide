@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
@@ -190,7 +189,6 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 
 		String configuration = "compileOnly";
 		String groupId = "com.liferay.portal";
-		String artifactId = _portalArtifactId;
 
 		IWorkspaceProject gradleWorkspace = LiferayWorkspaceUtil.getGradleWorkspaceProject();
 
@@ -204,42 +202,62 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 			try {
 				gradleDependencies = gradleBuildScript.getDependencies();
 
-				dependencyStream = gradleDependencies.stream();
-
-				dependencies = dependencyStream.filter(
-					dep ->
-						StringUtil.equals(groupId, dep.getGroup()) &&
-						StringUtil.equals(_portalArtifactId, dep.getName())
-				).collect(
-					Collectors.toList()
-				);
-
-				GradleDependency newDependency = new GradleDependency(
-					configuration, groupId, artifactId, null, 0, 0, null);
+				String oldReleaseApi = null;
+				String newReleaseApi = null;
 
 				if (productVersion.startsWith("dxp")) {
-					artifactId = _dxpArtifactId;
+					oldReleaseApi = _portalArtifactId;
+					newReleaseApi = _dxpArtifactId;
+				}
+				else if (productVersion.startsWith("portal")) {
+					oldReleaseApi = _dxpArtifactId;
+					newReleaseApi = _portalArtifactId;
+				}
+				else {
+					return;
+				}
 
-					newDependency = new GradleDependency(configuration, groupId, artifactId, null, 0, 0, null);
+				GradleDependency oldReleaseApiDependency = null;
 
-					if (!dependencies.isEmpty()) {
-						GradleDependency oldDependency = dependencies.get(0);
+				for (GradleDependency dependency : gradleDependencies) {
+					if (Objects.equals(groupId, dependency.getGroup()) &&
+						Objects.equals(oldReleaseApi, dependency.getName())) {
 
-						newDependency = new GradleDependency(
-							configuration, groupId, artifactId, null, oldDependency.getLineNumber(),
-							oldDependency.getLastLineNumber(), null);
+						oldReleaseApiDependency = dependency;
 
-						gradleBuildScript.updateDependency(oldDependency, newDependency);
-
-						ProjectUtil.refreshLocalProject(LiferayWorkspaceUtil.getWorkspaceProject());
-
-						gradleBuildScript = new GradleBuildScript(buildGradleFile);
+						break;
 					}
 				}
 
-				gradleBuildScript.insertDependency(newDependency);
+				if (Objects.nonNull(oldReleaseApiDependency)) {
+					GradleDependency newReleaseApiDependency = new GradleDependency(
+						configuration, groupId, newReleaseApi, null, oldReleaseApiDependency.getLineNumber(),
+						oldReleaseApiDependency.getLastLineNumber(), oldReleaseApiDependency.getArguments());
 
-				FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
+					gradleBuildScript.updateDependency(oldReleaseApiDependency, newReleaseApiDependency);
+				}
+				else {
+					GradleDependency newReleaseApiDependency = null;
+
+					for (GradleDependency dependency : gradleDependencies) {
+						if (Objects.equals(groupId, dependency.getGroup()) &&
+							Objects.equals(newReleaseApi, dependency.getName())) {
+
+							newReleaseApiDependency = dependency;
+
+							break;
+						}
+					}
+
+					if (Objects.isNull(newReleaseApiDependency)) {
+						newReleaseApiDependency = new GradleDependency(
+							configuration, groupId, newReleaseApi, null, 0, 0, null);
+
+						gradleBuildScript.insertDependency(newReleaseApiDependency);
+
+						FileUtils.writeLines(buildGradleFile, gradleBuildScript.getFileContents());
+					}
+				}
 
 				ProjectUtil.refreshLocalProject(LiferayWorkspaceUtil.getWorkspaceProject());
 			}
