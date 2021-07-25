@@ -155,6 +155,11 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 		return false;
 	}
 
+	@Override
+	public boolean isWarCoreExtModule() {
+		return false;
+	}
+
 	private MavenBundlePluginProject _bundleProject;
 
 }

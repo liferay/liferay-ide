@@ -132,6 +132,14 @@ public class GradleBuildScript {
 		return _fileContents;
 	}
 
+	public List<String> getWarCoreExtDefaultConfiguration() {
+		BuildScriptVisitor buildScriptVisitor = new BuildScriptVisitor();
+
+		_walkScript(buildScriptVisitor);
+
+		return buildScriptVisitor.getWarCoreExtDefaultConfiguration();
+	}
+
 	public BuildScriptVisitor insertDependency(GradleDependency gradleDependency) throws IOException {
 		return _insertDependency(gradleDependency);
 	}

@@ -68,16 +68,13 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
 			if (bundleProject != null) {
-
-				// TODO catch error in getOutputJar and show a popup notification instead
-
 				monitor.subTask("Building " + module.getName() + " output bundle...");
 
 				try {
 					IPath outputJar = bundleProject.getOutputBundle(cleanBuildNeeded(), monitor);
 
 					if (FileUtil.exists(outputJar)) {
-						if (server.getServerState() == IServer.STATE_STARTED) {
+						if ((server.getServerState() == IServer.STATE_STARTED) && !bundleProject.isWarCoreExtModule()) {
 							monitor.subTask(
 								"Remotely deploying " + module.getName() + " to Liferay module framework...");
 

@@ -22,6 +22,7 @@ import java.util.Stack;
 
 import org.codehaus.groovy.ast.CodeVisitorSupport;
 import org.codehaus.groovy.ast.expr.ArgumentListExpression;
+import org.codehaus.groovy.ast.expr.BinaryExpression;
 import org.codehaus.groovy.ast.expr.ClosureExpression;
 import org.codehaus.groovy.ast.expr.ConstantExpression;
 import org.codehaus.groovy.ast.expr.Expression;
@@ -29,6 +30,7 @@ import org.codehaus.groovy.ast.expr.MapEntryExpression;
 import org.codehaus.groovy.ast.expr.MapExpression;
 import org.codehaus.groovy.ast.expr.MethodCallExpression;
 import org.codehaus.groovy.ast.stmt.BlockStatement;
+import org.codehaus.groovy.syntax.Token;
 
 /**
  * @author Vernon Singleton
@@ -47,6 +49,10 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 
 	public int getDependenciesLastLineNumber() {
 		return _dependenciesLastLineNumber;
+	}
+
+	public List<String> getWarCoreExtDefaultConfiguration() {
+		return _warCoreExtDefaultConfiguration;
 	}
 
 	@Override
@@ -86,8 +92,23 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 	}
 
 	@Override
+	public void visitBinaryExpression(BinaryExpression expression) {
+		if (_inEclipse && _inClasspath) {
+			Expression leftExpression = expression.getLeftExpression();
+			Expression rightExpression = expression.getRightExpression();
+			Token operation = expression.getOperation();
+
+			_warCoreExtDefaultConfiguration.add(leftExpression.getText());
+			_warCoreExtDefaultConfiguration.add(operation.getText());
+			_warCoreExtDefaultConfiguration.add(rightExpression.getText());
+		}
+
+		super.visitBinaryExpression(expression);
+	}
+
+	@Override
 	public void visitBlockStatement(BlockStatement blockStatement) {
-		if (_inDependencies || _inBuildscriptDependencies) {
+		if (_inDependencies || _inBuildscriptDependencies || (_inEclipse && _inClasspath)) {
 			_blockStatementStack.push(true);
 
 			super.visitBlockStatement(blockStatement);
@@ -213,6 +234,18 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 			_inDependencies = true;
 		}
 
+		if (method.equals("eclipse")) {
+			_dependenciesLastLineNumber = call.getLastLineNumber();
+
+			_inEclipse = true;
+		}
+
+		if (method.equals("classpath") && _inEclipse) {
+			_dependenciesLastLineNumber = call.getLastLineNumber();
+
+			_inClasspath = true;
+		}
+
 		if (_inBuildscript && _inDependencies && (_buildscriptDependenciesLastLineNumber == -1)) {
 			_buildscriptDependenciesLastLineNumber = call.getLastLineNumber();
 			_inBuildscriptDependencies = true;
@@ -244,6 +277,9 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 	private boolean _inArguments = false;
 	private boolean _inBuildscript = false;
 	private boolean _inBuildscriptDependencies = false;
+	private boolean _inClasspath = false;
 	private boolean _inDependencies = false;
+	private boolean _inEclipse = false;
+	private List<String> _warCoreExtDefaultConfiguration = new ArrayList<>();
 
 }

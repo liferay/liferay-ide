@@ -32,6 +32,7 @@ import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.core.workspace.ProjectDeletedEvent;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
@@ -363,6 +364,57 @@ public class LiferayGradleProject
 	@Override
 	public boolean isStale() {
 		return _stale;
+	}
+
+	@Override
+	public boolean isWarCoreExtModule() {
+		IProject project = getProject();
+
+		try {
+			if (ProjectUtil.isModuleExtProject(project)) {
+				return false;
+			}
+
+			IFolder srcFolder = project.getFolder("src");
+
+			if (!(FileUtil.exists(srcFolder) && FileUtil.exists(srcFolder.getFolder("extImpl")) &&
+				  FileUtil.exists(srcFolder.getFolder("extKernel")) &&
+				  FileUtil.exists(srcFolder.getFolder("extUtilBridges")) &&
+				  FileUtil.exists(srcFolder.getFolder("extUtilJava")) &&
+				  FileUtil.exists(srcFolder.getFolder("extUtilTaglib")))) {
+
+				return false;
+			}
+
+			IPath extDirLocation = LiferayWorkspaceUtil.getExtDirLocation(LiferayWorkspaceUtil.getWorkspaceProject());
+
+			if (Objects.nonNull(extDirLocation) && !extDirLocation.isPrefixOf(project.getLocation())) {
+				return false;
+			}
+
+			IFile buildGradleFile = project.getFile("build.gradle");
+
+			if (buildGradleFile.exists()) {
+				GradleBuildScript buildGradleScript = new GradleBuildScript(FileUtil.getFile(buildGradleFile));
+
+				List<String> warCoreExtDefaultConfigurations = buildGradleScript.getWarCoreExtDefaultConfiguration();
+
+				if (warCoreExtDefaultConfigurations.size() == 3) {
+					String[] warCoreExtDefaultStrings = warCoreExtDefaultConfigurations.toArray(new String[0]);
+
+					if (Objects.equals("plusConfigurations", warCoreExtDefaultStrings[0]) &&
+						Objects.equals("+=", warCoreExtDefaultStrings[1]) &&
+						Objects.equals("[configurations.portal]", warCoreExtDefaultStrings[2])) {
+
+						return true;
+					}
+				}
+			}
+		}
+		catch (Exception exception) {
+		}
+
+		return false;
 	}
 
 	@Override

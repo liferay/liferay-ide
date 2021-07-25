@@ -270,6 +270,11 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 		return false;
 	}
 
+	@Override
+	public boolean isWarCoreExtModule() {
+		return false;
+	}
+
 	private IFolder _getTargetFolder(IProject project, IPath relativePath) {
 		IFolder targetFolder = project.getFolder(relativePath);
 
