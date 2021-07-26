@@ -15,8 +15,10 @@
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.dialog.StringsFilteredDialog;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.ConfigureWorkspaceProductKeyCommandKeys;
@@ -32,12 +34,11 @@ import java.io.File;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -68,32 +69,44 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		File gradleProperties = _getGradlePropertiesFile();
+		IProject gradePropertiesProject = _getGradlePropertiesFileProject();
 
-		if (Objects.isNull(gradleProperties)) {
+		if (Objects.isNull(gradePropertiesProject) || !gradePropertiesProject.exists()) {
 			return Status.CANCEL_STATUS;
 		}
 
-		return _updateWorkspaceProductKeyValue(gradleProperties);
+		File gradleProperties = FileUtil.getFile(gradePropertiesProject.getFile("gradle.properties"));
+
+		if (FileUtil.notExists(gradleProperties)) {
+			return Status.CANCEL_STATUS;
+		}
+
+		return _updateWorkspaceProductKeyValue(gradePropertiesProject, gradleProperties);
 	}
 
 	@Override
 	public void preview(IProgressMonitor progressMonitor) {
-		File gradeProperties = _getGradlePropertiesFile();
+		IProject gradlePropertiesProject = _getGradlePropertiesFileProject();
 
-		if (gradeProperties == null) {
+		if (Objects.isNull(gradlePropertiesProject) || !gradlePropertiesProject.exists()) {
+			return;
+		}
+
+		File gradleProperties = FileUtil.getFile(gradlePropertiesProject.getFile("gradle.properties"));
+
+		if (FileUtil.notExists(gradleProperties)) {
 			return;
 		}
 
 		File tempDir = getTempDir();
 
-		FileUtil.copyFileToDir(gradeProperties, "gradle.properties-preview", tempDir);
+		FileUtil.copyFileToDir(gradleProperties, "gradle.properties-preview", tempDir);
 
 		File tempFile = new File(tempDir, "gradle.properties-preview");
 
-		_updateWorkspaceProductKeyValue(tempFile);
+		_updateWorkspaceProductKeyValue(null, tempFile);
 
-		UIUtil.async(() -> _upgradeCompare.openCompareEditor(gradeProperties, tempFile));
+		UIUtil.async(() -> _upgradeCompare.openCompareEditor(gradleProperties, tempFile));
 	}
 
 	public class AsyncStringsSelectionValidator implements ISelectionStatusValidator {
@@ -118,7 +131,7 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 
 	}
 
-	private File _getGradlePropertiesFile() {
+	private IProject _getGradlePropertiesFileProject() {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select Liferay Workspace Project", false, ResourceSelection.WORKSPACE_PROJECTS);
 
@@ -126,9 +139,7 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 			return null;
 		}
 
-		IProject project = projects.get(0);
-
-		return FileUtil.getFile(project.getFile("gradle.properties"));
+		return projects.get(0);
 	}
 
 	private void _loadWorkspaceProduct(TreeViewer viewer, String targetPlatformVersion) {
@@ -168,13 +179,15 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 		}
 	}
 
-	private IStatus _updateWorkspaceProductKeyValue(File gradeProperties) {
+	private IStatus _updateWorkspaceProductKeyValue(IProject project, File gradeProperties) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
 		String targetVersion = upgradePlan.getTargetVersion();
 
 		try {
 			final AtomicInteger returnCode = new AtomicInteger();
+
+			Properties gradleProperties = PropertiesUtil.loadProperties(gradeProperties);
 
 			final AtomicReference<String> productKey = new AtomicReference<>();
 
@@ -194,19 +207,17 @@ public class ConfigureWorkspaceProductKeyCommand implements UpgradeCommand, Upgr
 					dialog.setHelpAvailable(false);
 
 					returnCode.set(dialog.open());
+
 					productKey.set((String)dialog.getFirstResult());
 				});
 
 			if (returnCode.get() == Window.OK) {
-				try {
-					PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
+				gradleProperties.setProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, productKey.get());
 
-					config.setProperty(WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, productKey);
+				PropertiesUtil.saveProperties(gradleProperties, gradeProperties);
 
-					config.save();
-				}
-				catch (Exception e) {
-					return UpgradeCommandsUIPlugin.createErrorStatus("Unable to save workspace product key", e);
+				if (Objects.nonNull(project)) {
+					ProjectUtil.refreshLocalProject(project);
 				}
 			}
 
