@@ -8,8 +8,6 @@ Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.fasterxml.jackson.core.jackson-annotations,
  com.fasterxml.jackson.core.jackson-core,
  com.fasterxml.jackson.core.jackson-databind,
- com.fasterxml.jackson.jaxrs.jackson-jaxrs-base,
- com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider,
  com.google.guava,
  com.google.gson,
  com.liferay.ide.core,
