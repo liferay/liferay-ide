@@ -36,4 +36,6 @@ public interface IBundleProject extends ILiferayProject {
 
 	public boolean isFragmentBundle();
 
+	public boolean isWarCoreExtModule();
+
 }

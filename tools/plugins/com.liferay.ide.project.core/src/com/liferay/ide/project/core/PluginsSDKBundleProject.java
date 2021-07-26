@@ -253,6 +253,11 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IBundleP
 		return false;
 	}
 
+	@Override
+	public boolean isWarCoreExtModule() {
+		return false;
+	}
+
 	private File[] _getSDKOutputFiles(IPath distPath) {
 		if (FileUtil.notExists(distPath)) {
 			return null;
