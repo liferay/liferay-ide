@@ -174,10 +174,7 @@ public class DockerServerWizard extends WizardFragment {
 
 		Container dockerContainer = LiferayDockerClient.getDockerContainerByName(dockerServer.getContainerName());
 
-		if (Objects.nonNull(dockerContainer) && Objects.nonNull(dockerImage)) {
-			dockerServer.setContainerId(dockerContainer.getId());
-		}
-		else {
+		if (Objects.isNull(dockerContainer) || Objects.isNull(dockerImage)) {
 			throw new CoreException(LiferayGradleUI.createErrorStatus("Can not create container and image."));
 		}
 	}

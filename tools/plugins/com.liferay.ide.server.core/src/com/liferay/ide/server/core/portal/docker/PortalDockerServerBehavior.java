@@ -170,6 +170,10 @@ public class PortalDockerServerBehavior
 		setMode(mode);
 
 		try {
+			IDockerServer dockerServer = LiferayServerCore.getDockerServer();
+
+			dockerServer.startDockerContainer(monitor);
+
 			startedThread = new PortalDockerServerStateStartThread(getServer(), this);
 		}
 		catch (Exception e) {

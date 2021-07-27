@@ -41,11 +41,6 @@ public class PortalDockerServer extends PortalServerDelegate implements IPortalD
 		return getAttribute(docker_container_health_check_url, (String)null);
 	}
 
-	@Override
-	public String getImageId() {
-		return getAttribute(docker_container_images_id, (String)null);
-	}
-
 	public void setContainerId(String containerId) {
 		setAttribute(docker_container_id, containerId);
 	}
@@ -61,10 +56,6 @@ public class PortalDockerServer extends PortalServerDelegate implements IPortalD
 
 	public void setHealthCheckUrl(String healthCheckUrl) {
 		setAttribute(docker_container_health_check_url, healthCheckUrl);
-	}
-
-	public void setImageId(String imageId) {
-		setAttribute(docker_container_images_id, imageId);
 	}
 
 	public final String docker_container_health_check_url = "docker-container-health-check-url";

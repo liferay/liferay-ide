@@ -22,7 +22,6 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
-import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.ui.util.UIUtil;
@@ -44,7 +43,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
@@ -97,13 +95,7 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 			PortalDockerServer portalDockerServer = getPortalDockerServer();
 
 			if (portalDockerServer != null) {
-				IRuntime runtime = getServer().getRuntime();
-
-				PortalDockerRuntime dockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(
-					PortalDockerRuntime.class, null);
-
 				portalDockerServer.setContainerName(_nameField.getText());
-				portalDockerServer.setImageId(dockerRuntime.getImageId());
 			}
 		}
 	}

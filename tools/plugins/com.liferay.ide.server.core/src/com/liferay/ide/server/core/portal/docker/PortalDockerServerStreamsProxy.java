@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Frame;
 
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -26,6 +27,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import java.util.Objects;
 
 import org.eclipse.debug.core.model.IStreamMonitor;
 
@@ -84,7 +87,14 @@ public class PortalDockerServerStreamsProxy implements IPortalDockerStreamsProxy
 
 			public void run() {
 				try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
-					_attachContainerCmd = dockerClient.attachContainerCmd(portalServer.getContainerId());
+					Container dockerContainer = LiferayDockerClient.getDockerContainerByName(
+						portalServer.getContainerName());
+
+					if (Objects.isNull(dockerContainer)) {
+						return;
+					}
+
+					_attachContainerCmd = dockerClient.attachContainerCmd(dockerContainer.getId());
 
 					_attachContainerCmd.withFollowStream(true);
 					_attachContainerCmd.withLogs(false);

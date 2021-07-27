@@ -210,6 +210,8 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 		PortalDockerServerBehavior portalServerBehavior = (PortalDockerServerBehavior)server.loadAdapter(
 			PortalDockerServerBehavior.class, monitor);
 
+		portalServerBehavior.launchServer(launch, mode, monitor);
+
 		IProcess streamProxyProcess = _createTerminateableStreamsProxyProcess(
 			server, portalServer, portalServerBehavior, launch, ILaunchManager.DEBUG_MODE.equals(mode), config,
 			monitor);
@@ -217,8 +219,6 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 		if (portalServerBehavior.getProcess() == null) {
 			portalServerBehavior.setProcess(streamProxyProcess);
 		}
-
-		portalServerBehavior.launchServer(launch, mode, monitor);
 
 		server.addServerListener(
 			new IServerListener() {

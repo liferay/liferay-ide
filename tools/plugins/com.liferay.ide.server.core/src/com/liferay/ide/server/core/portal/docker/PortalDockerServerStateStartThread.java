@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.HealthCheck;
 
@@ -28,6 +29,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IProcess;
@@ -66,7 +68,13 @@ public class PortalDockerServerStateStartThread {
 		try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
 			PortalDockerServer portalServer = behaviour.getPortalServer();
 
-			InspectContainerCmd inspectContainerCmd = dockerClient.inspectContainerCmd(portalServer.getContainerId());
+			Container dockerContainer = LiferayDockerClient.getDockerContainerByName(portalServer.getContainerName());
+
+			if (Objects.isNull(dockerContainer)) {
+				return;
+			}
+
+			InspectContainerCmd inspectContainerCmd = dockerClient.inspectContainerCmd(dockerContainer.getId());
 
 			InspectContainerResponse containerSetting = inspectContainerCmd.exec();
 
