@@ -528,7 +528,7 @@ public class LiferayWorkspaceUtil {
 
 		IPath workspaceLocation = getWorkspaceProject().getLocation();
 
-		if (workspaceLocation.isPrefixOf(location)) {
+		if (Objects.nonNull(workspaceLocation) && workspaceLocation.isPrefixOf(location)) {
 			return true;
 		}
 
