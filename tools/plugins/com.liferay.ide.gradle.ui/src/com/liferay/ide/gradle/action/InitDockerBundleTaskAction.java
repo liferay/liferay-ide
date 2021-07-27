@@ -148,16 +148,14 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 
 				serverWC.setName(serverType.getName() + " " + project.getName());
 
-				Container container = LiferayDockerClient.getDockerContainerByName(_projectInfo.getDockerContainerId());
-
 				PortalDockerServer portalDockerServer = (PortalDockerServer)serverWC.loadAdapter(
 					PortalDockerServer.class, null);
 
 				portalDockerServer.setContainerName(_projectInfo.getDockerContainerId());
 
-				portalDockerServer.setContainerId(container.getId());
+				Container container = LiferayDockerClient.getDockerContainerByName(_projectInfo.getDockerContainerId());
 
-				portalDockerServer.setImageId(portalDockerRuntime.getImageId());
+				portalDockerServer.setContainerId(container.getId());
 
 				serverWC.save(true, null);
 			}

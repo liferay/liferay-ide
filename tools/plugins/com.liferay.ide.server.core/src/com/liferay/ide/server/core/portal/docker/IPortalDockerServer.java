@@ -25,6 +25,4 @@ public interface IPortalDockerServer {
 
 	public String getHealthCheckUrl();
 
-	public String getImageId();
-
 }

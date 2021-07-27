@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.ContainerConfig;
 
 import com.liferay.ide.core.util.ListUtil;
@@ -28,6 +29,7 @@ import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
 
@@ -118,7 +120,13 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 	}
 
 	public boolean isTerminated() {
-		return LiferayDockerClient.verifyDockerContainerTerminated(_dockerServer.getContainerId());
+		Container dockerContainer = LiferayDockerClient.getDockerContainerByName(_dockerServer.getContainerName());
+
+		if (Objects.isNull(dockerContainer)) {
+			return true;
+		}
+
+		return LiferayDockerClient.verifyDockerContainerTerminated(dockerContainer.getId());
 	}
 
 	public void setAttribute(String key, String value) {
@@ -173,14 +181,19 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 					return;
 				}
 
-				dockerServer.startDockerContainer(monitor);
-
 				fireCreateEvent();
 
 				if (_debug) {
 					try (DockerClient dockerClient = LiferayDockerClient.getDockerClient()) {
+						Container dockerContainer = LiferayDockerClient.getDockerContainerByName(
+							_dockerServer.getContainerName());
+
+						if (Objects.isNull(dockerContainer)) {
+							return;
+						}
+
 						InspectContainerCmd inspectContainerCmd = dockerClient.inspectContainerCmd(
-							_dockerServer.getContainerId());
+							dockerContainer.getId());
 
 						InspectContainerResponse inspectContainerCmdResponse = inspectContainerCmd.exec();
 
