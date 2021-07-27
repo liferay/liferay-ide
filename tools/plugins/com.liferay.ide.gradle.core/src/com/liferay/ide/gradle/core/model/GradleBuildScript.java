@@ -53,6 +53,8 @@ public class GradleBuildScript {
 		this(new String(Files.readAllBytes(path)));
 
 		_path = path;
+
+		_fileContents = Files.readAllLines(_path);
 	}
 
 	public GradleBuildScript(String scriptContents) throws MultipleCompilationErrorsException {
