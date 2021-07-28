@@ -17,6 +17,8 @@ package com.liferay.ide.gradle.action;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.util.Objects;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 
@@ -29,6 +31,10 @@ public class DockerDeployTaskAction extends GradleTaskAction {
 	public void selectionChanged(IAction action, ISelection selection) {
 		super.selectionChanged(action, selection);
 
+		if (Objects.isNull(project)) {
+			return;
+		}
+		
 		action.setEnabled(ServerUtil.isDockerServerExist() && LiferayWorkspaceUtil.inLiferayWorkspace(project));
 	}
 

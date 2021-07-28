@@ -171,6 +171,10 @@ public class PortalDockerServerBehavior
 
 		try {
 			IDockerServer dockerServer = LiferayServerCore.getDockerServer();
+			
+			if (Objects.isNull(dockerServer)) {
+				return;
+			}
 
 			dockerServer.startDockerContainer(monitor);
 

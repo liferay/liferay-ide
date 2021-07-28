@@ -24,7 +24,6 @@ import com.liferay.ide.server.core.portal.docker.IDockerServer;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -33,10 +32,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
-import org.eclipse.wst.server.core.IRuntimeType;
-import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 
@@ -163,29 +159,35 @@ public class LiferayGradleDockerServer implements IDockerServer {
 					null
 				);
 
-				if (Objects.nonNull(dockerRuntime) &&
-					Objects.equals(
-						projectInfo.getDockerImageId(),
-						String.join(":", dockerRuntime.getImageRepo(), dockerRuntime.getImageTag()))) {
-
-					IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalDockerRuntime.ID);
-
-					IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(portalRuntimeType.getName(), null);
-
-					ServerUtil.setRuntimeName(runtimeWC, -1, workspaceProject.getName());
-
-					PortalDockerRuntime portalDockerRuntime = (PortalDockerRuntime)runtimeWC.loadAdapter(
-						PortalDockerRuntime.class, null);
-
+				if (Objects.nonNull(dockerRuntime)) {
 					String dockerImageId = projectInfo.getDockerImageId();
 
-					portalDockerRuntime.setImageRepo(dockerImageId.split(":")[0]);
+					dockerRuntime.setImageRepo(dockerImageId.split(":")[0]);
 
-					portalDockerRuntime.setImageId(dockerImage.getId());
+					dockerRuntime.setImageId(dockerImage.getId());
 
-					portalDockerRuntime.setImageTag(dockerImageId.split(":")[1]);
+					dockerRuntime.setImageTag(dockerImageId.split(":")[1]);
+				}
 
-					runtimeWC.save(true, null);
+				PortalDockerServer dockerServer = Stream.of(
+					ServerCore.getServers()
+				).filter(
+					server -> Objects.nonNull(server)
+				).map(
+					server -> (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, monitor)
+				).filter(
+					server -> Objects.nonNull(server)
+				).filter(
+					server -> Objects.equals(projectInfo.getDockerContainerId(), server.getContainerName())
+				).findAny(
+				).orElseGet(
+					null
+				);
+
+				if (Objects.nonNull(dockerServer)) {
+					IServer server = dockerServer.getServer();
+
+					IServerWorkingCopy serverWorkingCopy = server.createWorkingCopy();
 
 					Container dockerContainer = LiferayDockerClient.getDockerContainerByName(
 						projectInfo.getDockerContainerId());
@@ -194,30 +196,18 @@ public class LiferayGradleDockerServer implements IDockerServer {
 						return;
 					}
 
-					IServerType serverType = ServerCore.findServerType(PortalDockerServer.ID);
+					serverWorkingCopy.setAttribute(PortalDockerServer.DOCKER_CONTAINER_ID, dockerContainer.getId());
 
-					IServerWorkingCopy serverWC = serverType.createServer(serverType.getName(), null, runtimeWC, null);
-
-					serverWC.setName(serverType.getName() + " " + workspaceProject.getName());
-
-					Container container = LiferayDockerClient.getDockerContainerByName(
-						projectInfo.getDockerContainerId());
-
-					PortalDockerServer portalDockerServer = (PortalDockerServer)serverWC.loadAdapter(
-						PortalDockerServer.class, null);
-
-					portalDockerServer.setContainerName(projectInfo.getDockerContainerId());
-
-					portalDockerServer.setContainerId(container.getId());
-
-					serverWC.save(true, null);
-
-					monitor.worked(60);
+					serverWorkingCopy.save(true, monitor);
 				}
+
+				monitor.worked(60);
 
 				GradleUtil.runGradleTask(
 					workspaceProject, new String[] {"startDockerContainer"},
 					new String[] {"-x", "createDockerContainer"}, false, monitor);
+
+				monitor.done();
 			}
 		}
 		catch (Exception ce) {

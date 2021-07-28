@@ -24,29 +24,37 @@ import org.eclipse.wst.server.core.ServerUtil;
  */
 public class PortalDockerServer extends PortalServerDelegate implements IPortalDockerServer {
 
+	public static final String DOCKER_CONTAINER_HEALTH_CHECK_URL = "docker-container-health-check-url";
+
+	public static final String DOCKER_CONTAINER_ID = "docker-container-id";
+
+	public static final String DOCKER_CONTAINER_IMAGE_ID = "docker-container-image-id";
+
+	public static final String DOCKER_CONTAINER_NAME = "docker-container-name";
+
 	public static final String ID = "com.liferay.ide.server.portal.docker";
 
 	@Override
 	public String getContainerId() {
-		return getAttribute(docker_container_id, (String)null);
+		return getAttribute(DOCKER_CONTAINER_ID, (String)null);
 	}
 
 	@Override
 	public String getContainerName() {
-		return getAttribute(docker_container_name, (String)null);
+		return getAttribute(DOCKER_CONTAINER_NAME, (String)null);
 	}
 
 	@Override
 	public String getHealthCheckUrl() {
-		return getAttribute(docker_container_health_check_url, (String)null);
+		return getAttribute(DOCKER_CONTAINER_HEALTH_CHECK_URL, (String)null);
 	}
 
 	public void setContainerId(String containerId) {
-		setAttribute(docker_container_id, containerId);
+		setAttribute(DOCKER_CONTAINER_ID, containerId);
 	}
 
 	public void setContainerName(String name) {
-		setAttribute(docker_container_name, name);
+		setAttribute(DOCKER_CONTAINER_NAME, name);
 	}
 
 	@Override
@@ -55,12 +63,7 @@ public class PortalDockerServer extends PortalServerDelegate implements IPortalD
 	}
 
 	public void setHealthCheckUrl(String healthCheckUrl) {
-		setAttribute(docker_container_health_check_url, healthCheckUrl);
+		setAttribute(DOCKER_CONTAINER_HEALTH_CHECK_URL, healthCheckUrl);
 	}
-
-	public final String docker_container_health_check_url = "docker-container-health-check-url";
-	public final String docker_container_id = "docker-container-id";
-	public final String docker_container_images_id = "docker-container-image-id";
-	public final String docker_container_name = "docker-container-name";
 
 }
