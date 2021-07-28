@@ -15,7 +15,6 @@
 package com.liferay.ide.gradle.ui.portal.docker;
 
 import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.Image;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
@@ -24,7 +23,6 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
-import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
@@ -39,7 +37,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
@@ -161,22 +158,18 @@ public class DockerServerWizard extends WizardFragment {
 
 		PortalDockerServer dockerServer = (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, null);
 
-		IRuntime runtime = server.getRuntime();
-
-		PortalDockerRuntime dockerRuntime = (PortalDockerRuntime)runtime.loadAdapter(PortalDockerRuntime.class, null);
-
-		String imageRepoTag = String.join(":", dockerRuntime.getImageRepo(), dockerRuntime.getImageTag());
-
-		Image dockerImage = LiferayDockerClient.getDockerImageByName(imageRepoTag);
-
 		GradleUtil.runGradleTask(
 			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"createDockerContainer"}, monitor);
 
 		Container dockerContainer = LiferayDockerClient.getDockerContainerByName(dockerServer.getContainerName());
 
-		if (Objects.isNull(dockerContainer) || Objects.isNull(dockerImage)) {
-			throw new CoreException(LiferayGradleUI.createErrorStatus("Can not create container and image."));
+		if (Objects.isNull(dockerContainer)) {
+			throw new CoreException(LiferayGradleUI.createErrorStatus("Can not create container."));
 		}
+
+		dockerServer.setContainerId(dockerContainer.getId());
+
+		server.save(true, monitor);
 	}
 
 	private static final String _BUILD_GRADLE_FILE_NAME = "build.gradle";

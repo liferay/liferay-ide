@@ -32,14 +32,18 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.internal.RuntimeWorkingCopy;
 
 /**
  * @author Simon Jiang
  * @author Ethan Sun
  */
+@SuppressWarnings("restriction")
 public class LiferayGradleDockerServer implements IDockerServer {
 
 	public LiferayGradleDockerServer() {
@@ -137,12 +141,6 @@ public class LiferayGradleDockerServer implements IDockerServer {
 			if ((projectInfo != null) && CoreUtil.isNotNullOrEmpty(projectInfo.getDockerImageId()) &&
 				CoreUtil.isNotNullOrEmpty(projectInfo.getDockerContainerId())) {
 
-				Image dockerImage = LiferayDockerClient.getDockerImageByName(projectInfo.getDockerImageId());
-
-				if (Objects.isNull(dockerImage)) {
-					return;
-				}
-
 				PortalDockerRuntime dockerRuntime = Stream.of(
 					ServerCore.getRuntimes()
 				).filter(
@@ -160,13 +158,22 @@ public class LiferayGradleDockerServer implements IDockerServer {
 				);
 
 				if (Objects.nonNull(dockerRuntime)) {
-					String dockerImageId = projectInfo.getDockerImageId();
+					Image dockerImage = LiferayDockerClient.getDockerImageByName(projectInfo.getDockerImageId());
 
-					dockerRuntime.setImageRepo(dockerImageId.split(":")[0]);
+					if (Objects.isNull(dockerImage)) {
+						return;
+					}
 
-					dockerRuntime.setImageId(dockerImage.getId());
+					IRuntime runtime = dockerRuntime.getRuntime();
 
-					dockerRuntime.setImageTag(dockerImageId.split(":")[1]);
+					IRuntimeWorkingCopy iruntimeWorkingCopy = runtime.createWorkingCopy();
+
+					RuntimeWorkingCopy runtimeWorkingCopy = (RuntimeWorkingCopy)iruntimeWorkingCopy.loadAdapter(
+						RuntimeWorkingCopy.class, monitor);
+
+					runtimeWorkingCopy.setAttribute(PortalDockerRuntime.PROP_DOCKER_IMAGE_ID, dockerImage.getId());
+
+					runtimeWorkingCopy.save(true, monitor);
 				}
 
 				PortalDockerServer dockerServer = Stream.of(
@@ -185,16 +192,16 @@ public class LiferayGradleDockerServer implements IDockerServer {
 				);
 
 				if (Objects.nonNull(dockerServer)) {
-					IServer server = dockerServer.getServer();
-
-					IServerWorkingCopy serverWorkingCopy = server.createWorkingCopy();
-
 					Container dockerContainer = LiferayDockerClient.getDockerContainerByName(
 						projectInfo.getDockerContainerId());
 
 					if (Objects.isNull(dockerContainer)) {
 						return;
 					}
+
+					IServer server = dockerServer.getServer();
+
+					IServerWorkingCopy serverWorkingCopy = server.createWorkingCopy();
 
 					serverWorkingCopy.setAttribute(PortalDockerServer.DOCKER_CONTAINER_ID, dockerContainer.getId());
 
@@ -210,8 +217,8 @@ public class LiferayGradleDockerServer implements IDockerServer {
 				monitor.done();
 			}
 		}
-		catch (Exception ce) {
-			LiferayGradleCore.logError(ce);
+		catch (Exception exception) {
+			LiferayGradleCore.logError("Failed to start docker server", exception);
 		}
 	}
 

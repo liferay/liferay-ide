@@ -80,6 +80,8 @@ public class DockerRuntimeWizard extends WizardFragment {
 		if (Objects.nonNull(dockerImageId)) {
 			portalDockerRuntime.setImageId(dockerImageId);
 		}
+
+		runtime.save(true, monitor);
 	}
 
 	protected PortalDockerRuntime getPortalDockerRuntime(IRuntimeWorkingCopy runtime) {
