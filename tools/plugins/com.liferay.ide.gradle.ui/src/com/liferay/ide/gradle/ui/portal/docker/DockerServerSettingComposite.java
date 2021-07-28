@@ -215,8 +215,6 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 						() -> {
 							setFieldValue(_nameField, projectInfo.getDockerContainerId());
 
-							_complete = true;
-
 							validate();
 						});
 				}

@@ -34,7 +34,7 @@ public class DockerDeployTaskAction extends GradleTaskAction {
 		if (Objects.isNull(project)) {
 			return;
 		}
-		
+
 		action.setEnabled(ServerUtil.isDockerServerExist() && LiferayWorkspaceUtil.inLiferayWorkspace(project));
 	}
 
