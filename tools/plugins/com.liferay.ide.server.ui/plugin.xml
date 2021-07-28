@@ -206,15 +206,6 @@
 			>
 			</action>
 			<action
-				class="com.liferay.ide.server.ui.action.OpenLiferayHomeFolderServerAction"
-				definitionId="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder"
-				enablesFor="1"
-				icon="icons/liferay_logo_16.png"
-				id="com.liferay.ide.server.ui.action.openLiferayHomeFolderServerAction"
-				label="%open.liferay.home.folder.action.label"
-			>
-			</action>
-			<action
 				class="com.liferay.ide.server.ui.action.OpenJSONWSAPIAction"
 				definitionId="com.liferay.ide.server.ui.handlers.openjsonwsapi"
 				enablesFor="1"
@@ -232,6 +223,25 @@
 				label="%open.portal.home.action.label"
 			>
 			</action>
+
+		</objectContribution>
+		<objectContribution
+			adaptable="true"
+			id="com.liferay.ide.server.ui.popup.dbconnection"
+			objectClass="org.eclipse.wst.server.core.IServer"
+		>
+			<visibility>
+				<and>
+					<objectState
+						name="serverType"
+						value="com.liferay.*"
+					>
+					</objectState>
+					<not>
+						<objectState name="serverType" value="com.liferay.ide.server.portal.docker" />
+					</not>
+				</and>
+			</visibility>
 			<action
 				class="com.liferay.ide.server.ui.action.CreatePortalSettingsFileAction"
 				enablesFor="1"
@@ -253,6 +263,36 @@
 						value="com.liferay.*"
 					>
 					</objectState>
+					<not>
+						<objectState name="serverType" value="com.liferay.ide.server.portal.docker" />
+					</not>
+				</and>
+			</visibility>
+			<action
+				class="com.liferay.ide.server.ui.action.OpenLiferayHomeFolderServerAction"
+				definitionId="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder"
+				enablesFor="1"
+				icon="icons/liferay_logo_16.png"
+				id="com.liferay.ide.server.ui.action.openLiferayHomeFolderServerAction"
+				label="%open.liferay.home.folder.action.label"
+			>
+			</action>
+		</objectContribution>
+		<objectContribution
+			adaptable="true"
+			id="com.liferay.ide.server.ui.popup.dbconnection"
+			objectClass="org.eclipse.wst.server.core.IServer"
+		>
+			<visibility>
+				<and>
+					<objectState
+						name="serverType"
+						value="com.liferay.*"
+					>
+					</objectState>
+					<not>
+						<objectState name="serverType" value="com.liferay.ide.server.portal.docker" />
+					</not>
 				</and>
 			</visibility>
 			<action
