@@ -21,7 +21,9 @@ import com.google.common.collect.Lists;
 
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
@@ -29,6 +31,7 @@ import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -44,6 +47,8 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+
+import org.gradle.tooling.model.GradleProject;
 
 /**
  * @author Simon Jiang
@@ -88,6 +93,30 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 	@Override
 	protected void beforeAction() {
 		_cleanUpWorkspaceDockerServerAndRuntime();
+	}
+
+	@Override
+	protected String[] getGradleTaskArguments() {
+		ArrayList<String> ignorTasks = new ArrayList<>();
+
+		List<IProject> warCoreExtProjects = LiferayWorkspaceUtil.getWarCoreExtModules();
+
+		if (ListUtil.isNotEmpty(warCoreExtProjects)) {
+			for (IProject project : warCoreExtProjects) {
+				GradleProject gradleProject = GradleUtil.getGradleProject(project);
+
+				if (Objects.nonNull(gradleProject)) {
+					ignorTasks.add("-x");
+					ignorTasks.add(gradleProject.getPath() + ":buildExtInfo");
+					ignorTasks.add("-x");
+					ignorTasks.add(gradleProject.getPath() + ":deploy");
+					ignorTasks.add("-x");
+					ignorTasks.add(gradleProject.getPath() + ":dockerDeploy");
+				}
+			}
+		}
+
+		return ignorTasks.toArray(new String[0]);
 	}
 
 	@Override
