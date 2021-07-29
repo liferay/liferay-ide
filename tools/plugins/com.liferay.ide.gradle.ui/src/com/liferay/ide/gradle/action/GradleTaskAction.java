@@ -119,6 +119,10 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 	public void selectionChanged(IAction action, ISelection selection) {
 		super.selectionChanged(action, selection);
 
+		if (Objects.isNull(selection)) {
+			return;
+		}
+
 		if (fSelection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection)fSelection;
 
