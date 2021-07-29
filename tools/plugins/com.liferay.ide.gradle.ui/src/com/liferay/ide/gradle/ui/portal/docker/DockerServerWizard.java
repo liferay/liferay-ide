@@ -156,6 +156,13 @@ public class DockerServerWizard extends WizardFragment {
 					PortalDockerServer.class, new NullProgressMonitor());
 
 				if (Objects.nonNull(dockerServer.getContainerName())) {
+					Container dockerContainer = LiferayDockerClient.getDockerContainerByName(
+						dockerServer.getContainerName());
+
+					if (Objects.nonNull(dockerContainer)) {
+						return false;
+					}
+
 					return true;
 				}
 			}
