@@ -73,6 +73,8 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 		_project = LiferayWorkspaceUtil.getWorkspaceProject();
 
 		createControl(parent);
+
+		validate();
 	}
 
 	public boolean isComplete() {
@@ -175,6 +177,13 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 
 		IStatus status = Status.OK_STATUS;
 
+		if ((status == null) || (status.isOK() && (_project == null))) {
+			_wizard.setMessage("You must have a gradle liferay workspace.", IMessageProvider.ERROR);
+			_wizard.update();
+
+			return;
+		}
+
 		if ((status == null) || (status.isOK() && Objects.isNull(_dockerImageId))) {
 			_wizard.setMessage("Docker Image Id can not be null", IMessageProvider.ERROR);
 			_wizard.update();
@@ -186,13 +195,6 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 
 		if ((status == null) || (status.isOK() && dockerImageExisted)) {
 			_wizard.setMessage("Another docker image has the same image id", IMessageProvider.ERROR);
-			_wizard.update();
-
-			return;
-		}
-
-		if ((status == null) || (status.isOK() && (_project == null))) {
-			_wizard.setMessage("You must have a gradle liferay workspace.", IMessageProvider.ERROR);
 			_wizard.update();
 
 			return;
@@ -232,7 +234,12 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 	private void _createFields() {
 		_workspaceProjectField = createReadOnlyTextField(Msgs.workspaceProject);
 
-		_workspaceProjectField.setText(_project.getName());
+		if (Objects.isNull(_project)) {
+			_workspaceProjectField.setText("");
+		}
+		else {
+			_workspaceProjectField.setText(_project.getName());
+		}
 
 		_runtimeNameField = createReadOnlyTextField(Msgs.dockerRuntimeName);
 
@@ -248,6 +255,10 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 	}
 
 	private void _updateFields() {
+		if (Objects.isNull(_project)) {
+			return;
+		}
+
 		ServerUtil.setRuntimeName(getRuntime(), -1, _project.getName());
 
 		setFieldValue(_workspaceProjectField, _project.getName());

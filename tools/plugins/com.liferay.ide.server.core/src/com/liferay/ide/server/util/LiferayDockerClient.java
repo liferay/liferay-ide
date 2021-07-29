@@ -205,7 +205,7 @@ public class LiferayDockerClient {
 			Stream<Image> imageStream = imageList.stream();
 
 			Optional<Image> dockerImage = imageStream.filter(
-				image -> image.getRepoTags() != null
+				image -> Objects.nonNull(image) && Objects.nonNull(image.getRepoTags())
 			).filter(
 				image -> {
 					String[] repoTags = image.getRepoTags();

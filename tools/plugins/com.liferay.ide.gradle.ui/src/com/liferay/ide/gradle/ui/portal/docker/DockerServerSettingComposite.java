@@ -199,6 +199,10 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 	}
 
 	private void _updateFields() {
+		if (Objects.isNull(_project)) {
+			return;
+		}
+
 		CompletableFuture<ProjectInfo> projectInfoAsync = CompletableFuture.supplyAsync(
 			() -> LiferayGradleCore.getToolingModel(ProjectInfo.class, _project));
 
