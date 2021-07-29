@@ -174,6 +174,11 @@ public class DockerServerWizard extends WizardFragment {
 	}
 
 	@Override
+	public boolean isForceLastFragment() {
+		return true;
+	}
+
+	@Override
 	public void performFinish(IProgressMonitor monitor) throws CoreException {
 		IServerWorkingCopy server = (IServerWorkingCopy)getTaskModel().getObject(TaskModel.TASK_SERVER);
 
