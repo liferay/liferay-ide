@@ -14,6 +14,7 @@
 
 package com.liferay.ide.core.workspace;
 
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
@@ -28,10 +29,14 @@ import java.io.IOException;
 
 import java.nio.file.Files;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -344,6 +349,26 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return retval;
+	}
+
+	public static List<IProject> getWarCoreExtModules() {
+		IWorkspaceProject workspace = getGradleWorkspaceProject();
+
+		Set<IProject> childProjects = workspace.getChildProjects();
+
+		Stream<IProject> projectsStream = childProjects.stream();
+
+		return projectsStream.filter(
+			project -> Objects.nonNull(project)
+		).filter(
+			project -> {
+				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+				return bundleProject.isWarCoreExtModule();
+			}
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	public static File getWorkspaceDir(File dir) {
