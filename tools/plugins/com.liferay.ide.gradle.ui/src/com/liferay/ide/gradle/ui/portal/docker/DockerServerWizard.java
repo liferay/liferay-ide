@@ -188,16 +188,16 @@ public class DockerServerWizard extends WizardFragment {
 			throw new CoreException(LiferayGradleUI.createErrorStatus("Can not create container."));
 		}
 
-		dockerServer.setContainerId(dockerContainer.getId());
+		server.setAttribute(PortalDockerServer.DOCKER_CONTAINER_ID, dockerContainer.getId());
 
-		IRuntimeWorkingCopy runtimeWorkingCopy = (IRuntimeWorkingCopy)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
+		IRuntime runtime = (IRuntime)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
 
-		if (Objects.nonNull(runtimeWorkingCopy)) {
-			IRuntime runtime = runtimeWorkingCopy.getOriginal();
+		if (Objects.nonNull(runtime) && runtime.isWorkingCopy()) {
+			IRuntimeWorkingCopy runtimeWorkingCopy = (IRuntimeWorkingCopy)runtime;
 
-			if (Objects.nonNull(runtime)) {
-				server.setRuntime(runtime);
-			}
+			runtime = runtimeWorkingCopy.getOriginal();
+
+			server.setRuntime(runtime);
 		}
 
 		server.save(true, monitor);
