@@ -37,6 +37,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
@@ -168,6 +170,16 @@ public class DockerServerWizard extends WizardFragment {
 		}
 
 		dockerServer.setContainerId(dockerContainer.getId());
+
+		IRuntimeWorkingCopy runtimeWorkingCopy = (IRuntimeWorkingCopy)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
+
+		if (Objects.nonNull(runtimeWorkingCopy)) {
+			IRuntime runtime = runtimeWorkingCopy.getOriginal();
+
+			if (Objects.nonNull(runtime)) {
+				server.setRuntime(runtime);
+			}
+		}
 
 		server.save(true, monitor);
 	}
