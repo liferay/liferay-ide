@@ -14,13 +14,17 @@
 
 package com.liferay.ide.gradle.action;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Objects;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
  * @author Seiphon Wang
@@ -35,7 +39,27 @@ public class DockerDeployTaskAction extends GradleTaskAction {
 			return;
 		}
 
-		action.setEnabled(ServerUtil.isDockerServerExist() && LiferayWorkspaceUtil.inLiferayWorkspace(project));
+		boolean hasUnsupportedModules = false;
+
+		if (fSelection instanceof IStructuredSelection) {
+			IStructuredSelection structuredSelection = (IStructuredSelection)fSelection;
+
+			Object element = structuredSelection.getFirstElement();
+
+			if (Objects.nonNull(element) && (element instanceof IProject)) {
+				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, (IProject)element);
+
+				if ((bundleProject != null) &&
+					(bundleProject.isWarCoreExtModule() || bundleProject.isFragmentBundle())) {
+
+					hasUnsupportedModules = true;
+				}
+			}
+		}
+
+		action.setEnabled(
+			ServerUtil.isDockerServerExist() && LiferayWorkspaceUtil.inLiferayWorkspace(project) &&
+			!hasUnsupportedModules);
 	}
 
 	@Override
