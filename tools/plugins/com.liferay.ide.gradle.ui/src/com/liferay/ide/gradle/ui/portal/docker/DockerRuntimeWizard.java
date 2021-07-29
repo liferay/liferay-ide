@@ -19,7 +19,6 @@ import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.core.runtime.CoreException;
@@ -87,8 +86,6 @@ public class DockerRuntimeWizard extends WizardFragment {
 	protected PortalDockerRuntime getPortalDockerRuntime(IRuntimeWorkingCopy runtime) {
 		return (PortalDockerRuntime)runtime.loadAdapter(PortalDockerRuntime.class, null);
 	}
-
-	protected List<WizardFragment> childFragments;
 
 	private DockerRuntimeSettingComposite _composite;
 

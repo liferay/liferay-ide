@@ -96,11 +96,7 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 			}
 		}
 
-		try {
-			validate();
-		}
-		catch (NullPointerException nullException) {
-		}
+		validate();
 	}
 
 	public void setRuntime(IRuntimeWorkingCopy newRuntime) {
@@ -200,19 +196,21 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 			return;
 		}
 
-		IRuntime[] runtimes = ServerCore.getRuntimes();
+		if (Objects.nonNull(_runtimeWC)) {
+			IRuntime[] runtimes = ServerCore.getRuntimes();
 
-		for (IRuntime runtime : runtimes) {
-			IRuntimeType runtimeType = runtime.getRuntimeType();
-			String runtimeName = runtime.getName();
+			for (IRuntime runtime : runtimes) {
+				IRuntimeType runtimeType = runtime.getRuntimeType();
+				String runtimeName = runtime.getName();
 
-			if (runtimeType.equals(_runtimeWC.getRuntimeType()) &&
-				runtimeName.equalsIgnoreCase(getRuntime().getName()) && !runtime.equals(_runtimeWC)) {
+				if (runtimeType.equals(_runtimeWC.getRuntimeType()) &&
+					runtimeName.equalsIgnoreCase(getRuntime().getName()) && !runtime.equals(_runtimeWC)) {
 
-				_wizard.setMessage("This runtime was already existed", IMessageProvider.ERROR);
-				_wizard.update();
+					_wizard.setMessage("This runtime was already existed", IMessageProvider.ERROR);
+					_wizard.update();
 
-				return;
+					return;
+				}
 			}
 		}
 
