@@ -168,6 +168,10 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 	}
 
 	protected void validate() {
+		if (Objects.isNull(_nameField) || _nameField.isDisposed()) {
+			return;
+		}
+
 		String containerName = _nameField.getText();
 
 		if (CoreUtil.isNullOrEmpty(containerName)) {
