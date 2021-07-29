@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -254,14 +255,25 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 	}
 
 	private String _getConfigInfoFromManifest(String configType, IPath portalDir) {
-		IPath implJarPath = portalDir.append("/WEB-INF/lib/portal-impl.jar");
+		String[] implJarFolders = {"lib", "shielded-container-lib"};
 
-		File implJar = implJarPath.toFile();
+		IPath implJarPath = null;
+		File implJar = null;
+
+		for (String implJarFolder : implJarFolders) {
+			implJarPath = portalDir.append("/WEB-INF/" + implJarFolder + "/portal-impl.jar");
+
+			if (FileUtil.exists(implJarPath)) {
+				implJar = implJarPath.toFile();
+
+				break;
+			}
+		}
 
 		String version = null;
 		String serverInfo = null;
 
-		if (FileUtil.exists(implJar)) {
+		if (Objects.nonNull(implJar)) {
 			version = JavaUtil.getJarProperty(implJar, "Liferay-Portal-Version");
 			serverInfo = JavaUtil.getJarProperty(implJar, "Liferay-Portal-Release-Info");
 
@@ -271,14 +283,15 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 			}
 		}
 
-		if (configType.equals(_CONFIG_TYPE_VERSION)) {
-			return version;
-		}
+		switch (configType) {
+			case _CONFIG_TYPE_VERSION:
+				return version;
+			case _CONFIG_TYPE_SERVER:
+				if (Objects.nonNull(serverInfo)) {
+					serverInfo = serverInfo.substring(0, serverInfo.indexOf("("));
 
-		if (configType.equals(_CONFIG_TYPE_SERVER)) {
-			serverInfo = serverInfo.substring(0, serverInfo.indexOf("("));
-
-			return serverInfo.trim();
+					return serverInfo.trim();
+				}
 		}
 
 		return null;
