@@ -60,8 +60,6 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 	public DockerServerSettingComposite(Composite parent, IWizardHandle wizard) {
 		super(parent, SWT.NONE);
 
-		_complete = false;
-
 		_wizard = wizard;
 
 		wizard.setTitle(Msgs.dockerContainerTitle);
@@ -79,10 +77,6 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 	public void dispose() {
 		_nameField.removeModifyListener(this);
 		super.dispose();
-	}
-
-	public boolean isComplete() {
-		return _complete;
 	}
 
 	@Override
@@ -177,7 +171,6 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 		if (CoreUtil.isNullOrEmpty(containerName)) {
 			_wizard.setMessage("Container name can not be empty.", IMessageProvider.ERROR);
 			_wizard.update();
-			_complete = false;
 
 			return;
 		}
@@ -187,12 +180,9 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 		if (Objects.nonNull(container)) {
 			_wizard.setMessage("Container name is existed, Please change it to another.", IMessageProvider.ERROR);
 			_wizard.update();
-			_complete = false;
 
 			return;
 		}
-
-		_complete = true;
 
 		_wizard.setMessage(null, IMessageProvider.NONE);
 		_wizard.update();
@@ -225,7 +215,6 @@ public class DockerServerSettingComposite extends Composite implements ModifyLis
 			});
 	}
 
-	private boolean _complete;
 	private Text _nameField;
 	private IProject _project;
 	private IServerWorkingCopy _serverWC;

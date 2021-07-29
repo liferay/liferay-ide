@@ -36,6 +36,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
@@ -148,10 +149,21 @@ public class DockerServerWizard extends WizardFragment {
 	@Override
 	public boolean isComplete() {
 		if (_composite != null) {
-			return _composite.isComplete();
+			IServerWorkingCopy server = (IServerWorkingCopy)getTaskModel().getObject(TaskModel.TASK_SERVER);
+
+			if (server != null) {
+				PortalDockerServer dockerServer = (PortalDockerServer)server.loadAdapter(
+					PortalDockerServer.class, new NullProgressMonitor());
+
+				if (Objects.nonNull(dockerServer.getContainerName())) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
-		return true;
+		return false;
 	}
 
 	@Override
