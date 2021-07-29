@@ -93,7 +93,7 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 
 	@Override
 	public void visitBinaryExpression(BinaryExpression expression) {
-		if (_inEclipse && _inClasspath) {
+		if (_inEclipse && _inClasspath && (_blockStatementStack.isEmpty() ? false : _blockStatementStack.peek())) {
 			Expression leftExpression = expression.getLeftExpression();
 			Expression rightExpression = expression.getRightExpression();
 			Token operation = expression.getOperation();
