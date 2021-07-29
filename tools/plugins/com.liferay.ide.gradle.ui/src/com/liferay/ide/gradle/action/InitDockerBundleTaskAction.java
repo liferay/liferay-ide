@@ -20,6 +20,9 @@ import com.github.dockerjava.api.model.Image;
 import com.google.common.collect.Lists;
 
 import com.liferay.blade.gradle.tooling.ProjectInfo;
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
@@ -31,7 +34,9 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -88,6 +93,29 @@ public class InitDockerBundleTaskAction extends GradleTaskAction {
 	@Override
 	protected void beforeAction() {
 		_cleanUpWorkspaceDockerServerAndRuntime();
+	}
+
+	@Override
+	protected String[] getGradleTaskArguments() {
+		IWorkspaceProject workspace = LiferayWorkspaceUtil.getGradleWorkspaceProject();
+
+		Set<IProject> childProjects = workspace.getChildProjects();
+
+		Stream<IProject> projectsStream = childProjects.stream();
+
+		Set<IBundleProject> warCoreExtModules = projectsStream.map(
+			project -> LiferayCore.create(IBundleProject.class, project)
+		).filter(
+			bundleProject -> bundleProject.isWarCoreExtModule()
+		).collect(
+			Collectors.toSet()
+		);
+
+		if (!warCoreExtModules.isEmpty()) {
+			return new String[] {"-x", "buildExtInfo"};
+		}
+
+		return new String[0];
 	}
 
 	@Override

@@ -18,6 +18,9 @@ import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 
 import com.liferay.blade.gradle.tooling.ProjectInfo;
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.docker.IDockerServer;
@@ -26,6 +29,7 @@ import com.liferay.ide.server.core.portal.docker.PortalDockerServer;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -132,7 +136,12 @@ public class LiferayGradleDockerServer implements IDockerServer {
 
 			monitor.worked(20);
 
-			GradleUtil.runGradleTask(workspaceProject, tasks, monitor);
+			if (_hasWarCoreExtModules()) {
+				GradleUtil.runGradleTask(workspaceProject, tasks, new String[] {"-x", "buildExtInfo"}, false, monitor);
+			}
+			else {
+				GradleUtil.runGradleTask(workspaceProject, tasks, monitor);
+			}
 
 			monitor.worked(40);
 
@@ -238,6 +247,21 @@ public class LiferayGradleDockerServer implements IDockerServer {
 			LiferayGradleCore.logError(
 				"Failed to stop liferay docker container for project " + workspaceProject.getName(), exception);
 		}
+	}
+
+	private boolean _hasWarCoreExtModules() {
+		IWorkspaceProject workspace = LiferayWorkspaceUtil.getGradleWorkspaceProject();
+
+		Set<IProject> childProjects = workspace.getChildProjects();
+
+		Stream<IProject> projectsStream = childProjects.stream();
+
+		return !projectsStream.map(
+			project -> LiferayCore.create(IBundleProject.class, project)
+		).filter(
+			bundleProject -> bundleProject.isWarCoreExtModule()
+		).findAny(
+		).isEmpty();
 	}
 
 }

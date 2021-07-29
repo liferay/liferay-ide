@@ -51,6 +51,7 @@ import org.gradle.tooling.model.GradleTask;
  * @author Terry Jia
  * @author Charles Wu
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public abstract class GradleTaskAction extends AbstractObjectAction {
 
@@ -74,7 +75,8 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 						monitor.worked(20);
 
-						GradleUtil.runGradleTask(project, gradleTasks.toArray(new String[0]), monitor);
+						GradleUtil.runGradleTask(
+							project, gradleTasks.toArray(new String[0]), getGradleTaskArguments(), false, monitor);
 
 						monitor.done();
 					}
@@ -139,6 +141,10 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 				}
 			}
 		}
+	}
+
+	protected String[] getGradleTaskArguments() {
+		return new String[0];
 	}
 
 	protected abstract String getGradleTaskName();
