@@ -185,7 +185,8 @@ public class DockerServerWizard extends WizardFragment {
 		PortalDockerServer dockerServer = (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, null);
 
 		GradleUtil.runGradleTask(
-			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"createDockerContainer"}, monitor);
+			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"createDockerContainer"},
+			new String[] {"-x", "buildDockerImage"}, false, monitor);
 
 		Container dockerContainer = LiferayDockerClient.getDockerContainerByName(dockerServer.getContainerName());
 

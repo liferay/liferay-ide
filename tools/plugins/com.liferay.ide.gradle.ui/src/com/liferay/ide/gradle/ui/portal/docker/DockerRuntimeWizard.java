@@ -14,13 +14,17 @@
 
 package com.liferay.ide.gradle.ui.portal.docker;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntime;
 import com.liferay.ide.server.util.LiferayDockerClient;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
@@ -28,6 +32,8 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
+
+import org.gradle.tooling.model.GradleProject;
 
 /**
  * @author Simon Jiang
@@ -60,7 +66,17 @@ public class DockerRuntimeWizard extends WizardFragment {
 
 	@Override
 	public boolean isComplete() {
-		return _composite.isComplete();
+		IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
+
+		PortalDockerRuntime portalDockerRuntime = getPortalDockerRuntime(runtime);
+
+		if ((portalDockerRuntime.getImageRepo() != null) && (portalDockerRuntime.getImageTag() != null) &&
+			(portalDockerRuntime.getImageId() == null)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -68,7 +84,8 @@ public class DockerRuntimeWizard extends WizardFragment {
 		IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
 
 		GradleUtil.runGradleTask(
-			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"buildDockerImage"}, monitor);
+			LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"buildDockerImage"}, _getWarCoreExtIgngoreTasks(),
+			false, monitor);
 
 		PortalDockerRuntime portalDockerRuntime = getPortalDockerRuntime(runtime);
 
@@ -85,6 +102,29 @@ public class DockerRuntimeWizard extends WizardFragment {
 
 	protected PortalDockerRuntime getPortalDockerRuntime(IRuntimeWorkingCopy runtime) {
 		return (PortalDockerRuntime)runtime.loadAdapter(PortalDockerRuntime.class, null);
+	}
+
+	private String[] _getWarCoreExtIgngoreTasks() {
+		ArrayList<String> ignorTasks = new ArrayList<>();
+
+		List<IProject> warCoreExtProjects = LiferayWorkspaceUtil.getWarCoreExtModules();
+
+		if (ListUtil.isNotEmpty(warCoreExtProjects)) {
+			for (IProject project : warCoreExtProjects) {
+				GradleProject gradleProject = GradleUtil.getGradleProject(project);
+
+				if (Objects.nonNull(gradleProject)) {
+					ignorTasks.add("-x");
+					ignorTasks.add(gradleProject.getPath() + ":buildExtInfo");
+					ignorTasks.add("-x");
+					ignorTasks.add(gradleProject.getPath() + ":deploy");
+					ignorTasks.add("-x");
+					ignorTasks.add(gradleProject.getPath() + ":dockerDeploy");
+				}
+			}
+		}
+
+		return ignorTasks.toArray(new String[0]);
 	}
 
 	private DockerRuntimeSettingComposite _composite;

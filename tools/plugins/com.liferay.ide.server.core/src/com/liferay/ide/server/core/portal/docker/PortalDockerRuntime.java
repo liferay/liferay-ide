@@ -80,8 +80,8 @@ public class PortalDockerRuntime extends PortalRuntime implements IPortalDockerR
 			return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, _errorDuplicateRuntimeName, null);
 		}
 
-		if (CoreUtil.isNullOrEmpty(getImageTag())) {
-			return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, _nullRuntimeName, null);
+		if (CoreUtil.isNullOrEmpty(getImageTag()) || CoreUtil.isNullOrEmpty(getImageRepo())) {
+			return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, _nullDockerImageRepoTag, null);
 		}
 
 		String imageRepoTag = String.join(":", getImageRepo(), getImageTag());
@@ -121,6 +121,6 @@ public class PortalDockerRuntime extends PortalRuntime implements IPortalDockerR
 
 	private static String _errorDuplicateRuntimeName = "The name is already in use. Specify a different name.";
 	private static String _errorRuntimeName = "Enter a name for the runtime environment.";
-	private static String _nullRuntimeName = "The docker image of runtime can be found.";
+	private static String _nullDockerImageRepoTag = "The docker image repo tag can not be found.";
 
 }
