@@ -71,7 +71,7 @@ public class DockerRuntimeWizard extends WizardFragment {
 		PortalDockerRuntime portalDockerRuntime = getPortalDockerRuntime(runtime);
 
 		if ((portalDockerRuntime.getImageRepo() != null) && (portalDockerRuntime.getImageTag() != null) &&
-			(portalDockerRuntime.getImageId() == null)) {
+			(portalDockerRuntime.getImageId() == null) && _composite.isComplete()) {
 
 			return true;
 		}

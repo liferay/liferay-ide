@@ -77,6 +77,10 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 		validate();
 	}
 
+	public boolean isComplete() {
+		return _completeStatus.isOK();
+	}
+
 	@Override
 	public void modifyText(ModifyEvent e) {
 		Object source = e.getSource();
@@ -167,15 +171,21 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 	protected void validate() {
 		IStatus status = Status.OK_STATUS;
 
+		_completeStatus = status;
+
 		if ((status == null) || (status.isOK() && (_project == null))) {
-			_wizard.setMessage("You must have a gradle liferay workspace.", IMessageProvider.ERROR);
+			_completeStatus = LiferayGradleUI.createErrorStatus(_dontHaveLiferayWorkspace);
+
+			_wizard.setMessage(_dontHaveLiferayWorkspace, IMessageProvider.ERROR);
 			_wizard.update();
 
 			return;
 		}
 
 		if ((status == null) || (status.isOK() && Objects.isNull(_dockerImageId))) {
-			_wizard.setMessage("Docker Image Id can not be null", IMessageProvider.ERROR);
+			_completeStatus = LiferayGradleUI.createErrorStatus(_nullDockerImageId);
+
+			_wizard.setMessage(_nullDockerImageId, IMessageProvider.ERROR);
 			_wizard.update();
 
 			return;
@@ -184,7 +194,9 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 		boolean dockerImageExisted = LiferayDockerClient.verifyDockerImageByName(_dockerImageId.getText());
 
 		if ((status == null) || (status.isOK() && dockerImageExisted)) {
-			_wizard.setMessage("Another docker image has the same image id", IMessageProvider.ERROR);
+			_completeStatus = LiferayGradleUI.createErrorStatus(_errorDuplicateImageId);
+
+			_wizard.setMessage(_errorDuplicateImageId, IMessageProvider.ERROR);
 			_wizard.update();
 
 			return;
@@ -200,7 +212,9 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 				if (runtimeType.equals(_runtimeWC.getRuntimeType()) &&
 					runtimeName.equalsIgnoreCase(getRuntime().getName()) && !runtime.equals(_runtimeWC)) {
 
-					_wizard.setMessage("This runtime was already existed", IMessageProvider.ERROR);
+					_completeStatus = LiferayGradleUI.createErrorStatus(_errorRuntimeAlreadyExist);
+
+					_wizard.setMessage(_errorRuntimeAlreadyExist, IMessageProvider.ERROR);
 					_wizard.update();
 
 					return;
@@ -269,6 +283,12 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 			});
 	}
 
+	private static String _dontHaveLiferayWorkspace = "You must have a gradle liferay workspace.";
+	private static String _errorDuplicateImageId = "Another docker image has the same image id.";
+	private static String _errorRuntimeAlreadyExist = "This runtime was already existed.";
+	private static String _nullDockerImageId = "Docker Image Id can not be null.";
+
+	private IStatus _completeStatus = Status.OK_STATUS;
 	private Text _dockerImageId;
 	private Text _dockerImageLiferay;
 	private IProject _project;
