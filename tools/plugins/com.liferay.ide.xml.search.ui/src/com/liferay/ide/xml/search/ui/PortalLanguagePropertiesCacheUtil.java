@@ -21,14 +21,15 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.IRuntime;
@@ -45,10 +46,6 @@ public class PortalLanguagePropertiesCacheUtil {
 		}
 
 		Properties retval = null;
-
-		JarFile jar = null;
-
-		InputStream in = null;
 
 		try {
 			ILiferayPortal portal = project.adapt(ILiferayPortal.class);
@@ -81,15 +78,32 @@ public class PortalLanguagePropertiesCacheUtil {
 
 			if (retval == null) {
 				if (FileUtil.exists(appServerPortalDir)) {
-					jar = new JarFile(FileUtil.getFile(appServerPortalDir.append("WEB-INF/lib/portal-impl.jar")));
+					String[] implJarFolders = {"lib", "shielded-container-lib"};
 
-					ZipEntry lang = jar.getEntry("content/Language.properties");
+					File implJar = Stream.of(
+						implJarFolders
+					).map(
+						libFolder -> appServerPortalDir.append("/WEB-INF/" + libFolder + "/portal-impl.jar")
+					).map(
+						jarPath -> jarPath.toFile()
+					).filter(
+						file -> Objects.nonNull(file)
+					).filter(
+						file -> FileUtil.exists(file)
+					).findFirst(
+					).orElse(
+						null
+					);
 
-					retval = new Properties();
+					if (Objects.nonNull(implJar)) {
+						try (JarFile jar = new JarFile(implJar);
+							InputStream inputStream = jar.getInputStream(jar.getEntry("content/Language.properties"))) {
 
-					in = jar.getInputStream(lang);
+							retval = new Properties();
 
-					retval.load(in);
+							retval.load(inputStream);
+						}
+					}
 				}
 
 				_languagePortalMap.put(appServerPortalDir, retval);
@@ -97,22 +111,6 @@ public class PortalLanguagePropertiesCacheUtil {
 		}
 		catch (Exception e) {
 			LiferayXMLSearchUI.logError("Unable to find portal language properties", e);
-		}
-		finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-
-				if (jar != null) {
-					jar.close();
-				}
-			}
-			catch (IOException ioe) {
-
-				// no errors this is best effort
-
-			}
 		}
 
 		return retval;
