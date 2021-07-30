@@ -77,10 +77,6 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 		validate();
 	}
 
-	public boolean isComplete() {
-		return _complete;
-	}
-
 	@Override
 	public void modifyText(ModifyEvent e) {
 		Object source = e.getSource();
@@ -169,8 +165,6 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 	}
 
 	protected void validate() {
-		_complete = false;
-
 		IStatus status = Status.OK_STATUS;
 
 		if ((status == null) || (status.isOK() && (_project == null))) {
@@ -215,7 +209,6 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 		}
 
 		if ((status == null) || status.isOK()) {
-			_complete = true;
 			_wizard.setMessage(null, IMessageProvider.NONE);
 			_wizard.update();
 		}
@@ -276,7 +269,6 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 			});
 	}
 
-	private boolean _complete = false;
 	private Text _dockerImageId;
 	private Text _dockerImageLiferay;
 	private IProject _project;
