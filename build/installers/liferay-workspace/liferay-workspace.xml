@@ -234,6 +234,14 @@
                 </if>
             </elseActionList>
         </if>
+        <pathManipulation>
+            <action>nativeAbsolutize</action>
+            <path>${java_executable}/..</path>
+            <variable>java_bin_dir</variable>
+        </pathManipulation>
+        <include>
+            <file>../components/run-java-jpm-win.xml</file>
+        </include>
         <include>
             <file>../components/run-java-jpm.xml</file>
         </include>
@@ -252,6 +260,9 @@
         </include>
         <include>
             <file>../components/set-installer-variable-bnd.xml</file>
+        </include>
+        <include>
+            <file>../components/run-jpm-install-blade-win.xml</file>
         </include>
         <include>
             <file>../components/run-jpm-install-blade.xml</file>
@@ -334,7 +345,13 @@
             </ruleList>
         </if>
         <include>
+            <file>../components/run-jpm-install-gw-win.xml</file>
+        </include>
+        <include>
             <file>../components/run-jpm-install-gw.xml</file>
+        </include>
+        <include>
+            <file>../components/run-jpm-install-bnd-win.xml</file>
         </include>
         <include>
             <file>../components/run-jpm-install-bnd.xml</file>

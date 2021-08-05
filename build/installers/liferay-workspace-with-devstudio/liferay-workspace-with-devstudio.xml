@@ -76,6 +76,11 @@
                     <path>${userHome}${platform_path_separator}.liferay</path>
                     <progressText>Creating directory...</progressText>
                 </createDirectory>
+                <pathManipulation>
+                    <action>nativeAbsolutize</action>
+                    <path>${java_executable}/..</path>
+                    <variable>java_bin_dir</variable>
+                </pathManipulation>
             </actionList>
             <conditionRuleList>
                 <isTrue value="${clitools}"/>
@@ -368,6 +373,9 @@ ${java_executable}
                 <include>
                     <file>../components/run-java-jpm.xml</file>
                 </include>
+                <include>
+                    <file>../components/run-java-jpm-win.xml</file>
+                </include>
             </actionList>
             <conditionRuleList>
                 <isTrue value="${clitools}"/>
@@ -395,10 +403,19 @@ ${java_executable}
                     <file>../components/run-jpm-install-blade.xml</file>
                 </include>
                 <include>
+                    <file>../components/run-jpm-install-blade-win.xml</file>
+                </include>
+                <include>
                     <file>../components/run-jpm-install-gw.xml</file>
                 </include>
                 <include>
+                    <file>../components/run-jpm-install-gw-win.xml</file>
+                </include>
+                <include>
                     <file>../components/run-jpm-install-bnd.xml</file>
+                </include>
+                <include>
+                    <file>../components/run-jpm-install-bnd-win.xml</file>
                 </include>
                 <runProgram>
                     <program>chown</program>
@@ -491,7 +508,7 @@ ${java_executable}
                     <elseActionList>
                         <runProgram>
                             <program>${java_executable}</program>
-                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "portal-7.4-ga2"</programArguments>
+                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "portal-7.4-ga3"</programArguments>
                         </runProgram>
                     </elseActionList>
                 </if>
