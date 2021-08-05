@@ -1,4 +1,10 @@
 <runProgram>
     <program>${java_executable}</program>
     <programArguments> -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u -b "${userHome}" -h "${jpmSettingPath}" -B "${jpmSystemPath}" init</programArguments>
+    <ruleList>
+        <platformTest>
+            <negate>1</negate>
+            <type>windows</type>
+        </platformTest>
+    </ruleList>
 </runProgram>
