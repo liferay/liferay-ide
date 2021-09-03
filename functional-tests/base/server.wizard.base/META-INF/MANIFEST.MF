@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Server Wizard Base
 Bundle-SymbolicName: com.liferay.ide.functional.server.wizard.base
-Bundle-Version: 3.9.4.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Vendor: Liferay
 Require-Bundle: com.liferay.ide.functional.liferay,
  com.liferay.ide.functional.swtbot,

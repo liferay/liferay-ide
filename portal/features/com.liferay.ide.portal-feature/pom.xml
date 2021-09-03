@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.liferay.ide.portal</groupId>
         <artifactId>portal-features</artifactId>
-        <version>3.9.4-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.ide.portal-feature</artifactId>
