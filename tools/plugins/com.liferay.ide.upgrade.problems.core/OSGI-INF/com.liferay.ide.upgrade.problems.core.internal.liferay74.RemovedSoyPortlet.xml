@@ -3,7 +3,7 @@
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.tickets" value="LPS-122955"/>
    <property name="problem.title" value="Remove SoyPortlet and related code"/>
-   <property name="problem.summary" value="SoyPortlet is no longer available"/>
+   <property name="problem.summary" value="The `SoyPortlet` class has been removed. It used to implement a portlet whose views were backed by Closure Templates (Soy)"/>
    <property name="problem.section" value="#removed-soy-portlet"/>
    <property name="version" value="7.4"/>
    <service>

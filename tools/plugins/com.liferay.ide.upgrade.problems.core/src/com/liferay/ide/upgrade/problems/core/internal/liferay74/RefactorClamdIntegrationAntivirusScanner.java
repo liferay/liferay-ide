@@ -26,10 +26,9 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=properties",
-		"problem.title=Refactor Clamd integration to use Clamd remote service and remove portal",
-		"problem.summary=properties configuration for AntivirusScanner selection and hook support for AntivirusScanner registration in favor of AntivirusScanner OSGi integration",
-		"problem.tickets=LPS-122280", "problem.section=#remove-clamd-integration-antivirusscanner-properties",
+		"file.extensions=properties", "problem.title=Refactor Clamd integration to use Clamd remote service",
+		"problem.summary=The portal's Clamd integration implementation has been replaced by an OSGi service that uses a Clamd remote service",
+		"problem.tickets=LPS-122280", "problem.section=#refactor-clamd-integration-antivirusscanner-properties",
 		"problem.version=7.4", "version=7.4"
 	},
 	service = FileMigrator.class

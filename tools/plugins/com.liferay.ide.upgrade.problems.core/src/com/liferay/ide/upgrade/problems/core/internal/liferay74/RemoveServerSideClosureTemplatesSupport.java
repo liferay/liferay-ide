@@ -31,9 +31,10 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=java,jsp,jspf", "problem.summary= Server-side Closure Templates Support has been removed",
+		"file.extensions=java,jsp,jspf",
+		"problem.summary= Some modules and the classes they exported to allow Soy rendering server-side have been removed",
 		"problem.tickets=LPS-122956", "problem.title=Removed Server-side Closure Templates Support",
-		"problem.section=#server-side-closure-templates-support-has-been-removed", "version=7.4"
+		"problem.section=#removed-server-side-closure-templates-support", "version=7.4"
 	},
 	service = FileMigrator.class
 )
