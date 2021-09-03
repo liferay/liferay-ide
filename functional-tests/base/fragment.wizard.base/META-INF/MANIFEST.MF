@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Fragment Wizard Base
 Bundle-SymbolicName: com.liferay.ide.functional.fragment.wizard.base
-Bundle-Version: 3.9.4.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.functional.liferay,
  com.liferay.ide.functional.swtbot,
