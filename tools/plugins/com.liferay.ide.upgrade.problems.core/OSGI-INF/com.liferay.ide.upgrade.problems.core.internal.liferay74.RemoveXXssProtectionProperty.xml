@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveXXssProtectionProperty">
+   <property name="file.extensions" value="properties"/>
+   <property name="problem.summary" value="Remove `http.header.secure.x.xss.protection` from `portal-ext.properties` if it exists there."/>
+   <property name="problem.tickets" value="LPS-134188"/>
+   <property name="problem.title" value="Remove Portal Property http.header.secure.x.xss.protection"/>
+   <property name="problem.section" value="#remove-portal-property-http-header-secure-x-xss-protection"/>
+   <property name="version" value="7.4"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveXXssProtectionProperty"/>
+</scr:component>
