@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.tickets=LPS-121733",
-		"problem.title=The /portal/flash path is no longer available",
+		"problem.title=Removed the /portal/flash Path",
 		"problem.summary=The goal of this task is to remove all Flash paths and any related supporting code in line with End of Support for Flash",
 		"problem.section=#removed-portal-flash-support", "version=7.4"
 	},
