@@ -24,8 +24,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=jsp,jspf",
-		"problem.title=Removed the liferay-ui:flash Tag",
+		"file.extensions=jsp,jspf", "problem.title=Removed the liferay-ui:flash Tag",
 		"problem.section=#removed-liferay-ui-flash-tag",
 		"problem.summary=The tag liferay-ui:flash has been deleted and is no longer available",
 		"problem.tickets=LPS-121732", "version=7.4"

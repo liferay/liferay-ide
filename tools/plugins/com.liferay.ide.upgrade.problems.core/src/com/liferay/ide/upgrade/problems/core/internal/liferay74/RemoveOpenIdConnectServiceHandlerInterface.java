@@ -31,22 +31,29 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=java,jsp,jspf", "problem.tickets=LPS-121733", "problem.title=Removed the /portal/flash Path",
-		"problem.summary=The goal of this task is to remove all Flash paths and any related supporting code in line with End of Support for Flash",
-		"problem.section=#removed-portal-flash-support", "version=7.4"
+		"file.extensions=java,jsp,jspf", "problem.title=OpenIdConnectServiceHandler interface removed",
+		"problem.summary=In order to deliver improvements to OIDC refresh token handling, the authentication process has been improved to handle post-authentication processing.",
+		"problem.tickets=LPS-124898", "problem.section=#remove-openid-connect-service-handler", "version=7.4"
 	},
 	service = FileMigrator.class
 )
-public class RemovePortalFlashSupport extends JavaFileMigrator {
+public class RemoveOpenIdConnectServiceHandlerInterface extends JavaFileMigrator {
 
 	@Override
 	protected List<FileSearchResult> searchFile(File file, JavaFile fileChecker) {
 		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		searchResults.addAll(
-			fileChecker.findMethodInvocations("ThemeDisplay", null, "setPathFlash", new String[] {"String"}));
+		searchResults.addAll(fileChecker.findImplementsInterface("OpenIdConnectServiceHandler"));
+		searchResults.add(
+			fileChecker.findImport("com.liferay.portal.security.sso.openid.connect.OpenIdConnectServiceHandler"));
 
-		searchResults.addAll(fileChecker.findMethodInvocations("ThemeDisplay", null, "getPathFlash", null));
+		searchResults.addAll(
+			fileChecker.findMethodInvocations(
+				"OpenIdConnectServiceHandler", null, "hasValidOpenIdConnectSession", null));
+
+		searchResults.addAll(
+			fileChecker.findMethodInvocations(
+				"OpenIdConnectServiceHandler", null, "processAuthenticationResponse", null));
 
 		return searchResults;
 	}

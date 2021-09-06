@@ -646,7 +646,7 @@ This change was made to remove deprecated legacy code from Portal and improve th
 
 ---------------------------------------
 
-### OpenIdConnectServiceHandler interface removed [](id=#)
+### OpenIdConnectServiceHandler interface removed [](id=#remove-openid-connect-service-handler)
 - **Date:** 2021-Aug-09
 - **JIRA Ticket:** [LPS-124898](https://issues.liferay.com/browse/LPS-124898)
 
