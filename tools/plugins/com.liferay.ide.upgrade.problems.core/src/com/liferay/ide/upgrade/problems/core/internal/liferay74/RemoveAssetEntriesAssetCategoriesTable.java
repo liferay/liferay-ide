@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	property = {
 		"file.extensions=java,jsp,jspf", "problem.tickets=LPS-89065",
-		"problem.title=Remove AssetEntries_AssetCategories table and related code",
+		"problem.title=Removed the AssetEntries_AssetCategories Table and Corresponding Code",
 		"problem.summary=The AssetEntries_AssetCategories table and its corresponding code have been removed from the portal",
 		"problem.section=#removed-assetentries-assetcatagories-table", "version=7.4"
 	},

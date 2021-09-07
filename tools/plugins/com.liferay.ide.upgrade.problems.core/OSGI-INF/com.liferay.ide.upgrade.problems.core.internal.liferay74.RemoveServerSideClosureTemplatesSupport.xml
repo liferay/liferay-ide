@@ -3,7 +3,7 @@
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.summary" value="Some modules and the classes they exported to allow Soy rendering server-side have been removed"/>
    <property name="problem.tickets" value="LPS-122956"/>
-   <property name="problem.title" value="Removed Server-side Closure Templates Support"/>
+   <property name="problem.title" value="Removed Server-side Closure Templates (Soy) Support"/>
    <property name="problem.section" value="#removed-server-side-closure-templates-support"/>
    <property name="version" value="7.4"/>
    <service>

@@ -31,8 +31,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=java,jsp,jspf", "problem.tickets=LPS-122955",
-		"problem.title=Remove SoyPortlet and related code",
+		"file.extensions=java,jsp,jspf", "problem.tickets=LPS-122955", "problem.title=Removed the SoyPortlet Class",
 		"problem.summary=The `SoyPortlet` class has been removed. It used to implement a portlet whose views were backed by Closure Templates (Soy)",
 		"problem.section=#removed-soy-portlet", "version=7.4"
 	},

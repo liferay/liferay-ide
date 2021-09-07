@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=jsp,jspf", "problem.title=Previously unused and deprecated JSP tags are no longer available",
+		"file.extensions=jsp,jspf", "problem.title=Removed Deprecated and Unused JSP Tags",
 		"problem.section=#remove-deprecated-jsp-tags",
 		"problem.summary=A series of deprecated and unused JSP tags have been removed and are no longer available",
 		"problem.tickets=LPS-112476", "version=7.4"

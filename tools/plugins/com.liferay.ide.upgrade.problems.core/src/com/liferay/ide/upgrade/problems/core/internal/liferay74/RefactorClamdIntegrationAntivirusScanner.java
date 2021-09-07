@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"file.extensions=properties", "problem.title=Refactor Clamd integration to use Clamd remote service",
+		"file.extensions=properties", "problem.title=Refactored AntivirusScanner Support and Clamd Integration",
 		"problem.summary=The portal's Clamd integration implementation has been replaced by an OSGi service that uses a Clamd remote service",
 		"problem.tickets=LPS-122280", "problem.section=#refactor-clamd-integration-antivirusscanner-properties",
 		"problem.version=7.4", "version=7.4"

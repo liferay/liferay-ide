@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RefactorClamdIntegrationAntivirusScanner">
    <property name="file.extensions" value="properties"/>
-   <property name="problem.title" value="Refactor Clamd integration to use Clamd remote service"/>
+   <property name="problem.title" value="Refactored AntivirusScanner Support and Clamd Integration"/>
    <property name="problem.summary" value="The portal&apos;s Clamd integration implementation has been replaced by an OSGi service that uses a Clamd remote service"/>
    <property name="problem.tickets" value="LPS-122280"/>
    <property name="problem.section" value="#refactor-clamd-integration-antivirusscanner-properties"/>

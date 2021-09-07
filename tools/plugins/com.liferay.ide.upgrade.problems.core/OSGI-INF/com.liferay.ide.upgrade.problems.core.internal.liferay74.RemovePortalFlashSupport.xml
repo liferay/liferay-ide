@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemovePortalFlashSupport">
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.tickets" value="LPS-121733"/>
-   <property name="problem.title" value="The /portal/flash path has been removed and is no longer available"/>
+   <property name="problem.title" value="Removed the /portal/flash Path"/>
    <property name="problem.summary" value="The goal of this task is to remove all Flash paths and any related supporting code in line with End of Support for Flash"/>
    <property name="problem.section" value="#removed-portal-flash-support"/>
    <property name="version" value="7.4"/>

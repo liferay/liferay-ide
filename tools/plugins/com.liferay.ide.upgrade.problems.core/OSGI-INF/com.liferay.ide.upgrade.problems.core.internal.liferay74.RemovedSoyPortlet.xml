@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemovedSoyPortlet">
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.tickets" value="LPS-122955"/>
-   <property name="problem.title" value="Remove SoyPortlet and related code"/>
+   <property name="problem.title" value="Removed the SoyPortlet Class"/>
    <property name="problem.summary" value="The `SoyPortlet` class has been removed. It used to implement a portlet whose views were backed by Closure Templates (Soy)"/>
    <property name="problem.section" value="#removed-soy-portlet"/>
    <property name="version" value="7.4"/>

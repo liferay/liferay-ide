@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveAssetEntriesAssetCategoriesTable">
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.tickets" value="LPS-89065"/>
-   <property name="problem.title" value="Remove AssetEntries_AssetCategories table and related code"/>
+   <property name="problem.title" value="Removed the AssetEntries_AssetCategories Table and Corresponding Code"/>
    <property name="problem.summary" value="The AssetEntries_AssetCategories table and its corresponding code have been removed from the portal"/>
    <property name="problem.section" value="#removed-assetentries-assetcatagories-table"/>
    <property name="version" value="7.4"/>
