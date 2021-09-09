@@ -268,6 +268,8 @@ public interface UI {
 
 	public final String DOABOUT = "doAbout";
 
+	public final String DOCKER_DEPLOY = "Docker Deploy";
+
 	public final String DOCONFIG = "doConfig";
 
 	public final String DOEDIT = "doEdit";
@@ -392,6 +394,8 @@ public interface UI {
 	public final String INIT = "init";
 
 	public final String INIT_BUNDLE = "init-bundle";
+
+	public final String INIT_PORTAL_DOCKER_BUNDLE = "Init Portal Docker Bundle";
 
 	public final String INITIALIZE_SERVER_BUNDLE = "Initialize Server Bundle";
 

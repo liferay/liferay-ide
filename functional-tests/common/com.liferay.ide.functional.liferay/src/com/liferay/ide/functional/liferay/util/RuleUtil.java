@@ -16,6 +16,8 @@ package com.liferay.ide.functional.liferay.util;
 
 import com.liferay.ide.functional.liferay.support.sdk.Sdk62Support;
 import com.liferay.ide.functional.liferay.support.sdk.SdkSupport;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceDockerSupport;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningDockerSupport;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat70Support;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat71Support;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat72Support;
@@ -37,6 +39,14 @@ import org.junit.rules.TestRule;
  * @author Terry Jia
  */
 public class RuleUtil {
+
+	public static RuleChain getDockerRunningLiferayWorkspaceRuleChain(
+		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceDockerSupport server) {
+
+		LiferaryWorkspaceRunningDockerSupport runningServer = new LiferaryWorkspaceRunningDockerSupport(bot, server);
+
+		return getRuleChain(workspace, server, runningServer);
+	}
 
 	public static RuleChain getRuleChain(TestRule... rules) {
 		RuleChain chain = RuleChain.outerRule(rules[0]);
