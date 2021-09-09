@@ -63,5 +63,6 @@
 		<module>kaleo</module>
 		<module>modules.ext</module>
 		<module>springmvc.portlet</module>
+		<module>docker</module>
 	</modules>
 </project>
