@@ -17,7 +17,7 @@ package com.liferay.ide.functional.docker.tests;
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceDockerSupport;
-import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradleSupportForDocker;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradleDockerSupport;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
@@ -30,7 +30,7 @@ import org.junit.rules.RuleChain;
  */
 public class DockerDeployTests extends SwtbotBase {
 
-	public static LiferayWorkspaceGradleSupportForDocker workspace = new LiferayWorkspaceGradleSupportForDocker(bot);
+	public static LiferayWorkspaceGradleDockerSupport workspace = new LiferayWorkspaceGradleDockerSupport(bot);
 	public static LiferaryWorkspaceDockerSupport server = new LiferaryWorkspaceDockerSupport(bot, workspace);
 
 	@ClassRule
@@ -52,7 +52,7 @@ public class DockerDeployTests extends SwtbotBase {
 
 		viewAction.project.runDockerDeploy(workspace.getModuleFiles(project.getName()));
 
-		jobAction.waitForConsoleContent(getServerName(), "STARTED " + project.getName() + "_", M1);
+		jobAction.waitForConsoleContent(getDockerServerName(), "STARTED " + project.getName() + "_", M1);
 
 		viewAction.project.closeAndDeleteFromDisk(workspace.getModuleFiles(project.getName()));
 	}
@@ -73,7 +73,7 @@ public class DockerDeployTests extends SwtbotBase {
 
 		viewAction.project.runDockerDeploy(workspace.getModuleFiles(project.getName()));
 
-		jobAction.waitForConsoleContent(getServerName(), "STARTED " + project.getName() + "_", M1);
+		jobAction.waitForConsoleContent(getDockerServerName(), "STARTED " + project.getName() + "_", M1);
 
 		viewAction.project.closeAndDeleteFromDisk(workspace.getModuleFiles(project.getName()));
 	}
@@ -81,8 +81,8 @@ public class DockerDeployTests extends SwtbotBase {
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
 
-	protected String getServerName() {
-		return server.getServerName();
+	protected String getDockerServerName() {
+		return server.getDockerServerName();
 	}
 
 }

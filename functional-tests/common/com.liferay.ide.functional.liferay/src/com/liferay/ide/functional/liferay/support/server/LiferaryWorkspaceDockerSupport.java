@@ -42,19 +42,19 @@ public class LiferaryWorkspaceDockerSupport extends SupportBase {
 		_workspace.initBundle();
 	}
 
-	public String getServerName() {
-		return serverName + _workspace.getName();
+	public String getDockerServerName() {
+		return dockerServerName + _workspace.getName();
 	}
 
-	public String getStartedLabel() {
-		return getServerName() + "  [Started]";
+	public String getDockerStartedLabel() {
+		return getDockerServerName() + "  [Started]";
 	}
 
-	public String getStoppedLabel() {
-		return getServerName() + "  [Stopped]";
+	public String getDockerStoppedLabel() {
+		return getDockerServerName() + "  [Stopped]";
 	}
 
-	public String serverName = "Liferay Docker Server ";
+	public String dockerServerName = "Liferay Docker Server ";
 
 	private LiferayWorkspaceSupport _workspace;
 

@@ -33,9 +33,9 @@ public class LiferaryWorkspaceRunningDockerSupport extends SupportBase {
 
 	@Override
 	public void after() {
-		viewAction.servers.stop(_workspace.getStartedLabel());
+		viewAction.servers.stop(_workspace.getDockerStartedLabel());
 
-		jobAction.waitForServerStopped(_workspace.getServerName());
+		jobAction.waitForServerStopped(_workspace.getDockerServerName());
 
 		Assert.assertFalse("http://localhost:8080 still running", envAction.localConnected());
 
@@ -46,19 +46,19 @@ public class LiferaryWorkspaceRunningDockerSupport extends SupportBase {
 	public void before() {
 		super.before();
 
-		viewAction.servers.start(_workspace.getStoppedLabel());
+		viewAction.servers.start(_workspace.getDockerStoppedLabel());
 
 		jobAction.waitForConsoleContent(
-			_workspace.getServerName() + " [Liferay Docker]",
+			_workspace.getDockerServerName() + " [Liferay Docker]",
 			"-Djava.protocol.handler.pkgs=org.apache.catalina.webresources", 30 * 1000);
 
 		jobAction.waitForConsoleContent(
-			_workspace.getServerName() + " [Liferay Docker]", "-Dorg.apache.catalina.security.SecurityListener.UMASK",
-			30 * 1000);
+			_workspace.getDockerServerName() + " [Liferay Docker]",
+			"-Dorg.apache.catalina.security.SecurityListener.UMASK", 30 * 1000);
 
-		jobAction.waitForServerStarted(_workspace.getServerName());
+		jobAction.waitForServerStarted(_workspace.getDockerServerName());
 
-		viewAction.servers.openGogoShell(_workspace.getStartedLabel());
+		viewAction.servers.openGogoShell(_workspace.getDockerStartedLabel());
 
 		validationAction.assertGogoShellVisible();
 
