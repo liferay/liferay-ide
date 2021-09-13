@@ -21,9 +21,9 @@ import org.junit.Assert;
 /**
  * @author Lily Li
  */
-public class LiferayWorkspaceGradleSupportForDocker extends LiferayWorkspaceSupport {
+public class LiferayWorkspaceGradleDockerSupport extends LiferayWorkspaceSupport {
 
-	public LiferayWorkspaceGradleSupportForDocker(SWTWorkbenchBot bot) {
+	public LiferayWorkspaceGradleDockerSupport(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
