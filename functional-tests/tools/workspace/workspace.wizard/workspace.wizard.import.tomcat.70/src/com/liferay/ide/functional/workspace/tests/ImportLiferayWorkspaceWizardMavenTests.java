@@ -65,7 +65,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		// dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay Community Edition Portal 7.0.4 GA5");
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(projectName);
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 	}
 
 	@Test

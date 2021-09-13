@@ -46,7 +46,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		dialogAction.preferences.confirm();
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 	}
 
 	@Test

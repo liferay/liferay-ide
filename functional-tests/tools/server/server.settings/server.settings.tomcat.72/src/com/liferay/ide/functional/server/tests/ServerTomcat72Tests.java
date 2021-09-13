@@ -108,7 +108,7 @@ public class ServerTomcat72Tests extends ServerTomcat7xBase {
 
 		jobAction.waitForServerStopped(testServer.getServerName());
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 	}
 
 	@Override
