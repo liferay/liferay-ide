@@ -32,7 +32,7 @@ public class LiferaryWorkspaceDockerSupport extends SupportBase {
 
 	@Override
 	public void after() {
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 	}
 
 	@Override

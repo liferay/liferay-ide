@@ -39,7 +39,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.preferences.confirm();
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -67,7 +67,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -113,7 +113,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		editorAction.close();
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -169,7 +169,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		editorAction.close();
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -295,7 +295,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		viewAction.servers.visibleServer("Liferay Community Edition Portal 7");
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -335,7 +335,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		// jobAction.waitForServerStopped(serverName);
 
-		dialogAction.deleteRuntimFromPreferences(0);
+		dialogAction.deleteRuntimeFromPreferences(0);
 
 		resetTestServer();
 	}
