@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveOpenIdConnectServiceHandlerInterface">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="OpenIdConnectServiceHandler interface removed"/>
+   <property name="problem.summary" value="In order to deliver improvements to OIDC refresh token handling, the authentication process has been improved to handle post-authentication processing."/>
+   <property name="problem.tickets" value="LPS-124898"/>
+   <property name="problem.section" value="#remove-openid-connect-service-handler"/>
+   <property name="version" value="7.4"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveOpenIdConnectServiceHandlerInterface"/>
+</scr:component>
