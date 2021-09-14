@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 		"file.extensions=properties",
 		"problem.title=Remove some static methods in com.liferay.portal.kernel.servlet.SanitizedServletResponse and Portal Property http.header.secure.x.xss.protection",
 		"problem.summary=Some static methods in `com.liferay.portal.kernel.servlet.SanitizedServletResponse` have been removed because these relate to the X-Xss-Protection header which is not supported by modern browsers",
-		"problem.tickets=LPS-134188", "problem.section=#remove-sanitized-servlet-response-some-static-method",
+		"problem.tickets=LPS-134188", "problem.section=#removed-sanitized-servlet-response-some-static-method",
 		"version=7.4"
 	},
 	service = FileMigrator.class
