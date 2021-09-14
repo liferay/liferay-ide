@@ -4,7 +4,7 @@
    <property name="problem.summary" value="Some static methods in `com.liferay.portal.kernel.servlet.SanitizedServletResponse` have been removed because these relate to the X-Xss-Protection header which is not supported by modern browsers"/>
    <property name="problem.tickets" value="LPS-134188"/>
    <property name="problem.title" value="Remove some static methods in com.liferay.portal.kernel.servlet.SanitizedServletResponse and Portal Property http.header.secure.x.xss.protection"/>
-   <property name="problem.section" value="#remove-sanitized-servlet-response-some-static-method" />
+   <property name="problem.section" value="#removed-sanitized-servlet-response-some-static-method" />
    <property name="version" value="7.4"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
