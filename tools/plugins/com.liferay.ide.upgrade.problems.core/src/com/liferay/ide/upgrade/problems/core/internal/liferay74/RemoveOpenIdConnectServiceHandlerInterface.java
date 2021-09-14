@@ -49,11 +49,12 @@ public class RemoveOpenIdConnectServiceHandlerInterface extends JavaFileMigrator
 
 		searchResults.addAll(
 			fileChecker.findMethodInvocations(
-				"OpenIdConnectServiceHandler", null, "hasValidOpenIdConnectSession", null));
+				"OpenIdConnectServiceHandler", null, "hasValidOpenIdConnectSession", new String[] {"HttpSession"}));
 
 		searchResults.addAll(
 			fileChecker.findMethodInvocations(
-				"OpenIdConnectServiceHandler", null, "processAuthenticationResponse", null));
+				"OpenIdConnectServiceHandler", null, "processAuthenticationResponse",
+				new String[] {"HttpServletRequest", "HttpServletResponse"}));
 
 		return searchResults;
 	}
