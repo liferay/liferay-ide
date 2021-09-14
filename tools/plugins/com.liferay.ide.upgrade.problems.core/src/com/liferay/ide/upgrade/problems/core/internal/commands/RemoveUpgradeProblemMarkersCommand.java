@@ -47,7 +47,7 @@ public class RemoveUpgradeProblemMarkersCommand implements UpgradeCommand, Upgra
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		boolean result = _messagePrompt.promptQuestion(
-			"Remove Upgrade Proble Markers", "Are you sure to remove the upgrade problem markers?");
+			"Remove Upgrade Problem Markers", "Are you sure to remove the upgrade problem markers?");
 
 		if (result) {
 			UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
