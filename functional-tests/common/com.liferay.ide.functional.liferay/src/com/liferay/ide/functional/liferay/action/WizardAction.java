@@ -297,10 +297,10 @@ public class WizardAction extends UIAction {
 	public NewLiferayModulesExtFilesWizardAction newModulesExtFiles = new NewLiferayModulesExtFilesWizardAction();
 	public NewPluginWizardAction newPlugin = new NewPluginWizardAction();
 	public NewProjectWizardAction newProject = new NewProjectWizardAction();
-	public NewRuntimeWizardAction newRuntime = new NewRuntimeWizardAction();
 	public NewRuntime7WizardAction newRuntime7 = new NewRuntime7WizardAction();
 	public NewRuntime62WizardAction newRuntime62 = new NewRuntime62WizardAction();
 	public NewServerWizardAction newServer = new NewServerWizardAction();
+	public NewRuntimeWizardAction newServerRuntime = new NewRuntimeWizardAction();
 	public NewSpringMvcPortletWizardAction newSpringMvcPortlet = new NewSpringMvcPortletWizardAction();
 	public NewLiferayUpgradePlanWizardAction newUpgradePlan = new NewLiferayUpgradePlanWizardAction();
 	public ProjectFromExistSourceWizardAction projectFromExistSource = new ProjectFromExistSourceWizardAction();

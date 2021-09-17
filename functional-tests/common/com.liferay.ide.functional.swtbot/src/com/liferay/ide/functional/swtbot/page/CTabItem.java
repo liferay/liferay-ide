@@ -37,8 +37,8 @@ public class CTabItem extends AbstractWidget {
 					try {
 						getWidget().activate();
 					}
-					catch (Exception ex) {
-						ex.printStackTrace();
+					catch (Exception exception) {
+						exception.printStackTrace();
 					}
 				}
 

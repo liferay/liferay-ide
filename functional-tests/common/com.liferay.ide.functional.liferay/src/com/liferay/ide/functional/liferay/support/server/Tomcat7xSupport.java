@@ -59,7 +59,7 @@ public class Tomcat7xSupport extends SupportBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 

@@ -56,7 +56,7 @@ public class ServerTomcat72Tests extends ServerTomcat7xBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 

@@ -36,7 +36,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare62();
+		wizardAction.newServerRuntime.prepare62();
 
 		wizardAction.next();
 
@@ -57,7 +57,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare62();
+		wizardAction.newServerRuntime.prepare62();
 
 		wizardAction.next();
 

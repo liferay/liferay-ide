@@ -59,7 +59,7 @@ public class ImportLiferayWorkspaceProjectSupport extends ImportProjectSupport {
 		try {
 			ZipUtil.unzip(serverZip, _server.getBundleDir(), serverDir, new NullProgressMonitor());
 		}
-		catch (IOException ioe) {
+		catch (IOException ioException) {
 		}
 	}
 
@@ -73,7 +73,7 @@ public class ImportLiferayWorkspaceProjectSupport extends ImportProjectSupport {
 		try {
 			ZipUtil.unzip(sdkZipFile, _sdk.getSdkDir(), sdkDir, new NullProgressMonitor());
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 		}
 
 		if (needServer) {

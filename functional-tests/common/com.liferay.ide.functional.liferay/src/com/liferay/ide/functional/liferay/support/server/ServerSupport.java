@@ -81,14 +81,14 @@ public class ServerSupport extends SupportBase {
 
 				ZipUtil.unzip(zipFile, serverDir, new NullProgressMonitor());
 			}
-			catch (IOException ioe) {
+			catch (IOException ioException) {
 			}
 		}
 		else {
 			try {
 				ZipUtil.unTarGz(zipFile, serverDir);
 			}
-			catch (IOException ioe) {
+			catch (IOException ioException) {
 			}
 		}
 
@@ -134,40 +134,40 @@ public class ServerSupport extends SupportBase {
 	}
 
 	private void _preparePortalExtFile(File serverDir) {
-		String filename = "portal-ext.properties";
+		String fileName = "portal-ext.properties";
 
-		IPath bundlePath = envAction.getBundlesPath();
+		IPath bundlesPath = envAction.getBundlesPath();
 
-		IPath sourcePortalExtPath = bundlePath.append(filename);
+		IPath sourcePortalExtPath = bundlesPath.append(fileName);
 
 		File source = sourcePortalExtPath.toFile();
 
-		File dest = new File(serverDir, filename);
+		File dest = new File(serverDir, fileName);
 
 		try {
 			FileUtil.copyFile(source, dest);
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Exception exception) {
+			exception.printStackTrace();
 		}
 	}
 
 	private void _preparePortalSetupWizardFile(File serverDir) {
-		String filename = "portal-setup-wizard.properties";
+		String fileName = "portal-setup-wizard.properties";
 
-		IPath bundlePath = envAction.getBundlesPath();
+		IPath bundlesPath = envAction.getBundlesPath();
 
-		IPath sourcePortalSetupWizardPath = bundlePath.append(filename);
+		IPath sourcePortalSetupWizardPath = bundlesPath.append(fileName);
 
 		File source = sourcePortalSetupWizardPath.toFile();
 
-		File dest = new File(serverDir, filename);
+		File dest = new File(serverDir, fileName);
 
 		try {
 			FileUtil.copyFile(source, dest);
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Exception exception) {
+			exception.printStackTrace();
 		}
 	}
 

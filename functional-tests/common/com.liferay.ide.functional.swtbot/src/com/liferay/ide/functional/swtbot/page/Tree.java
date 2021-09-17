@@ -109,7 +109,7 @@ public class Tree extends AbstractWidget {
 						item = getWidget().getTreeItem(items[0]);
 					}
 				}
-				catch (Exception e) {
+				catch (Exception exception) {
 				}
 			}
 

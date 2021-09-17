@@ -191,8 +191,8 @@ public class EditorAction extends UIAction {
 			return _serverEditor.getUseDeveloperMode();
 		}
 
-		public Text getUsername() {
-			return _serverEditor.getUsername();
+		public Text getUserName() {
+			return _serverEditor.getUserName();
 		}
 
 		public void selectCustomLaunchSettings() {

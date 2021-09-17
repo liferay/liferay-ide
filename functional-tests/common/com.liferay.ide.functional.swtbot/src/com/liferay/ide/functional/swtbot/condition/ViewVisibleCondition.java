@@ -78,7 +78,7 @@ public class ViewVisibleCondition implements ICondition {
 				view = _bot.viewByTitle(_identifier);
 			}
 		}
-		catch (WidgetNotFoundException wnfe) {
+		catch (WidgetNotFoundException widgetNotFoundException) {
 		}
 		finally {
 			SWTBotPreferences.TIMEOUT = oldTimeOut;

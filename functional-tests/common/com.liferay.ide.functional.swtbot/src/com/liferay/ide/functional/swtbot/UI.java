@@ -131,9 +131,9 @@ public interface UI {
 
 	public final String CLASS = "Class:";
 
-	public final String CLASSIC = "classic";
+	public final String CLASS_NAME = "Classname:";
 
-	public final String CLASSNAME = "Classname:";
+	public final String CLASSIC = "classic";
 
 	public final String CLEAR = "Clear";
 

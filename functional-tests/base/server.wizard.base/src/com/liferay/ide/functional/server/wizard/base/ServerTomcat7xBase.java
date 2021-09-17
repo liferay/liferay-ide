@@ -29,7 +29,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -51,7 +51,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -79,7 +79,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -125,7 +125,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -181,7 +181,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -223,7 +223,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -273,7 +273,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -307,7 +307,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newServerRuntime.prepare7();
 
 		wizardAction.next();
 

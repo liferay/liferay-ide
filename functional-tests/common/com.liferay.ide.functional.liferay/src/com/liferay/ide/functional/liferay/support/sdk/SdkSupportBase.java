@@ -68,17 +68,17 @@ public class SdkSupportBase extends SupportBase {
 		try {
 			ZipUtil.unzip(zipFile, _sdk.getSdkDir(), sdkDir, new NullProgressMonitor());
 
-			String username = envAction.getUsername();
+			String userName = envAction.getUserName();
 
-			File userBuildFile = new File(sdkDir, "build." + username + ".properties");
+			File userBuildFile = new File(sdkDir, "build." + userName + ".properties");
 
 			try {
 				userBuildFile.createNewFile();
 			}
-			catch (IOException ioe) {
+			catch (IOException ioException) {
 			}
 
-			Assert.assertTrue("Expect build." + username + ".properties exists but not", userBuildFile.exists());
+			Assert.assertTrue("Expect build." + userName + ".properties exists but not", userBuildFile.exists());
 
 			String fullServerDir = _server.getFullServerDir();
 
@@ -97,7 +97,7 @@ public class SdkSupportBase extends SupportBase {
 
 			writer.close();
 		}
-		catch (IOException ioe) {
+		catch (IOException ioException) {
 		}
 
 		if (envAction.internal()) {
@@ -114,9 +114,9 @@ public class SdkSupportBase extends SupportBase {
 	}
 
 	public String getFullSdkDir() {
-		return new File(
-			envAction.getTempDir(), getSdkDirName()
-		).getAbsolutePath();
+		File file = new File(envAction.getTempDir(), getSdkDirName());
+
+		return file.getAbsolutePath();
 	}
 
 	public String getSdkDirName() {

@@ -30,7 +30,7 @@ public class NewImplClassDialog extends Dialog {
 
 		_javaPackage = new Text(bot, JAVA_PACKAGE);
 		_createBtn = new Button(bot, CREATE);
-		_className = new Text(bot, CLASSNAME);
+		_className = new Text(bot, CLASS_NAME);
 		_browseBtn = new Button(bot, BROWSE_WITH_DOT);
 	}
 

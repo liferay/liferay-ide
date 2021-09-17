@@ -14,16 +14,13 @@
 
 package com.liferay.ide.functional.liferay.page.editor;
 
-import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.allOf;
-import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
-import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withMnemonic;
-
 import com.liferay.ide.functional.swtbot.page.CheckBox;
 import com.liferay.ide.functional.swtbot.page.Editor;
 import com.liferay.ide.functional.swtbot.page.Radio;
 import com.liferay.ide.functional.swtbot.page.Text;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.forms.finder.widgets.SWTBotHyperlink;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
@@ -48,7 +45,8 @@ public class ServerEditor extends Editor {
 	}
 
 	public void clickHyperLink(String label, int hyperLinkIndex) {
-		Matcher<Hyperlink> hyperLink = allOf(widgetOfType(Hyperlink.class), withMnemonic(label));
+		Matcher<Hyperlink> hyperLink = WidgetMatcherFactory.allOf(
+			WidgetMatcherFactory.widgetOfType(Hyperlink.class), WidgetMatcherFactory.withMnemonic(label));
 
 		Hyperlink link = (Hyperlink)bot.widget(hyperLink, hyperLinkIndex);
 
@@ -82,7 +80,8 @@ public class ServerEditor extends Editor {
 	}
 
 	public boolean getHyperLink(String label) {
-		Matcher<Hyperlink> hyperLink = allOf(widgetOfType(Hyperlink.class), withMnemonic(label));
+		Matcher<Hyperlink> hyperLink = WidgetMatcherFactory.allOf(
+			WidgetMatcherFactory.widgetOfType(Hyperlink.class), WidgetMatcherFactory.withMnemonic(label));
 
 		Hyperlink link = (Hyperlink)bot.widget(hyperLink);
 
@@ -109,7 +108,7 @@ public class ServerEditor extends Editor {
 		return new CheckBox(getPart().bot(), "Use developer mode");
 	}
 
-	public Text getUsername() {
+	public Text getUserName() {
 		return new Text(getPart().bot(), "Username:");
 	}
 

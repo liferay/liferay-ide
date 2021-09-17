@@ -204,7 +204,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getSteps().doubleClick(steps);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 		}
 
@@ -272,7 +272,7 @@ public class ViewAction extends UIAction {
 
 				_jobAction.waitForCloseProject();
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 		}
 
@@ -318,7 +318,7 @@ public class ViewAction extends UIAction {
 
 				ide.sleep(2000);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 		}
 
@@ -334,13 +334,13 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().doubleClick(files);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 
 			try {
 				_getProjects().contextMenu("Open", files);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 		}
 
@@ -358,7 +358,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().contextMenu("Update Project...", projectName);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 		}
 
@@ -370,7 +370,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().contextMenu("Generic Text Editor", files);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 		}
 
@@ -384,7 +384,7 @@ public class ViewAction extends UIAction {
 
 				ide.sleep(2000);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 		}
 
@@ -394,7 +394,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().contextMenu(BUILD_SERVICE, projectNames);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				ide.sleep(2000);
 
 				_getProjects().contextMenu(BUILD_SERVICE, projectNames);
@@ -405,7 +405,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().contextMenu(BUILD_SERVICES, projectNames);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				ide.sleep(2000);
 
 				_getProjects().contextMenu(BUILD_SERVICES, projectNames);
@@ -416,7 +416,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().contextMenu(BUILD_WSDD, projectNames);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				ide.sleep(2000);
 
 				_getProjects().contextMenu(BUILD_WSDD, projectNames);
@@ -431,7 +431,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().contextMenu(INITIALIZE_SERVER_BUNDLE, projectNames);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				ide.sleep(2000);
 
 				_getProjects().contextMenu(INITIALIZE_SERVER_BUNDLE, projectNames);
@@ -442,7 +442,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().contextMenu(INIT_PORTAL_DOCKER_BUNDLE, projectNames);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				ide.sleep(2000);
 
 				_getProjects().contextMenu(INIT_PORTAL_DOCKER_BUNDLE, projectNames);
@@ -453,7 +453,7 @@ public class ViewAction extends UIAction {
 			try {
 				_getProjects().contextMenu(INIT_BUNDLE, projectNames);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				ide.sleep(2000);
 
 				_getProjects().contextMenu(INIT_BUNDLE, projectNames);
@@ -468,7 +468,7 @@ public class ViewAction extends UIAction {
 			try {
 				return _getProjects().isVisible(files);
 			}
-			catch (Exception e) {
+			catch (Exception exception1) {
 				_getProjects().setFocus();
 
 				try {
@@ -480,7 +480,7 @@ public class ViewAction extends UIAction {
 
 					ide.sleep(2000);
 				}
-				catch (Exception e1) {
+				catch (Exception exception2) {
 				}
 
 				for (int i = files.length - 1; i > 0; i--) {
@@ -639,7 +639,7 @@ public class ViewAction extends UIAction {
 			try {
 				return _getServers().isVisibleStartsBy(serverLabel, KALEO_WORKFLOWS, kaleoName);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				_getServers().setFocus();
 
 				_getServers().select(serverLabel);
@@ -663,7 +663,7 @@ public class ViewAction extends UIAction {
 			try {
 				return _getServers().isVisibleStartsBy(serverLabel, projectName);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				_getServers().setFocus();
 
 				_getServers().select(serverLabel);
@@ -682,7 +682,7 @@ public class ViewAction extends UIAction {
 			try {
 				return _getServers().isVisibleStartsBy(serverLabel, workspaceName, projectName);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 				_getServers().setFocus();
 
 				_getServers().select(serverLabel);

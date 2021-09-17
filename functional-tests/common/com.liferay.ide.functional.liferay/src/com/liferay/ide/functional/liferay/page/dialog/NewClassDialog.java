@@ -30,7 +30,7 @@ public class NewClassDialog extends Dialog {
 	public NewClassDialog(SWTBot bot) {
 		super(bot);
 
-		_className = new Text(bot, CLASSNAME);
+		_className = new Text(bot, CLASS_NAME);
 		_javaPackage = new Text(bot, JAVA_PACKAGE);
 		_createBtn = new Button(bot, CREATE);
 		_browseBtn = new Button(bot, BROWSE_WITH_DOT);
