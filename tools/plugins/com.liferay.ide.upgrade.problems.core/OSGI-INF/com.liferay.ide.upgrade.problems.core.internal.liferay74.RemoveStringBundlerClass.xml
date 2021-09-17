@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveStringBundlerClass">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.tickets" value="LPS-133200"/>
+   <property name="problem.title" value="Class com.liferay.portal.kernel.util.StringBundler has been deprecated"/>
+   <property name="problem.summary" value="The StringBundler class in package com.liferay.portal.kernel.util were removed"/>
+   <property name="problem.section" value="#removed-string-bundler-class"/>
+   <property name="version" value="7.4"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveStringBundlerClass"/>
+</scr:component>

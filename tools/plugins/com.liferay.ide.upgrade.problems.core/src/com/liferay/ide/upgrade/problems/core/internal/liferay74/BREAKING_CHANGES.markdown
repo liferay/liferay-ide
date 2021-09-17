@@ -516,7 +516,7 @@ To make file, page and web content DDM fields easy to reference in the database 
 
 ---------------------------------------
 
-### Class `com.liferay.portal.kernel.util.StringBundler` has been deprecated [](id=#)
+### Class `com.liferay.portal.kernel.util.StringBundler` has been deprecated [](id=removed-string-bundler-class)
 - **Date:** 2021-Jun-25
 - **JIRA Ticket:** [LPS-133200](https://issues.liferay.com/browse/LPS-133200)
 
