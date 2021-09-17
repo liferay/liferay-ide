@@ -42,7 +42,7 @@ public class ImportProjectSupport extends ProjectSupport {
 
 			_project = dist;
 		}
-		catch (IOException ioe) {
+		catch (IOException ioException) {
 		}
 	}
 

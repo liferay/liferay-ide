@@ -38,8 +38,8 @@ public class ProjectsSupport extends ExternalResource {
 
 				_timestamps[i] = String.valueOf(timestamp);
 			}
-			catch (NumberFormatException nfe) {
-				nfe.printStackTrace();
+			catch (NumberFormatException numberFormatException) {
+				numberFormatException.printStackTrace();
 			}
 		}
 	}

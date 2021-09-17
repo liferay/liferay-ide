@@ -14,16 +14,13 @@
 
 package com.liferay.ide.functional.liferay.page.view;
 
-import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.allOf;
-import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
-import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withMnemonic;
-
 import com.liferay.ide.functional.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.functional.swtbot.page.Tree;
 import com.liferay.ide.functional.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.forms.finder.widgets.SWTBotImageHyperlink;
+import org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
@@ -44,7 +41,8 @@ public class LiferayUpgradePlanView extends View {
 	}
 
 	public void click(String label) {
-		Matcher matcherImageHyperLink = allOf(widgetOfType(Hyperlink.class), withMnemonic(label));
+		Matcher<Hyperlink> matcherImageHyperLink = WidgetMatcherFactory.allOf(
+			WidgetMatcherFactory.widgetOfType(Hyperlink.class), WidgetMatcherFactory.withMnemonic(label));
 
 		ImageHyperlink link = (ImageHyperlink)bot.widget(matcherImageHyperLink);
 
@@ -55,7 +53,7 @@ public class LiferayUpgradePlanView extends View {
 		try {
 			imageHyperLink.click();
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 		}
 	}
 
@@ -104,7 +102,8 @@ public class LiferayUpgradePlanView extends View {
 	}
 
 	public boolean isVisible(String label) {
-		Matcher matcherImageHyperLink = allOf(widgetOfType(Hyperlink.class), withMnemonic(label));
+		Matcher<Hyperlink> matcherImageHyperLink = WidgetMatcherFactory.allOf(
+			WidgetMatcherFactory.widgetOfType(Hyperlink.class), WidgetMatcherFactory.withMnemonic(label));
 
 		ImageHyperlink link = (ImageHyperlink)bot.widget(matcherImageHyperLink);
 

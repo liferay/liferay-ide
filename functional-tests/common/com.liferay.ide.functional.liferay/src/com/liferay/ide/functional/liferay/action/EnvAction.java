@@ -71,10 +71,10 @@ public class EnvAction extends UIAction {
 			if ((_bundlesDir == null) || _bundlesDir.equals("") || _bundlesDir.equals("null")) {
 				Bundle bundle = Platform.getBundle("com.liferay.ide.functional.liferay");
 
-				URL rootUrl = bundle.getEntry("/");
+				URL rootURL = bundle.getEntry("/");
 
 				try {
-					URL url = FileLocator.toFileURL(rootUrl);
+					URL url = FileLocator.toFileURL(rootURL);
 
 					String filePath = url.getFile();
 
@@ -84,16 +84,14 @@ public class EnvAction extends UIAction {
 						_bundlesPath = new Path(filePath.substring(0, index) + "/tests-resources");
 					}
 					else {
-						IPath path = new Path(
-							filePath
-						).removeLastSegments(
-							3
-						);
+						Path newFilePath = new Path(filePath);
+
+						IPath path = newFilePath.removeLastSegments(3);
 
 						_bundlesPath = path.append("tests-resources");
 					}
 				}
-				catch (IOException ioe) {
+				catch (IOException ioException) {
 				}
 			}
 			else {
@@ -138,7 +136,7 @@ public class EnvAction extends UIAction {
 		return getTempDir().getPath();
 	}
 
-	public String getUsername() {
+	public String getUserName() {
 		String retval = System.getenv("USERNAME");
 
 		if (CoreUtil.empty(retval)) {
@@ -194,15 +192,15 @@ public class EnvAction extends UIAction {
 			retval = Boolean.parseBoolean(_internal);
 		}
 
-		boolean reachable = false;
-
 		if (retval) {
+			boolean reachable = false;
+
 			try {
 				InetAddress address = InetAddress.getByAddress(_internalServerIp);
 
 				reachable = address.isReachable(2000);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 			finally {
 				Assert.assertTrue("The argument \"internal\" is true but can not reach the internal server", reachable);
@@ -232,7 +230,7 @@ public class EnvAction extends UIAction {
 
 			url.openStream();
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 			connected = false;
 		}
 

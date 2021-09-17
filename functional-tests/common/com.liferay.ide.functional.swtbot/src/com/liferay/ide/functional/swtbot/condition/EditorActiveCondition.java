@@ -85,7 +85,7 @@ public class EditorActiveCondition implements ICondition {
 		try {
 			return _bot.editorByTitle(name);
 		}
-		catch (WidgetNotFoundException wnfe) {
+		catch (WidgetNotFoundException widgetNotFoundException) {
 		}
 		finally {
 			SWTBotPreferences.TIMEOUT = oldTimeOut;

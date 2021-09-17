@@ -62,7 +62,7 @@ public class ZipUtil {
 	}
 
 	public static ZipEntry getZipEntry(ZipFile zip, String name) {
-		String lcasename = name.toLowerCase();
+		String lcaseName = name.toLowerCase();
 
 		for (Enumeration<? extends ZipEntry> itr = zip.entries(); itr.hasMoreElements();) {
 			ZipEntry zipEntry = itr.nextElement();
@@ -71,7 +71,7 @@ public class ZipUtil {
 
 			String lowerCaseName = entryName.toLowerCase();
 
-			if (lowerCaseName.equals(lcasename)) {
+			if (lowerCaseName.equals(lcaseName)) {
 				return zipEntry;
 			}
 		}
@@ -83,12 +83,12 @@ public class ZipUtil {
 		try {
 			return new ZipFile(file);
 		}
-		catch (FileNotFoundException fnfe) {
-			FileNotFoundException exception = new FileNotFoundException(file.getAbsolutePath());
+		catch (FileNotFoundException fileNotFoundException1) {
+			FileNotFoundException fileNotFoundException2 = new FileNotFoundException(file.getAbsolutePath());
 
-			exception.initCause(fnfe);
+			fileNotFoundException2.initCause(fileNotFoundException1);
 
-			throw fnfe;
+			throw fileNotFoundException1;
 		}
 	}
 
@@ -129,7 +129,7 @@ public class ZipUtil {
 			try {
 				tarInputStream.close();
 			}
-			catch (IOException ioe) {
+			catch (IOException ioException) {
 			}
 		}
 	}
@@ -220,7 +220,7 @@ public class ZipUtil {
 			try {
 				zip.close();
 			}
-			catch (IOException ioe) {
+			catch (IOException ioException) {
 			}
 		}
 	}

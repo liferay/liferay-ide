@@ -206,7 +206,7 @@ public class CoreUtil {
 		try {
 			Double.parseDouble(str);
 		}
-		catch (NumberFormatException nfe) {
+		catch (NumberFormatException numberFormatException) {
 			return false;
 		}
 

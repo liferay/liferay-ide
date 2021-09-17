@@ -49,7 +49,7 @@ public class Tomcat62Support extends IdeServerSupport {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare62();
+		wizardAction.newServerRuntime.prepare62();
 
 		wizardAction.next();
 

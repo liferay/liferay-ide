@@ -63,21 +63,21 @@ import org.xml.sax.ErrorHandler;
 public class FileUtil {
 
 	public static void copyDirectiory(String sourceDir, String targetDir) throws IOException {
-		new File(
-			targetDir
-		).mkdirs();
+		File newTargetDirFile = new File(targetDir);
 
-		File[] files = new File(
-			sourceDir
-		).listFiles();
+		newTargetDirFile.mkdirs();
+
+		File sourceDirFile = new File(sourceDir);
+
+		File[] files = sourceDirFile.listFiles();
 
 		for (File file : files) {
 			if (file.isFile()) {
 				File sourceFile = file;
-				File targetFile = new File(
-					new File(
-						targetDir
-					).getAbsolutePath() + File.separator + file.getName());
+
+				File targetDirFile = new File(targetDir);
+
+				File targetFile = new File(targetDirFile.getAbsolutePath() + File.separator + file.getName());
 
 				copyFile(sourceFile, targetFile);
 			}
@@ -108,8 +108,8 @@ public class FileUtil {
 				avail = in.read(buf);
 			}
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Exception exception) {
+			exception.printStackTrace();
 		}
 	}
 
@@ -231,14 +231,14 @@ public class FileUtil {
 				}
 			}
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 		}
 		finally {
 			if (bufferedReader != null) {
 				try {
 					bufferedReader.close();
 				}
-				catch (IOException ioe) {
+				catch (IOException ioException) {
 				}
 			}
 		}
@@ -269,14 +269,14 @@ public class FileUtil {
 				lines.add(line);
 			}
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 		}
 		finally {
 			if (bufferedReader != null) {
 				try {
 					bufferedReader.close();
 				}
-				catch (Exception e) {
+				catch (Exception exception) {
 
 					// no need to log, best effort
 

@@ -36,14 +36,14 @@ public class Label extends AbstractWidget {
 		try {
 			return getWidget().isVisible();
 		}
-		catch (Exception e) {
-			String message = e.getMessage();
+		catch (Exception exception) {
+			String message = exception.getMessage();
 
 			if (message.contains(label)) {
 				return false;
 			}
 
-			throw e;
+			throw exception;
 		}
 		finally {
 			SWTBotPreferences.TIMEOUT = oldTimeOut;

@@ -69,7 +69,7 @@ public class SupportBase extends ExternalResource {
 
 			SWTBotPreferences.TIMEOUT = origin;
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 		}
 
 		Perspective liferayWsPerspective = ide.getLiferayWorkspacePerspective();
@@ -88,8 +88,8 @@ public class SupportBase extends ExternalResource {
 		try {
 			timestamp = Long.parseLong(tt.substring(6));
 		}
-		catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
+		catch (NumberFormatException numberFormatException) {
+			numberFormatException.printStackTrace();
 		}
 
 		if (isSwitchToUpgradePespective()) {

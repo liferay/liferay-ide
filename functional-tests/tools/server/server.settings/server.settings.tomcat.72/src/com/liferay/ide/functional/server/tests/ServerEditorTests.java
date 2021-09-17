@@ -54,7 +54,7 @@ public class ServerEditorTests extends ServerTomcat7xBase {
 
 		validationAction.assertCheckedTrue(editorAction.server.getUseDeveloperMode());
 
-		validationAction.assertTextEquals("test@liferay.com", editorAction.server.getUsername());
+		validationAction.assertTextEquals("test@liferay.com", editorAction.server.getUserName());
 
 		validationAction.assertTextEquals(StringPool.BLANK, editorAction.server.getPassword());
 

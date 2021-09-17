@@ -115,7 +115,7 @@ public class SwtbotBase implements FileConstants, Keys, Messages, Times, UI {
 
 			SWTBotPreferences.TIMEOUT = origin;
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 		}
 
 		if (!envAction.isEclipse()) {
@@ -142,7 +142,7 @@ public class SwtbotBase implements FileConstants, Keys, Messages, Times, UI {
 
 			dialogAction.confirm(DELETE_ALL_EVENTS);
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 		}
 	}
 
@@ -173,9 +173,7 @@ public class SwtbotBase implements FileConstants, Keys, Messages, Times, UI {
 
 		dialogAction.cancel();
 
-		String currentTitle = new Shell(
-			bot
-		).getLabel();
+		String currentTitle = shell.getLabel();
 
 		Assert.assertNotEquals("Unable to close the shell " + title, title, currentTitle);
 

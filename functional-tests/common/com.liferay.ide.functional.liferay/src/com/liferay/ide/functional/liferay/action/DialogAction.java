@@ -510,7 +510,7 @@ public class DialogAction extends UIAction {
 			try {
 				_openPreferenceType(GRADLE);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 
 			SWTBotPreferences.TIMEOUT = origin;
@@ -544,7 +544,7 @@ public class DialogAction extends UIAction {
 			try {
 				_openPreferenceType(LIFERAY, UPGRADE_PLANNER);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 
 			SWTBotPreferences.TIMEOUT = origin;
@@ -572,7 +572,7 @@ public class DialogAction extends UIAction {
 			try {
 				_openPreferenceType(SERVER, RUNTIME_ENVIRONMENTS);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 
 			SWTBotPreferences.TIMEOUT = origin;
@@ -642,7 +642,7 @@ public class DialogAction extends UIAction {
 			try {
 				confirm();
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 
 			SWTBotPreferences.TIMEOUT = origin;
@@ -666,7 +666,7 @@ public class DialogAction extends UIAction {
 			try {
 				confirm();
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 
 			SWTBotPreferences.TIMEOUT = origin;
@@ -744,7 +744,7 @@ public class DialogAction extends UIAction {
 			try {
 				_updateMavenProjectDialog.clickSelectAllBtn();
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 		}
 
