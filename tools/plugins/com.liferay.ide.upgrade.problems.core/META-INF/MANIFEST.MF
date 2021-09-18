@@ -209,4 +209,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.RemoveServiceBuilderLegacyFileCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.ServiceBuilderLegacyFileMigrator.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.SwitchToUseReleaseAPIDependencyCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveOpenIdConnectServiceHandlerInterface.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveOpenIdConnectServiceHandlerInterface.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveJournalArticleContentField.xml

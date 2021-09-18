@@ -494,7 +494,7 @@ This change was made to align and standarize all OAuth 2.0 constants in our code
 
 ---------------------------------------
 
-### Removed JournalArticle Content Field [](id=#)
+### Removed JournalArticle Content Field [](id=#remove-journalarticle-content-field)
 - **Date:** 2021-May-21
 - **JIRA Ticket:** [LPS-129058](https://issues.liferay.com/browse/LPS-129058)
 
