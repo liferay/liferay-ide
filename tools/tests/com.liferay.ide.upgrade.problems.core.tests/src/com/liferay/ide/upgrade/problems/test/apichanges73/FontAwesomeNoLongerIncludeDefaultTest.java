@@ -40,7 +40,7 @@ public class FontAwesomeNoLongerIncludeDefaultTest {
 
 		FileMigration m = _context.getService(sr);
 
-		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/liferayui-icon/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
+		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/liferay-ui-icon/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		Assert.assertEquals("", 1, problems.size());
 

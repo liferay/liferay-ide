@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.DeprecatedClayDropdownActionsTagAttributes">
+   <property name="file.extensions" value="jsp,jspf"/>
+   <property name="problem.title" value="Removed Deprecated Attributes From the frontend-taglib-clay Tags"/>
+   <property name="problem.section" value="#removed-deprecated-attributes-from-frontend-taglib-clay-tags"/>
+   <property name="problem.summary" value="The attributes buttonLabel, buttonStyle, buttonType, componentId, contributorKey, data, defaultEventHandler, elementClasses, expanded, itemsIconAlignment, searchable, showToggleIcon, spritemap, style, triggerCssClasses, triggerTitle, type in `clay:dropdown-actions` tag was removed."/>
+   <property name="problem.tickets" value="LPS-125256"/>
+   <property name="version" value="7.4"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay74.DeprecatedClayDropdownActionsTagAttributes"/>
+</scr:component>

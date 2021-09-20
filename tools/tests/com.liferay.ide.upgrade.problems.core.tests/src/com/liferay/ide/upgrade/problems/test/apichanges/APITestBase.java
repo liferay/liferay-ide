@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.problems.test.apichanges;
 
 import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,7 +47,7 @@ public abstract class APITestBase {
 
 		Assert.assertNotNull(fileMigrators);
 
-		Assert.assertEquals("", 1, fileMigrators.length);
+//		Assert.assertEquals("", 1, fileMigrators.length);
 	}
 
 	protected ServiceReference<FileMigrator>[] filterForVersion(ServiceReference<FileMigrator>[] serviceReferences) {
@@ -69,12 +69,16 @@ public abstract class APITestBase {
 
 	@Test
 	public void test() throws Exception {
-		FileMigrator fmigrator = context.getService(fileMigrators[0]);
+		ArrayList<UpgradeProblem> problems = new ArrayList<>();
+		
+		for (int i = 0;i < fileMigrators.length; i++) {
+			FileMigrator fmigrator = context.getService(fileMigrators[i]);
 
-		List<UpgradeProblem> problems = fmigrator.analyze(getTestFile());
+			problems.addAll(fmigrator.analyze(getTestFile()));
 
-		context.ungetService(fileMigrators[0]);
-
+			context.ungetService(fileMigrators[i]);
+		}
+		
 		Assert.assertNotNull(problems);
 
 		Assert.assertEquals("", getExpectedNumber(), problems.size());

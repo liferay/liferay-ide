@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.DeprecatedClayLinkTagAttributes">
+   <property name="file.extensions" value="jsp,jspf"/>
+   <property name="problem.title" value="Removed Deprecated Attributes From the frontend-taglib-clay Tags"/>
+   <property name="problem.section" value="#removed-deprecated-attributes-from-frontend-taglib-clay-tags"/>
+   <property name="problem.summary" value="The attributes ariaLabel, buttonStyle, componentId, contributorKey, data, defaultEventHandler, elementClasses, iconAlignment, spritemap, style, target, title in `clay:link` tag was replaced by aria-label."/>
+   <property name="problem.tickets" value="LPS-125256"/>
+   <property name="version" value="7.4"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay74.DeprecatedClayLinkTagAttributes"/>
+</scr:component>
