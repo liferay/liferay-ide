@@ -42,7 +42,7 @@ public class AllJSPTagProblemsTest {
 
 		List<UpgradeProblem> upgradeProblems = fileMigration.findUpgradeProblems(new File("jsptests/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor()).stream().sorted().collect(Collectors.toList());
 
-		final int expectedSize = 502;
+		final int expectedSize = 518;
 
 		final int size = upgradeProblems.size();
 

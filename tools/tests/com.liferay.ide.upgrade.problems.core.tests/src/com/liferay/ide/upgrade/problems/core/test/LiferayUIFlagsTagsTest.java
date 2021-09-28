@@ -39,7 +39,7 @@ public class LiferayUIFlagsTagsTest {
 
 		FileMigration m = _context.getService(sr);
 
-		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/liferayui-flags/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
+		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/liferay-ui-flags/"), UpgradePlanProblemsTestConstants.TEST_VERSIONS, new NullProgressMonitor());
 
 		Assert.assertEquals("", 1, problems.size());
 

@@ -357,7 +357,7 @@ SPI was removed by [LPS-110758](https://issues.liferay.com/browse/LPS-110758).
 
 ---------------------------------------
 
-### Removed Deprecated Attributes From the frontend-taglib-clay Tags [](id=#)
+### Removed Deprecated Attributes From the frontend-taglib-clay Tags [](id=removed-deprecated-attributes-from-frontend-taglib-clay-tags)
 - **Date:** 2021-Jan-26
 - **JIRA Ticket:** [LPS-125256](https://issues.liferay.com/browse/LPS-125256)
 
