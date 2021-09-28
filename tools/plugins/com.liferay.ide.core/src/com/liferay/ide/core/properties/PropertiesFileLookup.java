@@ -346,8 +346,6 @@ public class PropertiesFileLookup {
 				valueStart = limit[0];
 				hasSep = false;
 
-				// System.out.println("line=<" + new String(lineBuf, 0, limit) + ">");
-
 				precedingBackslash = false;
 
 				while (keyLen < limit[0]) {
@@ -408,6 +406,8 @@ public class PropertiesFileLookup {
 				if (key.equals(initialLookup)) {
 					return;
 				}
+
+				limit = lr.readLine();
 			}
 		}
 	}
