@@ -50,16 +50,14 @@ public class ImportProjectSupport extends ProjectSupport {
 
 			_projectFile = dist;
 		}
-		catch (IOException ioe) {
+		catch (IOException ioException) {
 		}
 	}
 
 	public IPath getFile(String filePath) {
-		return new Path(
-			_projectFile.getPath()
-		).append(
-			filePath
-		);
+		Path projectPath = new Path(_projectFile.getPath());
+
+		return projectPath.append(filePath);
 	}
 
 	public IPath getIPath() {

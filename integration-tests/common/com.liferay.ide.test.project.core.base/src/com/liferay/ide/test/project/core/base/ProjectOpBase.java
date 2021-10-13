@@ -68,8 +68,8 @@ public abstract class ProjectOpBase<T extends ExecutableElement> extends Project
 		try {
 			project.refreshLocal(IResource.DEPTH_INFINITE, npm);
 		}
-		catch (CoreException ce) {
-			failTest(ce);
+		catch (CoreException coreException) {
+			failTest(coreException);
 		}
 
 		return project;

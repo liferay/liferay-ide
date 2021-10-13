@@ -28,7 +28,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -43,18 +42,16 @@ import org.junit.Assert;
  */
 public class GradleTestUtil {
 
-	public static void failTest(Exception e) {
+	public static void failTest(Exception exception) {
 		StringWriter s = new StringWriter();
 
-		e.printStackTrace(new PrintWriter(s));
+		exception.printStackTrace(new PrintWriter(s));
 
 		Assert.fail(s.toString());
 	}
 
 	public static LiferayGradleProject fullImportGradleProject(ImportProjectSupport ips) throws Exception {
-		IProgressMonitor monitor = new NullProgressMonitor();
-
-		IStatus status = GradleUtil.synchronizeProject(new Path(ips.getPath()), monitor);
+		IStatus status = GradleUtil.synchronizeProject(new Path(ips.getPath()), new NullProgressMonitor());
 
 		waitForBuildAndValidation();
 
@@ -87,14 +84,14 @@ public class GradleTestUtil {
 
 			manager.beginRule(root = workspace.getRoot(), null);
 		}
-		catch (InterruptedException ie) {
-			failTest(ie);
+		catch (InterruptedException interruptedException) {
+			failTest(interruptedException);
 		}
-		catch (IllegalArgumentException iae) {
-			failTest(iae);
+		catch (IllegalArgumentException illegalArgumentException) {
+			failTest(illegalArgumentException);
 		}
-		catch (OperationCanceledException oce) {
-			failTest(oce);
+		catch (OperationCanceledException operationCanceledException) {
+			failTest(operationCanceledException);
 		}
 		finally {
 			if (root != null) {
