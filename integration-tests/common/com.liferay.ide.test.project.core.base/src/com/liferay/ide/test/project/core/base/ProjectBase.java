@@ -47,8 +47,8 @@ public class ProjectBase extends BaseTests {
 
 				project.delete(true, npm);
 			}
-			catch (CoreException ce) {
-				ce.printStackTrace();
+			catch (CoreException coreException) {
+				coreException.printStackTrace();
 			}
 		}
 	}
@@ -64,8 +64,8 @@ public class ProjectBase extends BaseTests {
 		try {
 			project.build(IncrementalProjectBuilder.CLEAN_BUILD, npm);
 		}
-		catch (CoreException ce) {
-			failTest(ce);
+		catch (CoreException coreException) {
+			failTest(coreException);
 		}
 
 		waitForBuildAndValidation();
@@ -73,8 +73,8 @@ public class ProjectBase extends BaseTests {
 		try {
 			project.build(IncrementalProjectBuilder.FULL_BUILD, npm);
 		}
-		catch (CoreException ce) {
-			failTest(ce);
+		catch (CoreException coreException) {
+			failTest(coreException);
 		}
 
 		waitForBuildAndValidation();
@@ -114,14 +114,14 @@ public class ProjectBase extends BaseTests {
 
 			manager.beginRule(root = workspace.getRoot(), null);
 		}
-		catch (InterruptedException ie) {
-			failTest(ie);
+		catch (InterruptedException interruptedException) {
+			failTest(interruptedException);
 		}
-		catch (IllegalArgumentException iae) {
-			failTest(iae);
+		catch (IllegalArgumentException illegalArgumentException) {
+			failTest(illegalArgumentException);
 		}
-		catch (OperationCanceledException oce) {
-			failTest(oce);
+		catch (OperationCanceledException operationCanceledException) {
+			failTest(operationCanceledException);
 		}
 		finally {
 			if (root != null) {

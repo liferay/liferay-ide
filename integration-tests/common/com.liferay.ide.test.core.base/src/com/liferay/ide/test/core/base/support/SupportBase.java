@@ -38,7 +38,7 @@ public class SupportBase extends ExternalResource {
 		try {
 			timestamp = Long.parseLong(tt.substring(6));
 		}
-		catch (NumberFormatException nfe) {
+		catch (NumberFormatException numberFormatException) {
 		}
 	}
 

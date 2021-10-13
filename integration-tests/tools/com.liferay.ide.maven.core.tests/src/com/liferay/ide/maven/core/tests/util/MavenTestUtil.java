@@ -174,13 +174,13 @@ public class MavenTestUtil {
 			if (!skipSanityCheck) {
 				MavenProjectInfo projectInfo = projectInfos.get(i);
 
-				Model model = projectInfo.getModel();
-
 				IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
 
 				IMavenProjectFacade facade = projectRegistry.create(projects[i], _npm);
 
 				if (facade == null) {
+					Model model = projectInfo.getModel();
+
 					Assert.fail(
 						"Project " + model.getGroupId() + "-" + model.getArtifactId() + "-" + model.getVersion() +
 							" was not imported. Errors: " +

@@ -43,8 +43,8 @@ public class NewModuleNpm71MavenTests extends NewModuleMavenBase {
 			try {
 				project.delete(true, monitor);
 			}
-			catch (CoreException ce) {
-				ce.printStackTrace();
+			catch (CoreException coreException) {
+				coreException.printStackTrace();
 			}
 		}
 

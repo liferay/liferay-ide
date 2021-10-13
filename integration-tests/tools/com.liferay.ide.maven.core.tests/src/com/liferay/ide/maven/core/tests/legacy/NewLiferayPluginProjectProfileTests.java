@@ -41,9 +41,9 @@ public class NewLiferayPluginProjectProfileTests {
 
 		Assert.assertEquals("foo,bar", _getter.get(op.getActiveProfilesValue()));
 
-		ElementList<Profile> seletedProfiles = op.getSelectedProfiles();
+		ElementList<Profile> selectedProfiles = op.getSelectedProfiles();
 
-		Assert.assertEquals(seletedProfiles.size(), 0, seletedProfiles.size());
+		Assert.assertEquals(selectedProfiles.size(), 0, selectedProfiles.size());
 
 		ElementList<NewLiferayProfile> liferayProfiles = op.getNewLiferayProfiles();
 

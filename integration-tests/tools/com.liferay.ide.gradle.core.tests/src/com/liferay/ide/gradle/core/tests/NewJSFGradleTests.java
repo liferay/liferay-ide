@@ -163,7 +163,7 @@ public class NewJSFGradleTests extends NewJSFGradleBase {
 
 		Status projectNameExistedValidationStatus = projectName.validation();
 
-		Assert.assertEquals(false, projectNameExistedValidationStatus.ok());
+		Assert.assertFalse(projectNameExistedValidationStatus.ok());
 	}
 
 	@Override

@@ -47,8 +47,8 @@ public abstract class NewModuleOpBase<T extends ExecutableElement> extends Proje
 
 			assertFileSuffix(outputBundle, shape());
 		}
-		catch (CoreException ce) {
-			failTest(ce);
+		catch (CoreException coreException) {
+			failTest(coreException);
 		}
 	}
 

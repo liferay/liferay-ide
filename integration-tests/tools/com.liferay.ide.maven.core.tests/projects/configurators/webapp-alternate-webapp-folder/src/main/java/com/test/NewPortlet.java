@@ -29,12 +29,12 @@ public class NewPortlet extends MVCPortlet {
 
 		try {
 			Group group = GroupLocalServiceUtil.getGroup(groupId);
-		} catch (PortalException e) {
+		} catch (PortalException exception) {
 
 			// TODO Auto-generated catch block
 
 			e.printStackTrace();
-		} catch (SystemException e) {
+		} catch (SystemException exception) {
 
 			// TODO Auto-generated catch block
 

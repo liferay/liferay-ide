@@ -57,10 +57,10 @@ import org.junit.Assert;
  */
 public class BaseTests {
 
-	protected static void failTest(Exception e) {
+	protected static void failTest(Exception exception) {
 		StringWriter s = new StringWriter();
 
-		e.printStackTrace(new PrintWriter(s));
+		exception.printStackTrace(new PrintWriter(s));
 
 		Assert.fail(s.toString());
 	}
@@ -111,7 +111,7 @@ public class BaseTests {
 		try {
 			file.refreshLocal(0, npm);
 		}
-		catch (CoreException ce) {
+		catch (CoreException coreException) {
 		}
 
 		Assert.assertTrue("Expected file " + file.getLocation() + " exists", FileUtil.exists(file.getLocation()));
@@ -124,9 +124,7 @@ public class BaseTests {
 	}
 
 	protected void assertFileNotContains(FileSupport fs, String expectedContent) {
-		File file = fs.getFile();
-
-		String content = FileUtil.readContents(file);
+		String content = FileUtil.readContents(fs.getFile());
 
 		Assert.assertFalse(content.contains(expectedContent));
 	}
@@ -257,7 +255,7 @@ public class BaseTests {
 		try {
 			project.refreshLocal(0, npm);
 		}
-		catch (CoreException ce) {
+		catch (CoreException coreException) {
 		}
 
 		IFolder folder = project.getFolder(folderPath);
@@ -285,8 +283,8 @@ public class BaseTests {
 
 			Assert.assertEquals(expectedValue, value);
 		}
-		catch (Exception e) {
-			failTest(e);
+		catch (Exception exception) {
+			failTest(exception);
 		}
 	}
 
@@ -318,11 +316,11 @@ public class BaseTests {
 
 			project.delete(true, true, npm);
 		}
-		catch (CoreException ce) {
+		catch (CoreException coreException) {
 
-			// failTest(ce);
+			// failTest(coreException);
 
-			ce.printStackTrace();
+			coreException.printStackTrace();
 		}
 	}
 
@@ -338,7 +336,7 @@ public class BaseTests {
 		try {
 			runtime.delete();
 		}
-		catch (CoreException ce) {
+		catch (CoreException coreException) {
 		}
 	}
 
@@ -348,7 +346,7 @@ public class BaseTests {
 		try {
 			server.delete();
 		}
-		catch (CoreException ce) {
+		catch (CoreException coreException) {
 		}
 	}
 

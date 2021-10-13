@@ -63,10 +63,10 @@ public class EnvAction {
 			if ((_bundlesDir == null) || _bundlesDir.equals("") || _bundlesDir.equals("null")) {
 				Bundle bundle = Platform.getBundle("com.liferay.ide.test.core.base");
 
-				URL rootUrl = bundle.getEntry("/");
+				URL rootURL = bundle.getEntry("/");
 
 				try {
-					URL fileURL = FileLocator.toFileURL(rootUrl);
+					URL fileURL = FileLocator.toFileURL(rootURL);
 
 					String filePath = fileURL.getFile();
 
@@ -83,7 +83,7 @@ public class EnvAction {
 						_bundlesPath = removeLastSegments.append("tests-resources");
 					}
 				}
-				catch (IOException ioe) {
+				catch (IOException ioException) {
 				}
 			}
 			else {
@@ -134,7 +134,7 @@ public class EnvAction {
 		return tempDir;
 	}
 
-	public String getUsername() {
+	public String getUserName() {
 		String retval = System.getenv("USERNAME");
 
 		if (CoreUtil.empty(retval)) {
@@ -192,15 +192,15 @@ public class EnvAction {
 			retval = Boolean.parseBoolean(_internal);
 		}
 
-		boolean reachable = false;
-
 		if (retval) {
+			boolean reachable = false;
+
 			try {
 				InetAddress address = InetAddress.getByAddress(_internalServerIp);
 
 				reachable = address.isReachable(2000);
 			}
-			catch (Exception e) {
+			catch (Exception exception) {
 			}
 			finally {
 				Assert.assertTrue("The argument \"internal\" is true but can not reach the internal server", reachable);
@@ -218,7 +218,7 @@ public class EnvAction {
 
 			url.openStream();
 		}
-		catch (Exception e) {
+		catch (Exception exception) {
 			connected = false;
 		}
 
