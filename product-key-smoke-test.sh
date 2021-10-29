@@ -1,4 +1,4 @@
-#define variables(product_key and tomcat_version)
+#define variables(product_key and tomcat_version and bundle_url)
 prodcut_key=$1
 if [ 0"$prodcut_key" = "0" ]
 then
@@ -11,11 +11,28 @@ then
 	read -p "Please enter the expected tomcat version:" tomcat_version
 fi
 
+bundle_url=$3
+if [ 0"$bundle_url" = "0" ]
+then
+	read -p "Please enter the expected bundle url:" bundle_url
+fi
+
+# check bundle url contains the string in product key name
+find_str=$prodcut_key
+find_key_str=${find_str##*-}
+[[ $bundle_url =~ "$find_key_str" ]]
+if [ $? -eq 0 ]
+then
+	echo "Test Passed: Bundle url containers string in product key"
+else
+	echo "Error to find key string in product key name"
+	exit 1
+fi
+
 # create a liferay workspace and set workspace plugin to 2.4.0
 echo "create a liferay workspace project..."
 rm -rf ws-smoke-test
-mkdir ws-smoke-test
-cd ws-smoke-test
+mkdir ws-smoke-test && cd ws-smoke-test
 blade init -v $prodcut_key
 
 #sed -i 's/2.3.1/2.4.0/g' settings.gradle
@@ -77,7 +94,7 @@ fi
 
 if [ ! -d "bundles/tomcat-$tomcat_version" ]
 then
-	echo "Error. Tomcat versions are not matched."
+	echo "Error. Tomcat versions are not match."
 	exit 1
 else
 	echo "Test Passed: Tomcat version is correct."
@@ -85,7 +102,8 @@ fi
 
 # start and stop server
 echo "starting server..."
-blade server start
+#blade server start
+./bundles/tomcat-$tomcat_version/bin/catalina.sh run
 
 if [ $? -eq 0 ]
 then
@@ -106,7 +124,8 @@ else
 fi
 
 echo "stopping server..."
-blade server stop
+#blade server stop
+./bundles/tomcat-$tomcat_version/bin/catalina.sh stop
 if [ $? -eq 0 ]
 then
 	echo "Test Passed: Server stop successfully"
@@ -121,9 +140,9 @@ echo "start a docker container..."
 
 if [ $? -eq 0 ]
 then
-	"Test Passed: Docker container start successfully"
+	echo "Test Passed: Docker container start successfully"
 else
-	"Failed to start docker conatiner"
+	echo "Failed to start docker conatiner"
 	exit 1
 fi
 
