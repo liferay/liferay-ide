@@ -433,7 +433,7 @@
                                     <elseActionList>
                                         <if>
                                             <actionList>
-                                                <setInstallerVariable name="selectbundleversion" value="portal-7.3-ga8"/>
+                                                <setInstallerVariable name="selectbundleversion" value="7.3"/>
                                             </actionList>
                                             <conditionRuleList>
                                                 <compareText>
@@ -443,7 +443,7 @@
                                                 </compareText>
                                             </conditionRuleList>
                                             <elseActionList>
-                                                <setInstallerVariable name="selectbundleversion" value="portal-7.4-ga3"/>
+                                                <setInstallerVariable name="selectbundleversion" value="7.4"/>
                                             </elseActionList>
                                         </if>
                                     </elseActionList>
@@ -463,7 +463,7 @@
                 <propertiesFileSet>
                     <file>${lrwsDir}${platform_path_separator}gradle.properties</file>
                     <key>liferay.workspace.product</key>
-                    <value>dxp-7.3-ga1</value>
+                    <value>dxp-7.4-ga1</value>
                     <ruleList>
                         <compareValues>
                             <logic>equals</logic>

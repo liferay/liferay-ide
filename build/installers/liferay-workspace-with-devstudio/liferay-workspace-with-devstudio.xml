@@ -476,7 +476,7 @@ ${java_executable}
                     <actionList>
                         <runProgram>
                             <program>${java_executable}</program>
-                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "dxp-7.3-ga1"</programArguments>
+                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "dxp-7.4-ga1"</programArguments>
                         </runProgram>
                         <createDirectory>
                             <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
@@ -508,7 +508,7 @@ ${java_executable}
                     <elseActionList>
                         <runProgram>
                             <program>${java_executable}</program>
-                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "portal-7.4-ga3"</programArguments>
+                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "portal-7.4-ga4"</programArguments>
                         </runProgram>
                     </elseActionList>
                 </if>
