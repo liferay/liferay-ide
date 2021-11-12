@@ -140,8 +140,13 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 		if (warCoreExt && retval.ok()) {
 			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
 
+			VersionRange notSupportPortalVersion = new VersionRange("7.3", "7.5");
+
 			if (StringUtil.equalsIgnoreCase(newLiferayProjectProvider.getDisplayName(), "maven")) {
 				retval = Status.createErrorStatus("Not support to create maven war-core-ext project.");
+			}
+			else if (notSupportPortalVersion.includes(Version.parseVersion(liferayVersion))) {
+				retval = Status.createErrorStatus("War Core Ext project not supported 7.3 and 7.4.");
 			}
 		}
 
