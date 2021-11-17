@@ -37,5 +37,7 @@ public class VersionUtilTest {
 		Assert.assertEquals("7.3.10.5", VersionUtil.simplifyTargetPlatformVersion("7.3.10.ep5"));
 
 		Assert.assertEquals("7.2.10.1", VersionUtil.simplifyTargetPlatformVersion("7.2.10.fp1-1"));
+
+		Assert.assertEquals("7.4.13.1", VersionUtil.simplifyTargetPlatformVersion("7.4.13.u1"));
 	}
 }

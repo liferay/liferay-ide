@@ -70,6 +70,6 @@ public class VersionUtil {
 		return sb.toString();
 	}
 
-	private static final Pattern _microPattern = Pattern.compile("(((e|f|s)p)|(ga))([0-9]+)(-[0-9]+)?");
+	private static final Pattern _microPattern = Pattern.compile("(((e|f|s)p)|(ga)|u)([0-9]+)(-[0-9]+)?");
 
 }
