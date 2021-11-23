@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.IRuntime;
@@ -96,12 +97,16 @@ public class PortalLanguagePropertiesCacheUtil {
 					);
 
 					if (Objects.nonNull(implJar)) {
-						try (JarFile jar = new JarFile(implJar);
-							InputStream inputStream = jar.getInputStream(jar.getEntry("content/Language.properties"))) {
+						try (JarFile jar = new JarFile(implJar)) {
+							ZipEntry zipEntry = jar.getEntry("content/Language.properties");
 
-							retval = new Properties();
+							if (Objects.nonNull(zipEntry)) {
+								try (InputStream inputStream = jar.getInputStream(zipEntry)) {
+									retval = new Properties();
 
-							retval.load(inputStream);
+									retval.load(inputStream);
+								}
+							}
 						}
 					}
 				}
