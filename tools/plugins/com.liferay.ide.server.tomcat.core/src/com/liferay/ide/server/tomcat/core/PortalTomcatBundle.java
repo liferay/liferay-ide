@@ -236,6 +236,19 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 					}
 				}
 			}
+
+			List<File> shieldedContainerLibFiles = FileListing.getFileListing(
+				new File(getAppServershieldedContainerLibDir().toOSString()));
+
+			for (File lib : shieldedContainerLibFiles) {
+				if (FileUtil.exists(lib)) {
+					String libName = lib.getName();
+
+					if (libName.endsWith(".jar")) {
+						libs.add(new Path(lib.getPath()));
+					}
+				}
+			}
 		}
 		catch (FileNotFoundException fnfe) {
 		}
@@ -253,6 +266,10 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	@Override
 	protected IPath getAppServerLibDir() {
 		return getAppServerDir().append("lib");
+	}
+
+	protected IPath getAppServershieldedContainerLibDir() {
+		return getAppServerDir().append("webapps/ROOT/WEB-INF/shielded-container-lib");
 	}
 
 	@Override

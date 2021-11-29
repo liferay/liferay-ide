@@ -38,11 +38,14 @@ import java.security.ProtectionDomain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.datatools.connectivity.ConnectionProfileConstants;
@@ -60,6 +63,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
 /**
@@ -169,8 +173,14 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 
 			List<?> selList = sel.toList();
 
-			if (selList.size() > 1) {
-				action.setEnabled(selList.size() == 1);
+			if (selList.size() == 1) {
+				IProduct product = Platform.getProduct();
+
+				Bundle bundle = product.getDefiningBundle();
+
+				Version version = bundle.getVersion();
+
+				action.setEnabled(version.compareTo(new Version("4.14.0")) < 0);
 			}
 		}
 	}
@@ -310,9 +320,19 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 
 		IPath mysqlJarPath = libGlobalDir.append("mysql.jar");
 
+		if (!FileUtil.exists(mysqlJarPath)) {
+			IPath appServerDir = liferayRuntime.getAppServerDir();
+
+			mysqlJarPath = appServerDir.append("webapps/ROOT/WEB-INF/shielded-container-lib/mysql.jar");
+		}
+
 		File mysqlJar = mysqlJarPath.toFile();
 
 		String[] version = FileUtil.readMainFestProsFromJar(mysqlJar, "Bundle-Version");
+
+		if (Objects.isNull(version)) {
+			return new Version("0.0.0");
+		}
 
 		return new Version(version[0]);
 	}

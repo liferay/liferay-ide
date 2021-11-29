@@ -148,7 +148,8 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 				retval = Status.createErrorStatus("Not support to create maven war-core-ext project.");
 			}
 			else if (currentVersion.compareTo(notSupportFromPortalVersion) >= 0) {
-				retval = Status.createErrorStatus("War Core Ext project is only supported starting from portal 7.0 to 7.2.");
+				retval = Status.createErrorStatus(
+					"War Core Ext project is only supported starting from portal 7.0 to 7.2.");
 			}
 		}
 
