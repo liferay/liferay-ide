@@ -178,6 +178,7 @@ public class LiferayTomcatUtil {
 		IPath libFolder = runtimeLocation.append("lib");
 		IPath extLibFolder = runtimeLocation.append("lib/ext");
 		IPath webinfLibFolder = portalDir.append("WEB-INF/lib");
+		IPath shieldedContainerLibFolder = runtimeLocation.append("shielded-container-lib");
 
 		try {
 			List<File> libFiles = FileListing.getFileListing(new File(libFolder.toOSString()));
@@ -207,6 +208,19 @@ public class LiferayTomcatUtil {
 			libFiles = FileListing.getFileListing(new File(webinfLibFolder.toOSString()));
 
 			for (File lib : libFiles) {
+				if (FileUtil.exists(lib)) {
+					String libName = lib.getName();
+
+					if (libName.endsWith(".jar")) {
+						libs.add(new Path(lib.getPath()));
+					}
+				}
+			}
+
+			List<File> shieldedContainerLibFiles = FileListing.getFileListing(
+				new File(shieldedContainerLibFolder.toOSString()));
+
+			for (File lib : shieldedContainerLibFiles) {
 				if (FileUtil.exists(lib)) {
 					String libName = lib.getName();
 
