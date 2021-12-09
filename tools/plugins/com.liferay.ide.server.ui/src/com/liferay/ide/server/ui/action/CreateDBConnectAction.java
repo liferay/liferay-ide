@@ -292,6 +292,11 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 			String connectionDesc = "Hsql Connection Profile";
 			String driverTemplate = "org.eclipse.datatools.enablement.hsqldb.1_8.driver";
 
+			if (Objects.nonNull(connectionUrl) && Objects.nonNull(userName) && Objects.nonNull(password)) {
+				return new HsqlLiferayDatabaseConnection(
+					driverClass, providerId, connectionDesc, driverTemplate, userName, password, connectionUrl);
+			}
+
 			return new HsqlLiferayDatabaseConnection(driverClass, providerId, connectionDesc, driverTemplate);
 		}
 
@@ -366,6 +371,13 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 				_DEFAULT_CONNECTION_URL);
 		}
 
+		public HsqlLiferayDatabaseConnection(
+			String driverClass, String providerId, String connectinDesc, String driverTemplate, String userName,
+			String password, String connectionURL) {
+
+			super(driverClass, providerId, connectinDesc, driverTemplate, userName, password, connectionURL);
+		}
+
 		@Override
 		protected String getDatabaseName(String connectionUrl) {
 			String retval = "lportal";
@@ -385,7 +397,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 			return retval;
 		}
 
-		private static final String _DEFAULT_CONNECTION_URL = "jdbc:hsqldb:lportal";
+		private static final String _DEFAULT_CONNECTION_URL = "jdbc:hsqldb:lportal;hsqldb.lock_file=false";
 
 		private static final String _DEFAULT_PASSWORD = "";
 
