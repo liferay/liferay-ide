@@ -165,4 +165,11 @@
 		unpack="false"
 		version="0.0.0"
 	/>
+	<plugin
+		download-size="0"
+		id="org.eclipse.equinox.ds"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
 </feature>
