@@ -34,24 +34,24 @@
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
         <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/libs-release-local/org/bndtools/org.bndtools.p2/5.2.0/org.bndtools.p2-5.2.0.jar!</bndtools-site>
-        <eclipse-site>https://download.eclipse.org/releases/2019-06/201906191000/</eclipse-site>
+        <eclipse-site>https://download.eclipse.org/releases/2020-09/202009161000/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gmaven.runtime>1.8</gmaven.runtime>
-        <gradle-site>https://download.eclipse.org/buildship/updates/e410/releases/3.x/3.1.2.v20190903-1732</gradle-site>
+        <gradle-site>https://download.eclipse.org/buildship/updates/e415/releases/3.x/3.1.5.v20210113-0926/</gradle-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <liferay-ide-tag>ga1</liferay-ide-tag>
-        <m2e-site>https://download.eclipse.org/technology/m2e/releases/1.13/1.13.0.20190716-1624/</m2e-site>
+        <m2e-site>https://download.eclipse.org/technology/m2e/releases/1.18.2/</m2e-site>
         <m2e-wtp-site>https://download.eclipse.org/m2e-wtp/releases/1.4/1.4.3.20191209-1849/</m2e-wtp-site>
         <m2e-archiver-site>https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
         <maven-deps-plugin-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
-        <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20190602212107/repository/</orbit-site>
+        <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20210223232630/repository/</orbit-site>
         <osgi-bundles-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
-        <sapphire-site>https://download.eclipse.org/sapphire/9.1.1/repository/</sapphire-site>
+        <sapphire-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/sapphire/9.1.1/</sapphire-site>
         <sign-apps>false</sign-apps>
-        <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
+        <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/3.1.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
         <tycho-extras-version>2.4.0</tycho-extras-version>
         <tycho-m2e-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/m2eclipse-tycho/0.9.0.201811261502/</tycho-m2e-site>
