@@ -42,10 +42,8 @@ import java.util.Objects;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.datatools.connectivity.ConnectionProfileConstants;
@@ -56,14 +54,11 @@ import org.eclipse.datatools.connectivity.drivers.DriverManager;
 import org.eclipse.datatools.connectivity.drivers.IPropertySet;
 import org.eclipse.datatools.connectivity.drivers.jdbc.IJDBCDriverDefinitionConstants;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
 /**
@@ -160,27 +155,6 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 			}
 			catch (Exception e) {
 				LiferayServerCore.logError(Msgs.noDBConnectDriver, e);
-			}
-		}
-	}
-
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		super.selectionChanged(action, selection);
-
-		if (!selection.isEmpty() && (selection instanceof IStructuredSelection)) {
-			IStructuredSelection sel = (IStructuredSelection)selection;
-
-			List<?> selList = sel.toList();
-
-			if (selList.size() == 1) {
-				IProduct product = Platform.getProduct();
-
-				Bundle bundle = product.getDefiningBundle();
-
-				Version version = bundle.getVersion();
-
-				action.setEnabled(version.compareTo(new Version("4.14.0")) < 0);
 			}
 		}
 	}
