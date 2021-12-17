@@ -2,7 +2,7 @@
 <feature
       id="com.liferay.ide.portal-feature"
       label="Liferay Portal Content Editing"
-      version="4.0.0.qualifier"
+      version="3.9.5.qualifier"
       provider-name="Liferay, Inc.">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
