@@ -23,7 +23,7 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -37,15 +37,15 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 	public void testLiferayFacetNoLiferayPluginConfigured() throws Exception {
 		IProject project = importProject("projects/configurators/default-webapp-no-liferay-plugin/pom.xml");
 
-		assertNotNull(project);
+		Assert.assertNotNull(project);
 
 		IMavenProjectRegistry registry = MavenPlugin.getMavenProjectRegistry();
 
 		IMavenProjectFacade facade = registry.create(project, monitor);
 
-		assertNotNull(facade);
+		Assert.assertNotNull(facade);
 
-		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
+		Assert.assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
 
 		deleteProject("default-webapp-no-liferay-plugin");
 	}
@@ -54,17 +54,17 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 	public void testLiferayFacetNoLiferayPluginWarPluginConfigured() throws Exception {
 		IProject project = importProject("projects/configurators/webapp-alternate-webapp-folder/pom.xml");
 
-		assertNotNull(project);
+		Assert.assertNotNull(project);
 
 		IMavenProjectRegistry registry = MavenPlugin.getMavenProjectRegistry();
 
 		IMavenProjectFacade facade = registry.create(project, monitor);
 
-		assertNotNull(facade);
+		Assert.assertNotNull(facade);
 
 		waitForJobsToComplete();
 
-		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
+		Assert.assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
 
 		deleteProject("webapp-alternate-webapp-folder");
 	}
@@ -73,15 +73,15 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 	public void testLiferayFacetNotConfigured() throws Exception {
 		IProject project = importProject("projects/configurators/webapp-1/pom.xml");
 
-		assertNotNull(project);
+		Assert.assertNotNull(project);
 
 		IMavenProjectRegistry registry = MavenPlugin.getMavenProjectRegistry();
 
 		IMavenProjectFacade facade = registry.create(project, monitor);
 
-		assertNotNull(facade);
+		Assert.assertNotNull(facade);
 
-		assertFalse(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
+		Assert.assertFalse(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
 
 		deleteProject("webapp-1");
 	}
@@ -90,17 +90,17 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 	public void testWarPluginNoWarSourceDirConfigured() throws Exception {
 		IProject project = importProject("projects/configurators/bad-war-config/pom.xml");
 
-		assertNotNull(project);
+		Assert.assertNotNull(project);
 
 		IMavenProjectRegistry registry = MavenPlugin.getMavenProjectRegistry();
 
 		IMavenProjectFacade facade = registry.create(project, monitor);
 
-		assertNotNull(facade);
+		Assert.assertNotNull(facade);
 
 		waitForJobsToComplete();
 
-		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
+		Assert.assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
 
 		deleteProject("bad-war-config");
 	}

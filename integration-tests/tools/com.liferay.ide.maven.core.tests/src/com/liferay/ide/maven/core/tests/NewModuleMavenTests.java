@@ -356,6 +356,8 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("theme-contributor");
 
+		MavenTestUtil.waitForJobsToComplete();
+
 		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
@@ -381,6 +383,8 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		cop.setComponentClassTemplateName("PortletActionCommand");
 
 		NewLiferayComponentOpMethods.execute(cop, ProgressMonitorBridge.create(new NullProgressMonitor()));
+
+		MavenTestUtil.waitForJobsToComplete();
 
 		IFile bgd = modPorject.getFile("bnd.bnd");
 
@@ -538,6 +542,8 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 
 		IProject project = MavenTestUtil.create(op);
 
+		MavenTestUtil.waitForJobsToComplete();
+
 		Assert.assertTrue(project.getFile("src/main/java/foo/test/portlet/FooTestPortlet.java").exists());
 
 		MavenTestUtil.verifyProject(project);
@@ -553,6 +559,8 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		op.setProjectProvider("maven-module");
 
 		IProject project = MavenTestUtil.create(op);
+
+		MavenTestUtil.waitForJobsToComplete();
 
 		MavenTestUtil.verifyProject(project);
 
@@ -672,6 +680,8 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 
 		MavenTestUtil.create(op);
 
+		MavenTestUtil.waitForJobsToComplete();
+		
 		IProject parentProject = CoreUtil.getProject(op.getProjectName().content());
 
 		parentProject.open(new NullProgressMonitor());
@@ -739,6 +749,8 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 
 		IProject project = MavenTestUtil.create(op);
 
+		MavenTestUtil.waitForJobsToComplete();
+
 		IFile serviceFile = project.getFile("src/main/java/service/test/ServiceTest.java");
 
 		Assert.assertTrue(serviceFile.exists());
@@ -772,7 +784,9 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		IProject parent = MavenTestUtil.create(op);
 
 		JobUtil.waitForLiferayProjectJob();
-		
+
+		MavenTestUtil.waitForJobsToComplete();
+
 		Assert.assertTrue(parent != null && parent.exists());
 
 		IProject api = CoreUtil.getProject("service-builder-test-api");
