@@ -123,6 +123,12 @@ public class WorkspaceConstants {
 			put(
 				"7.4.3.6",
 				LIFERAY_PORTAL_URL + "7.4.3.6-ga6/liferay-ce-portal-tomcat-7.4.3.6-ga6-20211227141428520.tar.gz");
+			put(
+				"7.4.3.7",
+				LIFERAY_PORTAL_URL + "7.4.3.7-ga7/liferay-ce-portal-tomcat-7.4.3.7-ga7-20220107103529408.tar.gz");
+			put(
+				"7.4.3.8",
+				LIFERAY_PORTAL_URL + "7.4.3.8-ga8/liferay-ce-portal-tomcat-7.4.3.8-ga8-20220117195955276.tar.gz");
 		}
 	};
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
@@ -131,7 +137,7 @@ public class WorkspaceConstants {
 			put("7.1", new String[] {"7.1.3-1", "7.1.2", "7.1.1", "7.1.0"});
 			put("7.2", new String[] {"7.2.1-1", "7.2.0"});
 			put("7.3", new String[] {"7.3.7", "7.3.6", "7.3.5", "7.3.4", "7.3.3-1", "7.3.2-1", "7.3.1-1", "7.3.0-1"});
-			put("7.4", new String[] {"7.4.3.6", "7.4.3.5", "7.4.3.4", "7.4.2-1", "7.4.1-1", "7.4.0"});
+			put("7.4", new String[] {"7.4.3.8", "7.4.3.7", "7.4.3.6", "7.4.3.5", "7.4.3.4", "7.4.2-1", "7.4.1-1", "7.4.0"});
 		}
 	};
 
