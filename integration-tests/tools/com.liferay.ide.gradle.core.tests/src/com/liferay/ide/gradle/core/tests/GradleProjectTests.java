@@ -121,7 +121,7 @@ public class GradleProjectTests extends ProjectBase {
 		assertProjectExists(ips);
 
 		GradleDependency gradleDependency = new GradleDependency(
-			"compile", "com.liferay.portal", "com.liferay.portal.kernel", "2.6.0", -1, -1);
+			"compile", "com.liferay.portal", "com.liferay.portal.kernel", "2.6.0", -1, -1, null);
 
 		IProject project = gradleProject.getProject();
 

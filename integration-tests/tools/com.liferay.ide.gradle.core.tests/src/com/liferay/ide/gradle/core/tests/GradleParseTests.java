@@ -43,7 +43,7 @@ public class GradleParseTests extends BaseTests {
 		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
 		GradleDependency gradleDependency = new GradleDependency(
-			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1, null);
 
 		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
@@ -68,7 +68,7 @@ public class GradleParseTests extends BaseTests {
 		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
 		GradleDependency gradleDependency = new GradleDependency(
-			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1, null);
 
 		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
@@ -93,7 +93,7 @@ public class GradleParseTests extends BaseTests {
 		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
 		GradleDependency gradleDependency = new GradleDependency(
-			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1, null);
 
 		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
@@ -118,7 +118,7 @@ public class GradleParseTests extends BaseTests {
 		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
 		GradleDependency gradleDependency = new GradleDependency(
-			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1, null);
 
 		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
@@ -143,7 +143,7 @@ public class GradleParseTests extends BaseTests {
 		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
 		GradleDependency gradleDependency = new GradleDependency(
-			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1, null);
 
 		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 

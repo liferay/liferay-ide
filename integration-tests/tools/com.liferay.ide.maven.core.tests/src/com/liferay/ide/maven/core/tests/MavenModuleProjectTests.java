@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -75,20 +76,20 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		IProject mavenDependencyTestProject = CoreUtil.getProject("MavenDependencyTestProject");
 
-		assertNotNull(mavenDependencyTestProject);
+		Assert.assertNotNull(mavenDependencyTestProject);
 
-		assertTrue(mavenDependencyTestProject.exists());
+		Assert.assertTrue(mavenDependencyTestProject.exists());
 
 		IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(
 			mavenDependencyTestProject, new NullProgressMonitor());
 
-		assertNotNull(projectFacade);
+		Assert.assertNotNull(projectFacade);
 
 		MavenProject mavenProject = projectFacade.getMavenProject(new NullProgressMonitor());
 
 		List<Dependency> existedDependencies = mavenProject.getDependencies();
 
-		assertFalse(_checkDependency(existedDependencies, mavenDependency));
+		Assert.assertFalse(_checkDependency(existedDependencies, mavenDependency));
 
 		ILiferayProject liferayMavenDependencyProject =
 			LiferayCore.create(ILiferayProject.class, mavenDependencyTestProject);
@@ -103,7 +104,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		List<Dependency> updateDependencies = updateMavenProject.getDependencies();
 
-		assertTrue(_checkDependency(updateDependencies, mavenDependency));
+		Assert.assertTrue(_checkDependency(updateDependencies, mavenDependency));
 	}
 
 	private boolean _checkDependency(List<Dependency> existedDependencies, Dependency mavenDependency) {

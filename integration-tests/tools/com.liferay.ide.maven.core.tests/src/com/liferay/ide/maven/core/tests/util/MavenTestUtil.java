@@ -86,6 +86,8 @@ public class MavenTestUtil {
 
 		IProject project = create(op);
 
+		waitForJobsToComplete();
+
 		verifyProject(project);
 
 		return project;
