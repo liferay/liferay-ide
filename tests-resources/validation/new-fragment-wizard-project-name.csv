@@ -9,4 +9,4 @@
 ..,'..' is an invalid name on this platform.,win32
 ##,The project name is invalid.,win32
 *,* is an invalid character in resource name '*'.,win32
-,Project name must be specified,win32
+,Please enter a project name.,win32

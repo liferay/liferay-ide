@@ -431,6 +431,8 @@ public interface UI {
 
 	public final String JSP_WITH_VIEW_TYPE = "Jsp";
 
+	public final String DOCKER_CONFIGURATION = "Docker Configuration";
+
 	public final String KALEO_DESIGNER = "Kaleo Designer";
 
 	public final String KALEO_WORKFLOW_VALIDATION = "Kaleo Workflow Validation";
