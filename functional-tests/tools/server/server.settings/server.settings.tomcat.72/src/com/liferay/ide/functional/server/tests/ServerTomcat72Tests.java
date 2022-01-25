@@ -84,7 +84,7 @@ public class ServerTomcat72Tests extends ServerTomcat7xBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(testServer.getStartedLabel());
 
@@ -92,9 +92,11 @@ public class ServerTomcat72Tests extends ServerTomcat7xBase {
 
 		dialogAction.confirm(FINISH);
 
-		Assert.assertTrue(viewAction.servers.visibleModuleTry(testServer.getStartedLabel(), project.getName()));
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		jobAction.waitForConsoleContent(testServer.getServerName(), "STARTED " + project.getName() + "_", M1);
+
+		Assert.assertTrue(viewAction.servers.visibleModuleTry(testServer.getStartedLabel(), project.getName()));
 
 		viewAction.servers.removeModule(testServer.getServerName(), project.getName());
 

@@ -32,7 +32,7 @@ public class ValidationUpgradePlannerTests extends SwtbotBase {
 	public void checkCurrentLifrayVersion() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		String[] expectedCurrentVersions = {"6.2", "7.0", "7.1", "7.2"};
+		String[] expectedCurrentVersions = {"6.2", "7.0", "7.1", "7.2", "7.3"};
 
 		ComboBox currentVersionComboBox = wizardAction.newUpgradePlan.currentLiferayVersion();
 
@@ -70,7 +70,7 @@ public class ValidationUpgradePlannerTests extends SwtbotBase {
 
 		validationAction.assertEquals("6.2", wizardAction.newUpgradePlan.getCurrentLiferayVersion());
 
-		validationAction.assertEquals("7.3", wizardAction.newUpgradePlan.getTargetLiferayVersion());
+		validationAction.assertEquals("7.4", wizardAction.newUpgradePlan.getTargetLiferayVersion());
 
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
@@ -104,7 +104,7 @@ public class ValidationUpgradePlannerTests extends SwtbotBase {
 	public void checkTargetLiferayVersion() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		String[] expectedTargetVersions = {"7.0", "7.1", "7.2", "7.3"};
+		String[] expectedTargetVersions = {"7.0", "7.1", "7.2", "7.3", "7.4"};
 
 		ComboBox targetVersionComboBox = wizardAction.newUpgradePlan.targetLiferayVersion();
 

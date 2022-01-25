@@ -36,7 +36,7 @@ public class LiferayPreferencesTests extends SwtbotBase {
 		dialogAction.liferay.expandLiferay(LIFERAY);
 
 		String[] expectedLiferay = {
-			KALEO_DESIGNER, KALEO_WORKFLOW_VALIDATION, MAVEN, PLUGIN_VALIDATION, UPGRADE_PROBLEMS, XML_SEARCH
+			DOCKER_CONFIGURATION, KALEO_DESIGNER, KALEO_WORKFLOW_VALIDATION, MAVEN, PLUGIN_VALIDATION, UPGRADE_PROBLEMS, XML_SEARCH
 		};
 
 		List<String> liferayItems = dialogAction.liferay.expandLiferay(LIFERAY);
