@@ -268,6 +268,8 @@ public interface UI {
 
 	public final String DOABOUT = "doAbout";
 
+	public final String DOCKER_CONFIGURATION = "Docker Configuration";
+
 	public final String DOCKER_DEPLOY = "Docker Deploy";
 
 	public final String DOCONFIG = "doConfig";
@@ -430,8 +432,6 @@ public interface UI {
 	public final String JSP_FOLDER = "JSP folder:";
 
 	public final String JSP_WITH_VIEW_TYPE = "Jsp";
-
-	public final String DOCKER_CONFIGURATION = "Docker Configuration";
 
 	public final String KALEO_DESIGNER = "Kaleo Designer";
 

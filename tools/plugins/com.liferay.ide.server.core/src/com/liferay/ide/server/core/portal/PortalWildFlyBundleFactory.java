@@ -24,6 +24,7 @@ import java.io.FileFilter;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IPath;
@@ -121,18 +122,18 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 	private static IPath[] _getFilesForModule(
 		File modulesFolder, String moduleName, String[] slots, FileFilter filter) {
 
-		String slashed = moduleName.replaceAll("\\.", "/");
+		String modulesNamePath = moduleName.replaceAll("\\.", "/");
 
 		return Stream.of(
 			slots
 		).map(
-			slot -> (slot == null) ? "main" : slot
+			slot -> Objects.isNull(slot) ? "main" : slot
 		).flatMap(
 			slot -> Stream.of(
 				_getFiles(
 					modulesFolder,
 					new Path(
-						slashed
+						modulesNamePath
 					).append(
 						slot
 					),
