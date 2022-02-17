@@ -24,6 +24,7 @@ import java.io.FileFilter;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -59,7 +60,7 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 		if (FileUtil.exists(modulesPath) && FileUtil.exists(standalonePath) && FileUtil.exists(binPath)) {
 			String vers = getManifestPropFromJBossModulesFolder(
 				new File[] {new File(path.toPortableString(), "modules")}, "org.jboss.as.product",
-				"wildfly-full/dir/META-INF", _WF_RELEASE_MANIFEST_KEY);
+				new String[] {"wildfly-full/dir/META-INF", "main/dir/META-INF"}, _WF_RELEASE_MANIFEST_KEY);
 
 			if (vers != null) {
 				Version version = Version.parseVersion(vers);
@@ -78,12 +79,12 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 	}
 
 	protected String getManifestPropFromJBossModulesFolder(
-		File[] moduleRoots, String moduleId, String slot, String property) {
+		File[] moduleRoots, String moduleId, String[] slots, String property) {
 
 		File[] layeredRoots = LayeredModulePathFactory.resolveLayeredModulePath(moduleRoots);
 
 		for (File root : layeredRoots) {
-			IPath[] manifests = _getFilesForModule(root, moduleId, slot, _manifestFilter());
+			IPath[] manifests = _getFilesForModule(root, moduleId, slots, _manifestFilter());
 
 			if (ListUtil.isNotEmpty(manifests)) {
 				String value = JavaUtil.getManifestProperty(manifests[0].toFile(), property);
@@ -117,19 +118,28 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 		return new IPath[0];
 	}
 
-	private static IPath[] _getFilesForModule(File modulesFolder, String moduleName, String slot, FileFilter filter) {
+	private static IPath[] _getFilesForModule(
+		File modulesFolder, String moduleName, String[] slots, FileFilter filter) {
+
 		String slashed = moduleName.replaceAll("\\.", "/");
 
-		slot = (slot == null) ? "main" : slot;
-
-		return _getFiles(
-			modulesFolder,
-			new Path(
-				slashed
-			).append(
-				slot
-			),
-			filter);
+		return Stream.of(
+			slots
+		).map(
+			slot -> (slot == null) ? "main" : slot
+		).flatMap(
+			slot -> Stream.of(
+				_getFiles(
+					modulesFolder,
+					new Path(
+						slashed
+					).append(
+						slot
+					),
+					filter))
+		).toArray(
+			IPath[]::new
+		);
 	}
 
 	private static IPath[] _getFilesFrom(File layeredPath, FileFilter filter) {
