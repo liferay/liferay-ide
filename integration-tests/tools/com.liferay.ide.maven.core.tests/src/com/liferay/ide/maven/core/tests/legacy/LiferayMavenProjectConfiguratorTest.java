@@ -23,6 +23,7 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
+
 import org.junit.Assert;
 import org.junit.Test;
 
