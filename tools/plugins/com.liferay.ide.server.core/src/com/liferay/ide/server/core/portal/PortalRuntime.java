@@ -25,6 +25,8 @@ import java.beans.PropertyChangeListener;
 
 import java.io.File;
 
+import java.text.MessageFormat;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +42,7 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
 
@@ -265,6 +268,16 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
 		String portalBundleVersion = _portalBundle.getVersion();
 
+		if (Objects.isNull(portalBundleVersion) ||
+			Objects.equals(portalBundleVersion, Version.emptyVersion.toString())) {
+
+			IRuntime runtime = getRuntime();
+
+			return new Status(
+				IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0,
+				MessageFormat.format(Msgs.errorPortalRuntimeConfiguration, runtime.getName()), null);
+		}
+
 		if (!portalBundleVersion.startsWith("7")) {
 			return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalVersion70, null);
 		}
@@ -367,6 +380,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 		public static String errorJRE;
 		public static String errorJRE80;
 		public static String errorPortalNotExisted;
+		public static String errorPortalRuntimeConfiguration;
 		public static String errorPortalVersion70;
 		public static String warningjre;
 
