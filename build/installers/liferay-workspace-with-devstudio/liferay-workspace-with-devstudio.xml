@@ -771,7 +771,7 @@ ${java_executable}
             </ruleList>
         </fileParameter>
         <directoryParameter>
-            <name>studiodir</name>
+            <name>installdir</name>
             <description>Installer.Parameter.installdir.description</description>
             <explanation>Installer.Parameter.installdir.explanation</explanation>
             <value></value>
@@ -783,8 +783,8 @@ ${java_executable}
             <width>30</width>
             <postShowPageActionList>
                 <setInstallerVariable>
-                    <name>installdir</name>
-                    <value>${studiodir}</value>
+                    <name>studiodir</name>
+                    <value>${installdir}</value>
                 </setInstallerVariable>
             </postShowPageActionList>
             <preShowPageActionList>
