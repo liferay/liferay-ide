@@ -33,6 +33,7 @@ import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -396,6 +397,8 @@ public class PortalServerBehavior
 				Lists.newArrayList(DebugPlugin.splitArguments(existingVMArgs)));
 
 			if (ListUtil.isNotEmpty(parsedExistingVMArgs)) {
+				List<String> changedExistedArguments = new ArrayList<>();
+
 				for (String parsedArg : parsedExistingVMArgs) {
 					if (parsedArg.startsWith("-Xm")) {
 						parsedExistingVMArgs.remove(parsedArg);
@@ -404,7 +407,22 @@ public class PortalServerBehavior
 					if (parsedArg.startsWith("-Dexternal-properties")) {
 						parsedExistingVMArgs.remove(parsedArg);
 					}
+
+					int eqaulsPostion = parsedArg.indexOf("=");
+
+					if (eqaulsPostion != -1) {
+						String existedArgumentKey = parsedArg.substring(0, eqaulsPostion);
+						String existedArgumentValue = parsedArg.substring(eqaulsPostion + 1);
+
+						for (String newConfig : configVMArgs) {
+							if (newConfig.startsWith(existedArgumentKey) && !newConfig.endsWith(existedArgumentValue)) {
+								changedExistedArguments.add(parsedArg);
+							}
+						}
+					}
 				}
+
+				parsedExistingVMArgs.removeAll(changedExistedArguments);
 			}
 
 			launch.setAttribute(
@@ -968,8 +986,20 @@ public class PortalServerBehavior
 	}
 
 	private void _mergeClasspath(List<IRuntimeClasspathEntry> oldCpEntries, IRuntimeClasspathEntry cpEntry) {
-		for (IRuntimeClasspathEntry oldCpEntry : oldCpEntries) {
+		Iterator<IRuntimeClasspathEntry> runtimeClassPathiterator = oldCpEntries.iterator();
+
+		while (runtimeClassPathiterator.hasNext()) {
+			IRuntimeClasspathEntry oldCpEntry = runtimeClassPathiterator.next();
+
 			IPath oldCpEntryPath = oldCpEntry.getPath();
+
+			if (Objects.nonNull(oldCpEntryPath) && (oldCpEntry.getType() == IRuntimeClasspathEntry.ARCHIVE)) {
+				if (FileUtil.notExists(oldCpEntryPath.toFile())) {
+					runtimeClassPathiterator.remove();
+
+					continue;
+				}
+			}
 
 			if (oldCpEntryPath.equals(cpEntry.getPath())) {
 				return;

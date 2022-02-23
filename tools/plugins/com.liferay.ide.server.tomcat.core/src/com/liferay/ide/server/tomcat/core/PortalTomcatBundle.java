@@ -24,6 +24,8 @@ import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -127,10 +129,12 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	public String getHttpPort() {
 		File serverXmlFile = new File(getAppServerDir().toPortableString(), "conf/server.xml");
 
-		String portValue = getHttpPortValue(serverXmlFile, "Connector", "protocol", "HTTP/1.1", "port");
+		if (Files.exists(serverXmlFile.toPath())) {
+			String portValue = getHttpPortValue(serverXmlFile, "Connector", "protocol", "HTTP/1.1", "port");
 
-		if (!CoreUtil.empty(portValue)) {
-			return portValue;
+			if (!CoreUtil.empty(portValue)) {
+				return portValue;
+			}
 		}
 
 		return "8080";
