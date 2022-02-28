@@ -16,9 +16,12 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.server.util.JavaUtil;
 
+import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -64,6 +67,7 @@ public class PortalJBossEapBundle extends PortalJBossBundle {
 
 		Version jdkVersion = Version.parseVersion(JavaUtil.getJDKVersion(vmInstall));
 		Version jdk8Version = Version.parseVersion("1.8");
+		File wildflyCommonLib = getJbossLib(bundlePath, "/modules/system/layers/base/org/wildfly/common/main/");
 
 		if (jdkVersion.compareTo(jdk8Version) <= 0) {
 			args.add(
@@ -74,6 +78,23 @@ public class PortalJBossEapBundle extends PortalJBossBundle {
 				"-Xbootclasspath/p:\"" + bundlePath +
 					"/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.1.1.Final-" +
 						"redhat-1.jar\"");
+
+			if (Objects.nonNull(wildflyCommonLib)) {
+				args.add("-Xbootclasspath/p:\"" + wildflyCommonLib.getAbsolutePath() + "\"");
+			}
+
+			File jbossLogManagerLib = getJbossLib(bundlePath, "/modules/system/layers/base/org/jboss/logmanager/main/");
+
+			if (Objects.nonNull(jbossLogManagerLib)) {
+				args.add("-Xbootclasspath/p:\"" + jbossLogManagerLib.getAbsolutePath() + "\"");
+			}
+		}
+		else {
+			if (Objects.nonNull(wildflyCommonLib)) {
+				args.add("-Xbootclasspath/a:\"" + wildflyCommonLib.getAbsolutePath() + "\"");
+			}
+
+			args.add("--add-modules java.se");
 		}
 
 		args.add("-Djboss.modules.system.pkgs=org.jboss.logmanager");
