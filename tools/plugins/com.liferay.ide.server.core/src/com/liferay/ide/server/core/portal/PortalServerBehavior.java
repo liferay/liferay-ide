@@ -993,12 +993,12 @@ public class PortalServerBehavior
 
 			IPath oldCpEntryPath = oldCpEntry.getPath();
 
-			if (Objects.nonNull(oldCpEntryPath) && (oldCpEntry.getType() == IRuntimeClasspathEntry.ARCHIVE)) {
-				if (FileUtil.notExists(oldCpEntryPath.toFile())) {
-					runtimeClassPathiterator.remove();
+			if (Objects.nonNull(oldCpEntryPath) && (oldCpEntry.getType() == IRuntimeClasspathEntry.ARCHIVE) &&
+				FileUtil.notExists(oldCpEntryPath.toFile())) {
 
-					continue;
-				}
+				runtimeClassPathiterator.remove();
+
+				continue;
 			}
 
 			if (oldCpEntryPath.equals(cpEntry.getPath())) {
