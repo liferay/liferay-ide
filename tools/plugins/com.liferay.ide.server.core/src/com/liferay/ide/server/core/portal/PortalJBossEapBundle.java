@@ -70,14 +70,12 @@ public class PortalJBossEapBundle extends PortalJBossBundle {
 		File wildflyCommonLib = getJbossLib(bundlePath, "/modules/system/layers/base/org/wildfly/common/main/");
 
 		if (jdkVersion.compareTo(jdk8Version) <= 0) {
-			args.add(
-				"-Xbootclasspath/p:\"" + bundlePath +
-					"/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-1.5.4.Final-redhat-" +
-						"1.jar\"");
-			args.add(
-				"-Xbootclasspath/p:\"" + bundlePath +
-					"/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.1.1.Final-" +
-						"redhat-1.jar\"");
+			File log4jJbossLogmanager = getJbossLib(
+				bundlePath, "/modules/system/layers/base/org/jboss/log4j/logmanager/main/");
+
+			if (Objects.nonNull(log4jJbossLogmanager)) {
+				args.add("-Xbootclasspath/p:" + log4jJbossLogmanager.getAbsolutePath());
+			}
 
 			if (Objects.nonNull(wildflyCommonLib)) {
 				args.add("-Xbootclasspath/p:\"" + wildflyCommonLib.getAbsolutePath() + "\"");
@@ -94,7 +92,7 @@ public class PortalJBossEapBundle extends PortalJBossBundle {
 				args.add("-Xbootclasspath/a:\"" + wildflyCommonLib.getAbsolutePath() + "\"");
 			}
 
-			args.add("--add-modules java.se");
+			args.add("--add-modules=java.se");
 		}
 
 		args.add("-Djboss.modules.system.pkgs=org.jboss.logmanager");
