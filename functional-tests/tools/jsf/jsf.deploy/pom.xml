@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.jsf</groupId>
 		<artifactId>jsf-tests</artifactId>
-		<version>3.9.5-SNAPSHOT</version>
+		<version>3.9.6-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.liferay.ide.functional.tests.jsf.deploy</groupId>
