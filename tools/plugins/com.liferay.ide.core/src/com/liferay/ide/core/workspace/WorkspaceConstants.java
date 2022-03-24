@@ -129,6 +129,30 @@ public class WorkspaceConstants {
 			put(
 				"7.4.3.8",
 				LIFERAY_PORTAL_URL + "7.4.3.8-ga8/liferay-ce-portal-tomcat-7.4.3.8-ga8-20220117195955276.tar.gz");
+			put(
+				"7.4.3.9",
+				LIFERAY_PORTAL_URL + "7.4.3.9-ga9/liferay-ce-portal-tomcat-7.4.3.9-ga9-20220125123415632.tar.gz");
+			put(
+				"7.4.3.10",
+				LIFERAY_PORTAL_URL + "7.4.3.10-ga10/liferay-ce-portal-tomcat-7.4.3.10-ga10-20220130185310773.tar.gz");
+			put(
+				"7.4.3.11",
+				LIFERAY_PORTAL_URL + "7.4.3.11-ga11/liferay-ce-portal-tomcat-7.4.3.11-ga11-20220207124232466.tar.gz");
+			put(
+				"7.4.3.12",
+				LIFERAY_PORTAL_URL + "7.4.3.12-ga12/liferay-ce-portal-tomcat-7.4.3.12-ga12-20220215025828785.tar.gz");
+			put(
+				"7.4.3.13",
+				LIFERAY_PORTAL_URL + "7.4.3.13-ga13/liferay-ce-portal-tomcat-7.4.3.13-ga13-20220223110450724.tar.gz");
+			put(
+				"7.4.3.14",
+				LIFERAY_PORTAL_URL + "7.4.3.14-ga14/liferay-ce-portal-tomcat-7.4.3.14-ga14-20220302152058124.tar.gz");
+			put(
+				"7.4.3.15",
+				LIFERAY_PORTAL_URL + "7.4.3.15-ga15/liferay-ce-portal-tomcat-7.4.3.15-ga15-20220308142134102.tar.gz");
+			put(
+				"7.4.3.16",
+				LIFERAY_PORTAL_URL + "7.4.3.16-ga16/liferay-ce-portal-tomcat-7.4.3.16-ga16-20220314155405565.tar.gz");
 		}
 	};
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
@@ -139,7 +163,10 @@ public class WorkspaceConstants {
 			put("7.3", new String[] {"7.3.7", "7.3.6", "7.3.5", "7.3.4", "7.3.3-1", "7.3.2-1", "7.3.1-1", "7.3.0-1"});
 			put(
 				"7.4",
-				new String[] {"7.4.3.8", "7.4.3.7", "7.4.3.6", "7.4.3.5", "7.4.3.4", "7.4.2-1", "7.4.1-1", "7.4.0"});
+				new String[] {
+					"7.4.3.16", "7.4.3.15", "7.4.3.14", "7.4.3.13", "7.4.3.12", "7.4.3.11", "7.4.3.10", "7.4.3.9",
+					"7.4.3.8", "7.4.3.7", "7.4.3.6", "7.4.3.5", "7.4.3.4", "7.4.2-1", "7.4.1-1", "7.4.0"
+				});
 		}
 	};
 
