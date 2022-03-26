@@ -112,6 +112,14 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		boolean warCoreExt = projectTemplateName.equals("war-core-ext");
 
+		if (warCoreExt) {
+			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
+
+			if (StringUtil.equalsIgnoreCase(newLiferayProjectProvider.getDisplayName(), "maven")) {
+				return Status.createErrorStatus("Creating war-core-ext project with Maven is not supported.");
+			}
+		}
+
 		boolean npm = projectTemplateName.startsWith("npm");
 
 		projectTemplateName = projectTemplateName.replace("-", ".");
@@ -123,34 +131,17 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 			if (!include) {
 				if (npm) {
-					retval = Status.createErrorStatus(
+					return Status.createErrorStatus(
 						"NPM portlet project templates generated from this tool are not supported for specified " +
 							"Liferay version. See LPS-97950 for full details.");
 				}
-				else {
-					retval = Status.createErrorStatus(
-						"Specified Liferay version is invaild. Must be in range " + versionRange);
-				}
+
+				return Status.createErrorStatus(
+					"Specified Liferay version is invaild. Must be in range " + versionRange);
 			}
 		}
 		else {
-			retval = Status.createWarningStatus("Unable to get supported Liferay version.");
-		}
-
-		if (warCoreExt && retval.ok()) {
-			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
-
-			Version notSupportFromPortalVersion = new Version("7.3");
-
-			Version currentVersion = Version.parseVersion(liferayVersion);
-
-			if (StringUtil.equalsIgnoreCase(newLiferayProjectProvider.getDisplayName(), "maven")) {
-				retval = Status.createErrorStatus("Not support to create maven war-core-ext project.");
-			}
-			else if (currentVersion.compareTo(notSupportFromPortalVersion) >= 0) {
-				retval = Status.createErrorStatus(
-					"War Core Ext project is only supported starting from portal 7.0 to 7.2.");
-			}
+			return Status.createWarningStatus("Unable to get supported Liferay version.");
 		}
 
 		return retval;
