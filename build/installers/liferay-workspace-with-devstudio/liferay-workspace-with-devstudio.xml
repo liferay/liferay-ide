@@ -789,7 +789,7 @@ ${java_executable}
             </postShowPageActionList>
             <preShowPageActionList>
                 <setInstallerVariable>
-                    <name>studiodir</name>
+                    <name>installdir</name>
                     <value>${userHome}/${product_shortname}</value>
                     <ruleList>
                         <compareText>
