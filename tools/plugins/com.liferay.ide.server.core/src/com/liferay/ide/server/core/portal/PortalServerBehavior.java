@@ -764,7 +764,13 @@ public class PortalServerBehavior
 			ServerUtil.setupPortalDevelopModeConfiguration(_getPortalRuntime(), portalServer);
 		}
 		else {
-			Collections.addAll(retval, PortalServerConstants.DEFAULT_MEMORY_ARGS);
+			String args = new String(PortalServerConstants.DEFAULT_MEMORY_ARGS);
+
+			if (!CoreUtil.isNullOrEmpty(args)) {
+				String[] defaultVmArgs = args.split(" ");
+
+				Collections.addAll(retval, defaultVmArgs);
+			}
 		}
 
 		PortalBundle portalBundle = _getPortalRuntime().getPortalBundle();

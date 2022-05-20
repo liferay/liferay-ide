@@ -37,7 +37,8 @@ public interface PortalServerConstants {
 
 	public String DEFAULT_HOST = "localhost";
 
-	public String DEFAULT_MEMORY_ARGS = defaultPrefs.get("default.memory.args", "-Xmx2560m");
+	public String DEFAULT_MEMORY_ARGS = defaultPrefs.get(
+		"default.memory.args", "-Xmx2560m -XX:MaxMetaspaceSize=768m -XX:MetaspaceSize=768m");
 
 	public String DEFAULT_USERNAME = "test@liferay.com";
 
