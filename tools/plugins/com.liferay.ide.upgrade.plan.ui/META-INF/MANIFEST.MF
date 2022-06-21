@@ -10,7 +10,7 @@ Bundle-Name: Liferay IDE Upgrade Plan UI
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.plan.ui;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 3.9.6.qualifier
+Bundle-Version: 3.9.7.qualifier
 Export-Package: com.liferay.ide.upgrade.plan.ui,
  com.liferay.ide.upgrade.plan.ui.navigator,
  com.liferay.ide.upgrade.plan.ui.util

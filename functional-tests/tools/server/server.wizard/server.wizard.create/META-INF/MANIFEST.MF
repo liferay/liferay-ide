@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Server Wizard Create Tests
 Bundle-SymbolicName: com.liferay.ide.functional.server.wizard.create.tests
-Bundle-Version: 3.9.6.qualifier
+Bundle-Version: 3.9.7.qualifier
 Bundle-Vendor: Liferay
 Require-Bundle: com.liferay.ide.functional.liferay,
  com.liferay.ide.functional.server.wizard.base,

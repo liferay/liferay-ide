@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Maven UI
 Bundle-SymbolicName: com.liferay.ide.maven.ui;singleton:=true
-Bundle-Version: 3.9.6.qualifier
+Bundle-Version: 3.9.7.qualifier
 Bundle-Activator: com.liferay.ide.maven.ui.LiferayMavenUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,
