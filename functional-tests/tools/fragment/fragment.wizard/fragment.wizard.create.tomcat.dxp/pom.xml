@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.fragment.wizard</groupId>
 		<artifactId>fragment-wizard-tests</artifactId>
-		<version>3.9.6-SNAPSHOT</version>
+		<version>3.9.7-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.fragment.wizard.create.tomcat.dxp.tests</artifactId>
