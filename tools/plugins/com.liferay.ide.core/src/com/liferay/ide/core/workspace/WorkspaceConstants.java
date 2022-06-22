@@ -153,6 +153,45 @@ public class WorkspaceConstants {
 			put(
 				"7.4.3.16",
 				LIFERAY_PORTAL_URL + "7.4.3.16-ga16/liferay-ce-portal-tomcat-7.4.3.16-ga16-20220314155405565.tar.gz");
+			put(
+				"7.4.3.17",
+				LIFERAY_PORTAL_URL + "7.4.3.17-ga17/liferay-ce-portal-tomcat-7.4.3.17-ga17-20220322082755437.tar.gz");
+			put(
+				"7.4.3.18",
+				LIFERAY_PORTAL_URL + "7.4.3.18-ga18/liferay-ce-portal-tomcat-7.4.3.18-ga18-20220329092001364.tar.gz");
+			put(
+				"7.4.3.19",
+				LIFERAY_PORTAL_URL + "7.4.3.19-ga19/liferay-ce-portal-tomcat-7.4.3.19-ga19-20220404174529051.tar.gz");
+			put(
+				"7.4.3.20",
+				LIFERAY_PORTAL_URL + "7.4.3.20-ga20/liferay-ce-portal-tomcat-7.4.3.20-ga20-20220408161249276.tar.gz");
+			put(
+				"7.4.3.21",
+				LIFERAY_PORTAL_URL + "7.4.3.21-ga21/liferay-ce-portal-tomcat-7.4.3.21-ga21-20220418102345052.tar.gz");
+			put(
+				"7.4.3.22",
+				LIFERAY_PORTAL_URL + "7.4.3.22-ga22/liferay-ce-portal-tomcat-7.4.3.22-ga22-20220427101210177.tar.gz");
+			put(
+				"7.4.3.23",
+				LIFERAY_PORTAL_URL + "7.4.3.23-ga23/liferay-ce-portal-tomcat-7.4.3.23-ga23-20220504071803965.tar.gz");
+			put(
+				"7.4.3.24",
+				LIFERAY_PORTAL_URL + "7.4.3.24-ga24/liferay-ce-portal-tomcat-7.4.3.24-ga24-20220510074512112.tar.gz");
+			put(
+				"7.4.3.25",
+				LIFERAY_PORTAL_URL + "7.4.3.25-ga25/liferay-ce-portal-tomcat-7.4.3.25-ga25-20220517170439802.tar.gz");
+			put(
+				"7.4.3.26",
+				LIFERAY_PORTAL_URL + "7.4.3.26-ga26/liferay-ce-portal-tomcat-7.4.3.26-ga26-20220520184751553.tar.gz");
+			put(
+				"7.4.3.27",
+				LIFERAY_PORTAL_URL + "7.4.3.27-ga27/liferay-ce-portal-tomcat-7.4.3.27-ga27-20220531092132731.tar.gz");
+			put(
+				"7.4.3.28",
+				LIFERAY_PORTAL_URL + "7.4.3.28-ga28/liferay-ce-portal-tomcat-7.4.3.28-ga28-20220607175240830.tar.gz");
+			put(
+				"7.4.3.29",
+				LIFERAY_PORTAL_URL + "7.4.3.29-ga29/liferay-ce-portal-tomcat-7.4.3.29-ga29-20220615102224235.tar.gz");
 		}
 	};
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
@@ -164,8 +203,10 @@ public class WorkspaceConstants {
 			put(
 				"7.4",
 				new String[] {
-					"7.4.3.16", "7.4.3.15", "7.4.3.14", "7.4.3.13", "7.4.3.12", "7.4.3.11", "7.4.3.10", "7.4.3.9",
-					"7.4.3.8", "7.4.3.7", "7.4.3.6", "7.4.3.5", "7.4.3.4", "7.4.2-1", "7.4.1-1", "7.4.0"
+					"7.4.3.29", "7.4.3.28", "7.4.3.27", "7.4.3.26", "7.4.3.25", "7.4.3.24", "7.4.3.23", "7.4.3.22",
+					"7.4.3.21", "7.4.3.20", "7.4.3.19", "7.4.3.18", "7.4.3.17", "7.4.3.16", "7.4.3.15", "7.4.3.14",
+					"7.4.3.13", "7.4.3.12", "7.4.3.11", "7.4.3.10", "7.4.3.9", "7.4.3.8", "7.4.3.7", "7.4.3.6",
+					"7.4.3.5", "7.4.3.4", "7.4.2-1", "7.4.1-1", "7.4.0"
 				});
 		}
 	};
