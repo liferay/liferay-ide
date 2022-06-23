@@ -350,6 +350,8 @@ public class PortalServerLaunchEditorSection
 				memoryArrays
 			).filter(
 				arg -> !arg.startsWith("-Xm")
+			).filter(
+				arg -> !arg.startsWith("-XX")
 			).findAny(
 			).isPresent();
 
