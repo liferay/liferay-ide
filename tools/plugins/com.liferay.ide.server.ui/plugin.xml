@@ -595,33 +595,6 @@
 		</startup>
 	</extension>
 	<extension
-		point="org.eclipse.mylyn.commons.notifications.ui.notifications"
-	>
-		<category
-			icon="icons/liferay_logo_16.png"
-			id="com.liferay.ide.server.ui.settings"
-			label="Liferay IDE"
-		>
-		</category>
-		<event
-			categoryId="com.liferay.ide.server.ui.settings"
-			icon="icons/e16/properties.png"
-			id="com.liferay.ide.server.ui.importglobalsettings"
-			label="Import Global Settings"
-		>
-			<defaultHandler
-				sinkId="com.liferay.ide.server.ui.ImportGlobalSettingsPopup"
-			>
-			</defaultHandler>
-		</event>
-		<sink
-			class="com.liferay.ide.server.ui.ImportGlobalSettingsNotificationSink"
-			id="com.liferay.ide.server.ui.ImportGlobalSettingsPopup"
-			label="Import Global Settings"
-		>
-		</sink>
-	</extension>
-	<extension
 		point="org.eclipse.wst.server.ui.serverImages"
 	>
 		<image
