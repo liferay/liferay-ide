@@ -47,7 +47,6 @@
 		<import feature="org.eclipse.jst.server_adapters.feature" match="greaterOrEqual" version="3.2.0" />
 		<import feature="org.eclipse.jst.server_ui.feature" match="greaterOrEqual" version="3.2.0" />
 		<import feature="org.eclipse.jst.web_ui.feature" match="greaterOrEqual" version="3.2.0" />
-		<import feature="org.eclipse.mylyn.commons.notifications" match="greaterOrEqual" version="1.0.0" />
 		<import feature="org.eclipse.sapphire" match="compatible" version="9.1.0" />
 		<import feature="org.eclipse.sapphire.java" match="compatible" version="9.1.0" />
 		<import feature="org.eclipse.sapphire.java.jdt" match="compatible" version="9.1.0" />

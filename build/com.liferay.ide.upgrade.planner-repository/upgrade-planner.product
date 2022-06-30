@@ -90,7 +90,6 @@ to distribution rights of the Software.
       <feature id="org.eclipse.jst.web_ui.feature" installMode="root"/>
       <feature id="org.eclipse.m2e.feature" installMode="root"/>
       <feature id="org.eclipse.m2e.wtp.feature" installMode="root"/>
-      <feature id="org.eclipse.mylyn_feature" installMode="root"/>
       <feature id="org.eclipse.tm.terminal.feature" installMode="root"/>
       <feature id="org.eclipse.wst.common.fproj" installMode="root"/>
       <feature id="org.eclipse.wst.jsdt.feature" installMode="root"/>

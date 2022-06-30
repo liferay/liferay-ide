@@ -120,7 +120,6 @@ to distribution rights of the Software.
       <feature id="org.eclipse.egit.import" installMode="root"/>
       -->
       <feature id="org.eclipse.egit" installMode="root"/>
-      <feature id="org.eclipse.egit.mylyn" installMode="root"/>
 
       <feature id="org.eclipse.jdt" installMode="root"/>
 
@@ -154,12 +153,6 @@ to distribution rights of the Software.
       <feature id="org.eclipse.m2e.wtp.jpa.feature" installMode="root"/>
       <feature id="org.eclipse.m2e.wtp.jsf.feature" installMode="root"/>
 
-      <feature id="org.eclipse.mylyn.bugzilla_feature" installMode="root"/>
-      <feature id="org.eclipse.mylyn.context_feature" installMode="root"/>
-      <feature id="org.eclipse.mylyn_feature" installMode="root"/>
-      <feature id="org.eclipse.mylyn.ide_feature" installMode="root"/>
-      <feature id="org.eclipse.mylyn.java_feature" installMode="root"/>
-      <feature id="org.eclipse.mylyn.wikitext_feature" installMode="root"/>
 
       <feature id="org.eclipse.pde" installMode="root"/>
 
