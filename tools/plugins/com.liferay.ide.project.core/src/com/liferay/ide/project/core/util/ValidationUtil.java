@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -53,7 +54,7 @@ public class ValidationUtil {
 			targetDir = FileUtil.getFile(targetFolder);
 
 			try {
-				String path = file.getCanonicalPath();
+				Path path = file.toPath();
 
 				inTargetDir = path.startsWith(targetDir.getCanonicalPath());
 			}
