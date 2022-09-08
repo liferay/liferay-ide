@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.file.Path;
 
 import org.eclipse.core.resources.IFolder;
