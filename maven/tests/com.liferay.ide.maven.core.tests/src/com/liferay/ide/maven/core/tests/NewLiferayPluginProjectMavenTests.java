@@ -94,6 +94,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase {
 		Assert.assertEquals(expected2, groupId.validation().message());
 	}
 
+	@Ignore
 	@Test
 	public void testHookProjectName() throws Exception {
 		NewLiferayPluginProjectOp op = newProjectOp("test-hook");
