@@ -201,6 +201,60 @@ public class WorkspaceConstants {
 			put(
 				"7.4.3.32",
 				LIFERAY_PORTAL_URL + "7.4.3.32-ga32/liferay-ce-portal-tomcat-7.4.3.32-ga32-20220704200951543.tar.gz");
+			put(
+				"7.4.3.33",
+				LIFERAY_PORTAL_URL + "7.4.3.33-ga33/liferay-ce-portal-tomcat-7.4.3.33-ga33-20220711220434272.tar.gz");
+			put(
+				"7.4.3.34",
+				LIFERAY_PORTAL_URL + "7.4.3.34-ga34/liferay-ce-portal-tomcat-7.4.3.34-ga34-20220719155007101.tar.gz");
+			put(
+				"7.4.3.35",
+				LIFERAY_PORTAL_URL + "7.4.3.35-ga35/liferay-ce-portal-tomcat-7.4.3.35-ga35-20220726170951454.tar.gz");
+			put(
+				"7.4.3.36",
+				LIFERAY_PORTAL_URL + "7.4.3.36-ga36/liferay-ce-portal-tomcat-7.4.3.36-ga36-20220802152002501.tar.gz");
+			put(
+				"7.4.3.37",
+				LIFERAY_PORTAL_URL + "7.4.3.37-ga37/liferay-ce-portal-tomcat-7.4.3.37-ga37-20220810074517865.tar.gz");
+			put(
+				"7.4.3.38",
+				LIFERAY_PORTAL_URL + "7.4.3.38-ga38/liferay-ce-portal-tomcat-7.4.3.38-ga38-20220816172522381.tar.gz");
+			put(
+				"7.4.3.39",
+				LIFERAY_PORTAL_URL + "7.4.3.39-ga39/liferay-ce-portal-tomcat-7.4.3.39-ga39-20220824100312686.tar.gz");
+			put(
+				"7.4.3.40",
+				LIFERAY_PORTAL_URL + "7.4.3.40-ga40/liferay-ce-portal-tomcat-7.4.3.40-ga40-20220901103436940.tar.gz");
+			put(
+				"7.4.3.41",
+				LIFERAY_PORTAL_URL + "7.4.3.41-ga41/liferay-ce-portal-tomcat-7.4.3.41-ga41-20220902171954397.tar.gz");
+			put(
+				"7.4.3.42",
+				LIFERAY_PORTAL_URL + "7.4.3.42-ga42/liferay-ce-portal-tomcat-7.4.3.42-ga42-20220913145951615.tar.gz");
+			put(
+				"7.4.3.43",
+				LIFERAY_PORTAL_URL + "7.4.3.43-ga43/liferay-ce-portal-tomcat-7.4.3.43-ga43-20220921132136623.tar.gz");
+			put(
+				"7.4.3.44",
+				LIFERAY_PORTAL_URL + "7.4.3.44-ga44/liferay-ce-portal-tomcat-7.4.3.44-ga44-20220928155119787.tar.gz");
+			put(
+				"7.4.3.45",
+				LIFERAY_PORTAL_URL + "7.4.3.45-ga45/liferay-ce-portal-tomcat-7.4.3.45-ga45-20221005161655738.tar.gz");
+			put(
+				"7.4.3.46",
+				LIFERAY_PORTAL_URL + "7.4.3.46-ga46/liferay-ce-portal-tomcat-7.4.3.46-ga46-20221012072050357.tar.gz");
+			put(
+				"7.4.3.47",
+				LIFERAY_PORTAL_URL + "7.4.3.47-ga47/liferay-ce-portal-tomcat-7.4.3.47-ga47-20221020194008980.tar.gz");
+			put(
+				"7.4.3.48",
+				LIFERAY_PORTAL_URL + "7.4.3.48-ga48/liferay-ce-portal-tomcat-7.4.3.48-ga48-20221024170919019.tar.gz");
+			put(
+				"7.4.3.49",
+				LIFERAY_PORTAL_URL + "7.4.3.49-ga49/liferay-ce-portal-tomcat-7.4.3.49-ga49-20221101182812798.tar.gz");
+			put(
+				"7.4.3.50",
+				LIFERAY_PORTAL_URL + "7.4.3.50-ga50/liferay-ce-portal-tomcat-7.4.3.50-ga50-20221109133624287.tar.gz");
 		}
 	};
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
@@ -212,10 +266,12 @@ public class WorkspaceConstants {
 			put(
 				"7.4",
 				new String[] {
-					"7.4.3.32", "7.4.3.31", "7.4.3.30", "7.4.3.29", "7.4.3.28", "7.4.3.27", "7.4.3.26", "7.4.3.25",
-					"7.4.3.24", "7.4.3.23", "7.4.3.22", "7.4.3.21", "7.4.3.20", "7.4.3.19", "7.4.3.18", "7.4.3.17",
-					"7.4.3.16", "7.4.3.15", "7.4.3.14", "7.4.3.13", "7.4.3.12", "7.4.3.11", "7.4.3.10", "7.4.3.9",
-					"7.4.3.8", "7.4.3.7", "7.4.3.6", "7.4.3.5", "7.4.3.4", "7.4.2-1", "7.4.1-1", "7.4.0"
+					"7.4.3.50", "7.4.3.49", "7.4.3.48", "7.4.3.47", "7.4.3.46", "7.4.3.45", "7.4.3.44", "7.4.3.43",
+					"7.4.3.42", "7.4.3.41", "7.4.3.40", "7.4.3.39", "7.4.3.38", "7.4.3.37", "7.4.3.36", "7.4.3.35",
+					"7.4.3.34", "7.4.3.32", "7.4.3.31", "7.4.3.30", "7.4.3.29", "7.4.3.28", "7.4.3.27", "7.4.3.26",
+					"7.4.3.25", "7.4.3.24", "7.4.3.23", "7.4.3.22", "7.4.3.21", "7.4.3.20", "7.4.3.19", "7.4.3.18",
+					"7.4.3.17", "7.4.3.16", "7.4.3.15", "7.4.3.14", "7.4.3.13", "7.4.3.12", "7.4.3.11", "7.4.3.10",
+					"7.4.3.9", "7.4.3.8", "7.4.3.7", "7.4.3.6", "7.4.3.5", "7.4.3.4", "7.4.2-1", "7.4.1-1", "7.4.0"
 				});
 		}
 	};
