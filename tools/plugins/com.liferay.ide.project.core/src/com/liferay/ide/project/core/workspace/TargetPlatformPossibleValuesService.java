@@ -14,18 +14,22 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
+
+import org.osgi.framework.Version;
 
 /**
  * @author Terry Jia
@@ -45,6 +49,11 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService i
 	}
 
 	@Override
+	public boolean ordered() {
+		return true;
+	}
+
+	@Override
 	protected void compute(Set<String> values) {
 		List<String> possibleValues = new ArrayList<>();
 
@@ -55,6 +64,73 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService i
 				if (liferayVersion.equals(version)) {
 					Collections.addAll(possibleValues, targetPlatformVersion);
 				}
+			});
+
+		possibleValues.sort(
+			new Comparator<String>() {
+
+				@Override
+				public int compare(String versionString1, String versionString2) {
+					if (versionString1.contains("-") && versionString2.contains("-")) {
+						String versionSubString1 = versionString1.substring(0, versionString1.indexOf("-"));
+						String versionSubString2 = versionString2.substring(0, versionString2.indexOf("-"));
+
+						Version subVersion1 = Version.parseVersion(versionSubString1);
+						Version subVersion2 = Version.parseVersion(versionSubString2);
+
+						return subVersion2.compareTo(subVersion1);
+					}
+					else if (versionString1.contains("-")) {
+						String versionSubString1 = versionString1.substring(0, versionString1.indexOf("-"));
+
+						Version subVersion1 = Version.parseVersion(versionSubString1);
+
+						Version version2 = Version.parseVersion(versionString2);
+
+						return version2.compareTo(subVersion1);
+					}
+					else if (versionString2.contains("-")) {
+						Version version1 = Version.parseVersion(versionString1);
+
+						String versionSubString2 = versionString2.substring(0, versionString2.indexOf("-"));
+
+						Version subVersion2 = Version.parseVersion(versionSubString2);
+
+						return subVersion2.compareTo(version1);
+					}
+
+					Version version1 = Version.parseVersion(versionString1);
+					Version version2 = Version.parseVersion(versionString2);
+
+					String version1Qualifier = version1.getQualifier();
+					String version2Qualifier = version2.getQualifier();
+
+					if (CoreUtil.isNotNullOrEmpty(version1Qualifier) && CoreUtil.isNotNullOrEmpty(version2Qualifier)) {
+						try {
+							int qualifier1 = Integer.parseInt(version1Qualifier);
+							int qualifier2 = Integer.parseInt(version2Qualifier);
+
+							return qualifier2 - qualifier1;
+						}
+						catch (NumberFormatException numberFormatException) {
+							return -1;
+						}
+					}
+					else if (CoreUtil.isNullOrEmpty(version1Qualifier)) {
+						return new Version(
+							version2.getMajor(), version2.getMinor(), version2.getMicro()
+						).compareTo(
+							version1
+						);
+					}
+					else if (CoreUtil.isNullOrEmpty(version2Qualifier)) {
+						return version2.compareTo(
+							new Version(version1.getMajor(), version1.getMinor(), version1.getMicro()));
+					}
+
+					return version2.compareTo(version1);
+				}
+
 			});
 
 		values.addAll(possibleValues);
