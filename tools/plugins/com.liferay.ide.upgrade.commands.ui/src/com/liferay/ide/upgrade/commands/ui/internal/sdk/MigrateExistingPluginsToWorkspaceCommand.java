@@ -18,8 +18,6 @@ import com.liferay.ide.core.ProjectSynchronizer;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.MultiStatusBuilder;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
@@ -36,8 +34,6 @@ import java.nio.file.Paths;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -145,13 +141,6 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 					sb.append(name);
 					sb.append("\"");
 
-					Optional<String> product = _getProduct(targetProjectLocation);
-
-					if (product.isPresent()) {
-						sb.append(" --product ");
-						sb.append(product.get());
-					}
-
 					try {
 						BladeCLI.execute(sb.toString());
 
@@ -190,29 +179,6 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 		}
 
 		return status;
-	}
-
-	private Optional<String> _getProduct(String workspaceLocation) {
-		try {
-			String productKey = LiferayWorkspaceUtil.getGradleProperty(
-				workspaceLocation, WorkspaceConstants.WORKSPACE_PRODUCT_PROPERTY, null);
-
-			if (Objects.isNull(productKey)) {
-				return Optional.empty();
-			}
-
-			String product = productKey.substring(0, productKey.indexOf("-"));
-
-			if (Objects.equals(product, "commerce")) {
-				product = "dxp";
-			}
-
-			return Optional.of(product);
-		}
-		catch (Exception e) {
-		}
-
-		return Optional.empty();
 	}
 
 	@Reference(target = "(type=gradle)")
