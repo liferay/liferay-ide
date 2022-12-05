@@ -21,16 +21,26 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -40,8 +50,11 @@ import org.eclipse.debug.core.sourcelookup.ISourceContainer;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourcePathComputer;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerUtil;
 
@@ -120,12 +133,66 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 				configuration, monitor, sourceContainers, liferayProject.getProject())
 		);
 
+		_addMarketplaceWebSurceContainers(configuration, sourceContainers);
+
 		return sourceContainers.toArray(new ISourceContainer[0]);
 	}
 
 	@Override
 	public String getId() {
 		return ID;
+	}
+
+	private void _addMarketplaceWebSurceContainers(
+		ILaunchConfiguration configuration, List<ISourceContainer> sourceContainers) {
+
+		try {
+			IServer server = ServerUtil.getServer(configuration);
+
+			IRuntime runtime = server.getRuntime();
+
+			PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
+
+			File[] marketplactLPkgFiles = _getMarketplaceLpkgFiles(portalBundle);
+
+			if (Objects.isNull(marketplactLPkgFiles)) {
+				return;
+			}
+
+			PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
+				PortalRuntime.class, new NullProgressMonitor());
+
+			Set<IRuntimeClasspathEntry> runtimeClasspathSet = new CopyOnWriteArraySet<>();
+
+			LiferayServerCore serverCore = LiferayServerCore.getDefault();
+
+			IPath serverCoreLocation = serverCore.getStateLocation();
+
+			IPath marketPlaceFolder = serverCoreLocation.append(portalRuntime.getPortalVersion());
+
+			Stream.of(
+				marketplactLPkgFiles
+			).parallel(
+			).forEach(
+				file -> _loadSourceJar(file, marketPlaceFolder, runtimeClasspathSet)
+			);
+
+			IRuntimeClasspathEntry[] entries = runtimeClasspathSet.toArray(new IRuntimeClasspathEntry[0]);
+
+			IRuntimeClasspathEntry[] resolved = JavaRuntime.resolveSourceLookupPath(entries, configuration);
+
+			ISourceContainer[] marketSourceContainers = JavaRuntime.getSourceContainers(resolved);
+
+			Stream.of(
+				marketSourceContainers
+			).filter(
+				computedSourceContainer -> !sourceContainers.contains(computedSourceContainer)
+			).forEach(
+				sourceConntainer -> sourceContainers.add(sourceConntainer)
+			);
+		}
+		catch (Exception exception) {
+		}
 	}
 
 	private void _addSourceContainers(
@@ -173,6 +240,54 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 		}
 		catch (CoreException ce) {
 			LiferayServerCore.logError("Unable to add source container for project " + projectName, ce);
+		}
+	}
+
+	private File[] _getMarketplaceLpkgFiles(PortalBundle portalBundle) {
+		IPath osgiBundlesDir = portalBundle.getOSGiBundlesDir();
+
+		IPath marketplacePath = osgiBundlesDir.append("marketplace");
+
+		File marketplace = marketplacePath.toFile();
+
+		return marketplace.listFiles(
+			new FilenameFilter() {
+
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.matches(".*\\.lpkg");
+				}
+
+			});
+	}
+
+	private void _loadSourceJar(File file, IPath marketPlaceFolder, Set<IRuntimeClasspathEntry> runtimeClasspathSet) {
+		try (JarFile jar = new JarFile(file)) {
+			Enumeration<JarEntry> jarEntryEnumeration = jar.entries();
+
+			while (jarEntryEnumeration.hasMoreElements()) {
+				JarEntry entry = jarEntryEnumeration.nextElement();
+
+				String entryName = entry.getName();
+
+				if (entryName.endsWith(".jar")) {
+					try (InputStream inputStream = jar.getInputStream(entry)) {
+						IPath jarFilePath = marketPlaceFolder.append(entryName);
+
+						if (FileUtil.exists(jarFilePath)) {
+							runtimeClasspathSet.add(JavaRuntime.newArchiveRuntimeClasspathEntry(jarFilePath));
+
+							continue;
+						}
+
+						FileUtil.writeFile(jarFilePath.toFile(), inputStream);
+
+						runtimeClasspathSet.add(JavaRuntime.newArchiveRuntimeClasspathEntry(jarFilePath));
+					}
+				}
+			}
+		}
+		catch (Exception e) {
 		}
 	}
 
