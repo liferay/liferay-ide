@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.server</groupId>
 		<artifactId>server-tests</artifactId>
-		<version>3.9.7-SNAPSHOT</version>
+		<version>3.9.8-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.liferay.ide.functional.tests.server.wizard</groupId>
