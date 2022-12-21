@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.liferay.ide.build</groupId>
     <artifactId>installers</artifactId>
-    <version>3.9.7-SNAPSHOT</version>
+    <version>3.9.8-SNAPSHOT</version>
   </parent>
   <groupId>com.liferay.ide.installer.tests</groupId>
   <artifactId>installer-tests</artifactId>

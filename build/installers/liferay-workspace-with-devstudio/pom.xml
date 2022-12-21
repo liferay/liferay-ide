@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.liferay.ide.build</groupId>
         <artifactId>installers</artifactId>
-        <version>3.9.7-SNAPSHOT</version>
+        <version>3.9.8-SNAPSHOT</version>
     </parent>
 
     <artifactId>liferay.workspace.with.devstudio.installer</artifactId>

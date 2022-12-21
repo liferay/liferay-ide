@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.portlet.wizard</groupId>
 		<artifactId>portlet-wizard-tests</artifactId>
-		<version>3.9.7-SNAPSHOT</version>
+		<version>3.9.8-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.portlet.wizard.validation.tests</artifactId>
