@@ -34,7 +34,7 @@
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
         <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/libs-release-local/org/bndtools/org.bndtools.p2/5.2.0/org.bndtools.p2-5.2.0.jar!</bndtools-site>
-        <eclipse-site>https://download.eclipse.org/releases/2019-06/201906191000/</eclipse-site>
+        <eclipse-site>https://download.eclipse.org/releases/2022-09/202209141001/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gmaven.runtime>1.8</gmaven.runtime>
         <gradle-site>https://download.eclipse.org/buildship/updates/e410/releases/3.x/3.1.2.v20190903-1732</gradle-site>
@@ -42,9 +42,9 @@
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <liferay-ide-tag>ga9</liferay-ide-tag>
-        <m2e-site>https://download.eclipse.org/technology/m2e/releases/1.13/1.13.0.20190716-1624/</m2e-site>
+        <m2e-site>https://archive.eclipse.org/technology/m2e/releases/2.0.3/</m2e-site>
         <m2e-wtp-site>https://download.eclipse.org/m2e-wtp/releases/1.4/1.4.3.20191209-1849/</m2e-wtp-site>
-        <m2e-archiver-site>https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
+        <m2e-archiver-site>file:/home/simon/work/tmp/m2eclipse-mavenarchiver/org.sonatype.m2e.mavenarchiver.repository/target/repository/</m2e-archiver-site>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
         <maven-deps-plugin-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
         <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20190602212107/repository/</orbit-site>
@@ -54,7 +54,7 @@
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
         <tycho-extras-version>2.4.0</tycho-extras-version>
-        <tycho-m2e-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/m2eclipse-tycho/0.9.0.201811261502/</tycho-m2e-site>
+        <tycho-m2e-site>file:/home/simon/work/tmp/m2eclipse-tycho/org.sonatype.tycho.repository/target/repository/</tycho-m2e-site>
         <tycho-packaging-format>yyyyMMddHHmm'-ga9'</tycho-packaging-format>
         <tycho-version>2.4.0</tycho-version>
     </properties>
@@ -182,14 +182,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.3</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <meminitial>256m</meminitial>
-                        <maxmem>1024m</maxmem>
-                        <compilerArgument>-proc:none</compilerArgument>
-                    </configuration>
+                    <version>3.8.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.eclipse.tycho</groupId>

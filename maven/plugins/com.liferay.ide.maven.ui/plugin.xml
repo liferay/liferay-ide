@@ -270,11 +270,11 @@
 			markerType="com.liferay.ide.maven.core.configurationProblem"
 		>
 		</markerResolutionGenerator>
-		<markerResolutionGenerator
+		<!-- <markerResolutionGenerator
 			class="com.liferay.ide.maven.ui.MavenConfigProblemMarkerResolutionGenerator"
 			markerType="org.eclipse.m2e.core.maven2Problem.mavenarchiver.error"
 		>
-		</markerResolutionGenerator>
+		</markerResolutionGenerator> -->
 	</extension>
 	<extension
 		point="org.eclipse.ui.preferencePages"
