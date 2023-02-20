@@ -23,13 +23,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.Optional;
+
+import org.eclipse.buildship.core.GradleBuild;
+import org.eclipse.buildship.core.GradleCore;
+import org.eclipse.buildship.core.GradleWorkspace;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
-import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
-import org.gradle.tooling.ProjectConnection;
 
 import org.osgi.framework.Bundle;
 
@@ -68,23 +71,25 @@ public class GradleTooling {
 				FileUtil.writeFileFromStream(scriptFile, inputStream);
 			}
 
-			GradleConnector newConnector = GradleConnector.newConnector();
+			GradleWorkspace gradleWorkspace = GradleCore.getWorkspace();
 
-			IPath projectLocation = project.getLocation();
+			Optional<GradleBuild> buildOptional = gradleWorkspace.getBuild(project);
 
-			newConnector.forProjectDirectory(projectLocation.toFile());
+			GradleBuild gradleBuild = buildOptional.get();
 
-			ProjectConnection connect = newConnector.connect();
+			return gradleBuild.withConnection(
+				connection -> {
+					ModelBuilder<T> model = connection.model(modelClass);
 
-			ModelBuilder<T> model = connect.model(modelClass);
+					ModelBuilder<T> withArguments = model.withArguments(
+						"--init-script", scriptFile.getAbsolutePath(), "--stacktrace");
 
-			ModelBuilder<T> withArguments = model.withArguments(
-				"--init-script", scriptFile.getAbsolutePath(), "--stacktrace");
-
-			return withArguments.get();
+					return withArguments.get();
+				},
+				new NullProgressMonitor());
 		}
-		catch (Exception e) {
-			LiferayGradleCore.logError("get gradle custom model error", e);
+		catch (Exception exception) {
+			LiferayGradleCore.logError("get gradle custom model error", exception);
 		}
 
 		return null;
