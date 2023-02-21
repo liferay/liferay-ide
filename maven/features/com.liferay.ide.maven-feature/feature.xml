@@ -34,14 +34,14 @@
 	</license>
 
 	<requires>
-		<import feature="org.eclipse.m2e.wtp.feature" match="greaterOrEqual" version="1.4.0" />
+		<!-- <import feature="org.eclipse.m2e.wtp.feature" match="greaterOrEqual" version="1.4.0" />
 		<import feature="org.eclipse.m2e.wtp.jsf.feature" match="greaterOrEqual" version="1.4.0" />
 		<import feature="org.eclipse.m2e.feature" match="greaterOrEqual" version="1.9.0" />
-		<import feature="org.sonatype.m2e.mavenarchiver.feature" match="greaterOrEqual" version="0.17" />
+		<import feature="org.sonatype.m2e.mavenarchiver.feature" match="greaterOrEqual" version="0.17" /> -->
 		<import feature="com.liferay.ide.eclipse.tools" match="greaterOrEqual" version="3.0.0" />
-		<import feature="org.sonatype.tycho.m2e.feature" match="greaterOrEqual" version="0.8.0" />
+		<!-- <import feature="org.sonatype.tycho.m2e.feature" match="greaterOrEqual" version="0.8.0" />
 		<import feature="com.ianbrandt.tools.m2e.mdp.feature" match="greaterOrEqual" version="0.0.4" />
-		<import feature="bndtools.m2e.feature" match="greaterOrEqual" version="4.1.0" />
+		<import feature="bndtools.m2e.feature" match="greaterOrEqual" version="4.1.0" /> -->
 	</requires>
 
 	<plugin

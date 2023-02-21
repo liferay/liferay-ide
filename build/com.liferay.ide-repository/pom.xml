@@ -29,7 +29,9 @@
     <packaging>eclipse-repository</packaging>
 
     <name>Liferay IDE Repository</name>
-
+    <properties>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+    </properties>
     <build>
         <plugins>
             <!-- Added the switch to final name in the AddAssociateSites -->
@@ -44,9 +46,28 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.4</version>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>2.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.groovy</groupId>
+                        <artifactId>groovy-ant</artifactId>
+                        <version>4.0.7</version>
+                    </dependency>
+                   <dependency>
+                        <groupId>org.apache.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>4.0.7</version>
+                        <type>pom</type>
+                        <scope>runtime</scope>                        
+                    </dependency>
+                     <dependency>
+                        <groupId>org.apache.groovy</groupId>
+                        <artifactId>groovy-xml</artifactId>
+                        <version>4.0.7</version>
+                    </dependency>                   
+                </dependencies>
                 <executions>
                     <execution>
                         <id>fix-repository</id>
@@ -57,7 +78,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>${pom.basedir}/src/main/assembly/RemoveUnwantedInstallUnits.groovy</source>
+                    <scripts>
+                        <script>${pom.basedir}/src/main/assembly/RemoveUnwantedInstallUnits.groovy</script>
+                    </scripts>
                 </configuration>
             </plugin>
             <plugin>
@@ -120,11 +143,27 @@
                         <version>${tycho-version}</version>
                         <executions>
                             <execution>
-                                <id>create-product-distributions</id>
+                                <id>materialize-products</id>
                                 <goals>
                                     <goal>materialize-products</goal>
+                                </goals>
+                                <configuration>
+                                    <installFeatures>true</installFeatures>
+                                    <profile>Installer</profile>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>archive-products</id>
+                                <goals>
                                     <goal>archive-products</goal>
                                 </goals>
+                                <configuration>
+                                    <formats>
+                                        <linux>zip</linux>
+                                        <win32>zip</win32>
+                                        <macosx>zip</macosx>
+                                    </formats>
+                                </configuration>
                             </execution>
                         </executions>
                         <configuration>
@@ -140,12 +179,21 @@
                         </configuration>
                     </plugin>
                     <plugin>
-                        <groupId>org.codehaus.gmaven</groupId>
-                        <artifactId>groovy-maven-plugin</artifactId>
-                        <version>2.0</version>
+                        <groupId>org.codehaus.gmavenplus</groupId>
+                        <artifactId>gmavenplus-plugin</artifactId>
+                        <version>2.1.0</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.groovy</groupId>
+                                <artifactId>groovy-all</artifactId>
+                                <version>4.0.7</version>
+                                <type>pom</type>
+                                <scope>runtime</scope>                        
+                            </dependency>
+                        </dependencies>
                         <executions>
                             <execution>
-                                <id>sign-app</id>
+                                <id>sign-app-macos-x86</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>execute</goal>
@@ -158,10 +206,30 @@
                                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
                                         <createDmg>false</createDmg>
                                     </properties>
-                                    <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source>
+                                </configuration>
+                            </execution>
+                             <execution>
+                                <id>sign-app-macos-arm64</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <properties>
+                                        <appPath>${pom.basedir}/target/products/com.liferay.ide.studio-macosx.cocoa.aarch64.zip</appPath>
+                                        <signingServerURL>${signingServerURL}</signingServerURL>
+                                        <signApps>${signApps}</signApps>
+                                        <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
+                                        <createDmg>false</createDmg>
+                                    </properties>
                                 </configuration>
                             </execution>
                         </executions>
+                        <configuration>
+                            <scripts>
+                                <script>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</script>
+                            </scripts>
+                        </configuration>                        
                     </plugin>
                 </plugins>
             </build>

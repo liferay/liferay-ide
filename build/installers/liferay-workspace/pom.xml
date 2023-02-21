@@ -31,6 +31,7 @@
     <name>Liferay Workspace Installer</name>
 
     <properties>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <workspace-installer-version>${maven.build.timestamp}</workspace-installer-version>
     </properties>
 
@@ -144,6 +145,23 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>linux_arm64</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${install-builder-executable}</executable>
+                            <arguments>
+                                <argument>build</argument>
+                                <argument>./liferay-workspace.xml</argument>
+                                <argument>linux-arm64</argument>
+                                <argument>--setvars</argument>
+                                <argument>project.version=${workspace-installer-version}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>                    
+                    <execution>
                         <id>windows</id>
                         <phase>package</phase>
                         <goals>
@@ -176,13 +194,22 @@
                                 <argument>project.version=${workspace-installer-version}</argument>
                             </arguments>
                         </configuration>
-                    </execution>
+                    </execution>                  
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>groovy-maven-plugin</artifactId>
-                <version>2.0</version>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>2.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>4.0.7</version>
+                        <type>pom</type>
+                        <scope>runtime</scope>                        
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>sign-app</id>
@@ -190,17 +217,21 @@
                         <goals>
                             <goal>execute</goal>
                         </goals>
+                         <configuration>
+                            <properties>
+                                <appPath>${pom.basedir}/../outputs/LiferayWorkspace-${workspace-installer-version}-osx-installer.app</appPath>
+                                <signingServerURL>${signingServerURL}</signingServerURL>
+                                <signApps>${signApps}</signApps>
+                                <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
+                                <createDmg>true</createDmg>
+                            </properties>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
-                    <properties>
-                        <appPath>${pom.basedir}/../outputs/LiferayWorkspace-${workspace-installer-version}-osx-installer.app</appPath>
-                        <signingServerURL>${signingServerURL}</signingServerURL>
-                        <signApps>${signApps}</signApps>
-                        <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
-                        <createDmg>true</createDmg>
-                    </properties>
-                    <source>${pom.basedir}/../shared/scripts/SignApp.groovy</source>
+                    <scripts>
+                         <script>${pom.basedir}/../shared/scripts/SignApp.groovy</script>
+                    </scripts>
                 </configuration>
             </plugin>
             <plugin>

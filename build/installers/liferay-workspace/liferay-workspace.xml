@@ -34,8 +34,14 @@
                 <folder>
                     <description>Program Files</description>
                     <destination>${installdir}</destination>
-                    <name>programfileslinux</name>
-                    <platforms>linux</platforms>
+                    <name>programfileslinux_arm64</name>
+                    <platforms>linux-arm64</platforms>
+                </folder>
+                <folder>
+                    <description>Program Files</description>
+                    <destination>${installdir}</destination>
+                    <name>programfileslinux_x64</name>
+                    <platforms>linux-x64</platforms>
                 </folder>
                 <folder>
                     <description>Program Files</description>
