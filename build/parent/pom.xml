@@ -27,14 +27,14 @@
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <blade-latest-download-url>https://repository.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/4.1.2-SNAPSHOT/com.liferay.blade.cli-4.1.2-20230213.163811-6.jar</blade-latest-download-url>
-        <blade-latest-md5>fe2d4001c9de5b8d766c201ff8f4a0b2</blade-latest-md5>
+        <blade-latest-download-url>https://repository.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/4.1.2-SNAPSHOT/com.liferay.blade.cli-4.1.2-20230307.022352-12.jar</blade-latest-download-url>
+        <blade-latest-md5>cece7c00bb9e397bcfe17012bf0b9352</blade-latest-md5>
         <blade-392-download-url>https://repository.liferay.com/nexus/content/repositories/public/com/liferay/blade/com.liferay.blade.cli/3.9.2/com.liferay.blade.cli-3.9.2.jar</blade-392-download-url>
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
         <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/libs-release-local/org/bndtools/org.bndtools.p2/5.2.0/org.bndtools.p2-5.2.0.jar!</bndtools-site>
-        <eclipse-site>https://download.eclipse.org/releases/2019-06/201906191000/</eclipse-site>
+        <eclipse-site>https://download.eclipse.org/releases/2021-12/202112081000/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gmaven.runtime>1.8</gmaven.runtime>
         <gradle-site>https://download.eclipse.org/buildship/updates/e410/releases/3.x/3.1.2.v20190903-1732</gradle-site>
@@ -42,24 +42,22 @@
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <liferay-ide-tag>ga9</liferay-ide-tag>
-        <m2e-site>https://download.eclipse.org/technology/m2e/releases/1.13/1.13.0.20190716-1624/</m2e-site>
-        <m2e-wtp-site>https://download.eclipse.org/m2e-wtp/releases/1.4/1.4.3.20191209-1849/</m2e-wtp-site>
-        <m2e-archiver-site>https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
-        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
-        <maven-deps-plugin-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
-        <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20190602212107/repository/</orbit-site>
-        <osgi-bundles-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
+        <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20211213173813/repository</orbit-site>
         <sapphire-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/sapphire/9.1.1/</sapphire-site>
-        <sign-apps>false</sign-apps>
+        <osgi-bundles-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
+        <sign-apps>true</sign-apps>
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
-        <tycho-extras-version>2.4.0</tycho-extras-version>
-        <tycho-m2e-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/m2eclipse-tycho/0.9.0.201811261502/</tycho-m2e-site>
         <tycho-packaging-format>yyyyMMddHHmm'-ga9'</tycho-packaging-format>
         <tycho-version>2.4.0</tycho-version>
     </properties>
 
     <repositories>
+        <repository>
+            <id>lide-deps</id>
+            <layout>p2</layout>
+            <url>${osgi-bundles-site}</url>
+        </repository>   
         <repository>
             <id>eclipse</id>
             <layout>p2</layout>
@@ -69,11 +67,6 @@
             <id>orbit</id>
             <layout>p2</layout>
             <url>${orbit-site}</url>
-        </repository>
-        <repository>
-            <id>lide-deps</id>
-            <layout>p2</layout>
-            <url>${osgi-bundles-site}</url>
         </repository>
         <repository>
             <id>eclipse-xml-search</id>
@@ -101,26 +94,6 @@
             <url>${ivyde-site}</url>
         </repository>
         <repository>
-            <id>m2e</id>
-            <layout>p2</layout>
-            <url>${m2e-site}</url>
-        </repository>
-        <repository>
-            <id>m2e-wtp</id>
-            <layout>p2</layout>
-            <url>${m2e-wtp-site}</url>
-        </repository>
-        <repository>
-            <id>m2e-archiver</id>
-            <layout>p2</layout>
-            <url>${m2e-archiver-site}</url>
-        </repository>
-        <repository>
-            <id>tycho-m2e</id>
-            <layout>p2</layout>
-            <url>${tycho-m2e-site}</url>
-        </repository>
-        <repository>
             <id>tm</id>
             <layout>p2</layout>
             <url>${tm-site}</url>
@@ -134,11 +107,6 @@
             <id>sapphire</id>
             <layout>p2</layout>
             <url>${sapphire-site}</url>
-        </repository>
-        <repository>
-            <id>maven-deps-plugin</id>
-            <layout>p2</layout>
-            <url>${maven-deps-plugin-site}</url>
         </repository>
     </repositories>
 
@@ -249,6 +217,16 @@
                                 <ws>gtk</ws>
                                 <arch>x86_64</arch>
                             </environment>
+                            <environment>
+                                <os>macosx</os>
+                                <ws>cocoa</ws>
+                                <arch>aarch64</arch>
+                            </environment>
+                            <environment>
+                                <os>linux</os>
+                                <ws>gtk</ws>
+                                <arch>aarch64</arch>
+                            </environment>                             
                         </environments>
                     </configuration>
                 </plugin>
@@ -275,6 +253,16 @@
                                 <ws>gtk</ws>
                                 <arch>x86_64</arch>
                             </environment>
+                            <environment>
+                                <os>macosx</os>
+                                <ws>cocoa</ws>
+                                <arch>aarch64</arch>
+                            </environment>
+                            <environment>
+                                <os>linux</os>
+                                <ws>gtk</ws>
+                                <arch>aarch64</arch>
+                            </environment>                             
                         </environments>
                     </configuration>
                 </plugin>

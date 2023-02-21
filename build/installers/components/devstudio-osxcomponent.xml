@@ -8,21 +8,43 @@
         <folder>
             <description>Program Files</description>
             <destination>${installdir}</destination>
-            <name>programfiles</name>
+            <name>programfiles_osx_x86_64</name>
             <platforms>all</platforms>
             <distributionFileList>
                 <distributionFile>
                     <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</origin>
                 </distributionFile>
             </distributionFileList>
+            <shouldPackRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>osx</value>
+                </compareText>
+                <platformTest type="osx-arm64"  negate="1" />
+            </shouldPackRuleList>            
         </folder>
+        <folder>
+            <description>Program Files</description>
+            <destination>${installdir}</destination>
+            <name>programfiles_osx_arm64</name>
+            <platforms>all</platforms>
+            <distributionFileList>
+                <distributionFile>
+                    <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-macosx.cocoa.aarch64.zip</origin>
+                </distributionFile>
+            </distributionFileList>
+            <shouldPackRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>osx</value>
+                </compareText>
+                <platformTest type="osx-arm64" />
+            </shouldPackRuleList>
+        </folder>        
     </folderList>
-    <shouldPackRuleList>
-        <compareText>
-            <logic>contains</logic>
-            <nocase>1</nocase>
-            <text>${platform_name}</text>
-            <value>osx</value>
-        </compareText>
-    </shouldPackRuleList>
+
 </component>

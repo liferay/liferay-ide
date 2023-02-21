@@ -1,3 +1,7 @@
+import groovy.ant.AntBuilder
+import groovy.xml.XmlNodePrinter
+import groovy.xml.XmlParser
+
 def basedir = project.basedir.canonicalPath
 def repositoryDir = basedir + "/target/repository"
 def contentJar = repositoryDir  + "/content.jar"
@@ -45,7 +49,7 @@ def props = root.properties
 def sapphireSite = project.properties.getProperty("sapphire-site")
 addAssociateSite( root, sapphireSite )
 */
-
+/*
 class MyXmlNodePrinter extends XmlNodePrinter
 {
     MyXmlNodePrinter(PrintWriter out)
@@ -59,6 +63,7 @@ class MyXmlNodePrinter extends XmlNodePrinter
        out.print(value)
     }
 }
+*/
 
 println 'Overwriting content.xml'
 def writer = new StringWriter()

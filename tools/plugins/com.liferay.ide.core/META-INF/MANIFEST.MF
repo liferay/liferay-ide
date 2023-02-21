@@ -8,7 +8,7 @@ Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.google.gson,
  org.apache.commons.codec,
  org.apache.commons.collections,
- org.apache.commons.io;bundle-version=2.6,
+ org.apache.commons.io;bundle-version="2.6",
  org.apache.commons.lang,
  org.apache.commons.logging,
  org.apache.httpcomponents.httpcore,
