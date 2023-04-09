@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Server Deploy Tomcat DXP Tests
 Bundle-SymbolicName: com.liferay.ide.functional.server.deploy.tomcat.dxp.tests
-Bundle-Version: 3.9.8.qualifier
+Bundle-Version: 3.9.9.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.functional.liferay,
  com.liferay.ide.functional.server.deploy.base,

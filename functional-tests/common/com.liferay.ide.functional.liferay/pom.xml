@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests</groupId>
 		<artifactId>common-tests</artifactId>
-		<version>3.9.8-SNAPSHOT</version>
+		<version>3.9.9-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.liferay</artifactId>
