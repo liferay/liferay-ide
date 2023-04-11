@@ -172,7 +172,7 @@
                             <arguments>
                                 <argument>build</argument>
                                 <argument>./liferay-workspace-with-devstudio.xml</argument>
-                                <argument>windows</argument>
+                                <argument>windows-x64</argument>
                                 <argument>--setvars</argument>
                                 <argument>project.version=${studio-installer-version}</argument>
                             </arguments>
