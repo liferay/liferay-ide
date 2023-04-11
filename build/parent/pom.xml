@@ -21,14 +21,14 @@
 
     <groupId>com.liferay.ide</groupId>
     <artifactId>parent</artifactId>
-    <version>3.9.8-SNAPSHOT</version>
+    <version>3.9.9-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <blade-latest-download-url>https://repository.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/4.1.2-SNAPSHOT/com.liferay.blade.cli-4.1.2-20230213.163811-6.jar</blade-latest-download-url>
-        <blade-latest-md5>fe2d4001c9de5b8d766c201ff8f4a0b2</blade-latest-md5>
+        <blade-latest-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/4.1.2-SNAPSHOT/com.liferay.blade.cli-4.1.2-20230307.022352-12.jar</blade-latest-download-url>
+        <blade-latest-md5>cece7c00bb9e397bcfe17012bf0b9352</blade-latest-md5>
         <blade-392-download-url>https://repository.liferay.com/nexus/content/repositories/public/com/liferay/blade/com.liferay.blade.cli/3.9.2/com.liferay.blade.cli-3.9.2.jar</blade-392-download-url>
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
@@ -41,7 +41,7 @@
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
-        <liferay-ide-tag>ga9</liferay-ide-tag>
+        <liferay-ide-tag>ga10</liferay-ide-tag>
         <m2e-site>https://download.eclipse.org/technology/m2e/releases/1.13/1.13.0.20190716-1624/</m2e-site>
         <m2e-wtp-site>https://download.eclipse.org/m2e-wtp/releases/1.4/1.4.3.20191209-1849/</m2e-wtp-site>
         <m2e-archiver-site>https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>

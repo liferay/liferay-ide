@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.project.core;singleton:=true
-Bundle-Version: 3.9.8.qualifier
+Bundle-Version: 3.9.9.qualifier
 Bundle-Activator: com.liferay.ide.project.core.ProjectCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6)",

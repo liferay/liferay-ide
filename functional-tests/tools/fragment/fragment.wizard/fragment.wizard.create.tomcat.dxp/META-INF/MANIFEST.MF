@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Fragment Tomcat Wizard Create Tomcat DXP Tests
 Bundle-SymbolicName: com.liferay.ide.functional.fragment.wizard.create.tomcat.dxp.tests
-Bundle-Version: 3.9.8.qualifier
+Bundle-Version: 3.9.9.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.functional.fragment.wizard.base,
  com.liferay.ide.functional.liferay,

@@ -8,7 +8,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Gradle Core
 Bundle-SymbolicName: com.liferay.ide.gradle.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 3.9.8.qualifier
+Bundle-Version: 3.9.9.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.liferay.blade.gradle.tooling,
  com.liferay.ide.gradle.core,
