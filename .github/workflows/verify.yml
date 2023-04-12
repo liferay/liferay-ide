@@ -30,8 +30,8 @@ jobs:
           ./csf.sh
   Verify:
     name: Verify
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
+    runs-on: macos-latest
+    timeout-minutes: 60
     steps:
       - name: Checkout liferay-ide
         uses: actions/checkout@v3
@@ -48,16 +48,6 @@ jobs:
           java-version: 11
           distribution: 'zulu'
           cache: maven
-
-      - name: Free space
-        run: |
-          sudo swapoff -a
-          sudo swapon -a
-          docker rmi $(docker image ls -aq)
-          df -h
-#          sudo swapoff /swapfile
-#          sudo rm -f /swapfile
-        continue-on-error: true
 
       - name: Cache
         uses: actions/cache@v3
