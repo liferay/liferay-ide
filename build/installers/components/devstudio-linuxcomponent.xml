@@ -15,14 +15,14 @@
                     <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-linux.gtk.x86_64.zip</origin>
                 </distributionFile>
             </distributionFileList>
+            <shouldPackRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>linux-x64</value>
+                </compareText>
+            </shouldPackRuleList>
         </folder>
     </folderList>
-    <shouldPackRuleList>
-        <compareText>
-            <logic>contains</logic>
-            <nocase>1</nocase>
-            <text>${platform_name}</text>
-            <value>linux</value>
-        </compareText>
-    </shouldPackRuleList>
 </component>

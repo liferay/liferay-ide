@@ -1,0 +1,28 @@
+<component>
+    <name>linux_arm64_component</name>
+    <description>linuxarm64-Component</description>
+    <canBeEdited>0</canBeEdited>
+    <selected>1</selected>
+    <show>1</show>
+    <folderList>
+        <folder>
+            <description>Program Files</description>
+            <destination>${installdir}</destination>
+            <name>programfiles</name>
+            <platforms>all</platforms>
+            <distributionFileList>
+                <distributionFile>
+                    <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-linux.gtk.aarch64.zip</origin>
+                </distributionFile>
+            </distributionFileList>
+            <shouldPackRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>linux-arm64</value>
+                </compareText>
+            </shouldPackRuleList>
+        </folder>
+    </folderList>
+</component>

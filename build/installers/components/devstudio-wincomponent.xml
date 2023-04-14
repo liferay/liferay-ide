@@ -15,14 +15,14 @@
                     <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-win32.win32.x86_64.zip</origin>
                 </distributionFile>
             </distributionFileList>
+            <shouldPackRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>windows-x64</value>
+                </compareText>
+            </shouldPackRuleList>
         </folder>
     </folderList>
-    <shouldPackRuleList>
-        <compareText>
-            <logic>contains</logic>
-            <nocase>1</nocase>
-            <text>${platform_name}</text>
-            <value>win</value>
-        </compareText>
-    </shouldPackRuleList>
 </component>
