@@ -329,7 +329,9 @@
                 <addTextToFile>
                     <file>${installdir}/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</file>
                     <insertAt>beginning</insertAt>
-                    <text>-vm${text_escape}\r${text_escape}${libjli_path}${text_escape}\r${text_escape}</text>
+                     <text>-vm
+${libjli_path}
+</text>
                     <ruleList>
                         <isFalse>
                             <value>${java_autodetected}</value>
@@ -352,7 +354,9 @@
                 <addTextToFile>
                     <file>${installdir}/liferay-developer-studio/DeveloperStudio.ini</file>
                     <insertAt>beginning</insertAt>
-                    <text>-vm${text_escape}\r${text_escape}${java_executable}${text_escape}\r${text_escape}</text>
+                     <text>-vm
+${libjli_path}
+</text>
                     <ruleList>
                         <isFalse>
                             <value>${java_autodetected}</value>
