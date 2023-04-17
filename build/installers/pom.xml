@@ -45,7 +45,6 @@
     <modules>
         <module>liferay-workspace</module>
         <module>liferay-workspace-with-devstudio</module>
-        <module>installer-tests</module>
     </modules>
 
     <build>

@@ -34,7 +34,7 @@
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
         <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/libs-release-local/org/bndtools/org.bndtools.p2/5.2.0/org.bndtools.p2-5.2.0.jar!</bndtools-site>
-        <eclipse-site>https://download.eclipse.org/releases/2019-06/201906191000/</eclipse-site>
+        <eclipse-site>https://download.eclipse.org/releases/2022-06/202206151000/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gmaven.runtime>1.8</gmaven.runtime>
         <gradle-site>https://download.eclipse.org/buildship/updates/e410/releases/3.x/3.1.2.v20190903-1732</gradle-site>
@@ -249,6 +249,16 @@
                                 <ws>gtk</ws>
                                 <arch>x86_64</arch>
                             </environment>
+                            <environment>
+                                <os>macosx</os>
+                                <ws>cocoa</ws>
+                                <arch>aarch64</arch>
+                            </environment>
+                            <environment>
+                                <os>linux</os>
+                                <ws>gtk</ws>
+                                <arch>aarch64</arch>
+                            </environment>                            
                         </environments>
                     </configuration>
                 </plugin>
@@ -275,6 +285,16 @@
                                 <ws>gtk</ws>
                                 <arch>x86_64</arch>
                             </environment>
+                            <environment>
+                                <os>macosx</os>
+                                <ws>cocoa</ws>
+                                <arch>aarch64</arch>
+                            </environment>
+                            <environment>
+                                <os>linux</os>
+                                <ws>gtk</ws>
+                                <arch>aarch64</arch>
+                            </environment>                            
                         </environments>
                     </configuration>
                 </plugin>
