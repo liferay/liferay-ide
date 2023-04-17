@@ -329,7 +329,7 @@
                 <addTextToFile>
                     <file>${installdir}/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</file>
                     <insertAt>beginning</insertAt>
-                     <text>-vm
+                    <text>-vm
 ${libjli_path}
 </text>
                     <ruleList>
@@ -354,7 +354,7 @@ ${libjli_path}
                 <addTextToFile>
                     <file>${installdir}/liferay-developer-studio/DeveloperStudio.ini</file>
                     <insertAt>beginning</insertAt>
-                     <text>-vm
+                    <text>-vm
 ${libjli_path}
 </text>
                     <ruleList>
