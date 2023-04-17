@@ -100,8 +100,6 @@ public class JSFModuleProjectComponentSuitePossibleValues
 
 			connection = connection.timeout(10000);
 
-			//connection = connection.validateTLSCertificates(true);
-
 			Document document = connection.get();
 
 			Element select = document.getElementById(_select_element_id);
