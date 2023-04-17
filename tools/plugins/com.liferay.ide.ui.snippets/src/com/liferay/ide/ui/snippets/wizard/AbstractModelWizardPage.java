@@ -72,7 +72,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 			return new Object[0];
 		}
 
-		JDTBeanIntrospector beanIntrospector = JDTBeanIntrospector.forType(type);
+		JDTBeanIntrospector beanIntrospector = new JDTBeanIntrospector(type);
 
 		Map<String, JDTBeanProperty> properties = beanIntrospector.getProperties();
 

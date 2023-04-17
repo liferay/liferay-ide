@@ -34,7 +34,7 @@
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
         <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/libs-release-local/org/bndtools/org.bndtools.p2/5.2.0/org.bndtools.p2-5.2.0.jar!</bndtools-site>
-        <eclipse-site>https://download.eclipse.org/releases/2022-06/202206151000/</eclipse-site>
+        <eclipse-site>https://download.eclipse.org/releases/2021-12/202112081000/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gradle-site>https://download.eclipse.org/buildship/updates/e410/releases/3.x/3.1.2.v20190903-1732</gradle-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
