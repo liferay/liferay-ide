@@ -71,8 +71,6 @@ public class JSFModuleProjectArchetypeDefaultValueService
 
 			connection = connection.timeout(10000);
 
-			connection = connection.validateTLSCertificates(true);
-
 			Document document = connection.get();
 
 			Element archetype = document.getElementById(_archetype_element_id);
