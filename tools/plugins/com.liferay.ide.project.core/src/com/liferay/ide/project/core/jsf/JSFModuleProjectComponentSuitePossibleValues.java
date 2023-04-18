@@ -89,11 +89,13 @@ public class JSFModuleProjectComponentSuitePossibleValues
 		List<String> possibleValues = new ArrayList<>();
 
 		StringBuffer sb = new StringBuffer(
-			"https://faces.liferay.dev/home/-/archetype-portlet/liferay-portal-version/");
+			"https://www.liferayfaces.org/home/-/archetype-portlet/liferay-portal-version/");
 
 		sb.append(liferayVersion);
 
-		sb.append("/jsf-version/2.2/component-suite/jsf/build-tool/maven");
+		sb.append("+%28Portlet+3.0%29");
+
+		sb.append("/jsf-version/2.3/component-suite/jsf/build-tool/maven");
 
 		try {
 			Connection connection = Jsoup.connect(sb.toString());
