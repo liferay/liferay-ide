@@ -33,9 +33,11 @@ import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -476,14 +478,22 @@ public class PortalServerBehavior
 				_replaceJREConatiner(oldCp, newJRECp);
 			}
 			catch (Exception e) {
-
-				// ignore
-
 			}
 
 			File vmInstallLocation = vmInstall.getInstallLocation();
 
 			IPath jrePath = new Path(vmInstallLocation.getAbsolutePath());
+
+			Map<String, String> launchEnvrionment = launch.getAttribute(
+				ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map<String, String>)null);
+
+			if (launchEnvrionment == null) {
+				launchEnvrionment = new HashMap<>();
+			}
+
+			launchEnvrionment.put("JAVA_HOME", vmInstallLocation.getAbsolutePath());
+
+			launch.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, launchEnvrionment);
 
 			if (jrePath != null) {
 				IPath toolsPath = jrePath.append("lib/tools.jar");
