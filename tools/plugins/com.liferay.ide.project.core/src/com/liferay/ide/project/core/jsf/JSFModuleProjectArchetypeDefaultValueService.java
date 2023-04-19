@@ -132,11 +132,17 @@ public class JSFModuleProjectArchetypeDefaultValueService
 		NewLiferayJSFModuleProjectOp op = _op();
 
 		StringBuffer sb = new StringBuffer(
-			"https://faces.liferay.dev/home/-/archetype-portlet/liferay-portal-version/");
+			"https://www.liferayfaces.org/home/-/archetype-portlet/liferay-portal-version/");
 
 		sb.append(get(op.getLiferayVersion()));
 
-		sb.append("/jsf-version/2.2/component-suite/");
+		sb.append("+%28Portlet+3.0%29");
+
+		sb.append("/jsf-version/");
+
+		sb.append(get(op.getJSFVersion()));
+
+		sb.append("/component-suite/");
 
 		String templateName = get(op.getTemplateName());
 

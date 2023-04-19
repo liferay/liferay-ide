@@ -43,11 +43,15 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 
 	public Value<String> getArchetype();
 
+	public Value<String> getJSFVersion();
+
 	public Value<String> getLiferayVersion();
 
 	public Value<String> getTemplateName();
 
 	public void setArchetype(String value);
+
+	public void setJSFVersion(String value);
 
 	public void setLiferayVersion(String value);
 
@@ -56,9 +60,14 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 	@Service(impl = JSFModuleProjectArchetypeDefaultValueService.class)
 	public ValueProperty PROP_ARCHETYPE = new ValueProperty(TYPE, "Archetype");
 
-	@DefaultValue(text = "7.3")
+	@DefaultValue(text = "2.3")
+	@Label(standard = "JSF version")
+	@PossibleValues(values = {"2.2", "2.3"})
+	public ValueProperty PROP_JSF_VERSION = new ValueProperty(TYPE, "JSFVersion");
+
+	@DefaultValue(text = "7.4")
 	@Label(standard = "liferay version")
-	@PossibleValues(values = {"7.0", "7.1", "7.2", "7.3"})
+	@PossibleValues(values = {"7.0", "7.1", "7.2", "7.3", "7.4"})
 	public ValueProperty PROP_LIFERAY_VERSION = new ValueProperty(TYPE, "LiferayVersion");
 
 	@Service(
