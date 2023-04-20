@@ -355,7 +355,7 @@ ${libjli_path}
                     <file>${installdir}/liferay-developer-studio/DeveloperStudio.ini</file>
                     <insertAt>beginning</insertAt>
                     <text>-vm
-${libjli_path}
+${java_executable}
 </text>
                     <ruleList>
                         <isFalse>
