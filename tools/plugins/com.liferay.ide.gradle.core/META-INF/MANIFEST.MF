@@ -3,7 +3,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.liferay.ide.gradle.core.LiferayGradleCore
 Bundle-ClassPath: .,
  lib/gradle-tooling.jar,
- lib/groovy-2.4.3.jar
+ lib/groovy-4.0.7.jar
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Gradle Core
 Bundle-SymbolicName: com.liferay.ide.gradle.core;singleton:=true

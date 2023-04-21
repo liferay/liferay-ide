@@ -44,9 +44,9 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-                <version>2.1.0</version>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>1.4</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.groovy</groupId>
@@ -76,9 +76,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scripts>
-                        <script>${pom.basedir}/src/main/assembly/RemoveUnwantedInstallUnits.groovy</script>
-                    </scripts>
+                    <source>${pom.basedir}/src/main/assembly/RemoveUnwantedInstallUnits.groovy</source>
                 </configuration>
             </plugin>
             <plugin>
@@ -177,21 +175,12 @@
                         </configuration>
                     </plugin>
                     <plugin>
-                        <groupId>org.codehaus.gmavenplus</groupId>
-                        <artifactId>gmavenplus-plugin</artifactId>
-                        <version>2.1.0</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.groovy</groupId>
-                                <artifactId>groovy-all</artifactId>
-                                <version>4.0.7</version>
-                                <type>pom</type>
-                                <scope>runtime</scope>
-                            </dependency>
-                        </dependencies>
-                       <executions>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <version>2.0</version>
+                        <executions>
                             <execution>
-                                <id>sign-app-macos-x86</id>
+                                <id>sign-app-x86</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>execute</goal>
@@ -204,10 +193,11 @@
                                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
                                         <createDmg>false</createDmg>
                                     </properties>
+                                    <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source>
                                 </configuration>
                             </execution>
-                             <execution>
-                                <id>sign-app-macos-arm64</id>
+                            <execution>
+                                <id>sign-app-arm64</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>execute</goal>
@@ -220,14 +210,10 @@
                                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
                                         <createDmg>false</createDmg>
                                     </properties>
+                                    <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source>
                                 </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <scripts>
-                                <script>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</script>
-                            </scripts>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
