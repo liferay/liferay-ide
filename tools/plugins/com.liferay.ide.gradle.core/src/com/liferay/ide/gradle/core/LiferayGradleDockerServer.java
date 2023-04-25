@@ -131,7 +131,7 @@ public class LiferayGradleDockerServer implements IDockerServer {
 				LiferayGradleCore.logError("Can not find valid liferay workspace project.");
 			}
 
-			String[] tasks = {"removeDockerContainer", "cleanDockerImage", "createDockerContainer"};
+			String[] tasks = {"removeDockerContainer", "cleanDockerImage", "buildDockerImage", "createDockerContainer"};
 
 			monitor.beginTask("startDockerContainer", 100);
 
