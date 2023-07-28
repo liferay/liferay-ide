@@ -220,6 +220,7 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 		args.add("-Djboss.home.dir=\"" + bundlePath + "\"");
 		args.add("-Djboss.bind.address.management=localhost");
 		args.add("-Duser.timezone=GMT");
+		args.add("-Djdk.util.zip.disableZip64ExtraFieldValidation=true");
 
 		return args.toArray(new String[0]);
 	}
