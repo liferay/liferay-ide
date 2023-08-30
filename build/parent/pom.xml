@@ -27,8 +27,8 @@
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <blade-latest-download-url>https://repository.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/4.1.2-SNAPSHOT/com.liferay.blade.cli-4.1.2-20230425.080220-14.jar</blade-latest-download-url>
-        <blade-latest-md5>209251e2e308ea119def0941e1d78b1c</blade-latest-md5>
+        <blade-latest-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/5.0.1-SNAPSHOT/com.liferay.blade.cli-5.0.1-20230927.053520-3.jar</blade-latest-download-url>
+        <blade-latest-md5>73f74298226c1b1e818969fd064101d2</blade-latest-md5>
         <blade-392-download-url>https://repository.liferay.com/nexus/content/repositories/public/com/liferay/blade/com.liferay.blade.cli/3.9.2/com.liferay.blade.cli-3.9.2.jar</blade-392-download-url>
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
