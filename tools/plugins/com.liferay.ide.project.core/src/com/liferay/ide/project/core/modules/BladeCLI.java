@@ -15,8 +15,10 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -32,7 +34,10 @@ import java.util.Scanner;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
+import org.apache.tools.ant.types.Environment;
 
+import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -173,6 +178,58 @@ public class BladeCLI {
 		javaTask.setFailonerror(true);
 		javaTask.setJar(bladeCLIPath.toFile());
 		javaTask.setArgs(args);
+
+		IProxyService proxyService = LiferayCore.getProxyService();
+
+		IProxyData[] proxyDatas = proxyService.getProxyData();
+
+		for (IProxyData proxyData : proxyDatas) {
+			if (Objects.isNull(proxyData)) {
+				continue;
+			}
+
+			if (Objects.isNull(proxyData.getHost())) {
+				continue;
+			}
+
+			String proxyType = StringUtil.toLowerCase(proxyData.getType());
+
+			Environment.Variable proxyHostVariable = new Environment.Variable();
+
+			proxyHostVariable.setKey(proxyType + ".proxyHost");
+			proxyHostVariable.setValue(proxyData.getHost());
+
+			javaTask.addSysproperty(proxyHostVariable);
+
+			Environment.Variable proxyPortVariable = new Environment.Variable();
+
+			proxyPortVariable.setKey(proxyType + ".proxyPort");
+			proxyPortVariable.setValue(String.valueOf(proxyData.getPort()));
+
+			javaTask.addSysproperty(proxyPortVariable);
+
+			if (!proxyData.isRequiresAuthentication()) {
+				continue;
+			}
+
+			if (Objects.isNull(proxyData.getUserId()) || Objects.isNull(proxyData.getPassword())) {
+				continue;
+			}
+
+			Environment.Variable proxyUserVariable = new Environment.Variable();
+
+			proxyUserVariable.setKey(proxyType + ".proxyUser");
+			proxyUserVariable.setValue(proxyData.getUserId());
+
+			javaTask.addSysproperty(proxyUserVariable);
+
+			Environment.Variable proxyPasswordVariable = new Environment.Variable();
+
+			proxyPasswordVariable.setKey(proxyType + ".proxyPassword");
+			proxyPasswordVariable.setValue(proxyData.getPassword());
+
+			javaTask.addSysproperty(proxyPasswordVariable);
+		}
 
 		DefaultLogger logger = new DefaultLogger();
 
