@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -179,56 +181,63 @@ public class BladeCLI {
 		javaTask.setJar(bladeCLIPath.toFile());
 		javaTask.setArgs(args);
 
-		IProxyService proxyService = LiferayCore.getProxyService();
+		try {
+			IProxyService proxyService = LiferayCore.getProxyService();
 
-		IProxyData[] proxyDatas = proxyService.getProxyData();
+			URL downloadProductInfoUrl = new URL(_PRODUCT_INFO_URL);
 
-		for (IProxyData proxyData : proxyDatas) {
-			if (Objects.isNull(proxyData)) {
-				continue;
+			IProxyData[] proxyDatas = proxyService.select(downloadProductInfoUrl.toURI());
+
+			for (IProxyData proxyData : proxyDatas) {
+				if (Objects.isNull(proxyData)) {
+					continue;
+				}
+
+				if (Objects.isNull(proxyData.getHost())) {
+					continue;
+				}
+
+				String proxyType = StringUtil.toLowerCase(proxyData.getType());
+
+				Environment.Variable proxyHostVariable = new Environment.Variable();
+
+				proxyHostVariable.setKey(proxyType + ".proxyHost");
+				proxyHostVariable.setValue(proxyData.getHost());
+
+				javaTask.addSysproperty(proxyHostVariable);
+
+				Environment.Variable proxyPortVariable = new Environment.Variable();
+
+				proxyPortVariable.setKey(proxyType + ".proxyPort");
+				proxyPortVariable.setValue(String.valueOf(proxyData.getPort()));
+
+				javaTask.addSysproperty(proxyPortVariable);
+
+				if (!proxyData.isRequiresAuthentication()) {
+					continue;
+				}
+
+				if (Objects.isNull(proxyData.getUserId()) || Objects.isNull(proxyData.getPassword())) {
+					continue;
+				}
+
+				Environment.Variable proxyUserVariable = new Environment.Variable();
+
+				proxyUserVariable.setKey(proxyType + ".proxyUser");
+				proxyUserVariable.setValue(proxyData.getUserId());
+
+				javaTask.addSysproperty(proxyUserVariable);
+
+				Environment.Variable proxyPasswordVariable = new Environment.Variable();
+
+				proxyPasswordVariable.setKey(proxyType + ".proxyPassword");
+				proxyPasswordVariable.setValue(proxyData.getPassword());
+
+				javaTask.addSysproperty(proxyPasswordVariable);
 			}
-
-			if (Objects.isNull(proxyData.getHost())) {
-				continue;
-			}
-
-			String proxyType = StringUtil.toLowerCase(proxyData.getType());
-
-			Environment.Variable proxyHostVariable = new Environment.Variable();
-
-			proxyHostVariable.setKey(proxyType + ".proxyHost");
-			proxyHostVariable.setValue(proxyData.getHost());
-
-			javaTask.addSysproperty(proxyHostVariable);
-
-			Environment.Variable proxyPortVariable = new Environment.Variable();
-
-			proxyPortVariable.setKey(proxyType + ".proxyPort");
-			proxyPortVariable.setValue(String.valueOf(proxyData.getPort()));
-
-			javaTask.addSysproperty(proxyPortVariable);
-
-			if (!proxyData.isRequiresAuthentication()) {
-				continue;
-			}
-
-			if (Objects.isNull(proxyData.getUserId()) || Objects.isNull(proxyData.getPassword())) {
-				continue;
-			}
-
-			Environment.Variable proxyUserVariable = new Environment.Variable();
-
-			proxyUserVariable.setKey(proxyType + ".proxyUser");
-			proxyUserVariable.setValue(proxyData.getUserId());
-
-			javaTask.addSysproperty(proxyUserVariable);
-
-			Environment.Variable proxyPasswordVariable = new Environment.Variable();
-
-			proxyPasswordVariable.setKey(proxyType + ".proxyPassword");
-			proxyPasswordVariable.setValue(proxyData.getPassword());
-
-			javaTask.addSysproperty(proxyPasswordVariable);
+		}
+		catch (Exception exception) {
+			throw new BladeCLIException(exception.getMessage());
 		}
 
 		DefaultLogger logger = new DefaultLogger();
@@ -289,6 +298,8 @@ public class BladeCLI {
 
 		return new Path(bladeJarBundleFile.getCanonicalPath());
 	}
+
+	private static final String _PRODUCT_INFO_URL = "https://releases.liferay.com/tools/workspace/.product_info.json";
 
 	private static String _bladeJarName = null;
 
