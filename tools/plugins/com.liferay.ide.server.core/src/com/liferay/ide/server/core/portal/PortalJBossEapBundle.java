@@ -103,6 +103,7 @@ public class PortalJBossEapBundle extends PortalJBossBundle {
 		args.add("-Djboss.bind.address.management=localhost");
 		args.add("-Duser.timezone=GMT");
 		args.add("-Dorg.jboss.logmanager.nocolor=true");
+		args.add("-Djdk.util.zip.disableZip64ExtraFieldValidation=true");
 
 		return args.toArray(new String[0]);
 	}

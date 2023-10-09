@@ -345,6 +345,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		args.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
 		args.add("-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false");
 		args.add("-Duser.timezone=GMT");
+		args.add("-Djdk.util.zip.disableZip64ExtraFieldValidation=true");
 
 		return args.toArray(new String[0]);
 	}
