@@ -56,16 +56,3 @@ jobs:
         shell: bash
         run: |
           ./run-tests.sh
-      - name: Upload tests
-        uses: actions/upload-artifact@v1
-        if: ${{ failure() }}
-        with:
-          name: surefire-reports.tar.gz
-          path: surefire-reports.tar.gz
-      - name: Run reporter
-        uses: check-run-reporter/action@v2.11.2
-        if: ${{ always() }}
-        with:
-          label: "Maven surefire test reports"
-          report: "**/TEST-*.xml"
-          token: "000f9d8e-4211-4cb7-9438-cb165d0db32a"
