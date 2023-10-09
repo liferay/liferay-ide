@@ -49,9 +49,9 @@ public class BladeCLITests
 
         Domain domain = Domain.domain( bladeFile );
 
-        assertTrue( domain.getBundleVersion().startsWith( "4" ) );
+        assertTrue( domain.getBundleVersion().startsWith( "5" ) );
 
-        assertFalse( domain.getBundleVersion().startsWith( "3" ) );
+        assertFalse( domain.getBundleVersion().startsWith( "4" ) );
     }
 
     @Test
