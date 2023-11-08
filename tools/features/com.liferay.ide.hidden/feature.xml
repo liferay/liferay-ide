@@ -61,7 +61,7 @@
 		unpack="false"
 		version="0.0.0"
 	/>
-	
+
 	<plugin
 		download-size="0"
 		id="org.apache.commons.logging"

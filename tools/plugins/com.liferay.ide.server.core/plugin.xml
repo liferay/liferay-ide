@@ -1499,19 +1499,6 @@
 		point="org.eclipse.wst.server.core.serverTypes"
 	>
 		<serverType
-			behaviourClass="com.liferay.ide.server.remote.RemoteServerBehavior"
-			class="com.liferay.ide.server.remote.RemoteServer"
-			description="%server.type.description"
-			hasConfiguration="true"
-			id="com.liferay.ide.eclipse.server.remote"
-			launchConfigId="com.liferay.ide.server.remote.launchConfigurationType"
-			name="%server.type.name"
-			runtime="true"
-			runtimeTypeId="com.liferay.ide.eclipse.server.runtime.stub"
-			supportsRemoteHosts="true"
-		>
-		</serverType>
-		<serverType
 			behaviourClass="com.liferay.ide.server.core.portal.PortalServerBehavior"
 			class="com.liferay.ide.server.core.portal.PortalServerDelegate"
 			description="Liferay 7.x"
@@ -1547,16 +1534,6 @@
 	<extension
 		point="org.eclipse.debug.core.launchConfigurationTypes"
 	>
-		<launchConfigurationType
-			delegate="com.liferay.ide.server.remote.RemoteLaunchConfigDelegate"
-			id="com.liferay.ide.server.remote.launchConfigurationType"
-			modes="run, debug"
-			name="%launch.configuration.type.name"
-			public="true"
-			sourceLocatorId="com.liferay.ide.server.core.portal.sourceLocator"
-			sourcePathComputerId="com.liferay.ide.server.remote.sourcePathComputer"
-		>
-		</launchConfigurationType>
 		<launchConfigurationType
 			delegate="com.liferay.ide.server.core.portal.PortalServerLaunchConfigDelegate"
 			id="com.liferay.ide.server.portal.launch"
@@ -1673,15 +1650,6 @@
 		</runtimeClasspathProvider>
 	</extension>
 	<extension
-		point="org.eclipse.debug.core.sourcePathComputers"
-	>
-		<sourcePathComputer
-			class="com.liferay.ide.server.remote.RemoteSourcePathComputerDelegate"
-			id="com.liferay.ide.server.remote.sourcePathComputer"
-		>
-		</sourcePathComputer>
-	</extension>
-	<extension
 		point="org.eclipse.wst.server.core.moduleTypes"
 	>
 		<moduleType
@@ -1709,17 +1677,6 @@
 		>
 		</sourcePathComputer>
 	</extension>
-	<!--
-<extension
-	point="com.liferay.ide.server.core.portalBundles"
->
-	<portalBundle
-		class="com.liferay.ide.server.core.portal.PortalJBossBundleFactory"
-		type="jboss"
-	>
-	  </portalBundle>
-</extension>
--->
 	<extension
 		point="com.liferay.ide.server.core.portalBundles"
 	>
@@ -1735,6 +1692,15 @@
 		<portalBundle
 			class="com.liferay.ide.server.core.portal.PortalJBossEapBundleFactory"
 			type="jboss"
+		>
+		</portalBundle>
+	</extension>
+	<extension
+		point="com.liferay.ide.server.core.portalBundles"
+	>
+		<portalBundle
+			class="com.liferay.ide.server.core.portal.PortalTomcatBundleFactory"
+			type="tomcat"
 		>
 		</portalBundle>
 	</extension>

@@ -16,6 +16,8 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.MultiStatusBuilder;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -29,6 +31,7 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Gregory Amerson
@@ -42,9 +45,9 @@ public class LiferayMavenCore extends Plugin {
 
 	public static final String PLUGIN_ID = "com.liferay.ide.maven.core";
 
-	// set maven project context root with suffix
-
 	public static final String PREF_ADD_MAVEN_PLUGIN_SUFFIX = "add-maven-plugin-suffix";
+
+	// set maven project context root with suffix
 
 	public static final String PREF_ARCHETYPE_GAV_EXT = "archetype-gav-ext";
 
@@ -76,8 +79,6 @@ public class LiferayMavenCore extends Plugin {
 
 	public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
 
-	// The key of disable customJspValidation checking
-
 	public static Status createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, msg, null);
 	}
@@ -89,6 +90,8 @@ public class LiferayMavenCore extends Plugin {
 	public static IStatus createErrorStatus(Throwable throwable) {
 		return createErrorStatus(throwable.getMessage(), throwable);
 	}
+
+	// The key of disable customJspValidation checking
 
 	public static IStatus createMultiStatus(int severity, IStatus[] statuses) {
 		return new MultiStatus(
@@ -141,20 +144,40 @@ public class LiferayMavenCore extends Plugin {
 	public LiferayMavenCore() {
 	}
 
+	public LiferayArchetypePlugin getArchetypePlugin() {
+		synchronized (this) {
+			if (_archetypeManager == null) {
+				_archetypeManager = new ServiceTracker<>(_context, LiferayArchetypePlugin.class, null);
+
+				_archetypeManager.open();
+			}
+		}
+
+		return _archetypeManager.getService();
+	}
+
 	public void start(BundleContext context) throws Exception {
+		_context = context;
 		super.start(context);
 
 		_plugin = this;
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		if (Objects.nonNull(_archetypeManager)) {
+			_archetypeManager.close();
+		}
+
 		_plugin = null;
 		super.stop(context);
 	}
 
-	// The plug-in ID
-
 	private static LiferayMavenCore _plugin;
 	private static final IScopeContext[] _scopes = {InstanceScope.INSTANCE, DefaultScope.INSTANCE};
+
+	// The plug-in ID
+
+	private ServiceTracker<LiferayArchetypePlugin, LiferayArchetypePlugin> _archetypeManager;
+	private BundleContext _context;
 
 }

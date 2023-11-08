@@ -12,11 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.server.tomcat.core;
+package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
-import com.liferay.ide.server.core.portal.PortalBundle;
 
 import java.util.Map;
 

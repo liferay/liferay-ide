@@ -4,8 +4,9 @@ Bundle-Activator: com.liferay.ide.upgrade.problems.core.internal.UpgradeProblems
 Bundle-ClassPath: .,
  libs/com.liferay.markdown.parser.jar
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.upgrade.problems.core
 Bundle-Name: Liferay IDE Upgrade Problems Core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.9.9.qualifier

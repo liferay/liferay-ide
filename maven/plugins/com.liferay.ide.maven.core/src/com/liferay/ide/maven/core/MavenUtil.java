@@ -29,9 +29,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,7 +73,6 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenConfiguration;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
-import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.AbstractProjectScanner;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -82,6 +83,7 @@ import org.eclipse.m2e.core.project.LocalProjectScanner;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.wtp.ProjectUtils;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
 
@@ -350,6 +352,18 @@ public class MavenUtil {
 		return retval;
 	}
 
+	public static IProject getProject(ProjectConfigurationRequest request) {
+		if (Objects.nonNull(request)) {
+			IMavenProjectFacade mavenProjectFacade = request.mavenProjectFacade();
+
+			if (Objects.nonNull(mavenProjectFacade)) {
+				return mavenProjectFacade.getProject();
+			}
+		}
+
+		return null;
+	}
+
 	public static IMavenProjectFacade getProjectFacade(IProject project) {
 		return getProjectFacade(project, new NullProgressMonitor());
 	}
@@ -437,12 +451,8 @@ public class MavenUtil {
 	public static List<IMavenProjectImportResult> importProject(String location, IProgressMonitor monitor)
 		throws CoreException, InterruptedException {
 
-		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
-
-		File root = CoreUtil.getWorkspaceRootFile();
-
 		AbstractProjectScanner<MavenProjectInfo> scanner = new LocalProjectScanner(
-			root, location, false, mavenModelManager);
+			Arrays.asList(location), false, MavenPlugin.getMavenModelManager());
 
 		scanner.run(monitor);
 
@@ -516,9 +526,7 @@ public class MavenUtil {
 					break;
 				}
 
-				IMaven maven = MavenPlugin.getMaven();
-
-				MavenProject parentProject = maven.resolveParentProject(mavenProject, monitor);
+				MavenProject parentProject = mavenProject.getParent();
 
 				if (parentProject != null) {
 					mavenProject.setParent(parentProject);
@@ -557,12 +565,8 @@ public class MavenUtil {
 	public static void updateProjectConfiguration(String projectName, String location, IProgressMonitor monitor)
 		throws InterruptedException {
 
-		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
-
-		File root = CoreUtil.getWorkspaceRootFile();
-
 		AbstractProjectScanner<MavenProjectInfo> scanner = new LocalProjectScanner(
-			root, location, false, mavenModelManager);
+			Arrays.asList(location), false, MavenPlugin.getMavenModelManager());
 
 		scanner.run(monitor);
 

@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.layouttpl.ui
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.layouttpl.ui;singleton:=true
 Bundle-Version: 3.9.9.qualifier
@@ -26,7 +27,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.xml.core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.ui,
  com.liferay.ide.layouttpl.ui.draw2d,

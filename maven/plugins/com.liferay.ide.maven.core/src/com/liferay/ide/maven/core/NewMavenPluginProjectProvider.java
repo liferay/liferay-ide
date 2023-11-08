@@ -33,27 +33,29 @@ import java.io.IOException;
 
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.RequiredProperty;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.cli.configuration.SettingsXmlConfigurationProcessor;
 import org.apache.maven.model.Model;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -61,24 +63,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenConfiguration;
+import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.m2e.core.internal.MavenPluginActivator;
-import org.eclipse.m2e.core.internal.archetype.ArchetypeManager;
-import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.m2e.core.project.IMavenProjectImportResult;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
-import org.eclipse.m2e.core.project.MavenUpdateRequest;
+import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
-import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 import org.w3c.dom.Document;
+
+import org.xml.sax.SAXException;
 
 /**
  * @author Gregory Amerson
@@ -98,8 +96,6 @@ public class NewMavenPluginProjectProvider
 		IStatus retval = null;
 
 		IMavenConfiguration mavenConfiguration = MavenPlugin.getMavenConfiguration();
-		IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
-		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
 		String groupId = get(op.getGroupId());
 		String artifactId = get(op.getProjectName());
@@ -134,73 +130,61 @@ public class NewMavenPluginProjectProvider
 
 		archetype.setVersion(archetypeVersion);
 
-		MavenPluginActivator pluginActivator = MavenPluginActivator.getDefault();
+		LiferayMavenCore liferayMavenCore = LiferayMavenCore.getDefault();
 
-		ArchetypeManager archetypeManager = pluginActivator.getArchetypeManager();
+		LiferayArchetypePlugin archetypePlugin = liferayMavenCore.getArchetypePlugin();
 
-		ArtifactRepository remoteArchetypeRepository = archetypeManager.getArchetypeRepository(archetype);
+		Map<String, String> properties = new HashMap<>();
 
-		Properties properties = new Properties();
+		List<RequiredProperty> archProps = archetypePlugin.getRequiredProperties(
+			new LiferayMavenArchetype(archetype), monitor);
 
-		try {
-			List<?> archProps = archetypeManager.getRequiredProperties(archetype, remoteArchetypeRepository, monitor);
+		if (ListUtil.isNotEmpty(archProps)) {
+			for (Object prop : archProps) {
+				if (prop instanceof RequiredProperty) {
+					RequiredProperty rProp = (RequiredProperty)prop;
 
-			if (ListUtil.isNotEmpty(archProps)) {
-				for (Object prop : archProps) {
-					if (prop instanceof RequiredProperty) {
-						RequiredProperty rProp = (RequiredProperty)prop;
+					PluginType pluginType = get(op.getPluginType());
 
-						PluginType pluginType = get(op.getPluginType());
+					if (pluginType.equals(PluginType.theme)) {
+						String key = rProp.getKey();
 
-						if (pluginType.equals(PluginType.theme)) {
-							String key = rProp.getKey();
-
-							if (key.equals("themeParent")) {
-								properties.put(key, get(op.getThemeParent()));
-							}
-							else if (key.equals("themeType")) {
-								properties.put(key, ThemeUtil.getTemplateExtension(get(op.getThemeFramework())));
-							}
+						if (key.equals("themeParent")) {
+							properties.put(key, get(op.getThemeParent()));
 						}
-						else {
-							properties.put(rProp.getKey(), rProp.getDefaultValue());
+						else if (key.equals("themeType")) {
+							properties.put(key, ThemeUtil.getTemplateExtension(get(op.getThemeFramework())));
 						}
+					}
+					else {
+						properties.put(rProp.getKey(), rProp.getDefaultValue());
 					}
 				}
 			}
 		}
-		catch (UnknownArchetype e1) {
-			LiferayMavenCore.logError("Unable to find archetype required properties", e1);
-		}
 
 		ResolverConfiguration resolverConfig = new ResolverConfiguration();
+
+		resolverConfig.setResolveWorkspaceProjects(false);
 
 		if (!CoreUtil.isNullOrEmpty(activeProfilesValue)) {
 			resolverConfig.setSelectedProfiles(activeProfilesValue);
 		}
 
-		ProjectImportConfiguration configuration = new ProjectImportConfiguration(resolverConfig);
+		LiferayArchetypeGenerator generator = archetypePlugin.getGenerator();
 
-		List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
-			location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor);
+		Collection<MavenProjectInfo> newMavenProjects = generator.createArchetypeProjects(
+			location, new LiferayMavenArchetype(archetype), groupId, artifactId, version, javaPackage, properties,
+			false, monitor);
 
-		if (ListUtil.isNotEmpty(newProjects)) {
-			op.setImportProjectStatus(true);
+		for (MavenProjectInfo mavenInfo : newMavenProjects) {
+			MavenProjectInfo parentMavenProjectInfo = mavenInfo.getParent();
 
-			for (IProject project : newProjects) {
-				ProjectName projectName = projectNames.insert();
-
-				projectName.setName(project.getName());
+			if (Objects.nonNull(parentMavenProjectInfo)) {
+				continue;
 			}
-		}
 
-		if (ListUtil.isEmpty(newProjects)) {
-			retval = LiferayMavenCore.createErrorStatus("New project was not created due to unknown error");
-		}
-		else {
-			IProject firstProject = newProjects.get(0);
-
-			// add new profiles if it was specified to add to project or parent poms
+			File pomFile = mavenInfo.getPomFile();
 
 			if (!CoreUtil.isNullOrEmpty(activeProfilesValue)) {
 				String[] activeProfiles = activeProfilesValue.split(",");
@@ -263,44 +247,70 @@ public class NewMavenPluginProjectProvider
 				List<NewLiferayProfile> newProjectPomProfiles = getNewProfilesToSave(
 					activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.projectPom);
 
-				// only need to set the first project as nested projects should pickup the
-				// parent setting
-
-				IMavenProjectFacade newMavenProject = mavenProjectRegistry.getProject(firstProject);
-
-				IFile pomFile = newMavenProject.getPom();
-
-				IDOMModel domModel = null;
-
 				try {
-					IModelManager modelManager = StructuredModelManager.getModelManager();
+					DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
-					domModel = (IDOMModel)modelManager.getModelForEdit(pomFile);
+					DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+					Document pomDocument = docBuilder.parse(pomFile.getCanonicalPath());
 
 					for (NewLiferayProfile newProfile : newProjectPomProfiles) {
-						createNewLiferayProfileNode(domModel.getDocument(), newProfile);
+						createNewLiferayProfileNode(pomDocument, newProfile);
 					}
 
-					domModel.save();
+					TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
+					Transformer transformer = transformerFactory.newTransformer();
+
+					DOMSource source = new DOMSource(pomDocument);
+
+					StreamResult result = new StreamResult(pomFile);
+
+					transformer.transform(source, result);
 				}
-				catch (IOException ioe) {
+				catch (IOException | ParserConfigurationException | SAXException | TransformerException ioe) {
 					LiferayMavenCore.logError("Unable to save new Liferay profiles to project pom.", ioe);
 				}
-				finally {
-					if (domModel != null) {
-						domModel.releaseFromEdit();
-					}
-				}
+			}
+		}
 
-				for (IProject project : newProjects) {
-					try {
-						projectConfigurationManager.updateProjectConfiguration(
-							new MavenUpdateRequest(project, mavenConfiguration.isOffline(), true), monitor);
-					}
-					catch (Exception e) {
-						LiferayMavenCore.logError("Unable to update configuration for " + project.getName(), e);
-					}
-				}
+		ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration(resolverConfig);
+
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+
+		List<IMavenProjectImportResult> importProjectResults = projectConfigurationManager.importProjects(
+			newMavenProjects, importConfiguration, null, monitor);
+
+		List<IProject> newProjects = new ArrayList<>();
+
+		for (IMavenProjectImportResult result : importProjectResults) {
+			IProject importProject = result.getProject();
+
+			if ((importProject != null) && importProject.exists()) {
+				newProjects.add(importProject);
+			}
+		}
+
+		if (ListUtil.isNotEmpty(newProjects)) {
+			op.setImportProjectStatus(true);
+
+			for (IProject project : newProjects) {
+				ProjectName projectName = projectNames.insert();
+
+				projectName.setName(project.getName());
+			}
+		}
+
+		if (ListUtil.isEmpty(newProjects)) {
+			retval = LiferayMavenCore.createErrorStatus("New project was not created due to unknown error");
+		}
+		else {
+			IProject firstProject = newProjects.get(0);
+
+			// add new profiles if it was specified to add to project or parent poms
+
+			if (!CoreUtil.isNullOrEmpty(activeProfilesValue)) {
+				String[] activeProfiles = activeProfilesValue.split(",");
 
 				String pluginVersion = getNewLiferayProfilesPluginVersion(
 					activeProfiles, op.getNewLiferayProfiles(), archetypeVersion);
@@ -348,10 +358,10 @@ public class NewMavenPluginProjectProvider
 		File pomFile = FileUtil.getFile(path.append(IMavenConstants.POM_FILE_NAME));
 
 		if (FileUtil.exists(pomFile)) {
-			IMaven maven = MavenPlugin.getMaven();
+			MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
 
 			try {
-				Model result = maven.readModel(pomFile);
+				Model result = mavenModelManager.readMavenModel(pomFile);
 
 				if (!Objects.equals("pom", result.getPackaging())) {
 					retval = LiferayMavenCore.createErrorStatus(

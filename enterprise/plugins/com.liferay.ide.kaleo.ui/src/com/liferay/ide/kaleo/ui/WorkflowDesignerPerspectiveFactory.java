@@ -75,7 +75,6 @@ public class WorkflowDesignerPerspectiveFactory extends LiferayPerspectiveFactor
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void createLayout(IPageLayout layout) {
 		String editorArea = layout.getEditorArea();
 
@@ -84,7 +83,7 @@ public class WorkflowDesignerPerspectiveFactory extends LiferayPerspectiveFactor
 		topLeft.addView(ID_PACKAGE_EXPLORER_VIEW);
 
 		topLeft.addPlaceholder(ID_J2EE_HIERARCHY_VIEW);
-		topLeft.addPlaceholder(IPageLayout.ID_RES_NAV);
+		//topLeft.addPlaceholder(IPageLayout.ID_RES_NAV);
 		topLeft.addPlaceholder(JavaUI.ID_TYPE_HIERARCHY);
 		topLeft.addPlaceholder(JavaUI.ID_PACKAGES_VIEW);
 

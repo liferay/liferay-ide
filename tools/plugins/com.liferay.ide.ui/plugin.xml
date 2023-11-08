@@ -47,13 +47,6 @@
 			name="Liferay Workspace"
 		>
 		</perspective>
-		<perspective
-			class="com.liferay.ide.ui.LiferayPerspectiveFactory"
-			icon="icons/liferay_legacy_logo_16.png"
-			id="com.liferay.ide.eclipse.ui.perspective.liferay"
-			name="Liferay Plugins (Legacy)"
-		>
-		</perspective>
 	</extension>
 	<extension
 		point="org.eclipse.ui.perspectiveExtensions"
@@ -65,10 +58,6 @@
 				id="com.liferay.ide.eclipse.ui.shortcuts.actionSet"
 			>
 			</actionSet>
-			<perspectiveShortcut
-				id="com.liferay.ide.eclipse.ui.perspective.liferay"
-			>
-			</perspectiveShortcut>
 			<newWizardShortcut
 				id="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard"
 			>
@@ -97,10 +86,6 @@
 				id="com.liferay.ide.eclipse.ui.shortcuts.actionSet"
 			>
 			</actionSet>
-			<perspectiveShortcut
-				id="com.liferay.ide.eclipse.ui.perspective.liferay"
-			>
-			</perspectiveShortcut>
 			<newWizardShortcut
 				id="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard"
 			>

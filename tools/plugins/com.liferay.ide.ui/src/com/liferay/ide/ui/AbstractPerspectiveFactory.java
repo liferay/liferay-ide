@@ -147,7 +147,6 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory 
 		layout.addShowViewShortcut(IPageLayout.ID_BOOKMARKS);
 		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 		layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
-		layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
 		layout.addShowViewShortcut(ID_WST_SNIPPETS_VIEW);
 		layout.addShowViewShortcut(ID_MARKERS_VIEW);
 		layout.addShowViewShortcut(ID_SEARCH_VIEW);

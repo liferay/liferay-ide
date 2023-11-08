@@ -25,18 +25,16 @@ import com.liferay.ide.project.core.modules.BaseModuleOp;
 
 import java.io.File;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 
-import org.apache.maven.archetype.ArchetypeGenerationRequest;
-import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 
 import org.eclipse.aether.artifact.Artifact;
-import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -44,8 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.m2e.core.internal.MavenPluginActivator;
-import org.eclipse.m2e.core.internal.embedder.MavenImpl;
+import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -145,7 +142,7 @@ public class NewMavenJSFModuleProjectProvider
 			throw new CoreException(LiferayCore.createErrorStatus("Unable to create project from archetype."));
 		}
 
-		Properties properties = new Properties();
+		Map<String, String> properties = new HashMap<>();
 
 		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
@@ -154,39 +151,17 @@ public class NewMavenJSFModuleProjectProvider
 		}
 
 		try {
-			MavenPluginActivator pluginActivator = MavenPluginActivator.getDefault();
+			LiferayMavenCore liferayMavenCore = LiferayMavenCore.getDefault();
 
-			ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
+			LiferayArchetypePlugin liferayArchetypePlugin = liferayMavenCore.getArchetypePlugin();
 
-			MavenImpl mavenImpl = pluginActivator.getMaven();
+			LiferayArchetypeGenerator generator = liferayArchetypePlugin.getGenerator();
 
-			request.setTransferListener(mavenImpl.createTransferListener(monitor));
+			Collection<MavenProjectInfo> projects = generator.createArchetypeProjects(
+				location, new LiferayMavenArchetype(archetype), groupId, artifactId, version, javaPackage, properties,
+				false, monitor);
 
-			request.setArchetypeGroupId(artifact.getGroupId());
-			request.setArchetypeArtifactId(artifact.getArtifactId());
-			request.setArchetypeVersion(artifact.getVersion());
-
-			RemoteRepository remoteRepository = AetherUtil.newCentralRepository();
-
-			request.setArchetypeRepository(remoteRepository.getUrl());
-
-			request.setGroupId(groupId);
-			request.setArtifactId(artifactId);
-			request.setVersion(version);
-			request.setPackage(javaPackage);
-
-			// the model does not have a package field
-
-			request.setLocalRepository(mavenImpl.getLocalRepository());
-			request.setRemoteArtifactRepositories(mavenImpl.getArtifactRepositories(true));
-			request.setProperties(properties);
-			request.setOutputDirectory(location.toPortableString());
-
-			ArchetypeGenerationResult result = _getArchetyper().generateProjectFromArchetype(request);
-
-			Exception cause = result.getCause();
-
-			if (cause != null) {
+			if (projects.isEmpty()) {
 				throw new CoreException(LiferayCore.createErrorStatus("Unable to create project from archetype."));
 			}
 
@@ -201,14 +176,6 @@ public class NewMavenJSFModuleProjectProvider
 		}
 
 		return projectLocation;
-	}
-
-	private ArchetypeManager _getArchetyper() {
-		MavenPluginActivator plugin = MavenPluginActivator.getDefault();
-
-		org.eclipse.m2e.core.internal.archetype.ArchetypeManager archetypeManager = plugin.getArchetypeManager();
-
-		return archetypeManager.getArchetyper();
 	}
 
 }

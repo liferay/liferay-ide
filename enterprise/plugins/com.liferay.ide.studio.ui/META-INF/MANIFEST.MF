@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.studio.ui
 Bundle-Name: Liferay Developer Studio UI
 Bundle-SymbolicName: com.liferay.ide.studio.ui;singleton:=true
 Bundle-Version: 3.9.9.qualifier
@@ -9,7 +10,6 @@ Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.project.core,
  com.liferay.ide.project.ui,
  com.liferay.ide.ui,
- com.liferay.ide.ui.snippets,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.sapphire.modeling;bundle-version="[9,10)",
@@ -17,7 +17,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.sapphire.ui;bundle-version="[9,10)",
  org.eclipse.ui,
  org.eclipse.ui.intro
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Export-Package: com.liferay.ide.studio.ui

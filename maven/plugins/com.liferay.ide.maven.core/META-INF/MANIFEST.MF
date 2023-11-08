@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.maven.core
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.maven.core;singleton:=true
 Bundle-Version: 3.9.9.qualifier
 Bundle-Activator: com.liferay.ide.maven.core.LiferayMavenCore
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6]",
+Require-Bundle: biz.aQute.bndlib,
  com.liferay.ide.core,
  com.liferay.ide.hook.core,
  com.liferay.ide.layouttpl.core,
@@ -21,11 +22,11 @@ Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6]",
  org.eclipse.jdt.launching,
  org.eclipse.jst.j2ee,
  org.eclipse.ltk.core.refactoring,
- org.eclipse.m2e.archetype.common;bundle-version="[1.13,2.0)",
- org.eclipse.m2e.core;bundle-version="[1.13,2.0)",
- org.eclipse.m2e.jdt;bundle-version="[1.13,2.0)",
- org.eclipse.m2e.maven.runtime;bundle-version="[1.13,2.0)",
- org.eclipse.m2e.wtp;bundle-version="[1.4,2.0)",
+ org.eclipse.m2e.archetype.common,
+ org.eclipse.m2e.core,
+ org.eclipse.m2e.jdt,
+ org.eclipse.m2e.maven.runtime,
+ org.eclipse.m2e.wtp,
  org.eclipse.sapphire.modeling;bundle-version="[9,10)",
  org.eclipse.sapphire.platform;bundle-version="[9,10)",
  org.eclipse.wst.common.frameworks,
@@ -33,8 +34,21 @@ Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6]",
  org.eclipse.wst.server.core,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core,
- org.json
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+ org.json,
+ org.eclipse.m2e.apt.core;bundle-version="2.2.100",
+ org.eclipse.m2e.apt.ui;bundle-version="2.0.400",
+ org.eclipse.m2e.discovery;bundle-version="2.0.200",
+ org.eclipse.m2e.launching;bundle-version="2.0.600",
+ org.eclipse.m2e.mavenarchiver;bundle-version="2.0.400",
+ org.eclipse.m2e.refactoring;bundle-version="2.0.301",
+ org.eclipse.osgi,
+ org.eclipse.equinox.registry,
+ org.osgi.service.component.annotations,
+ slf4j.api;bundle-version="2.0.7",
+ slf4j.simple;bundle-version="2.0.7",
+ org.slf4j.api;bundle-version="1.7.30",
+ org.slf4j.ext;bundle-version="1.7.30"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/maven-portal-support.jar
@@ -42,4 +56,6 @@ Export-Package: com.liferay.ide.maven,
  com.liferay.ide.maven.core,
  com.liferay.ide.maven.core.aether,
  com.liferay.ide.maven.core.model
-Service-Component: OSGI-INF/com.liferay.ide.maven.core.LiferayMavenLegacyProjectUpdater.xml
+Service-Component: OSGI-INF/com.liferay.ide.maven.core.LiferayArchetypeGenerator.xml,
+ OSGI-INF/com.liferay.ide.maven.core.LiferayArchetypePlugin.xml,
+ OSGI-INF/com.liferay.ide.maven.core.LiferayMavenLegacyProjectUpdater.xml

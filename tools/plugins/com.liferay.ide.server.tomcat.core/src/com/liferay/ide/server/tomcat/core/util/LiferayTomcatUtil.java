@@ -23,13 +23,13 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.IPluginPublisher;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.PortalContext;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
-import com.liferay.ide.server.tomcat.core.PortalContext;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 

@@ -57,6 +57,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
+import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -116,7 +117,9 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 					}
 
 					if (FileUtil.exists(pomFile)) {
-						Model model = maven.readModel(pomFile);
+						MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
+
+						Model model = mavenModelManager.readMavenModel(pomFile);
 
 						File parentDir = pomFile.getParentFile();
 
@@ -129,7 +132,8 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 							if (FileUtil.exists(parentDir)) {
 								try {
-									model = maven.readModel(new File(parentDir, IMavenConstants.POM_FILE_NAME));
+									model = mavenModelManager.readMavenModel(
+										new File(parentDir, IMavenConstants.POM_FILE_NAME));
 								}
 								catch (Exception e) {
 									model = null;
@@ -192,9 +196,9 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 			if (FileUtil.exists(parentPom)) {
 				try {
-					IMaven maven = MavenPlugin.getMaven();
+					MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
 
-					Model model = maven.readModel(parentPom);
+					Model model = mavenModelManager.readMavenModel(parentPom);
 
 					version.add(type.cast(model.getVersion()));
 
@@ -214,9 +218,9 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 			if (FileUtil.exists(parentPom)) {
 				try {
-					IMaven maven = MavenPlugin.getMaven();
+					MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
 
-					Model model = maven.readModel(parentPom);
+					Model model = mavenModelManager.readMavenModel(parentPom);
 
 					groupId.add(type.cast(model.getGroupId()));
 

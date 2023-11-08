@@ -77,4 +77,11 @@
 		</pluginManagement>
 	</build>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.liferay.ide.tools.plugins</groupId>
+			<artifactId>com.liferay.ide.core</artifactId>
+			<version>3.9.9-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

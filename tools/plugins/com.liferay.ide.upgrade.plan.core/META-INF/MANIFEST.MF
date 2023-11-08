@@ -2,8 +2,9 @@ Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.upgrade.plan.core
 Bundle-Name: Liferay IDE Upgrade Plan Core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.liferay.ide.upgrade.plan.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.9.9.qualifier

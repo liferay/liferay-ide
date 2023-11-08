@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.gradle.ui
 Bundle-Name: Liferay IDE Gradle UI
 Bundle-SymbolicName: com.liferay.ide.gradle.ui;singleton:=true
 Bundle-Version: 3.9.9.qualifier
@@ -35,7 +36,7 @@ Require-Bundle: com.google.guava,
  org.eclipse.wst.server.ui,
  org.eclipse.debug.ui,
  org.eclipse.jdt.debug.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.liferay.ide.gradle.ui

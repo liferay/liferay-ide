@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.project.core
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.project.core;singleton:=true
 Bundle-Version: 3.9.9.qualifier
 Bundle-Activator: com.liferay.ide.project.core.ProjectCore
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6)",
+Require-Bundle: biz.aQute.bndlib,
  com.google.gson,
  com.liferay.ide.core,
  com.liferay.ide.sdk.core,
@@ -38,7 +39,7 @@ Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6)",
  org.eclipse.wst.validation,
  org.eclipse.wst.xml.core,
  org.jsoup
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core,
  com.liferay.ide.project.core.descriptor,
@@ -54,6 +55,8 @@ Export-Package: com.liferay.ide.project.core,
  com.liferay.ide.project.core.util,
  com.liferay.ide.project.core.workspace,
  org.apache.commons.validator.routines
+Import-Package: org.eclipse.jdt.launching,
+ org.eclipse.wst.jsdt.launching
 Bundle-ClassPath: lib/commons-validator-1.6.jar,
  lib/jackson-core-asl-1.9.13.jar,
  lib/jackson-mapper-asl-1.9.13.jar,

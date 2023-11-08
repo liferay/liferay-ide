@@ -3,8 +3,9 @@ Bundle-Activator: com.liferay.ide.upgrade.problems.ui.internal.UpgradeProblemsUI
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.upgrade.problems.ui
 Bundle-Name: Liferay IDE Upgrade Problems UI
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.ui;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.9.9.qualifier

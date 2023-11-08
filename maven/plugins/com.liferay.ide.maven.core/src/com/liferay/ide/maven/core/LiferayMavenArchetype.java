@@ -12,28 +12,37 @@
  * details.
  */
 
-package com.liferay.ide.project.ui;
+package com.liferay.ide.maven.core;
 
-import java.util.Objects;
+import org.apache.maven.archetype.catalog.Archetype;
 
-import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.m2e.core.project.IArchetype;
 
 /**
- * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class BuildFilePropertyTester extends PropertyTester {
+@SuppressWarnings("restriction")
+public class LiferayMavenArchetype implements IArchetype {
 
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (receiver instanceof IFile) {
-			IFile file = (IFile)receiver;
-
-			if (file.exists() && Objects.equals("build.xml", file.getName())) {
-				return true;
-			}
-		}
-
-		return false;
+	public LiferayMavenArchetype(Archetype archetype) {
+		_archetype = archetype;
 	}
+
+	@Override
+	public String getArtifactId() {
+		return _archetype.getArtifactId();
+	}
+
+	@Override
+	public String getGroupId() {
+		return _archetype.getGroupId();
+	}
+
+	@Override
+	public String getVersion() {
+		return _archetype.getVersion();
+	}
+
+	private Archetype _archetype;
 
 }

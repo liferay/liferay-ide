@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.kaleo.ui
 Bundle-Name: Liferay IDE Kaleo UI
 Bundle-SymbolicName: com.liferay.ide.kaleo.ui;singleton:=true
 Bundle-Version: 3.9.9.qualifier
@@ -37,7 +38,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.xml.core,
  org.eclipse.wst.xml.ui,
  org.json
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.kaleo.ui,
  com.liferay.ide.kaleo.ui.action,

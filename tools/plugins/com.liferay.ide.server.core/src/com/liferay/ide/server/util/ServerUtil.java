@@ -1199,6 +1199,22 @@ public class ServerUtil {
 		return false;
 	}
 
+	public static boolean isLiferayPortal(File file) {
+		File webXMLFile = new File(file, "WEB-INF/web.xml");
+
+		if (FileUtil.notExists(webXMLFile)) {
+			return false;
+		}
+
+		String fileContents = FileUtil.readContents(webXMLFile);
+
+		if (fileContents.contains("id=\"Liferay_Portal\"")) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static boolean isLiferayRuntime(BridgedRuntime bridgedRuntime) {
 		if (bridgedRuntime != null) {
 			String id = bridgedRuntime.getProperty("id");

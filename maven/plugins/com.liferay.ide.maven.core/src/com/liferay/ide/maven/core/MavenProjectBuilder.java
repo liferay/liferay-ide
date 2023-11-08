@@ -406,7 +406,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 			File pomFile = new File(FileUtil.getLocationOSString(project), IMavenConstants.POM_FILE_NAME);
 
-			Model model = maven.readModel(pomFile);
+			Model model = mavenProject.getModel();
 
 			for (Artifact artifact : dependencies) {
 				Dependency dependency = new Dependency();

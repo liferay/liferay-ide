@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<scr:component activate="activate" deactivate="shutdown" name="com.liferay.ide.maven.core.LiferayArchetypePlugin" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<service>
+		<provide interface="com.liferay.ide.maven.core.LiferayArchetypePlugin" />
+	</service>
+	<reference cardinality="1..1" field="archetypeGenerator" interface="com.liferay.ide.maven.core.LiferayArchetypeGenerator" name="archetypeGenerator" />
+	<reference cardinality="1..1" field="maven" interface="org.eclipse.m2e.core.embedder.IMaven" name="maven" />
+	<implementation class="com.liferay.ide.maven.core.LiferayArchetypePlugin" />
+</scr:component>
