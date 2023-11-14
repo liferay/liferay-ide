@@ -33,22 +33,20 @@
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
-        <bndtools-site>https://bndtools.jfrog.io/bndtools/update-latest/libs-release-local/org/bndtools/org.bndtools.p2/5.2.0/org.bndtools.p2-5.2.0.jar!</bndtools-site>
-        <eclipse-site>https://download.eclipse.org/releases/2022-03/202203161000/</eclipse-site>
+        <bndtools-site>https://bndtools.jfrog.io/artifactory/update-latest/org/bndtools/org.bndtools.p2/5.3.0/org.bndtools.p2-5.3.0.jar!</bndtools-site>
+        <eclipse-site>https://download.eclipse.org/releases/2023-09/202309131000/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
-        <gradle-site>https://download.eclipse.org/buildship/updates/e410/releases/3.x/3.1.2.v20190903-1732</gradle-site>
-        <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.5.0.final_20191020104435/</ivy-site>
-        <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
+        <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.7.v20230428-1350</gradle-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <liferay-ide-tag>ga9</liferay-ide-tag>
-        <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20211213173813/repository</orbit-site>
+        <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20230531010532/repository</orbit-site>
         <sapphire-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/sapphire/9.1.1/</sapphire-site>
         <osgi-bundles-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
         <sign-apps>false</sign-apps>
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
         <tycho-packaging-format>yyyyMMddHHmm'-ga9'</tycho-packaging-format>
-        <tycho-version>3.0.3</tycho-version>
+        <tycho-version>3.0.5</tycho-version>
     </properties>
 
     <repositories>
@@ -81,16 +79,6 @@
             <id>gradle</id>
             <layout>p2</layout>
             <url>${gradle-site}</url>
-        </repository>
-        <repository>
-            <id>ivy</id>
-            <layout>p2</layout>
-            <url>${ivy-site}</url>
-        </repository>
-        <repository>
-            <id>ivyde</id>
-            <layout>p2</layout>
-            <url>${ivyde-site}</url>
         </repository>
         <repository>
             <id>tm</id>
@@ -163,6 +151,9 @@
                     <artifactId>tycho-maven-plugin</artifactId>
                     <version>${tycho-version}</version>
                     <extensions>true</extensions>
+                    <configuration>
+                        <digest>sha256</digest>
+                    </configuration>                    
                 </plugin>
 
                 <plugin>

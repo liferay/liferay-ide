@@ -68,9 +68,11 @@ public class MarkdownParser {
 		if (retval == null) {
 			String markdown = _readStreamToString(MarkdownParser.class.getResourceAsStream(fileName), true);
 
-			MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
+			//MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
 
-			String html = markdownConverter.convert(markdown);
+			//String html = markdownConverter.convert(markdown);
+			
+			String html = "";
 
 			Map<String, String> sections = _parseHtml(html);
 

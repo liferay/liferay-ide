@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.BackgroundTaskLegacyAPI">
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.summary" value="All BackgroundTask APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service into separate OSGi modules"/>

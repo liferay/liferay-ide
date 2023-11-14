@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.UserServicesThrownExceptionsChanges">
    <property name="file.extensions" value="java"/>
    <property name="problem.title" value="Changes in Exceptions Thrown by User Services"/>

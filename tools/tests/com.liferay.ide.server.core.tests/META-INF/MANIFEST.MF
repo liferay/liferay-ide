@@ -8,7 +8,6 @@ Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.core.tests,
  com.liferay.ide.project.core,
  com.liferay.ide.server.core,
- com.liferay.ide.server.tomcat.core,
  org.eclipse.core.runtime,
  org.eclipse.debug.core,
  org.eclipse.jdt.launching,
@@ -18,6 +17,6 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.common.project.facet.core,
  org.eclipse.wst.server.core,
  org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.core.tests

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.commands.core.internal.buildservice.RebuildServicesCommand">
    <property name="id" value="rebuild_services"/>
    <service scope="prototype">

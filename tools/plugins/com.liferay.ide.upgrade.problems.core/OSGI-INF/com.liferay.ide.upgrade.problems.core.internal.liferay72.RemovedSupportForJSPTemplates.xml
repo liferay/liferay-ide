@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay72.RemovedSupportForJSPTemplates">
    <property name="file.extensions" value="xml"/>
    <property name="problem.summary" value="Themes can no longer leverage JSP templates. Also, related logic has been removed from the public APIs com.liferay.portal.kernel.util.ThemeHelper and com.liferay.taglib.util.ThemeUtil."/>

@@ -33,9 +33,7 @@
 	</license>
 
 	<requires>
-		<import feature="bndtools.main.feature" match="perfect" version="5.2.0.REL-202010142003-gc979114" />
-		<import feature="org.apache.ivy.feature" match="greaterOrEqual" version="2.3.0" />
-		<import feature="org.apache.ivyde.feature" match="greaterOrEqual" version="2.2.0" />
+		<import feature="bndtools.main.feature" match="greaterOrEqual" version="5.2.0.REL-202010142003-gc979114" />
 		<import feature="org.eclipse.buildship" match="greaterOrEqual" version="2.1.1" />
 		<import feature="org.eclipse.jsf.feature" match="greaterOrEqual" version="3.2.0" />
 		<import feature="org.eclipse.jst.common.fproj.enablement.jdt" match="greaterOrEqual" version="3.2.0" />
@@ -116,22 +114,6 @@
 
 	<plugin
 		download-size="0"
-		id="com.liferay.ide.server.tomcat.core"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.liferay.ide.server.tomcat.ui"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="com.liferay.ide.server.ui"
 		install-size="0"
 		unpack="false"
@@ -202,13 +184,13 @@
 		version="0.0.0"
 	/>
 
-	<plugin
+	<!--plugin
 		download-size="0"
 		id="com.liferay.ide.ui.snippets"
 		install-size="0"
 		unpack="false"
 		version="0.0.0"
-	/>
+	/-->
 
 	<plugin
 		download-size="0"

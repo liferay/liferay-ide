@@ -13,7 +13,6 @@ Require-Bundle: biz.aQute.bndlib,
  com.liferay.ide.server.core,
  com.liferay.ide.ui,
  org.apache.commons.io,
- org.apache.ivyde.eclipse,
  org.eclipse.ant.ui,
  org.eclipse.compare,
  org.eclipse.core.runtime,
@@ -48,7 +47,7 @@ Require-Bundle: biz.aQute.bndlib,
  org.eclipse.wst.web,
  org.eclipse.wst.web.ui,
  org.eclipse.wst.xml.core,
- org.eclipse.jdt.launching;bundle-version="3.20.100"
+ org.eclipse.jdt.launching
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

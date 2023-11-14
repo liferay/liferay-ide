@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.DLGetEntriesInvocation">
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.summary" value="The getEntries method was no longer used, and contained hardcoded references to classes that will be moved into OSGi bundles."/>

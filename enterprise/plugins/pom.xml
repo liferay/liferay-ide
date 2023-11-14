@@ -38,7 +38,6 @@
 
 	<modules>
 		<module>com.liferay.ide.kaleo.core</module>
-		<module>com.liferay.ide.kaleo.ui</module>
 		<module>com.liferay.ide.scripting.core</module>
 		<module>com.liferay.ide.studio.ui</module>
 	</modules>

@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-    <!--bundle id="com.liferay.ide.alloy.ui.tests" version="0.0.0" /-->
     <bundle id="com.liferay.ide.maven.core.tests" version="0.0.0" />
     <bundle id="com.liferay.ide.core.tests" version="0.0.0" />
-    <bundle id="com.liferay.ide.hook.core.tests" version="0.0.0" />
-    <!--bundle id="com.liferay.ide.hook.ui.tests" version="0.0.0" /-->
-    <bundle id="com.liferay.ide.layouttpl.core.tests" version="0.0.0" />
-    <bundle id="com.liferay.ide.portlet.core.tests" version="0.0.0" />
-    <!--bundle id="com.liferay.ide.portlet.ui.tests" version="0.0.0" /-->
     <bundle id="com.liferay.ide.project.core.tests" version="0.0.0" />
-    <!--bundle id="com.liferay.ide.project.ui.tests" version="0.0.0" /-->
     <bundle id="com.liferay.ide.server.core.tests" version="0.0.0" />
-    <bundle id="com.liferay.ide.service.core.tests" version="0.0.0" />
     <bundle id="com.liferay.ide.ui.tests" version="0.0.0" />
     <bundle id="com.liferay.ide.xml.search.ui.tests" version="0.0.0" />
 </site>
