@@ -45,11 +45,17 @@
         <sign-apps>false</sign-apps>
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
+        <jre-site>https://download.eclipse.org/justj/jres/17/updates/release/latest</jre-site>
         <tycho-packaging-format>yyyyMMddHHmm'-ga9'</tycho-packaging-format>
         <tycho-version>3.0.5</tycho-version>
     </properties>
 
     <repositories>
+        <repository>
+            <id>eclipse-jre</id>
+            <layout>p2</layout>
+            <url>${jre-site}</url>
+        </repository>
         <repository>
             <id>lide-deps</id>
             <layout>p2</layout>
@@ -207,6 +213,16 @@
                                 <ws>gtk</ws>
                                 <arch>x86_64</arch>
                             </environment>
+                            <environment>
+                                <os>linux</os>
+                                <ws>gtk</ws>
+                                <arch>aarch64</arch>
+                            </environment>
+                            <environment>
+                                <os>macosx</os>
+                                <ws>cocoa</ws>
+                                <arch>aarch64</arch>
+                            </environment>                                                      
                         </environments>
                     </configuration>
                 </plugin>
@@ -233,6 +249,16 @@
                                 <ws>gtk</ws>
                                 <arch>x86_64</arch>
                             </environment>
+                            <environment>
+                                <os>linux</os>
+                                <ws>gtk</ws>
+                                <arch>aarch64</arch>
+                            </environment>
+                            <environment>
+                                <os>macosx</os>
+                                <ws>cocoa</ws>
+                                <arch>aarch64</arch>
+                            </environment>                              
                         </environments>
                     </configuration>
                 </plugin>

@@ -83,13 +83,6 @@
 
 	<plugin
 		download-size="0"
-		id="com.liferay.ide.portlet.ui"
-		install-size="0"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="com.liferay.ide.project.core"
 		install-size="0"
 		unpack="false"
@@ -130,14 +123,6 @@
 
 	<plugin
 		download-size="0"
-		id="com.liferay.ide.layouttpl.ui"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="com.liferay.ide.theme.core"
 		install-size="0"
 		unpack="false"
@@ -154,23 +139,7 @@
 
 	<plugin
 		download-size="0"
-		id="com.liferay.ide.service.ui"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="com.liferay.ide.hook.core"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.liferay.ide.hook.ui"
 		install-size="0"
 		unpack="false"
 		version="0.0.0"
@@ -183,14 +152,6 @@
 		unpack="false"
 		version="0.0.0"
 	/>
-
-	<!--plugin
-		download-size="0"
-		id="com.liferay.ide.ui.snippets"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/-->
 
 	<plugin
 		download-size="0"

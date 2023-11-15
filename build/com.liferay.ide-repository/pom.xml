@@ -46,25 +46,14 @@
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
-                <version>2.1.0</version>
+                <version>3.0.2</version>
                 <dependencies>
                     <dependency>
-                        <groupId>org.apache.groovy</groupId>
-                        <artifactId>groovy-ant</artifactId>
-                        <version>4.0.7</version>
-                    </dependency>
-                   <dependency>
-                        <groupId>org.apache.groovy</groupId>
+                        <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-all</artifactId>
-                        <version>4.0.7</version>
+                        <version>3.0.19</version>
                         <type>pom</type>
-                        <scope>runtime</scope>                        
                     </dependency>
-                     <dependency>
-                        <groupId>org.apache.groovy</groupId>
-                        <artifactId>groovy-xml</artifactId>
-                        <version>4.0.7</version>
-                    </dependency>                   
                 </dependencies>
                 <executions>
                     <execution>
@@ -179,15 +168,14 @@
                     <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
                         <artifactId>gmavenplus-plugin</artifactId>
-                        <version>2.1.0</version>
+                        <version>3.0.2</version>
                         <dependencies>
                             <dependency>
-                                <groupId>org.apache.groovy</groupId>
+                                <groupId>org.codehaus.groovy</groupId>
                                 <artifactId>groovy-all</artifactId>
-                                <version>4.0.7</version>
+                                <version>3.0.19</version>
                                 <type>pom</type>
-                                <scope>runtime</scope>                        
-                            </dependency>
+                            </dependency>                
                         </dependencies>
                         <executions>
                             <execution>
@@ -220,7 +208,7 @@
                                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
                                         <createDmg>false</createDmg>
                                     </properties>
-                                    <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source>
+                                    <!-- <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source> -->
                                 </configuration>
                             </execution>
                         </executions>

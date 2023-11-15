@@ -14,23 +14,7 @@
 
 package com.liferay.ide.server.core.portal;
 
-import com.google.common.collect.Lists;
-
-import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.server.core.ILiferayServerBehavior;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
-import com.liferay.ide.server.util.PingThread;
-import com.liferay.ide.server.util.ServerUtil;
-
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -75,8 +59,21 @@ import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
-
 import org.osgi.framework.Bundle;
+
+import com.google.common.collect.Lists;
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.server.core.ILiferayServerBehavior;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
+import com.liferay.ide.server.util.PingThread;
+import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Gregory Amerson
@@ -381,6 +378,21 @@ public class PortalServerBehavior
 		}
 	}
 
+
+    private static String _updatePathString(String originalString, String newValue) {
+        // 使用等号分隔字符串
+        String[] parts = originalString.split("=");
+
+        if (parts.length != 2) {
+            return originalString;
+        }
+
+        String newPath =  newValue + ":" + parts[1] ;
+        String updatedString = parts[0] + "=" + newPath;
+
+        return updatedString;
+    }
+	
 	@Override
 	public void setupLaunchConfiguration(ILaunchConfigurationWorkingCopy launch, IProgressMonitor monitor)
 		throws CoreException {
@@ -493,7 +505,25 @@ public class PortalServerBehavior
 
 			launchEnvrionment.put("JAVA_HOME", vmInstallLocation.getAbsolutePath());
 
+			DebugPlugin debugplugin = DebugPlugin.getDefault();
+
+			ILaunchManager launchManager = debugplugin.getLaunchManager();
+
+			Map<String, String> nativeEnvrionment = launchManager.getNativeEnvironmentCasePreserved();
+
+			String pathEnvironment = nativeEnvrionment.get("PATH");
+
+			if (Objects.nonNull(pathEnvironment)) {
+				try {
+					launchEnvrionment.put("PATH", jrePath.toOSString() + ":" + pathEnvironment);
+				}
+				catch(Exception exception) {
+				}
+			}
+
 			launch.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, launchEnvrionment);
+
+			launch.setAttribute(ILaunchManager.ATTR_APPEND_ENVIRONMENT_VARIABLES, false);
 
 			if (jrePath != null) {
 				IPath toolsPath = jrePath.append("lib/tools.jar");

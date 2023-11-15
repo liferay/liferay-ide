@@ -44,10 +44,7 @@ Require-Bundle: biz.aQute.bndlib,
  org.eclipse.osgi,
  org.eclipse.equinox.registry,
  org.osgi.service.component.annotations,
- slf4j.api;bundle-version="2.0.7",
- slf4j.simple;bundle-version="2.0.7",
- org.slf4j.api;bundle-version="1.7.30",
- org.slf4j.ext;bundle-version="1.7.30"
+ slf4j.api
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
