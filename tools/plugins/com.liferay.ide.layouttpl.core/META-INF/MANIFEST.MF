@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.layouttpl.core
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.layouttpl.core;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.layouttpl.core.LayoutTplCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,

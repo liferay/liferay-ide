@@ -21,7 +21,7 @@
 
     <groupId>com.liferay.ide</groupId>
     <artifactId>parent</artifactId>
-    <version>3.9.9-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
@@ -38,7 +38,7 @@
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.7.v20230428-1350</gradle-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
-        <liferay-ide-tag>ga9</liferay-ide-tag>
+        <liferay-ide-tag>ga1</liferay-ide-tag>
         <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20230531010532/repository</orbit-site>
         <sapphire-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/sapphire/9.1.1/</sapphire-site>
         <osgi-bundles-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
@@ -46,8 +46,8 @@
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
         <jre-site>https://download.eclipse.org/justj/jres/17/updates/release/latest</jre-site>
-        <tycho-packaging-format>yyyyMMddHHmm'-ga9'</tycho-packaging-format>
-        <tycho-version>4.0.4</tycho-version>
+        <tycho-packaging-format>yyyyMMddHHmm'-ga1'</tycho-packaging-format>
+        <tycho-version>3.0.5</tycho-version>
     </properties>
 
     <repositories>
@@ -197,7 +197,6 @@
                         <resolver>p2</resolver>
                         <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.full-17</executionEnvironment>
                         <resolveWithExecutionEnvironmentConstraints>true</resolveWithExecutionEnvironmentConstraints>
-                        <ignoreTychoRepositories>true</ignoreTychoRepositories>
                         <allowConflictingDependencies>true</allowConflictingDependencies>
                         <environments>
                             <environment>
@@ -234,34 +233,6 @@
                     <version>${tycho-version}</version>
                     <configuration>
                         <format>${tycho-packaging-format}</format>
-                        <archiveSite>true</archiveSite>
-                        <environments>
-                            <environment>
-                                <os>win32</os>
-                                <ws>win32</ws>
-                                <arch>x86_64</arch>
-                            </environment>
-                            <environment>
-                                <os>macosx</os>
-                                <ws>cocoa</ws>
-                                <arch>x86_64</arch>
-                            </environment>
-                            <environment>
-                                <os>linux</os>
-                                <ws>gtk</ws>
-                                <arch>x86_64</arch>
-                            </environment>
-                            <environment>
-                                <os>linux</os>
-                                <ws>gtk</ws>
-                                <arch>aarch64</arch>
-                            </environment>
-                            <environment>
-                                <os>macosx</os>
-                                <ws>cocoa</ws>
-                                <arch>aarch64</arch>
-                            </environment>                              
-                        </environments>
                     </configuration>
                 </plugin>
                 <plugin>
