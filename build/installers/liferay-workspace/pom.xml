@@ -31,7 +31,8 @@
     <name>Liferay Workspace Installer</name>
 
     <properties>
-        <workspace-installer-version>${maven.build.timestamp}</workspace-installer-version>
+        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+        <workspace-installer-version>4.0.0-${liferay-ide-tag}-${maven.build.timestamp}</workspace-installer-version>
     </properties>
 
     <build>

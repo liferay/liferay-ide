@@ -31,7 +31,8 @@
     <name>Liferay Workspace with DevStudio Installer</name>
 
     <properties>
-        <studio-installer-version>${maven.build.timestamp}</studio-installer-version>
+        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+        <studio-installer-version>4.0.0-${liferay-ide-tag}-${maven.build.timestamp}</studio-installer-version>
     </properties>
 
     <build>
