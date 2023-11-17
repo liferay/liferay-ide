@@ -236,26 +236,6 @@ public class FileMigrationService implements FileMigration {
 			}
 
 			if (ListUtil.isNotEmpty(fileMigrators)) {
-				
-//					System.out.println(" Total migrator count is  " + fileMigrators.size());
-//					
-//					for(int i=0;i<fileMigrators.size();i++) {
-//						try {
-//							ServiceReference<FileMigrator> service = fileMigrators.get(i);
-//							
-//							FileMigrator migrator = _context.getService(service);
-//							
-//							List<UpgradeProblem> upgradeProblem = migrator.analyze(file);
-//							
-//							System.out.println("(" + i + ")" + migrator.getClass().toString() + " problems count is " + upgradeProblem.size());
-//							
-//							upgradeProblems.addAll(upgradeProblem);
-//						}
-//						catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//					}
-
 				try {
 					Stream<ServiceReference<FileMigrator>> migratorStream = fileMigrators.parallelStream();
 

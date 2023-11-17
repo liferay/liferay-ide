@@ -118,8 +118,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 					throw new RuntimeException("Missing version information: " + nullableVersion.orElse("<null>"));
 			}
 
-			//String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
-			String sectionHtml = "";
+			String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
 			if (Objects.equals(sectionHtml, "#legacy")) {
 				sectionHtml = problemSummary;

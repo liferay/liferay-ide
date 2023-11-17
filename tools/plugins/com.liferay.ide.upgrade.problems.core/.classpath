@@ -12,7 +12,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="libs/com.liferay.markdown.parser.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/flexmark-0.34.48.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/flexmark-util-0.34.48.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

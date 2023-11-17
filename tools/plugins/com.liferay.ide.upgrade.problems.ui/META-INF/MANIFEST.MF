@@ -1,8 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Activator: com.liferay.ide.upgrade.problems.ui.internal.UpgradeProblemsUIPlugin
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .,
- lib/com.liferay.markdown.parser.jar
 Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.upgrade.problems.ui
 Bundle-Name: Liferay IDE Upgrade Problems UI

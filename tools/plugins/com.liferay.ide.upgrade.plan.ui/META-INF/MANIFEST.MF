@@ -3,8 +3,7 @@ Bundle-Activator: com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/flexmark-0.34.48.jar,
- lib/flexmark-util-0.34.48.jar,
- lib/com.liferay.markdown.parser.jar
+ lib/flexmark-util-0.34.48.jar
 Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.upgrade.plan.ui
 Bundle-Name: Liferay IDE Upgrade Plan UI

@@ -14,14 +14,10 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.knowledge.base.markdown.converter.MarkdownConverter;
-import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +30,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
 
 /**
  * @author Gregory Amerson
@@ -68,11 +67,13 @@ public class MarkdownParser {
 		if (retval == null) {
 			String markdown = _readStreamToString(MarkdownParser.class.getResourceAsStream(fileName), true);
 
-			//MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
+	        Parser parser = Parser.builder().build();
 
-			//String html = markdownConverter.convert(markdown);
-			
-			String html = "";
+	        com.vladsch.flexmark.ast.Node document = parser.parse(markdown);
+
+	        HtmlRenderer renderer = HtmlRenderer.builder().build();
+
+	        String html = renderer.render(document);
 
 			Map<String, String> sections = _parseHtml(html);
 
