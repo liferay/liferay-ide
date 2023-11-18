@@ -46,6 +46,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 
 /**
@@ -89,7 +90,11 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 
 			Map<IPath, IClasspathEntry> containersToAdd = new HashMap<>();
 
-			IClasspathEntry jreEntry = _createContainerEntry(_getJrePathFromSourceSettings());
+			IVMInstall defaultVMInstall = JavaRuntime.getDefaultVMInstall();
+
+			IPath newJREContainerPath = JavaRuntime.newJREContainerPath(defaultVMInstall);
+
+			IClasspathEntry jreEntry = _createContainerEntry(newJREContainerPath);
 
 			containersToAdd.put(jreEntry.getPath(), jreEntry);
 
@@ -98,6 +103,8 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 			classpath.addAll(_indexOfNewContainers(classpath), containersToAdd.values());
 
 			javaProject.setRawClasspath(classpath.toArray(new IClasspathEntry[0]), monitor);
+
+			ProjectUtil.updateComplianceSettings(javaProject, ProjectUtil.getVmCompliance(defaultVMInstall));
 		}
 
 		if (project.hasNature("org.eclipse.buildship.core.gradleprojectnature") && !LiferayNature.hasNature(project)) {
@@ -162,10 +169,6 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 				LiferayGradleCore.logError("Unable to get tooling model", e);
 			}
 		}
-	}
-
-	private IPath _getJrePathFromSourceSettings() {
-		return JavaRuntime.newJREContainerPath(JavaRuntime.getDefaultVMInstall());
 	}
 
 	private int _indexOfNewContainers(List<IClasspathEntry> classpath) {

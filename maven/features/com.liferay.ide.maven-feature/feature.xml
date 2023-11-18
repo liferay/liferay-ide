@@ -54,10 +54,11 @@
 	/>
 
 	<plugin
-		 id="org.slf4j.api"
-		 download-size="0"
-		 install-size="0"
-		 version="0.0.0"
-		 unpack="false"/>
+		download-size="0"
+		id="org.slf4j.api"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
 
 </feature>

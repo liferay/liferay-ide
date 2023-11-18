@@ -232,6 +232,18 @@
                                     </scripts>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>fix-updatesite-content</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <scripts>
+                                        <script>${pom.basedir}/src/main/assembly/RemoveUnwantedInstallUnits.groovy</script>
+                                    </scripts>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay74.RemoveFlashJSPTags">
    <property name="file.extensions" value="jsp,jspf"/>
    <property name="problem.title" value="Removed the liferay-ui:flash Tag"/>
