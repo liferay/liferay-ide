@@ -1,14 +1,13 @@
 import groovy.ant.AntBuilder
 import groovy.xml.XmlNodePrinter
 import groovy.xml.XmlParser
-import org.codehaus.groovy.ast.ModuleNode
 
 def basedir = project.basedir.canonicalPath
 def repositoryDir = basedir + "/target/repository"
 def contentJar = repositoryDir  + "/content.jar"
 def contentDir = basedir  + "/target/content.jar/"
 
-// Remove hidden feature
+//Remove hidden feature
 
 println 'Unzipping content.jar'
 

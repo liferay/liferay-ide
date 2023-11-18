@@ -233,34 +233,6 @@
                     <version>${tycho-version}</version>
                     <configuration>
                         <format>${tycho-packaging-format}</format>
-                        <archiveSite>true</archiveSite>
-                        <environments>
-                            <environment>
-                                <os>win32</os>
-                                <ws>win32</ws>
-                                <arch>x86_64</arch>
-                            </environment>
-                            <environment>
-                                <os>macosx</os>
-                                <ws>cocoa</ws>
-                                <arch>x86_64</arch>
-                            </environment>
-                            <environment>
-                                <os>linux</os>
-                                <ws>gtk</ws>
-                                <arch>x86_64</arch>
-                            </environment>
-                            <environment>
-                                <os>linux</os>
-                                <ws>gtk</ws>
-                                <arch>aarch64</arch>
-                            </environment>
-                            <environment>
-                                <os>macosx</os>
-                                <ws>cocoa</ws>
-                                <arch>aarch64</arch>
-                            </environment>                              
-                        </environments>                        
                     </configuration>
                 </plugin>
                 <plugin>

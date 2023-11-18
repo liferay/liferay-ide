@@ -46,7 +46,6 @@
                     <finalName>liferay-ide-updatesite-${unqualifiedVersion}-${liferay-ide-tag}-${maven.build.timestamp}</finalName>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
@@ -61,7 +60,7 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>fix-repository</id>
+                        <id>fix-updatesite-package</id>
                         <phase>package</phase>
                         <goals>
                             <goal>execute</goal>
@@ -71,6 +70,7 @@
                 <configuration>
                     <scripts>
                         <script>${pom.basedir}/src/main/assembly/RemoveUnwantedInstallUnits.groovy</script>
+                        <script>${pom.basedir}/src/main/assembly/RemoveUnusedJstujLib.groovy</script>
                     </scripts>
                 </configuration>
             </plugin>
@@ -179,7 +179,7 @@
                                 <artifactId>groovy-all</artifactId>
                                 <version>3.0.19</version>
                                 <type>pom</type>
-                            </dependency>                
+                            </dependency>
                         </dependencies>
                         <executions>
                             <execution>
@@ -196,6 +196,9 @@
                                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
                                         <createDmg>false</createDmg>
                                     </properties>
+                                    <scripts>
+                                        <script>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</script>
+                                    </scripts>
                                 </configuration>
                             </execution>
                             <execution>
@@ -212,15 +215,24 @@
                                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
                                         <createDmg>false</createDmg>
                                     </properties>
-                                    <!-- <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source> -->
+                                    <scripts>
+                                        <script>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</script>
+                                    </scripts>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>fix-updatesite-package</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <scripts>
+                                        <script>${pom.basedir}/src/main/assembly/RemoveUnusedJstujLib.groovy</script>
+                                    </scripts>
                                 </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <scripts>
-                                <script>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</script>
-                            </scripts>
-                        </configuration>                        
                     </plugin>
                 </plugins>
             </build>
