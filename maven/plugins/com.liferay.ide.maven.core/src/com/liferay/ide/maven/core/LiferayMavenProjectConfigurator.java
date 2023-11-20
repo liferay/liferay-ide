@@ -52,6 +52,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.core.internal.markers.IMavenMarkerManager;
@@ -63,6 +66,7 @@ import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.jdt.IClasspathDescriptor;
 import org.eclipse.m2e.jdt.IJavaProjectConfigurator;
+import org.eclipse.m2e.jdt.internal.MavenClasspathHelpers;
 import org.eclipse.m2e.wtp.WTPProjectsUtil;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
 import org.eclipse.osgi.util.NLS;
@@ -277,6 +281,19 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 	public void configureRawClasspath(
 			ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor)
 		throws CoreException {
+		
+		IMavenProjectFacade mavenProjectFacade = request.mavenProjectFacade();
+
+		IClasspathEntry jreContainerEntry = MavenClasspathHelpers.getJREContainerEntry(
+			JavaCore.create(mavenProjectFacade.getProject()));
+
+		classpath.removeEntry(jreContainerEntry.getPath());
+
+		IClasspathEntry defaultJREContainerEntry = JavaCore.newContainerEntry(
+			JavaRuntime.newJREContainerPath(JavaRuntime.getDefaultVMInstall()));
+
+		classpath.addEntry(defaultJREContainerEntry);
+		
 	}
 
 	protected void configureDeployedName(IProject project, String deployedFileName) {

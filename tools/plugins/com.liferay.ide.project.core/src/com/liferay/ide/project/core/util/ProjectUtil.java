@@ -34,6 +34,7 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.PluginsSDKBundleProject;
@@ -45,12 +46,14 @@ import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BndProperties;
 import com.liferay.ide.project.core.modules.BndPropertiesValue;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.workspace.bundle.url.codec.BundleURLCodec;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -62,6 +65,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -827,6 +831,17 @@ public class ProjectUtil {
 		return fpwc.getProject();
 	}
 
+	public static String decodeBundleUrl(ProductInfo productInfo) {
+		try {
+			return BundleURLCodec.decode(productInfo.getBundleUrl(), productInfo.getReleaseDate());
+		}
+		catch (Exception exception) {
+			ProjectCore.logError("Unable to determine bundle URL", exception);
+		}
+
+		return null;
+	}
+
 	public static void fixExtProjectSrcFolderLinks(IProject extProject) throws JavaModelException {
 		if (extProject == null) {
 			return;
@@ -1074,8 +1089,6 @@ public class ProjectUtil {
 		return CoreUtil.getProject(projectName);
 	}
 
-	// IDE-270
-
 	public static ProjectRecord getProjectRecordForDir(String dir) {
 		ProjectRecord projectRecord = null;
 		File projectDir = new File(dir);
@@ -1099,6 +1112,8 @@ public class ProjectUtil {
 
 		return projectRecord;
 	}
+
+	// IDE-270
 
 	public static String getRelativePathFromDocroot(IWebProject lrproject, String path) {
 		IFolder docroot = lrproject.getDefaultDocrootFolder();
@@ -1334,6 +1349,51 @@ public class ProjectUtil {
 		}
 
 		return retval;
+	}
+
+	public static Map<String, String[]> initMavenTargetPlatform() {
+		Map<String, String[]> targetPlatformVersionMap = new HashMap<>();
+
+		try {
+			String[] workspaceProducts = BladeCLI.getWorkspaceProducts(true);
+
+			if (Objects.isNull(workspaceProducts)) {
+				return targetPlatformVersionMap;
+			}
+
+			Map<String, ProductInfo> productInfos = getProductInfos();
+
+			if (Objects.isNull(productInfos)) {
+				return targetPlatformVersionMap;
+			}
+
+			for (String liferayVersion : WorkspaceConstants.LIFERAY_VERSIONS) {
+				String[] targetPlatformVersions = Arrays.stream(
+					workspaceProducts
+				).unordered(
+				).filter(
+					product -> product.startsWith("portal")
+				).map(
+					productInfos::get
+				).filter(
+					productInfo -> {
+						String targetPlatformVersion = productInfo.getTargetPlatformVersion();
+
+						return targetPlatformVersion.startsWith(liferayVersion);
+					}
+				).map(
+					ProductInfo::getTargetPlatformVersion
+				).toArray(
+					String[]::new
+				);
+
+				targetPlatformVersionMap.put(liferayVersion, targetPlatformVersions);
+			}
+		}
+		catch (Exception exception) {
+		}
+
+		return targetPlatformVersionMap;
 	}
 
 	public static boolean is7xServerDeployableProject(IProject project) {

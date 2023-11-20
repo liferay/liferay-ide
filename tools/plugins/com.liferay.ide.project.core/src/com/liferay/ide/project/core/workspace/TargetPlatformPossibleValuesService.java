@@ -17,14 +17,21 @@ package com.liferay.ide.project.core.workspace;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -55,9 +62,13 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService i
 
 	@Override
 	protected void compute(Set<String> values) {
+		if (Objects.isNull(_mavenTargetPlatformVersions)) {
+			return;
+		}
+
 		List<String> possibleValues = new ArrayList<>();
 
-		WorkspaceConstants.liferayTargetPlatformVersions.forEach(
+		_mavenTargetPlatformVersions.forEach(
 			(liferayVersion, targetPlatformVersion) -> {
 				String version = get(_op.getLiferayVersion());
 
@@ -138,6 +149,28 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService i
 
 	@Override
 	protected void initPossibleValuesService() {
+		Job getProductVersions = new Job("Get product versions") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					_mavenTargetPlatformVersions = ProjectUtil.initMavenTargetPlatform();
+
+					refresh();
+				}
+				catch (Exception exception) {
+					ProjectCore.logError("Failed to init product version list.", exception);
+				}
+
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		getProductVersions.setSystem(true);
+
+		getProductVersions.schedule();
+
 		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			@Override
@@ -153,6 +186,7 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService i
 	}
 
 	private FilteredListener<PropertyContentEvent> _listener;
+	private Map<String, String[]> _mavenTargetPlatformVersions;
 	private NewLiferayWorkspaceOp _op;
 
 }

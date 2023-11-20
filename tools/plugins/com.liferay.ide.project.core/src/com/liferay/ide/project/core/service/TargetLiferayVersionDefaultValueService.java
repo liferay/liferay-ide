@@ -19,8 +19,6 @@ import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 
-import java.util.Set;
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
@@ -44,9 +42,7 @@ public class TargetLiferayVersionDefaultValueService extends DefaultValueService
 			return liferayWorkspaceProjectVersion;
 		}
 
-		Set<String> liferayTargetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.keySet();
-
-		String[] versions = liferayTargetPlatformVersions.toArray(new String[0]);
+		String[] versions = WorkspaceConstants.LIFERAY_VERSIONS;
 
 		String defaultValue = versions[versions.length - 1];
 

@@ -28,7 +28,9 @@ public class TargetLiferayVersionPossibleValuesService extends PossibleValuesSer
 
 	@Override
 	protected void compute(Set<String> values) {
-		values.addAll(WorkspaceConstants.liferayTargetPlatformVersions.keySet());
+		for (String version : WorkspaceConstants.LIFERAY_VERSIONS) {
+			values.add(version);
+		}
 	}
 
 }
