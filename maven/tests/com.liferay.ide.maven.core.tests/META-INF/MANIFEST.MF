@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.maven.core.tests
 Bundle-Name: Liferay Maven Core Tests
 Bundle-SymbolicName: com.liferay.ide.maven.core.tests
 Bundle-Version: 4.0.0.qualifier

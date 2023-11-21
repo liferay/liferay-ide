@@ -281,7 +281,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 	public void configureRawClasspath(
 			ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor)
 		throws CoreException {
-		
+
 		IMavenProjectFacade mavenProjectFacade = request.mavenProjectFacade();
 
 		IClasspathEntry jreContainerEntry = MavenClasspathHelpers.getJREContainerEntry(
@@ -293,7 +293,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 			JavaRuntime.newJREContainerPath(JavaRuntime.getDefaultVMInstall()));
 
 		classpath.addEntry(defaultJREContainerEntry);
-		
 	}
 
 	protected void configureDeployedName(IProject project, String deployedFileName) {

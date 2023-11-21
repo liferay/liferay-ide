@@ -794,6 +794,8 @@ ${java_executable}
     <startMenuGroupName></startMenuGroupName>
     <vendor>Liferay, Inc</vendor>
     <width>600</width>
+    <!-- <windowsSigningPkcs12File>${build_project_directory}/liferay.pfx</windowsSigningPkcs12File>
+    <windowsSigningPkcs12Password>${env(WINDOWS_SIGNING_PASSWORD)}</windowsSigningPkcs12Password> -->
     <parameterList>
         <fileParameter>
             <name>java_executable</name>

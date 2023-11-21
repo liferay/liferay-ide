@@ -46,8 +46,6 @@ public class TargetPlatformDefaultValueService extends DefaultValueService imple
 
 	@Override
 	protected void initDefaultValueService() {
-		super.initDefaultValueService();
-
 		PossibleValuesService possibleValuesService = _possibleValuesService();
 
 		_listener = new Listener() {

@@ -16,15 +16,6 @@ package com.liferay.ide.maven.core.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import com.liferay.ide.core.tests.TestUtil;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
-import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
-import com.liferay.ide.server.core.tests.ServerCoreBase;
-import com.liferay.ide.server.util.ServerUtil;
-
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -39,6 +30,15 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.liferay.ide.core.tests.TestUtil;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
+import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
+import com.liferay.ide.server.core.tests.ServerCoreBase;
+import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Joye Luo
@@ -135,14 +135,15 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
         workspaceOp.setProjectProvider("maven-liferay-workspace");
         workspaceOp.setWorkspaceName( "test-maven-liferay-workspace" );
         workspaceOp.setUseDefaultLocation( true );
-        workspaceOp.setProvisionLiferayBundle(true);
+        workspaceOp.setProvisionLiferayBundle(false);
         workspaceOp.setServerName("test-maven-liferay-workspace");
-        workspaceOp.setLiferayVersion("7.3");
+        workspaceOp.setLiferayVersion("7.4");
+        workspaceOp.setTargetPlatform("7.4.3.101");
         
         TestUtil.waitForBuildAndValidation();
-
+        
         NewLiferayWorkspaceOpMethods.execute( workspaceOp, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-
+        
         IProject workspaceProject = CoreUtil.getProject( "test-maven-liferay-workspace" );
 
         assertTrue(workspaceProject != null);

@@ -149,7 +149,7 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService i
 
 	@Override
 	protected void initPossibleValuesService() {
-		Job getProductVersions = new Job("Get product versions") {
+		Job getTargetPlatformVersions = new Job("Get target platform versions") {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -167,9 +167,9 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService i
 
 		};
 
-		getProductVersions.setSystem(true);
+		getTargetPlatformVersions.setSystem(true);
 
-		getProductVersions.schedule();
+		getTargetPlatformVersions.schedule();
 
 		_listener = new FilteredListener<PropertyContentEvent>() {
 

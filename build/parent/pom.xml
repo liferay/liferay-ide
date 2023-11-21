@@ -33,18 +33,18 @@
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
-        <bndtools-site>https://bndtools.jfrog.io/artifactory/update-latest/org/bndtools/org.bndtools.p2/5.3.0/org.bndtools.p2-5.3.0.jar!</bndtools-site>
+        <bndtools-site>https://bndtools.jfrog.io/artifactory/update-latest/org/bndtools/org.bndtools.p2/7.0.0/org.bndtools.p2-7.0.0.jar!</bndtools-site>
         <eclipse-site>https://download.eclipse.org/releases/2023-12/202311171000/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
-        <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.7.v20230428-1350</gradle-site>
+        <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.8.v20231117-1658/</gradle-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <liferay-ide-tag>ga1</liferay-ide-tag>
-        <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20230531010532/repository</orbit-site>
+        <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/N20230908195041/repository</orbit-site>
         <sapphire-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/sapphire/9.1.1/</sapphire-site>
         <osgi-bundles-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
         <sign-apps>false</sign-apps>
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
-        <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
+        <tm-site>https://download.eclipse.org/tm/updates/4.5.500/repository/</tm-site>
         <jre-site>https://download.eclipse.org/justj/jres/17/updates/release/latest</jre-site>
         <tycho-packaging-format>yyyyMMddHHmm'-ga1'</tycho-packaging-format>
         <tycho-version>3.0.5</tycho-version>
