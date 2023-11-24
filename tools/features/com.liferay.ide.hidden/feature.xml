@@ -3,7 +3,7 @@
 	id="com.liferay.ide.hidden"
 	label="Liferay IDE Hidden"
 	provider-name="Liferay, Inc."
-	version="3.9.9.qualifier"
+	version="4.0.0.qualifier"
 >
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
@@ -31,6 +31,11 @@
 	  Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text. http://www.gnu.org/licenses/lgpl-2.1.html
 	</license>
 
+	<!--includes
+		id="org.eclipse.justj.epp.feature"
+		version="0.0.0"
+	/-->
+
 	<includes
 		id="bndtools.main.feature"
 		version="0.0.0"
@@ -57,6 +62,14 @@
 	<plugin
 		download-size="0"
 		id="com.google.gson"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.apache.commons.logging"
 		install-size="0"
 		unpack="false"
 		version="0.0.0"

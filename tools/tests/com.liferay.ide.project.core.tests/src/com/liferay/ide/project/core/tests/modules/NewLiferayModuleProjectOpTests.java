@@ -183,7 +183,7 @@ public class NewLiferayModuleProjectOpTests extends ProjectCoreBase
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "my-test-project" );
+        op.setProjectName( "my-test-project-validataionService" );
 
         assertTrue( op.validation().ok() );
 
@@ -229,7 +229,7 @@ public class NewLiferayModuleProjectOpTests extends ProjectCoreBase
 
         Status exStatus =
             NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-
+        
         assertEquals( "OK", exStatus.message() );
 
         TestUtil.waitForBuildAndValidation();
@@ -265,6 +265,8 @@ public class NewLiferayModuleProjectOpTests extends ProjectCoreBase
         Status exStatus =
             NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
+        TestUtil.waitForBuildAndValidation();
+        
         assertTrue( exStatus.message(), exStatus.ok() );
 
         IProject modPorject = CoreUtil.getProject( op.getProjectName().content() );

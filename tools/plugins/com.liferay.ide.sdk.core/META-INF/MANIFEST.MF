@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.sdk.core
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.sdk.core;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.sdk.core.SDKCorePlugin
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,
@@ -17,6 +18,6 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.jdt.core,
  org.eclipse.jdt.launching,
  org.eclipse.wst.server.core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.sdk.core

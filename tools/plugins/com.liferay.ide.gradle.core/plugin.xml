@@ -109,4 +109,13 @@
 			</enablement>
 		</deleteParticipant>
 	</extension>
+	<extension
+		point="bndtools.core.bndPlugins"
+	>
+	</extension>
+	<extension
+		point="org.eclipse.buildship.core.invocationcustomizers"
+	>
+		<customizer class="com.liferay.ide.gradle.core.LiferayGradleInvocationCustomizer" />
+	</extension>
 </plugin>

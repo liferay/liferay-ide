@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Layout Templates Core Tests
 Bundle-SymbolicName: com.liferay.ide.layouttpl.core.tests
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.core.tests,
@@ -11,6 +11,6 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.core.runtime,
  org.eclipse.sapphire.modeling;bundle-version="[9,10)",
  org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.core.tests

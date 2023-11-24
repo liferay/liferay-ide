@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.ui.snippets
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.ui.snippets;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.ui.snippets.SnippetsUIPlugin
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,
@@ -16,7 +17,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.wst.common.snippets
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui.snippets,
  com.liferay.ide.ui.snippets.util,

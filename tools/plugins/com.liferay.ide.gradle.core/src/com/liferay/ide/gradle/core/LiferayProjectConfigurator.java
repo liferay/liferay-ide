@@ -14,6 +14,9 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.FileUtil;
@@ -25,6 +28,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.buildship.core.InitializationContext;
@@ -33,8 +40,14 @@ import org.eclipse.buildship.core.ProjectContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.JavaRuntime;
 
 /**
  * @author Simon Jiang
@@ -61,7 +74,39 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 	public void unconfigure(ProjectContext arg0, IProgressMonitor arg1) {
 	}
 
+	private static IClasspathEntry _createContainerEntry(IPath path) {
+		return JavaCore.newContainerEntry(path);
+	}
+
 	private void _configureIfLiferayProject(final IProject project) throws CoreException {
+		IJavaProject javaProject = JavaCore.create(project);
+
+		IProgressMonitor monitor = new NullProgressMonitor();
+
+		if (project.hasNature(JavaCore.NATURE_ID)) {
+			List<IClasspathEntry> classpath = Lists.newArrayList(javaProject.getRawClasspath());
+
+			Map<IPath, IClasspathEntry> oldContainers = _removeOldContainers(classpath);
+
+			Map<IPath, IClasspathEntry> containersToAdd = new HashMap<>();
+
+			IVMInstall defaultVMInstall = JavaRuntime.getDefaultVMInstall();
+
+			IPath newJREContainerPath = JavaRuntime.newJREContainerPath(defaultVMInstall);
+
+			IClasspathEntry jreEntry = _createContainerEntry(newJREContainerPath);
+
+			containersToAdd.put(jreEntry.getPath(), jreEntry);
+
+			containersToAdd.putAll(oldContainers);
+
+			classpath.addAll(_indexOfNewContainers(classpath), containersToAdd.values());
+
+			javaProject.setRawClasspath(classpath.toArray(new IClasspathEntry[0]), monitor);
+
+			ProjectUtil.updateComplianceSettings(javaProject, ProjectUtil.getVmCompliance(defaultVMInstall));
+		}
+
 		if (project.hasNature("org.eclipse.buildship.core.gradleprojectnature") && !LiferayNature.hasNature(project)) {
 			final boolean[] needAddNature = new boolean[1];
 
@@ -88,8 +133,6 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 					try {
 						gulpFileContent = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
 
-						// case 2: has gulpfile.js with some content
-
 						if (gulpFileContent.contains("require('liferay-theme-tasks')")) {
 							needAddNature[0] = true;
 						}
@@ -101,8 +144,6 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 			}
 
 			try {
-				IProgressMonitor monitor = new NullProgressMonitor();
-
 				if (needAddNature[0]) {
 					LiferayNature.addLiferayNature(project, monitor);
 
@@ -128,6 +169,45 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 				LiferayGradleCore.logError("Unable to get tooling model", e);
 			}
 		}
+	}
+
+	private int _indexOfNewContainers(List<IClasspathEntry> classpath) {
+		int index = 0;
+
+		for (int i = 0; i < classpath.size(); i++) {
+			IClasspathEntry classpathEntry = classpath.get(i);
+
+			if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+				index = i + 1;
+			}
+		}
+
+		return index;
+	}
+
+	private Map<IPath, IClasspathEntry> _removeOldContainers(List<IClasspathEntry> classpath) {
+		Map<IPath, IClasspathEntry> retainedEntries = Maps.newLinkedHashMap();
+		ListIterator<IClasspathEntry> iterator = classpath.listIterator();
+
+		while (iterator.hasNext()) {
+			IClasspathEntry entry = iterator.next();
+
+			if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
+				if (_shouldRetainContainer(entry)) {
+					retainedEntries.put(entry.getPath(), entry);
+				}
+
+				iterator.remove();
+			}
+		}
+
+		return retainedEntries;
+	}
+
+	private boolean _shouldRetainContainer(IClasspathEntry entry) {
+		IPath newDefaultJREContainerPath = JavaRuntime.newDefaultJREContainerPath();
+
+		return !newDefaultJREContainerPath.isPrefixOf(entry.getPath());
 	}
 
 }

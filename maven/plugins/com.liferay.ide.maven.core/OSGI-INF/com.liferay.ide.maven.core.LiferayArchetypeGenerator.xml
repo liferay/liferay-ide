@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<scr:component name="com.liferay.ide.maven.core.LiferayArchetypeGenerator" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<service>
+		<provide interface="com.liferay.ide.maven.core.LiferayArchetypeGenerator" />
+	</service>
+	<reference cardinality="1..1" field="mavenLauncher" interface="org.eclipse.m2e.core.internal.launch.IMavenLauncher" name="mavenLauncher" />
+	<reference cardinality="1..1" field="mavenModelManager" interface="org.eclipse.m2e.core.embedder.MavenModelManager" name="mavenModelManager" />
+	<reference cardinality="1..1" field="projectConfigurationManager" interface="org.eclipse.m2e.core.project.IProjectConfigurationManager" name="projectConfigurationManager" />
+	<implementation class="com.liferay.ide.maven.core.LiferayArchetypeGenerator" />
+</scr:component>

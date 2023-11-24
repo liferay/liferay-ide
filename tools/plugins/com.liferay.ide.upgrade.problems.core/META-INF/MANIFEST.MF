@@ -2,13 +2,15 @@ Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin
 Bundle-ClassPath: .,
- libs/com.liferay.markdown.parser.jar
+ libs/flexmark-0.34.48.jar,
+ libs/flexmark-util-0.34.48.jar
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.upgrade.problems.core
 Bundle-Name: Liferay IDE Upgrade Problems Core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Export-Package: com.liferay.ide.upgrade.problems.core,
  com.liferay.ide.upgrade.problems.core.commands
 Require-Bundle: com.google.guava,
@@ -26,7 +28,8 @@ Require-Bundle: com.google.guava,
  org.eclipse.osgi.services,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core,
- org.json
+ org.json,
+ org.jsoup
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXMLFile.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.JSPFileWTP.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.JSPFFileWTP.xml,

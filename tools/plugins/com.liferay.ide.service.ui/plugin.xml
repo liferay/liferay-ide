@@ -3,30 +3,6 @@
 
 <plugin>
 	<extension
-		point="org.eclipse.ui.newWizards"
-	>
-		<category
-			id="com.liferay.ide.newWizards"
-			name="%category.name"
-		>
-		</category>
-		<wizard
-			category="com.liferay.ide.newWizards"
-			icon="icons/n16/service_new.png"
-			id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder"
-			name="%service.wizard.name"
-		>
-			<class class="com.liferay.ide.service.ui.wizard.NewServiceBuilderWizard">
-				<parameter name="liferay_plugin_artifact" value="true" />
-				<parameter name="menuIndex" value="30" />
-				<parameter name="validProjectTypes" value="portlet,hook,ext" />
-			</class>
-			<description>
-			%service.wizard.description
-			</description>
-		</wizard>
-	</extension>
-	<extension
 		point="org.eclipse.ui.editors.templates"
 	>
 		<contextType

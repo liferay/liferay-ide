@@ -158,9 +158,15 @@ public class AetherUtil {
 	}
 
 	public static RepositorySystem newRepositorySystem() {
-		MavenPluginActivator activator = MavenPluginActivator.getDefault();
+		try {
+			MavenPluginActivator activator = MavenPluginActivator.getDefault();
 
-		return activator.getRepositorySystem();
+			return activator.getRepositorySystem();
+		}
+		catch (Exception exception) {
+		}
+
+		return null;
 	}
 
 	public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {

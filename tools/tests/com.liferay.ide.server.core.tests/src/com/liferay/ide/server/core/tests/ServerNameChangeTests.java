@@ -18,13 +18,6 @@ package com.liferay.ide.server.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.portal.PortalRuntime;
-import com.liferay.ide.server.core.portal.PortalServer;
-import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime;
-import com.liferay.ide.server.util.ServerUtil;
-
 import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
@@ -38,6 +31,12 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.internal.ServerWorkingCopy;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.portal.PortalRuntime;
+import com.liferay.ide.server.core.portal.PortalServer;
+import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Simon Jiang
@@ -180,37 +179,7 @@ public class ServerNameChangeTests extends ServerCoreBase
         return findRuntime.getId();
     }
     
-    private String setup62Runtime( IPath runtimeZipPath, IPath runitmeDirPath, String runtimeName, IPath runtimUnzipDir, String runtimeId ) throws Exception
-    {
-        assertEquals( "Expected liferayBundlesPath to exist: " + runtimeZipPath.toOSString(), true,
-            runtimeZipPath.toFile().exists() );
-
-        extractLiferayRuntime( runtimeZipPath, runtimUnzipDir );
-
-        final NullProgressMonitor npm = new NullProgressMonitor();
-
-        IRuntime findRuntime = ServerCore.findRuntime( runtimeName );
-
-        if( findRuntime == null )
-        {
-            final IRuntimeWorkingCopy runtimeWC =
-                ServerCore.findRuntimeType( runtimeId ).createRuntime( runtimeName, npm );
-
-            runtimeWC.setName( runtimeName );
-            runtimeWC.setLocation( runitmeDirPath );
-
-            findRuntime = runtimeWC.save( true, npm );
-        }
-
-        assertNotNull( findRuntime );
-        final LiferayTomcatRuntime liferayRuntime =
-            (LiferayTomcatRuntime) ServerCore.findRuntime( runtimeName ).loadAdapter( LiferayTomcatRuntime.class, npm );
-
-        assertNotNull( liferayRuntime );
-        
-        return findRuntime.getId();
-    }    
-    
+   
     @Before
     public void setupRuntime() throws Exception
     {
@@ -219,8 +188,6 @@ public class ServerNameChangeTests extends ServerCoreBase
 
         setupRuntime( getLiferayTomcatRuntimeZip(), getLiferayTomcatRuntimeDir(), getTomcatRuntimeName(), getLiferayTomcatUnzipRuntimeDir(),getRuntimeId() );
         setupRuntime( getLiferayWildflyRuntimeZip(), getLiferayWildflyRuntimeDir(), getWildflyRuntimeName(), getLiferayWildflyUnzipRuntimeDir(), getRuntimeId() );
-        setup62Runtime( getLiferayTomcat62RuntimeZip(), getLiferayTomcat62RuntimeDir(), getTomcat62RuntimeName(), getLiferayTomcat62UnzipRuntimeDir(), get62RuntimeId() );
-        setup62Runtime( getLiferayTomcat62RuntimeZip(), getLiferayTomcat62RuntimeDir(), getTomcat62DumyRuntimeName(), getLiferayTomcat62DumyUnzipRuntimeDir(), get62RuntimeId() );
     }
 
     @Test
@@ -246,28 +213,4 @@ public class ServerNameChangeTests extends ServerCoreBase
         ((ServerWorkingCopy)newServer).setDefaults(null);
         assertEquals( "Liferay CE GA5 Wildfly at localhost", newServer.getName() );
     }
-
-    @Test
-    public void testPortalServiceDelegate62Name() throws Exception 
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        IServerType portalServer62Type = ServerCore.findServerType( "com.liferay.ide.eclipse.server.tomcat.7062" );
-
-        assertNotNull( portalServer62Type );
-
-        IProgressMonitor monitor = new NullProgressMonitor();
-
-        IServerWorkingCopy newServer = portalServer62Type.createServer( null, null, monitor );
-
-        assertNotNull( newServer );
-
-        newServer.setRuntime( ServerUtil.getRuntime( getTomcat62RuntimeName() ) );
-        ((ServerWorkingCopy)newServer).setDefaults(null);
-        assertEquals( "Liferay CE Tomcat62 at localhost", newServer.getName() );
-
-        newServer.setRuntime( ServerUtil.getRuntime( getTomcat62DumyRuntimeName() ) );
-        ((ServerWorkingCopy)newServer).setDefaults(null);
-        assertEquals( "Liferay CE Tomcat62 Dumy at localhost", newServer.getName() );
-    }       
 }

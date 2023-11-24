@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.ide.server.tomcat.core;
+package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.AbstractPortalBundle;
-import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
+import com.liferay.ide.server.core.PortalContext;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -102,7 +102,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 			_appServerPortalDir = Stream.of(
 				files
 			).filter(
-				LiferayTomcatUtil::isLiferayPortal
+				ServerUtil::isLiferayPortal
 			).map(
 				File::getName
 			).map(

@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>com.liferay.ide.tools</groupId>
 		<artifactId>tools</artifactId>
-		<version>3.9.9-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.liferay.ide.tools.plugins</groupId>
@@ -50,14 +50,11 @@
 		<module>com.liferay.ide.project.ui</module>
 		<module>com.liferay.ide.sdk.core</module>
 		<module>com.liferay.ide.server.core</module>
-		<module>com.liferay.ide.server.tomcat.core</module>
-		<module>com.liferay.ide.server.tomcat.ui</module>
 		<module>com.liferay.ide.server.ui</module>
 		<module>com.liferay.ide.service.core</module>
 		<module>com.liferay.ide.service.ui</module>
 		<module>com.liferay.ide.theme.core</module>
 		<module>com.liferay.ide.ui</module>
-		<module>com.liferay.ide.ui.snippets</module>
 		<module>com.liferay.ide.upgrade.plan.core</module>
 		<module>com.liferay.ide.upgrade.plan.ui</module>
 		<module>com.liferay.ide.upgrade.planner.ui</module>

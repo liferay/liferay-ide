@@ -3,7 +3,7 @@
 	id="com.liferay.ide.enterprise"
 	label="Liferay IDE Enterprise"
 	provider-name="Liferay, Inc."
-	version="3.9.9.qualifier"
+	version="4.0.0.qualifier"
 >
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
@@ -38,14 +38,6 @@
 	<plugin
 		download-size="0"
 		id="com.liferay.ide.kaleo.core"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.liferay.ide.kaleo.ui"
 		install-size="0"
 		unpack="false"
 		version="0.0.0"

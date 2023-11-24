@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.server.core
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.server.core;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.server.core.LiferayServerCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.fasterxml.jackson.core.jackson-annotations,
@@ -36,7 +37,7 @@ Require-Bundle: com.fasterxml.jackson.core.jackson-annotations,
  org.gradle.toolingapi,
  org.json,
  org.slf4j.api
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.github.dockerjava.api.model,
  com.liferay.ide.server.core,

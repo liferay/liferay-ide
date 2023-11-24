@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.service.ui
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.service.ui;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.service.ui.ServiceUI
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,
@@ -30,7 +31,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.wst.common.frameworks.ui,
  org.eclipse.wst.common.modulecore
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.service.ui,
  com.liferay.ide.service.ui.actions,

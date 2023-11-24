@@ -38,31 +38,6 @@
 
 	</extension>
 	<extension
-		point="org.eclipse.ui.newWizards"
-	>
-		<category
-			id="com.liferay.ide.newWizards"
-			name="%category.name"
-		>
-		</category>
-		<wizard
-			category="com.liferay.ide.newWizards"
-			icon="icons/n16/hook_new.png"
-			id="com.liferay.ide.eclipse.portlet.ui.wizard.hook"
-			name="%hook.wizard.name"
-		>
-			<class class="com.liferay.ide.hook.ui.wizard.NewHookWizard">
-				<parameter name="liferay_plugin_artifact" value="true" />
-				<parameter name="menuIndex" value="20" />
-				<parameter name="validProjectTypes" value="portlet,hook" />
-			</class>
-			<description>
-			%wizard.description
-			</description>
-		</wizard>
-	</extension>
-
-	<extension
 		point="org.eclipse.ui.ide.markerResolution"
 	>
 		<markerResolutionGenerator

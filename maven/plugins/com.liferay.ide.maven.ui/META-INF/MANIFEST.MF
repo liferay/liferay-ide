@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.maven.ui
 Bundle-Name: Liferay IDE Maven UI
 Bundle-SymbolicName: com.liferay.ide.maven.ui;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.maven.ui.LiferayMavenUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,
@@ -15,16 +16,16 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.core.runtime,
  org.eclipse.debug.ui,
  org.eclipse.jdt.core,
- org.eclipse.m2e.core;bundle-version="[1.13,2.0)",
- org.eclipse.m2e.launching;bundle-version="[1.13,2.0)",
- org.eclipse.m2e.maven.runtime;bundle-version="[1.13,2.0)",
- org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.eclipse.m2e.core,
+ org.eclipse.m2e.launching,
+ org.eclipse.m2e.maven.runtime,
+ org.eclipse.sapphire.modeling,
  org.eclipse.sapphire.ui;bundle-version="[9,10)",
  org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.liferay.ide.maven.ui,

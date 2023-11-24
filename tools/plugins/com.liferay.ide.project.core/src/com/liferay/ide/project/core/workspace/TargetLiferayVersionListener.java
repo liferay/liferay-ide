@@ -15,12 +15,18 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.project.core.util.ProjectUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Haoyi Sun
@@ -39,7 +45,29 @@ public class TargetLiferayVersionListener
 
 		NewLiferayWorkspaceOp op = newLiferayWorkspaceOp.adapt(NewLiferayWorkspaceOp.class);
 
-		op.setTargetPlatform(WorkspaceConstants.liferayTargetPlatformVersions.get(liferayVersion)[0]);
+		Value<String> targetPlatform = op.getTargetPlatform();
+
+		targetPlatform.clear();
+
+		CompletableFuture<Map<String, String[]>> future = CompletableFuture.supplyAsync(
+			() -> {
+				try {
+					return ProjectUtil.initMavenTargetPlatform();
+				}
+				catch (Exception exception) {
+					return new HashMap<>();
+				}
+			});
+
+		future.thenAccept(
+			new Consumer<Map<String, String[]>>() {
+
+				@Override
+				public void accept(Map<String, String[]> mavenTargetPlatform) {
+					op.setTargetPlatform(mavenTargetPlatform.get(liferayVersion)[0]);
+				}
+
+			});
 	}
 
 }

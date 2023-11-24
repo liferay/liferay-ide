@@ -16,9 +16,11 @@
 package com.liferay.ide.server.core.tests;
 
 import org.junit.Test;
+
+import com.liferay.ide.server.core.PortalContext;
+
 import org.junit.Assert;
 
-import com.liferay.ide.server.tomcat.core.PortalContext;
 
 /**
  * @author Seiphon Wang

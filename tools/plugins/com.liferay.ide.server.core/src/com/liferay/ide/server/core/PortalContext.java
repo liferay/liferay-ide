@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.server.tomcat.core;
+package com.liferay.ide.server.core;
 
 import java.util.Locale;
 

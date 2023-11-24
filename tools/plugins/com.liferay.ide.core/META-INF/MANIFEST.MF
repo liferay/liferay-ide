@@ -1,14 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.core
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.core;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.core.LiferayCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.google.gson,
  org.apache.commons.codec,
  org.apache.commons.collections,
- org.apache.commons.io;bundle-version=2.6,
+ org.apache.commons.io,
  org.apache.commons.lang,
  org.apache.commons.logging,
  org.apache.httpcomponents.httpcore,
@@ -23,9 +24,9 @@ Require-Bundle: com.google.gson,
  org.eclipse.jdt.core,
  org.eclipse.jdt.launching,
  org.eclipse.jface.text,
- org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.eclipse.sapphire.modeling,
  org.json
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.core,
  com.liferay.ide.core.adapter,

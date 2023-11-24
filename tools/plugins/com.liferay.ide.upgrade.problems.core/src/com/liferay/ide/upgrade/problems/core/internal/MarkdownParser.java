@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.knowledge.base.markdown.converter.MarkdownConverter;
-import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,9 +68,15 @@ public class MarkdownParser {
 		if (retval == null) {
 			String markdown = _readStreamToString(MarkdownParser.class.getResourceAsStream(fileName), true);
 
-			MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
+			Parser parser = Parser.builder(
+			).build();
 
-			String html = markdownConverter.convert(markdown);
+			com.vladsch.flexmark.ast.Node document = parser.parse(markdown);
+
+			HtmlRenderer renderer = HtmlRenderer.builder(
+			).build();
+
+			String html = renderer.render(document);
 
 			Map<String, String> sections = _parseHtml(html);
 

@@ -63,6 +63,10 @@ public class LiferayGradleWorkspaceProjectDeleteParticipant extends DeletePartic
 
 		CompositeChange change = new CompositeChange(getName());
 
+		if (!GradleUtil.isGradleProject(workspaceProject)) {
+			return change;
+		}
+
 		ProjectInfo projectInfo = LiferayGradleCore.getToolingModel(ProjectInfo.class, _workspaceProject);
 
 		if (Objects.isNull(projectInfo)) {

@@ -95,7 +95,7 @@ public class JSFModuleProjectComponentSuitePossibleValues
 
 		sb.append("+%28Portlet+3.0%29");
 
-		sb.append("/jsf-version/2.3/component-suite/jsf/build-tool/maven");
+		sb.append("/jsf-version/2.3/component-suite/jsf/build-tool/maven/format/thick/cdi/disabled");
 
 		try {
 			Connection connection = Jsoup.connect(sb.toString());

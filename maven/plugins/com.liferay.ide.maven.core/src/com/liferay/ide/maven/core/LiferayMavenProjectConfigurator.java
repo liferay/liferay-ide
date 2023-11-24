@@ -52,6 +52,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.core.internal.markers.IMavenMarkerManager;
@@ -63,6 +66,7 @@ import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.jdt.IClasspathDescriptor;
 import org.eclipse.m2e.jdt.IJavaProjectConfigurator;
+import org.eclipse.m2e.jdt.internal.MavenClasspathHelpers;
 import org.eclipse.m2e.wtp.WTPProjectsUtil;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
 import org.eclipse.osgi.util.NLS;
@@ -108,10 +112,10 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 			monitor = new NullProgressMonitor();
 		}
 
-		monitor.beginTask(NLS.bind(Msgs.configuringLiferayProject, request.getProject()), 100);
+		monitor.beginTask(NLS.bind(Msgs.configuringLiferayProject, MavenUtil.getProject(request)), 100);
 
 		Plugin liferayMavenPlugin = MavenUtil.getPlugin(
-			request.getMavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor);
+			request.mavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor);
 
 		if (!_shouldConfigure(liferayMavenPlugin, request)) {
 			monitor.done();
@@ -119,7 +123,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 			return;
 		}
 
-		IProject project = request.getProject();
+		IProject project = MavenUtil.getProject(request);
 
 		IFile pomFile = project.getFile(IMavenConstants.POM_FILE_NAME);
 		IFacetedProject facetedProject = ProjectFacetsManager.create(project, false, monitor);
@@ -128,7 +132,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 		monitor.worked(25);
 
-		MavenProject mavenProject = request.getMavenProject();
+		MavenProject mavenProject = request.mavenProject();
 
 		List<MavenProblemInfo> errors = _findLiferayMavenPluginProblems(request, monitor);
 
@@ -277,6 +281,18 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 	public void configureRawClasspath(
 			ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor)
 		throws CoreException {
+
+		IMavenProjectFacade mavenProjectFacade = request.mavenProjectFacade();
+
+		IClasspathEntry jreContainerEntry = MavenClasspathHelpers.getJREContainerEntry(
+			JavaCore.create(mavenProjectFacade.getProject()));
+
+		classpath.removeEntry(jreContainerEntry.getPath());
+
+		IClasspathEntry defaultJREContainerEntry = JavaCore.newContainerEntry(
+			JavaRuntime.newJREContainerPath(JavaRuntime.getDefaultVMInstall()));
+
+		classpath.addEntry(defaultJREContainerEntry);
 	}
 
 	protected void configureDeployedName(IProject project, String deployedFileName) {
@@ -414,7 +430,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		// pointed to valid location
 
 		Plugin liferayMavenPlugin = MavenUtil.getPlugin(
-			request.getMavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor);
+			request.mavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor);
 
 		if (liferayMavenPlugin != null) {
 			Xpp3Dom config = (Xpp3Dom)liferayMavenPlugin.getConfiguration();
@@ -525,14 +541,14 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 		MavenProblemInfo retval = null;
 
-		String pluginType = MavenUtil.getLiferayMavenPluginType(request.getMavenProject());
+		String pluginType = MavenUtil.getLiferayMavenPluginType(request.mavenProject());
 
 		if (pluginType == null) {
 			pluginType = ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE;
 		}
 
 		Plugin liferayMavenPlugin = MavenUtil.getPlugin(
-			request.getMavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor);
+			request.mavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor);
 		IFacetedProject.Action action = _getNewLiferayFacetInstallAction(pluginType);
 
 		if (action != null) {
@@ -597,8 +613,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 	 * for liferay specific files
 	 */
 	private boolean _shouldConfigure(Plugin liferayMavenPlugin, ProjectConfigurationRequest request) {
-		IProject project = request.getProject();
-		MavenProject mavenProject = request.getMavenProject();
+		IProject project = MavenUtil.getProject(request);
+		MavenProject mavenProject = request.mavenProject();
 
 		boolean configureAsLiferayPlugin = false;
 

@@ -56,6 +56,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.JavaRuntime;
 
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnector;
@@ -340,12 +342,18 @@ public class GradleUtil {
 		GradleBuild gradleBuild = gradleBuildOpt.get();
 
 		try {
+			IVMInstall defaultVMInstall = JavaRuntime.getDefaultVMInstall();
+
+			File jvmInstallLocation = defaultVMInstall.getInstallLocation();
+
 			if (redirectOutput) {
 				OutputStream outputStream = new ByteArrayOutputStream();
 
 				gradleBuild.withConnection(
 					connection -> {
 						connection.newBuild(
+						).setJavaHome(
+							jvmInstallLocation
 						).addArguments(
 							arguments
 						).forTasks(
@@ -366,6 +374,8 @@ public class GradleUtil {
 			gradleBuild.withConnection(
 				connection -> {
 					connection.newBuild(
+					).setJavaHome(
+						jvmInstallLocation
 					).addArguments(
 						arguments
 					).forTasks(
@@ -397,6 +407,10 @@ public class GradleUtil {
 		gradleBuilder.gradleDistribution(GradleDistribution.fromBuild());
 		gradleBuilder.showConsoleView(true);
 		gradleBuilder.showExecutionsView(true);
+
+		gradleBuilder.javaHome(
+			JavaRuntime.getDefaultVMInstall(
+			).getInstallLocation());
 
 		BuildConfiguration configuration = gradleBuilder.build();
 

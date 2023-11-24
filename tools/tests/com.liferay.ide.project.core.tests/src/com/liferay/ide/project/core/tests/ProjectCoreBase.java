@@ -19,39 +19,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.JobUtil;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.ProjectRecord;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.model.NewLiferayProfile;
-import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.model.ProfileLocation;
-import com.liferay.ide.project.core.util.ProjectImportUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKCorePlugin;
-import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.tests.ServerCoreBase;
-import com.liferay.ide.server.util.ServerUtil;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.util.Properties;
-import java.util.stream.Stream;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -61,26 +32,32 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.internal.launching.StandardVMType;
 import org.eclipse.jdt.launching.IVMInstall;
-import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.VMStandin;
-import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
-import org.junit.Before;
+
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.JobUtil;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.ProjectRecord;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
+import com.liferay.ide.sdk.core.SDKCorePlugin;
+import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.server.core.tests.ServerCoreBase;
+import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Gregory Amerson
@@ -184,83 +161,7 @@ public class ProjectCoreBase extends ServerCoreBase
         waitForBuildAndValidation();
     }
 
-    protected IProject createAntProject( NewLiferayPluginProjectOp op ) throws Exception
-    {
-        op.setProjectProvider( "ant" );
-
-        final IProject project = createProject( op );
-
-        /*
-        assertEquals(
-            "SDK project layout is not standard, /src folder exists.", false, project.getFolder( "src" ).exists() );
-
-        switch( op.getPluginType().content() )
-        {
-            case ext:
-                break;
-            case hook:
-            case portlet:
-            case web:
-
-                assertEquals(
-                    "java source folder docroot/WEB-INF/src doesn't exist.", true,
-                    project.getFolder( "docroot/WEB-INF/src" ).exists() );
-
-                break;
-            case layouttpl:
-                break;
-            case theme:
-                break;
-            default:
-                break;
-        }
-        */
-
-        project.refreshLocal( IResource.DEPTH_INFINITE, null );
-
-        return project;
-    }
-
-    public NewLiferayPluginProjectOp setMavenProfile( NewLiferayPluginProjectOp op ) throws Exception
-    {
-        NewLiferayProfile profile = op.getNewLiferayProfiles().insert();
-        profile.setId( "Liferay-v6.2-CE-(Tomcat-7)" );
-        profile.setLiferayVersion( "6.2.2" );
-        profile.setRuntimeName( getRuntimeVersion() );
-        profile.setProfileLocation( ProfileLocation.projectPom );
-
-        op.setActiveProfilesValue( "Liferay-v6.2-CE-(Tomcat-7)" );
-
-        return op;
-    }
-
-    protected IProject createMavenProject( NewLiferayPluginProjectOp op ) throws Exception
-    {
-        op.setProjectProvider( "maven" );
-
-        op = setMavenProfile( op );
-
-        IProject project = createProject( op );
-
-        switch( op.getPluginType().content() )
-        {
-            case ext:
-            case hook:
-            case portlet:
-            case web:
-                assertEquals( "java source folder src/main/webapp doesn't exist.", true, project.getFolder( "src/main/webapp" ).exists() );
-            case layouttpl:
-            case theme:
-            case servicebuilder:
-            default:
-                break;
-            }
-
-            Thread.sleep( 3000 );
-
-            return project;
-    }
-
+    
     protected IRuntime createNewRuntime( final String name ) throws Exception
     {
         final IPath newRuntimeLocation = new Path( getLiferayRuntimeDir().toString() + "-new" );
@@ -293,89 +194,6 @@ public class ProjectCoreBase extends ServerCoreBase
         return runtime;
     }
 
-    protected SDK createNewSDK() throws Exception
-    {
-        final IPath newSDKLocation = new Path( getLiferayPluginsSdkDir().toString() + "-new" );
-
-        if( ! newSDKLocation.toFile().exists() )
-        {
-            FileUtils.copyDirectory( getLiferayPluginsSdkDir().toFile(), newSDKLocation.toFile() );
-        }
-
-        assertEquals( true, newSDKLocation.toFile().exists() );
-
-        SDK newSDK = SDKUtil.createSDKFromLocation( newSDKLocation );
-
-        if( newSDK == null )
-        {
-            FileUtils.copyDirectory( getLiferayPluginsSdkDir().toFile(), newSDKLocation.toFile() );
-            newSDK = SDKUtil.createSDKFromLocation( newSDKLocation );
-        }
-
-        SDKManager.getInstance().addSDK( newSDK );
-
-        return newSDK;
-    }
-
-    public IProject createProject( NewLiferayPluginProjectOp op )
-    {
-        return createProject( op, null );
-    }
-
-    public IProject createProject( NewLiferayPluginProjectOp op, String projectName )
-    {
-        Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-
-        assertNotNull( status );
-
-        assertEquals(
-            status.toString(), Status.createOkStatus().message().toLowerCase(), status.message().toLowerCase() );
-
-        if( projectName == null || op.getProjectProvider().content().getShortName().equalsIgnoreCase( "ant" ) )
-        {
-            projectName = op.getFinalProjectName().content();
-        }
-
-//        if( op.getProjectProvider().content().getShortName().equalsIgnoreCase( "maven" ) )
-//        {
-//            if( op.getPluginType().content().equals( PluginType.ext ) )
-//            {
-//                projectName = projectName + "-ext";
-//            }
-//            else if( op.getPluginType().content().equals( PluginType.servicebuilder ) )
-//            {
-//                projectName = projectName + "-portlet";
-//            }
-//        }
-
-        final IProject newLiferayPluginProject = project( projectName );
-
-        assertNotNull( newLiferayPluginProject );
-
-        assertEquals( true, newLiferayPluginProject.exists() );
-
-        final IFacetedProject facetedProject = ProjectUtil.getFacetedProject( newLiferayPluginProject );
-
-        assertNotNull( facetedProject );
-
-        final IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
-
-        assertNotNull( liferayFacet );
-
-        final PluginType pluginTypeValue = op.getPluginType().content( true );
-
-        if( pluginTypeValue.equals( PluginType.servicebuilder ) )
-        {
-            assertEquals( "liferay.portlet", liferayFacet.getId() );
-        }
-        else
-        {
-            assertEquals( "liferay." + pluginTypeValue, liferayFacet.getId() );
-        }
-
-        return newLiferayPluginProject;
-    }
-
     protected String getBundleId()
     {
         return BUNDLE_ID;
@@ -388,26 +206,6 @@ public class ProjectCoreBase extends ServerCoreBase
                 "custom-project-location-tests" );
 
         return customLocationBase;
-    }
-
-    protected IPath getIvyCacheZip()
-    {
-        return getLiferayBundlesPath().append( "ivy-cache-7.0.zip" );
-    }
-
-    protected IPath getLiferayPluginsSdkDir()
-    {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
-    }
-
-    protected IPath getLiferayPluginsSDKZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2-ce-ga6-20171101150212422.zip" );
-    }
-
-    protected String getLiferayPluginsSdkZipFolder()
-    {
-        return "liferay-plugins-sdk-6.2/";
     }
 
     protected IProject getProject( String path, String projectName ) throws Exception
@@ -474,69 +272,6 @@ public class ProjectCoreBase extends ServerCoreBase
         return op;
     }
 
-    private void ensureDefaultVMInstallExists() throws CoreException
-    {
-        IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
-
-        if( vmInstall != null )
-        {
-            return;
-        }
-
-        final IVMInstallType vmInstallType = JavaRuntime.getVMInstallType( StandardVMType.ID_STANDARD_VM_TYPE );
-        String id = null;
-
-        do
-        {
-            id = String.valueOf( System .currentTimeMillis() );
-        }
-        while( vmInstallType.findVMInstall( id ) != null );
-
-        VMStandin newVm = new VMStandin( vmInstallType, id );
-        newVm.setName( "Default-VM" );
-        String jrePath = System.getProperty( "java.home" );
-        File installLocation = new File( jrePath );
-        newVm.setInstallLocation( installLocation );
-        IVMInstall realVm = newVm.convertToRealVM();
-        JavaRuntime.setDefaultVMInstall( realVm, new NullProgressMonitor() );
-    }
-
-    private void persistAppServerProperties() throws FileNotFoundException, IOException, ConfigurationException
-    {
-        Properties initProps = new Properties();
-        initProps.put( "app.server.type", "tomcat" );
-        initProps.put( "app.server.tomcat.dir", getLiferayRuntimeDir().toPortableString() );
-        initProps.put( "app.server.tomcat.deploy.dir", getLiferayRuntimeDir().append( "webapps" ).toPortableString() );
-        initProps.put( "app.server.tomcat.lib.global.dir", getLiferayRuntimeDir().append( "lib/ext" ).toPortableString() );
-        initProps.put( "app.server.parent.dir", getLiferayRuntimeDir().removeLastSegments( 1 ).toPortableString() );
-        initProps.put( "app.server.tomcat.portal.dir", getLiferayRuntimeDir().append( "webapps/ROOT" ).toPortableString() );
-
-        IPath loc = getLiferayPluginsSdkDir();
-        String userName = System.getProperty( "user.name" ); //$NON-NLS-1$
-        File userBuildFile = loc.append( "build." + userName + ".properties" ).toFile(); //$NON-NLS-1$ //$NON-NLS-2$
-
-        try(OutputStream fileOutput = Files.newOutputStream( userBuildFile.toPath() ))
-        {
-            if( userBuildFile.exists() )
-            {
-                PropertiesConfiguration propsConfig = new PropertiesConfiguration( userBuildFile );
-                for( Object key : initProps.keySet() )
-                {
-                    propsConfig.setProperty( (String) key, initProps.get( key ) );
-                }
-                propsConfig.setHeader( "" );
-                propsConfig.save( fileOutput );
-
-            }
-            else
-            {
-                Properties props = new Properties();
-                props.putAll( initProps );
-                props.store( fileOutput, StringPool.EMPTY );
-            }
-        }
-    }
-
     protected void removeAllRuntimes() throws Exception
     {
         for( IRuntime r : ServerCore.getRuntimes() )
@@ -545,136 +280,12 @@ public class ProjectCoreBase extends ServerCoreBase
         }
     }
 
-    /**
-     * @throws Exception
-     */
-    @Before
-    public void setupPluginsSDK() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        final SDK existingSdk = SDKManager.getInstance().getSDK( getLiferayPluginsSdkDir() );
-
-        if( existingSdk == null )
-        {
-            FileUtil.deleteDir( getLiferayPluginsSdkDir().toFile(), true );
-        }
-
-        final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
-
-        if( ! liferayPluginsSdkDirFile.exists() )
-        {
-            final File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
-
-            assertEquals(
-                "Expected file to exist: " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
-                liferayPluginsSdkZipFile.exists() );
-
-            liferayPluginsSdkDirFile.mkdirs();
-
-            final String liferayPluginsSdkZipFolder = getLiferayPluginsSdkZipFolder();
-
-            if( CoreUtil.isNullOrEmpty( liferayPluginsSdkZipFolder ) )
-            {
-                ZipUtil.unzip( liferayPluginsSdkZipFile, liferayPluginsSdkDirFile );
-            }
-            else
-            {
-                ZipUtil.unzip(
-                    liferayPluginsSdkZipFile, liferayPluginsSdkZipFolder, liferayPluginsSdkDirFile,
-                    new NullProgressMonitor() );
-            }
-        }
-
-        assertEquals( true, liferayPluginsSdkDirFile.exists() );
-
-        final File ivyCacheDir = new File( liferayPluginsSdkDirFile, ".ivy" );
-
-        if( ! ivyCacheDir.exists() )
-        {
-         // setup ivy cache
-
-            final File ivyCacheZipFile = getIvyCacheZip().toFile();
-
-            assertEquals( "Expected ivy-cache.zip to be here: " + ivyCacheZipFile.getAbsolutePath(), true, ivyCacheZipFile.exists() );
-
-            ZipUtil.unzip( ivyCacheZipFile, liferayPluginsSdkDirFile );
-        }
-
-        assertEquals( "Expected .ivy folder to be here: " + ivyCacheDir.getAbsolutePath(), true, ivyCacheDir.exists() );
-
-        SDK sdk = null;
-
-        if( existingSdk == null )
-        {
-            sdk = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
-        }
-        else
-        {
-            sdk = existingSdk;
-        }
-
-        assertNotNull( sdk );
-
-        sdk.setDefault( true );
-
-        SDKManager.getInstance().setSDKs( new SDK[] { sdk } );
-
-        final IPath customLocationBase = getCustomLocationBase();
-
-        final File customBaseDir = customLocationBase.toFile();
-
-        if( customBaseDir.exists() )
-        {
-            FileUtil.deleteDir( customBaseDir, true );
-
-            if( customBaseDir.exists() )
-            {
-                for( File f : customBaseDir.listFiles() )
-                {
-                    System.out.println(f.getAbsolutePath());
-                }
-            }
-
-            assertEquals( "Unable to delete pre-existing customBaseDir", false, customBaseDir.exists() );
-        }
-
-        SDK workspaceSdk = SDKUtil.getWorkspaceSDK();
-
-        if ( workspaceSdk == null)
-        {
-            persistAppServerProperties();
-
-            IStatus validationStatus = sdk.validate( true );
-
-            StringBuilder sb = new StringBuilder();
-
-            Stream.of(validationStatus.getChildren()).map(IStatus::getMessage).forEach(sb::append);
-
-            PrintDirectoryTree.print(sdk.getLocation().toFile(), sb);
-
-            assertTrue(sb.toString(), validationStatus.isOK());
-
-            SDKUtil.openAsProject( sdk );
-        }
-
-        ensureDefaultVMInstallExists();
-    }
-
     @Override
     public void setupRuntime() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
 
         super.setupRuntime();
-    }
-
-    public void setupPluginsSDKAndRuntime() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        setupPluginsSDK();
-        setupRuntime();
     }
 
 }

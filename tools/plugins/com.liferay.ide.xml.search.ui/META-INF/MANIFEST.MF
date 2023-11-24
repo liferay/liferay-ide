@@ -1,10 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.xml.search.ui
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: com.liferay.ide.xml.search.ui;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.xml.search.ui.LiferayXMLSearchUI
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.xml.search.core,
@@ -35,7 +36,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.jsdt.web.support.jsp,
  org.eclipse.jst.j2ee
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.liferay.ide.xml.search.ui,
  com.liferay.ide.xml.search.ui.editor,
  com.liferay.ide.xml.search.ui.markerResolutions,

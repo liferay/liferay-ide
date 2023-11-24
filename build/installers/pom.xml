@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.liferay.ide.build</groupId>
         <artifactId>build</artifactId>
-        <version>3.9.9-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>installers</artifactId>
@@ -38,7 +38,7 @@
         <gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
         <jpmcli-latest-download-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/biz.aQute.jpm.run-4.0.0-SNAPSHOT.jar</jpmcli-latest-download-url>
         <jpmcli-latest-md5>7aafe878e453385fbcfbf0ced0ead2c6</jpmcli-latest-md5>
-        <bnd-latest-download-url>https://repository-cdn.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/4.3.0/biz.aQute.bnd-4.3.0.jar</bnd-latest-download-url>
+        <bnd-latest-download-url>https://bndtools.jfrog.io/bndtools/update-latest/libs-release-local/org/bndtools/org.bndtools.p2/5.3.0/org.bndtools.p2-5.3.0.jar</bnd-latest-download-url>
         <bnd-latest-md5>4c64ce43b472749825ec7cd4ec8ee202</bnd-latest-md5>
     </properties>
 

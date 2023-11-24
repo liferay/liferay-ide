@@ -3,7 +3,7 @@
 	id="com.liferay.ide.upgrade.planner"
 	label="Liferay Upgrade Planner"
 	provider-name="Liferay, Inc."
-	version="3.9.9.qualifier"
+	version="4.0.0.qualifier"
 >
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
@@ -37,8 +37,6 @@
 	/>
 
 	<requires>
-		<import feature="org.apache.ivy.feature" match="greaterOrEqual" version="2.3.0" />
-		<import feature="org.apache.ivyde.feature" match="greaterOrEqual" version="2.2.0" />
 		<import feature="org.eclipse.buildship" match="greaterOrEqual" version="2.1.1" />
 		<import feature="org.eclipse.jsf.feature" match="greaterOrEqual" version="3.2.0" />
 		<import feature="org.eclipse.jst.common.fproj.enablement.jdt" match="greaterOrEqual" version="3.2.0" />
@@ -100,22 +98,6 @@
 	<plugin
 		download-size="0"
 		id="com.liferay.ide.server.core"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.liferay.ide.server.tomcat.core"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.liferay.ide.server.tomcat.ui"
 		install-size="0"
 		unpack="false"
 		version="0.0.0"

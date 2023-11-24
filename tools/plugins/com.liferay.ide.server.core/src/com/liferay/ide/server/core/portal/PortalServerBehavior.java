@@ -493,7 +493,25 @@ public class PortalServerBehavior
 
 			launchEnvrionment.put("JAVA_HOME", vmInstallLocation.getAbsolutePath());
 
+			DebugPlugin debugplugin = DebugPlugin.getDefault();
+
+			ILaunchManager launchManager = debugplugin.getLaunchManager();
+
+			Map<String, String> nativeEnvrionment = launchManager.getNativeEnvironmentCasePreserved();
+
+			String pathEnvironment = nativeEnvrionment.get("PATH");
+
+			if (Objects.nonNull(pathEnvironment)) {
+				try {
+					launchEnvrionment.put("PATH", jrePath.toOSString() + ":" + pathEnvironment);
+				}
+				catch (Exception exception) {
+				}
+			}
+
 			launch.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, launchEnvrionment);
+
+			launch.setAttribute(ILaunchManager.ATTR_APPEND_ENVIRONMENT_VARIABLES, Boolean.FALSE);
 
 			if (jrePath != null) {
 				IPath toolsPath = jrePath.append("lib/tools.jar");

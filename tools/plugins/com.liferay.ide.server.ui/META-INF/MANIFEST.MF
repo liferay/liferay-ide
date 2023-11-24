@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.server.ui
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.server.ui;singleton:=true
-Bundle-Version: 3.9.9.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.server.ui.LiferayServerUI
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,
@@ -40,7 +41,7 @@ Require-Bundle: com.liferay.ide.core,
  org.apache.commons.logging,
  com.google.guava,
  org.slf4j.api
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.ui,
  com.liferay.ide.server.ui.action,

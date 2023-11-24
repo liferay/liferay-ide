@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Liferay Developer Studio" uid="com.liferay.ide.studio" id="com.liferay.ide.studio" application="org.eclipse.ui.ide.workbench" version="3.9.9.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Liferay Developer Studio" uid="com.liferay.ide.studio" id="com.liferay.ide.studio" application="org.eclipse.ui.ide.workbench" version="4.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="images/about.png"/>
@@ -19,29 +19,35 @@
 com.liferay.ide.studio.ui.product
 --launcher.defaultAction
 openFile
---launcher.XXMaxPermSize
-384M
 -showsplash
 com.liferay.ide.studio.ui
 --launcher.defaultAction
 openFile
 </programArgs>
       <vmArgs>
--Dosgi.requiredJavaVersion=1.8
--Xms40m
--Xmx1024m
--Dsun.java2d.noddraw=true
+-Dosgi.requiredJavaVersion=17
+-Xms1024m
+-Xmx2048m
+-XX:+UseG1GC
+-XX:+UseStringDeduplication
+-Dosgi.dataAreaRequiresExplicitInit=true
+-Dorg.eclipse.swt.graphics.Resource.reportNonDisposed=false
+-Dorg.slf4j.simpleLogger.defaultLogLevel=off
+--add-modules=ALL-SYSTEM
 </vmArgs>
       <vmArgsMac>
--Dosgi.requiredJavaVersion=1.8
 -XstartOnFirstThread
--Dorg.eclipse.swt.internal.carbon.smallFonts
--XX:MaxPermSize=384m
--Xms40m
--Xmx1024m
+-Dosgi.requiredJavaVersion=17
+-Xms1024m
+-Xmx2048m
+-XX:+UseG1GC
+-XX:+UseStringDeduplication
+-Dosgi.dataAreaRequiresExplicitInit=true
+-Dorg.eclipse.swt.graphics.Resource.reportNonDisposed=false
+-Dorg.slf4j.simpleLogger.defaultLogLevel=off
 -Xdock:icon=../Resources/DeveloperStudio.icns
--XstartOnFirstThread
 -Dorg.eclipse.swt.internal.carbon.smallFonts
+--add-modules=ALL-SYSTEM
 </vmArgsMac>
    </launcherArgs>
 
@@ -81,6 +87,7 @@ to distribution rights of the Software.
    </license>
 
    <plugins>
+      <plugin id="org.eclipse.justj.openjdk.hotspot.jre.full"/>
    </plugins>
 
    <features>
@@ -123,6 +130,7 @@ to distribution rights of the Software.
 
       <feature id="org.eclipse.jdt" installMode="root"/>
 
+      <feature id="org.eclipse.justj.openjdk.hotspot.jre.full" installMode="root"/>
 
       <feature id="org.eclipse.jpt.common.feature" installMode="root"/>
       <feature id="org.eclipse.jpt.jaxb.feature" installMode="root"/>

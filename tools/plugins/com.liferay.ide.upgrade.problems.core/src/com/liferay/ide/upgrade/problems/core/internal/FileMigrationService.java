@@ -248,6 +248,7 @@ public class FileMigrationService implements FileMigration {
 						));
 				}
 				catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 

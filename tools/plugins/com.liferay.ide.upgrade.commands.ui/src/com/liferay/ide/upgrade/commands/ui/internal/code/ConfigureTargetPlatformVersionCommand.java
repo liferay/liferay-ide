@@ -16,9 +16,9 @@ package com.liferay.ide.upgrade.commands.ui.internal.code;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.ConfigureTargetPlatformVersionCommandKeys;
-import com.liferay.ide.upgrade.commands.ui.internal.UpgradeCommandsUIPlugin;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
@@ -30,8 +30,12 @@ import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 import java.io.File;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -108,34 +112,51 @@ public class ConfigureTargetPlatformVersionCommand implements UpgradeCommand, Up
 	}
 
 	private IStatus _updateTargetPlatformValue(File gradeProperties) {
-		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+		CompletableFuture<Map<String, String[]>> future = CompletableFuture.supplyAsync(
+			() -> {
+				try {
+					return ProjectUtil.initMavenTargetPlatform();
+				}
+				catch (Exception exception) {
+					return new HashMap<>();
+				}
+			});
 
-		String targetPlatformVersion = WorkspaceConstants.liferayTargetPlatformVersions.get("7.1")[0];
+		future.thenAccept(
+			new Consumer<Map<String, String[]>>() {
 
-		String targetVersion = upgradePlan.getTargetVersion();
+				@Override
+				public void accept(Map<String, String[]> mavenTargetPlatform) {
+					UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		if (Objects.equals(targetVersion, "7.0")) {
-			targetPlatformVersion = WorkspaceConstants.liferayTargetPlatformVersions.get("7.0")[0];
-		}
-		else if (Objects.equals(targetVersion, "7.1")) {
-			targetPlatformVersion = WorkspaceConstants.liferayTargetPlatformVersions.get("7.1")[0];
-		}
-		else if (Objects.equals(targetVersion, "7.2")) {
-			targetPlatformVersion = WorkspaceConstants.liferayTargetPlatformVersions.get("7.2")[0];
-		}
+					String targetPlatformVersion = mavenTargetPlatform.get("7.1")[0];
 
-		try {
-			PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
+					String targetVersion = upgradePlan.getTargetVersion();
 
-			config.setProperty(WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, targetPlatformVersion);
+					if (Objects.equals(targetVersion, "7.0")) {
+						targetPlatformVersion = mavenTargetPlatform.get("7.0")[0];
+					}
+					else if (Objects.equals(targetVersion, "7.1")) {
+						targetPlatformVersion = mavenTargetPlatform.get("7.1")[0];
+					}
+					else if (Objects.equals(targetVersion, "7.2")) {
+						targetPlatformVersion = mavenTargetPlatform.get("7.2")[0];
+					}
 
-			config.save();
+					try {
+						PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
 
-			return Status.OK_STATUS;
-		}
-		catch (ConfigurationException ce) {
-			return UpgradeCommandsUIPlugin.createErrorStatus("Unable to configure target platform", ce);
-		}
+						config.setProperty(WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, targetPlatformVersion);
+
+						config.save();
+					}
+					catch (ConfigurationException ce) {
+					}
+				}
+
+			});
+
+		return Status.OK_STATUS;
 	}
 
 	@Reference

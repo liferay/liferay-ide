@@ -16,7 +16,6 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -176,64 +175,6 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 				}
 
 				break;
-
-			case LiferayPerspectiveFactory.ID:
-
-				NewWizardAction[] pluginProjectActions = getActionFromDescriptors(_getPluginProjectTypeAttribute());
-
-				for (NewWizardAction action : pluginProjectActions) {
-					action.setShell(fWizardShell);
-
-					ActionContributionItem pluginProjectitem = new ActionContributionItem(action);
-
-					pluginProjectitem.fill(fMenu, -1);
-				}
-
-				NewWizardAction importAction = new ImportLiferayProjectsWizardAction();
-
-				importAction.setShell(fWizardShell);
-
-				ActionContributionItem item = new ActionContributionItem(importAction);
-
-				item.fill(fMenu, -1);
-
-				new Separator().fill(fMenu, -1);
-
-				NewWizardAction[] pluginNonProjectActions = getActionFromDescriptors(
-					getPluginNonprojectTypeAttribute());
-
-				for (NewWizardAction action : pluginNonProjectActions) {
-					action.setShell(fWizardShell);
-
-					ActionContributionItem pluginNonProjectItem = new ActionContributionItem(action);
-
-					pluginNonProjectItem.fill(fMenu, -1);
-				}
-
-				new Separator().fill(fMenu, -1);
-
-				NewWizardAction[] noProjectExtraActions = getActionFromDescriptors(getNonprojectExtraTypeAttribute());
-
-				for (NewWizardAction action : noProjectExtraActions) {
-					action.setShell(fWizardShell);
-
-					ActionContributionItem noProjectExtraItem = new ActionContributionItem(action);
-
-					noProjectExtraItem.fill(fMenu, -1);
-				}
-
-				//None Project Right Now!
-				NewWizardAction[] projectExtraActions = getExtraProjectActions();
-
-				for (NewWizardAction extraAction : projectExtraActions) {
-					extraAction.setShell(fWizardShell);
-
-					ActionContributionItem extraItem = new ActionContributionItem(extraAction);
-
-					extraItem.fill(fMenu, -1);
-				}
-
-				break;
 		}
 
 		new Separator().fill(fMenu, -1);
@@ -268,12 +209,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 	}
 
 	public void run(IAction action) {
-		if (LiferayPerspectiveFactory.ID.equals(_getPerspectiveID())) {
-			getPluginProjectAction().run();
-		}
-		else {
-			getDefaultAction().run();
-		}
+		getDefaultAction().run();
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
@@ -319,10 +255,6 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 	protected Shell fWizardShell;
 
 	private static String _getAttribute() {
-		if (LiferayPerspectiveFactory.ID.equals(_getPerspectiveID())) {
-			return _getPluginProjectTypeAttribute();
-		}
-
 		return _getTypeAttribute();
 	}
 
@@ -336,10 +268,6 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 		IPerspectiveDescriptor perspective = activePage.getPerspective();
 
 		return perspective.getId();
-	}
-
-	private static String _getPluginProjectTypeAttribute() {
-		return "liferay_plugin_project";
 	}
 
 	private static String _getTypeAttribute() {

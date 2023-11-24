@@ -72,7 +72,7 @@ public class TestUtil {
 			manager.join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
 			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
 			JobUtil.waitForLiferayProjectJob();
-			Thread.sleep(200);
+			Thread.sleep(500);
 			manager.beginRule(root = workspace.getRoot(), null);
 		}
 		catch (InterruptedException ie) {

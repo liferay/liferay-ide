@@ -291,13 +291,4 @@
 		>
 		</sourceLocator>
 	</extension>
-	<extension
-		point="com.liferay.ide.server.core.portalBundles"
-	>
-		<portalBundle
-			class="com.liferay.ide.server.tomcat.core.PortalTomcatBundleFactory"
-			type="tomcat"
-		>
-		</portalBundle>
-	</extension>
 </plugin>

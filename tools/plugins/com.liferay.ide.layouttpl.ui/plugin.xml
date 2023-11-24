@@ -27,24 +27,4 @@
 		>
 		</editor>
 	</extension>
-	<extension
-		point="org.eclipse.ui.newWizards"
-	>
-		<wizard
-			category="com.liferay.ide.newWizards"
-			icon="icons/n16/layout_new.png"
-			id="com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate"
-			name="%layout.wizard.name"
-		>
-			<class class="com.liferay.ide.layouttpl.ui.wizard.NewLayoutTplWizard">
-				<parameter name="liferay_plugin_artifact" value="true" />
-				<parameter name="menuIndex" value="40" />
-				<parameter name="validProjectTypes" value="layouttpl" />
-			</class>
-			<description>
-			%layout.wizard.description
-			</description>
-		</wizard>
-	</extension>
-
 </plugin>

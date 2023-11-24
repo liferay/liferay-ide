@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.liferay.ide.tools.tests</groupId>
         <artifactId>tools-tests</artifactId>
-        <version>3.9.9-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.ide.project.core.tests</artifactId>
@@ -51,48 +51,6 @@
                 <version>1.3.0</version>
                 <executions>
                     <execution>
-                        <id>download-plugins-sdk-1.0.16</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>https://repository-cdn.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk/1.0.16/com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</url>
-                            <outputDirectory>${liferay.bundles.dir}</outputDirectory>
-                            <outputFileName>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</outputFileName>
-                            <md5>74498e30292fcde3f007a159ba283ed2</md5>
-                            <checkSignature>true</checkSignature>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-plugins-sdk-6.2.5-ga6</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>https://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.5%20GA6/liferay-plugins-sdk-6.2-ce-ga6-20171101150212422.zip</url>
-                            <outputDirectory>${liferay.bundles.dir}</outputDirectory>
-                            <outputFileName>liferay-plugins-sdk-6.2-ce-ga6-20171101150212422.zip</outputFileName>
-                            <md5>f021052bd71d72043c830a1fbe2b2c36</md5>
-                            <checkSignature>true</checkSignature>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-portal-tomcat-6.2-ga6</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>https://releases-cdn.liferay.com/portal/6.2.5-ga6/liferay-portal-tomcat-6.2-ce-ga6-20160112152609836.zip</url>
-                            <outputDirectory>${liferay.bundles.dir}</outputDirectory>
-                            <outputFileName>liferay-portal-tomcat-6.2-ce-ga6-20160112152609836.zip</outputFileName>
-                            <md5>22d4846a10b17e93c9729e909ccffda8</md5>
-                            <checkSignature>true</checkSignature>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>download-portal-tomcat-7.0-ga5</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -103,20 +61,6 @@
                             <outputDirectory>${liferay.bundles.dir}</outputDirectory>
                             <outputFileName>liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip</outputFileName>
                             <md5>d303cfd7d02bed5a82998f0a099a81a5</md5>
-                            <checkSignature>true</checkSignature>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-ivy-cache-70</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>http://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/zips/ivy-cache-7.0.zip</url>
-                            <outputDirectory>${liferay.bundles.dir}</outputDirectory>
-                            <outputFileName>ivy-cache-7.0.zip</outputFileName>
-                            <md5>22625f72b6daa86f68ae0e06fc4c1f12</md5>
                             <checkSignature>true</checkSignature>
                         </configuration>
                     </execution>

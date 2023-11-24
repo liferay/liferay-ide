@@ -15,7 +15,6 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -47,10 +46,6 @@ public class TargetPlatformDefaultValueService extends DefaultValueService imple
 
 	@Override
 	protected void initDefaultValueService() {
-		super.initDefaultValueService();
-
-		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
-
 		PossibleValuesService possibleValuesService = _possibleValuesService();
 
 		_listener = new Listener() {
@@ -71,10 +66,6 @@ public class TargetPlatformDefaultValueService extends DefaultValueService imple
 		};
 
 		possibleValuesService.attach(_listener);
-
-		String liferayVersion = get(op.getLiferayVersion());
-
-		_defaultValue = WorkspaceConstants.liferayTargetPlatformVersions.get(liferayVersion)[0];
 	}
 
 	private PossibleValuesService _possibleValuesService() {

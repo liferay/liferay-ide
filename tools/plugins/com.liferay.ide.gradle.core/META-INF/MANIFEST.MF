@@ -5,21 +5,23 @@ Bundle-ClassPath: .,
  lib/gradle-tooling.jar,
  lib/groovy-4.0.7.jar
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.liferay.ide.gradle.core
 Bundle-Name: Liferay IDE Gradle Core
 Bundle-SymbolicName: com.liferay.ide.gradle.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 3.9.9.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Version: 4.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.liferay.blade.gradle.tooling,
  com.liferay.ide.gradle.core,
  com.liferay.ide.gradle.core.model
-Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6)",
+Import-Package: com.google.common.collect
+Require-Bundle: biz.aQute.bndlib,
  com.liferay.ide.core,
  com.liferay.ide.project.core,
  com.liferay.ide.server.core,
  org.apache.commons.io,
  org.apache.commons.lang,
- org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
+ org.eclipse.buildship.core,
  org.eclipse.core.runtime,
  org.eclipse.jdt.core,
  org.eclipse.jdt.launching,

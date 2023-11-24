@@ -14,12 +14,7 @@
 
 package com.liferay.ide.studio.ui;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.ui.snippets.util.SnippetsUtil;
-
 import java.io.File;
-import java.io.FilenameFilter;
 
 import java.net.URL;
 
@@ -143,11 +138,6 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 	}
 
 	public void earlyStartup() {
-		if (!isProductRunning()) {
-			return;
-		}
-
-		_importSnippets();
 	}
 
 	public IEclipsePreferences getPreferences() {
@@ -163,97 +153,6 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 		super.stop(context);
-	}
-
-	private void _importSnippets() {
-		try {
-			URL snippetsImportPath = FileLocator.resolve(new URL(IProductPreferences.SNIPPETS_IMPORT_PATH));
-
-			if (snippetsImportPath != null) {
-				File snippetsImportDir = new File(snippetsImportPath.getFile());
-
-				if (snippetsImportDir.exists() && snippetsImportDir.isDirectory()) {
-					File[] snippetFiles = snippetsImportDir.listFiles(
-						new FilenameFilter() {
-
-							public boolean accept(File dir, String name) {
-								if ((name != null) && name.endsWith(".xml")) {
-									return true;
-								}
-
-								return false;
-							}
-
-						});
-
-					if (ListUtil.isNotEmpty(snippetFiles)) {
-						for (File snippetFile : snippetFiles) {
-							if (_shouldImportFile(snippetFile)) {
-								try {
-									SnippetsUtil.importSnippetsFromFile(snippetFile);
-								}
-								catch (Exception ex) {
-									logError("Failed to import snippet file: " + snippetFile.getName(), ex);
-								}
-
-								_storeFileImported(snippetFile);
-							}
-						}
-					}
-				}
-			}
-		}
-		catch (Exception e) {
-		}
-	}
-
-	private boolean _shouldImportFile(File importFile) {
-		if ((importFile == null) || !importFile.exists() || !importFile.isFile()) {
-			return false;
-		}
-
-		IScopeContext[] scopes = {InstanceScope.INSTANCE};
-
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		String importedSnippetFiles = preferencesService.getString(PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes);
-
-		if (!CoreUtil.isNullOrEmpty(importedSnippetFiles)) {
-			String[] fileNames = importedSnippetFiles.split(",");
-
-			if (ListUtil.isNotEmpty(fileNames)) {
-				for (String fileName : fileNames) {
-					if (fileName.equals(importFile.getName())) {
-						return false;
-					}
-				}
-			}
-		}
-
-		return true;
-	}
-
-	private void _storeFileImported(File importedFile) {
-		if (importedFile == null) {
-			return;
-		}
-
-		IScopeContext[] scopes = {InstanceScope.INSTANCE};
-
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		String importedSnippetFiles = preferencesService.getString(PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes);
-
-		String newImportedSnippetFiles = importedSnippetFiles;
-
-		if (CoreUtil.isNullOrEmpty(importedSnippetFiles)) {
-			newImportedSnippetFiles = importedFile.getName();
-		}
-		else {
-			newImportedSnippetFiles = importedSnippetFiles + "," + importedFile.getName();
-		}
-
-		getPreferences().put(IMPORTED_SNIPPET_FILES, newImportedSnippetFiles);
 	}
 
 	private static StudioPlugin _plugin;
