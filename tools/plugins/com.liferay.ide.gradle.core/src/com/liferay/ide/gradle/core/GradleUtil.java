@@ -343,9 +343,9 @@ public class GradleUtil {
 
 		try {
 			IVMInstall defaultVMInstall = JavaRuntime.getDefaultVMInstall();
-			
+
 			File jvmInstallLocation = defaultVMInstall.getInstallLocation();
-			
+
 			if (redirectOutput) {
 				OutputStream outputStream = new ByteArrayOutputStream();
 

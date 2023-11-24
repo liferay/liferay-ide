@@ -37,7 +37,6 @@ openFile
 -Xms40m
 -Xmx1024m
 -Xdock:icon=../Resources/UpgradePlanner.icns
--XstartOnFirstThread
 -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
