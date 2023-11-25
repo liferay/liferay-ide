@@ -795,7 +795,9 @@ ${java_executable}
     <vendor>Liferay, Inc</vendor>
     <width>600</width>
     <!-- <windowsSigningPkcs12File>${build_project_directory}/liferay.pfx</windowsSigningPkcs12File>
-    <windowsSigningPkcs12Password>${env(WINDOWS_SIGNING_PASSWORD)}</windowsSigningPkcs12Password> -->
+    <windowsSigningPkcs12Password>${env(WINDOWS_SIGNING_PASSWORD)}</windowsSigningPkcs12Password>
+    <osxSigningPkcs12File>${build_project_directory}/osx-signing.p12</osxSigningPkcs12File>
+    <osxSigningPkcs12Password>${env(OSX_SIGNING_PASSWORD)}</osxSigningPkcs12Password>-->
     <parameterList>
         <fileParameter>
             <name>java_executable</name>
