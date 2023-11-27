@@ -107,9 +107,7 @@
                 </compareValues>
             </ruleList>   
             <elseActionList>
-                <actionList>
-                    <setInstallerVariable name="extraArgumentForJdk17" value=""/>
-                </actionList>
+                <setInstallerVariable name="extraArgumentForJdk17" value=""/>
             </elseActionList>
         </if>
         <if>
