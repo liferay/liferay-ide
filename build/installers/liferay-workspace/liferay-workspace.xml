@@ -240,6 +240,34 @@
                 </if>
             </elseActionList>
         </if>
+        <if>
+            <actionList>
+                <setInstallerVariable name="extraArgumentForJdk17" value=" --add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
+            </actionList>
+            <conditionRuleList>
+                <compareText>
+                    <logic>equals</logic>
+                    <nocase>1</nocase>
+                    <text>${java_version}</text>
+                    <value>17</value>
+                </compareText>
+            </conditionRuleList>
+            <elseActionList>
+                <if>
+                    <actionList>
+                        <setInstallerVariable name="extraArgumentForJdk17" value=""/>
+                    </actionList>
+                    <conditionRuleList>
+                        <compareText>
+                            <logic>contains</logic>
+                            <nocase>1</nocase>
+                            <text>${java_version}</text>
+                            <value>17</value>
+                        </compareText>
+                    </conditionRuleList>
+                </if>
+            </elseActionList>
+        </if>        
         <pathManipulation>
             <action>nativeAbsolutize</action>
             <path>${java_executable}/..</path>

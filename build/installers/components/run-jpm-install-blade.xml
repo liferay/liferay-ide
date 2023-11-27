@@ -1,6 +1,6 @@
 <runProgram>
     <program>${java_executable}</program>
-    <programArguments> -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" install -fl "${bladeFilePath}"</programArguments>
+    <programArguments>${extraArgumentForJdk17} -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" install -fl "${bladeFilePath}"</programArguments>
     <ruleList>
         <platformTest>
             <negate>1</negate>
@@ -8,3 +8,4 @@
         </platformTest>
     </ruleList>
 </runProgram>
+

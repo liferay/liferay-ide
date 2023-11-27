@@ -97,6 +97,23 @@
         </if>
         <if>
             <actionList>
+                <setInstallerVariable name="extraArgumentForJdk17" value=" --add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
+            </actionList>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${java_version}</value1>
+                    <value2>17</value2>
+                </compareValues>
+            </ruleList>   
+            <elseActionList>
+                <actionList>
+                    <setInstallerVariable name="extraArgumentForJdk17" value=""/>
+                </actionList>
+            </elseActionList>
+        </if>
+        <if>
+            <actionList>
                 <if>
                     <actionList>
                         <if>
@@ -794,9 +811,9 @@ ${java_executable}
     <startMenuGroupName></startMenuGroupName>
     <vendor>Liferay, Inc</vendor>
     <width>600</width>
-    <!-- <windowsSigningPkcs12File>${build_project_directory}/liferay.pfx</windowsSigningPkcs12File>
+    <!-- windowsSigningPkcs12File>${build_project_directory}/liferay.pfx</windowsSigningPkcs12File>
     <windowsSigningPkcs12Password>${env(WINDOWS_SIGNING_PASSWORD)}</windowsSigningPkcs12Password>
-    <osxSigningPkcs12File>${build_project_directory}/osx-signing.p12</osxSigningPkcs12File>
+    <<osxSigningPkcs12File>${build_project_directory}/osx-signing.p12</osxSigningPkcs12File>
     <osxSigningPkcs12Password>${env(OSX_SIGNING_PASSWORD)}</osxSigningPkcs12Password>-->
     <parameterList>
         <fileParameter>
