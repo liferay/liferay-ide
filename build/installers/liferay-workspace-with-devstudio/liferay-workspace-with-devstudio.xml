@@ -97,21 +97,6 @@
         </if>
         <if>
             <actionList>
-                <setInstallerVariable name="extraArgumentForJdk17" value=" --add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
-            </actionList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${java_version}</value1>
-                    <value2>17</value2>
-                </compareValues>
-            </ruleList>   
-            <elseActionList>
-                <setInstallerVariable name="extraArgumentForJdk17" value=""/>
-            </elseActionList>
-        </if>
-        <if>
-            <actionList>
                 <if>
                     <actionList>
                         <if>
@@ -422,6 +407,21 @@ ${java_executable}
                         </if>
                     </elseActionList>
                 </if>
+            </elseActionList>
+        </if>
+        <if>
+            <actionList>
+                <setInstallerVariable name="extraArgumentForJdk17" value="--add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
+            </actionList>
+            <conditionRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <text>${java_version}</text>
+                    <value>17</value>
+                </compareText>
+            </conditionRuleList>
+            <elseActionList>
+                <setInstallerVariable name="extraArgumentForJdk17" value=""/>
             </elseActionList>
         </if>
         <if>
