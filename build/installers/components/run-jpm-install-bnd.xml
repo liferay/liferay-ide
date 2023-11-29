@@ -1,10 +1,10 @@
 <runProgram>
     <program>${java_executable}</program>
-    <programArguments> -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" install -fl "${bndFilePath}"</programArguments>
+    <programArguments>${extraArgumentForJdk17} -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" install -fl "${bndFilePath}"</programArguments>
     <ruleList>
         <platformTest>
             <negate>1</negate>
             <type>windows</type>
-        </platformTest>
+        </platformTest>      
     </ruleList>
 </runProgram>

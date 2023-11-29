@@ -245,6 +245,21 @@
             <path>${java_executable}/..</path>
             <variable>java_bin_dir</variable>
         </pathManipulation>
+        <if>
+            <actionList>
+                <setInstallerVariable name="extraArgumentForJdk17" value="--add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
+            </actionList>
+            <conditionRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <text>${java_version}</text>
+                    <value>17</value>
+                </compareText>
+            </conditionRuleList>
+            <elseActionList>
+                <setInstallerVariable name="extraArgumentForJdk17" value=""/>
+            </elseActionList>
+        </if>
         <include>
             <file>../components/run-java-jpm-win.xml</file>
         </include>
