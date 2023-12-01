@@ -503,7 +503,7 @@ public class PortalServerBehavior
 
 			if (Objects.nonNull(pathEnvironment)) {
 				try {
-					launchEnvrionment.put("PATH", jrePath.toOSString() + ":" + pathEnvironment);
+					launchEnvrionment.put("PATH", jrePath.toOSString() + "/bin:" + pathEnvironment);
 				}
 				catch (Exception exception) {
 				}
