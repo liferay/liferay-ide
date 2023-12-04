@@ -20,8 +20,10 @@ Require-Bundle: com.google.guava,
  org.eclipse.buildship.core,
  org.eclipse.core.expressions,
  org.eclipse.core.runtime,
+ org.eclipse.debug.ui,
  org.eclipse.jdt.core,
  org.eclipse.jdt.core.manipulation,
+ org.eclipse.jdt.debug.ui,
  org.eclipse.jdt.launching,
  org.eclipse.jdt.ui,
  org.eclipse.jface.text,
@@ -34,12 +36,10 @@ Require-Bundle: com.google.guava,
  org.eclipse.wst.common.project.facet.ui,
  org.eclipse.wst.server.core,
  org.eclipse.wst.server.ui,
- org.eclipse.debug.ui,
- org.eclipse.jdt.debug.ui
+ org.json
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.liferay.ide.gradle.ui
 Service-Component: OSGI-INF/com.liferay.ide.gradle.ui.upgrade.UpdateWorkspacePluginVersionCommand.xml,
  OSGI-INF/com.liferay.ide.gradle.ui.upgrade.RemoveDependencyVersionCommand.xml
-Import-Package: org.json

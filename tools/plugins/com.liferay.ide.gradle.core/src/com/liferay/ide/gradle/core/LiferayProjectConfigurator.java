@@ -14,9 +14,6 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.FileUtil;
@@ -28,6 +25,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -84,7 +83,7 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 		IProgressMonitor monitor = new NullProgressMonitor();
 
 		if (project.hasNature(JavaCore.NATURE_ID)) {
-			List<IClasspathEntry> classpath = Lists.newArrayList(javaProject.getRawClasspath());
+			List<IClasspathEntry> classpath = new ArrayList<>(Arrays.asList(javaProject.getRawClasspath()));
 
 			Map<IPath, IClasspathEntry> oldContainers = _removeOldContainers(classpath);
 
@@ -186,7 +185,7 @@ public class LiferayProjectConfigurator implements ProjectConfigurator {
 	}
 
 	private Map<IPath, IClasspathEntry> _removeOldContainers(List<IClasspathEntry> classpath) {
-		Map<IPath, IClasspathEntry> retainedEntries = Maps.newLinkedHashMap();
+		Map<IPath, IClasspathEntry> retainedEntries = new HashMap<>();
 		ListIterator<IClasspathEntry> iterator = classpath.listIterator();
 
 		while (iterator.hasNext()) {
