@@ -7,13 +7,14 @@ Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: com.liferay.ide.core.LiferayCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.google.gson,
+ com.liferay.release.util,
  org.apache.commons.codec,
  org.apache.commons.collections,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.apache.commons.logging,
- org.apache.httpcomponents.httpcore,
  org.apache.httpcomponents.httpclient,
+ org.apache.httpcomponents.httpcore,
  org.eclipse.core.contenttype,
  org.eclipse.core.expressions,
  org.eclipse.core.filesystem,
