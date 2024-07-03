@@ -26,16 +26,12 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCompare;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradePreview;
+import com.liferay.release.util.ReleaseEntry;
 
 import java.io.File;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -112,49 +108,26 @@ public class ConfigureTargetPlatformVersionCommand implements UpgradeCommand, Up
 	}
 
 	private IStatus _updateTargetPlatformValue(File gradeProperties) {
-		CompletableFuture<Map<String, String[]>> future = CompletableFuture.supplyAsync(
-			() -> {
-				try {
-					return ProjectUtil.initMavenTargetPlatform();
-				}
-				catch (Exception exception) {
-					return new HashMap<>();
-				}
-			});
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		future.thenAccept(
-			new Consumer<Map<String, String[]>>() {
+		String upgradePlanTargetVersion = upgradePlan.getTargetVersion();
 
-				@Override
-				public void accept(Map<String, String[]> mavenTargetPlatform) {
-					UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+		ReleaseEntry releaseEntry = ProjectUtil.getReleaseEntry(upgradePlanTargetVersion);
 
-					String targetPlatformVersion = mavenTargetPlatform.get("7.1")[0];
+		if (releaseEntry == null) {
+			releaseEntry = ProjectUtil.getReleaseEntry("7.1");
+		}
 
-					String targetVersion = upgradePlan.getTargetVersion();
+		try {
+			PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
 
-					if (Objects.equals(targetVersion, "7.0")) {
-						targetPlatformVersion = mavenTargetPlatform.get("7.0")[0];
-					}
-					else if (Objects.equals(targetVersion, "7.1")) {
-						targetPlatformVersion = mavenTargetPlatform.get("7.1")[0];
-					}
-					else if (Objects.equals(targetVersion, "7.2")) {
-						targetPlatformVersion = mavenTargetPlatform.get("7.2")[0];
-					}
+			config.setProperty(
+				WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, releaseEntry.getTargetPlatformVersion());
 
-					try {
-						PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
-
-						config.setProperty(WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, targetPlatformVersion);
-
-						config.save();
-					}
-					catch (ConfigurationException ce) {
-					}
-				}
-
-			});
+			config.save();
+		}
+		catch (ConfigurationException ce) {
+		}
 
 		return Status.OK_STATUS;
 	}

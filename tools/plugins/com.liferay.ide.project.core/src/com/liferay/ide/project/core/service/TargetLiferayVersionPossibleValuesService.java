@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.service;
 
-import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.Set;
 
@@ -28,7 +28,7 @@ public class TargetLiferayVersionPossibleValuesService extends PossibleValuesSer
 
 	@Override
 	protected void compute(Set<String> values) {
-		for (String version : WorkspaceConstants.LIFERAY_VERSIONS) {
+		for (String version : ProjectUtil.getProductGroupVersions()) {
 			values.add(version);
 		}
 	}

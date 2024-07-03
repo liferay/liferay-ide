@@ -15,13 +15,13 @@
 package com.liferay.ide.project.ui;
 
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.ConfigureWorkspaceProductOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 import com.liferay.ide.project.ui.workspace.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.release.util.ReleaseEntry;
 
 import java.util.Objects;
 
@@ -74,12 +74,12 @@ public interface RequireLiferayWorkspaceProject {
 		IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
 		if (Objects.nonNull(workspaceProject) && workspaceProject.isFlexibleLiferayWorkspace()) {
-			ProductInfo workspaceProductInfo = workspaceProject.getWorkspaceProductInfo();
+			ReleaseEntry workspaceReleaseEntry = workspaceProject.getWorkspaceReleaseEntry();
 
 			liferayWorkspaceProject = workspaceProject.getProject();
 
 			if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(liferayWorkspaceProject.getLocation()) &&
-				Objects.isNull(workspaceProductInfo)) {
+				Objects.isNull(workspaceReleaseEntry)) {
 
 				int updateProduct = MessageDialog.open(
 					MessageDialog.QUESTION, activeShell, NLS.bind(Msgs.newElement, wizardName),

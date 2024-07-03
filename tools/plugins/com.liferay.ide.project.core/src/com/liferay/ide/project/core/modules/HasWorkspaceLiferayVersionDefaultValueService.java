@@ -17,9 +17,9 @@ package com.liferay.ide.project.core.modules;
 import aQute.bnd.version.Version;
 
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.release.util.ReleaseEntry;
 
 import java.util.Objects;
 
@@ -46,12 +46,14 @@ public class HasWorkspaceLiferayVersionDefaultValueService extends DefaultValueS
 				return Boolean.toString(true);
 			}
 
-			ProductInfo workspaceProductInfo = liferayWorkspaceProject.getWorkspaceProductInfo();
+			ReleaseEntry workspaceReleaseEntry = liferayWorkspaceProject.getWorkspaceReleaseEntry();
 
-			if (Objects.nonNull(workspaceProductInfo)) {
-				String workspaceProductTargetPlatformVersion = workspaceProductInfo.getTargetPlatformVersion();
+			if (Objects.nonNull(workspaceReleaseEntry)) {
+				String workspaceProductTargetPlatformVersion = workspaceReleaseEntry.getTargetPlatformVersion();
 
-				if (Version.isVersion(workspaceProductTargetPlatformVersion)) {
+				if (Version.isVersion(workspaceProductTargetPlatformVersion) ||
+					workspaceProductTargetPlatformVersion.contains("q")) {
+
 					return Boolean.toString(true);
 				}
 			}

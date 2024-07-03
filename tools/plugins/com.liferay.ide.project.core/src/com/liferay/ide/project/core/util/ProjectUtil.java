@@ -14,17 +14,12 @@
 
 package com.liferay.ide.project.core.util;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -34,7 +29,6 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.PluginsSDKBundleProject;
@@ -46,14 +40,14 @@ import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BndProperties;
 import com.liferay.ide.project.core.modules.BndPropertiesValue;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.workspace.bundle.url.codec.BundleURLCodec;
+import com.liferay.release.util.ReleaseEntry;
+import com.liferay.release.util.ReleaseUtil;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -62,10 +56,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import java.nio.file.Files;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,8 +67,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -831,17 +824,6 @@ public class ProjectUtil {
 		return fpwc.getProject();
 	}
 
-	public static String decodeBundleUrl(ProductInfo productInfo) {
-		try {
-			return BundleURLCodec.decode(productInfo.getBundleUrl(), productInfo.getReleaseDate());
-		}
-		catch (Exception exception) {
-			ProjectCore.logError("Unable to determine bundle URL", exception);
-		}
-
-		return null;
-	}
-
 	public static void fixExtProjectSrcFolderLinks(IProject extProject) throws JavaModelException {
 		if (extProject == null) {
 			return;
@@ -1059,20 +1041,37 @@ public class ProjectUtil {
 		return null;
 	}
 
-	public static Map<String, ProductInfo> getProductInfos() {
-		try (JsonReader jsonReader = new JsonReader(Files.newBufferedReader(_workspaceCacheFile.toPath()))) {
-			Gson gson = new Gson();
+	public static String[] getProductGroupVersions() {
+		if (_productGroupVersions == null) {
+			Stream<ReleaseEntry> releaseEntryStream = ReleaseUtil.getReleaseEntryStream();
 
-			TypeToken<Map<String, ProductInfo>> typeToken = new TypeToken<Map<String, ProductInfo>>() {
-			};
-
-			return gson.fromJson(jsonReader, typeToken.getType());
+			_productGroupVersions = releaseEntryStream.map(
+				ReleaseEntry::getProductGroupVersion
+			).distinct(
+			).toArray(
+				String[]::new
+			);
 		}
-		catch (Exception ce) {
-			ProjectCore.logError("Cannot Find Product Info", ce);
-		}
 
-		return null;
+		return _productGroupVersions;
+	}
+
+	public static String[] getProductVersions(boolean showAll) {
+		Stream<ReleaseEntry> releaseEntryStream = ReleaseUtil.getReleaseEntryStream();
+
+		return releaseEntryStream.filter(
+			releaseEntry -> {
+				if (showAll) {
+					return true;
+				}
+
+				return releaseEntry.isPromoted();
+			}
+		).map(
+			ReleaseEntry::getReleaseKey
+		).toArray(
+			String[]::new
+		);
 	}
 
 	public static IProject getProject(IDataModel model) {
@@ -1113,8 +1112,6 @@ public class ProjectUtil {
 		return projectRecord;
 	}
 
-	// IDE-270
-
 	public static String getRelativePathFromDocroot(IWebProject lrproject, String path) {
 		IFolder docroot = lrproject.getDefaultDocrootFolder();
 
@@ -1130,6 +1127,39 @@ public class ProjectUtil {
 
 		return "/" + retval;
 	}
+
+	public static ReleaseEntry getReleaseEntry(String version) {
+		return getReleaseEntry(null, version);
+	}
+
+	public static ReleaseEntry getReleaseEntry(String product, String version) {
+		Predicate<ReleaseEntry> productGroupVersionPredicate = releaseEntry -> Objects.equals(
+			releaseEntry.getProductGroupVersion(), version);
+		Predicate<ReleaseEntry> productPredicate = releaseEntry -> Objects.equals(releaseEntry.getProduct(), product);
+		Predicate<ReleaseEntry> releaseKeyPredicate = releaseEntry -> Objects.equals(
+			releaseEntry.getReleaseKey(), version);
+		Predicate<ReleaseEntry> targetPlatformVersionPredicate = releaseEntry -> Objects.equals(
+			releaseEntry.getTargetPlatformVersion(), version);
+
+		Stream<ReleaseEntry> releaseEntryStream = ReleaseUtil.getReleaseEntryStream();
+
+		return releaseEntryStream.filter(
+			releaseKeyPredicate.or(
+				productPredicate.and(targetPlatformVersionPredicate)
+			).or(
+				productPredicate.and(productGroupVersionPredicate)
+			).or(
+				targetPlatformVersionPredicate
+			).or(
+				productGroupVersionPredicate
+			)
+		).findFirst(
+		).orElse(
+			null
+		);
+	}
+
+	// IDE-270
 
 	public static String getRequiredSuffix(IProject project) {
 		String requiredSuffix = null;
@@ -1349,51 +1379,6 @@ public class ProjectUtil {
 		}
 
 		return retval;
-	}
-
-	public static Map<String, String[]> initMavenTargetPlatform() {
-		Map<String, String[]> targetPlatformVersionMap = new HashMap<>();
-
-		try {
-			String[] workspaceProducts = BladeCLI.getWorkspaceProducts(true);
-
-			if (Objects.isNull(workspaceProducts)) {
-				return targetPlatformVersionMap;
-			}
-
-			Map<String, ProductInfo> productInfos = getProductInfos();
-
-			if (Objects.isNull(productInfos)) {
-				return targetPlatformVersionMap;
-			}
-
-			for (String liferayVersion : WorkspaceConstants.LIFERAY_VERSIONS) {
-				String[] targetPlatformVersions = Arrays.stream(
-					workspaceProducts
-				).unordered(
-				).filter(
-					product -> product.startsWith("portal")
-				).map(
-					productInfos::get
-				).filter(
-					productInfo -> {
-						String targetPlatformVersion = productInfo.getTargetPlatformVersion();
-
-						return targetPlatformVersion.startsWith(liferayVersion);
-					}
-				).map(
-					ProductInfo::getTargetPlatformVersion
-				).toArray(
-					String[]::new
-				);
-
-				targetPlatformVersionMap.put(liferayVersion, targetPlatformVersions);
-			}
-		}
-		catch (Exception exception) {
-		}
-
-		return targetPlatformVersionMap;
 	}
 
 	public static boolean is7xServerDeployableProject(IProject project) {
@@ -2030,16 +2015,13 @@ public class ProjectUtil {
 		return retval;
 	}
 
-	private static final String _DEFAULT_WORKSPACE_CACHE_FILE = ".liferay/workspace/.product_info.json";
-
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
 	};
+	private static String[] _productGroupVersions;
 	private static final Pattern _themeBuilderPlugin = Pattern.compile(
 		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.portal\\.tools\\.theme\\.builder[\'\"].*",
 		Pattern.MULTILINE | Pattern.DOTALL);
 	private static final Pattern _warPlugin = Pattern.compile(".*apply.*war.*", Pattern.MULTILINE | Pattern.DOTALL);
-	private static final File _workspaceCacheFile = new File(
-		System.getProperty("user.home"), _DEFAULT_WORKSPACE_CACHE_FILE);
 
 	private static class Msgs extends NLS {
 

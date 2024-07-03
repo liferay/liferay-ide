@@ -16,11 +16,7 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.util.ProjectUtil;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
+import com.liferay.release.util.ReleaseEntry;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
@@ -49,25 +45,9 @@ public class TargetLiferayVersionListener
 
 		targetPlatform.clear();
 
-		CompletableFuture<Map<String, String[]>> future = CompletableFuture.supplyAsync(
-			() -> {
-				try {
-					return ProjectUtil.initMavenTargetPlatform();
-				}
-				catch (Exception exception) {
-					return new HashMap<>();
-				}
-			});
+		ReleaseEntry releaseEntry = ProjectUtil.getReleaseEntry(liferayVersion);
 
-		future.thenAccept(
-			new Consumer<Map<String, String[]>>() {
-
-				@Override
-				public void accept(Map<String, String[]> mavenTargetPlatform) {
-					op.setTargetPlatform(mavenTargetPlatform.get(liferayVersion)[0]);
-				}
-
-			});
+		op.setTargetPlatform(releaseEntry.getTargetPlatformVersion());
 	}
 
 }

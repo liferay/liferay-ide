@@ -14,6 +14,8 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.release.util.ReleaseEntry;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +42,7 @@ public interface IWorkspaceProject extends ILiferayProject {
 		return null;
 	}
 
-	public default ProductInfo getWorkspaceProductInfo() {
+	public default ReleaseEntry getWorkspaceReleaseEntry() {
 		return null;
 	}
 
