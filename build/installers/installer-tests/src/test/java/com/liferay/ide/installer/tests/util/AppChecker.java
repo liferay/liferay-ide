@@ -32,16 +32,8 @@ public class AppChecker {
 		return installed("jpm version", InstallerUtil.getJpmVersion());
 	}
 
-	public static boolean bndInstalled() throws IOException {
-		return installed("bnd version", InstallerUtil.getBndVersion());
-	}
-
 	public static boolean bladeInstalled() throws IOException {
 		return installed("blade version", InstallerUtil.getBladeVersion());
-	}
-
-	public static boolean gwInstalled() throws IOException {
-		return installed("gw", InstallerUtil.getGwOutput());
 	}
 
 }

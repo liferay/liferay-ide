@@ -1,9 +1,0 @@
-<runProgram>
-    <program>${java_executable}</program>
-    <programArguments>${extraArgumentForJdk17} -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" install --jvmlocation "${java_bin_dir}" -fl "${bndFilePath}"</programArguments>
-    <ruleList>
-        <platformTest>
-            <type>windows</type>
-        </platformTest>    
-    </ruleList>
-</runProgram>

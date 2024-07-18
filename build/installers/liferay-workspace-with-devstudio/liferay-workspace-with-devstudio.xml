@@ -23,12 +23,6 @@
                         <distributionFile>
                             <origin>../shared/download/blade.jar</origin>
                         </distributionFile>
-                        <distributionFile>
-                            <origin>../shared/download/gw.jar</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>../shared/download/biz.aQute.bnd.jar</origin>
-                        </distributionFile>
                     </distributionFileList>
                 </folder>
                 <folder>
@@ -450,28 +444,10 @@ ${java_executable}
                     <file>../components/set-installer-variable-blade.xml</file>
                 </include>
                 <include>
-                    <file>../components/set-installer-variable-gw.xml</file>
-                </include>
-                <include>
-                    <file>../components/set-installer-variable-bnd.xml</file>
-                </include>
-                <include>
                     <file>../components/run-jpm-install-blade.xml</file>
                 </include>
                 <include>
                     <file>../components/run-jpm-install-blade-win.xml</file>
-                </include>
-                <include>
-                    <file>../components/run-jpm-install-gw.xml</file>
-                </include>
-                <include>
-                    <file>../components/run-jpm-install-gw-win.xml</file>
-                </include>
-                <include>
-                    <file>../components/run-jpm-install-bnd.xml</file>
-                </include>
-                <include>
-                    <file>../components/run-jpm-install-bnd-win.xml</file>
                 </include>
                 <runProgram>
                     <program>chown</program>
@@ -785,13 +761,7 @@ ${java_executable}
             <path>${installdir}${platform_path_separator}blade.jar</path>
         </deleteFile>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}gw.jar</path>
-        </deleteFile>
-        <deleteFile>
             <path>${installdir}${platform_path_separator}biz.aQute.jpm.run.jar</path>
-        </deleteFile>
-        <deleteFile>
-            <path>${installdir}${platform_path_separator}biz.aQute.bnd.jar</path>
         </deleteFile>
         <deleteFile>
             <path>${studioZipPath}</path>
@@ -895,7 +865,7 @@ ${java_executable}
         <booleanParameterGroup>
             <name>clitools</name>
             <description>Install Command Line Tools</description>
-            <explanation>Install Command Line Tools such as blade and bnd.</explanation>
+            <explanation>Install Command Line Tools such as blade.</explanation>
             <value></value>
             <default>1</default>
             <parameterList>
