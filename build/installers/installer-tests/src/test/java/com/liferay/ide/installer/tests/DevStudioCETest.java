@@ -50,8 +50,6 @@ public class DevStudioCETest {
 
 		Assertions.assertTrue(AppChecker.jpmInstalled());	
 		Assertions.assertTrue(AppChecker.bladeInstalled());
-		Assertions.assertTrue(AppChecker.bndInstalled());
-		Assertions.assertTrue(AppChecker.gwInstalled());
 	}
 
 	@EnabledOnOs(OS.LINUX)

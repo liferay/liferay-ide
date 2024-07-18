@@ -23,12 +23,6 @@
                         <distributionFile>
                             <origin>../shared/download/blade.jar</origin>
                         </distributionFile>
-                        <distributionFile>
-                            <origin>../shared/download/biz.aQute.bnd.jar</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>../shared/download/gw.jar</origin>
-                        </distributionFile>
                     </distributionFileList>
                 </folder>
                 <folder>
@@ -277,12 +271,6 @@
             <file>../components/set-installer-variable-blade.xml</file>
         </include>
         <include>
-            <file>../components/set-installer-variable-gw.xml</file>
-        </include>
-        <include>
-            <file>../components/set-installer-variable-bnd.xml</file>
-        </include>
-        <include>
             <file>../components/run-jpm-install-blade-win.xml</file>
         </include>
         <include>
@@ -365,18 +353,6 @@
                 </compareValues>
             </ruleList>
         </if>
-        <include>
-            <file>../components/run-jpm-install-gw-win.xml</file>
-        </include>
-        <include>
-            <file>../components/run-jpm-install-gw.xml</file>
-        </include>
-        <include>
-            <file>../components/run-jpm-install-bnd-win.xml</file>
-        </include>
-        <include>
-            <file>../components/run-jpm-install-bnd.xml</file>
-        </include>
         <runProgram>
             <program>chown</program>
             <programArguments>-R ${env(SUDO_USER)} "${userHome}/jpm"</programArguments>
