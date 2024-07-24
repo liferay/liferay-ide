@@ -17,12 +17,12 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 import com.liferay.release.util.ReleaseEntry;
@@ -93,7 +93,7 @@ public class LiferayMavenWorkspaceProjectProvider
 
 				properties.setProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, targetPlatform);
 
-				ReleaseEntry releaseEntry = ProjectUtil.getReleaseEntry(targetPlatform);
+				ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(targetPlatform);
 
 				if (releaseEntry != null) {
 					properties.setProperty(WorkspaceConstants.BUNDLE_URL_PROPERTY, releaseEntry.getBundleURL());

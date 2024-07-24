@@ -46,8 +46,6 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.release.util.ReleaseEntry;
-import com.liferay.release.util.ReleaseUtil;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -67,10 +65,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -1041,39 +1037,6 @@ public class ProjectUtil {
 		return null;
 	}
 
-	public static String[] getProductGroupVersions() {
-		if (_productGroupVersions == null) {
-			Stream<ReleaseEntry> releaseEntryStream = ReleaseUtil.getReleaseEntryStream();
-
-			_productGroupVersions = releaseEntryStream.map(
-				ReleaseEntry::getProductGroupVersion
-			).distinct(
-			).toArray(
-				String[]::new
-			);
-		}
-
-		return _productGroupVersions;
-	}
-
-	public static String[] getProductVersions(boolean showAll) {
-		Stream<ReleaseEntry> releaseEntryStream = ReleaseUtil.getReleaseEntryStream();
-
-		return releaseEntryStream.filter(
-			releaseEntry -> {
-				if (showAll) {
-					return true;
-				}
-
-				return releaseEntry.isPromoted();
-			}
-		).map(
-			ReleaseEntry::getReleaseKey
-		).toArray(
-			String[]::new
-		);
-	}
-
 	public static IProject getProject(IDataModel model) {
 		if (model == null) {
 			return null;
@@ -1126,37 +1089,6 @@ public class ProjectUtil {
 		}
 
 		return "/" + retval;
-	}
-
-	public static ReleaseEntry getReleaseEntry(String version) {
-		return getReleaseEntry(null, version);
-	}
-
-	public static ReleaseEntry getReleaseEntry(String product, String version) {
-		Predicate<ReleaseEntry> productGroupVersionPredicate = releaseEntry -> Objects.equals(
-			releaseEntry.getProductGroupVersion(), version);
-		Predicate<ReleaseEntry> productPredicate = releaseEntry -> Objects.equals(releaseEntry.getProduct(), product);
-		Predicate<ReleaseEntry> releaseKeyPredicate = releaseEntry -> Objects.equals(
-			releaseEntry.getReleaseKey(), version);
-		Predicate<ReleaseEntry> targetPlatformVersionPredicate = releaseEntry -> Objects.equals(
-			releaseEntry.getTargetPlatformVersion(), version);
-
-		Stream<ReleaseEntry> releaseEntryStream = ReleaseUtil.getReleaseEntryStream();
-
-		return releaseEntryStream.filter(
-			releaseKeyPredicate.or(
-				productPredicate.and(targetPlatformVersionPredicate)
-			).or(
-				productPredicate.and(productGroupVersionPredicate)
-			).or(
-				targetPlatformVersionPredicate
-			).or(
-				productGroupVersionPredicate
-			)
-		).findFirst(
-		).orElse(
-			null
-		);
 	}
 
 	// IDE-270
@@ -2017,7 +1949,6 @@ public class ProjectUtil {
 
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
 	};
-	private static String[] _productGroupVersions;
 	private static final Pattern _themeBuilderPlugin = Pattern.compile(
 		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.portal\\.tools\\.theme\\.builder[\'\"].*",
 		Pattern.MULTILINE | Pattern.DOTALL);

@@ -25,6 +25,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
@@ -33,7 +34,6 @@ import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.release.util.ReleaseEntry;
 
@@ -328,7 +328,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 			return null;
 		}
 
-		return ProjectUtil.getReleaseEntry(workspaceProductKey);
+		return ReleaseUtil.getReleaseEntry(workspaceProductKey);
 	}
 
 	@Override

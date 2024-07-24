@@ -18,7 +18,7 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.release.util.ReleaseEntry;
-import com.liferay.release.util.ReleaseUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 
 import java.util.Objects;
 import java.util.Set;

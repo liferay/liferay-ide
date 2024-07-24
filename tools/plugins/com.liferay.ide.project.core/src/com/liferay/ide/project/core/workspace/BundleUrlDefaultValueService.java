@@ -14,9 +14,9 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.release.util.ReleaseEntry;
 
 import org.eclipse.sapphire.DefaultValueService;
@@ -56,7 +56,7 @@ public class BundleUrlDefaultValueService extends DefaultValueService implements
 
 		String targetPlatform = get(op.getTargetPlatform());
 
-		ReleaseEntry releaseEntry = ProjectUtil.getReleaseEntry(targetPlatform);
+		ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(targetPlatform);
 
 		if (releaseEntry != null) {
 			return releaseEntry.getBundleURL();

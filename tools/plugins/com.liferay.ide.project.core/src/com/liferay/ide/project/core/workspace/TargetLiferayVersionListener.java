@@ -14,8 +14,8 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.release.util.ReleaseEntry;
 
 import org.eclipse.sapphire.Element;
@@ -45,7 +45,7 @@ public class TargetLiferayVersionListener
 
 		targetPlatform.clear();
 
-		ReleaseEntry releaseEntry = ProjectUtil.getReleaseEntry(liferayVersion);
+		ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(liferayVersion);
 
 		op.setTargetPlatform(releaseEntry.getTargetPlatformVersion());
 	}

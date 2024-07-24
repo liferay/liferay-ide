@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.ConfigureTargetPlatformVersionCommandKeys;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
@@ -112,10 +112,10 @@ public class ConfigureTargetPlatformVersionCommand implements UpgradeCommand, Up
 
 		String upgradePlanTargetVersion = upgradePlan.getTargetVersion();
 
-		ReleaseEntry releaseEntry = ProjectUtil.getReleaseEntry(upgradePlanTargetVersion);
+		ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(upgradePlanTargetVersion);
 
 		if (releaseEntry == null) {
-			releaseEntry = ProjectUtil.getReleaseEntry("7.1");
+			releaseEntry = ReleaseUtil.getReleaseEntry("7.1");
 		}
 
 		try {

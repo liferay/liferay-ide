@@ -19,13 +19,13 @@ import aQute.bnd.version.VersionRange;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.release.util.ReleaseEntry;
 
 import java.io.BufferedReader;
@@ -80,7 +80,7 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		String liferayVersion = get(op.getLiferayVersion());
 
-		ReleaseEntry releaseEntry = ProjectUtil.getReleaseEntry(liferayWorkspaceProject.getTargetPlatformVersion());
+		ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(liferayWorkspaceProject.getTargetPlatformVersion());
 
 		if (releaseEntry != null) {
 			liferayVersion = releaseEntry.getProductGroupVersion();
