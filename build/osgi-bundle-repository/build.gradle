@@ -11,6 +11,6 @@ buildscript {
 apply plugin: "nu.studer.credentials"
 
 task deployToS3(type:Exec) {
-	args = ["target/repository", "eclipse", "liferay-ide-deps", "201904221700"]
+	args = ["target/repository", "eclipse", "liferay-ide-deps", "202407241604"]
 	executable = "./deployToS3.sh"
 }
