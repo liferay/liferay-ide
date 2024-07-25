@@ -18,7 +18,7 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.springmvcportlet.NewSpringMVCPortletProjectOp;
 import com.liferay.ide.project.core.springmvcportlet.SpringMVCPortletProjectConstants;
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.sapphire.FilteredListener;
@@ -228,7 +228,7 @@ public class SpringMVCPortletConfigurationPresentationPart
 
 		String liferayVersion = get(_op().getLiferayVersion());
 
-		if (liferayVersion.equals(ProjectUtil.getProductGroupVersions()[0])) {
+		if (liferayVersion.equals(ReleaseUtil.getProductGroupVersions()[0])) {
 			_op().setFramework(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[1]);
 		}
 		else {
@@ -292,7 +292,7 @@ public class SpringMVCPortletConfigurationPresentationPart
 	private void _intializeSpringConfigurationData(String liferayVersion) {
 		_clearSpringConfigurationData();
 
-		if (liferayVersion.equals(ProjectUtil.getProductGroupVersions()[0])) {
+		if (liferayVersion.equals(ReleaseUtil.getProductGroupVersions()[0])) {
 			_frameworkCombo.setItems(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[1]);
 			_frameworkDependenciesCombo.setItems(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
 		}
