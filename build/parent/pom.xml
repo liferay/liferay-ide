@@ -41,7 +41,7 @@
         <liferay-ide-tag>ga1</liferay-ide-tag>
         <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/N20230908195041/repository</orbit-site>
         <sapphire-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/sapphire/9.1.1/</sapphire-site>
-        <osgi-bundles-site>file:///Users/drewbrokke/Documents/liferay/liferay-ide/build/osgi-bundle-repository/target/repository</osgi-bundles-site>
+        <osgi-bundles-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
         <sign-apps>false</sign-apps>
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.500/repository/</tm-site>
