@@ -3,7 +3,7 @@
 	id="com.liferay.ide.hidden"
 	label="Liferay IDE Hidden"
 	provider-name="Liferay, Inc."
-	version="4.0.0.qualifier"
+	version="3.10.0.qualifier"
 >
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">

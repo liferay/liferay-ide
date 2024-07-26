@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.jsf.deploy</groupId>
 		<artifactId>jsf-deploy-tests</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>3.10.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.jsf.deploy.tomcat.70.tests</artifactId>

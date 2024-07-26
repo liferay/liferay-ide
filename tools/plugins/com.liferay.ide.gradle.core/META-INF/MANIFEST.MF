@@ -9,7 +9,7 @@ Automatic-Module-Name: com.liferay.ide.gradle.core
 Bundle-Name: Liferay IDE Gradle Core
 Bundle-SymbolicName: com.liferay.ide.gradle.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 4.0.0.qualifier
+Bundle-Version: 3.10.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.liferay.blade.gradle.tooling,
  com.liferay.ide.gradle.core,

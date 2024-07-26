@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.studio.ui
 Bundle-Name: Liferay Developer Studio UI
 Bundle-SymbolicName: com.liferay.ide.studio.ui;singleton:=true
-Bundle-Version: 4.0.0.qualifier
+Bundle-Version: 3.10.0.qualifier
 Bundle-Activator: com.liferay.ide.studio.ui.StudioPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,

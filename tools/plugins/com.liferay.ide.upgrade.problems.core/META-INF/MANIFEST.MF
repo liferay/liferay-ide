@@ -10,7 +10,7 @@ Bundle-Name: Liferay IDE Upgrade Problems Core
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 4.0.0.qualifier
+Bundle-Version: 3.10.0.qualifier
 Export-Package: com.liferay.ide.upgrade.problems.core,
  com.liferay.ide.upgrade.problems.core.commands
 Require-Bundle: com.google.guava,
