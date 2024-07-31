@@ -7,6 +7,7 @@ Bundle-Version: 3.10.0.qualifier
 Bundle-Activator: com.liferay.ide.core.LiferayCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.google.gson,
+ com.liferay.release.util,
  org.apache.commons.codec,
  org.apache.commons.collections,
  org.apache.commons.io,
