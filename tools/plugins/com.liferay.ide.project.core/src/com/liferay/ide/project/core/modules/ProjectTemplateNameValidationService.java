@@ -18,15 +18,15 @@ import aQute.bnd.version.Version;
 import aQute.bnd.version.VersionRange;
 
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.release.util.ReleaseEntry;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -78,16 +78,15 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
-		String targetPlatformVersionString = VersionUtil.simplifyTargetPlatformVersion(
-			liferayWorkspaceProject.getTargetPlatformVersion());
-
 		String liferayVersion = get(op.getLiferayVersion());
 
-		if (CoreUtil.isNotNullOrEmpty(targetPlatformVersionString)) {
-			Version targetPlatformVersion = Version.parseVersion(targetPlatformVersionString);
+		ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(liferayWorkspaceProject.getTargetPlatformVersion());
 
-			liferayVersion = new String(targetPlatformVersion.getMajor() + "." + targetPlatformVersion.getMinor());
+		if (releaseEntry != null) {
+			liferayVersion = releaseEntry.getProductGroupVersion();
 		}
+
+		liferayVersion = liferayVersion.replace("q", "");
 
 		String projectTemplateName = get(op.getProjectTemplateName());
 
@@ -126,25 +125,21 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		VersionRange versionRange = _projectTemplateVersionRangeMap.get(projectTemplateName);
 
-		if (versionRange != null) {
-			boolean include = versionRange.includes(new Version(liferayVersion));
-
-			if (!include) {
-				if (npm) {
-					return Status.createErrorStatus(
-						"NPM portlet project templates generated from this tool are not supported for specified " +
-							"Liferay version. See LPS-97950 for full details.");
-				}
-
-				return Status.createErrorStatus(
-					"Specified Liferay version is invaild. Must be in range " + versionRange);
-			}
-		}
-		else {
+		if (versionRange == null) {
 			return Status.createWarningStatus("Unable to get supported Liferay version.");
 		}
 
-		return retval;
+		if (versionRange.includes(new Version(liferayVersion))) {
+			return retval;
+		}
+
+		if (npm) {
+			return Status.createErrorStatus(
+				"NPM portlet project templates generated from this tool are not supported for specified Liferay " +
+					"version. See LPS-97950 for full details.");
+		}
+
+		return Status.createErrorStatus("Specified Liferay version is invaild. Must be in range " + versionRange);
 	}
 
 	@Override
