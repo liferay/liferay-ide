@@ -14,14 +14,8 @@
 
 package com.liferay.ide.project.core.modules;
 
-import aQute.bnd.version.Version;
-
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.ProductInfo;
-import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-
-import java.util.Objects;
 
 import org.eclipse.sapphire.DefaultValueService;
 
@@ -38,28 +32,11 @@ public class HasWorkspaceLiferayVersionDefaultValueService extends DefaultValueS
 			return Boolean.toString(false);
 		}
 
-		try {
-			String simplifiedVersion = VersionUtil.simplifyTargetPlatformVersion(
-				liferayWorkspaceProject.getTargetPlatformVersion());
-
-			if (Version.isVersion(simplifiedVersion)) {
-				return Boolean.toString(true);
-			}
-
-			ProductInfo workspaceProductInfo = liferayWorkspaceProject.getWorkspaceProductInfo();
-
-			if (Objects.nonNull(workspaceProductInfo)) {
-				String workspaceProductTargetPlatformVersion = workspaceProductInfo.getTargetPlatformVersion();
-
-				if (Version.isVersion(workspaceProductTargetPlatformVersion)) {
-					return Boolean.toString(true);
-				}
-			}
-		}
-		catch (Exception exception) {
+		if (liferayWorkspaceProject.getWorkspaceReleaseEntry() == null) {
+			return Boolean.toString(false);
 		}
 
-		return Boolean.toString(false);
+		return Boolean.toString(true);
 	}
 
 }
