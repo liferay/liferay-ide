@@ -416,7 +416,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		// Use the internal server instead of the public server and also need to append the internal host
 
 		String bundleUrl =
-			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+			"https://releases-cdn.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
