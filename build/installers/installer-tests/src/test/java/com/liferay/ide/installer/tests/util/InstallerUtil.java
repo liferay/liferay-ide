@@ -93,16 +93,8 @@ public class InstallerUtil implements Constants {
 		return _getInfo().getProperty("jpm.version");
 	}
 
-	public static String getBndVersion() {
-		return _getInfo().getProperty("bnd.version");
-	}
-
 	public static String getBladeVersion() {
 		return _getInfo().getProperty("blade.version");
-	}
-
-	public static String getGwOutput() {
-		return _getInfo().getProperty("gw.output");
 	}
 
 	public static String getJpmHome() {

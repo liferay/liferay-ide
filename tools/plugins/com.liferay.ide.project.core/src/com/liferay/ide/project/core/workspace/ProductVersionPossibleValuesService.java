@@ -15,10 +15,10 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BladeCLI;
 
 import java.util.Collections;
 import java.util.List;
@@ -80,7 +80,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					String[] allWorkspaceProducts = BladeCLI.getWorkspaceProducts(true);
+					String[] allWorkspaceProducts = ReleaseUtil.getProductVersions(true);
 
 					if (!_isEmpty(allWorkspaceProducts)) {
 						_productVersions.clear();
@@ -88,7 +88,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 						Collections.addAll(_productVersions, allWorkspaceProducts);
 					}
 
-					String[] promotedProducts = BladeCLI.getWorkspaceProducts(false);
+					String[] promotedProducts = ReleaseUtil.getProductVersions(false);
 
 					if (!_isEmpty(promotedProducts)) {
 						_promotedProductVersions.clear();

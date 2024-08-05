@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.liferay.ide.build</groupId>
         <artifactId>installers</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>3.10.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>liferay.workspace.installer</artifactId>
@@ -32,7 +32,7 @@
 
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
-        <workspace-installer-version>4.0.0-${liferay-ide-tag}-${maven.build.timestamp}</workspace-installer-version>
+        <workspace-installer-version>3.10.0-${liferay-ide-tag}-${maven.build.timestamp}</workspace-installer-version>
     </properties>
 
     <build>
@@ -79,20 +79,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>download-gw</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${gw-latest-download-url}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                            <outputFileName>gw.jar</outputFileName>
-                            <md5>${gw-latest-md5}</md5>
-                            <checkSignature>true</checkSignature>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>download-jpmcli</id>
                         <phase>package</phase>
                         <goals>
@@ -103,20 +89,6 @@
                             <outputDirectory>../shared/download/</outputDirectory>
                             <outputFileName>biz.aQute.jpm.run.jar</outputFileName>
                             <md5>${jpmcli-latest-md5}</md5>
-                            <checkSignature>true</checkSignature>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-bnd</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${bnd-latest-download-url}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                            <outputFileName>biz.aQute.bnd.jar</outputFileName>
-                            <md5>${bnd-latest-md5}</md5>
                             <checkSignature>true</checkSignature>
                         </configuration>
                     </execution>

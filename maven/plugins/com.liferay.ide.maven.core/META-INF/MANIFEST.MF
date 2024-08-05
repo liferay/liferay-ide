@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.maven.core
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.maven.core;singleton:=true
-Bundle-Version: 4.0.0.qualifier
+Bundle-Version: 3.10.0.qualifier
 Bundle-Activator: com.liferay.ide.maven.core.LiferayMavenCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: biz.aQute.bndlib,
@@ -13,6 +13,7 @@ Require-Bundle: biz.aQute.bndlib,
  com.liferay.ide.project.core,
  com.liferay.ide.server.core,
  com.liferay.ide.theme.core,
+ com.liferay.release.util,
  org.apache.commons.io,
  org.apache.httpcomponents.httpclient,
  org.apache.httpcomponents.httpcore,

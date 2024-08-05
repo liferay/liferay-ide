@@ -67,7 +67,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.importLiferayWorkspace.prepare(project.getPath(), true, project.getName());
 
 		String bundleUrl =
-			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+			"https://releases-cdn.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
 		wizardAction.importLiferayWorkspace.prepareBundleUrl(bundleUrl);
 
@@ -170,7 +170,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.importLiferayWorkspace.prepare(project.getPath(), true, project.getName());
 
 		String bundleUrl =
-			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+			"https://releases-cdn.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
 		wizardAction.importLiferayWorkspace.prepareBundleUrl(bundleUrl);
 

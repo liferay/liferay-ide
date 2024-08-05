@@ -60,8 +60,6 @@ public class WorkspaceConstants {
 
 	public static final String LIFERAY_PORTAL_URL = "https://releases-cdn.liferay.com/portal/";
 
-	public static final String[] LIFERAY_VERSIONS = {"7.0", "7.1", "7.2", "7.3", "7.4"};
-
 	public static final String MODULES_DIR_PROPERTY = "liferay.workspace.modules.dir";
 
 	public static final String PLUGINS_SDK_DIR_PROPERTY = "liferay.workspace.plugins.sdk.dir";

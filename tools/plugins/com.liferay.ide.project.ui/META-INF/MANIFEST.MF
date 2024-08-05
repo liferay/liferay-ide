@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.project.ui
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.project.ui;singleton:=true
-Bundle-Version: 4.0.0.qualifier
+Bundle-Version: 3.10.0.qualifier
 Bundle-Activator: com.liferay.ide.project.ui.ProjectUI
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: biz.aQute.bndlib,
@@ -12,6 +12,7 @@ Require-Bundle: biz.aQute.bndlib,
  com.liferay.ide.sdk.core,
  com.liferay.ide.server.core,
  com.liferay.ide.ui,
+ com.liferay.release.util,
  org.apache.commons.io,
  org.eclipse.ant.ui,
  org.eclipse.compare,

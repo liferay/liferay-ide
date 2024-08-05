@@ -15,22 +15,20 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.ProductInfo;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
+import com.liferay.release.util.ReleaseEntry;
 
 import java.io.File;
 
-import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.maven.model.Model;
@@ -61,7 +59,15 @@ public class LiferayMavenWorkspaceProjectProvider
 
 		IPath workspaceLocation = location.append(workspaceName);
 
-		String version = get(op.getTargetPlatform());
+		String version = get(op.getProductVersion());
+
+		if (version == null) {
+			version = get(op.getTargetPlatform());
+		}
+
+		if (version == null) {
+			version = get(op.getLiferayVersion());
+		}
 
 		StringBuilder sb = new StringBuilder();
 
@@ -93,29 +99,15 @@ public class LiferayMavenWorkspaceProjectProvider
 
 				String targetPlatform = get(op.getTargetPlatform());
 
-				Map<String, ProductInfo> productInfos = ProjectUtil.getProductInfos();
-
-				ProductInfo productInfo = null;
-
-				for (ProductInfo product : productInfos.values()) {
-					try {
-						if (Objects.equals(product.getTargetPlatformVersion(), targetPlatform)) {
-							productInfo = product;
-
-							break;
-						}
-					}
-					catch (Exception exception) {
-						exception.printStackTrace();
-					}
-				}
-
 				properties.setProperty(WorkspaceConstants.WORKSPACE_BOM_VERSION, targetPlatform);
 
-				properties.setProperty(
-					WorkspaceConstants.BUNDLE_URL_PROPERTY, ProjectUtil.decodeBundleUrl(productInfo));
+				ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(targetPlatform);
 
-				MavenUtil.updateMavenPom(pomModel, pomFile);
+				if (releaseEntry != null) {
+					properties.setProperty(WorkspaceConstants.BUNDLE_URL_PROPERTY, releaseEntry.getBundleURL());
+
+					MavenUtil.updateMavenPom(pomModel, pomFile);
+				}
 			}
 			catch (Exception e) {
 				LiferayMavenCore.logError(e);

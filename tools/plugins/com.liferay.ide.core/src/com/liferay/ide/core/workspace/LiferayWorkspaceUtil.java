@@ -22,7 +22,9 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.VersionUtil;
+import com.liferay.release.util.ReleaseEntry;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +44,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-
-import org.osgi.framework.Version;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -235,9 +235,9 @@ public class LiferayWorkspaceUtil {
 
 		if (CoreUtil.isNotNullOrEmpty(simplifiedTargetPlatformVersion)) {
 			try {
-				Version liferayVersion = new Version(simplifiedTargetPlatformVersion);
+				ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(simplifiedTargetPlatformVersion);
 
-				return new String(liferayVersion.getMajor() + "." + liferayVersion.getMinor());
+				return releaseEntry.getProductGroupVersion();
 			}
 			catch (IllegalArgumentException iae) {
 				LiferayCore.logError("Failed to get liferay workspace project version.", iae);

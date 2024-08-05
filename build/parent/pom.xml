@@ -21,20 +21,20 @@
 
     <groupId>com.liferay.ide</groupId>
     <artifactId>parent</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>3.10.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <blade-latest-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/5.0.1-SNAPSHOT/com.liferay.blade.cli-5.0.1-20231122.160114-7.jar</blade-latest-download-url>
-        <blade-latest-md5>85762ef6e35197599a3e18c2e78da50f</blade-latest-md5>
+        <blade-latest-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli//7.0.2-SNAPSHOT/com.liferay.blade.cli-7.0.2-20240802.025710-4.jar</blade-latest-download-url>
+        <blade-latest-md5>f93d29d58af6fd77070289820b5cd606</blade-latest-md5>
         <blade-392-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/public/com/liferay/blade/com.liferay.blade.cli/3.9.2/com.liferay.blade.cli-3.9.2.jar</blade-392-download-url>
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
         <bndtools-site>https://bndtools.jfrog.io/artifactory/update-latest/org/bndtools/org.bndtools.p2/7.0.0/org.bndtools.p2-7.0.0.jar!</bndtools-site>
-        <eclipse-site>https://download.eclipse.org/releases/2023-12/202311241000/</eclipse-site>
+        <eclipse-site>https://download.eclipse.org/releases/2023-12/202312061001/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.8.v20231117-1658/</gradle-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
