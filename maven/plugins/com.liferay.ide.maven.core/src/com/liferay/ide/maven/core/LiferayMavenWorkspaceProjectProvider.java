@@ -61,6 +61,14 @@ public class LiferayMavenWorkspaceProjectProvider
 
 		String version = get(op.getProductVersion());
 
+		if (version == null) {
+			version = get(op.getTargetPlatform());
+		}
+
+		if (version == null) {
+			version = get(op.getLiferayVersion());
+		}
+
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("-q ");
