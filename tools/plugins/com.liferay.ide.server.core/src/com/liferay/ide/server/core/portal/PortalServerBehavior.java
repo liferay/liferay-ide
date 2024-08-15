@@ -509,6 +509,26 @@ public class PortalServerBehavior
 				}
 			}
 
+			List<String> opens = new ArrayList<>();
+
+			opens.add("--add-opens=java.base/java.io=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.lang.invoke=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.lang.ref=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.lang.reflect=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.net=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.nio.charset=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.nio=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.text=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.util.concurrent=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/sun.nio.ch=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/sun.nio.cs=ALL-UNNAMED");
+			opens.add("--add-opens=java.xml/com.sun.org.apache.xerces.internal.util=ALL-UNNAMED");
+
+			launchEnvrionment.put("JDK_JAVA_OPTIONS", String.join(" ", opens));
+
 			launch.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, launchEnvrionment);
 
 			launch.setAttribute(ILaunchManager.ATTR_APPEND_ENVIRONMENT_VARIABLES, Boolean.FALSE);
