@@ -38,7 +38,6 @@
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.8.v20231117-1658/</gradle-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
-        <liferay-ide-tag>ga1</liferay-ide-tag>
         <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/N20230908195041/repository</orbit-site>
         <sapphire-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/sapphire/9.1.1/</sapphire-site>
         <osgi-bundles-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
@@ -46,7 +45,7 @@
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.500/repository/</tm-site>
         <jre-site>https://download.eclipse.org/justj/jres/17/updates/release/latest</jre-site>
-        <tycho-packaging-format>yyyyMMddHHmm'-ga1'</tycho-packaging-format>
+        <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
         <tycho-version>3.0.5</tycho-version>
     </properties>
 

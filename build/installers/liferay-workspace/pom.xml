@@ -32,7 +32,7 @@
 
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
-        <workspace-installer-version>3.10.0-${liferay-ide-tag}-${maven.build.timestamp}</workspace-installer-version>
+        <workspace-installer-version>3.10.0-${maven.build.timestamp}</workspace-installer-version>
     </properties>
 
     <build>
