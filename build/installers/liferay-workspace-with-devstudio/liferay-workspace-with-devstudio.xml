@@ -258,7 +258,7 @@
                                     <actionList>
                                         <setInstallerVariable>
                                             <name>studioZipPath</name>
-                                            <value>${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.aarch64.zip</value>
+                                            <value>${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip</value>
                                         </setInstallerVariable>
                                     </actionList>
                                     <conditionRuleList>

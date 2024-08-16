@@ -209,7 +209,7 @@
                                 </goals>
                                 <configuration>
                                     <properties>
-                                        <appPath>${pom.basedir}/target/products/com.liferay.ide.studio-macosx.cocoa.aarch64.zip</appPath>
+                                        <appPath>${pom.basedir}/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</appPath>
                                         <signingServerURL>${signingServerURL}</signingServerURL>
                                         <signApps>${signApps}</signApps>
                                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>

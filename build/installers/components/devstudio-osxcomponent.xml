@@ -32,7 +32,7 @@
             <platforms>all</platforms>
             <distributionFileList>
                 <distributionFile>
-                    <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-macosx.cocoa.aarch64.zip</origin>
+                    <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</origin>
                 </distributionFile>
             </distributionFileList>
             <shouldPackRuleList>
