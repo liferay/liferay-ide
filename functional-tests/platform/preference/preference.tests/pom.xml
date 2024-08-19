@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.preference</groupId>
 		<artifactId>preference-tests</artifactId>
-		<version>3.10.0-SNAPSHOT</version>
+		<version>3.10.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.preference.tests</artifactId>
