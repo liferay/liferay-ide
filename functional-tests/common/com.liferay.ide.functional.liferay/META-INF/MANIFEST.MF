@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Functional Liferay Base
 Bundle-SymbolicName: com.liferay.ide.functional.liferay
-Bundle-Version: 3.10.1.qualifier
+Bundle-Version: 3.10.2.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: 
  com.liferay.ide.functional.swtbot,
