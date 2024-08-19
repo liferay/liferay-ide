@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.hook.core
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.hook.core;singleton:=true
-Bundle-Version: 3.10.0.qualifier
+Bundle-Version: 3.10.1.qualifier
 Bundle-Activator: com.liferay.ide.hook.core.HookCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,
