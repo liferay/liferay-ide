@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Liferay Upgrade Planner" uid="com.liferay.ide.upgrade.planner" id="com.liferay.ide.upgrade.planner" application="org.eclipse.ui.ide.workbench" version="3.10.1.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Liferay Upgrade Planner" uid="com.liferay.ide.upgrade.planner" id="com.liferay.ide.upgrade.planner" application="org.eclipse.ui.ide.workbench" version="3.10.2.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="images/about.png"/>

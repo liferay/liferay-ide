@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Functional SWTBot Base
 Bundle-SymbolicName: com.liferay.ide.functional.swtbot
-Bundle-Version: 3.10.1.qualifier
+Bundle-Version: 3.10.2.qualifier
 Bundle-Vendor: Liferay
 Require-Bundle: org.eclipse.debug.ui,
  org.eclipse.swtbot.go,
