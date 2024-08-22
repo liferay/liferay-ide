@@ -79,13 +79,15 @@ new File("../").eachDirRecurse
 			&& contents.contains( "<version>${oldPomVersion}" ) )
 		{
 			println "Found pom: " + pom.getAbsolutePath()
-			pom.text = contents.replaceAll( "<version>${oldPomVersion}", "<version>${newPomVersion}" )
+			contents = contents.replaceAll( "<version>${oldPomVersion}", "<version>${newPomVersion}" )
 		}
 
 		if( (contents.contains("-installer-version>${oldVersion}-")) )
 		{
 			println "Found pom: " + pom.getAbsolutePath()
-			pom.text = contents.replaceAll( "-installer-version>${oldVersion}-", "-installer-version>${newVersion}-")
+			contents = contents.replaceAll( "-installer-version>${oldVersion}-", "-installer-version>${newVersion}-")
 		}
+
+		pom.text = contents
 	}
 }
