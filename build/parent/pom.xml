@@ -33,7 +33,7 @@
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <upgrade-plan-content-zip-url>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/docs/code-upgrade-docs-20210312.zip</upgrade-plan-content-zip-url>
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
-        <bndtools-site>https://bndtools.jfrog.io/artifactory/update-latest/org/bndtools/org.bndtools.p2/7.0.0/org.bndtools.p2-7.0.0.jar!</bndtools-site>
+        <bndtools-site>https://bndtools.org/bndtools.p2.repo/7.0.0/</bndtools-site>
         <eclipse-site>https://download.eclipse.org/releases/2023-12/202312061001/</eclipse-site>
         <eclipse-xml-search-site>https://us-east-1.linodeobjects.com/devtools-s3.liferay.com/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.8.v20231117-1658/</gradle-site>
