@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
@@ -75,10 +76,9 @@ public class LiferayRuntimeNameValidationService extends ValidationService imple
 				return Status.createErrorStatus("Could not set invalid portal runtime");
 			}
 
-			Version workspaceVersion = Version.parseVersion(
-				VersionUtil.simplifyTargetPlatformVersion(targetPlatformVersion));
+			Version workspaceVersion = CoreUtil.parseVersion(targetPlatformVersion);
 
-			Version portalRuntimeVersion = Version.parseVersion(liferayRuntime.getPortalVersion());
+			Version portalRuntimeVersion = CoreUtil.parseVersion(liferayRuntime.getPortalVersion());
 
 			int majorWorkspaceVersion = workspaceVersion.getMajor();
 			int minorWorkspaceVersion = workspaceVersion.getMinor();
