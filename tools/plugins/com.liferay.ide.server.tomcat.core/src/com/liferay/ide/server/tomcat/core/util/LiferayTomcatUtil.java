@@ -335,22 +335,30 @@ public class LiferayTomcatUtil {
 	public static String getVersion(ILiferayRuntime runtime) {
 		String version = getConfigInfoFromCache(CONFIG_TYPE_VERSION, runtime.getAppServerPortalDir());
 
+		if (version != null) {
+			return version;
+		}
+
+		if (version == null) {
+			version = _getVersionFromLiferayVersionFile(runtime);
+		}
+
 		if (version == null) {
 			version = getConfigInfoFromManifest(CONFIG_TYPE_VERSION, runtime.getAppServerPortalDir());
+		}
 
-			if (version == null) {
-				LiferayPortalValueLoader loader = new LiferayPortalValueLoader(runtime.getUserLibs());
+		if (version == null) {
+			LiferayPortalValueLoader loader = new LiferayPortalValueLoader(runtime.getUserLibs());
 
-				Version loadedVersion = loader.loadVersionFromClass();
+			Version loadedVersion = loader.loadVersionFromClass();
 
-				if (loadedVersion != null) {
-					version = loadedVersion.toString();
-				}
+			if (loadedVersion != null) {
+				version = loadedVersion.toString();
 			}
+		}
 
-			if (version != null) {
-				saveConfigInfoIntoCache(CONFIG_TYPE_VERSION, version, runtime.getAppServerPortalDir());
-			}
+		if (version != null) {
+			saveConfigInfoIntoCache(CONFIG_TYPE_VERSION, version, runtime.getAppServerPortalDir());
 		}
 
 		return version;
@@ -760,6 +768,20 @@ public class LiferayTomcatUtil {
 		}
 
 		return retval;
+	}
+
+	private static String _getVersionFromLiferayVersionFile(ILiferayRuntime runtime) {
+		IPath liferayHomeIPath = runtime.getLiferayHome();
+
+		IPath liferayVersionIPath = liferayHomeIPath.append(".liferay-version");
+
+		String versionString = FileUtil.readContents(liferayVersionIPath.toFile());
+
+		if (versionString != null) {
+			return versionString.trim();
+		}
+
+		return null;
 	}
 
 	private static File _setupExternalPropertiesFile(File portalIdePropFile, String externalPropertiesPath) {
