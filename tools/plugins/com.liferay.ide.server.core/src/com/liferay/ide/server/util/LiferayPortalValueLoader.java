@@ -14,6 +14,7 @@
 
 package com.liferay.ide.server.util;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -77,7 +78,7 @@ public class LiferayPortalValueLoader {
 		try {
 			String versionString = (String)_getMethodValueFromClass(loadClassName, methodName);
 
-			retval = Version.parseVersion(versionString);
+			retval = CoreUtil.parseVersion(versionString);
 		}
 		catch (Exception e) {
 			retval = Version.emptyVersion;
@@ -156,6 +157,14 @@ public class LiferayPortalValueLoader {
 			File libDir = libPath.toFile();
 
 			_addLibs(libDir, libUrlList);
+
+			libPath = _portalDir.append("WEB-INF/shielded-container-lib");
+
+			libDir = libPath.toFile();
+
+			if (libDir.exists()) {
+				_addLibs(libDir, libUrlList);
+			}
 		}
 
 		if (ListUtil.isNotEmpty(_userLibs)) {
