@@ -18,6 +18,7 @@ import aQute.bnd.version.Version;
 import aQute.bnd.version.VersionRange;
 
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
@@ -78,15 +79,15 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
-		String liferayVersion = get(op.getLiferayVersion());
+		String liferayVersionString = get(op.getLiferayVersion());
+
+		Version liferayVersion = new Version(CoreUtil.parseVersion(liferayVersionString));
 
 		ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(liferayWorkspaceProject.getTargetPlatformVersion());
 
 		if (releaseEntry != null) {
-			liferayVersion = releaseEntry.getProductGroupVersion();
+			liferayVersionString = releaseEntry.getProductGroupVersion();
 		}
-
-		liferayVersion = liferayVersion.replace("q", "");
 
 		String projectTemplateName = get(op.getProjectTemplateName());
 
@@ -103,7 +104,7 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 				VersionRange requiredVersionRange = new VersionRange(
 					true, new Version("7.0"), new Version("7.2"), false);
 
-				if (!requiredVersionRange.includes(new Version(liferayVersion))) {
+				if (!requiredVersionRange.includes(liferayVersion)) {
 					return Status.createErrorStatus("Form Field project is only supported 7.0 and 7.1 for Maven");
 				}
 			}
@@ -129,7 +130,7 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 			return Status.createWarningStatus("Unable to get supported Liferay version.");
 		}
 
-		if (versionRange.includes(new Version(liferayVersion))) {
+		if (versionRange.includes(liferayVersion)) {
 			return retval;
 		}
 
