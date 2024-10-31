@@ -76,7 +76,7 @@ public class LiferayTomcatServer
 		try {
 			String version = LiferayTomcatUtil.getVersion((ILiferayRuntime)getServer().getRuntime());
 
-			Version portalVersion = Version.parseVersion(version);
+			Version portalVersion = CoreUtil.parseVersion(version);
 
 			if (CoreUtil.compareVersions(portalVersion, ILiferayConstants.V620) < 0) {
 				defaultServerMode = ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE;
