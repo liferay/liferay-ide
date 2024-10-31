@@ -329,25 +329,47 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 
 		String version = _getConfigInfoFromCache(_CONFIG_TYPE_VERSION, portalDir);
 
+		if (version != null) {
+			return version;
+		}
+
+		if (version == null) {
+			version = _getVersionFromLiferayVersionFile();
+		}
+
 		if (version == null) {
 			version = _getConfigInfoFromManifest(_CONFIG_TYPE_VERSION, portalDir);
+		}
 
-			if (version == null) {
-				LiferayPortalValueLoader loader = new LiferayPortalValueLoader(portalDir, extraLib);
+		if (version == null) {
+			LiferayPortalValueLoader loader = new LiferayPortalValueLoader(portalDir, extraLib);
 
-				Version loadedVersion = loader.loadVersionFromClass();
+			Version loadedVersion = loader.loadVersionFromClass();
 
-				if (loadedVersion != null) {
-					version = loadedVersion.toString();
-				}
-			}
-
-			if (version != null) {
-				_saveConfigInfoIntoCache(_CONFIG_TYPE_VERSION, version, portalDir);
+			if (loadedVersion != null) {
+				version = loadedVersion.toString();
 			}
 		}
 
+		if (version != null) {
+			_saveConfigInfoIntoCache(_CONFIG_TYPE_VERSION, version, portalDir);
+		}
+
 		return version;
+	}
+
+	private String _getVersionFromLiferayVersionFile() {
+		IPath liferayHomeIPath = getLiferayHome();
+
+		IPath liferayVersionIPath = liferayHomeIPath.append(".liferay-version");
+
+		String versionString = FileUtil.readContents(liferayVersionIPath.toFile());
+
+		if (versionString != null) {
+			return versionString.trim();
+		}
+
+		return null;
 	}
 
 	private void _saveConfigInfoIntoCache(String configType, String configInfo, IPath portalDir) {
