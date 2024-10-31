@@ -593,6 +593,10 @@ public class CoreUtil {
 		return project;
 	}
 
+	public static Version parseVersion(String versionString) {
+		return Version.parseVersion(versionString.replace("q", ""));
+	}
+
 	public static void prepareFolder(IFolder folder) throws CoreException {
 		IContainer parent = folder.getParent();
 
