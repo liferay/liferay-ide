@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.commands.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ReleaseUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.ui.util.UIUtil;
@@ -23,6 +24,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.release.util.ReleaseEntry;
 
 import java.nio.file.Paths;
 
@@ -74,27 +76,34 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 		NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		switch (upgradePlan.getTargetVersion()) {
-			case "7.0":
-				newLiferayWorkspaceOp.setProductVersion("portal-7.0-ga7");
+		ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry("portal", upgradePlan.getTargetVersion());
 
-				break;
-			case "7.1":
-				newLiferayWorkspaceOp.setProductVersion("portal-7.1-ga4");
+		if (releaseEntry != null) {
+			newLiferayWorkspaceOp.setProductVersion(releaseEntry.getReleaseKey());
+		}
+		else {
+			switch (upgradePlan.getTargetVersion()) {
+				case "7.0":
+					newLiferayWorkspaceOp.setProductVersion("portal-7.0-ga7");
 
-				break;
-			case "7.2":
-				newLiferayWorkspaceOp.setProductVersion("portal-7.2-ga2");
+					break;
+				case "7.1":
+					newLiferayWorkspaceOp.setProductVersion("portal-7.1-ga4");
 
-				break;
-			case "7.3":
-				newLiferayWorkspaceOp.setProductVersion("portal-7.3-ga8");
+					break;
+				case "7.2":
+					newLiferayWorkspaceOp.setProductVersion("portal-7.2-ga2");
 
-				break;
-			case "7.4":
-				newLiferayWorkspaceOp.setProductVersion("portal-7.4-ga4");
+					break;
+				case "7.3":
+					newLiferayWorkspaceOp.setProductVersion("portal-7.3-ga8");
 
-				break;
+					break;
+				case "7.4":
+					newLiferayWorkspaceOp.setProductVersion("portal-7.4-ga4");
+
+					break;
+			}
 		}
 
 		newLiferayWorkspaceOp.setLiferayVersion(upgradePlan.getTargetVersion());
