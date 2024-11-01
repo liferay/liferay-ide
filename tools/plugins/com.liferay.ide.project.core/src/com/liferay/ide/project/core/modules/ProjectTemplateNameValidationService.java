@@ -81,8 +81,6 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		String liferayVersionString = get(op.getLiferayVersion());
 
-		Version liferayVersion = new Version(CoreUtil.parseVersion(liferayVersionString));
-
 		ReleaseEntry releaseEntry = ReleaseUtil.getReleaseEntry(liferayWorkspaceProject.getTargetPlatformVersion());
 
 		if (releaseEntry != null) {
@@ -96,6 +94,8 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 				"This wizard does not support creating this type of module. Create it using the CLI first and then " +
 					"import here.");
 		}
+
+		Version liferayVersion = new Version(CoreUtil.parseVersion(liferayVersionString));
 
 		if (projectTemplateName.startsWith("form-field")) {
 			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
