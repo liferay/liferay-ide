@@ -58,7 +58,7 @@ public class ModuleExtProjectNameValidationService extends ModuleProjectNameVali
 		}
 
 		if (CoreUtil.compareVersions(
-				Version.parseVersion(liferayWorkspaceProjectVersion), Version.parseVersion("7.0")) <= 0) {
+				CoreUtil.parseVersion(liferayWorkspaceProjectVersion), Version.parseVersion("7.0")) <= 0) {
 
 			retval = Status.createErrorStatus(
 				"Module Ext projects only work on liferay workspace which version is greater than 7.0.");
