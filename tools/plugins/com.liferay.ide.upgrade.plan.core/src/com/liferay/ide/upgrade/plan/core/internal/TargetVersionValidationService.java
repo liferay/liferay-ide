@@ -34,8 +34,8 @@ public class TargetVersionValidationService extends ValidationService implements
 
 		NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
 
-		Version currentVersion = new Version(get(op.getCurrentVersion()));
-		Version targetVersion = new Version(get(op.getTargetVersion()));
+		Version currentVersion = CoreUtil.parseVersion(get(op.getCurrentVersion()));
+		Version targetVersion = CoreUtil.parseVersion(get(op.getTargetVersion()));
 
 		if (CoreUtil.compareVersions(currentVersion, targetVersion) >= 0) {
 			retval = Status.createErrorStatus("Target version must be greater than current version.");
