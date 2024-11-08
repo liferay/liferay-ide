@@ -278,7 +278,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 				MessageFormat.format(Msgs.errorPortalRuntimeConfiguration, runtime.getName()), null);
 		}
 
-		if (!portalBundleVersion.startsWith("7")) {
+		if (portalBundleVersion.startsWith("5") || portalBundleVersion.startsWith("6")) {
 			return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalVersion70, null);
 		}
 
