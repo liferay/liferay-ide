@@ -22,7 +22,7 @@
    <parent>
         <groupId>com.liferay.ide.portal.plugins</groupId>
 	<artifactId>portal-plugins</artifactId>
-	<version>3.10.4-SNAPSHOT</version>
+	<version>3.10.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.ide.freemarker</artifactId>

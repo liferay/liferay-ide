@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.portlet.ui
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.portlet.ui;singleton:=true
-Bundle-Version: 3.10.4.qualifier
+Bundle-Version: 3.10.5.qualifier
 Bundle-Activator: com.liferay.ide.portlet.ui.PortletUIPlugin
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,

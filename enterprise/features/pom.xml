@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>com.liferay.ide.enterprise</groupId>
 		<artifactId>enterprise</artifactId>
-		<version>3.10.4-SNAPSHOT</version>
+		<version>3.10.5-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.liferay.ide.enterprise.features</groupId>

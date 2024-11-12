@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.gradle.ui
 Bundle-Name: Liferay IDE Gradle UI
 Bundle-SymbolicName: com.liferay.ide.gradle.ui;singleton:=true
-Bundle-Version: 3.10.4.qualifier
+Bundle-Version: 3.10.5.qualifier
 Bundle-Activator: com.liferay.ide.gradle.ui.LiferayGradleUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.google.guava,
