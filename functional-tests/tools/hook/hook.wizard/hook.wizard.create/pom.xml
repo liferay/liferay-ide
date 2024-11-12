@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.hook.wizard</groupId>
 		<artifactId>hook-wizard-tests</artifactId>
-		<version>3.10.4-SNAPSHOT</version>
+		<version>3.10.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.hook.wizard.create.tests</artifactId>

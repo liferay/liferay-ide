@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Preference Tests
 Bundle-SymbolicName: com.liferay.ide.functional.preference.tests
-Bundle-Version: 3.10.4.qualifier
+Bundle-Version: 3.10.5.qualifier
 Bundle-Vendor: Liferay
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

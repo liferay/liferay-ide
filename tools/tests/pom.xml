@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.liferay.ide.tools</groupId>
         <artifactId>tools</artifactId>
-        <version>3.10.4-SNAPSHOT</version>
+        <version>3.10.5-SNAPSHOT</version>
     </parent>
 
     <groupId>com.liferay.ide.tools.tests</groupId>
