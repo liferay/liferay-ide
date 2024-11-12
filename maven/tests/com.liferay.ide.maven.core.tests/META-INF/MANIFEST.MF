@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.maven.core.tests
 Bundle-Name: Liferay Maven Core Tests
 Bundle-SymbolicName: com.liferay.ide.maven.core.tests
-Bundle-Version: 3.10.2.qualifier
+Bundle-Version: 3.10.3.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.core.tests,
