@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Workspace Wizard Create Tomcat 70 Tests
 Bundle-SymbolicName: com.liferay.ide.functional.workspace.wizard.create.tomcat.70.tests
-Bundle-Version: 3.10.3.qualifier
+Bundle-Version: 3.10.4.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.functional.liferay,
  com.liferay.ide.functional.swtbot,

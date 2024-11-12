@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.maven.ui
 Bundle-Name: Liferay IDE Maven UI
 Bundle-SymbolicName: com.liferay.ide.maven.ui;singleton:=true
-Bundle-Version: 3.10.3.qualifier
+Bundle-Version: 3.10.4.qualifier
 Bundle-Activator: com.liferay.ide.maven.ui.LiferayMavenUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,
