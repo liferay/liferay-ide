@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.hook.ui
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.hook.ui;singleton:=true
-Bundle-Version: 3.10.2.qualifier
+Bundle-Version: 3.10.3.qualifier
 Bundle-Activator: com.liferay.ide.hook.ui.HookUI
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,

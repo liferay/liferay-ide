@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>com.liferay.ide</groupId>
 		<artifactId>integration-tests</artifactId>
-		<version>3.10.2-SNAPSHOT</version>
+		<version>3.10.3-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.liferay.ide.integration.tests</groupId>

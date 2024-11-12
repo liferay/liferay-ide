@@ -4,7 +4,7 @@
 	label="Liferay IDE Maven Support (includes Eclipse m2e plugins)"
 	plugin="com.liferay.ide.maven.ui"
 	provider-name="Liferay, Inc."
-	version="3.10.2.qualifier"
+	version="3.10.3.qualifier"
 >
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">

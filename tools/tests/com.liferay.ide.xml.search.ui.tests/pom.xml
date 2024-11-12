@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.liferay.ide.tools.tests</groupId>
         <artifactId>tools-tests</artifactId>
-        <version>3.10.2-SNAPSHOT</version>
+        <version>3.10.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.ide.xml.search.ui.tests</artifactId>
