@@ -241,7 +241,7 @@
         </pathManipulation>
         <if>
             <actionList>
-                <setInstallerVariable name="extraArgumentForJdk17" value="--add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
+                <setInstallerVariable name="extraArgumentForJdk17And21" value="--add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
             </actionList>
             <conditionRuleList>
                 <compareText>
@@ -251,7 +251,7 @@
                 </compareText>
             </conditionRuleList>
             <elseActionList>
-                <setInstallerVariable name="extraArgumentForJdk17" value=""/>
+                <setInstallerVariable name="extraArgumentForJdk17And21" value=""/>
             </elseActionList>
         </if>
         <include>

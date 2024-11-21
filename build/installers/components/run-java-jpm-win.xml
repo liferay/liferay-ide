@@ -1,6 +1,6 @@
 <runProgram>
     <program>${java_executable}</program>
-    <programArguments>${extraArgumentForJdk17} -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u -b "${userHome}" -h "${jpmSettingPath}" -B "${jpmSystemPath}" init --jvmlocation "${java_bin_dir}"</programArguments>
+    <programArguments>${extraArgumentForJdk17And21} -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u -b "${userHome}" -h "${jpmSettingPath}" -B "${jpmSystemPath}" init --jvmlocation "${java_bin_dir}"</programArguments>
     <ruleList>
         <platformTest>
             <type>windows</type>

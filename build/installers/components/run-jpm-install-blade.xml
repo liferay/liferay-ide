@@ -1,6 +1,6 @@
 <runProgram>
     <program>${java_executable}</program>
-    <programArguments>${extraArgumentForJdk17} -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" install -fl "${bladeFilePath}"</programArguments>
+    <programArguments>${extraArgumentForJdk17And21} -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" install -fl "${bladeFilePath}"</programArguments>
     <ruleList>
         <platformTest>
             <negate>1</negate>
