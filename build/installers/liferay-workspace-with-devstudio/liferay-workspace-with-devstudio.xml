@@ -408,11 +408,11 @@ ${java_executable}
                 <setInstallerVariable name="extraArgumentForJdk17And21" value="--add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
             </actionList>
             <conditionRuleList>
-                <compareText>
-                    <logic>contains</logic>
+                <regExMatch>
+                    <logic>matches</logic>
+                    <pattern>.*(17|21).*</pattern>
                     <text>${java_version}</text>
-                    <value>17</value>
-                </compareText>
+                </regExMatch>
             </conditionRuleList>
             <elseActionList>
                 <setInstallerVariable name="extraArgumentForJdk17And21" value=""/>
