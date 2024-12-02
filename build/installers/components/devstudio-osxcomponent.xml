@@ -23,7 +23,7 @@
                     <value>osx</value>
                 </compareText>
                 <platformTest type="osx-arm64"  negate="1" />
-            </shouldPackRuleList>            
+            </shouldPackRuleList>
         </folder>
         <folder>
             <description>Program Files</description>
@@ -44,7 +44,7 @@
                 </compareText>
                 <platformTest type="osx-arm64" />
             </shouldPackRuleList>
-        </folder>        
+        </folder>
     </folderList>
 
 </component>

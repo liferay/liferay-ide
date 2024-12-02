@@ -132,7 +132,7 @@
                                 <argument>project.version=${workspace-installer-version}</argument>
                             </arguments>
                         </configuration>
-                    </execution>                    
+                    </execution>
                     <execution>
                         <id>windows</id>
                         <phase>package</phase>
@@ -166,7 +166,7 @@
                                 <argument>project.version=${workspace-installer-version}</argument>
                             </arguments>
                         </configuration>
-                    </execution>                  
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -179,7 +179,7 @@
                         <artifactId>groovy-all</artifactId>
                         <version>4.0.7</version>
                         <type>pom</type>
-                        <scope>runtime</scope>                        
+                        <scope>runtime</scope>
                     </dependency>
                 </dependencies>
                 <executions>
