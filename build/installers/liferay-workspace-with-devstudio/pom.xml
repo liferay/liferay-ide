@@ -132,7 +132,7 @@
                                 <argument>project.version=${studio-installer-version}</argument>
                             </arguments>
                         </configuration>
-                    </execution>                    
+                    </execution>
                     <execution>
                         <id>windows</id>
                         <phase>package</phase>
@@ -179,7 +179,7 @@
                         <artifactId>groovy-all</artifactId>
                         <version>4.0.7</version>
                         <type>pom</type>
-                        <scope>runtime</scope>                        
+                        <scope>runtime</scope>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -199,14 +199,14 @@
                                 <signingServerSearchPath>${signingServerSearchPath}</signingServerSearchPath>
                                 <signingServerReplacePath>${signingServerReplacePath}</signingServerReplacePath>
                             </properties>
-                        </configuration>                          
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
                     <scripts>
                         <script>${pom.basedir}/../shared/scripts/SignApp.groovy</script>
                     </scripts>
-                </configuration>   
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
