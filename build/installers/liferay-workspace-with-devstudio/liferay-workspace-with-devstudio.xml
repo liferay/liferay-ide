@@ -88,38 +88,13 @@
             <text>${password.password}</text>
         </writeFile>
         <deleteFile path="${installdir}${platform_path_separator}pwd" />
-        <actionGroup explanation="Set the studioZipPath variable based on the platform">
-            <actionList>
-                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-linux.gtk.x86_64.zip">
-                    <ruleList>
-                        <platformTest type="linux-x64"/>
-                    </ruleList>
-                </setInstallerVariable>
-                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-linux.gtk.aarch64.zip">
-                    <ruleList>
-                        <platformTest type="linux-arm64" />
-                    </ruleList>
-                </setInstallerVariable>
-                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip">
-                    <ruleList>
-                        <platformTest type="osx"/>
-                        <platformTest negate="1" type="osx-arm64" />
-                    </ruleList>
-                </setInstallerVariable>
-                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip">
-                    <ruleList>
-                         <platformTest type="osx-arm64" />
-                    </ruleList>
-                </setInstallerVariable>
-                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-win32.win32.x86_64.zip">
-                    <ruleList>
-                        <platformTest type="windows-x64" />
-                    </ruleList>
-                </setInstallerVariable>
-            </actionList>
-        </actionGroup>
         <actionGroup explanation="Install the main program">
             <actionList>
+                <findFile>
+                    <baseDirectory>${installdir}</baseDirectory>
+                    <variable>studioZipPath</variable>
+                    <pattern>com.liferay.ide.studio-*.zip</pattern>
+                </findFile>
                 <actionGroup explanation="Install zip on MacOS">
                     <actionList>
                         <runProgram>
