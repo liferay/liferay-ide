@@ -51,29 +51,169 @@
                 </folder>
             </folderList>
         </component>
-        <include>
-            <file>../components/devstudio-linuxcomponent.xml</file>
-        </include>
-        <include>
-            <file>../components/devstudio-osxcomponent.xml</file>
-        </include>
-        <include>
-            <file>../components/devstudio-wincomponent.xml</file>
-        </include>
-        <include>
-            <file>../components/devstudio-linux-arm64-component.xml</file>
-        </include>
+        <include file="../components/devstudio-linuxcomponent.xml" />
+        <include file="../components/devstudio-osxcomponent.xml" />
+        <include file="../components/devstudio-wincomponent.xml" />
+        <include file="../components/devstudio-linux-arm64-component.xml" />
     </componentList>
     <preInstallationActionList>
-        <include>
-            <file>../components/autodetect-java.xml</file>
-        </include>
-        <include>
-            <file>../components/autodetect-java-windows.xml</file>
-        </include>
+        <include file="../components/autodetect-java.xml" />
+        <include file="../components/autodetect-java-windows.xml" />
     </preInstallationActionList>
     <postInstallationActionList>
-        <if>
+        <actionGroup explanation="Set proxy arg variables">
+            <actionList>
+                <setInstallerVariable name="proxyHostArg" value="" />
+                <setInstallerVariable name="proxyPortArg" value="" />
+                <setInstallerVariable name="proxyUsernameArg" value="" />
+                <setInstallerVariable name="proxyPasswordArg" value="" />
+
+                <actionGroup>
+                    <actionList>
+                        <setInstallerVariable name="proxyHostArg" value=" -Dhttp.proxyHost=${httpproxyhost}" />
+                        <setInstallerVariable name="proxyPortArg" value=" -Dhttp.proxyPort=${httpproxyport}" />
+                        <setInstallerVariable name="proxyUsernameArg" value=" -Dhttp.proxyUser=${httpproxyusername}" />
+                        <setInstallerVariable name="proxyPasswordArg" value=" -Dhttp.proxyPassword=${httpproxypassword}" />
+                    </actionList>
+                    <ruleList>
+                        <compareValues logic="equals" value1="${proxysetting}" value2="httpProxy" />
+                    </ruleList>
+                </actionGroup>
+                <actionGroup>
+                    <actionList>
+                        <setInstallerVariable name="proxyHostArg" value=" -Dhttps.proxyHost=${httpsproxyhost}" />
+                        <setInstallerVariable name="proxyPortArg" value=" -Dhttps.proxyPort=${httpsproxyport}" />
+                        <setInstallerVariable name="proxyUsernameArg" value=" -Dhttps.proxyUser=${httpsproxyusername}" />
+                        <setInstallerVariable name="proxyPasswordArg" value=" -Dhttps.proxyPassword=${httpsproxypassword}" />
+                    </actionList>
+                    <ruleList>
+                        <compareValues logic="equals" value1="${proxysetting}" value2="httpsProxy" />
+                    </ruleList>
+                </actionGroup>
+                <actionGroup>
+                    <actionList>
+                        <setInstallerVariable name="proxyHostArg" value=" -DsocksProxyHost=${socksproxyhost}" />
+                        <setInstallerVariable name="proxyPortArg" value=" -DsocksProxyPort=${socksproxyport}" />
+                        <setInstallerVariable name="proxyUsernameArg" value="" />
+                        <setInstallerVariable name="proxyPasswordArg" value="" />
+                    </actionList>
+                    <ruleList>
+                        <compareValues logic="equals" value1="${proxysetting}" value2="socksProxy" />
+                    </ruleList>
+                </actionGroup>
+            </actionList>
+            <ruleList>
+                <compareValues logic="equals" value1="${proxy}" value2="proxysetting" />
+            </ruleList>
+        </actionGroup>
+        <writeFile explanation="Write password to pwd file">
+            <encoding>utf-8</encoding>
+            <path>${installdir}${platform_path_separator}pwd</path>
+            <text>${password.password}</text>
+        </writeFile>
+        <deleteFile path="${installdir}${platform_path_separator}pwd" />
+        <actionGroup explanation="Set the studioZipPath variable based on the platform">
+            <actionList>
+                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-linux.gtk.x86_64.zip">
+                    <ruleList>
+                        <platformTest type="linux-x64"/>
+                    </ruleList>
+                </setInstallerVariable>
+                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-linux.gtk.aarch64.zip">
+                    <ruleList>
+                        <platformTest type="linux-arm64" />
+                    </ruleList>
+                </setInstallerVariable>
+                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip">
+                    <ruleList>
+                        <platformTest type="osx"/>
+                        <platformTest negate="1" type="osx-arm64" />
+                    </ruleList>
+                </setInstallerVariable>
+                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip">
+                    <ruleList>
+                         <platformTest type="osx-arm64" />
+                    </ruleList>
+                </setInstallerVariable>
+                <setInstallerVariable name="studioZipPath" value="${installdir}${platform_path_separator}com.liferay.ide.studio-win32.win32.x86_64.zip">
+                    <ruleList>
+                        <platformTest type="windows-x64" />
+                    </ruleList>
+                </setInstallerVariable>
+            </actionList>
+        </actionGroup>
+        <actionGroup explanation="Install the main program">
+            <actionList>
+                <actionGroup explanation="Install zip on MacOS">
+                    <actionList>
+                        <runProgram>
+                            <program>chown</program>
+                            <programArguments>-R $USER "${installdir}"</programArguments>
+                        </runProgram>
+                        <runProgram>
+                            <program>unzip</program>
+                            <programArguments>${studioZipPath}</programArguments>
+                            <progressText>unzipping</progressText>
+                            <workingDirectory>${installdir}</workingDirectory>
+                        </runProgram>
+                        <runProgram>
+                            <program>chmod</program>
+                            <programArguments>+w "${installdir}"/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</programArguments>
+                        </runProgram>
+                        <actionGroup explanation="Set startup JDK">
+                            <actionList>
+                                <dirName>
+                                    <path>${java_executable}</path>
+                                    <variable>find_in_path</variable>
+                                </dirName>
+                                <findFile>
+                                    <baseDirectory>${find_in_path}/../</baseDirectory>
+                                    <pattern>libjli.dylib</pattern>
+                                    <variable>libjli_path</variable>
+                                </findFile>
+                                <addTextToFile>
+                                    <file>${installdir}/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</file>
+                                    <insertAt>beginning</insertAt>
+                                    <text>-vm
+${libjli_path}
+</text>
+                                </addTextToFile>
+                            </actionList>
+                            <ruleList>
+                                <isFalse value="${java_autodetected}" />
+                            </ruleList>
+                        </actionGroup>
+                    </actionList>
+                    <ruleList>
+                        <platformTest type="osx" />
+                    </ruleList>
+                </actionGroup>
+                <actionGroup explanation="Install zip on Linux and Windows">
+                    <actionList>
+                        <unzip>
+                            <addToUninstaller>0</addToUninstaller>
+                            <destinationDirectory>${installdir}</destinationDirectory>
+                            <progressText>Unpacking files</progressText>
+                            <zipFile>${studioZipPath}</zipFile>
+                        </unzip>
+                        <addTextToFile explanation="Set startup JDK">
+                            <file>${installdir}/liferay-developer-studio/DeveloperStudio.ini</file>
+                            <insertAt>beginning</insertAt>
+                            <text>-vm
+${java_executable}
+</text>
+                            <ruleList>
+                                <isFalse value="${java_autodetected}" />
+                            </ruleList>
+                        </addTextToFile>
+                    </actionList>
+                    <ruleList>
+                        <platformTest negate="1" type="osx" />
+                    </ruleList>
+                </actionGroup>
+            </actionList>
+        </actionGroup>
+        <actionGroup explanation="Perform CLI Tools installation actions">
             <actionList>
                 <createDirectory>
                     <path>${userHome}${platform_path_separator}.liferay</path>
@@ -84,526 +224,164 @@
                     <path>${java_executable}/..</path>
                     <variable>java_bin_dir</variable>
                 </pathManipulation>
-            </actionList>
-            <conditionRuleList>
-                <isTrue value="${clitools}"/>
-            </conditionRuleList>
-        </if>
-        <if>
-            <actionList>
                 <if>
+                    <explanation>Set extra arguments for JDK 17 and 21</explanation>
                     <actionList>
-                        <if>
-                            <actionList>
-                                <setInstallerVariable>
-                                    <name>proxyHostArg</name>
-                                    <value> -Dhttp.proxyHost=${httpproxyhost}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyPortArg</name>
-                                    <value> -Dhttp.proxyPort=${httpproxyport}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyUsernameArg</name>
-                                    <value> -Dhttp.proxyUser=${httpproxyusername}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyPasswordArg</name>
-                                    <value> -Dhttp.proxyPassword=${httpproxypassword}</value>
-                                </setInstallerVariable>
-                            </actionList>
-                            <ruleList>
-                                <compareValues>
-                                    <logic>equals</logic>
-                                    <value1>${proxysetting}</value1>
-                                    <value2>httpProxy</value2>
-                                </compareValues>
-                            </ruleList>
-                        </if>
-                        <if>
-                            <actionList>
-                                <setInstallerVariable>
-                                    <name>proxyHostArg</name>
-                                    <value> -Dhttps.proxyHost=${httpsproxyhost}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyPortArg</name>
-                                    <value> -Dhttps.proxyPort=${httpsproxyport}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyUsernameArg</name>
-                                    <value> -Dhttps.proxyUser=${httpsproxyusername}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyPasswordArg</name>
-                                    <value> -Dhttps.proxyPassword=${httpsproxypassword}</value>
-                                </setInstallerVariable>
-                            </actionList>
-                            <ruleList>
-                                <compareValues>
-                                    <logic>equals</logic>
-                                    <value1>${proxysetting}</value1>
-                                    <value2>httpsProxy</value2>
-                                </compareValues>
-                            </ruleList>
-                        </if>
-                        <if>
-                            <actionList>
-                                <setInstallerVariable>
-                                    <name>proxyHostArg</name>
-                                    <value> -DsocksProxyHost=${socksproxyhost}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyPortArg</name>
-                                    <value> -DsocksProxyPort=${socksproxyport}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyUsernameArg</name>
-                                    <value></value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>proxyPasswordArg</name>
-                                    <value></value>
-                                </setInstallerVariable>
-                            </actionList>
-                            <ruleList>
-                                <compareValues>
-                                    <logic>equals</logic>
-                                    <value1>${proxysetting}</value1>
-                                    <value2>socksProxy</value2>
-                                </compareValues>
-                            </ruleList>
-                        </if>
+                        <setInstallerVariable name="extraArgumentForJdk17And21" value="--add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
                     </actionList>
                     <conditionRuleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
+                        <regExMatch>
+                            <logic>matches</logic>
+                            <pattern>.*(17|21).*</pattern>
+                            <text>${java_version}</text>
+                        </regExMatch>
                     </conditionRuleList>
                     <elseActionList>
-                        <setInstallerVariable>
-                            <name>proxyHostArg</name>
-                            <value></value>
-                        </setInstallerVariable>
-                        <setInstallerVariable>
-                            <name>proxyPortArg</name>
-                            <value></value>
-                        </setInstallerVariable>
-                        <setInstallerVariable>
-                            <name>proxyUsernameArg</name>
-                            <value></value>
-                        </setInstallerVariable>
-                        <setInstallerVariable>
-                            <name>proxyPasswordArg</name>
-                            <value></value>
-                        </setInstallerVariable>
+                        <setInstallerVariable name="extraArgumentForJdk17And21" value=""/>
                     </elseActionList>
                 </if>
-                <writeFile>
-                    <encoding>utf-8</encoding>
-                    <path>${installdir}${platform_path_separator}pwd</path>
-                    <text>${password.password}</text>
-                </writeFile>
-                <deleteFile>
-                    <path>${installdir}${platform_path_separator}pwd</path>
-                </deleteFile>
-            </actionList>
-        </if>
-        <if>
-            <explanation>is linux x86_64</explanation>
-            <actionList>
-                <setInstallerVariable>
-                    <name>studioZipPath</name>
-                    <value>${installdir}${platform_path_separator}com.liferay.ide.studio-linux.gtk.x86_64.zip</value>
-                </setInstallerVariable>
-            </actionList>
-            <conditionRuleList>
-                <platformTest type="linux-x64"/>
-            </conditionRuleList>
-            <elseActionList>
-                <if>
-                    <explanation>is linux arm64</explanation>
+                <actionGroup explanation="Set JPM paths">
                     <actionList>
-                        <setInstallerVariable>
-                            <name>studioZipPath</name>
-                            <value>${installdir}${platform_path_separator}com.liferay.ide.studio-linux.gtk.aarch64.zip</value>
-                        </setInstallerVariable>
-                    </actionList>
-                    <conditionRuleList>
-                        <platformTest type="linux-arm64"/>
-                    </conditionRuleList>
-                    <elseActionList>
-                        <if>
-                            <explanation>is mac x86_64</explanation>
+                        <actionGroup>
                             <actionList>
-                                <setInstallerVariable>
-                                    <name>studioZipPath</name>
-                                    <value>${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip</value>
-                                </setInstallerVariable>
+                                <setInstallerVariable name="jpmSystemPath" value="${userHome}/jpm/bin"/>
+                                <setInstallerVariable name="jpmSettingPath" value="${userHome}/.jpm"/>
                             </actionList>
-                            <conditionRuleList>
-                                <compareText>
-                                    <logic>contains</logic>
-                                    <nocase>1</nocase>
-                                    <text>${platform_name}</text>
-                                    <value>osx</value>
-                                </compareText>
-                                <platformTest negate="1" type="osx-arm64"/>
-                            </conditionRuleList>
-                            <elseActionList>
-                                <if>
-                                    <explanation>is mac aarch64</explanation>
-                                    <actionList>
-                                        <setInstallerVariable>
-                                            <name>studioZipPath</name>
-                                            <value>${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip</value>
-                                        </setInstallerVariable>
-                                    </actionList>
-                                    <conditionRuleList>
-                                         <platformTest type="osx-arm64"/>
-                                    </conditionRuleList>
-                                    <elseActionList>
-                                        <if>
-                                            <explanation>is mac aarch64</explanation>
-                                            <actionList>
-                                                <setInstallerVariable>
-                                                    <name>studioZipPath</name>
-                                                    <value>${installdir}${platform_path_separator}com.liferay.ide.studio-win32.win32.x86_64.zip</value>
-                                                </setInstallerVariable>
-                                            </actionList>
-                                            <conditionRuleList>
-                                                <platformTest type="windows-x64"/>
-                                            </conditionRuleList>
-                                        </if>
-                                    </elseActionList>
-                                </if>
-                            </elseActionList>
-                        </if>
-                    </elseActionList>
-                </if>
-            </elseActionList>
-        </if>
-        <if>
-            <actionList>
-                <runProgram>
-                    <program>chown</program>
-                    <programArguments>-R $USER "${installdir}"</programArguments>
-                </runProgram>
-                <runProgram>
-                    <program>unzip</program>
-                    <programArguments>${studioZipPath}</programArguments>
-                    <progressText>unzipping</progressText>
-                    <workingDirectory>${installdir}</workingDirectory>
-                </runProgram>
-                <runProgram>
-                    <program>chmod</program>
-                    <programArguments>+w "${installdir}"/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</programArguments>
-                </runProgram>
-                <dirName>
-                    <path>${java_executable}</path>
-                    <variable>find_in_path</variable>
-                    <ruleList>
-                        <isFalse>
-                            <value>${java_autodetected}</value>
-                        </isFalse>
-                    </ruleList>
-                </dirName>
-                <findFile>
-                    <baseDirectory>${find_in_path}/../</baseDirectory>
-                    <pattern>libjli.dylib</pattern>
-                    <variable>libjli_path</variable>
-                    <ruleList>
-                        <isFalse>
-                            <value>${java_autodetected}</value>
-                        </isFalse>
-                    </ruleList>
-                </findFile>
-                <addTextToFile>
-                    <file>${installdir}/LiferayDeveloperStudio.app/Contents/Eclipse/DeveloperStudio.ini</file>
-                    <insertAt>beginning</insertAt>
-                    <text>-vm
-${libjli_path}
-</text>
-                    <ruleList>
-                        <isFalse>
-                            <value>${java_autodetected}</value>
-                        </isFalse>
-                    </ruleList>
-                </addTextToFile>
-            </actionList>
-            <conditionRuleList>
-                <platformTest>
-                    <type>osx</type>
-                </platformTest>
-            </conditionRuleList>
-            <elseActionList>
-                <unzip>
-                    <addToUninstaller>0</addToUninstaller>
-                    <destinationDirectory>${installdir}</destinationDirectory>
-                    <progressText>Unpacking files</progressText>
-                    <zipFile>${studioZipPath}</zipFile>
-                </unzip>
-                <addTextToFile>
-                    <file>${installdir}/liferay-developer-studio/DeveloperStudio.ini</file>
-                    <insertAt>beginning</insertAt>
-                    <text>-vm
-${java_executable}
-</text>
-                    <ruleList>
-                        <isFalse>
-                            <value>${java_autodetected}</value>
-                        </isFalse>
-                    </ruleList>
-                </addTextToFile>
-            </elseActionList>
-        </if>
-        <if>
-            <explanation>is linux</explanation>
-            <actionList>
-                <setInstallerVariable name="jpmSystemPath" value="${userHome}/jpm/bin"/>
-                <setInstallerVariable name="jpmSettingPath" value="${userHome}/.jpm"/>
-            </actionList>
-            <conditionRuleList>
-                <compareText>
-                    <logic>contains</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>linux</value>
-                </compareText>
-            </conditionRuleList>
-            <elseActionList>
-                <if>
-                    <explanation>is mac</explanation>
-                    <actionList>
-                        <setInstallerVariable name="jpmSystemPath" value="${userHome}/Library/PackageManager/bin"/>
-                        <setInstallerVariable name="jpmSettingPath" value="${userHome}/.jpm"/>
-                    </actionList>
-                    <conditionRuleList>
-                        <compareText>
-                            <logic>contains</logic>
-                            <nocase>1</nocase>
-                            <text>${platform_name}</text>
-                            <value>osx</value>
-                        </compareText>
-                        <isTrue value="${clitools}"/>
-                    </conditionRuleList>
-                    <elseActionList>
-                        <if>
+                            <ruleList>
+                                <platformTest type="linux" />
+                            </ruleList>
+                        </actionGroup>
+                        <actionGroup>
+                            <actionList>
+                                <setInstallerVariable name="jpmSystemPath" value="${userHome}/Library/PackageManager/bin"/>
+                                <setInstallerVariable name="jpmSettingPath" value="${userHome}/.jpm"/>
+                            </actionList>
+                            <ruleList>
+                               <platformTest type="osx" />
+                            </ruleList>
+                        </actionGroup>
+                        <actionGroup>
                             <actionList>
                                 <setInstallerVariable name="jpmSystemPath" value="${userHome}\.jpm\windows\bin"/>
                                 <setInstallerVariable name="jpmSettingPath" value="${userHome}\.jpm\windows"/>
                             </actionList>
-                            <conditionRuleList>
-                                <isTrue value="${clitools}"/>
-                            </conditionRuleList>
-                        </if>
-                    </elseActionList>
-                </if>
-            </elseActionList>
-        </if>
-        <if>
-            <actionList>
-                <setInstallerVariable name="extraArgumentForJdk17And21" value="--add-opens java.prefs/java.util.prefs=ALL-UNNAMED"/>
-            </actionList>
-            <conditionRuleList>
-                <regExMatch>
-                    <logic>matches</logic>
-                    <pattern>.*(17|21).*</pattern>
-                    <text>${java_version}</text>
-                </regExMatch>
-            </conditionRuleList>
-            <elseActionList>
-                <setInstallerVariable name="extraArgumentForJdk17And21" value=""/>
-            </elseActionList>
-        </if>
-        <if>
-            <actionList>
-                <include>
-                    <file>../components/run-java-jpm.xml</file>
-                </include>
-                <include>
-                    <file>../components/run-java-jpm-win.xml</file>
-                </include>
-            </actionList>
-            <conditionRuleList>
-                <isTrue value="${clitools}"/>
-            </conditionRuleList>
-        </if>
-        <if>
-            <actionList>
+                            <ruleList>
+                               <platformTest type="windows" />
+                            </ruleList>
+                        </actionGroup>
+                    </actionList>
+                </actionGroup>
+                <include file="../components/run-java-jpm.xml" />
+                <include file="../components/run-java-jpm-win.xml" />
                 <addDirectoryToPath>
                     <insertAt>end</insertAt>
                     <path>${jpmSystemPath}</path>
                 </addDirectoryToPath>
-                <include>
-                    <file>../components/set-installer-variable-jpm.xml</file>
-                </include>
-                <include>
-                    <file>../components/set-installer-variable-blade.xml</file>
-                </include>
-                <include>
-                    <file>../components/run-jpm-install-blade.xml</file>
-                </include>
-                <include>
-                    <file>../components/run-jpm-install-blade-win.xml</file>
-                </include>
-                <runProgram>
-                    <program>chown</program>
-                    <programArguments>-R ${env(SUDO_USER)} "${userHome}/jpm"</programArguments>
-                    <ruleList>
-                        <isTrue>
-                            <value>${installer_is_root_install}</value>
-                        </isTrue>
-                        <compareText>
-                            <logic>does_not_contain</logic>
-                            <nocase>1</nocase>
-                            <text>${platform_name}</text>
-                            <value>win</value>
-                        </compareText>
-                        <fileExists>
-                            <path>${userHome}/jpm</path>
-                        </fileExists>
-                    </ruleList>
-                </runProgram>
-                <runProgram>
-                    <program>chown</program>
-                    <programArguments>-R ${env(SUDO_USER)} ${jpmSettingPath}</programArguments>
-                    <ruleList>
-                        <isTrue>
-                            <value>${installer_is_root_install}</value>
-                        </isTrue>
-                        <compareText>
-                            <logic>does_not_contain</logic>
-                            <nocase>1</nocase>
-                            <text>${platform_name}</text>
-                            <value>win</value>
-                        </compareText>
-                        <fileExists>
-                            <path>${jpmSettingPath}</path>
-                        </fileExists>
-                    </ruleList>
-                </runProgram>
-                <setInstallerVariable>
-                    <name>bladeCommandPath</name>
-                    <value>${jpmSystemPath}${platform_path_separator}blade</value>
-                </setInstallerVariable>
-                <runProgram>
-                    <program>chown</program>
-                    <programArguments>-R ${env(SUDO_USER)} ${userHome}/.gradle</programArguments>
-                    <ruleList>
-                        <isTrue>
-                            <value>${installer_is_root_install}</value>
-                        </isTrue>
-                        <compareText>
-                            <logic>does_not_contain</logic>
-                            <nocase>1</nocase>
-                            <text>${platform_name}</text>
-                            <value>win</value>
-                        </compareText>
-                    </ruleList>
-                </runProgram>
-                <if>
+                <include file="../components/set-installer-variable-jpm.xml" />
+                <include file="../components/set-installer-variable-blade.xml" />
+                <include file="../components/run-jpm-install-blade.xml" />
+                <include file="../components/run-jpm-install-blade-win.xml" />
+                <actionGroup explanation="Update permissions if root and not on Windows">
                     <actionList>
                         <runProgram>
-                            <program>${java_executable}</program>
-                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "dxp-7.4-ga1"</programArguments>
+                            <program>chown</program>
+                            <programArguments>-R ${env(SUDO_USER)} "${userHome}/jpm"</programArguments>
+                            <ruleList>
+                                <fileExists path="${userHome}/jpm" />
+                            </ruleList>
                         </runProgram>
-                        <createDirectory>
-                            <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
+                        <runProgram>
+                            <program>chown</program>
+                            <programArguments>-R ${env(SUDO_USER)} ${jpmSettingPath}</programArguments>
                             <ruleList>
-                                <fileTest>
-                                    <condition>exists</condition>
-                                    <path>${activationKey}</path>
-                                </fileTest>
+                                <fileExists path="${jpmSettingPath}" />
                             </ruleList>
-                        </createDirectory>
-                        <copyFile>
-                            <destination>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy${platform_path_separator}activation_key.xml</destination>
-                            <origin>${activationKey}</origin>
-                            <ruleList>
-                                <fileTest>
-                                    <condition>exists</condition>
-                                    <path>${activationKey}</path>
-                                </fileTest>
-                            </ruleList>
-                        </copyFile>
+                        </runProgram>
+                        <setInstallerVariable name="bladeCommandPath" value="${jpmSystemPath}${platform_path_separator}blade"/>
+                        <runProgram>
+                            <program>chown</program>
+                            <programArguments>-R ${env(SUDO_USER)} ${userHome}/.gradle</programArguments>
+                        </runProgram>
                     </actionList>
-                    <conditionRuleList>
-                        <compareText>
-                            <logic>equals</logic>
-                            <text>${productkey}</text>
-                            <value>dxp</value>
-                        </compareText>
-                    </conditionRuleList>
-                    <elseActionList>
-                        <runProgram>
-                            <program>${java_executable}</program>
-                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "7.4"</programArguments>
-                        </runProgram>
-                    </elseActionList>
-                </if>
-                <if>
-                    <explanation>need to configure Blade CLI with proxy settings</explanation>
+                    <ruleList>
+                        <isTrue value="${installer_is_root_install}" />
+                        <platformTest negate="1" type="windows" />
+                    </ruleList>
+                </actionGroup>
+                <actionGroup explanation="Set up Liferay Workspace">
                     <actionList>
-                        <if>
+                        <if explanation="Set Liferay version variable">
                             <actionList>
-                                <setInstallerVariable>
-                                    <name>bladeProxyHostArg</name>
-                                    <value> -Dhttp.proxyHost=${bladehttpproxyhost}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>bladeProxyPortArg</name>
-                                    <value> -Dhttp.proxyPort=${bladehttpproxyport}</value>
-                                </setInstallerVariable>
+                                <setInstallerVariable name="liferayVersion" value="2024.q3" />
+                            </actionList>
+                            <conditionRuleList>
+                                <compareText logic="equals" text="${productkey}" value="dxp" />
+                            </conditionRuleList>
+                            <elseActionList>
+                                <setInstallerVariable name="liferayVersion" value="7.4" />
+                            </elseActionList>
+                        </if>
+                        <runProgram explanation="Run blade init">
+                            <program>${java_executable}</program>
+                            <programArguments> -jar "${bladeFilePath}" --base "${lrws}" init -v "${liferayVersion}"</programArguments>
+                        </runProgram>
+                        <actionGroup explanation="Install license if DXP">
+                            <actionList>
+                                <createDirectory>
+                                    <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
+                                    <ruleList>
+                                        <fileTest>
+                                            <condition>exists</condition>
+                                            <path>${activationKey}</path>
+                                        </fileTest>
+                                    </ruleList>
+                                </createDirectory>
+                                <copyFile>
+                                    <destination>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy${platform_path_separator}activation_key.xml</destination>
+                                    <origin>${activationKey}</origin>
+                                    <ruleList>
+                                        <fileTest>
+                                            <condition>exists</condition>
+                                            <path>${activationKey}</path>
+                                        </fileTest>
+                                    </ruleList>
+                                </copyFile>
                             </actionList>
                             <ruleList>
-                                <compareText>
-                                    <logic>equals</logic>
-                                    <text>${bladeproxysetting}</text>
-                                    <value>bladehttpProxy</value>
-                                </compareText>
+                                <compareText logic="equals" text="${productkey}" value="dxp" />
                             </ruleList>
-                        </if>
-                        <if>
+                        </actionGroup>
+                    </actionList>
+                </actionGroup>
+                <actionGroup explanation="Configure proxy settings for Blade CLI">
+                    <actionList>
+                        <actionGroup>
                             <actionList>
-                                <setInstallerVariable>
-                                    <name>bladeProxyHostArg</name>
-                                    <value> -Dhttps.proxyHost=${bladehttpsproxyhost}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>bladeProxyPortArg</name>
-                                    <value> -Dhttps.proxyPort=${bladehttpsproxyport}</value>
-                                </setInstallerVariable>
+                                <setInstallerVariable name="bladeProxyHostArg" value=" -Dhttp.proxyHost=${bladehttpproxyhost}"/>
+                                <setInstallerVariable name="bladeProxyHostArg" value=" -Dhttp.proxyPort=${bladehttpproxyport}"/>
                             </actionList>
                             <ruleList>
-                                <compareText>
-                                    <logic>equals</logic>
-                                    <text>${bladeproxysetting}</text>
-                                    <value>bladehttpsProxy</value>
-                                </compareText>
+                                <compareText logic="equals" text="${bladeproxysetting}" value="bladehttpProxy" />
                             </ruleList>
-                        </if>
-                        <if>
+                        </actionGroup>
+                        <actionGroup>
                             <actionList>
-                                <setInstallerVariable>
-                                    <name>bladeProxyHostArg</name>
-                                    <value> -DsystemProp.socks.proxyHost=${bladesocksproxyhost}</value>
-                                </setInstallerVariable>
-                                <setInstallerVariable>
-                                    <name>bladeProxyPortArg</name>
-                                    <value> -DsystemProp.socks.proxyPort=${bladesocksproxyport}</value>
-                                </setInstallerVariable>
+                                <setInstallerVariable name="bladeProxyHostArg" value=" -Dhttps.proxyHost=${bladehttpsproxyhost}" />
+                                <setInstallerVariable name="bladeProxyPortArg" value=" -Dhttps.proxyPort=${bladehttpsproxyport}" />
                             </actionList>
                             <ruleList>
-                                <compareText>
-                                    <logic>equals</logic>
-                                    <text>${bladeproxysetting}</text>
-                                    <value>bladesocksProxy</value>
-                                </compareText>
+                                <compareText logic="equals" text="${bladeproxysetting}" value="bladehttpsProxy" />
                             </ruleList>
-                        </if>
+                        </actionGroup>
+                        <actionGroup>
+                            <actionList>
+                                <setInstallerVariable name="bladeProxyHostArg" value=" -DsystemProp.socks.proxyHost=${bladesocksproxyhost}" />
+                                <setInstallerVariable name="bladeProxyPortArg" value=" -DsystemProp.socks.proxyPort=${bladesocksproxyport}" />
+                            </actionList>
+                            <ruleList>
+                                <compareText logic="equals" text="${bladeproxysetting}" value="bladesocksProxy" />
+                            </ruleList>
+                        </actionGroup>
                         <runProgram>
                             <program>${java_executable}</program>
                             <programArguments> -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" command --jvmargs "${bladeProxyHostArg} ${bladeProxyPortArg}" jpm</programArguments>
@@ -614,158 +392,66 @@ ${java_executable}
                         </runProgram>
                     </actionList>
                     <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${bladeproxy}</value1>
-                            <value2>bladeproxysetting</value2>
-                        </compareValues>
+                        <compareText logic="equals" text="${bladeproxy}" value="bladeproxysetting" />
                     </ruleList>
-                </if>
-                <createDirectory>
-                    <path>${userHome}${platform_path_separator}.gradle</path>
-                </createDirectory>
+                </actionGroup>
+                <createDirectory path="${userHome}${platform_path_separator}.gradle" />
             </actionList>
-            <conditionRuleList>
+            <ruleList>
                 <isTrue value="${clitools}"/>
-            </conditionRuleList>
-        </if>
-        <if>
+            </ruleList>
+        </actionGroup>
+        <actionGroup explanation="Write proxy properties to gradle.properties file">
             <actionList>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.http.proxyHost</key>
-                    <value>${httpproxyhost}</value>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.http.proxyPort</key>
-                    <value>${httpproxyport}</value>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.http.proxyUser</key>
-                    <value>${httpproxyusername}</value>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.http.proxyPassword</key>
-                    <value>${httpproxypassword}</value>
-                </propertiesFileSet>
+                <setInstallerVariable name="gradlePropertiesFile" value="${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties" />
+                <actionGroup explanation="http">
+                    <actionList>
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.http.proxyHost" value="${httpproxyhost}" />
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.http.proxyPort" value="${httpproxyport}" />
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.http.proxyUser" value="${httpproxyusername}" />
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.http.proxyPassword" value="${httpproxypassword}" />
+                    </actionList>
+                    <ruleList>
+                        <compareValues logic="equals" value1="${proxysetting}" value2="httpProxy" />
+                    </ruleList>
+                </actionGroup>
+                <actionGroup explanation="https">
+                    <actionList>
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.https.proxyHost" value="${httpsproxyhost}" />
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.https.proxyPort" value="${httpsproxyport}" />
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.https.proxyUser" value="${httpsproxyusername}" />
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.https.proxyPassword" value="${httpsproxypassword}" />
+                    </actionList>
+                    <ruleList>
+                        <compareValues logic="equals" value1="${proxysetting}" value2="httpsProxy" />
+                    </ruleList>
+                </actionGroup>
+                <actionGroup explanation="socks">
+                    <actionList>
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.socks.proxyHost" value="${socksproxyhost}" />
+                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.socks.proxyPort" value="${socksproxyport}" />
+                    </actionList>
+                    <ruleList>
+                        <compareValues logic="equals" value1="${proxysetting}" value2="socksProxy" />
+                    </ruleList>
+                </actionGroup>
             </actionList>
             <ruleList>
-                <ruleGroup>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxysetting}</value1>
-                            <value2>httpProxy</value2>
-                        </compareValues>
-                    </ruleList>
-                </ruleGroup>
+                <compareValues logic="equals" value1="${proxy}" value2="proxysetting" />
             </ruleList>
-        </if>
-        <if>
-            <actionList>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.https.proxyHost</key>
-                    <value>${httpsproxyhost}</value>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.https.proxyPort</key>
-                    <value>${httpsproxyport}</value>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.https.proxyUser</key>
-                    <value>${httpsproxyusername}</value>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.https.proxyPassword</key>
-                    <value>${httpsproxypassword}</value>
-                </propertiesFileSet>
-            </actionList>
-            <ruleList>
-                <ruleGroup>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxysetting}</value1>
-                            <value2>httpsProxy</value2>
-                        </compareValues>
-                    </ruleList>
-                </ruleGroup>
-            </ruleList>
-        </if>
-        <if>
-            <actionList>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.socks.proxyHost</key>
-                    <value>${socksproxyhost}</value>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>systemProp.socks.proxyPort</key>
-                    <value>${socksproxyport}</value>
-                </propertiesFileSet>
-            </actionList>
-            <ruleList>
-                <ruleGroup>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxysetting}</value1>
-                            <value2>socksProxy</value2>
-                        </compareValues>
-                    </ruleList>
-                </ruleGroup>
-            </ruleList>
-        </if>
+        </actionGroup>
         <runProgram>
             <program>chown</program>
             <programArguments>-R ${env(SUDO_USER)} ${lrws}</programArguments>
             <ruleList>
-                <isTrue>
-                    <value>${installer_is_root_install}</value>
-                </isTrue>
-                <compareText>
-                    <logic>does_not_contain</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-                <fileExists>
-                    <path>${lrws}</path>
-                </fileExists>
+                <isTrue value="${installer_is_root_install}" />
+                <compareText logic="does_not_contain" nocase="1" text="${platform_name}" value="win" />
+                <fileExists path="${lrws}" />
             </ruleList>
         </runProgram>
-        <deleteFile>
-            <path>${installdir}${platform_path_separator}blade.jar</path>
-        </deleteFile>
-        <deleteFile>
-            <path>${installdir}${platform_path_separator}biz.aQute.jpm.run.jar</path>
-        </deleteFile>
-        <deleteFile>
-            <path>${studioZipPath}</path>
-        </deleteFile>
+        <deleteFile path="${installdir}${platform_path_separator}blade.jar" />
+        <deleteFile path="${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" />
+        <deleteFile path="${studioZipPath}" />
     </postInstallationActionList>
     <allowWindowResize>1</allowWindowResize>
     <createOsxBundleDmg>1</createOsxBundleDmg>
@@ -796,9 +482,7 @@ ${java_executable}
             <mustExist>1</mustExist>
             <width>30</width>
             <ruleList>
-                <isFalse>
-                    <value>${java_autodetected}</value>
-                </isFalse>
+                <isFalse value="${java_autodetected}" />
             </ruleList>
         </fileParameter>
         <directoryParameter>
@@ -813,40 +497,23 @@ ${java_executable}
             <mustExist>0</mustExist>
             <width>30</width>
             <postShowPageActionList>
-                <setInstallerVariable>
-                    <name>studiodir</name>
-                    <value>${installdir}</value>
-                </setInstallerVariable>
+                <setInstallerVariable name="studiodir" value="${installdir}" />
             </postShowPageActionList>
             <preShowPageActionList>
-                <setInstallerVariable>
-                    <name>installdir</name>
-                    <value>${userHome}/${product_shortname}</value>
+                <setInstallerVariable name="installdir" value="${userHome}/${product_shortname}">
                     <ruleList>
-                        <compareText>
-                            <logic>contains</logic>
-                            <nocase>1</nocase>
-                            <text>${platform_name}</text>
-                            <value>osx</value>
-                        </compareText>
+                        <compareText logic="contains" nocase="1" text="${platform_name}" value="osx" />
                     </ruleList>
                 </setInstallerVariable>
             </preShowPageActionList>
             <validationActionList>
-                <if>
+                <throwError>
                     <explanation>is empty</explanation>
-                    <actionList>
-                        <throwError>
-                            <text>the folder must be empty</text>
-                        </throwError>
-                    </actionList>
-                    <conditionRuleList>
-                        <fileTest>
-                            <condition>is_not_empty</condition>
-                            <path>${studiodir}</path>
-                        </fileTest>
-                    </conditionRuleList>
-                </if>
+                    <text>the folder must be empty</text>
+                    <ruleList>
+                        <fileTest condition="is_not_empty" path="${studiodir}" />
+                    </ruleList>
+                </throwError>
             </validationActionList>
         </directoryParameter>
         <directoryParameter>
@@ -913,9 +580,7 @@ ${java_executable}
                 </labelParameter>
             </parameterList>
             <ruleList>
-                <isTrue>
-                    <value>${clitools}</value>
-                </isTrue>
+                <isTrue value="${clitools}" />
             </ruleList>
         </choiceParameterGroup>
         <fileParameter>
@@ -930,9 +595,7 @@ ${java_executable}
             <mustExist>1</mustExist>
             <width>30</width>
             <ruleList>
-                <isTrue>
-                    <value>${clitools}</value>
-                </isTrue>
+                <isTrue value="${clitools}" />
                 <compareText>
                     <logic>equals</logic>
                     <text>${productkey}</text>
@@ -986,9 +649,7 @@ ${java_executable}
                 </choiceParameter>
             </parameterList>
             <ruleList>
-                <isTrue>
-                    <value>${clitools}</value>
-                </isTrue>
+                <isTrue value="${clitools}" />
             </ruleList>
         </choiceParameterGroup>
         <parameterGroup>
@@ -1199,20 +860,16 @@ ${java_executable}
                 </stringParameter>
             </parameterList>
             <ruleList>
-                <ruleGroup>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxysetting}</value1>
-                            <value2>httpProxy</value2>
-                        </compareValues>
-                    </ruleList>
-                </ruleGroup>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${proxy}</value1>
+                    <value2>proxysetting</value2>
+                </compareValues>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${proxysetting}</value1>
+                    <value2>httpProxy</value2>
+                </compareValues>
             </ruleList>
         </parameterGroup>
         <parameterGroup>
@@ -1260,20 +917,16 @@ ${java_executable}
                 </stringParameter>
             </parameterList>
             <ruleList>
-                <ruleGroup>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxysetting}</value1>
-                            <value2>httpsProxy</value2>
-                        </compareValues>
-                    </ruleList>
-                </ruleGroup>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${proxy}</value1>
+                    <value2>proxysetting</value2>
+                </compareValues>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${proxysetting}</value1>
+                    <value2>httpsProxy</value2>
+                </compareValues>
             </ruleList>
         </parameterGroup>
         <parameterGroup>
@@ -1303,20 +956,16 @@ ${java_executable}
                 </stringParameter>
             </parameterList>
             <ruleList>
-                <ruleGroup>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxysetting}</value1>
-                            <value2>socksProxy</value2>
-                        </compareValues>
-                    </ruleList>
-                </ruleGroup>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${proxy}</value1>
+                    <value2>proxysetting</value2>
+                </compareValues>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${proxysetting}</value1>
+                    <value2>socksProxy</value2>
+                </compareValues>
             </ruleList>
         </parameterGroup>
     </parameterList>
