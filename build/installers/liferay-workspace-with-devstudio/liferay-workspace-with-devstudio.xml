@@ -61,33 +61,6 @@
         <include file="../components/autodetect-java-windows.xml" />
     </preInstallationActionList>
     <postInstallationActionList>
-        <actionGroup explanation="Set proxy arg variables">
-            <actionList>
-                <setInstallerVariable name="proxyHostArg" value=" -D${proxysetting}.proxyHost=${proxyhost}" />
-                <setInstallerVariable name="proxyPortArg" value=" -D${proxysetting}.proxyPort=${proxyport}" />
-                <setInstallerVariable name="proxyUsernameArg" value=" -D${proxysetting}.proxyUser=${proxyusername}" />
-                <setInstallerVariable name="proxyPasswordArg" value=" -D${proxysetting}.proxyPassword=${proxypassword}" />
-
-                <actionGroup>
-                    <actionList>
-                        <setInstallerVariable name="proxyUsernameArg" value="" />
-                        <setInstallerVariable name="proxyPasswordArg" value="" />
-                    </actionList>
-                    <ruleList>
-                        <compareValues logic="equals" value1="${proxysetting}" value2="socks" />
-                    </ruleList>
-                </actionGroup>
-            </actionList>
-            <ruleList>
-                <compareValues logic="equals" value1="${proxy}" value2="proxysetting" />
-            </ruleList>
-        </actionGroup>
-        <writeFile explanation="Write password to pwd file">
-            <encoding>utf-8</encoding>
-            <path>${installdir}${platform_path_separator}pwd</path>
-            <text>${password.password}</text>
-        </writeFile>
-        <deleteFile path="${installdir}${platform_path_separator}pwd" />
         <actionGroup explanation="Install the main program">
             <actionList>
                 <findFile>
