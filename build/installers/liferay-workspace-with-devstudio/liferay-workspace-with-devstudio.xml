@@ -63,42 +63,18 @@
     <postInstallationActionList>
         <actionGroup explanation="Set proxy arg variables">
             <actionList>
-                <setInstallerVariable name="proxyHostArg" value="" />
-                <setInstallerVariable name="proxyPortArg" value="" />
-                <setInstallerVariable name="proxyUsernameArg" value="" />
-                <setInstallerVariable name="proxyPasswordArg" value="" />
+                <setInstallerVariable name="proxyHostArg" value=" -D${proxysetting}.proxyHost=${proxyhost}" />
+                <setInstallerVariable name="proxyPortArg" value=" -D${proxysetting}.proxyPort=${proxyport}" />
+                <setInstallerVariable name="proxyUsernameArg" value=" -D${proxysetting}.proxyUser=${proxyusername}" />
+                <setInstallerVariable name="proxyPasswordArg" value=" -D${proxysetting}.proxyPassword=${proxypassword}" />
 
                 <actionGroup>
                     <actionList>
-                        <setInstallerVariable name="proxyHostArg" value=" -Dhttp.proxyHost=${httpproxyhost}" />
-                        <setInstallerVariable name="proxyPortArg" value=" -Dhttp.proxyPort=${httpproxyport}" />
-                        <setInstallerVariable name="proxyUsernameArg" value=" -Dhttp.proxyUser=${httpproxyusername}" />
-                        <setInstallerVariable name="proxyPasswordArg" value=" -Dhttp.proxyPassword=${httpproxypassword}" />
-                    </actionList>
-                    <ruleList>
-                        <compareValues logic="equals" value1="${proxysetting}" value2="httpProxy" />
-                    </ruleList>
-                </actionGroup>
-                <actionGroup>
-                    <actionList>
-                        <setInstallerVariable name="proxyHostArg" value=" -Dhttps.proxyHost=${httpsproxyhost}" />
-                        <setInstallerVariable name="proxyPortArg" value=" -Dhttps.proxyPort=${httpsproxyport}" />
-                        <setInstallerVariable name="proxyUsernameArg" value=" -Dhttps.proxyUser=${httpsproxyusername}" />
-                        <setInstallerVariable name="proxyPasswordArg" value=" -Dhttps.proxyPassword=${httpsproxypassword}" />
-                    </actionList>
-                    <ruleList>
-                        <compareValues logic="equals" value1="${proxysetting}" value2="httpsProxy" />
-                    </ruleList>
-                </actionGroup>
-                <actionGroup>
-                    <actionList>
-                        <setInstallerVariable name="proxyHostArg" value=" -DsocksProxyHost=${socksproxyhost}" />
-                        <setInstallerVariable name="proxyPortArg" value=" -DsocksProxyPort=${socksproxyport}" />
                         <setInstallerVariable name="proxyUsernameArg" value="" />
                         <setInstallerVariable name="proxyPasswordArg" value="" />
                     </actionList>
                     <ruleList>
-                        <compareValues logic="equals" value1="${proxysetting}" value2="socksProxy" />
+                        <compareValues logic="equals" value1="${proxysetting}" value2="socks" />
                     </ruleList>
                 </actionGroup>
             </actionList>
@@ -355,33 +331,9 @@ ${java_executable}
                 </actionGroup>
                 <actionGroup explanation="Configure proxy settings for Blade CLI">
                     <actionList>
-                        <actionGroup>
-                            <actionList>
-                                <setInstallerVariable name="bladeProxyHostArg" value=" -Dhttp.proxyHost=${bladehttpproxyhost}"/>
-                                <setInstallerVariable name="bladeProxyHostArg" value=" -Dhttp.proxyPort=${bladehttpproxyport}"/>
-                            </actionList>
-                            <ruleList>
-                                <compareText logic="equals" text="${bladeproxysetting}" value="bladehttpProxy" />
-                            </ruleList>
-                        </actionGroup>
-                        <actionGroup>
-                            <actionList>
-                                <setInstallerVariable name="bladeProxyHostArg" value=" -Dhttps.proxyHost=${bladehttpsproxyhost}" />
-                                <setInstallerVariable name="bladeProxyPortArg" value=" -Dhttps.proxyPort=${bladehttpsproxyport}" />
-                            </actionList>
-                            <ruleList>
-                                <compareText logic="equals" text="${bladeproxysetting}" value="bladehttpsProxy" />
-                            </ruleList>
-                        </actionGroup>
-                        <actionGroup>
-                            <actionList>
-                                <setInstallerVariable name="bladeProxyHostArg" value=" -DsystemProp.socks.proxyHost=${bladesocksproxyhost}" />
-                                <setInstallerVariable name="bladeProxyPortArg" value=" -DsystemProp.socks.proxyPort=${bladesocksproxyport}" />
-                            </actionList>
-                            <ruleList>
-                                <compareText logic="equals" text="${bladeproxysetting}" value="bladesocksProxy" />
-                            </ruleList>
-                        </actionGroup>
+                        <setInstallerVariable name="bladeProxyHostArg" value=" -D${proxysetting}.proxyHost=${proxyhost}"/>
+                        <setInstallerVariable name="bladeProxyPortArg" value=" -D${proxysetting}.proxyPort=${proxyport}"/>
+
                         <runProgram>
                             <program>${java_executable}</program>
                             <programArguments> -jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" command --jvmargs "${bladeProxyHostArg} ${bladeProxyPortArg}" jpm</programArguments>
@@ -392,7 +344,7 @@ ${java_executable}
                         </runProgram>
                     </actionList>
                     <ruleList>
-                        <compareText logic="equals" text="${bladeproxy}" value="bladeproxysetting" />
+                        <compareText logic="equals" text="${proxy}" value="proxysetting" />
                     </ruleList>
                 </actionGroup>
                 <createDirectory path="${userHome}${platform_path_separator}.gradle" />
@@ -404,37 +356,11 @@ ${java_executable}
         <actionGroup explanation="Write proxy properties to gradle.properties file">
             <actionList>
                 <setInstallerVariable name="gradlePropertiesFile" value="${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties" />
-                <actionGroup explanation="http">
-                    <actionList>
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.http.proxyHost" value="${httpproxyhost}" />
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.http.proxyPort" value="${httpproxyport}" />
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.http.proxyUser" value="${httpproxyusername}" />
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.http.proxyPassword" value="${httpproxypassword}" />
-                    </actionList>
-                    <ruleList>
-                        <compareValues logic="equals" value1="${proxysetting}" value2="httpProxy" />
-                    </ruleList>
-                </actionGroup>
-                <actionGroup explanation="https">
-                    <actionList>
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.https.proxyHost" value="${httpsproxyhost}" />
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.https.proxyPort" value="${httpsproxyport}" />
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.https.proxyUser" value="${httpsproxyusername}" />
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.https.proxyPassword" value="${httpsproxypassword}" />
-                    </actionList>
-                    <ruleList>
-                        <compareValues logic="equals" value1="${proxysetting}" value2="httpsProxy" />
-                    </ruleList>
-                </actionGroup>
-                <actionGroup explanation="socks">
-                    <actionList>
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.socks.proxyHost" value="${socksproxyhost}" />
-                        <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.socks.proxyPort" value="${socksproxyport}" />
-                    </actionList>
-                    <ruleList>
-                        <compareValues logic="equals" value1="${proxysetting}" value2="socksProxy" />
-                    </ruleList>
-                </actionGroup>
+
+                <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.${proxysetting}.proxyHost" value="${proxyhost}" />
+                <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.${proxysetting}.proxyPort" value="${proxyport}" />
+                <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.${proxysetting}.proxyUser" value="${proxyusername}" />
+                <propertiesFileSet file="${gradlePropertiesFile}" key="systemProp.${proxysetting}.proxyPassword" value="${proxypassword}" />
             </actionList>
             <ruleList>
                 <compareValues logic="equals" value1="${proxy}" value2="proxysetting" />
@@ -596,179 +522,9 @@ ${java_executable}
             <width>30</width>
             <ruleList>
                 <isTrue value="${clitools}" />
-                <compareText>
-                    <logic>equals</logic>
-                    <text>${productkey}</text>
-                    <value>dxp</value>
-                </compareText>
+                <compareText logic="equals" text="${productkey}" value="dxp" />
             </ruleList>
         </fileParameter>
-        <choiceParameterGroup>
-            <name>bladeproxy</name>
-            <description>Config proxy for JPM and Blade CLI</description>
-            <explanation>If your workstation requires a proxy server, you must configure it for use by Blade by specifying it here.</explanation>
-            <value></value>
-            <default>skipbladeproxysetting</default>
-            <parameterList>
-                <labelParameter>
-                    <name>skipbladeproxysetting</name>
-                    <description>Skip proxy configuration</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-                <choiceParameter>
-                    <name>bladeproxysetting</name>
-                    <description>Configure proxy settings</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <displayType>combobox</displayType>
-                    <ordering>default</ordering>
-                    <width>30</width>
-                    <optionList>
-                        <option>
-                            <description></description>
-                            <image></image>
-                            <text>HTTP Proxy</text>
-                            <value>bladehttpProxy</value>
-                        </option>
-                        <option>
-                            <description></description>
-                            <image></image>
-                            <text>HTTPS Proxy</text>
-                            <value>bladehttpsProxy</value>
-                        </option>
-                        <option>
-                            <description></description>
-                            <image></image>
-                            <text>SOCKS5 Proxy</text>
-                            <value>bladesocksProxy</value>
-                        </option>
-                    </optionList>
-                </choiceParameter>
-            </parameterList>
-            <ruleList>
-                <isTrue value="${clitools}" />
-            </ruleList>
-        </choiceParameterGroup>
-        <parameterGroup>
-            <name>bladehttpproxyinfo</name>
-            <title>HTTP Proxy Information</title>
-            <explanation></explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <stringParameter>
-                    <name>bladehttpproxyhost</name>
-                    <description>Proxy Host</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>bladehttpproxyport</name>
-                    <description>Proxy Port</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-            </parameterList>
-            <ruleList>
-                <compareText>
-                    <logic>equals</logic>
-                    <text>${bladeproxy}</text>
-                    <value>bladeproxysetting</value>
-                </compareText>
-                <compareText>
-                    <logic>equals</logic>
-                    <text>${bladeproxysetting}</text>
-                    <value>bladehttpProxy</value>
-                </compareText>
-            </ruleList>
-        </parameterGroup>
-        <parameterGroup>
-            <name>bladehttpsproxyinfo</name>
-            <title>HTTPS Proxy Information</title>
-            <explanation></explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <stringParameter>
-                    <name>bladehttpsproxyhost</name>
-                    <description>Proxy Host</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>bladehttpsproxyport</name>
-                    <description>Proxy Port</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-            </parameterList>
-            <ruleList>
-                <compareText>
-                    <logic>equals</logic>
-                    <text>${bladeproxy}</text>
-                    <value>bladeproxysetting</value>
-                </compareText>
-                <compareText>
-                    <logic>equals</logic>
-                    <text>${bladeproxysetting}</text>
-                    <value>bladehttpsProxy</value>
-                </compareText>
-            </ruleList>
-        </parameterGroup>
-        <parameterGroup>
-            <name>bladesocksproxyinfo</name>
-            <title>SOCKS5 Proxy Information</title>
-            <explanation></explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <stringParameter>
-                    <name>bladesocksproxyhost</name>
-                    <description>Proxy Host</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>bladesocksproxyport</name>
-                    <description>Proxy Port</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-            </parameterList>
-            <ruleList>
-                <compareText>
-                    <logic>equals</logic>
-                    <text>${bladeproxy}</text>
-                    <value>bladeproxysetting</value>
-                </compareText>
-                <compareText>
-                    <logic>equals</logic>
-                    <text>${bladeproxysetting}</text>
-                    <value>bladesocksProxy</value>
-                </compareText>
-            </ruleList>
-        </parameterGroup>
         <choiceParameterGroup>
             <name>proxy</name>
             <description>Proxy Configuration</description>
@@ -787,7 +543,7 @@ ${java_executable}
                     <description>Configure proxy settings</description>
                     <explanation></explanation>
                     <value></value>
-                    <default>httpProxy</default>
+                    <default>http</default>
                     <allowEmptyValue>0</allowEmptyValue>
                     <displayType>combobox</displayType>
                     <ordering>default</ordering>
@@ -797,33 +553,33 @@ ${java_executable}
                             <description></description>
                             <image></image>
                             <text>HTTP Proxy</text>
-                            <value>httpProxy</value>
+                            <value>http</value>
                         </option>
                         <option>
                             <description></description>
                             <image></image>
                             <text>HTTPS Proxy</text>
-                            <value>httpsProxy</value>
+                            <value>https</value>
                         </option>
                         <option>
                             <description></description>
                             <image></image>
                             <text>SOCKS5 Proxy</text>
-                            <value>socksProxy</value>
+                            <value>socks</value>
                         </option>
                     </optionList>
                 </choiceParameter>
             </parameterList>
         </choiceParameterGroup>
         <parameterGroup>
-            <name>httpproxyinfo</name>
-            <title>HTTP Proxy Information</title>
+            <name>proxyinfo</name>
+            <title>Proxy Information (${proxysetting})</title>
             <explanation></explanation>
             <value></value>
             <default></default>
             <parameterList>
                 <stringParameter>
-                    <name>httpproxyhost</name>
+                    <name>proxyhost</name>
                     <description>Proxy Host</description>
                     <explanation></explanation>
                     <value></value>
@@ -832,7 +588,7 @@ ${java_executable}
                     <width>30</width>
                 </stringParameter>
                 <stringParameter>
-                    <name>httpproxyport</name>
+                    <name>proxyport</name>
                     <description>Proxy Port</description>
                     <explanation></explanation>
                     <value></value>
@@ -841,7 +597,7 @@ ${java_executable}
                     <width>30</width>
                 </stringParameter>
                 <stringParameter>
-                    <name>httpproxyusername</name>
+                    <name>proxyusername</name>
                     <description>Proxy Username</description>
                     <explanation></explanation>
                     <value></value>
@@ -850,7 +606,7 @@ ${java_executable}
                     <width>30</width>
                 </stringParameter>
                 <stringParameter>
-                    <name>httpproxypassword</name>
+                    <name>proxypassword</name>
                     <description>Proxy Password</description>
                     <explanation></explanation>
                     <value></value>
@@ -860,112 +616,7 @@ ${java_executable}
                 </stringParameter>
             </parameterList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxy}</value1>
-                    <value2>proxysetting</value2>
-                </compareValues>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>httpProxy</value2>
-                </compareValues>
-            </ruleList>
-        </parameterGroup>
-        <parameterGroup>
-            <name>httppsroxyinfo</name>
-            <title>HTTPS Proxy Information</title>
-            <explanation></explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <stringParameter>
-                    <name>httpsproxyhost</name>
-                    <description>Proxy Host</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>httpsproxyport</name>
-                    <description>Proxy Port</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>httpsproxyusername</name>
-                    <description>Proxy Username</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>httpsproxypassword</name>
-                    <description>Proxy Password</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-            </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxy}</value1>
-                    <value2>proxysetting</value2>
-                </compareValues>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>httpsProxy</value2>
-                </compareValues>
-            </ruleList>
-        </parameterGroup>
-        <parameterGroup>
-            <name>socksroxyinfo</name>
-            <title>SOCKS5 Proxy Information</title>
-            <explanation></explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <stringParameter>
-                    <name>socksproxyhost</name>
-                    <description>Proxy Host</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>socksproxyport</name>
-                    <description>Proxy Port</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-            </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxy}</value1>
-                    <value2>proxysetting</value2>
-                </compareValues>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>socksProxy</value2>
-                </compareValues>
+                <compareValues logic="equals" value1="${proxy}" value2="proxysetting" />
             </ruleList>
         </parameterGroup>
     </parameterList>
