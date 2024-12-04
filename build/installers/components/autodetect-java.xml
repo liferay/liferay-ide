@@ -1,41 +1,29 @@
-<autodetectJava>
-    <abortOnError>0</abortOnError>
-    <customErrorMessage>The installer could not find a valid Java(tm) through standard installation paths or environment variables on this machine. Required JDK versions: 1.8 64-Bit JDK or 11 64-Bit JDK. Please click OK and browse a valid java executable file to continue.</customErrorMessage>
-    <promptUser>1</promptUser>
-    <ruleList>
-        <platformTest>
-            <negate>1</negate>
-            <type>windows</type>
-        </platformTest>
-    </ruleList>
-    <validVersionList>
-        <validVersion>
-            <bitness>64</bitness>
-            <maxVersion>1.8</maxVersion>
-            <minVersion>1.8</minVersion>
-            <requireJDK>1</requireJDK>
-            <vendor></vendor>
-        </validVersion>
-        <validVersion>
-            <bitness>64</bitness>
-            <maxVersion>11</maxVersion>
-            <minVersion>11</minVersion>
-            <requireJDK>1</requireJDK>
-            <vendor></vendor>
-        </validVersion>
-        <validVersion>
-            <bitness>64</bitness>
-            <maxVersion>17</maxVersion>
-            <minVersion>17</minVersion>
-            <requireJDK>1</requireJDK>
-            <vendor></vendor>
-        </validVersion>
-        <validVersion>
-            <bitness>64</bitness>
-            <maxVersion>21</maxVersion>
-            <minVersion>21</minVersion>
-            <requireJDK>1</requireJDK>
-            <vendor></vendor>
-        </validVersion>
-    </validVersionList>
-</autodetectJava>
+<if>
+    <actionList>
+        <autodetectJava>
+            <promptUser>1</promptUser>
+            <validVersionList>
+                <validVersion bitness="64" maxVersion="1.8" minVersion="1.8" requireJDK="1" />
+                <validVersion bitness="64" maxVersion="11" minVersion="11" requireJDK="1" />
+                <validVersion bitness="64" maxVersion="17" minVersion="17" requireJDK="1" />
+                <validVersion bitness="64" maxVersion="21" minVersion="21" requireJDK="1" />
+            </validVersionList>
+        </autodetectJava>
+    </actionList>
+    <conditionRuleList>
+        <platformTest type="windows" />
+    </conditionRuleList>
+    <elseActionList>
+        <autodetectJava>
+            <abortOnError>0</abortOnError>
+            <customErrorMessage>The installer could not find a valid Java(tm) through standard installation paths or environment variables on this machine. Required JDK versions: 1.8 64-Bit JDK or 11 64-Bit JDK. Please click OK and browse a valid java executable file to continue.</customErrorMessage>
+            <promptUser>1</promptUser>
+            <validVersionList>
+                <validVersion bitness="64" maxVersion="1.8" minVersion="1.8" requireJDK="1" />
+                <validVersion bitness="64" maxVersion="11" minVersion="11" requireJDK="1" />
+                <validVersion bitness="64" maxVersion="17" minVersion="17" requireJDK="1" />
+                <validVersion bitness="64" maxVersion="21" minVersion="21" requireJDK="1" />
+            </validVersionList>
+        </autodetectJava>
+    </elseActionList>
+</if>
