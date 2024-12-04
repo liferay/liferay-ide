@@ -56,9 +56,6 @@
         <include>
             <file>../components/autodetect-java.xml</file>
         </include>
-        <include>
-            <file>../components/autodetect-java-windows.xml</file>
-        </include>
     </preInstallationActionList>
     <postInstallationActionList>
         <createDirectory>
