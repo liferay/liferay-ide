@@ -315,7 +315,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		args.add("-Dcatalina.base=\"" + bundlePath.toPortableString() + "\"");
 		args.add("-Dcatalina.home=\"" + bundlePath.toPortableString() + "\"");
 
-		Version portalVersion = new Version(getVersion());
+		Version portalVersion = CoreUtil.parseVersion(getVersion());
 
 		if (portalVersion.compareTo(new Version("7.0.0")) > 0) {
 			args.add("-Djdk.tls.ephemeralDHKeySize=2048");
