@@ -594,7 +594,7 @@ public class CoreUtil {
 	}
 
 	public static Version parseVersion(String versionString) {
-		return Version.parseVersion(versionString.replace("q", ""));
+		return Version.parseVersion(versionString.replaceAll("q|-lts", ""));
 	}
 
 	public static void prepareFolder(IFolder folder) throws CoreException {
