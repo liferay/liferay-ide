@@ -41,7 +41,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.xml.core,
  org.eclipse.wst.xml.search.core
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.ui,
  com.liferay.ide.portlet.ui.action,

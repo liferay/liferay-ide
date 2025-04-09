@@ -37,7 +37,7 @@ Require-Bundle: com.google.guava,
  org.eclipse.wst.server.core,
  org.eclipse.wst.server.ui,
  org.json
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.liferay.ide.gradle.ui

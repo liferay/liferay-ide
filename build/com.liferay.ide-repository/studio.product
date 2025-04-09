@@ -25,7 +25,7 @@ com.liferay.ide.studio.ui
 openFile
 </programArgs>
       <vmArgs>
--Dosgi.requiredJavaVersion=17
+-Dosgi.requiredJavaVersion=21
 -Xms1024m
 -Xmx2048m
 -XX:+UseG1GC
@@ -37,7 +37,7 @@ openFile
 </vmArgs>
       <vmArgsMac>
 -XstartOnFirstThread
--Dosgi.requiredJavaVersion=17
+-Dosgi.requiredJavaVersion=21
 -Xms1024m
 -Xmx2048m
 -XX:+UseG1GC

@@ -28,6 +28,6 @@ Require-Bundle: biz.aQute.bndlib,
  org.eclipse.wst.validation,
  org.eclipse.wst.xml.core,
  org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core.tests

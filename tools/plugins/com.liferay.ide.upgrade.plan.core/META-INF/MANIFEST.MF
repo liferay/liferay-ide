@@ -4,7 +4,7 @@ Bundle-Activator: com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin
 Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.upgrade.plan.core
 Bundle-Name: Liferay IDE Upgrade Plan Core
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-SymbolicName: com.liferay.ide.upgrade.plan.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.10.4.qualifier

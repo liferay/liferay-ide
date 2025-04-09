@@ -31,7 +31,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.wst.common.frameworks.ui,
  org.eclipse.wst.common.modulecore
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.service.ui,
  com.liferay.ide.service.ui.actions,

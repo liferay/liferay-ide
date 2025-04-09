@@ -1208,8 +1208,14 @@ public class ProjectUtil {
 
 					compliance = JavaCore.VERSION_20;
 				}
+				else if (javaVersion.startsWith(JavaCore.VERSION_21) &&
+						 ((javaVersion.length() == JavaCore.VERSION_21.length()) ||
+						  (javaVersion.charAt(JavaCore.VERSION_21.length()) == '.'))) {
+
+					compliance = JavaCore.VERSION_21;
+				}
 				else {
-					compliance = JavaCore.VERSION_20; // use latest by default
+					compliance = JavaCore.VERSION_21; // use latest by default
 				}
 
 				return compliance;

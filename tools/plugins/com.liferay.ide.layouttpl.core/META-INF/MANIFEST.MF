@@ -21,7 +21,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.common.project.facet.core,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.core,
  com.liferay.ide.layouttpl.core.descriptor,

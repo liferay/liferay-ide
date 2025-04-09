@@ -4,7 +4,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.liferay.ide.upgrade.problems.ui
 Bundle-Name: Liferay IDE Upgrade Problems UI
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.ui;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.10.4.qualifier

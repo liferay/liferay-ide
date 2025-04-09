@@ -12,7 +12,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.intro
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Export-Package: com.liferay.ide.upgrade.planner.ui

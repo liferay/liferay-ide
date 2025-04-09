@@ -25,7 +25,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.ui.ide,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.liferay.ide.maven.ui,

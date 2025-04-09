@@ -49,7 +49,7 @@ Require-Bundle: biz.aQute.bndlib,
  org.eclipse.wst.web.ui,
  org.eclipse.wst.xml.core,
  org.eclipse.jdt.launching
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,
  com.liferay.ide.project.ui.action,

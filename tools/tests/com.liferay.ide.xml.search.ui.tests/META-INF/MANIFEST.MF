@@ -22,6 +22,6 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.xml.core,
  org.eclipse.wst.xml.search.editor,
  org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.xml.search.ui.tests
