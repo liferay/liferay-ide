@@ -44,7 +44,7 @@
         <sign-apps>false</sign-apps>
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.500/repository/</tm-site>
-        <jre-site>https://download.eclipse.org/justj/jres/17/updates/release/latest</jre-site>
+        <jre-site>https://download.eclipse.org/justj/jres/21/updates/release/latest</jre-site>
         <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
         <tycho-version>3.0.5</tycho-version>
     </properties>
@@ -194,7 +194,7 @@
                             </extraRequirements>
                         </dependency-resolution>
                         <resolver>p2</resolver>
-                        <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.full-17</executionEnvironment>
+                        <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.full-21</executionEnvironment>
                         <resolveWithExecutionEnvironmentConstraints>true</resolveWithExecutionEnvironmentConstraints>
                         <allowConflictingDependencies>true</allowConflictingDependencies>
                         <environments>
