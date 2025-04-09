@@ -46,7 +46,7 @@
         <tm-site>https://download.eclipse.org/tm/updates/4.5.500/repository/</tm-site>
         <jre-site>https://download.eclipse.org/justj/jres/21/updates/release/latest</jre-site>
         <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
-        <tycho-version>3.0.5</tycho-version>
+        <tycho-version>4.0.12</tycho-version>
     </properties>
 
     <repositories>
