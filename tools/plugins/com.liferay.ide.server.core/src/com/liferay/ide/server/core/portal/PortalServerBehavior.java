@@ -523,9 +523,13 @@ public class PortalServerBehavior
 			opens.add("--add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED");
 			opens.add("--add-opens=java.base/java.util.concurrent=ALL-UNNAMED");
 			opens.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/sun.net.www.protocol.http=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/sun.net.www.protocol.https=ALL-UNNAMED");
 			opens.add("--add-opens=java.base/sun.nio.ch=ALL-UNNAMED");
 			opens.add("--add-opens=java.base/sun.nio.cs=ALL-UNNAMED");
+			opens.add("--add-opens=java.base/sun.util.calendar=ALL-UNNAMED");
 			opens.add("--add-opens=java.xml/com.sun.org.apache.xerces.internal.util=ALL-UNNAMED");
+			opens.add("--add-opens=jdk.zipfs/jdk.nio.zipfs=ALL-UNNAMED");
 
 			launchEnvrionment.put("JDK_JAVA_OPTIONS", String.join(" ", opens));
 
