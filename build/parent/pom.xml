@@ -59,7 +59,7 @@
             <id>lide-deps</id>
             <layout>p2</layout>
             <url>${osgi-bundles-site}</url>
-        </repository>   
+        </repository>
         <repository>
             <id>eclipse</id>
             <layout>p2</layout>
@@ -158,7 +158,7 @@
                     <extensions>true</extensions>
                     <configuration>
                         <digest>sha256</digest>
-                    </configuration>                    
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -222,7 +222,7 @@
                                 <os>macosx</os>
                                 <ws>cocoa</ws>
                                 <arch>aarch64</arch>
-                            </environment>                                                      
+                            </environment>
                         </environments>
                     </configuration>
                 </plugin>
