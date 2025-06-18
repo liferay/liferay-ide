@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.gradle.core.GradleUtil;
@@ -106,10 +105,9 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 			return Collections.emptyList();
 		}
 
-		String simplifiedVersion = VersionUtil.simplifyTargetPlatformVersion(
-			gradleWorkspaceProject.getTargetPlatformVersion());
+		String targetPlatformVersion = gradleWorkspaceProject.getTargetPlatformVersion();
 
-		if (Objects.isNull(simplifiedVersion)) {
+		if (Objects.isNull(targetPlatformVersion)) {
 			return Collections.emptyList();
 		}
 
@@ -117,18 +115,19 @@ public class SwitchToUseReleaseAPIDependencyCommand implements UpgradeCommand, U
 
 		List<String> allArtifactIds = new ArrayList<>();
 
-		String[] versionParts = simplifiedVersion.split("\\.");
+		String[] versionParts = targetPlatformVersion.split("\\.");
 
 		if (productKey.startsWith("dxp")) {
-			simplifiedVersion = versionParts[0] + "." + versionParts[1] + "." + versionParts[2] + ".x";
+			targetPlatformVersion = versionParts[0] + "." + versionParts[1] + "." + versionParts[2] + ".x";
 		}
 		else if (productKey.startsWith("portal")) {
-			simplifiedVersion = versionParts[0] + "." + versionParts[1] + ".x";
+			targetPlatformVersion = versionParts[0] + "." + versionParts[1] + ".x";
 		}
 
 		Class<?> clazz = SwitchToUseReleaseAPIDependencyCommand.class;
 
-		try (InputStream inputStream = clazz.getResourceAsStream("/release-api/" + simplifiedVersion + "-versions.txt");
+		try (InputStream inputStream = clazz.getResourceAsStream(
+				"/release-api/" + targetPlatformVersion + "-versions.txt");
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
 
 			String dependency = null;

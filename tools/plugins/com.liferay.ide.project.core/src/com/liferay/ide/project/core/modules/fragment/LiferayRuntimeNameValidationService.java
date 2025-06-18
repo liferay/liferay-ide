@@ -17,7 +17,6 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.core.util.VersionUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -65,8 +64,7 @@ public class LiferayRuntimeNameValidationService extends ValidationService imple
 					"make it point to an existing runtime.");
 		}
 
-		String targetPlatformVersion = VersionUtil.simplifyTargetPlatformVersion(
-			liferayWorkspaceProject.getTargetPlatformVersion());
+		String targetPlatformVersion = liferayWorkspaceProject.getTargetPlatformVersion();
 
 		if (Objects.nonNull(targetPlatformVersion)) {
 			PortalRuntime liferayRuntime = (PortalRuntime)runtime.loadAdapter(
