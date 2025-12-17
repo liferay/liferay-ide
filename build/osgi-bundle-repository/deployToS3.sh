@@ -18,5 +18,5 @@ PACKAGE=$3
 VERSION=$4
 
 echo "uploading to version $VERSION ..."
-s3cmd --no-mime-magic --acl-public --delete-removed --delete-after sync $REPO_PATH/ s3://devtools-s3.liferay.com/$REPO/$PACKAGE/$VERSION/
+gcloud storage rsync --recursive --delete-unmatched-destination-objects $REPO_PATH/ gs://liferay-devtools/$REPO/$PACKAGE/$VERSION/
 echo
