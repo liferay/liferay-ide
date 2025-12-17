@@ -102,20 +102,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>download-ivy-cache-70</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>wget</goal>
-						</goals>
-						<configuration>
-							<url>http://us-east-1.linodeobjects.com/devtools-s3.liferay.com/liferay-ide-files/zips/ivy-cache-7.0.zip</url>
-							<outputDirectory>${liferay.bundles.dir}</outputDirectory>
-							<outputFileName>ivy-cache-7.0.zip</outputFileName>
-							<md5>22625f72b6daa86f68ae0e06fc4c1f12</md5>
-							<checkSignature>true</checkSignature>
-						</configuration>
-					</execution>
-					<execution>
 						<id>download-portal-tomcat-7.0-ga5</id>
 						<phase>generate-resources</phase>
 						<goals>
