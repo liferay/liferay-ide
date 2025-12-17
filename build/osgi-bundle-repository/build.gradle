@@ -1,14 +1,6 @@
-buildscript {
-	dependencies {
-		classpath group: "nu.studer", name: "gradle-credentials-plugin", version: "1.0.7"
-	}
-
-	repositories {
-		jcenter()
-	}
+plugins {
+  id("nu.studer.credentials") version "3.0"
 }
-
-apply plugin: "nu.studer.credentials"
 
 task deployToS3(type:Exec) {
 	args = ["target/repository", "eclipse", "liferay-ide-deps", "201904221700"]
