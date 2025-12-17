@@ -21,7 +21,6 @@ The following folders are already applied to portal code style:
 8. /enterprise/plugins/com.liferay.ide.studio.ui
 9. /tools/plugins/com.liferay.ide.theme.core
 10. /tools/plugins/com.liferay.ide.ui.snippets
-11. /tools/plugins/com.liferay.ide.xml.search.ui
 12. /tools/plugins/com.liferay.ide.ui
 14. /maven/plugins/com.liferay.ide.maven.core
 15. /maven/plugins/com.liferay.ide.maven.ui
