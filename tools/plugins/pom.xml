@@ -55,12 +55,5 @@
 		<module>com.liferay.ide.service.ui</module>
 		<module>com.liferay.ide.theme.core</module>
 		<module>com.liferay.ide.ui</module>
-		<module>com.liferay.ide.upgrade.plan.core</module>
-		<module>com.liferay.ide.upgrade.plan.ui</module>
-		<module>com.liferay.ide.upgrade.planner.ui</module>
-		<module>com.liferay.ide.upgrade.problems.core</module>
-		<module>com.liferay.ide.upgrade.problems.ui</module>
-		<module>com.liferay.ide.upgrade.commands.core</module>
-		<module>com.liferay.ide.upgrade.commands.ui</module>
 	</modules>
 </project>
