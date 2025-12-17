@@ -38,6 +38,5 @@
 	<modules>
 		<module>com.liferay.ide.eclipse.tools</module>
 		<module>com.liferay.ide.hidden</module>
-		<module>com.liferay.ide.upgrade.planner</module>
 	</modules>
 </project>
