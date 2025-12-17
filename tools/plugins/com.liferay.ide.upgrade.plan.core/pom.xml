@@ -52,26 +52,6 @@
 					</filesets>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.googlecode.maven-download-plugin</groupId>
-				<artifactId>download-maven-plugin</artifactId>
-				<version>1.3.0</version>
-				<executions>
-					<execution>
-						<id>download-liferay-offline-docs</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>wget</goal>
-						</goals>
-						<configuration>
-							<url>${upgrade-plan-content-zip-url}</url>
-							<outputDirectory>resources</outputDirectory>
-							<outputFileName>${code.upgrade.zip}</outputFileName>
-							<md5>${upgrade-plan-content-zip-md5}</md5>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
