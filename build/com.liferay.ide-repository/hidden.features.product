@@ -40,7 +40,6 @@
       <feature id="org.eclipse.sapphire.ui" />
       <feature id="org.eclipse.sapphire.ui.swt.gef" />
       <feature id="org.eclipse.sapphire.ui.swt.xml.editor" />
-      <feature id="org.eclipse.wst.xml.search.core-feature" />
       <feature id="org.eclipse.tm.terminal.connector.telnet.feature" />
       <feature id="org.eclipse.tm.terminal.control.feature" />
       <feature id="org.eclipse.tm.terminal.view.feature" />
