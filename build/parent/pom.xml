@@ -35,11 +35,11 @@
         <upgrade-plan-content-zip-md5>c4bce64c362ecffcce300f31e88b2e63</upgrade-plan-content-zip-md5>
         <bndtools-site>https://bndtools.org/bndtools.p2.repo/7.0.0/</bndtools-site>
         <eclipse-site>https://download.eclipse.org/releases/2023-12/202312061001/</eclipse-site>
-        <eclipse-xml-search-site>https://storage.googleapis.com/liferay-devtools/eclipse/eclipse-wtp-xml-search/</eclipse-xml-search-site>
+        <eclipse-xml-search-site>http://oss.opensagres.fr/eclipse-wtp-xml-search/1.0.0/</eclipse-xml-search-site>
         <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.8.v20231117-1658/</gradle-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/N20230908195041/repository</orbit-site>
-        <sapphire-site>https://storage.googleapis.com/liferay-devtools/eclipse/sapphire/9.1.1/</sapphire-site>
+        <sapphire-site>https://mirrors.ibiblio.org/eclipse/sapphire/9.1.1/repository/</sapphire-site>
         <osgi-bundles-site>https://storage.googleapis.com/liferay-devtools/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
         <sign-apps>false</sign-apps>
         <swtbot-site>https://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
