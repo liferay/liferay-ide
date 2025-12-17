@@ -40,7 +40,7 @@ if [ -d "${unzip_dir}" ]; then
     rm -rf "${unzip_dir}" "${zipfile}" "output"
 
     if [ -s "code-upgrade-docs-${tag}.zip" ]; then
-      gcloud storage rsync --recursive --delete-unmatched-destination-objects code-upgrade-docs-${tag}.zip gs://liferay-devtools/liferay-ide-files/docs/
+      gcloud storage cp code-upgrade-docs-${tag}.zip gs://liferay-devtools/liferay-ide-files/docs/
 
       if [ $? -ne 0 ]; then
         echo "Failed to upload code-upgrade-docs-${tag}.zip file."
