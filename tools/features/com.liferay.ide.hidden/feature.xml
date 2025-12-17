@@ -133,22 +133,6 @@
 
 	<plugin
 		download-size="0"
-		id="org.eclipse.jst.jsp.search.editor"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="org.eclipse.wst.html.search.editor"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="org.gradle.toolingapi"
 		install-size="0"
 		unpack="false"
