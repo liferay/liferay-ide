@@ -49,7 +49,7 @@ public class BladeCLITests
 
         Domain domain = Domain.domain( bladeFile );
 
-        assertTrue( domain.getBundleVersion().startsWith( "7" ) );
+        assertTrue( domain.getBundleVersion().startsWith( "8" ) );
 
         assertFalse( domain.getBundleVersion().startsWith( "5" ) );
     }
