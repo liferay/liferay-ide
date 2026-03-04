@@ -1,0 +1,9 @@
+provides.0.namespace = org.eclipse.equinox.p2.iu
+provides.0.name = org.eclipse.equinox.launcher.cocoa.macosx
+provides.0.version = 1.2.1400.v20250801-0854
+provides.0.filter = (&(osgi.os=macosx)(osgi.arch=aarch64))
+
+requires.0.namespace = org.eclipse.equinox.p2.iu
+requires.0.name = org.eclipse.equinox.launcher.cocoa.macosx.aarch64
+requires.0.range = 0.0.0
+requires.0.filter = (&(osgi.os=macosx)(osgi.arch=aarch64))
