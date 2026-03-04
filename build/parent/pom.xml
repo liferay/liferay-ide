@@ -48,6 +48,16 @@
 
     <repositories>
         <repository>
+            <id>lemminx-releases</id>
+            <url>https://repo.eclipse.org/content/repositories/lemminx-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>eclipse-jre</id>
             <layout>p2</layout>
             <url>${jre-site}</url>
@@ -76,6 +86,12 @@
             <id>gradle</id>
             <layout>p2</layout>
             <url>${gradle-site}</url>
+        </repository>
+
+        <repository>
+            <id>swtbot</id>
+            <layout>p2</layout>
+            <url>${swtbot-site}</url>
         </repository>
         <repository>
             <id>tm</id>
