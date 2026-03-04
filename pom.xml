@@ -47,6 +47,11 @@
 			<id>lily.li</id>
 			<email>lily.li@liferay.com</email>
 		</developer>
+		<developer>
+			<name>Drew Brokke</name>
+			<id>drewbrokke</id>
+			<email>drew.brokke@liferay.com</email>
+		</developer>
 	</developers>
 
 	<licenses>
