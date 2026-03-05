@@ -38,10 +38,10 @@ jobs:
         with:
           repository: gamerson/liferay-ide-m2-repository
           path: liferay-ide-m2-repository
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'zulu'
           cache: maven
 
