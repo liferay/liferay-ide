@@ -100,14 +100,14 @@ public class NewLiferayModuleProjectOpMethods {
 					@Override
 					public boolean visit(MarkerAnnotation node) {
 						if (_isComponentAnnotation(node)) {
-							NormalAnnotation normalAnnotation = cu.getAST(
-							).newNormalAnnotation();
+							NormalAnnotation normalAnnotation = ast.newNormalAnnotation();
+							Name typeName = (Name)ASTNode.copySubtree(ast, node.getTypeName());
 
-							normalAnnotation.setTypeName((Name)ASTNode.copySubtree(cu.getAST(), node.getTypeName()));
+							normalAnnotation.setTypeName(typeName);
 
 							rewrite.replace(node, normalAnnotation, null);
 
-							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, cu.getAST(), properties);
+							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, ast, properties);
 
 							modified[0] = true;
 						}
@@ -118,7 +118,7 @@ public class NewLiferayModuleProjectOpMethods {
 					@Override
 					public boolean visit(NormalAnnotation node) {
 						if (_isComponentAnnotation(node)) {
-							_addPropertiesToNormalAnnotation(node, rewrite, cu.getAST(), properties);
+							_addPropertiesToNormalAnnotation(node, rewrite, ast, properties);
 
 							modified[0] = true;
 						}
@@ -129,29 +129,26 @@ public class NewLiferayModuleProjectOpMethods {
 					@Override
 					public boolean visit(SingleMemberAnnotation node) {
 						if (_isComponentAnnotation(node)) {
-							NormalAnnotation normalAnnotation = cu.getAST(
-							).newNormalAnnotation();
+							NormalAnnotation normalAnnotation = ast.newNormalAnnotation();
+							Name typeName = (Name)ASTNode.copySubtree(ast, node.getTypeName());
 
-							normalAnnotation.setTypeName((Name)ASTNode.copySubtree(cu.getAST(), node.getTypeName()));
+							normalAnnotation.setTypeName(typeName);
 
-							MemberValuePair pair = cu.getAST(
-							).newMemberValuePair();
+							MemberValuePair pair = ast.newMemberValuePair();
+							SimpleName valueName = ast.newSimpleName("value");
 
-							pair.setName(
-								cu.getAST(
-								).newSimpleName(
-									"value"
-								));
-							pair.setValue((Expression)ASTNode.copySubtree(cu.getAST(), node.getValue()));
+							pair.setName(valueName);
+							Expression valueExpression = (Expression)ASTNode.copySubtree(ast, node.getValue());
 
-							normalAnnotation.values(
-							).add(
-								pair
-							);
+							pair.setValue(valueExpression);
+
+							List valuesList = normalAnnotation.values();
+
+							valuesList.add(pair);
 
 							rewrite.replace(node, normalAnnotation, null);
 
-							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, cu.getAST(), properties);
+							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, ast, properties);
 
 							modified[0] = true;
 						}
@@ -214,8 +211,9 @@ public class NewLiferayModuleProjectOpMethods {
 							ArrayInitializer newArrayInitializer = ast.newArrayInitializer();
 
 							MemberValuePair propertyMemberValuePair = ast.newMemberValuePair();
+							SimpleName propertyName = ast.newSimpleName("property");
 
-							propertyMemberValuePair.setName(ast.newSimpleName("property"));
+							propertyMemberValuePair.setName(propertyName);
 							propertyMemberValuePair.setValue(newArrayInitializer);
 
 							if (ListUtil.isNotEmpty(values)) {
@@ -239,6 +237,8 @@ public class NewLiferayModuleProjectOpMethods {
 							}
 						}
 					}
+
+					private final AST ast = cu.getAST();
 
 				});
 
@@ -487,10 +487,13 @@ public class NewLiferayModuleProjectOpMethods {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
-			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, SapphireUtil.getText(op.getLiferayVersion()));
-			prefs.put(
-				ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION,
-				SapphireUtil.getText(op.getProjectProvider()));
+			String liferayVersionText = SapphireUtil.getText(op.getLiferayVersion());
+
+			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, liferayVersionText);
+
+			String projectProviderText = SapphireUtil.getText(op.getProjectProvider());
+
+			prefs.put(ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, projectProviderText);
 
 			prefs.flush();
 		}
