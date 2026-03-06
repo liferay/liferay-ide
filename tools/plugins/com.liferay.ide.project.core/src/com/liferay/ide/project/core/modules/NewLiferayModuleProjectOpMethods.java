@@ -43,13 +43,16 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -75,7 +78,7 @@ public class NewLiferayModuleProjectOpMethods {
 		}
 
 		try {
-			ASTParser parser = ASTParser.newParser(AST.JLS8);
+			ASTParser parser = ASTParser.newParser(AST.JLS17);
 
 			String readContents = FileUtil.readContents(dest, true);
 
@@ -83,120 +86,191 @@ public class NewLiferayModuleProjectOpMethods {
 
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
-			parser.setResolveBindings(true);
-
 			CompilationUnit cu = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 
-			cu.recordModifications();
-
 			Document document = new Document(new String(readContents));
+
+			ASTRewrite rewrite = ASTRewrite.create(cu.getAST());
+
+			final boolean[] modified = new boolean[1];
 
 			cu.accept(
 				new ASTVisitor() {
 
 					@Override
-					public boolean visit(NormalAnnotation node) {
-						Name name = node.getTypeName();
+					public boolean visit(MarkerAnnotation node) {
+						if (_isComponentAnnotation(node)) {
+							NormalAnnotation normalAnnotation = cu.getAST(
+							).newNormalAnnotation();
 
-						String qualifiedName = name.getFullyQualifiedName();
+							normalAnnotation.setTypeName((Name)ASTNode.copySubtree(cu.getAST(), node.getTypeName()));
 
-						if (qualifiedName.equals("Component")) {
-							ASTRewrite rewrite = ASTRewrite.create(cu.getAST());
+							rewrite.replace(node, normalAnnotation, null);
 
-							AST ast = cu.getAST();
+							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, cu.getAST(), properties);
 
-							List<ASTNode> values = node.values();
-
-							boolean hasProperty = false;
-
-							for (ASTNode astNode : values) {
-								if (astNode instanceof MemberValuePair) {
-									MemberValuePair pairNode = (MemberValuePair)astNode;
-
-									SimpleName simpleName = pairNode.getName();
-
-									String fullQualifiedName = simpleName.getFullyQualifiedName();
-
-									if (fullQualifiedName.equals("property")) {
-										Expression express = pairNode.getValue();
-
-										if (express instanceof ArrayInitializer) {
-											ListRewrite lrw = rewrite.getListRewrite(
-												express, ArrayInitializer.EXPRESSIONS_PROPERTY);
-
-											ArrayInitializer initializer = (ArrayInitializer)express;
-
-											List<ASTNode> expressions = initializer.expressions();
-
-											ASTNode propertyNode = null;
-
-											for (int i = properties.size() - 1; i >= 0; i--) {
-												StringLiteral stringLiteral = ast.newStringLiteral();
-
-												stringLiteral.setLiteralValue(properties.get(i));
-
-												if (ListUtil.isNotEmpty(expressions)) {
-													propertyNode = expressions.get(expressions.size() - 1);
-
-													lrw.insertAfter(stringLiteral, propertyNode, null);
-												}
-												else {
-													lrw.insertFirst(stringLiteral, null);
-												}
-											}
-										}
-
-										hasProperty = true;
-									}
-								}
-							}
-
-							if (!hasProperty) {
-								ListRewrite clrw = rewrite.getListRewrite(node, NormalAnnotation.VALUES_PROPERTY);
-
-								ASTNode lastNode = values.get(values.size() - 1);
-
-								ArrayInitializer newArrayInitializer = ast.newArrayInitializer();
-
-								MemberValuePair propertyMemberValuePair = ast.newMemberValuePair();
-
-								propertyMemberValuePair.setName(ast.newSimpleName("property"));
-								propertyMemberValuePair.setValue(newArrayInitializer);
-
-								clrw.insertBefore(propertyMemberValuePair, lastNode, null);
-
-								ListRewrite newLrw = rewrite.getListRewrite(
-									newArrayInitializer, ArrayInitializer.EXPRESSIONS_PROPERTY);
-
-								for (String property : properties) {
-									StringLiteral stringLiteral = ast.newStringLiteral();
-
-									stringLiteral.setLiteralValue(property);
-
-									newLrw.insertAt(stringLiteral, 0, null);
-								}
-							}
-
-							try (OutputStream fos = Files.newOutputStream(dest.toPath())) {
-								TextEdit edits = rewrite.rewriteAST(document, null);
-
-								edits.apply(document);
-
-								String content = document.get();
-
-								fos.write(content.getBytes());
-
-								fos.flush();
-							}
-							catch (Exception e) {
-								ProjectCore.logError(e);
-							}
+							modified[0] = true;
 						}
 
 						return super.visit(node);
 					}
 
+					@Override
+					public boolean visit(NormalAnnotation node) {
+						if (_isComponentAnnotation(node)) {
+							_addPropertiesToNormalAnnotation(node, rewrite, cu.getAST(), properties);
+
+							modified[0] = true;
+						}
+
+						return super.visit(node);
+					}
+
+					@Override
+					public boolean visit(SingleMemberAnnotation node) {
+						if (_isComponentAnnotation(node)) {
+							NormalAnnotation normalAnnotation = cu.getAST(
+							).newNormalAnnotation();
+
+							normalAnnotation.setTypeName((Name)ASTNode.copySubtree(cu.getAST(), node.getTypeName()));
+
+							MemberValuePair pair = cu.getAST(
+							).newMemberValuePair();
+
+							pair.setName(
+								cu.getAST(
+								).newSimpleName(
+									"value"
+								));
+							pair.setValue((Expression)ASTNode.copySubtree(cu.getAST(), node.getValue()));
+
+							normalAnnotation.values(
+							).add(
+								pair
+							);
+
+							rewrite.replace(node, normalAnnotation, null);
+
+							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, cu.getAST(), properties);
+
+							modified[0] = true;
+						}
+
+						return super.visit(node);
+					}
+
+					private void _addPropertiesToNormalAnnotation(
+						NormalAnnotation node, ASTRewrite rewrite, AST ast, List<String> properties) {
+
+						List<ASTNode> values = node.values();
+
+						boolean hasProperty = false;
+
+						for (ASTNode astNode : values) {
+							if (astNode instanceof MemberValuePair) {
+								MemberValuePair pairNode = (MemberValuePair)astNode;
+
+								SimpleName simpleName = pairNode.getName();
+
+								String fullQualifiedName = simpleName.getFullyQualifiedName();
+
+								if (fullQualifiedName.equals("property")) {
+									Expression express = pairNode.getValue();
+
+									if (express instanceof ArrayInitializer) {
+										ListRewrite lrw = rewrite.getListRewrite(
+											express, ArrayInitializer.EXPRESSIONS_PROPERTY);
+
+										ArrayInitializer initializer = (ArrayInitializer)express;
+
+										List<ASTNode> expressions = initializer.expressions();
+
+										ASTNode propertyNode = null;
+
+										for (int i = properties.size() - 1; i >= 0; i--) {
+											StringLiteral stringLiteral = ast.newStringLiteral();
+
+											stringLiteral.setLiteralValue(properties.get(i));
+
+											if (ListUtil.isNotEmpty(expressions)) {
+												propertyNode = expressions.get(expressions.size() - 1);
+
+												lrw.insertAfter(stringLiteral, propertyNode, null);
+											}
+											else {
+												lrw.insertFirst(stringLiteral, null);
+											}
+										}
+									}
+
+									hasProperty = true;
+								}
+							}
+						}
+
+						if (!hasProperty) {
+							ListRewrite clrw = rewrite.getListRewrite(node, NormalAnnotation.VALUES_PROPERTY);
+
+							ArrayInitializer newArrayInitializer = ast.newArrayInitializer();
+
+							MemberValuePair propertyMemberValuePair = ast.newMemberValuePair();
+
+							propertyMemberValuePair.setName(ast.newSimpleName("property"));
+							propertyMemberValuePair.setValue(newArrayInitializer);
+
+							if (ListUtil.isNotEmpty(values)) {
+								ASTNode lastNode = values.get(values.size() - 1);
+
+								clrw.insertAfter(propertyMemberValuePair, lastNode, null);
+							}
+							else {
+								clrw.insertFirst(propertyMemberValuePair, null);
+							}
+
+							ListRewrite newLrw = rewrite.getListRewrite(
+								newArrayInitializer, ArrayInitializer.EXPRESSIONS_PROPERTY);
+
+							for (int i = properties.size() - 1; i >= 0; i--) {
+								StringLiteral stringLiteral = ast.newStringLiteral();
+
+								stringLiteral.setLiteralValue(properties.get(i));
+
+								newLrw.insertFirst(stringLiteral, null);
+							}
+						}
+					}
+
 				});
+
+			if (modified[0]) {
+				try (OutputStream fos = Files.newOutputStream(dest.toPath())) {
+					TextEdit edits = rewrite.rewriteAST(document, null);
+
+					edits.apply(document);
+
+					String content = document.get();
+
+					fos.write(content.getBytes());
+
+					fos.flush();
+				}
+			}
+			else {
+				String content = readContents;
+
+				for (String property : properties) {
+					if (content.contains("property = {")) {
+						content = content.replace("property = {", "property = {\n\t\t\"" + property + "\",");
+					}
+				}
+
+				if (!content.equals(readContents)) {
+					try (OutputStream fos = Files.newOutputStream(dest.toPath())) {
+						fos.write(content.getBytes());
+						fos.flush();
+					}
+				}
+			}
 
 			return true;
 		}
@@ -210,15 +284,13 @@ public class NewLiferayModuleProjectOpMethods {
 	@SuppressWarnings("deprecation")
 	public static boolean checkComponentAnnotation(File dest) throws Exception {
 		try {
-			ASTParser parser = ASTParser.newParser(AST.JLS8);
+			ASTParser parser = ASTParser.newParser(AST.JLS17);
 
 			String readContents = FileUtil.readContents(dest, true);
 
 			parser.setSource(readContents.toCharArray());
 
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
-
-			parser.setResolveBindings(true);
 
 			CompilationUnit cu = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 
@@ -263,24 +335,41 @@ public class NewLiferayModuleProjectOpMethods {
 				projectLocation = location.append(projectName);
 			}
 
-			List<IPath> finalClassPaths = _getClassFilePath(projectLocation);
+			IProject project = CoreUtil.getProject(projectName);
 
-			for (IPath classFilePath : finalClassPaths) {
-				File finalClassFile = classFilePath.toFile();
+			if ((project != null) && project.exists()) {
+				IPath actualLocation = project.getLocation();
 
-				if (FileUtil.exists(finalClassFile)) {
-					ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
+				if (actualLocation == null) {
+					actualLocation = project.getRawLocation();
+				}
 
-					List<String> properties = new ArrayList<>();
+				if (actualLocation != null) {
+					projectLocation = actualLocation;
+				}
+			}
 
-					for (PropertyKey propertyKey : propertyKeys) {
-						properties.add(_getter.get(propertyKey.getName()) + "=" + _getter.get(propertyKey.getValue()));
-					}
+			if (projectLocation != null) {
+				List<IPath> finalClassPaths = _getClassFilePath(projectLocation);
 
-					if (addProperties(finalClassFile, properties)) {
-						IProject project = CoreUtil.getProject(_getter.get(op.getProjectName()));
+				for (IPath classFilePath : finalClassPaths) {
+					File finalClassFile = classFilePath.toFile();
 
-						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					if (FileUtil.exists(finalClassFile)) {
+						ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
+
+						List<String> properties = new ArrayList<>();
+
+						for (PropertyKey propertyKey : propertyKeys) {
+							properties.add(
+								_getter.get(propertyKey.getName()) + "=" + _getter.get(propertyKey.getValue()));
+						}
+
+						if (addProperties(finalClassFile, properties)) {
+							if ((project != null) && project.exists()) {
+								project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+							}
+						}
 					}
 				}
 			}
@@ -346,6 +435,10 @@ public class NewLiferayModuleProjectOpMethods {
 	}
 
 	private static void _getClassFile(File packageRoot, List<IPath> classFiles) {
+		if (!packageRoot.exists()) {
+			return;
+		}
+
 		File[] children = packageRoot.listFiles();
 
 		if (ListUtil.isNotEmpty(children)) {
@@ -379,6 +472,17 @@ public class NewLiferayModuleProjectOpMethods {
 		return classFiles;
 	}
 
+	private static boolean _isComponentAnnotation(Annotation node) {
+		String name = node.getTypeName(
+		).getFullyQualifiedName();
+
+		if (name.equals("Component") || name.endsWith(".Component")) {
+			return true;
+		}
+
+		return false;
+	}
+
 	private static void _updateBuildAndVersionPrefs(NewLiferayModuleProjectOp op) {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
@@ -410,12 +514,26 @@ public class NewLiferayModuleProjectOpMethods {
 		}
 
 		@Override
+		public boolean visit(MarkerAnnotation node) {
+			if (_isComponentAnnotation(node)) {
+				_hasComponentAnnotation = true;
+			}
+
+			return super.visit(node);
+		}
+
+		@Override
 		public boolean visit(NormalAnnotation node) {
-			Name name = node.getTypeName();
+			if (_isComponentAnnotation(node)) {
+				_hasComponentAnnotation = true;
+			}
 
-			String qualifiedName = name.getFullyQualifiedName();
+			return super.visit(node);
+		}
 
-			if (qualifiedName.equals("Component")) {
+		@Override
+		public boolean visit(SingleMemberAnnotation node) {
+			if (_isComponentAnnotation(node)) {
 				_hasComponentAnnotation = true;
 			}
 
