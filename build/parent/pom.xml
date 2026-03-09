@@ -44,6 +44,7 @@
         <jre-site>https://download.eclipse.org/justj/jres/21/updates/release/latest</jre-site>
         <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
         <tycho-version>5.0.1</tycho-version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <repositories>
