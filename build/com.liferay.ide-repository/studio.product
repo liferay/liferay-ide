@@ -63,7 +63,7 @@ openFile
       <macosx icon="icons/DeveloperStudio.icns"/>
       <solaris/>
       <win useIco="true">
-         <ico path="icons/DeveloperStudio.ico"/>
+         <ico path="icons/DeveloperStudio_xlarge.ico"/>
          <bmp/>
       </win>
    </launcher>
