@@ -100,14 +100,14 @@ public class NewLiferayModuleProjectOpMethods {
 					@Override
 					public boolean visit(MarkerAnnotation node) {
 						if (_isComponentAnnotation(node)) {
-							NormalAnnotation normalAnnotation = ast.newNormalAnnotation();
-							Name typeName = (Name)ASTNode.copySubtree(ast, node.getTypeName());
+							NormalAnnotation normalAnnotation = _ast.newNormalAnnotation();
+							Name typeName = (Name)ASTNode.copySubtree(_ast, node.getTypeName());
 
 							normalAnnotation.setTypeName(typeName);
 
 							rewrite.replace(node, normalAnnotation, null);
 
-							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, ast, properties);
+							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, _ast, properties);
 
 							modified[0] = true;
 						}
@@ -118,7 +118,7 @@ public class NewLiferayModuleProjectOpMethods {
 					@Override
 					public boolean visit(NormalAnnotation node) {
 						if (_isComponentAnnotation(node)) {
-							_addPropertiesToNormalAnnotation(node, rewrite, ast, properties);
+							_addPropertiesToNormalAnnotation(node, rewrite, _ast, properties);
 
 							modified[0] = true;
 						}
@@ -129,16 +129,17 @@ public class NewLiferayModuleProjectOpMethods {
 					@Override
 					public boolean visit(SingleMemberAnnotation node) {
 						if (_isComponentAnnotation(node)) {
-							NormalAnnotation normalAnnotation = ast.newNormalAnnotation();
-							Name typeName = (Name)ASTNode.copySubtree(ast, node.getTypeName());
+							NormalAnnotation normalAnnotation = _ast.newNormalAnnotation();
+							Name typeName = (Name)ASTNode.copySubtree(_ast, node.getTypeName());
 
 							normalAnnotation.setTypeName(typeName);
 
-							MemberValuePair pair = ast.newMemberValuePair();
-							SimpleName valueName = ast.newSimpleName("value");
+							MemberValuePair pair = _ast.newMemberValuePair();
+							SimpleName valueName = _ast.newSimpleName("value");
 
 							pair.setName(valueName);
-							Expression valueExpression = (Expression)ASTNode.copySubtree(ast, node.getValue());
+
+							Expression valueExpression = (Expression)ASTNode.copySubtree(_ast, node.getValue());
 
 							pair.setValue(valueExpression);
 
@@ -148,7 +149,7 @@ public class NewLiferayModuleProjectOpMethods {
 
 							rewrite.replace(node, normalAnnotation, null);
 
-							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, ast, properties);
+							_addPropertiesToNormalAnnotation(normalAnnotation, rewrite, _ast, properties);
 
 							modified[0] = true;
 						}
@@ -214,6 +215,7 @@ public class NewLiferayModuleProjectOpMethods {
 							SimpleName propertyName = ast.newSimpleName("property");
 
 							propertyMemberValuePair.setName(propertyName);
+
 							propertyMemberValuePair.setValue(newArrayInitializer);
 
 							if (ListUtil.isNotEmpty(values)) {
@@ -238,7 +240,7 @@ public class NewLiferayModuleProjectOpMethods {
 						}
 					}
 
-					private final AST ast = cu.getAST();
+					private final AST _ast = cu.getAST();
 
 				});
 
@@ -365,10 +367,8 @@ public class NewLiferayModuleProjectOpMethods {
 								_getter.get(propertyKey.getName()) + "=" + _getter.get(propertyKey.getValue()));
 						}
 
-						if (addProperties(finalClassFile, properties)) {
-							if ((project != null) && project.exists()) {
-								project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-							}
+						if (addProperties(finalClassFile, properties) && (project != null) && project.exists()) {
+							project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 						}
 					}
 				}
@@ -473,8 +473,9 @@ public class NewLiferayModuleProjectOpMethods {
 	}
 
 	private static boolean _isComponentAnnotation(Annotation node) {
-		String name = node.getTypeName(
-		).getFullyQualifiedName();
+		Name typeName = node.getTypeName();
+
+		String name = typeName.getFullyQualifiedName();
 
 		if (name.equals("Component") || name.endsWith(".Component")) {
 			return true;
