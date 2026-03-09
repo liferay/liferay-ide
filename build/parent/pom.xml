@@ -32,7 +32,7 @@
         <blade-392-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/public/com/liferay/blade/com.liferay.blade.cli/3.9.2/com.liferay.blade.cli-3.9.2.jar</blade-392-download-url>
         <blade-392-md5>08aedcb6bacc3166060d0032f9489dd1</blade-392-md5>
         <bndtools-site>https://bndtools.org/bndtools.p2.repo/7.0.0/</bndtools-site>
-        <eclipse-site>https://download.eclipse.org/releases/2025-12/202512101000/</eclipse-site>
+        <eclipse-site>https://download.eclipse.org/releases/2026-03/202603111000/</eclipse-site>
         <gradle-site>https://download.eclipse.org/buildship/updates/e427/releases/3.x/3.1.8.v20231117-1658/</gradle-site>
         <liferay-ide-swtbot-testing-site>https://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/N20230908195041/repository</orbit-site>
