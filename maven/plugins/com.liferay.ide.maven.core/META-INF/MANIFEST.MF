@@ -46,7 +46,7 @@ Require-Bundle: biz.aQute.bndlib,
  org.eclipse.equinox.registry,
  org.osgi.service.component.annotations,
  slf4j.api
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/maven-portal-support.jar

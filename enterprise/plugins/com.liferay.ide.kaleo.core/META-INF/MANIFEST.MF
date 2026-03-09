@@ -23,7 +23,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.validation,
  org.eclipse.wst.xml.core,
  org.json
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.kaleo.core,
  com.liferay.ide.kaleo.core.model,
