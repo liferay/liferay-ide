@@ -203,12 +203,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.15.0</version>
                     <configuration>
-<<<<<<< HEAD
                         <release>21</release>
-=======
-                        <source>21</source>
-                        <target>21</target>
->>>>>>> 3725301 (LPD-82051 fix error: JDK Version Mismatch & Compilation Errors)
                         <meminitial>256m</meminitial>
                         <maxmem>1024m</maxmem>
                         <proc>none</proc>
@@ -248,20 +243,18 @@
                     <version>${tycho-version}</version>
                     <configuration>
                         <dependency-resolution>
+                            <resolver>p2</resolver>
+                            <ignoreJREContactPoints>true</ignoreJREContactPoints>
+                            <allowConflictingDependencies>true</allowConflictingDependencies>
                             <extraRequirements>
-                              <requirement>
-                                <type>p2-installable-unit</type>
-                                <id>org.eclipse.jdt.feature.group</id>
-                                <versionRange>0.0.0</versionRange>
-                              </requirement>
+                                <requirement>
+                                    <type>p2-installable-unit</type>
+                                    <id>org.eclipse.justj.openjdk.hotspot.jre.full.feature.group</id>
+                                    <versionRange>0.0.0</versionRange>
+                                </requirement>
                             </extraRequirements>
                         </dependency-resolution>
-<<<<<<< HEAD
-                        <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.full-21</executionEnvironment>
-=======
-                        <resolver>p2</resolver>
                         <executionEnvironment>JavaSE-21</executionEnvironment>
->>>>>>> 3725301 (LPD-82051 fix error: JDK Version Mismatch & Compilation Errors)
                         <resolveWithExecutionEnvironmentConstraints>true</resolveWithExecutionEnvironmentConstraints>
                         <environments>
                             <environment>
@@ -288,7 +281,7 @@
                                 <os>macosx</os>
                                 <ws>cocoa</ws>
                                 <arch>aarch64</arch>
-                            </environment>                                                      
+                            </environment>
                         </environments>
                     </configuration>
                 </plugin>
