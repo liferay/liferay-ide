@@ -251,7 +251,8 @@
                               </requirement>
                             </extraRequirements>
                         </dependency-resolution>
-                        <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.full-21</executionEnvironment>
+                        <resolver>p2</resolver>
+                        <executionEnvironment>JavaSE-21</executionEnvironment>
                         <resolveWithExecutionEnvironmentConstraints>true</resolveWithExecutionEnvironmentConstraints>
                         <environments>
                             <environment>
