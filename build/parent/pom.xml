@@ -194,18 +194,19 @@
                     <version>${tycho-version}</version>
                     <configuration>
                         <dependency-resolution>
+                            <resolver>p2</resolver>
+                            <ignoreJREContactPoints>true</ignoreJREContactPoints>
+                            <allowConflictingDependencies>true</allowConflictingDependencies>
                             <extraRequirements>
-                              <requirement>
-                                <type>p2-installable-unit</type>
-                                <id>org.eclipse.jdt.feature.group</id>
-                                <versionRange>0.0.0</versionRange>
-                              </requirement>
+                                <requirement>
+                                    <type>p2-installable-unit</type>
+                                    <id>org.eclipse.justj.openjdk.hotspot.jre.full.feature.group</id>
+                                    <versionRange>0.0.0</versionRange>
+                                </requirement>
                             </extraRequirements>
                         </dependency-resolution>
-                        <resolver>p2</resolver>
                         <executionEnvironment>JavaSE-21</executionEnvironment>
                         <resolveWithExecutionEnvironmentConstraints>true</resolveWithExecutionEnvironmentConstraints>
-                        <allowConflictingDependencies>true</allowConflictingDependencies>
                         <environments>
                             <environment>
                                 <os>win32</os>
@@ -231,7 +232,7 @@
                                 <os>macosx</os>
                                 <ws>cocoa</ws>
                                 <arch>aarch64</arch>
-                            </environment>                                                      
+                            </environment>
                         </environments>
                     </configuration>
                 </plugin>
