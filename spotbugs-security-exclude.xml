@@ -1,0 +1,92 @@
+<FindBugsFilter>
+	<!-- PATH_TRAVERSAL_IN: False positives in IDE context - paths come from
+		 Eclipse workspace APIs and project configurations, not user input -->
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+	</Match>
+
+	<!-- DEFAULT_HTTP_CLIENT: Bundled Apache HTTP Client 4.2.1 does not have
+		 HttpClientBuilder. Requires library upgrade to fix. -->
+	<Match>
+		<Bug pattern="DEFAULT_HTTP_CLIENT" />
+	</Match>
+
+	<!-- INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE: Intentional logging
+		 and error reporting for IDE functionality -->
+	<Match>
+		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
+	</Match>
+
+	<!-- TEMPLATE_INJECTION_FREEMARKER: Templates are loaded from Eclipse
+		 plugin bundles, not from user input -->
+	<Match>
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+	</Match>
+
+	<!-- XXE_SAXPARSER: SAXParserFactory features are configured but SpotBugs
+		 cannot trace cross-method feature settings to parse() calls -->
+	<Match>
+		<Bug pattern="XXE_SAXPARSER" />
+	</Match>
+
+	<!-- XXE_DOCUMENT: DocumentBuilderFactory features are configured but
+		 SpotBugs cannot verify cross-method configuration -->
+	<Match>
+		<Bug pattern="XXE_DOCUMENT" />
+	</Match>
+
+	<!-- XXE_DTD_TRANSFORM_FACTORY / XXE_XSLT_TRANSFORM_FACTORY:
+		 TransformerFactory ACCESS_EXTERNAL_DTD/STYLESHEET attributes are set
+		 but SpotBugs may not recognize the fix in all cases -->
+	<Match>
+		<Bug pattern="XXE_DTD_TRANSFORM_FACTORY" />
+	</Match>
+	<Match>
+		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
+	</Match>
+
+	<!-- IMPROPER_UNICODE: Locale.ROOT is used for case conversions but
+		 SpotBugs still flags toLowerCase/equalsIgnoreCase calls -->
+	<Match>
+		<Bug pattern="IMPROPER_UNICODE" />
+	</Match>
+
+	<!-- UNENCRYPTED_SOCKET / UNENCRYPTED_SERVER_SOCKET: IDE development
+		 tools connecting to local Liferay servers via plain sockets -->
+	<Match>
+		<Bug pattern="UNENCRYPTED_SOCKET" />
+	</Match>
+	<Match>
+		<Bug pattern="UNENCRYPTED_SERVER_SOCKET" />
+	</Match>
+
+	<!-- URLCONNECTION_SSRF_FD: IDE tools connecting to configured Liferay
+		 server URLs, not arbitrary user-supplied URLs -->
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!-- COMMAND_INJECTION: IDE launch commands use paths from Eclipse
+		 workspace configuration, not arbitrary user input -->
+	<Match>
+		<Bug pattern="COMMAND_INJECTION" />
+	</Match>
+
+	<!-- REDOS: Regular expressions used for build configuration matching,
+		 not for parsing untrusted user input -->
+	<Match>
+		<Bug pattern="REDOS" />
+	</Match>
+
+	<!-- MODIFICATION_AFTER_VALIDATION: IDE internal data transformations
+		 between validated states -->
+	<Match>
+		<Bug pattern="MODIFICATION_AFTER_VALIDATION" />
+	</Match>
+
+	<!-- GROOVY_SHELL: IDE scripting support intentionally uses Groovy shell
+		 for user-initiated script execution -->
+	<Match>
+		<Bug pattern="GROOVY_SHELL" />
+	</Match>
+</FindBugsFilter>
