@@ -308,7 +308,7 @@ public class NewModuleFragmentOpMethods {
 				bndProperty.load(bndFile);
 			}
 			catch (IOException ioe) {
-				ioe.printStackTrace();
+				LiferayCore.logError(ioe);
 			}
 
 			try (OutputStream out = Files.newOutputStream(bndFile.toPath())) {

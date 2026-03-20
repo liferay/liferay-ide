@@ -14,6 +14,7 @@
 
 package com.liferay.ide.server.remote;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.remote.RemoteConnection;
 import com.liferay.ide.core.util.CoreUtil;
@@ -186,7 +187,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 			httpPost.releaseConnection();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LiferayCore.logError(e);
 
 			return e.getMessage();
 		}
@@ -323,7 +324,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 			httpPut.releaseConnection();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LiferayCore.logError(e);
 
 			return e.getMessage();
 		}

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.theme.core.util;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.theme.core.ThemeCore;
@@ -588,7 +589,7 @@ public class BuildHelper {
 					children = folder.members();
 				}
 				catch (CoreException ce) {
-					ce.printStackTrace();
+					LiferayCore.logError(ce);
 				}
 
 				// build array of ignored Paths that apply to this folder
@@ -868,7 +869,7 @@ public class BuildHelper {
 				_addArrayToList(status, stat);
 			}
 			catch (CoreException ce) {
-				ce.printStackTrace();
+				LiferayCore.logError(ce);
 			}
 		}
 		else {
