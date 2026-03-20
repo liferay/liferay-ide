@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core.model.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.model.CustomWindowState;
 import com.liferay.ide.portlet.core.model.WindowState;
 
@@ -57,10 +58,10 @@ public class WindowStateImageService extends ImageService implements SapphireCon
 			strWindowState = get(windowState.getWindowState());
 		}
 
-		if ("MAXIMIZED".equalsIgnoreCase(strWindowState)) {
+		if (StringUtil.equalsIgnoreCase("MAXIMIZED", strWindowState)) {
 			imageData = _imgMaximized;
 		}
-		else if ("MINIMIZED".equalsIgnoreCase(strWindowState)) {
+		else if (StringUtil.equalsIgnoreCase("MINIMIZED", strWindowState)) {
 			imageData = _imgMinimized;
 		}
 

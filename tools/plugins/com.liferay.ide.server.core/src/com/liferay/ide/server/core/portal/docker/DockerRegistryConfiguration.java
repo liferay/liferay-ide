@@ -16,6 +16,8 @@ package com.liferay.ide.server.core.portal.docker;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import org.eclipse.core.runtime.Adapters;
 
 /**
@@ -86,15 +88,7 @@ public class DockerRegistryConfiguration {
 	}
 
 	private boolean _isEqualIgnoreCase(String original, String target) {
-		if (original != null) {
-			return original.equalsIgnoreCase(target);
-		}
-
-		if (target == null) {
-			return true;
-		}
-
-		return false;
+		return StringUtil.equalsIgnoreCase(original, target);
 	}
 
 	@SerializedName("activity")
