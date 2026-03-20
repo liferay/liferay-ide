@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules.templates.mvcportlet;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BndProperties;
 import com.liferay.ide.project.core.modules.BndPropertiesValue;
@@ -75,18 +76,18 @@ public class NewLiferayComponentMVCPortletOperation extends AbstractLiferayCompo
 
 			IFolder metaFolder = resourceFolder.getFolder("META-INF/resources");
 
-			IFile initJsp = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/init.jsp"));
+			IFile initJsp = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/init.jsp"));
 
 			if (FileUtil.notExists(initJsp)) {
 				createSampleFile(initJsp, "mvcportlet/mvc-init.jsp");
 			}
 
-			IFile viewJsp = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/view.jsp"));
+			IFile viewJsp = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/view.jsp"));
 
 			if (FileUtil.notExists(viewJsp)) {
 				createSampleFile(
 					viewJsp, "mvcportlet/mvc-view.jsp", "/init.jsp",
-					"/" + componentClassName.toLowerCase() + "/init.jsp");
+					"/" + StringUtil.toLowerCase(componentClassName) + "/init.jsp");
 			}
 		}
 		catch (Exception e) {
@@ -130,7 +131,8 @@ public class NewLiferayComponentMVCPortletOperation extends AbstractLiferayCompo
 			properties.add(property);
 		}
 
-		properties.add("javax.portlet.init-param.view-template=/" + componentClassName.toLowerCase() + "/view.jsp");
+		properties.add(
+			"javax.portlet.init-param.view-template=/" + StringUtil.toLowerCase(componentClassName) + "/view.jsp");
 
 		return properties;
 	}
