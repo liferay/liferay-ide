@@ -24,6 +24,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.SSLContext;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -44,6 +46,7 @@ import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -287,6 +290,32 @@ public class RemoteConnection implements IRemoteConnection {
 		return httpJSONAPI(post, args);
 	}
 
+	private DefaultHttpClient _createTls12HttpClient() {
+		SchemeRegistry schemeRegistry = new SchemeRegistry();
+
+		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
+		schemeRegistry.register(new Scheme("https", 443, _createTls12SSLSocketFactory()));
+
+		PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry);
+
+		return new DefaultHttpClient(connectionManager);
+	}
+
+	private SSLSocketFactory _createTls12SSLSocketFactory() {
+		try {
+			SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+
+			sslContext.init(null, null, null);
+
+			return new SSLSocketFactory(sslContext);
+		}
+		catch (Exception exception) {
+			LiferayCore.logError("Unable to create TLS 1.2 SSLSocketFactory", exception);
+
+			return SSLSocketFactory.getSocketFactory();
+		}
+	}
+
 	private HttpClient _getHttpClient() {
 		if (_httpClient != null) {
 			return _httpClient;
@@ -310,6 +339,7 @@ public class RemoteConnection implements IRemoteConnection {
 					SchemeRegistry schemeRegistry = new SchemeRegistry();
 
 					schemeRegistry.register(new Scheme("http", data.getPort(), PlainSocketFactory.getSocketFactory()));
+					schemeRegistry.register(new Scheme("https", 443, _createTls12SSLSocketFactory()));
 
 					PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
 
@@ -340,7 +370,7 @@ public class RemoteConnection implements IRemoteConnection {
 							continue;
 						}
 
-						DefaultHttpClient newHttpClient = new DefaultHttpClient();
+						DefaultHttpClient newHttpClient = _createTls12HttpClient();
 
 						HttpParams params = newHttpClient.getParams();
 
@@ -366,13 +396,13 @@ public class RemoteConnection implements IRemoteConnection {
 			}
 
 			if (newDefaultHttpClient == null) {
-				newDefaultHttpClient = new DefaultHttpClient();
+				newDefaultHttpClient = _createTls12HttpClient();
 			}
 
 			_httpClient = newDefaultHttpClient;
 		}
 		else {
-			_httpClient = new DefaultHttpClient();
+			_httpClient = _createTls12HttpClient();
 		}
 
 		return _httpClient;
