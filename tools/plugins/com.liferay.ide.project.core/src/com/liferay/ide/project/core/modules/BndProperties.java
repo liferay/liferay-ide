@@ -474,10 +474,7 @@ public class BndProperties extends Properties {
 					break;
 				default:
 					if ((c < ' ') || (c > '~')) {
-						String hex = Integer.toHexString(c);
-
-						buffer.append("\\u0000".substring(0, 6 - hex.length()));
-						buffer.append(hex);
+						buffer.append(String.format("\\u%04x", (int)c));
 					}
 					else {
 						buffer.append(c);
