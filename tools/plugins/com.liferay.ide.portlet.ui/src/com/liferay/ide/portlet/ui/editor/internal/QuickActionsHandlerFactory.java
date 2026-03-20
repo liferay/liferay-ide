@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -55,7 +56,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		List<SapphireActionHandler> listOfHandlers = new ArrayList<>();
 
 		for (String property : _modelProperties) {
-			if ((property != null) && "Portlets".equalsIgnoreCase(property) && _isPartInLiferayProject()) {
+			if ((property != null) && StringUtil.equalsIgnoreCase("Portlets", property) && _isPartInLiferayProject()) {
 				SapphireActionHandler handler = new CreateLiferayPortletActionHandler();
 
 				handler.init(getAction(), null);

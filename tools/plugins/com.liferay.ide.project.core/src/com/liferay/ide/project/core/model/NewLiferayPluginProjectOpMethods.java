@@ -23,6 +23,7 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -522,7 +523,7 @@ public class NewLiferayPluginProjectOpMethods {
 			prefs.putBoolean(ProjectCore.PREF_INCLUDE_SAMPLE_CODE, _getter.get(op.getIncludeSampleCode()));
 			prefs.putBoolean(ProjectCore.PREF_CREATE_NEW_PORLET, _getter.get(op.getCreateNewPortlet()));
 
-			if ("maven".equalsIgnoreCase(SapphireUtil.getText(op.getProjectProvider()))) {
+			if (StringUtil.equalsIgnoreCase("maven", SapphireUtil.getText(op.getProjectProvider()))) {
 				prefs.put(ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, _getter.get(op.getGroupId()));
 			}
 
