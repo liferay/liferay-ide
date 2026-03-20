@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SecureXMLFactoryUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.JavaUtil;
 
@@ -333,7 +334,7 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 		DocumentBuilderFactory dbf = null;
 
 		try {
-			dbf = DocumentBuilderFactory.newInstance();
+			dbf = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
 			db = dbf.newDocumentBuilder();
 
@@ -361,7 +362,7 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 				}
 			}
 
-			TransformerFactory factory = TransformerFactory.newInstance();
+			TransformerFactory factory = SecureXMLFactoryUtil.newTransformerFactory();
 
 			Transformer transformer = factory.newTransformer();
 

@@ -24,6 +24,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.SecureXMLFactoryUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -1105,7 +1106,7 @@ public class ServerUtil {
 		}
 
 		if (FileUtil.exists(filtersWebXmlFile)) {
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilderFactory documentBuilderFactory = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
