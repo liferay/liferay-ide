@@ -27,6 +27,8 @@ import com.liferay.ide.project.core.modules.IComponentTemplate;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
 
+import freemarker.core.TemplateClassResolver;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -442,6 +444,7 @@ public abstract class AbstractLiferayComponentTemplate
 			cfg.setDirectoryForTemplateLoading(FileUtil.getFile(FileLocator.toFileURL(templateURL)));
 
 			cfg.setDefaultEncoding("UTF-8");
+			cfg.setNewBuiltinClassResolver(TemplateClassResolver.ALLOWS_NOTHING_RESOLVER);
 			cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		}
 		catch (IOException ioe) {
