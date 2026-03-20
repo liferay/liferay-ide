@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SecureXMLFactoryUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.JavaUtil;
@@ -189,7 +190,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 		DocumentBuilderFactory dbf = null;
 
 		try {
-			dbf = DocumentBuilderFactory.newInstance();
+			dbf = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
 			db = dbf.newDocumentBuilder();
 

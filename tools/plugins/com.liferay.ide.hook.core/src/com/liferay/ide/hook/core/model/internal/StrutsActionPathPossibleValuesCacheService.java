@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SecureXMLFactoryUtil;
 import com.liferay.ide.hook.core.HookCore;
 
 import java.io.File;
@@ -49,9 +50,8 @@ public class StrutsActionPathPossibleValuesCacheService extends Service {
 				TreeSet<String> possibleValues = new TreeSet<>();
 
 				try {
-					DocumentBuilderFactory newInstance = DocumentBuilderFactory.newInstance();
+					DocumentBuilderFactory newInstance = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
-					newInstance.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 					newInstance.setValidating(false);
 
 					DocumentBuilder documentBuilder = newInstance.newDocumentBuilder();
