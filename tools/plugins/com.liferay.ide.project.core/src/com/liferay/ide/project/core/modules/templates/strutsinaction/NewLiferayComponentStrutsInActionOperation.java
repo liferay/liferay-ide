@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules.templates.strutsinaction;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BndProperties;
 import com.liferay.ide.project.core.modules.BndPropertiesValue;
@@ -45,7 +46,7 @@ public class NewLiferayComponentStrutsInActionOperation extends AbstractLiferayC
 
 			IFolder metaFolder = resourceFolder.getFolder("META-INF/resources");
 
-			IFile initJsp = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/html/init.jsp"));
+			IFile initJsp = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/html/init.jsp"));
 
 			if (FileUtil.notExists(initJsp)) {
 				createSampleFile(initJsp, "strutsinaction/strutsinaction-init.jsp");
@@ -53,13 +54,13 @@ public class NewLiferayComponentStrutsInActionOperation extends AbstractLiferayC
 
 			IFile viewJsp = metaFolder.getFile(
 				new Path(
-					componentClassName.toLowerCase() + "/html/portal/" +
-						componentNameWithoutTemplateName.toLowerCase() + ".jsp"));
+					StringUtil.toLowerCase(componentClassName) + "/html/portal/" +
+						StringUtil.toLowerCase(componentNameWithoutTemplateName) + ".jsp"));
 
 			if (FileUtil.notExists(viewJsp)) {
 				createSampleFile(
 					viewJsp, "strutsinaction/strutsinaction-blade.jsp", "/html/init.jsp",
-					"/" + componentClassName.toLowerCase() + "/html/init.jsp");
+					"/" + StringUtil.toLowerCase(componentClassName) + "/html/init.jsp");
 			}
 		}
 		catch (Exception e) {
@@ -104,7 +105,7 @@ public class NewLiferayComponentStrutsInActionOperation extends AbstractLiferayC
 	protected List<String> getProperties() {
 		List<String> imports = new ArrayList<>();
 
-		imports.add("path=/portal/" + this.componentNameWithoutTemplateName.toLowerCase());
+		imports.add("path=/portal/" + StringUtil.toLowerCase(componentNameWithoutTemplateName));
 
 		return imports;
 	}
@@ -123,7 +124,7 @@ public class NewLiferayComponentStrutsInActionOperation extends AbstractLiferayC
 	protected Map<String, Object> getTemplateMap() {
 		Map<String, Object> root = super.getTemplateMap();
 
-		root.put("simplecomponent", componentNameWithoutTemplateName.toLowerCase());
+		root.put("simplecomponent", StringUtil.toLowerCase(componentNameWithoutTemplateName));
 		root.put("bundlesymbolicname", getBundleSymbolicName());
 
 		return root;

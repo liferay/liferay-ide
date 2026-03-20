@@ -20,6 +20,8 @@ import aQute.bnd.build.model.clauses.VersionedClause;
 import aQute.bnd.header.Attrs;
 import aQute.bnd.osgi.resource.CapReqBuilder;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -76,7 +78,7 @@ public class PortletTemplate extends AbstractProjectTemplate {
 
 		String safePackageName = safePackageName(projectName);
 
-		String lowerCase = safePackageName.toLowerCase();
+		String lowerCase = StringUtil.toLowerCase(safePackageName);
 
 		String pkgPath = lowerCase.replaceAll("\\.", "/");
 
