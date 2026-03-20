@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.snippets.wizard;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
@@ -38,7 +40,7 @@ public class AddModelEntityWizardPage extends AbstractModelWizardPage {
 	}
 
 	public String getVarName() {
-		return getModel().toLowerCase();
+		return StringUtil.toLowerCase(getModel());
 	}
 
 	private static class Msgs extends NLS {
