@@ -59,14 +59,14 @@ public final class ZipUtil {
 	}
 
 	public static ZipEntry getZipEntry(ZipFile zip, String name) {
-		String lowerCaseName = name.toLowerCase();
+		String lowerCaseName = StringUtil.toLowerCase(name);
 
 		for (Enumeration<? extends ZipEntry> itr = zip.entries(); itr.hasMoreElements();) {
 			ZipEntry zipEntry = itr.nextElement();
 
 			String zipEntryName = zipEntry.getName();
 
-			if (lowerCaseName.equals(zipEntryName.toLowerCase())) {
+			if (lowerCaseName.equals(StringUtil.toLowerCase(zipEntryName))) {
 				return zipEntry;
 			}
 		}

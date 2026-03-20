@@ -16,6 +16,7 @@ package com.liferay.ide.portlet.core.jsf;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
@@ -62,7 +63,7 @@ public class NewJSFPortletClassDataModelProvider
 
 			String portletName = property.toString();
 
-			return "/WEB-INF/views/" + portletName.toLowerCase();
+			return "/WEB-INF/views/" + StringUtil.toLowerCase(portletName);
 		}
 		else if (SHOW_NEW_CLASS_OPTION.equals(propertyName)) {
 			return false;

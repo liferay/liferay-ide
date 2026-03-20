@@ -129,7 +129,7 @@ public class TargetPlatformUtil {
 
 		currentVersion = currentVersion.replace("[", "");
 		currentVersion = currentVersion.replace("]", "");
-		currentVersion = currentVersion.toLowerCase();
+		currentVersion = StringUtil.toLowerCase(currentVersion);
 
 		return _useSpecificTargetPlatform(currentVersion, type);
 	}

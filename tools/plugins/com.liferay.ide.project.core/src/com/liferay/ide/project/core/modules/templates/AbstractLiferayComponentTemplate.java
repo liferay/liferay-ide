@@ -21,6 +21,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BndProperties;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
@@ -409,7 +410,7 @@ public abstract class AbstractLiferayComponentTemplate
 		Map<String, Object> root = new HashMap<>();
 
 		root.put("classname", componentClassName);
-		root.put("componentfolder", componentClassName.toLowerCase());
+		root.put("componentfolder", StringUtil.toLowerCase(componentClassName));
 		root.put("componentNameWithoutTemplateName", componentNameWithoutTemplateName);
 		root.put("extensionclass", getExtensionClass());
 		root.put("importlibs", getImports());

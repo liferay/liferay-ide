@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules.templates.authenticator;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BndProperties;
 import com.liferay.ide.project.core.modules.BndPropertiesValue;
@@ -43,7 +44,8 @@ public class NewLiferayComponentAuthenticatorOperation extends AbstractLiferayCo
 		try {
 			IFolder resourceFolder = liferayProject.getSourceFolder("resources");
 
-			IFile authIni = resourceFolder.getFile(new Path(componentClassName.toLowerCase() + "/userauth.ini"));
+			IFile authIni = resourceFolder.getFile(
+				new Path(StringUtil.toLowerCase(componentClassName) + "/userauth.ini"));
 
 			if (FileUtil.notExists(authIni)) {
 				createSampleFile(authIni, "authenticator/authenticator-sample.ini");
