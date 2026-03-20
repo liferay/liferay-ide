@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core.model.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.model.CustomPortletMode;
 import com.liferay.ide.portlet.core.model.PortletMode;
 
@@ -59,13 +60,13 @@ public class PortletModeImageService extends ImageService implements SapphireCon
 		}
 
 		if (portletMode != null) {
-			if ("VIEW".equalsIgnoreCase(portletMode)) {
+			if (StringUtil.equalsIgnoreCase("VIEW", portletMode)) {
 				imageData = _imgView;
 			}
-			else if ("EDIT".equalsIgnoreCase(portletMode)) {
+			else if (StringUtil.equalsIgnoreCase("EDIT", portletMode)) {
 				imageData = _imgEdit;
 			}
-			else if ("HELP".equalsIgnoreCase(portletMode)) {
+			else if (StringUtil.equalsIgnoreCase("HELP", portletMode)) {
 				imageData = _imgHelp;
 			}
 		}

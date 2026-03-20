@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.ui.portal.docker;
 import com.liferay.blade.gradle.tooling.ProjectInfo;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
@@ -210,7 +211,7 @@ public class DockerRuntimeSettingComposite extends Composite implements ModifyLi
 				String runtimeName = runtime.getName();
 
 				if (runtimeType.equals(_runtimeWC.getRuntimeType()) &&
-					runtimeName.equalsIgnoreCase(getRuntime().getName()) && !runtime.equals(_runtimeWC)) {
+					StringUtil.equalsIgnoreCase(getRuntime().getName(), runtimeName) && !runtime.equals(_runtimeWC)) {
 
 					_completeStatus = LiferayGradleUI.createErrorStatus(_errorRuntimeAlreadyExist);
 

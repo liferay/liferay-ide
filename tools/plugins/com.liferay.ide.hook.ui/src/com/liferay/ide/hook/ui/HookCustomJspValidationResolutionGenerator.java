@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.ui;
 
 import com.liferay.ide.core.util.MarkerUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.util.HookUtil;
 
@@ -46,7 +47,7 @@ public class HookCustomJspValidationResolutionGenerator implements IMarkerResolu
 			if ((severity != null) && severity.equals(IMarker.SEVERITY_ERROR)) {
 				String validationId = (String)marker.getAttribute("ValidationId");
 
-				if (validationId.equalsIgnoreCase(HookCore.VALIDATOR_ID)) {
+				if (StringUtil.equalsIgnoreCase(HookCore.VALIDATOR_ID, validationId)) {
 					IProject project = MarkerUtil.getProject(marker);
 
 					IPath customJspPath = HookUtil.getCustomJspPath(project);

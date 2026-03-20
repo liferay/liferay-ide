@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class ValidationUtil {
 		IProject[] projects = CoreUtil.getAllProjects();
 
 		for (IProject project : projects) {
-			if (projectName.equalsIgnoreCase(project.getName())) {
+			if (StringUtil.equalsIgnoreCase(project.getName(), projectName)) {
 				return true;
 			}
 		}
