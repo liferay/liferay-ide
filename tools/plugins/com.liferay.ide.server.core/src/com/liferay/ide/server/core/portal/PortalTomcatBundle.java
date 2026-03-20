@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SecureXMLFactoryUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.PortalContext;
 import com.liferay.ide.server.util.ServerUtil;
@@ -366,7 +367,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		DocumentBuilderFactory dbf = null;
 
 		try {
-			dbf = DocumentBuilderFactory.newInstance();
+			dbf = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
 			db = dbf.newDocumentBuilder();
 
@@ -394,7 +395,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 				}
 			}
 
-			TransformerFactory factory = TransformerFactory.newInstance();
+			TransformerFactory factory = SecureXMLFactoryUtil.newTransformerFactory();
 
 			Transformer transformer = factory.newTransformer();
 
