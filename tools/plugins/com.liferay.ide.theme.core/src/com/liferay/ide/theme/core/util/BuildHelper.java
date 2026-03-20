@@ -960,6 +960,58 @@ public class BuildHelper {
 	 * Copy a file from a to b. Closes the input stream after use.
 	 *
 	 * @param in
+	 *            an InputStream
+	 * @param toFile
+	 *            the file to copy to
+	 * @return a status
+	 */
+	private IStatus _copyFile(InputStream in, File toFile) {
+		OutputStream out = null;
+
+		try {
+			File canonicalFile = toFile.getCanonicalFile();
+
+			out = new FileOutputStream(canonicalFile);
+
+			int avail = in.read(_buf);
+
+			while (avail > 0) {
+				out.write(_buf, 0, avail);
+				avail = in.read(_buf);
+			}
+
+			return Status.OK_STATUS;
+		}
+		catch (Exception e) {
+			ThemeCore.logError("Error copying file", e);
+
+			return new Status(
+				IStatus.ERROR, ThemeCore.PLUGIN_ID, 0,
+				NLS.bind(Messages.errorCopyingFile, new String[] {toFile.getPath(), e.getLocalizedMessage()}), e);
+		}
+		finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			}
+			catch (Exception ex) {
+			}
+
+			try {
+				if (out != null) {
+					out.close();
+				}
+			}
+			catch (Exception ex) {
+			}
+		}
+	}
+
+	/**
+	 * Copy a file from a to b. Closes the input stream after use.
+	 *
+	 * @param in
 	 *            an input stream
 	 * @param to
 	 *            a path to copy to. the directory must already exist
@@ -1041,56 +1093,6 @@ public class BuildHelper {
 	}
 
 	/**
-	 * Copy a file from a to b. Closes the input stream after use.
-	 *
-	 * @param in
-	 *            an InputStream
-	 * @param to
-	 *            the file to copy to
-	 * @return a status
-	 */
-	private IStatus _copyFile(InputStream in, String to) {
-		OutputStream out = null;
-
-		try {
-			out = new FileOutputStream(to);
-
-			int avail = in.read(_buf);
-
-			while (avail > 0) {
-				out.write(_buf, 0, avail);
-				avail = in.read(_buf);
-			}
-
-			return Status.OK_STATUS;
-		}
-		catch (Exception e) {
-			ThemeCore.logError("Error copying file", e);
-
-			return new Status(
-				IStatus.ERROR, ThemeCore.PLUGIN_ID, 0,
-				NLS.bind(Messages.errorCopyingFile, new String[] {to, e.getLocalizedMessage()}), e);
-		}
-		finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-			}
-			catch (Exception ex) {
-			}
-
-			try {
-				if (out != null) {
-					out.close();
-				}
-			}
-			catch (Exception ex) {
-			}
-		}
-	}
-
-	/**
 	 * Utility method to move a temp file into position by deleting the original
 	 * and swapping in a new copy.
 	 *
@@ -1108,7 +1110,7 @@ public class BuildHelper {
 			try {
 				InputStream in = new FileInputStream(tempFile);
 
-				IStatus status = _copyFile(in, file.getPath());
+				IStatus status = _copyFile(in, file);
 
 				if (!status.isOK()) {
 					MultiStatus status2 = new MultiStatus(
