@@ -16,6 +16,7 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.util.JavaUtil;
 import com.liferay.ide.server.util.LayeredModulePathFactory;
 
@@ -163,7 +164,7 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 			public boolean accept(File pathname) {
 				String pathName = pathname.getName();
 
-				String pathNameLowerCase = pathName.toLowerCase();
+				String pathNameLowerCase = StringUtil.toLowerCase(pathName);
 
 				if (pathname.isFile() && pathNameLowerCase.equals("manifest.mf")) {
 					return true;

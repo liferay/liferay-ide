@@ -18,6 +18,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 
 import java.util.Set;
@@ -52,7 +53,7 @@ public class NewLayoutTplDataModelProvider
 			if (CoreUtil.isNotNullOrEmpty(name)) {
 				name = name.replaceAll("[^a-zA-Z0-9]+", StringPool.EMPTY);
 
-				return name.toLowerCase();
+				return StringUtil.toLowerCase(name);
 			}
 		}
 		else if (LAYOUT_TEMPLATE_FILE.equals(propertyName)) {
