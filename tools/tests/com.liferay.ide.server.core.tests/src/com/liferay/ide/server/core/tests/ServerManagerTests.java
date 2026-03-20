@@ -175,7 +175,7 @@ public class ServerManagerTests extends ServerCoreBase
         service.setHttpPort( liferayServerStartPort );
         service.setManagerContextPath( "/server-manager-web" );
         service.setUsername( "test@liferay.com" );
-        service.setPassword( "test" );
+        service.setPassword( _getTestCredential() );
 
         // Given the server 10 seconds to deploy remote IDE Connector plugin
         try
@@ -301,6 +301,17 @@ public class ServerManagerTests extends ServerCoreBase
             getLiferayRuntimeDir().append( "webapps" ).append( "test-application" ).toFile();
 
         assertEquals( "Expected the Test Portlet has been uninstalled", false, testApplicationUnistallFolder.exists() );
+    }
+
+    private static String _getTestCredential() {
+        String value = System.getProperty( "server.manager.password" );
+
+        if( value == null )
+        {
+            value = "test";
+        }
+
+        return value;
     }
 
 }
