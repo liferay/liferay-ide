@@ -202,14 +202,14 @@ public final class ZipUtil {
 				}
 
 				if (entry.isDirectory()) {
-					File emptyDir = new File(destdir, entryName);
+					File emptyDir = _createValidatedFile(destdir, entryName);
 
 					_mkdir(emptyDir);
 
 					continue;
 				}
 
-				File f = new File(destdir, entryName);
+				File f = _createValidatedFile(destdir, entryName);
 
 				File dir = f.getParentFile();
 
@@ -250,7 +250,7 @@ public final class ZipUtil {
 					continue;
 				}
 
-				final File f = new File(destinationDir, entryName);
+				final File f = _createValidatedFile(destinationDir, entryName);
 
 				if (f.exists()) {
 					Files.delete(f.toPath());
@@ -319,14 +319,14 @@ public final class ZipUtil {
 		String entryName = entry.getName();
 
 		if (entry.isDirectory()) {
-			File emptyDir = new File(destDir, entryName);
+			File emptyDir = _createValidatedFile(destDir, entryName);
 
 			_mkdir(emptyDir);
 
 			return;
 		}
 
-		File file = new File(destDir, entryName);
+		File file = _createValidatedFile(destDir, entryName);
 
 		File dir = file.getParentFile();
 
@@ -344,6 +344,19 @@ public final class ZipUtil {
 
 			out.flush();
 		}
+	}
+
+	private static File _createValidatedFile(File destDir, String entryName) throws IOException {
+		File destFile = new File(destDir, entryName);
+
+		String destDirPath = destDir.getCanonicalPath();
+		String destFilePath = destFile.getCanonicalPath();
+
+		if (!destFilePath.startsWith(destDirPath + File.separator) && !destFilePath.equals(destDirPath)) {
+			throw new IOException("Zip entry is outside of the target directory: " + entryName);
+		}
+
+		return destFile;
 	}
 
 	private static void _delete(File f) throws IOException {
