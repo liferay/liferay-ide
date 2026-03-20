@@ -210,7 +210,7 @@ public class RenameDialog extends SelectionStatusDialog {
 
 		for (Object oldName : _oldNames) {
 			if ((_caseSensitive && text.equals(oldName)) ||
-				(!_caseSensitive && text.equalsIgnoreCase(oldName.toString()))) {
+				(!_caseSensitive && StringUtil.equalsIgnoreCase(oldName.toString(), text))) {
 
 				_status = new Status(
 					IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, IStatus.ERROR, Msgs.nameAlreadyExists, null);
