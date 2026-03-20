@@ -14,6 +14,8 @@
 
 package com.liferay.ide.gradle.core.model;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -158,7 +160,7 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 			String key = keyExpression.getText();
 			String value = valueExpression.getText();
 
-			if (key.equalsIgnoreCase("group")) {
+			if (StringUtil.equalsIgnoreCase("group", key)) {
 				gav = true;
 			}
 

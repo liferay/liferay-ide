@@ -16,6 +16,7 @@ package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -122,7 +123,7 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 				for (String javadocJar : _JARS) {
 					String pathLastSegment = path.lastSegment();
 
-					if (pathLastSegment.equalsIgnoreCase(javadocJar)) {
+					if (StringUtil.equalsIgnoreCase(javadocJar, pathLastSegment)) {
 						IClasspathAttribute[] extraAttrs = existingEntry.getExtraAttributes();
 
 						List<IClasspathAttribute> newExtraAttrs = new ArrayList<>();
@@ -181,7 +182,7 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 				for (String sourceJar : _JARS) {
 					String pathLastSegment = path.lastSegment();
 
-					if (pathLastSegment.equalsIgnoreCase(sourceJar)) {
+					if (StringUtil.equalsIgnoreCase(sourceJar, pathLastSegment)) {
 						IPath sourcePath = existingEntry.getSourceAttachmentPath();
 
 						if (sourcePath == null) {
