@@ -185,13 +185,7 @@ public class CoreUtil {
 			StringBuilder buf = new StringBuilder();
 
 			for (byte d : digest) {
-				String hex = Integer.toHexString(0xFF & d);
-
-				if (hex.length() == 1) {
-					buf.append('0');
-				}
-
-				buf.append(hex);
+				buf.append(String.format("%02x", d));
 			}
 
 			return buf.toString();
