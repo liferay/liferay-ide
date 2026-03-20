@@ -27,9 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.io.Writer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -444,13 +442,32 @@ public class CoreUtil {
 	 *  <code>printStackTrace(PrintWriter)</code> method.
 	 */
 	public static String getStackTrace(Throwable throwable) {
-		StringWriter sw = new StringWriter();
+		StringBuilder sb = new StringBuilder();
 
-		PrintWriter pw = new PrintWriter(sw, true);
+		sb.append(throwable.toString());
+		sb.append('\n');
 
-		throwable.printStackTrace(pw);
+		for (StackTraceElement element : throwable.getStackTrace()) {
+			sb.append("\tat ");
+			sb.append(element.toString());
+			sb.append('\n');
+		}
 
-		StringBuffer sb = sw.getBuffer();
+		Throwable cause = throwable.getCause();
+
+		while (cause != null) {
+			sb.append("Caused by: ");
+			sb.append(cause.toString());
+			sb.append('\n');
+
+			for (StackTraceElement element : cause.getStackTrace()) {
+				sb.append("\tat ");
+				sb.append(element.toString());
+				sb.append('\n');
+			}
+
+			cause = cause.getCause();
+		}
 
 		return sb.toString();
 	}
