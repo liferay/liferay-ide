@@ -17,6 +17,8 @@ package com.liferay.ide.core.templates;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 
+import freemarker.core.TemplateClassResolver;
+
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
 
@@ -179,6 +181,7 @@ public class TemplatesCore {
 
 		config.setDirectoryForTemplateLoading(FileUtil.getFile(fileUrl));
 
+		config.setNewBuiltinClassResolver(TemplateClassResolver.ALLOWS_NOTHING_RESOLVER);
 		config.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
 
 		templateModel.setConfig(config);
