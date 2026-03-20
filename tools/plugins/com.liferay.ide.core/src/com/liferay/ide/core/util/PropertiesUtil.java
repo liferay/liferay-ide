@@ -59,7 +59,6 @@ import org.eclipse.jdt.core.JavaCore;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -655,11 +654,6 @@ public class PropertiesUtil {
 				try (InputStream contents = liferayHookXml.getContents()) {
 					SAXParser saxParser = _saxParserFactory.newSAXParser();
 
-					XMLReader xmlReader = saxParser.getXMLReader();
-
-					xmlReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-					xmlReader.setFeature("http://xml.org/sax/features/validation", false);
-
 					saxParser.parse(contents, handler);
 				}
 			}
@@ -768,11 +762,6 @@ public class PropertiesUtil {
 				try (InputStream contents = portletXml.getContents()) {
 					SAXParser saxParser = _saxParserFactory.newSAXParser();
 
-					XMLReader xmlReader = saxParser.getXMLReader();
-
-					xmlReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-					xmlReader.setFeature("http://xml.org/sax/features/validation", false);
-
 					saxParser.parse(contents, handler);
 				}
 			}
@@ -800,7 +789,7 @@ public class PropertiesUtil {
 		return false;
 	}
 
-	private static final SAXParserFactory _saxParserFactory = SAXParserFactory.newInstance();
+	private static final SAXParserFactory _saxParserFactory = SecureXMLFactoryUtil.newSAXParserFactory();
 	private static LanguageFileInfo _tmpLanguageFileInfo = null;
 	private static ResourceNodeInfo _tmpResourceNodeInfo = null;
 
