@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.facet;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
@@ -269,7 +270,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 			return FileUtil.toOSString(runtime.getLocation());
 		}
 		catch (CoreException ce) {
-			ce.printStackTrace();
+			LiferayCore.logError(ce);
 		}
 
 		return null;

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.server.core;
 
+import com.liferay.ide.core.LiferayCore;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -57,7 +59,7 @@ public class LiferayRuntimeStubClasspathProvider extends RuntimeClasspathProvide
 						break;
 					}
 					catch (CoreException ce) {
-						ce.printStackTrace();
+						LiferayCore.logError(ce);
 					}
 				}
 			}
