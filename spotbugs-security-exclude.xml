@@ -1,2 +1,48 @@
 <FindBugsFilter>
+	<Match>
+		<Class name="com.liferay.ide.core.describer.LiferayPortalPropertiesFileDescriber" />
+		<Method name="isPropertiesFile" />
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+	</Match>
+	<Match>
+		<Class name="com.liferay.ide.core.util.FileUtil" />
+		<Or>
+			<Method name="copyFileToDir" />
+			<Method name="getFile" />
+		</Or>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+	</Match>
+	<Match>
+		<Class name="com.liferay.ide.core.templates.TemplatesCore" />
+		<Method name="_initializeModel" />
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+	</Match>
+	<Match>
+		<Class name="com.liferay.ide.core.util.IOUtil" />
+		<Method name="copyDirToDir" />
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+	</Match>
+	<Match>
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Or>
+			<Method name="clearWorkspace" />
+			<Method name="findParentFile" />
+			<Method name="getExtDir" />
+			<Method name="getGradleProperty" />
+			<Method name="getHomeDir" />
+			<Method name="getIndexSource" />
+			<Method name="getLiferayWorkspaceProjectWarsDirs" />
+			<Method name="getMavenProperty" />
+			<Method name="getModulesDirArray" />
+			<Method name="getPluginsSDKDir" />
+			<Method name="getThemesDir" />
+			<Method name="getWorkspaceType" />
+			<Method name="guessLiferayVersion" />
+			<Method name="isValidGradleWorkspaceLocation" />
+			<Method name="isValidMavenWorkspaceLocation" />
+			<Method name="_isValidGradleWorkspace" />
+			<Method name="_isValidMavenWorkspace" />
+		</Or>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+	</Match>
 </FindBugsFilter>
