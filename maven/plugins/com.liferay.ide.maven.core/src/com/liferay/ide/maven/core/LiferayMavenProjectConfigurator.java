@@ -687,7 +687,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 	private static final IPath _rootPath = new Path("/");
 	private static final Pattern _versionPattern = Pattern.compile(
-		"^(.*)-([0-9]+((.[0-9]+)?(.[0-9]+)?)*)(?:-SNAPSHOT)?$");
+		"^(.*)-\\d+(\\.\\d+)*(?:-SNAPSHOT)?$");
 
 	private IMavenMarkerManager _mavenMarkerManager;
 
