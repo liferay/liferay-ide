@@ -3,11 +3,13 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 usage() {
-	echo "Usage: $0 [--module <module-path>] [--bug-type <BUG_TYPE>]"
+	echo "Usage: $0 [--module <module-path>] [--bug-type <BUG_TYPE>] [--zip [<output>]]"
 	echo ""
 	echo "Options:"
 	echo "  --module, -m <path>     Scan a single module (e.g. tools/plugins/com.liferay.ide.core)"
 	echo "  --bug-type, -b <type>   Filter to a single bug type (e.g. XXE_SAXPARSER)"
+	echo "  --zip, -z [<output>]    Zip all spotbugsXml.xml reports into an archive"
+	echo "                          (default: spotbugs-reports.zip)"
 	echo ""
 	echo "All other arguments are passed through to Maven."
 	exit 0
@@ -15,6 +17,7 @@ usage() {
 
 module=""
 bug_type=""
+zip_output=""
 mvn_extra_args=()
 
 while [ $# -gt 0 ]; do
@@ -27,6 +30,15 @@ while [ $# -gt 0 ]; do
 			bug_type="$2"
 			shift 2
 			;;
+		--zip|-z)
+			shift
+			if [ $# -gt 0 ] && [[ "$1" != -* ]]; then
+				zip_output="$1"
+				shift
+			else
+				zip_output="spotbugs-reports.zip"
+			fi
+			;;
 		--help|-h)
 			usage
 			;;
@@ -37,7 +49,7 @@ while [ $# -gt 0 ]; do
 	esac
 done
 
-mvn_args=(compile spotbugs:spotbugs -DskipTests)
+mvn_args=(compile spotbugs:spotbugs -DskipTests --fail-at-end)
 
 if [ -n "$module" ]; then
 	mvn_args+=(-pl "$module")
@@ -76,8 +88,7 @@ fi
 
 if [ $mvn_exit_code -ne 0 ]; then
 	echo ""
-	echo "ERROR: Maven build failed with exit code ${mvn_exit_code}"
-	exit $mvn_exit_code
+	echo "WARNING: Maven build failed with exit code ${mvn_exit_code}. Reporting on partial results."
 fi
 
 echo ""
@@ -140,5 +151,38 @@ if [ $total_bugs -gt 0 ]; then
 		fi
 	done
 	echo ""
+fi
+
+if [ -n "$zip_output" ]; then
+	zip_path="${SCRIPT_DIR}/${zip_output}"
+
+	rm -f "$zip_path"
+
+	report_files=()
+	while IFS= read -r f; do
+		report_files+=("$f")
+	done < <(find "$search_dir" -path '*/target/spotbugsXml.xml' -type f | sort)
+
+	if [ ${#report_files[@]} -eq 0 ]; then
+		echo "No spotbugsXml.xml reports found to zip."
+	else
+		# Use relative paths so each module's report is distinguishable
+		relative_files=()
+		for f in "${report_files[@]}"; do
+			relative_files+=("${f#"${SCRIPT_DIR}/"}")
+		done
+
+		(cd "$SCRIPT_DIR" && zip "$zip_path" "${relative_files[@]}")
+
+		echo ""
+		echo "Zipped ${#report_files[@]} report(s) to ${zip_path}"
+	fi
+fi
+
+if [ $mvn_exit_code -ne 0 ]; then
+	exit $mvn_exit_code
+fi
+
+if [ $total_bugs -gt 0 ]; then
 	exit 1
 fi
