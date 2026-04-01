@@ -1215,7 +1215,7 @@ public class ProjectUtil {
 					compliance = JavaCore.VERSION_21;
 				}
 				else {
-					compliance = JavaCore.VERSION_20; // use latest by default
+					compliance = JavaCore.VERSION_21; // use latest by default
 				}
 
 				return compliance;
