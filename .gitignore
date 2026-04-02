@@ -3,6 +3,7 @@
 .resources/
 .springBeans
 .tycho-consumer-pom.xml
+*.cdx.json
 *.swp
 hs_err_pid*.log
 bin/
