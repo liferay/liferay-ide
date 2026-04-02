@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.tests.util;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
+
 import java.net.URL;
 
 import org.eclipse.jdt.launching.IVMInstall;
@@ -29,12 +30,10 @@ import org.eclipse.jdt.launching.LibraryLocation;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ProjectUtilTest
-{
+public class ProjectUtilTest {
 
 	@Test
-	public void testVMCompliance() throws Exception
-	{
+	public void testVMCompliance() throws Exception {
 		_testGetVmCompliance("1.5", "1.5.0-22");
 		_testGetVmCompliance("1.6", "1.6.0-119");
 		_testGetVmCompliance("1.7", "1.7.0_352");
@@ -54,20 +53,19 @@ public class ProjectUtilTest
 		_testGetVmCompliance("21", "22.0.2");
 	}
 
-	
 	private void _testGetVmCompliance(String expectedCompliance, String javaVersion) throws Exception {
 		IVMInstall vm;
-		
+
 		if (javaVersion.isEmpty()) {
 			vm = new FakeLegacyVM();
 		}
 		else {
 			vm = new FakeModernVM(javaVersion);
 		}
-		
+
 		String actualCompliance = ProjectUtil.getVmCompliance(vm);
 
-		Assert.assertEquals(actualCompliance, expectedCompliance);
+		Assert.assertEquals(expectedCompliance, actualCompliance);
 	}
 
 	private static class FakeLegacyVM implements IVMInstall {
@@ -78,28 +76,12 @@ public class ProjectUtilTest
 		}
 
 		@Override
-		public String getName() {
-			return null;
-		}
-
-		@Override
-		public IVMRunner getVMRunner(String mode) {
-			return null;
-		}
-
-		@Override
-		public void setName(String name) {}
-
-		@Override
 		public File getInstallLocation() {
 			return null;
 		}
 
 		@Override
-		public void setInstallLocation(File installLocation) {}
-
-		@Override
-		public IVMInstallType getVMInstallType() {
+		public URL getJavadocLocation() {
 			return null;
 		}
 
@@ -109,13 +91,7 @@ public class ProjectUtilTest
 		}
 
 		@Override
-		public void setLibraryLocations(LibraryLocation[] locations) {}
-
-		@Override
-		public void setJavadocLocation(URL url) {}
-
-		@Override
-		public URL getJavadocLocation() {
+		public String getName() {
 			return null;
 		}
 
@@ -125,33 +101,41 @@ public class ProjectUtilTest
 		}
 
 		@Override
-		public void setVMArguments(String[] vmArgs) {}
-		
-	}
-	
-	private static class FakeModernVM implements IVMInstall, IVMInstall2 {
-		private String version;
-
-		public FakeModernVM(String version) {
-			this.version = version;
-		}
-
-		@Override
-		public String getJavaVersion() {
-			return version;
-		}
-
-		@Override
-		public String getVMArgs() {
+		public IVMInstallType getVMInstallType() {
 			return null;
 		}
-
-		@Override
-		public void setVMArgs(String vmArgs) {}
 
 		@Override
 		public IVMRunner getVMRunner(String mode) {
 			return null;
+		}
+
+		@Override
+		public void setInstallLocation(File installLocation) {
+		}
+
+		@Override
+		public void setJavadocLocation(URL url) {
+		}
+
+		@Override
+		public void setLibraryLocations(LibraryLocation[] locations) {
+		}
+
+		@Override
+		public void setName(String name) {
+		}
+
+		@Override
+		public void setVMArguments(String[] vmArgs) {
+		}
+
+	}
+
+	private static class FakeModernVM implements IVMInstall, IVMInstall2 {
+
+		public FakeModernVM(String version) {
+			this.version = version;
 		}
 
 		@Override
@@ -160,24 +144,18 @@ public class ProjectUtilTest
 		}
 
 		@Override
-		public String getName() {
-			return null;
-		}
-
-		@Override
-		public void setName(String name) {}
-
-		@Override
 		public File getInstallLocation() {
 			return null;
 		}
 
 		@Override
-		public void setInstallLocation(File installLocation) {}
+		public URL getJavadocLocation() {
+			return null;
+		}
 
 		@Override
-		public IVMInstallType getVMInstallType() {
-			return null;
+		public String getJavaVersion() {
+			return version;
 		}
 
 		@Override
@@ -186,13 +164,12 @@ public class ProjectUtilTest
 		}
 
 		@Override
-		public void setLibraryLocations(LibraryLocation[] locations) {}
+		public String getName() {
+			return null;
+		}
 
 		@Override
-		public void setJavadocLocation(URL url) {}
-
-		@Override
-		public URL getJavadocLocation() {
+		public String getVMArgs() {
 			return null;
 		}
 
@@ -202,6 +179,41 @@ public class ProjectUtilTest
 		}
 
 		@Override
-		public void setVMArguments(String[] vmArgs) {}
+		public IVMInstallType getVMInstallType() {
+			return null;
+		}
+
+		@Override
+		public IVMRunner getVMRunner(String mode) {
+			return null;
+		}
+
+		@Override
+		public void setInstallLocation(File installLocation) {
+		}
+
+		@Override
+		public void setJavadocLocation(URL url) {
+		}
+
+		@Override
+		public void setLibraryLocations(LibraryLocation[] locations) {
+		}
+
+		@Override
+		public void setName(String name) {
+		}
+
+		@Override
+		public void setVMArgs(String vmArgs) {
+		}
+
+		@Override
+		public void setVMArguments(String[] vmArgs) {
+		}
+
+		private String version;
+
 	}
+
 }
