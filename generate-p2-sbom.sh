@@ -49,7 +49,6 @@ if [ ! -f "$CONTENT_JAR" ]; then
 fi
 
 GROOVY_SCRIPT="${SCRIPT_DIR}/build/com.liferay.ide-repository/src/main/assembly/GenerateP2Sbom.groovy"
-GROOVY_VERSION="3.0.19"
 M2_REPO="${HOME}/.m2/repository"
 GROOVY_BASE="${M2_REPO}/org/codehaus/groovy"
 
@@ -58,21 +57,18 @@ GROOVY_BASE="${M2_REPO}/org/codehaus/groovy"
 GROOVY_CP=""
 
 for module in groovy groovy-json groovy-xml; do
-	jar="${GROOVY_BASE}/${module}/${GROOVY_VERSION}/${module}-${GROOVY_VERSION}.jar"
+	jar=$(find "${GROOVY_BASE}/${module}" -name "${module}-*.jar" \
+		-not -name "*-sources.jar" -not -name "*-javadoc.jar" \
+		2>/dev/null | sort -V | tail -1)
 
-	if [ ! -f "$jar" ]; then
-		echo "ERROR: Required Groovy JAR not found: ${jar}"
+	if [ -z "$jar" ]; then
+		echo "ERROR: Required Groovy JAR not found: ${module}"
 		echo ""
-		echo "Run a full build first (./mvnw clean package -DskipTests) to download dependencies,"
-		echo "or run: ./mvnw dependency:resolve -f build/com.liferay.ide-repository/pom.xml"
+		echo "Run a full build first (./mvnw clean package -DskipTests) to download dependencies."
 		exit 1
 	fi
 
-	if [ -n "$GROOVY_CP" ]; then
-		GROOVY_CP="${GROOVY_CP}:"
-	fi
-
-	GROOVY_CP="${GROOVY_CP}${jar}"
+	GROOVY_CP="${GROOVY_CP:+${GROOVY_CP}:}${jar}"
 done
 
 groovy_args=(
