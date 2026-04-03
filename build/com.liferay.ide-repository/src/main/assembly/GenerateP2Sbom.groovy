@@ -429,13 +429,11 @@ pluginDirs.each { pluginDir ->
 			if (g && a && v) {
 				purl = "pkg:maven/${g}/${a}@${v}"
 			}
-			else if (a && v) {
-				purl = "pkg:maven/unknown/${a}@${v}"
-			}
 			else {
-				def nameWithoutJar = jarName.replace(".jar", "")
+				def p2Name = a ?: jarName.replace(".jar", "")
+				def p2Version = v ?: "unknown"
 
-				purl = "pkg:maven/unknown/${nameWithoutJar}@unknown"
+				purl = "pkg:p2/${p2Name}@${p2Version}"
 			}
 
 			// Check if already captured from p2 metadata
