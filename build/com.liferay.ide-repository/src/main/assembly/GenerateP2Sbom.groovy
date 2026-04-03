@@ -270,12 +270,11 @@ contentRootNode.units.unit.each { Node unitNode ->
 		purl: purl
 	]
 
-	if (displayName && !displayName.startsWith("%")) {
-		componentMap["description"] = displayName
-	}
-
-	if (description && !description.startsWith("%") && description != displayName) {
+	if (description && !description.startsWith("%")) {
 		componentMap["description"] = description
+	}
+	else if (displayName && !displayName.startsWith("%")) {
+		componentMap["description"] = displayName
 	}
 
 	if (provider && !provider.startsWith("%")) {
