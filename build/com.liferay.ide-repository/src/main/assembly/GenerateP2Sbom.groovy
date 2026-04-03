@@ -390,7 +390,7 @@ pluginDirPaths.each { String pluginDirPath ->
 			bundleSymbolicName = symbolicNameMatcher[0][1]
 		}
 
-		List<String> classPathEntries = bundleClassPathMatcher[0][1].split(",").collect { it.trim().replaceAll(",\$", "") }
+		List<String> classPathEntries = bundleClassPathMatcher[0][1].split(",").collect { it.trim() }
 
 		classPathEntries.each { String classPathEntry ->
 			if (classPathEntry == "." || !classPathEntry.endsWith(".jar")) {
