@@ -19,11 +19,12 @@ import groovy.xml.XmlParser
 import java.time.Instant
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 
 // --- Configuration (simple argument parsing) ---
 
-def argsMap = [:]
+Map<String, String> argsMap = [:]
 
 for (int i = 0; i < args.length; i++) {
 	if (args[i] == "--repository-dir" && i + 1 < args.length) {
@@ -45,27 +46,27 @@ if (!argsMap["repositoryDir"] || !argsMap["projectRoot"]) {
 	System.exit(1)
 }
 
-def repositoryDir = argsMap["repositoryDir"]
-def projectRoot = argsMap["projectRoot"]
-def outputFile = argsMap["output"] ?: (projectRoot + "/p2-sbom.cdx.json")
+String repositoryDir = argsMap["repositoryDir"]
+String projectRoot = argsMap["projectRoot"]
+String outputFile = argsMap["output"] ?: (projectRoot + "/p2-sbom.cdx.json")
 
-def basedir = new File(repositoryDir).parentFile.parentFile.canonicalPath
-def contentJar = repositoryDir + "/content.jar"
-def embeddedJarMappingFile = basedir + "/embedded-jar-coordinates.json"
+String basedir = new File(repositoryDir).parentFile.parentFile.canonicalPath
+String contentJarPath = repositoryDir + "/content.jar"
+String embeddedJarMappingFile = basedir + "/embedded-jar-coordinates.json"
 
 // Determine project version
 
-def projectVersion = argsMap["projectVersion"]
+String projectVersion = argsMap["projectVersion"]
 
 if (!projectVersion) {
-	def rootPom = new File(projectRoot, "pom.xml")
+	File rootPom = new File(projectRoot, "pom.xml")
 
 	if (rootPom.exists()) {
-		def pomParser = new XmlParser()
+		XmlParser pomParser = new XmlParser()
 
 		pomParser.setTrimWhitespace(false)
 
-		def pomRoot = pomParser.parseText(rootPom.text)
+		Node pomRoot = pomParser.parseText(rootPom.text)
 
 		projectVersion = pomRoot.version?.text() ?: "unknown"
 	}
@@ -76,24 +77,24 @@ if (!projectVersion) {
 
 // --- Shared utility: read Maven coordinates from META-INF/maven/**/pom.properties inside a JAR ---
 
-def readPomProperties = { File jarFile ->
+Closure<Map<String, String>> readPomProperties = { File jarFile ->
 	try {
-		def result = new ZipFile(jarFile).withCloseable { zip ->
-			def pomPropsEntry = zip.entries().toList().find { entry ->
-				entry.name.startsWith("META-INF/maven/") && entry.name.endsWith("/pom.properties")
+		Map<String, String> result = new ZipFile(jarFile).withCloseable { ZipFile zipFile ->
+			ZipEntry pomPropsEntry = zipFile.entries().toList().find { ZipEntry zipEntry ->
+				zipEntry.name.startsWith("META-INF/maven/") && zipEntry.name.endsWith("/pom.properties")
 			}
 
 			if (pomPropsEntry) {
-				def props = new Properties()
+				Properties properties = new Properties()
 
-				props.load(zip.getInputStream(pomPropsEntry))
+				properties.load(zipFile.getInputStream(pomPropsEntry))
 
-				def g = props.getProperty("groupId")
-				def a = props.getProperty("artifactId")
-				def v = props.getProperty("version")
+				String groupId = properties.getProperty("groupId")
+				String artifactId = properties.getProperty("artifactId")
+				String version = properties.getProperty("version")
 
-				if (g && a && v) {
-					return [groupId: g, artifactId: a, version: v]
+				if (groupId && artifactId && version) {
+					return [groupId: groupId, artifactId: artifactId, version: version]
 				}
 			}
 
@@ -112,78 +113,78 @@ def readPomProperties = { File jarFile ->
 
 println "Generating SBOM from p2 repository metadata..."
 
-if (!new File(contentJar).exists()) {
-	System.err.println("ERROR: content.jar not found at ${contentJar}")
+if (!new File(contentJarPath).exists()) {
+	System.err.println("ERROR: content.jar not found at ${contentJarPath}")
 	System.err.println("Build the repository first: ./mvnw clean package -DskipTests")
 	System.exit(1)
 }
 
-def contentXmlText
+String contentXmlText
 
-new ZipFile(contentJar).withCloseable { zip ->
-	def entry = zip.getEntry("content.xml")
+new ZipFile(contentJarPath).withCloseable { ZipFile zipFile ->
+	ZipEntry contentEntry = zipFile.getEntry("content.xml")
 
-	contentXmlText = zip.getInputStream(entry).text
+	contentXmlText = zipFile.getInputStream(contentEntry).text
 }
 
-def parser = new XmlParser()
+XmlParser contentParser = new XmlParser()
 
-parser.setTrimWhitespace(false)
+contentParser.setTrimWhitespace(false)
 
-def root = parser.parseText(contentXmlText)
+Node contentRoot = contentParser.parseText(contentXmlText)
 
-def components = []
-def dependencyMap = [:]
+List<Map<String, Object>> components = []
+Map<String, List<String>> dependencyMap = [:]
 
-def getProperty = { unit, name ->
-	def props = unit.properties?.property
+Closure<String> getProperty = { Node unit, String propertyName ->
+	List propertyNodes = unit.properties?.property
 
-	if (!props) {
+	if (!propertyNodes) {
 		return null
 	}
 
-	def prop = props.find { it.'@name' == name }
+	Node matchingProperty = propertyNodes.find { it.'@name' == propertyName }
 
-	return prop?.'@value'
+	return matchingProperty?.'@value'
 }
 
-root.units.unit.each { unit ->
-	def id = unit.'@id'
-	def version = unit.'@version'
+contentRoot.units.unit.each { Node unit ->
+	String unitId = unit.'@id'
+	String unitVersion = unit.'@version'
 
 	// Skip .feature.jar IUs (duplicates of .feature.group)
 
-	if (id.endsWith(".feature.jar")) {
+	if (unitId.endsWith(".feature.jar")) {
 		return
 	}
 
 	// Skip category/config/tooling IUs
 
-	if (id.startsWith("tooling")) {
+	if (unitId.startsWith("tooling")) {
 		return
 	}
 
-	if (id.startsWith("configure.") || id.startsWith("a.jre.")) {
+	if (unitId.startsWith("configure.") || unitId.startsWith("a.jre.")) {
 		return
 	}
 
-	if (id.matches("^\\d+\\..*")) {
+	if (unitId.matches("^\\d+\\..*")) {
 		return
 	}
 
-	def mavenGroupId = getProperty(unit, "maven-groupId")
-	def mavenArtifactId = getProperty(unit, "maven-artifactId")
-	def mavenVersion = getProperty(unit, "maven-version")
+	String mavenGroupId = getProperty(unit, "maven-groupId")
+	String mavenArtifactId = getProperty(unit, "maven-artifactId")
+	String mavenVersion = getProperty(unit, "maven-version")
 
 	// If content.xml lacks Maven coords, check the plugin JAR for pom.properties
 
-	if (!mavenGroupId && !id.endsWith(".feature.group")) {
-		def pluginJar = new File(repositoryDir, "plugins").listFiles()?.find { f ->
-			f.name.startsWith("${id}_") && f.name.endsWith(".jar")
+	if (!mavenGroupId && !unitId.endsWith(".feature.group")) {
+		File pluginJar = new File(repositoryDir, "plugins").listFiles()?.find { File file ->
+			file.name.startsWith("${unitId}_") && file.name.endsWith(".jar")
 		}
 
 		if (pluginJar) {
-			def pomProps = readPomProperties(pluginJar)
+			Map<String, String> pomProps = readPomProperties(pluginJar)
 
 			if (pomProps) {
 				mavenGroupId = pomProps.groupId
@@ -193,75 +194,75 @@ root.units.unit.each { unit ->
 		}
 	}
 
-	def p2Name = getProperty(unit, "org.eclipse.equinox.p2.name")
-	def p2Provider = getProperty(unit, "org.eclipse.equinox.p2.provider")
-	def p2Description = getProperty(unit, "org.eclipse.equinox.p2.description")
-	def isGroup = getProperty(unit, "org.eclipse.equinox.p2.type.group") == "true"
+	String displayName = getProperty(unit, "org.eclipse.equinox.p2.name")
+	String provider = getProperty(unit, "org.eclipse.equinox.p2.provider")
+	String description = getProperty(unit, "org.eclipse.equinox.p2.description")
+	boolean isGroup = getProperty(unit, "org.eclipse.equinox.p2.type.group") == "true"
 
 	// Resolve localized property placeholders from df_LT.* properties
 
-	if (p2Name?.startsWith("%")) {
-		def key = p2Name.substring(1)
-		def resolved = getProperty(unit, "df_LT.${key}")
+	if (displayName?.startsWith("%")) {
+		String localizedKey = displayName.substring(1)
+		String resolvedValue = getProperty(unit, "df_LT.${localizedKey}")
 
-		if (resolved) {
-			p2Name = resolved
+		if (resolvedValue) {
+			displayName = resolvedValue
 		}
 	}
 
-	if (p2Provider?.startsWith("%")) {
-		def key = p2Provider.substring(1)
-		def resolved = getProperty(unit, "df_LT.${key}")
+	if (provider?.startsWith("%")) {
+		String localizedKey = provider.substring(1)
+		String resolvedValue = getProperty(unit, "df_LT.${localizedKey}")
 
-		if (resolved) {
-			p2Provider = resolved
+		if (resolvedValue) {
+			provider = resolvedValue
 		}
 	}
 
-	if (p2Description?.startsWith("%")) {
-		def key = p2Description.substring(1)
-		def resolved = getProperty(unit, "df_LT.${key}")
+	if (description?.startsWith("%")) {
+		String localizedKey = description.substring(1)
+		String resolvedValue = getProperty(unit, "df_LT.${localizedKey}")
 
-		if (resolved) {
-			p2Description = resolved
+		if (resolvedValue) {
+			description = resolvedValue
 		}
 	}
 
 	// Build purl
 
-	def purl
+	String purl
 
 	if (mavenGroupId && mavenArtifactId && mavenVersion) {
 		purl = "pkg:maven/${mavenGroupId}/${mavenArtifactId}@${mavenVersion}"
 	}
 	else {
-		def p2Id = id
+		String p2Id = unitId
 
 		if (p2Id.endsWith(".feature.group")) {
 			p2Id = p2Id.replace(".feature.group", "")
 		}
 
-		purl = "pkg:p2/${p2Id}@${version}"
+		purl = "pkg:p2/${p2Id}@${unitVersion}"
 	}
 
-	def component = [
+	Map<String, Object> component = [
 		type: "library",
 		"bom-ref": purl,
-		name: mavenArtifactId ?: (isGroup ? id.replace(".feature.group", "") : id),
-		version: mavenVersion ?: version,
+		name: mavenArtifactId ?: (isGroup ? unitId.replace(".feature.group", "") : unitId),
+		version: mavenVersion ?: unitVersion,
 		purl: purl
 	]
 
-	if (p2Name && !p2Name.startsWith("%")) {
-		component["description"] = p2Name
+	if (displayName && !displayName.startsWith("%")) {
+		component["description"] = displayName
 	}
 
-	if (p2Description && !p2Description.startsWith("%") && p2Description != p2Name) {
-		component["description"] = p2Description
+	if (description && !description.startsWith("%") && description != displayName) {
+		component["description"] = description
 	}
 
-	if (p2Provider && !p2Provider.startsWith("%")) {
-		component["publisher"] = p2Provider
+	if (provider && !provider.startsWith("%")) {
+		component["publisher"] = provider
 	}
 
 	if (mavenGroupId) {
@@ -270,25 +271,25 @@ root.units.unit.each { unit ->
 
 	// Extract license from IU
 
-	def licenses = unit.licenses?.license
+	List licenseNodes = unit.licenses?.license
 
-	if (licenses) {
-		def licenseEntries = []
+	if (licenseNodes) {
+		List<Map<String, Object>> licenseEntries = []
 
-		licenses.each { lic ->
-			def licUri = lic.'@uri'
-			def licText = lic.text()?.trim()
+		licenseNodes.each { Node licenseNode ->
+			String licenseUri = licenseNode.'@uri'
+			String licenseText = licenseNode.text()?.trim()
 
-			if (licUri && !licUri.startsWith("%")) {
-				def licenseEntry = [license: [url: licUri]]
+			if (licenseUri && !licenseUri.startsWith("%")) {
+				Map<String, Object> licenseEntry = [license: [url: licenseUri]]
 
 				licenseEntries.add(licenseEntry)
 			}
-			else if (licText && !licText.startsWith("%")) {
-				def firstLine = licText.readLines().find { it.trim() }
+			else if (licenseText && !licenseText.startsWith("%")) {
+				String firstLine = licenseText.readLines().find { it.trim() }
 
 				if (firstLine) {
-					def licenseEntry = [license: [name: firstLine.take(128).trim()]]
+					Map<String, Object> licenseEntry = [license: [name: firstLine.take(128).trim()]]
 
 					licenseEntries.add(licenseEntry)
 				}
@@ -304,22 +305,22 @@ root.units.unit.each { unit ->
 
 	// Extract dependency relationships
 
-	def requires = unit.requires?.required
+	List requiredNodes = unit.requires?.required
 
-	if (requires) {
-		def deps = []
+	if (requiredNodes) {
+		List<String> dependencyNames = []
 
-		requires.each { req ->
-			def reqName = req.'@name'
-			def reqNs = req.'@namespace'
+		requiredNodes.each { Node requiredNode ->
+			String requiredName = requiredNode.'@name'
+			String requiredNamespace = requiredNode.'@namespace'
 
-			if (reqNs == "org.eclipse.equinox.p2.iu" || reqNs == "osgi.bundle") {
-				deps.add(reqName)
+			if (requiredNamespace == "org.eclipse.equinox.p2.iu" || requiredNamespace == "osgi.bundle") {
+				dependencyNames.add(requiredName)
 			}
 		}
 
-		if (deps) {
-			dependencyMap[purl] = deps
+		if (dependencyNames) {
+			dependencyMap[purl] = dependencyNames
 		}
 	}
 }
@@ -328,112 +329,112 @@ root.units.unit.each { unit ->
 
 println "Scanning for embedded JARs in Bundle-ClassPath..."
 
-def embeddedJarMapping = [:]
-def mappingFile = new File(embeddedJarMappingFile)
+Map embeddedJarMapping = [:]
+File mappingFile = new File(embeddedJarMappingFile)
 
 if (mappingFile.exists()) {
 	embeddedJarMapping = new JsonSlurper().parse(mappingFile)
 }
 
-def jarVersionPattern = Pattern.compile("(.+?)[-_](\\d+\\.\\d+[\\d.]*(?:-[A-Za-z0-9]+)?)\\.jar")
+Pattern jarVersionPattern = Pattern.compile("(.+?)[-_](\\d+\\.\\d+[\\d.]*(?:-[A-Za-z0-9]+)?)\\.jar")
 
-def pluginDirs = ["tools/plugins", "enterprise/plugins", "maven/plugins", "portal/plugins"]
-def embeddedCount = 0
-def pomPropsCount = 0
+List<String> pluginDirs = ["tools/plugins", "enterprise/plugins", "maven/plugins", "portal/plugins"]
+int embeddedCount = 0
+int pomPropsCount = 0
 
-pluginDirs.each { pluginDir ->
-	def dir = new File(projectRoot, pluginDir)
+pluginDirs.each { String pluginDirPath ->
+	File pluginDir = new File(projectRoot, pluginDirPath)
 
-	if (!dir.exists()) {
+	if (!pluginDir.exists()) {
 		return
 	}
 
-	dir.eachDir { pluginRoot ->
-		def manifest = new File(pluginRoot, "META-INF/MANIFEST.MF")
+	pluginDir.eachDir { File pluginRoot ->
+		File manifest = new File(pluginRoot, "META-INF/MANIFEST.MF")
 
 		if (!manifest.exists()) {
 			return
 		}
 
-		def manifestText = manifest.text.replaceAll("\\r?\\n ", "")
-		def bcpMatch = manifestText =~ /(?m)^Bundle-ClassPath:\s*(.+)$/
+		String manifestText = manifest.text.replaceAll("\\r?\\n ", "")
+		java.util.regex.Matcher bundleClassPathMatch = manifestText =~ /(?m)^Bundle-ClassPath:\s*(.+)$/
 
-		if (!bcpMatch) {
+		if (!bundleClassPathMatch) {
 			return
 		}
 
-		def bundleId = null
-		def bsnMatch = manifestText =~ /(?m)^Bundle-SymbolicName:\s*([^;,\s]+)/
+		String bundleSymbolicName = null
+		java.util.regex.Matcher symbolicNameMatch = manifestText =~ /(?m)^Bundle-SymbolicName:\s*([^;,\s]+)/
 
-		if (bsnMatch) {
-			bundleId = bsnMatch[0][1]
+		if (symbolicNameMatch) {
+			bundleSymbolicName = symbolicNameMatch[0][1]
 		}
 
-		def entries = bcpMatch[0][1].split(",").collect { it.trim().replaceAll(",\$", "") }
+		List<String> classPathEntries = bundleClassPathMatch[0][1].split(",").collect { it.trim().replaceAll(",\$", "") }
 
-		entries.each { entry ->
-			if (entry == "." || !entry.endsWith(".jar")) {
+		classPathEntries.each { String classPathEntry ->
+			if (classPathEntry == "." || !classPathEntry.endsWith(".jar")) {
 				return
 			}
 
-			def jarName = entry.contains("/") ? entry.substring(entry.lastIndexOf("/") + 1) : entry
-			def jarFile = new File(pluginRoot, entry)
+			String jarFileName = classPathEntry.contains("/") ? classPathEntry.substring(classPathEntry.lastIndexOf("/") + 1) : classPathEntry
+			File jarFile = new File(pluginRoot, classPathEntry)
 
-			def g = null
-			def a = null
-			def v = null
+			String groupId = null
+			String artifactId = null
+			String version = null
 
 			// Priority 1: Read pom.properties from inside the JAR
 
 			if (jarFile.exists()) {
-				def pomProps = readPomProperties(jarFile)
+				Map<String, String> pomProps = readPomProperties(jarFile)
 
 				if (pomProps) {
-					g = pomProps.groupId
-					a = pomProps.artifactId
-					v = pomProps.version
+					groupId = pomProps.groupId
+					artifactId = pomProps.artifactId
+					version = pomProps.version
 					pomPropsCount++
 				}
 			}
 
 			// Priority 2: Check the mapping file
 
-			if (!g) {
-				def mapping = embeddedJarMapping[jarName]
+			if (!groupId) {
+				Map mapping = embeddedJarMapping[jarFileName]
 
 				if (mapping) {
-					g = mapping.groupId
-					a = mapping.artifactId
-					v = mapping.version
+					groupId = mapping.groupId
+					artifactId = mapping.artifactId
+					version = mapping.version
 				}
 			}
 
 			// Priority 3: Parse version from filename
 
-			if (!v) {
-				Matcher vm = jarVersionPattern.matcher(jarName)
+			if (!version) {
+				Matcher versionMatcher = jarVersionPattern.matcher(jarFileName)
 
-				if (vm.matches()) {
-					if (!a) {
-						a = vm.group(1)
+				if (versionMatcher.matches()) {
+					if (!artifactId) {
+						artifactId = versionMatcher.group(1)
 					}
 
-					v = vm.group(2)
+					version = versionMatcher.group(2)
 				}
 			}
 
 			// Build purl
 
-			def purl
+			String purl
 
-			if (g && a && v) {
-				purl = "pkg:maven/${g}/${a}@${v}"
+			if (groupId && artifactId && version) {
+				purl = "pkg:maven/${groupId}/${artifactId}@${version}"
 			}
 			else {
-				def p2Name = a ?: jarName.replace(".jar", "")
-				def p2Version = v ?: "unknown"
+				String p2ComponentName = artifactId ?: jarFileName.replace(".jar", "")
+				String p2ComponentVersion = version ?: "unknown"
 
-				purl = "pkg:p2/${p2Name}@${p2Version}"
+				purl = "pkg:p2/${p2ComponentName}@${p2ComponentVersion}"
 			}
 
 			// Check if already captured from p2 metadata
@@ -442,21 +443,21 @@ pluginDirs.each { pluginDir ->
 				return
 			}
 
-			def comp = [
+			Map<String, Object> component = [
 				type: "library",
 				"bom-ref": purl,
-				name: a ?: jarName.replace(".jar", ""),
-				version: v ?: "unknown",
+				name: artifactId ?: jarFileName.replace(".jar", ""),
+				version: version ?: "unknown",
 				purl: purl,
 				scope: "required",
-				description: "Embedded JAR in ${bundleId ?: pluginRoot.name}"
+				description: "Embedded JAR in ${bundleSymbolicName ?: pluginRoot.name}"
 			]
 
-			if (g && g != "unknown") {
-				comp["group"] = g
+			if (groupId) {
+				component["group"] = groupId
 			}
 
-			components.add(comp)
+			components.add(component)
 			embeddedCount++
 		}
 	}
@@ -470,28 +471,28 @@ println "Generating CycloneDX 1.5 SBOM..."
 
 // Build dependency entries, resolving IU names to purls
 
-def iuToPurl = [:]
+Map<String, String> iuNameToPurl = [:]
 
-components.each { comp ->
-	iuToPurl[comp.name] = comp.purl
+components.each { Map<String, Object> component ->
+	iuNameToPurl[component.name] = component.purl
 }
 
-def dependencies = []
+List<Map<String, Object>> dependencies = []
 
-dependencyMap.each { parentPurl, depNames ->
-	def resolvedDeps = depNames.collect { depName ->
-		iuToPurl[depName]
+dependencyMap.each { String parentPurl, List<String> dependencyNames ->
+	List<String> resolvedDependencies = dependencyNames.collect { String dependencyName ->
+		iuNameToPurl[dependencyName]
 	}.findAll { it != null }.unique()
 
-	if (resolvedDeps) {
+	if (resolvedDependencies) {
 		dependencies.add([
 			ref: parentPurl,
-			dependsOn: resolvedDeps
+			dependsOn: resolvedDependencies
 		])
 	}
 }
 
-def bom = [
+Map<String, Object> bom = [
 	bomFormat: "CycloneDX",
 	specVersion: "1.5",
 	serialNumber: "urn:uuid:" + UUID.randomUUID().toString(),
@@ -518,20 +519,20 @@ def bom = [
 			description: "Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development."
 		]
 	],
-	components: components.sort { a, b -> a.purl <=> b.purl },
-	dependencies: dependencies.sort { a, b -> a.ref <=> b.ref }
+	components: components.sort { Map left, Map right -> left.purl <=> right.purl },
+	dependencies: dependencies.sort { Map left, Map right -> left.ref <=> right.ref }
 ]
 
-def json = new JsonBuilder(bom).toPrettyString()
-def output = new File(outputFile)
+String jsonOutput = new JsonBuilder(bom).toPrettyString()
+File outputFileHandle = new File(outputFile)
 
-output.text = json
+outputFileHandle.text = jsonOutput
 
 println ""
-println "SBOM generated: ${output.canonicalPath}"
+println "SBOM generated: ${outputFileHandle.canonicalPath}"
 println ""
 println "  Components:          ${components.size()}"
-println "  With Maven coords:   ${components.count { it.purl.startsWith('pkg:maven/') && !it.purl.contains('unknown/') }}"
+println "  With Maven coords:   ${components.count { it.purl.startsWith('pkg:maven/') }}"
 println "  With p2 coords:      ${components.count { it.purl.startsWith('pkg:p2/') }}"
 println "  Embedded JARs:       ${embeddedCount}"
 println "  Dependency entries:  ${dependencies.size()}"
