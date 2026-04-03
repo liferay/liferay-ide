@@ -195,6 +195,18 @@ contentRootNode.units.unit.each { Node unitNode ->
 		}
 	}
 
+	// Skip Eclipse platform bundles (not on Maven Central, covered by Eclipse's own security process)
+
+	if (mavenGroupId?.startsWith("org.eclipse.") || (!mavenGroupId && unitId.startsWith("org.eclipse."))) {
+		return
+	}
+
+	// Skip first-party Liferay IDE modules (the product itself, not third-party dependencies)
+
+	if (mavenGroupId?.startsWith("com.liferay.ide.") || (!mavenGroupId && unitId.startsWith("com.liferay.ide."))) {
+		return
+	}
+
 	String displayName = getProperty(unitNode, "org.eclipse.equinox.p2.name")
 	String provider = getProperty(unitNode, "org.eclipse.equinox.p2.provider")
 	String description = getProperty(unitNode, "org.eclipse.equinox.p2.description")
@@ -436,6 +448,12 @@ pluginDirPaths.each { String pluginDirPath ->
 				String p2ComponentVersion = version ?: "unknown"
 
 				purl = "pkg:p2/${p2ComponentName}@${p2ComponentVersion}"
+			}
+
+			// Skip first-party Liferay IDE embedded JARs
+
+			if (groupId?.startsWith("com.liferay.ide.")) {
+				return
 			}
 
 			// Check if already captured from p2 metadata
