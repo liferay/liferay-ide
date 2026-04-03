@@ -42,7 +42,7 @@ for (int i = 0; i < args.length; i++) {
 }
 
 if (!argsMap["repositoryDir"] || !argsMap["projectRoot"]) {
-	System.err.println("Usage: GenerateP2Sbom.groovy --repository-dir <path> --project-root <path> [--output <path>] [--project-version <version>]")
+	println "Usage: GenerateP2Sbom.groovy --repository-dir <path> --project-root <path> [--output <path>] [--project-version <version>]"
 	System.exit(1)
 }
 
@@ -103,7 +103,8 @@ Closure<Map<String, String>> readPomProperties = { File jarFile ->
 
 		return resultMap
 	}
-	catch (Exception ignored) {
+	catch (Exception exception) {
+		println "WARNING: Could not read pom.properties from ${jarFile.name}: ${exception.message}"
 	}
 
 	return null
@@ -114,8 +115,8 @@ Closure<Map<String, String>> readPomProperties = { File jarFile ->
 println "Generating SBOM from p2 repository metadata..."
 
 if (!new File(contentJarPath).exists()) {
-	System.err.println("ERROR: content.jar not found at ${contentJarPath}")
-	System.err.println("Build the repository first: ./mvnw clean package -DskipTests")
+	println "ERROR: content.jar not found at ${contentJarPath}"
+	println "Build the repository first: ./mvnw clean package -DskipTests"
 	System.exit(1)
 }
 
