@@ -19,7 +19,7 @@ output_file=""
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--output|-o)
-			if [ -z "$2" ] || [[ "$2" == -* ]]; then
+			if [ $# -lt 2 ] || [[ "$2" == -* ]]; then
 				echo "ERROR: --output requires a file path argument"
 				exit 1
 			fi
