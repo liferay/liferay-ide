@@ -48,27 +48,27 @@ if (!argsMap["repositoryDir"] || !argsMap["projectRoot"]) {
 
 String repositoryDir = argsMap["repositoryDir"]
 String projectRoot = argsMap["projectRoot"]
-String outputFile = argsMap["output"] ?: (projectRoot + "/p2-sbom.cdx.json")
+String outputFilePath = argsMap["output"] ?: (projectRoot + "/p2-sbom.cdx.json")
 
 String basedir = new File(repositoryDir).parentFile.parentFile.canonicalPath
 String contentJarPath = repositoryDir + "/content.jar"
-String embeddedJarMappingFile = basedir + "/embedded-jar-coordinates.json"
+String embeddedJarMappingFilePath = basedir + "/embedded-jar-coordinates.json"
 
 // Determine project version
 
 String projectVersion = argsMap["projectVersion"]
 
 if (!projectVersion) {
-	File rootPom = new File(projectRoot, "pom.xml")
+	File rootPomFile = new File(projectRoot, "pom.xml")
 
-	if (rootPom.exists()) {
+	if (rootPomFile.exists()) {
 		XmlParser pomParser = new XmlParser()
 
 		pomParser.setTrimWhitespace(false)
 
-		Node pomRoot = pomParser.parseText(rootPom.text)
+		Node pomRootNode = pomParser.parseText(rootPomFile.text)
 
-		projectVersion = pomRoot.version?.text() ?: "unknown"
+		projectVersion = pomRootNode.version?.text() ?: "unknown"
 	}
 	else {
 		projectVersion = "unknown"
@@ -79,7 +79,7 @@ if (!projectVersion) {
 
 Closure<Map<String, String>> readPomProperties = { File jarFile ->
 	try {
-		Map<String, String> result = new ZipFile(jarFile).withCloseable { ZipFile zipFile ->
+		Map<String, String> resultMap = new ZipFile(jarFile).withCloseable { ZipFile zipFile ->
 			ZipEntry pomPropsEntry = zipFile.entries().toList().find { ZipEntry zipEntry ->
 				zipEntry.name.startsWith("META-INF/maven/") && zipEntry.name.endsWith("/pom.properties")
 			}
@@ -101,7 +101,7 @@ Closure<Map<String, String>> readPomProperties = { File jarFile ->
 			return null
 		}
 
-		return result
+		return resultMap
 	}
 	catch (Exception ignored) {
 	}
@@ -131,26 +131,26 @@ XmlParser contentParser = new XmlParser()
 
 contentParser.setTrimWhitespace(false)
 
-Node contentRoot = contentParser.parseText(contentXmlText)
+Node contentRootNode = contentParser.parseText(contentXmlText)
 
 List<Map<String, Object>> components = []
 Map<String, List<String>> dependencyMap = [:]
 
-Closure<String> getProperty = { Node unit, String propertyName ->
-	List propertyNodes = unit.properties?.property
+Closure<String> getProperty = { Node unitNode, String propertyName ->
+	List propertyNodes = unitNode.properties?.property
 
 	if (!propertyNodes) {
 		return null
 	}
 
-	Node matchingProperty = propertyNodes.find { it.'@name' == propertyName }
+	Node matchingPropertyNode = propertyNodes.find { it.'@name' == propertyName }
 
-	return matchingProperty?.'@value'
+	return matchingPropertyNode?.'@value'
 }
 
-contentRoot.units.unit.each { Node unit ->
-	String unitId = unit.'@id'
-	String unitVersion = unit.'@version'
+contentRootNode.units.unit.each { Node unitNode ->
+	String unitId = unitNode.'@id'
+	String unitVersion = unitNode.'@version'
 
 	// Skip .feature.jar IUs (duplicates of .feature.group)
 
@@ -172,38 +172,38 @@ contentRoot.units.unit.each { Node unit ->
 		return
 	}
 
-	String mavenGroupId = getProperty(unit, "maven-groupId")
-	String mavenArtifactId = getProperty(unit, "maven-artifactId")
-	String mavenVersion = getProperty(unit, "maven-version")
+	String mavenGroupId = getProperty(unitNode, "maven-groupId")
+	String mavenArtifactId = getProperty(unitNode, "maven-artifactId")
+	String mavenVersion = getProperty(unitNode, "maven-version")
 
 	// If content.xml lacks Maven coords, check the plugin JAR for pom.properties
 
 	if (!mavenGroupId && !unitId.endsWith(".feature.group")) {
-		File pluginJar = new File(repositoryDir, "plugins").listFiles()?.find { File file ->
+		File pluginJarFile = new File(repositoryDir, "plugins").listFiles()?.find { File file ->
 			file.name.startsWith("${unitId}_") && file.name.endsWith(".jar")
 		}
 
-		if (pluginJar) {
-			Map<String, String> pomProps = readPomProperties(pluginJar)
+		if (pluginJarFile) {
+			Map<String, String> pomPropertiesMap = readPomProperties(pluginJarFile)
 
-			if (pomProps) {
-				mavenGroupId = pomProps.groupId
-				mavenArtifactId = pomProps.artifactId
-				mavenVersion = pomProps.version
+			if (pomPropertiesMap) {
+				mavenGroupId = pomPropertiesMap.groupId
+				mavenArtifactId = pomPropertiesMap.artifactId
+				mavenVersion = pomPropertiesMap.version
 			}
 		}
 	}
 
-	String displayName = getProperty(unit, "org.eclipse.equinox.p2.name")
-	String provider = getProperty(unit, "org.eclipse.equinox.p2.provider")
-	String description = getProperty(unit, "org.eclipse.equinox.p2.description")
-	boolean isGroup = getProperty(unit, "org.eclipse.equinox.p2.type.group") == "true"
+	String displayName = getProperty(unitNode, "org.eclipse.equinox.p2.name")
+	String provider = getProperty(unitNode, "org.eclipse.equinox.p2.provider")
+	String description = getProperty(unitNode, "org.eclipse.equinox.p2.description")
+	boolean isGroup = getProperty(unitNode, "org.eclipse.equinox.p2.type.group") == "true"
 
 	// Resolve localized property placeholders from df_LT.* properties
 
 	if (displayName?.startsWith("%")) {
 		String localizedKey = displayName.substring(1)
-		String resolvedValue = getProperty(unit, "df_LT.${localizedKey}")
+		String resolvedValue = getProperty(unitNode, "df_LT.${localizedKey}")
 
 		if (resolvedValue) {
 			displayName = resolvedValue
@@ -212,7 +212,7 @@ contentRoot.units.unit.each { Node unit ->
 
 	if (provider?.startsWith("%")) {
 		String localizedKey = provider.substring(1)
-		String resolvedValue = getProperty(unit, "df_LT.${localizedKey}")
+		String resolvedValue = getProperty(unitNode, "df_LT.${localizedKey}")
 
 		if (resolvedValue) {
 			provider = resolvedValue
@@ -221,7 +221,7 @@ contentRoot.units.unit.each { Node unit ->
 
 	if (description?.startsWith("%")) {
 		String localizedKey = description.substring(1)
-		String resolvedValue = getProperty(unit, "df_LT.${localizedKey}")
+		String resolvedValue = getProperty(unitNode, "df_LT.${localizedKey}")
 
 		if (resolvedValue) {
 			description = resolvedValue
@@ -245,7 +245,7 @@ contentRoot.units.unit.each { Node unit ->
 		purl = "pkg:p2/${p2Id}@${unitVersion}"
 	}
 
-	Map<String, Object> component = [
+	Map<String, Object> componentMap = [
 		type: "library",
 		"bom-ref": purl,
 		name: mavenArtifactId ?: (isGroup ? unitId.replace(".feature.group", "") : unitId),
@@ -254,24 +254,24 @@ contentRoot.units.unit.each { Node unit ->
 	]
 
 	if (displayName && !displayName.startsWith("%")) {
-		component["description"] = displayName
+		componentMap["description"] = displayName
 	}
 
 	if (description && !description.startsWith("%") && description != displayName) {
-		component["description"] = description
+		componentMap["description"] = description
 	}
 
 	if (provider && !provider.startsWith("%")) {
-		component["publisher"] = provider
+		componentMap["publisher"] = provider
 	}
 
 	if (mavenGroupId) {
-		component["group"] = mavenGroupId
+		componentMap["group"] = mavenGroupId
 	}
 
 	// Extract license from IU
 
-	List licenseNodes = unit.licenses?.license
+	List licenseNodes = unitNode.licenses?.license
 
 	if (licenseNodes) {
 		List<Map<String, Object>> licenseEntries = []
@@ -281,31 +281,31 @@ contentRoot.units.unit.each { Node unit ->
 			String licenseText = licenseNode.text()?.trim()
 
 			if (licenseUri && !licenseUri.startsWith("%")) {
-				Map<String, Object> licenseEntry = [license: [url: licenseUri]]
+				Map<String, Object> licenseEntryMap = [license: [url: licenseUri]]
 
-				licenseEntries.add(licenseEntry)
+				licenseEntries.add(licenseEntryMap)
 			}
 			else if (licenseText && !licenseText.startsWith("%")) {
 				String firstLine = licenseText.readLines().find { it.trim() }
 
 				if (firstLine) {
-					Map<String, Object> licenseEntry = [license: [name: firstLine.take(128).trim()]]
+					Map<String, Object> licenseEntryMap = [license: [name: firstLine.take(128).trim()]]
 
-					licenseEntries.add(licenseEntry)
+					licenseEntries.add(licenseEntryMap)
 				}
 			}
 		}
 
 		if (licenseEntries) {
-			component["licenses"] = licenseEntries
+			componentMap["licenses"] = licenseEntries
 		}
 	}
 
-	components.add(component)
+	components.add(componentMap)
 
 	// Extract dependency relationships
 
-	List requiredNodes = unit.requires?.required
+	List requiredNodes = unitNode.requires?.required
 
 	if (requiredNodes) {
 		List<String> dependencyNames = []
@@ -329,48 +329,48 @@ contentRoot.units.unit.each { Node unit ->
 
 println "Scanning for embedded JARs in Bundle-ClassPath..."
 
-Map embeddedJarMapping = [:]
-File mappingFile = new File(embeddedJarMappingFile)
+Map embeddedJarCoordinatesMap = [:]
+File mappingFile = new File(embeddedJarMappingFilePath)
 
 if (mappingFile.exists()) {
-	embeddedJarMapping = new JsonSlurper().parse(mappingFile)
+	embeddedJarCoordinatesMap = new JsonSlurper().parse(mappingFile)
 }
 
 Pattern jarVersionPattern = Pattern.compile("(.+?)[-_](\\d+\\.\\d+[\\d.]*(?:-[A-Za-z0-9]+)?)\\.jar")
 
-List<String> pluginDirs = ["tools/plugins", "enterprise/plugins", "maven/plugins", "portal/plugins"]
+List<String> pluginDirPaths = ["tools/plugins", "enterprise/plugins", "maven/plugins", "portal/plugins"]
 int embeddedCount = 0
 int pomPropsCount = 0
 
-pluginDirs.each { String pluginDirPath ->
-	File pluginDir = new File(projectRoot, pluginDirPath)
+pluginDirPaths.each { String pluginDirPath ->
+	File pluginDirFile = new File(projectRoot, pluginDirPath)
 
-	if (!pluginDir.exists()) {
+	if (!pluginDirFile.exists()) {
 		return
 	}
 
-	pluginDir.eachDir { File pluginRoot ->
-		File manifest = new File(pluginRoot, "META-INF/MANIFEST.MF")
+	pluginDirFile.eachDir { File pluginRootDir ->
+		File manifestFile = new File(pluginRootDir, "META-INF/MANIFEST.MF")
 
-		if (!manifest.exists()) {
+		if (!manifestFile.exists()) {
 			return
 		}
 
-		String manifestText = manifest.text.replaceAll("\\r?\\n ", "")
-		java.util.regex.Matcher bundleClassPathMatch = manifestText =~ /(?m)^Bundle-ClassPath:\s*(.+)$/
+		String manifestText = manifestFile.text.replaceAll("\\r?\\n ", "")
+		Matcher bundleClassPathMatcher = manifestText =~ /(?m)^Bundle-ClassPath:\s*(.+)$/
 
-		if (!bundleClassPathMatch) {
+		if (!bundleClassPathMatcher) {
 			return
 		}
 
 		String bundleSymbolicName = null
-		java.util.regex.Matcher symbolicNameMatch = manifestText =~ /(?m)^Bundle-SymbolicName:\s*([^;,\s]+)/
+		Matcher symbolicNameMatcher = manifestText =~ /(?m)^Bundle-SymbolicName:\s*([^;,\s]+)/
 
-		if (symbolicNameMatch) {
-			bundleSymbolicName = symbolicNameMatch[0][1]
+		if (symbolicNameMatcher) {
+			bundleSymbolicName = symbolicNameMatcher[0][1]
 		}
 
-		List<String> classPathEntries = bundleClassPathMatch[0][1].split(",").collect { it.trim().replaceAll(",\$", "") }
+		List<String> classPathEntries = bundleClassPathMatcher[0][1].split(",").collect { it.trim().replaceAll(",\$", "") }
 
 		classPathEntries.each { String classPathEntry ->
 			if (classPathEntry == "." || !classPathEntry.endsWith(".jar")) {
@@ -378,7 +378,7 @@ pluginDirs.each { String pluginDirPath ->
 			}
 
 			String jarFileName = classPathEntry.contains("/") ? classPathEntry.substring(classPathEntry.lastIndexOf("/") + 1) : classPathEntry
-			File jarFile = new File(pluginRoot, classPathEntry)
+			File jarFile = new File(pluginRootDir, classPathEntry)
 
 			String groupId = null
 			String artifactId = null
@@ -387,12 +387,12 @@ pluginDirs.each { String pluginDirPath ->
 			// Priority 1: Read pom.properties from inside the JAR
 
 			if (jarFile.exists()) {
-				Map<String, String> pomProps = readPomProperties(jarFile)
+				Map<String, String> pomPropertiesMap = readPomProperties(jarFile)
 
-				if (pomProps) {
-					groupId = pomProps.groupId
-					artifactId = pomProps.artifactId
-					version = pomProps.version
+				if (pomPropertiesMap) {
+					groupId = pomPropertiesMap.groupId
+					artifactId = pomPropertiesMap.artifactId
+					version = pomPropertiesMap.version
 					pomPropsCount++
 				}
 			}
@@ -400,12 +400,12 @@ pluginDirs.each { String pluginDirPath ->
 			// Priority 2: Check the mapping file
 
 			if (!groupId) {
-				Map mapping = embeddedJarMapping[jarFileName]
+				Map coordinatesMap = embeddedJarCoordinatesMap[jarFileName]
 
-				if (mapping) {
-					groupId = mapping.groupId
-					artifactId = mapping.artifactId
-					version = mapping.version
+				if (coordinatesMap) {
+					groupId = coordinatesMap.groupId
+					artifactId = coordinatesMap.artifactId
+					version = coordinatesMap.version
 				}
 			}
 
@@ -443,21 +443,21 @@ pluginDirs.each { String pluginDirPath ->
 				return
 			}
 
-			Map<String, Object> component = [
+			Map<String, Object> componentMap = [
 				type: "library",
 				"bom-ref": purl,
 				name: artifactId ?: jarFileName.replace(".jar", ""),
 				version: version ?: "unknown",
 				purl: purl,
 				scope: "required",
-				description: "Embedded JAR in ${bundleSymbolicName ?: pluginRoot.name}"
+				description: "Embedded JAR in ${bundleSymbolicName ?: pluginRootDir.name}"
 			]
 
 			if (groupId) {
-				component["group"] = groupId
+				componentMap["group"] = groupId
 			}
 
-			components.add(component)
+			components.add(componentMap)
 			embeddedCount++
 		}
 	}
@@ -471,17 +471,17 @@ println "Generating CycloneDX 1.5 SBOM..."
 
 // Build dependency entries, resolving IU names to purls
 
-Map<String, String> iuNameToPurl = [:]
+Map<String, String> iuNameToPurlMap = [:]
 
-components.each { Map<String, Object> component ->
-	iuNameToPurl[component.name] = component.purl
+components.each { Map<String, Object> componentMap ->
+	iuNameToPurlMap[componentMap.name] = componentMap.purl
 }
 
 List<Map<String, Object>> dependencies = []
 
 dependencyMap.each { String parentPurl, List<String> dependencyNames ->
 	List<String> resolvedDependencies = dependencyNames.collect { String dependencyName ->
-		iuNameToPurl[dependencyName]
+		iuNameToPurlMap[dependencyName]
 	}.findAll { it != null }.unique()
 
 	if (resolvedDependencies) {
@@ -492,7 +492,7 @@ dependencyMap.each { String parentPurl, List<String> dependencyNames ->
 	}
 }
 
-Map<String, Object> bom = [
+Map<String, Object> bomMap = [
 	bomFormat: "CycloneDX",
 	specVersion: "1.5",
 	serialNumber: "urn:uuid:" + UUID.randomUUID().toString(),
@@ -519,17 +519,17 @@ Map<String, Object> bom = [
 			description: "Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development."
 		]
 	],
-	components: components.sort { Map left, Map right -> left.purl <=> right.purl },
-	dependencies: dependencies.sort { Map left, Map right -> left.ref <=> right.ref }
+	components: components.sort { Map componentMap1, Map componentMap2 -> componentMap1.purl <=> componentMap2.purl },
+	dependencies: dependencies.sort { Map dependencyMap1, Map dependencyMap2 -> dependencyMap1.ref <=> dependencyMap2.ref }
 ]
 
-String jsonOutput = new JsonBuilder(bom).toPrettyString()
-File outputFileHandle = new File(outputFile)
+String jsonOutput = new JsonBuilder(bomMap).toPrettyString()
+File outputFile = new File(outputFilePath)
 
-outputFileHandle.text = jsonOutput
+outputFile.text = jsonOutput
 
 println ""
-println "SBOM generated: ${outputFileHandle.canonicalPath}"
+println "SBOM generated: ${outputFile.canonicalPath}"
 println ""
 println "  Components:          ${components.size()}"
 println "  With Maven coords:   ${components.count { it.purl.startsWith('pkg:maven/') }}"
