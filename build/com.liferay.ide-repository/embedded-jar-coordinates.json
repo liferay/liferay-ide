@@ -1,0 +1,23 @@
+{
+	"freemarker-2.3.17-patched.jar": {
+		"groupId": "org.freemarker",
+		"artifactId": "freemarker",
+		"version": "2.3.17"
+	},
+	"groovy-4.0.7.jar": {
+		"groupId": "org.apache.groovy",
+		"artifactId": "groovy"
+	},
+	"jackson-core-asl-1.9.13.jar": {
+		"groupId": "org.codehaus.jackson",
+		"artifactId": "jackson-core-asl"
+	},
+	"jackson-mapper-asl-1.9.13.jar": {
+		"groupId": "org.codehaus.jackson",
+		"artifactId": "jackson-mapper-asl"
+	},
+	"jna-5.8.0.jar": {
+		"groupId": "net.java.dev.jna",
+		"artifactId": "jna"
+	}
+}
