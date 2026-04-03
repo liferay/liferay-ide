@@ -140,6 +140,8 @@ Node contentRootNode = contentParser.parseText(contentXmlText)
 
 List<Map<String, Object>> components = []
 Map<String, List<String>> dependencyMap = [:]
+Set<String> purlSet = new HashSet<>()
+Map<String, String> unitIdToPurlMap = [:]
 
 Closure<String> getProperty = { Node unitNode, String propertyName ->
 	List propertyNodes = unitNode.properties?.property
@@ -318,6 +320,8 @@ contentRootNode.units.unit.each { Node unitNode ->
 	}
 
 	components.add(componentMap)
+	purlSet.add(purl)
+	unitIdToPurlMap[unitId] = purl
 
 	// Extract dependency relationships
 
@@ -461,7 +465,7 @@ pluginDirPaths.each { String pluginDirPath ->
 
 			// Check if already captured from p2 metadata
 
-			if (components.any { it.purl == purl }) {
+			if (purlSet.contains(purl)) {
 				return
 			}
 
@@ -480,6 +484,7 @@ pluginDirPaths.each { String pluginDirPath ->
 			}
 
 			components.add(componentMap)
+			purlSet.add(purl)
 			embeddedCount++
 		}
 	}
@@ -493,17 +498,11 @@ println "Generating CycloneDX 1.5 SBOM..."
 
 // Build dependency entries, resolving IU names to purls
 
-Map<String, String> iuNameToPurlMap = [:]
-
-components.each { Map<String, Object> componentMap ->
-	iuNameToPurlMap[componentMap.name] = componentMap.purl
-}
-
 List<Map<String, Object>> dependencies = []
 
 dependencyMap.each { String parentPurl, List<String> dependencyNames ->
 	List<String> resolvedDependencies = dependencyNames.collect { String dependencyName ->
-		iuNameToPurlMap[dependencyName]
+		unitIdToPurlMap[dependencyName]
 	}.findAll { it != null }.unique()
 
 	if (resolvedDependencies) {
