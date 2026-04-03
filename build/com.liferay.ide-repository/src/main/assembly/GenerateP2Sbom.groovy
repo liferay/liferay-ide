@@ -50,9 +50,8 @@ String repositoryDir = argsMap["repositoryDir"]
 String projectRoot = argsMap["projectRoot"]
 String outputFilePath = argsMap["output"] ?: (projectRoot + "/p2-sbom.cdx.json")
 
-String basedir = new File(repositoryDir).parentFile.parentFile.canonicalPath
 String contentJarPath = repositoryDir + "/content.jar"
-String embeddedJarMappingFilePath = basedir + "/embedded-jar-coordinates.json"
+String embeddedJarMappingFilePath = projectRoot + "/build/com.liferay.ide-repository/embedded-jar-coordinates.json"
 
 // Determine project version
 
@@ -113,6 +112,11 @@ Closure<Map<String, String>> readPomProperties = { File jarFile ->
 // --- Phase A: Parse content.xml ---
 
 println "Generating SBOM from p2 repository metadata..."
+
+if (!new File(projectRoot).isDirectory()) {
+	println "ERROR: project root not found at ${projectRoot}"
+	System.exit(1)
+}
 
 if (!new File(contentJarPath).exists()) {
 	println "ERROR: content.jar not found at ${contentJarPath}"
