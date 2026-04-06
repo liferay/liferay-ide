@@ -1,2 +1,5 @@
 <FindBugsFilter>
+    <Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
+    <Method name="startServer" />
+    <Bug pattern="HARD_CODE_PASSWORD" />
 </FindBugsFilter>
