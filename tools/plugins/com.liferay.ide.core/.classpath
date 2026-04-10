@@ -20,9 +20,9 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/commons-configuration-1.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/freemarker-2.3.17-patched.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/org.apache.httpcomponents.httpclient_4.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/org.apache.httpcomponents.httpcore_4.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/org.apache.httpcomponents.httpmime_4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.apache.httpcomponents.httpclient_4.5.14.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.apache.httpcomponents.httpcore_4.4.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.apache.httpcomponents.httpmime_4.5.14.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
