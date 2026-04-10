@@ -44,8 +44,11 @@ import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
@@ -292,7 +295,7 @@ public class RemoteConnection implements IRemoteConnection {
 			return _httpClient;
 		}
 
-		DefaultHttpClient newDefaultHttpClient = null;
+		CloseableHttpClient newDefaultHttpClient = null;
 
 		if ((getUsername() != null) || (getPassword() != null)) {
 			try {
@@ -307,17 +310,19 @@ public class RemoteConnection implements IRemoteConnection {
 						continue;
 					}
 
-					SchemeRegistry schemeRegistry = new SchemeRegistry();
-
-					schemeRegistry.register(new Scheme("http", data.getPort(), PlainSocketFactory.getSocketFactory()));
-
-					PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
+					PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 
 					cm.setMaxTotal(200);
 
 					cm.setDefaultMaxPerRoute(20);
 
-					DefaultHttpClient newHttpClient = new DefaultHttpClient(cm);
+					HttpClientBuilder httpClientBuilder = HttpClients.custom();
+
+					httpClientBuilder.setConnectionManager(cm);
+
+					httpClientBuilder.useSystemProperties();
+
+					CloseableHttpClient newHttpClient = httpClientBuilder.build();
 
 					HttpHost proxy = new HttpHost(data.getHost(), data.getPort());
 
@@ -340,7 +345,7 @@ public class RemoteConnection implements IRemoteConnection {
 							continue;
 						}
 
-						DefaultHttpClient newHttpClient = new DefaultHttpClient();
+						CloseableHttpClient newHttpClient = HttpClients.createSystem();
 
 						HttpParams params = newHttpClient.getParams();
 
@@ -366,13 +371,13 @@ public class RemoteConnection implements IRemoteConnection {
 			}
 
 			if (newDefaultHttpClient == null) {
-				newDefaultHttpClient = new DefaultHttpClient();
+				newDefaultHttpClient = HttpClients.createSystem();
 			}
 
 			_httpClient = newDefaultHttpClient;
 		}
 		else {
-			_httpClient = new DefaultHttpClient();
+			_httpClient = HttpClients.createSystem();
 		}
 
 		return _httpClient;
