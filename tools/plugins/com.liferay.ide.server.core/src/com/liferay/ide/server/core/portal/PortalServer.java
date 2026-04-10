@@ -17,6 +17,8 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.ILiferayServer;
 
+import java.io.IOException;
+
 /**
  * @author Gregory Amerson
  * @author Terry Jia
@@ -31,7 +33,7 @@ public interface PortalServer extends ILiferayServer {
 
 	public String getExternalProperties();
 
-	public String getGogoShellPort();
+	public String getGogoShellPort() throws IOException;
 
 	public String[] getMemoryArgs();
 

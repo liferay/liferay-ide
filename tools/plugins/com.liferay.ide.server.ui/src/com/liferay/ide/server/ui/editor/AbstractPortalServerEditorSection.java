@@ -22,6 +22,8 @@ import com.liferay.ide.server.core.portal.PortalServer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.io.IOException;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -117,7 +119,11 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 
 					updating = false;
 
-					validate();
+					try {
+						validate();
+					}
+					catch (IOException ioException) {
+					}
 				}
 
 			});
@@ -128,7 +134,11 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 
 		setDefault.setLayoutData(data);
 
-		initialize();
+		try {
+			initialize();
+		}
+		catch (IOException ioException) {
+		}
 	}
 
 	public void dispose() {
@@ -173,7 +183,11 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 
 				updating = true;
 
-				addPropertyListeners(event);
+				try {
+					addPropertyListeners(event);
+				}
+				catch (IOException ioException) {
+				}
 
 				updating = false;
 			}
@@ -205,7 +219,7 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 		originalServer.addPublishListener(publishListener);
 	}
 
-	protected abstract void addPropertyListeners(PropertyChangeEvent event);
+	protected abstract void addPropertyListeners(PropertyChangeEvent event) throws IOException;
 
 	protected abstract void createEditorSection(FormToolkit toolkit, Composite composite);
 
@@ -219,12 +233,12 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 		return label;
 	}
 
-	protected void doValidate() {
+	protected void doValidate() throws IOException {
 	}
 
 	protected abstract String getSectionLabel();
 
-	protected void initialize() {
+	protected void initialize() throws IOException {
 		if ((portalServer == null) || (portalBundle == null)) {
 			return;
 		}
@@ -238,13 +252,13 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 		validate();
 	}
 
-	protected abstract void initProperties();
+	protected abstract void initProperties() throws IOException;
 
 	protected abstract boolean needCreate();
 
 	protected abstract void setDefault();
 
-	protected void validate() {
+	protected void validate() throws IOException {
 		if (portalServer != null) {
 			setErrorMessage(null);
 		}

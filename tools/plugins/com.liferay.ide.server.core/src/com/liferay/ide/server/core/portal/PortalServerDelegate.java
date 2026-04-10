@@ -118,7 +118,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 		return getAttribute(PROPERTY_EXTERNAL_PROPERTIES, StringPool.EMPTY);
 	}
 
-	public String getGogoShellPort() {
+	public String getGogoShellPort() throws IOException {
 		String gogoShellPort = getAttribute(PROPERTY_GOGOSHELL_PORT, StringPool.EMPTY);
 
 		if (StringUtils.isEmpty(gogoShellPort)) {
@@ -257,7 +257,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 		setAttribute(ATTR_USERNAME, username);
 	}
 
-	private String _getGogoShellPort(IServer server) {
+	private String _getGogoShellPort(IServer server) throws IOException {
 		String gogoShellPortValue = PortalServerConstants.DEFAULT_GOGOSHELL_PORT;
 
 		IRuntime runtime = server.getRuntime();

@@ -29,6 +29,7 @@ import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.server.util.SocketUtil;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class RemoteServerBehavior
 	public RemoteServerBehavior() {
 	}
 
-	public boolean canConnect() {
+	public boolean canConnect() throws IOException {
 		IStatus status = SocketUtil.canConnect(getServer().getHost(), getRemoteServer().getHTTPPort());
 
 		if ((status != null) && status.isOK()) {
@@ -228,7 +229,7 @@ public class RemoteServerBehavior
 		setServerState(IServer.STATE_STOPPED);
 	}
 
-	protected Job checkRemoteServerState(IProgressMonitor monitor) {
+	protected Job checkRemoteServerState(IProgressMonitor monitor) throws IOException {
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
@@ -344,16 +345,22 @@ public class RemoteServerBehavior
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				Job updateServerJob = checkRemoteServerState(monitor);
+				Job updateServerJob;
 
-				if (updateServerJob != null) {
-					updateServerJob.schedule();
+				try {
+					updateServerJob = checkRemoteServerState(monitor);
 
-					try {
-						updateServerJob.join();
+					if (updateServerJob != null) {
+						updateServerJob.schedule();
+
+						try {
+							updateServerJob.join();
+						}
+						catch (InterruptedException ie) {
+						}
 					}
-					catch (InterruptedException ie) {
-					}
+				}
+				catch (IOException ioException) {
 				}
 
 				if (remoteServerUpdateJob != null) {
