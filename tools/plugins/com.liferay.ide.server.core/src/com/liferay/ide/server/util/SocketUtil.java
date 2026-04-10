@@ -21,10 +21,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
@@ -38,7 +41,7 @@ import org.eclipse.osgi.util.NLS;
  */
 public class SocketUtil {
 
-	public static IStatus canConnect(Socket socket, String host, String port) {
+	public static IStatus canConnect(SSLSocket sslSocket, String host, String port) {
 		IStatus status = null;
 
 		InputStream in = null;
@@ -48,20 +51,20 @@ public class SocketUtil {
 
 			InetSocketAddress local = new InetSocketAddress(0);
 
-			socket.bind(local);
+			sslSocket.bind(local);
 
-			socket.connect(address);
+			sslSocket.connect(address);
 
-			in = socket.getInputStream();
+			in = sslSocket.getInputStream();
 			status = Status.OK_STATUS;
 		}
 		catch (IOException | NumberFormatException e) {
 			status = LiferayServerCore.error(Msgs.notConnect);
 		}
 		finally {
-			if (socket != null) {
+			if (sslSocket != null) {
 				try {
-					socket.close();
+					sslSocket.close();
 				}
 				catch (IOException ioe) {
 
@@ -85,11 +88,13 @@ public class SocketUtil {
 		return status;
 	}
 
-	public static IStatus canConnect(String host, String port) {
-		return canConnect(new Socket(), host, port);
+	public static IStatus canConnect(String host, String port) throws IOException {
+		SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+
+		return canConnect((SSLSocket)sslSocketFactory.createSocket(), host, port);
 	}
 
-	public static IStatus canConnectProxy(Socket socket, String host, String port) {
+	public static IStatus canConnectProxy(SSLSocket sslSocket, String host, String port) {
 		IProxyService proxyService = LiferayCore.getProxyService();
 
 		try {
@@ -99,7 +104,7 @@ public class SocketUtil {
 
 			for (IProxyData data : proxyDataForHost) {
 				if (data.getHost() != null) {
-					return canConnect(socket, data.getHost(), String.valueOf(data.getPort()));
+					return canConnect(sslSocket, data.getHost(), String.valueOf(data.getPort()));
 				}
 			}
 
@@ -109,7 +114,7 @@ public class SocketUtil {
 
 			for (IProxyData data : proxyDataForHost) {
 				if (data.getHost() != null) {
-					return canConnect(socket, data.getHost(), String.valueOf(data.getPort()));
+					return canConnect(sslSocket, data.getHost(), String.valueOf(data.getPort()));
 				}
 			}
 		}
@@ -120,26 +125,30 @@ public class SocketUtil {
 		return null;
 	}
 
-	public static IStatus canConnectProxy(String host, String port) {
-		return canConnectProxy(new Socket(), host, port);
+	public static IStatus canConnectProxy(String host, String port) throws IOException {
+		SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+
+		return canConnectProxy((SSLSocket)sslSocketFactory.createSocket(), host, port);
 	}
 
 	public static boolean isPortAvailable(String port) {
-		ServerSocket serverSocket = null;
+		SSLServerSocket sslServerSocket = null;
 
 		try {
-			serverSocket = new ServerSocket();
+			SSLServerSocketFactory sslServerSocketFactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
 
-			serverSocket.bind(new InetSocketAddress(Integer.parseInt(port)));
+			sslServerSocket = (SSLServerSocket)sslServerSocketFactory.createServerSocket();
+
+			sslServerSocket.bind(new InetSocketAddress(Integer.parseInt(port)));
 
 			return true;
 		}
 		catch (IOException | NumberFormatException e) {
 		}
 		finally {
-			if (serverSocket != null) {
+			if (sslServerSocket != null) {
 				try {
-					serverSocket.close();
+					sslServerSocket.close();
 				}
 				catch (IOException ioe) {
 				}
