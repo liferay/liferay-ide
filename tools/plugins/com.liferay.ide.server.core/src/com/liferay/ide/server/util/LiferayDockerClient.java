@@ -41,6 +41,7 @@ import com.liferay.ide.server.core.portal.docker.IDockerServer;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 
 import java.net.InetAddress;
@@ -100,7 +101,7 @@ public class LiferayDockerClient {
 		return dockerUrl;
 	}
 
-	public static DockerClient getDockerClient() throws CoreException {
+	public static DockerClient getDockerClient() throws CoreException, IOException {
 		DefaultDockerClientConfig.Builder createDefaultConfigBuilder =
 			DefaultDockerClientConfig.createDefaultConfigBuilder();
 

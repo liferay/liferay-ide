@@ -17,6 +17,8 @@ package com.liferay.ide.server.ui.cmd;
 import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.core.portal.PortalServerDelegate;
 
+import java.io.IOException;
+
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.ui.internal.Messages;
 import org.eclipse.wst.server.ui.internal.command.ServerCommand;
@@ -36,7 +38,11 @@ public class SetGogoShellPortCommand extends ServerCommand {
 	public void execute() {
 		PortalServer portalServer = (PortalServer)server.loadAdapter(PortalServer.class, null);
 
-		oldGogoShellPort = portalServer.getGogoShellPort();
+		try {
+			oldGogoShellPort = portalServer.getGogoShellPort();
+		}
+		catch (IOException ioException) {
+		}
 
 		PortalServerDelegate portalServerDelegate = (PortalServerDelegate)server.loadAdapter(PortalServer.class, null);
 

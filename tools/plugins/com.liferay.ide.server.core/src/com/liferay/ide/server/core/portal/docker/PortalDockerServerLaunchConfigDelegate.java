@@ -18,6 +18,8 @@ import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.SocketUtil;
 
+import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,7 +99,7 @@ public class PortalDockerServerLaunchConfigDelegate extends AbstractJavaLaunchCo
 	}
 
 	public void startDebugLaunch(IServer server, ILaunchConfiguration config, ILaunch launch, IProgressMonitor monitor)
-		throws CoreException {
+		throws CoreException, IOException {
 
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();

@@ -17,6 +17,8 @@ package com.liferay.ide.server.ui.action;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.portal.PortalServer;
 
+import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ public class OpenGogoShellAction extends AbstractServerRunningAction {
 	public OpenGogoShellAction() {
 	}
 
-	public void runAction(IAction action) {
+	public void runAction(IAction action) throws IOException {
 		if (selectedServer != null) {
 			String host = selectedServer.getHost();
 

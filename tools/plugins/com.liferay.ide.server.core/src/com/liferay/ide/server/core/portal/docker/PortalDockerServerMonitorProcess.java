@@ -52,9 +52,10 @@ import org.eclipse.wst.server.core.IServer;
 public class PortalDockerServerMonitorProcess implements IProcess {
 
 	public PortalDockerServerMonitorProcess(
-		IServer server, final PortalDockerServerBehavior serverBehavior, ILaunch launch, boolean debug,
-		IPortalDockerStreamsProxy proxy, ILaunchConfiguration config, PortalDockerServerLaunchConfigDelegate delegate,
-		IProgressMonitor monitor) {
+			IServer server, final PortalDockerServerBehavior serverBehavior, ILaunch launch, boolean debug,
+			IPortalDockerStreamsProxy proxy, ILaunchConfiguration config,
+			PortalDockerServerLaunchConfigDelegate delegate, IProgressMonitor monitor)
+		throws IOException {
 
 		_server = server;
 		_dockerServer = (PortalDockerServer)server.loadAdapter(PortalDockerServer.class, null);
@@ -164,7 +165,7 @@ public class PortalDockerServerMonitorProcess implements IProcess {
 		}
 	}
 
-	protected void startContainer(IProgressMonitor monitor) {
+	protected void startContainer(IProgressMonitor monitor) throws IOException {
 		if (_dockerServer != null) {
 			if (_dockerServer.getGogoShellPort() == null) {
 				LiferayServerCore.logError("The Gogo shell port you configured in Dockerfile.ext is in used.");

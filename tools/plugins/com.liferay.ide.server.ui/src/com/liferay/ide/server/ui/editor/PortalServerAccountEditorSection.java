@@ -22,6 +22,8 @@ import com.liferay.ide.server.ui.cmd.SetPortalServerUsernameCommand;
 
 import java.beans.PropertyChangeEvent;
 
+import java.io.IOException;
+
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -41,7 +43,7 @@ public class PortalServerAccountEditorSection extends AbstractPortalServerEditor
 	}
 
 	@Override
-	protected void addPropertyListeners(PropertyChangeEvent event) {
+	protected void addPropertyListeners(PropertyChangeEvent event) throws IOException {
 		if (PortalServer.ATTR_USERNAME.equals(event.getPropertyName())) {
 			String s = (String)event.getNewValue();
 

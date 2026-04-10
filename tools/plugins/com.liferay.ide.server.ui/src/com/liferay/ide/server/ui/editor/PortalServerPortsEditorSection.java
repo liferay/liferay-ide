@@ -23,6 +23,8 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.beans.PropertyChangeEvent;
 
+import java.io.IOException;
+
 import java.util.Objects;
 
 import org.eclipse.core.runtime.IStatus;
@@ -52,7 +54,7 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 	public PortalServerPortsEditorSection() {
 	}
 
-	protected void addPropertyListeners(PropertyChangeEvent event) {
+	protected void addPropertyListeners(PropertyChangeEvent event) throws IOException {
 		if (PortalServer.ATTR_HTTP_PORT.equals(event.getPropertyName())) {
 			String s = (String)event.getNewValue();
 
@@ -96,7 +98,11 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 
 					updating = false;
 
-					validate();
+					try {
+						validate();
+					}
+					catch (IOException ioException) {
+					}
 				}
 
 			});
@@ -125,13 +131,17 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 
 					updating = false;
 
-					validate();
+					try {
+						validate();
+					}
+					catch (IOException ioException) {
+					}
 				}
 
 			});
 	}
 
-	protected void doValidate() {
+	protected void doValidate() throws IOException {
 		String gogoShellPort = portalServer.getGogoShellPort();
 
 		String extGogoShellPort = ServerUtil.getGogoShellPort(server.getOriginal());
@@ -156,7 +166,7 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 		return Msgs.ports;
 	}
 
-	protected void initProperties() {
+	protected void initProperties() throws IOException {
 		httpPort.setText(portalBundle.getHttpPort());
 		gogoShellPort.setText(portalServer.getGogoShellPort());
 

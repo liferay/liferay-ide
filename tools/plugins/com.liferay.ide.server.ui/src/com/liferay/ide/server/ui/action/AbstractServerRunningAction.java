@@ -14,6 +14,8 @@
 
 package com.liferay.ide.server.ui.action;
 
+import java.io.IOException;
+
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -69,7 +71,11 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
 				}
 			}
 			else {
-				runAction(action);
+				try {
+					runAction(action);
+				}
+				catch (IOException ioException) {
+				}
 			}
 		}
 	}
@@ -121,7 +127,7 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
 
 	protected abstract int getRequiredServerState();
 
-	protected abstract void runAction(IAction action);
+	protected abstract void runAction(IAction action) throws IOException;
 
 	protected IWorkbenchPart activePart;
 	protected IServerModule selectedModule;
