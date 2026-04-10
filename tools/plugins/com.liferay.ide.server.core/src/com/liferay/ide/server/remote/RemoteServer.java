@@ -20,12 +20,16 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.server.util.SocketUtil;
 
+import java.io.IOException;
+
 import java.net.MalformedURLException;
-import java.net.Socket;
 import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -51,11 +55,13 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 	public RemoteServer() {
 	}
 
-	public boolean canMakeHttpConnection() {
+	public boolean canMakeHttpConnection() throws IOException {
 		String host = getServer().getHost();
 		String http = getHTTPPort();
 
-		Socket socket = new Socket();
+		SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+
+		SSLSocket sslSocket1 = (SSLSocket)sslSocketFactory.createSocket();
 
 		new Thread() {
 
@@ -63,7 +69,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 			public void run() {
 				try {
 					sleep(3000);
-					socket.close();
+					sslSocket1.close();
 				}
 				catch (Exception e) {
 				}
@@ -71,15 +77,15 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
 		}.start();
 
-		IStatus status = SocketUtil.canConnect(socket, host, http);
+		IStatus status = SocketUtil.canConnect(sslSocket1, host, http);
 
 		if ((status != null) && status.isOK()) {
 			return true;
 		}
 
-		Socket socket1 = new Socket();
+		SSLSocket sslSocket2 = (SSLSocket)sslSocketFactory.createSocket();
 
-		status = SocketUtil.canConnectProxy(socket1, host, http);
+		status = SocketUtil.canConnectProxy(sslSocket2, host, http);
 
 		if ((status != null) && status.isOK()) {
 			return true;

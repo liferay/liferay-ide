@@ -18,10 +18,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import java.net.Socket;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Java client for Telnet handshake.
@@ -35,10 +37,20 @@ import java.util.List;
 public class GogoShellClient implements AutoCloseable {
 
 	public GogoShellClient(String host, int port) throws IOException {
-		_socket = new Socket(host, port);
+		SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
 
-		_inputStream = new DataInputStream(_socket.getInputStream());
-		_outputStream = new DataOutputStream(_socket.getOutputStream());
+		_sslSocket = (SSLSocket)sslSocketFactory.createSocket(host, port);
+
+		SSLParameters params = new SSLParameters();
+
+		params.setEndpointIdentificationAlgorithm("HTTPS");
+
+		_sslSocket.setSSLParameters(params);
+
+		_sslSocket.startHandshake();
+
+		_inputStream = new DataInputStream(_sslSocket.getInputStream());
+		_outputStream = new DataOutputStream(_sslSocket.getOutputStream());
 
 		_handshake();
 	}
@@ -46,7 +58,7 @@ public class GogoShellClient implements AutoCloseable {
 	@Override
 	public void close() {
 		try {
-			_socket.close();
+			_sslSocket.close();
 
 			_inputStream.close();
 			_outputStream.close();
@@ -208,6 +220,6 @@ public class GogoShellClient implements AutoCloseable {
 
 	private final DataInputStream _inputStream;
 	private final DataOutputStream _outputStream;
-	private final Socket _socket;
+	private final SSLSocket _sslSocket;
 
 }
