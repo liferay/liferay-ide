@@ -18,6 +18,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.test.core.base.support.FileSupport;
 import com.liferay.ide.test.core.base.support.ImportProjectSupport;
@@ -27,8 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -58,11 +57,7 @@ import org.junit.Assert;
 public class BaseTests {
 
 	protected static void failTest(Exception exception) {
-		StringWriter s = new StringWriter();
-
-		exception.printStackTrace(new PrintWriter(s));
-
-		Assert.fail(s.toString());
+		Assert.fail(CoreUtil.getStackTrace(exception));
 	}
 
 	protected static IProject project(String name) {

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.maven.core.aether;
 
+import com.liferay.ide.maven.core.LiferayMavenCore;
+
 import java.io.PrintStream;
 
 import java.util.Map;
@@ -39,9 +41,7 @@ public class ConsoleTransferListener extends AbstractTransferListener {
 	}
 
 	public void transferCorrupted(TransferEvent event) {
-		Exception exception = event.getException();
-
-		exception.printStackTrace(_out);
+		LiferayMavenCore.logError("Transfer corrupted", event.getException());
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class ConsoleTransferListener extends AbstractTransferListener {
 		Exception exception = event.getException();
 
 		if (!(exception instanceof MetadataNotFoundException)) {
-			exception.printStackTrace(_out);
+			LiferayMavenCore.logError("Transfer failed", exception);
 		}
 	}
 

@@ -22,8 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -52,11 +50,7 @@ public class BaseTests {
 	}
 
 	protected static void failTest(Exception e) {
-		StringWriter s = new StringWriter();
-
-		e.printStackTrace(new PrintWriter(s));
-
-		Assert.fail(s.toString());
+		Assert.fail(CoreUtil.getStackTrace(e));
 	}
 
 	protected static IProject project(String name) {
