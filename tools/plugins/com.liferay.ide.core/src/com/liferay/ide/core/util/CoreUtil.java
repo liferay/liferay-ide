@@ -450,27 +450,14 @@ public class CoreUtil {
 	public static String getStackTrace(Throwable throwable) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(throwable.toString());
-		sb.append('\n');
-
-		for (StackTraceElement element : throwable.getStackTrace()) {
-			sb.append("\tat ");
-			sb.append(element.toString());
-			sb.append('\n');
-		}
+		_appendThrowable(sb, throwable);
 
 		Throwable cause = throwable.getCause();
 
 		while (cause != null) {
 			sb.append("Caused by: ");
-			sb.append(cause.toString());
-			sb.append('\n');
 
-			for (StackTraceElement element : cause.getStackTrace()) {
-				sb.append("\tat ");
-				sb.append(element.toString());
-				sb.append('\n');
-			}
+			_appendThrowable(sb, cause);
 
 			cause = cause.getCause();
 		}
@@ -750,6 +737,23 @@ public class CoreUtil {
 		}
 
 		return result;
+	}
+
+	private static void _appendThrowable(StringBuilder sb, Throwable throwable) {
+		sb.append(throwable.toString());
+		sb.append('\n');
+
+		for (StackTraceElement element : throwable.getStackTrace()) {
+			sb.append("\tat ");
+			sb.append(element.toString());
+			sb.append('\n');
+		}
+
+		for (Throwable suppressed : throwable.getSuppressed()) {
+			sb.append("\tSuppressed: ");
+
+			_appendThrowable(sb, suppressed);
+		}
 	}
 
 }
