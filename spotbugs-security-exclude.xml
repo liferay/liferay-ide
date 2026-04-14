@@ -272,12 +272,12 @@
 	</Match>
 
 	<!--
-	ServerUtil.getFilters() uses SecureXMLFactoryUtil.newDocumentBuilderFactory().
+	ServerUtil.getServletFilterNames() uses SecureXMLFactoryUtil.newDocumentBuilderFactory().
 	SpotBugs cannot track security features set inside the utility method.
 	-->
 	<Match>
 		<Class name="com.liferay.ide.server.util.ServerUtil" />
-		<Method name="getFilters" />
+		<Method name="getServletFilterNames" />
 		<Bug pattern="XXE_DOCUMENT" />
 	</Match>
 
