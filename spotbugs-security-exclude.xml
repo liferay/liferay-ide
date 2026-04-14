@@ -1,2 +1,16 @@
 <FindBugsFilter>
+
+	<!--
+	GroovyScriptingSupport.createGroovyShell() is an intentional developer-facing
+	Groovy script runner used by the IDE scripting console. The "untrusted
+	input" threat model does not apply — the IDE user authors and executes
+	their own scripts. Restricting the GroovyShell with a SecureASTCustomizer
+	would break this feature's intended purpose.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.scripting.core.GroovyScriptingSupport" />
+		<Method name="createGroovyShell" />
+		<Bug pattern="GROOVY_SHELL" />
+	</Match>
+
 </FindBugsFilter>
