@@ -106,9 +106,9 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 					break;
 
 				case Platform.OS_LINUX:
-					commands.add("/bin/bash");
-					commands.add("-c");
-					commands.add("''./" + launcher.getName() + " -data \"" + workspaceLocation + "\"''");
+					commands.add(new File(launchDir, launcher.getName()).getAbsolutePath());
+					commands.add("-data");
+					commands.add(workspaceLocation);
 
 					break;
 

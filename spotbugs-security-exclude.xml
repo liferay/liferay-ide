@@ -1,2 +1,28 @@
 <FindBugsFilter>
+
+	<!--
+	ServerUIUtil.openInSystemExplorer executes the user-configured
+	"system explorer" IDE preference command template. The command
+	string is controlled by the IDE user on their own machine and
+	is not influenced by external/untrusted input.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.server.ui.util.ServerUIUtil" />
+		<Method name="openInSystemExplorer" />
+		<Bug pattern="COMMAND_INJECTION" />
+	</Match>
+
+	<!--
+	LaunchWorkspaceHandler.execute() uses ProcessBuilder with separate arguments
+	(no shell concatenation). The workspace location comes from Eclipse's
+	ChooseWorkspaceDialog and the launcher path from
+	Platform.getInstallLocation(). SpotBugs flags the tainted data flow
+	but the inputs are IDE-controlled.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.ui.workspace.LaunchWorkspaceHandler" />
+		<Method name="execute" />
+		<Bug pattern="COMMAND_INJECTION" />
+	</Match>
+
 </FindBugsFilter>
