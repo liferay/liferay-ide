@@ -800,7 +800,7 @@ public class PropertiesUtil {
 		return false;
 	}
 
-	private static final SAXParserFactory _saxParserFactory = SAXParserFactory.newInstance();
+	private static final SAXParserFactory _saxParserFactory = SecureXMLFactoryUtil.newSAXParserFactory();
 	private static LanguageFileInfo _tmpLanguageFileInfo = null;
 	private static ResourceNodeInfo _tmpResourceNodeInfo = null;
 
