@@ -32,6 +32,28 @@
 		<Method name="startServer" />
 	</Match>
 
+	<!--
+	StringUtil.equalsIgnoreCase(String, Object) already uses
+	toLowerCase(Locale.ROOT) internally. SpotBugs flags the call
+	because it cannot verify the Locale parameter through static analysis.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.core.util.StringUtil" />
+		<Method name="equalsIgnoreCase" />
+		<Bug pattern="IMPROPER_UNICODE" />
+	</Match>
+
+	<!--
+	StringUtil.toLowerCase(String) already passes Locale.ROOT to
+	String.toLowerCase(). SpotBugs flags it because it treats any
+	toLowerCase call as suspect regardless of the Locale argument.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.core.util.StringUtil" />
+		<Method name="toLowerCase" />
+		<Bug pattern="IMPROPER_UNICODE" />
+	</Match>
+
 	<!-- Test failure messages intentionally include stack traces for developer diagnostics -->
 
 	<Match>
