@@ -14,6 +14,7 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.util.SecureXMLFactoryUtil;
 import com.liferay.ide.core.util.StringPool;
 
 import java.io.IOException;
@@ -92,7 +93,7 @@ public abstract class AbstractDefaultHandler extends DefaultHandler {
 				return fFactory;
 			}
 
-			fFactory = SAXParserFactory.newInstance();
+			fFactory = SecureXMLFactoryUtil.newSAXParserFactory();
 
 			fFactory.setNamespaceAware(true);
 		}

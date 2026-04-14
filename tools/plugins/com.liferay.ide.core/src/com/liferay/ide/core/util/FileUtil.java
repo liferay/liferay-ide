@@ -1001,7 +1001,7 @@ public class FileUtil {
 	}
 
 	public static Document readXML(InputStream inputStream, EntityResolver resolver, ErrorHandler error) {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilderFactory dbf = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
 		DocumentBuilder db;
 
@@ -1038,7 +1038,7 @@ public class FileUtil {
 	}
 
 	public static Document readXMLFile(File file, EntityResolver resolver) {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilderFactory dbf = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
 		DocumentBuilder db;
 
@@ -1281,7 +1281,7 @@ public class FileUtil {
 	}
 
 	public static String writeXml(Document document) throws Exception {
-		TransformerFactory tf = TransformerFactory.newInstance();
+		TransformerFactory tf = SecureXMLFactoryUtil.newTransformerFactory();
 
 		Transformer transformer = tf.newTransformer();
 
