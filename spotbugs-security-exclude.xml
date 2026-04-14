@@ -1,2 +1,73 @@
 <FindBugsFilter>
+
+	<!--
+	TemplateOperation.execute() processes Freemarker templates whose Configuration
+	is created by TemplatesCore._createTemplateModel() which sets
+	ALLOWS_NOTHING_RESOLVER. SpotBugs cannot track the resolver through
+	the TemplateModel indirection.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.core.templates.TemplateOperation" />
+		<Method name="execute" />
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+	</Match>
+
+	<!--
+	TemplatesCore._createTemplateModel() configures Freemarker Configuration with
+	TemplateClassResolver.ALLOWS_NOTHING_RESOLVER. SpotBugs cannot verify
+	the resolver configuration through static analysis.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.core.templates.TemplatesCore" />
+		<Method name="_createTemplateModel" />
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+	</Match>
+
+	<!--
+	AbstractLiferayComponentTemplate.initFreeMarker() configures Freemarker
+	Configuration with TemplateClassResolver.ALLOWS_NOTHING_RESOLVER.
+	SpotBugs cannot verify the resolver configuration through static analysis.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate" />
+		<Method name="initFreeMarker" />
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+	</Match>
+
+	<!--
+	NewLiferayComponentPollerProcessorOperation.doExecute() inherits its
+	Freemarker Configuration from AbstractLiferayComponentTemplate.initFreeMarker()
+	which sets ALLOWS_NOTHING_RESOLVER. SpotBugs cannot track the resolver
+	through the inheritance chain.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.project.core.modules.templates.pollerprocessor.NewLiferayComponentPollerProcessorOperation" />
+		<Method name="doExecute" />
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+	</Match>
+
+	<!--
+	NewLiferayComponentPortletActionCommandOperation.doExecute() inherits its
+	Freemarker Configuration from AbstractLiferayComponentTemplate.initFreeMarker()
+	which sets ALLOWS_NOTHING_RESOLVER. SpotBugs cannot track the resolver
+	through the inheritance chain.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.project.core.modules.templates.portletinactioncommand.NewLiferayComponentPortletActionCommandOperation" />
+		<Method name="doExecute" />
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+	</Match>
+
+	<!--
+	NewLiferayComponentPortletFilterOperation.doExecute() inherits its
+	Freemarker Configuration from AbstractLiferayComponentTemplate.initFreeMarker()
+	which sets ALLOWS_NOTHING_RESOLVER. SpotBugs cannot track the resolver
+	through the inheritance chain.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.project.core.modules.templates.portletfilter.NewLiferayComponentPortletFilterOperation" />
+		<Method name="doExecute" />
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+	</Match>
+
 </FindBugsFilter>
