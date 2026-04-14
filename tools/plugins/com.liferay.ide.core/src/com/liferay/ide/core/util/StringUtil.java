@@ -17,7 +17,6 @@ package com.liferay.ide.core.util;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -84,7 +83,7 @@ public class StringUtil {
 
 	public static boolean equalsIgnoreCase(String s1, Object o) {
 		if ((s1 == null) || (o == null)) {
-			return Objects.equals(s1, o);
+			return false;
 		}
 
 		return s1.toLowerCase(
@@ -99,7 +98,7 @@ public class StringUtil {
 
 	public static boolean equalsIgnoreCase(String s1, String s2) {
 		if ((s1 == null) || (s2 == null)) {
-			return Objects.equals(s1, s2);
+			return false;
 		}
 
 		return s1.toLowerCase(
