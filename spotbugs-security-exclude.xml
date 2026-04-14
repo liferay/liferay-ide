@@ -1,2 +1,101 @@
 <FindBugsFilter>
+
+	<!--
+	HookXmlEditor.getFileContents() opens a stream from FileStoreEditorInput.getURI()
+	which is controlled by the Eclipse framework's file system abstraction.
+	No external/untrusted input influences this URL.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.hook.ui.editor.HookXmlEditor" />
+		<Method name="getFileContents" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!--
+	ServiceBuilderEditor.getFileContents() opens a stream from
+	FileStoreEditorInput.getURI() which is controlled by the Eclipse
+	framework's file system abstraction. No external/untrusted input
+	influences this URL.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.service.ui.editor.ServiceBuilderEditor" />
+		<Method name="getFileContents" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!--
+	AddLayoutTplOperation._createLayoutTplIconsFiles() opens a stream from
+	Bundle.getEntry() pointing to a static icon file bundled with the
+	plugin. Not influenced by external input.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.layouttpl.ui.wizard.AddLayoutTplOperation" />
+		<Method name="_createLayoutTplIconsFiles" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!--
+	PingThread.ping() connects to the user-configured Liferay server URL
+	for health-checking. The IDE user controls both the URL and the
+	target — no SSRF vector exists.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.server.util.PingThread" />
+		<Method name="ping" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!--
+	PortalDockerServerStateStartThread.startMonitor() connects to the
+	user-configured Docker container URL for health-checking. The IDE
+	user controls both the URL and the target — no SSRF vector exists.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.server.core.portal.docker.PortalDockerServerStateStartThread" />
+		<Method name="startMonitor" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!--
+	RemoteLogStream.openInputStream() connects to the user-configured
+	remote server URL for log streaming. The IDE user controls both the
+	URL and the target — no SSRF vector exists.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.server.remote.RemoteLogStream" />
+		<Method name="openInputStream" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!--
+	WebServicesHelper.initMap() connects to the user-configured Liferay
+	server URL for web services discovery. The IDE user controls both
+	the URL and the target — no SSRF vector exists.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.server.util.WebServicesHelper" />
+		<Method name="initMap" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!--
+	ServerManagerTests.startServer() and stopServer() connect to localhost
+	with a test-controlled port. Test code only.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
+		<Method name="startServer" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
+	<!--
+	ServerManagerTests.stopServer() connects to localhost with a
+	test-controlled port. Test code only.
+	-->
+	<Match>
+		<Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
+		<Method name="stopServer" />
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+	</Match>
+
 </FindBugsFilter>
