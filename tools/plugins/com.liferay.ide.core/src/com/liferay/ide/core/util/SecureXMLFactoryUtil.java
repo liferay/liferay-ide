@@ -31,7 +31,6 @@ public class SecureXMLFactoryUtil {
 
 		try {
 			documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-			documentBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 			documentBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
 			documentBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 			documentBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
@@ -48,7 +47,6 @@ public class SecureXMLFactoryUtil {
 
 		try {
 			saxParserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-			saxParserFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 			saxParserFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
 			saxParserFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 			saxParserFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
