@@ -1,2 +1,13 @@
 <FindBugsFilter>
+
+	<!-- ServerUIUtil.openInSystemExplorer executes the user-configured
+	     "system explorer" IDE preference command template. The command
+	     string is controlled by the IDE user on their own machine and
+	     is not influenced by external/untrusted input. -->
+	<Match>
+		<Class name="com.liferay.ide.server.ui.util.ServerUIUtil" />
+		<Method name="openInSystemExplorer" />
+		<Bug pattern="COMMAND_INJECTION" />
+	</Match>
+
 </FindBugsFilter>
