@@ -14,6 +14,8 @@
 
 package com.liferay.ide.portlet.core.util;
 
+import com.liferay.ide.core.util.SecureXMLFactoryUtil;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -102,7 +104,7 @@ public class PortletModelUtil {
 	 * @throws TransformerException
 	 */
 	public static void printDocument(Document doc, OutputStream out) throws IOException, TransformerException {
-		TransformerFactory tf = TransformerFactory.newInstance();
+		TransformerFactory tf = SecureXMLFactoryUtil.newTransformerFactory();
 
 		Transformer transformer = tf.newTransformer();
 

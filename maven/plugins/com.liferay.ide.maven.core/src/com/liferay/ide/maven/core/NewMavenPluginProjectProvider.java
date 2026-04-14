@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SecureXMLFactoryUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -217,7 +218,7 @@ public class NewMavenPluginProjectProvider
 
 						FileUtils.copyFile(settingsXmlFile, backupFile);
 
-						DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+						DocumentBuilderFactory docFactory = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
 						DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -227,7 +228,7 @@ public class NewMavenPluginProjectProvider
 							createNewLiferayProfileNode(pomDocument, newProfile);
 						}
 
-						TransformerFactory transformerFactory = TransformerFactory.newInstance();
+						TransformerFactory transformerFactory = SecureXMLFactoryUtil.newTransformerFactory();
 
 						Transformer transformer = transformerFactory.newTransformer();
 
@@ -248,7 +249,7 @@ public class NewMavenPluginProjectProvider
 					activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.projectPom);
 
 				try {
-					DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+					DocumentBuilderFactory docFactory = SecureXMLFactoryUtil.newDocumentBuilderFactory();
 
 					DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -258,7 +259,7 @@ public class NewMavenPluginProjectProvider
 						createNewLiferayProfileNode(pomDocument, newProfile);
 					}
 
-					TransformerFactory transformerFactory = TransformerFactory.newInstance();
+					TransformerFactory transformerFactory = SecureXMLFactoryUtil.newTransformerFactory();
 
 					Transformer transformer = transformerFactory.newTransformer();
 
