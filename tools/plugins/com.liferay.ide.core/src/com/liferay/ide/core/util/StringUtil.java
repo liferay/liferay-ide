@@ -16,6 +16,7 @@ package com.liferay.ide.core.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -85,7 +86,14 @@ public class StringUtil {
 			return false;
 		}
 
-		return s1.equalsIgnoreCase(o.toString());
+		return s1.toLowerCase(
+			Locale.ROOT
+		).equals(
+			o.toString(
+			).toLowerCase(
+				Locale.ROOT
+			)
+		);
 	}
 
 	public static boolean equalsIgnoreCase(String s1, String s2) {
@@ -93,7 +101,11 @@ public class StringUtil {
 			return false;
 		}
 
-		return s1.equalsIgnoreCase(s2);
+		return s1.toLowerCase(
+			Locale.ROOT
+		).equals(
+			s2.toLowerCase(Locale.ROOT)
+		);
 	}
 
 	public static byte[] getBytes(String s) {
@@ -215,7 +227,7 @@ public class StringUtil {
 			return "";
 		}
 
-		return s.toLowerCase();
+		return s.toLowerCase(Locale.ROOT);
 	}
 
 	public static String toLowerCase(StringBuilder sb) {
@@ -225,7 +237,7 @@ public class StringUtil {
 
 		String string = sb.toString();
 
-		return string.toLowerCase();
+		return string.toLowerCase(Locale.ROOT);
 	}
 
 	public static String toString(Object o) {
@@ -241,7 +253,7 @@ public class StringUtil {
 			return "";
 		}
 
-		return s.toUpperCase();
+		return s.toUpperCase(Locale.ROOT);
 	}
 
 	public static String trim(String string) {

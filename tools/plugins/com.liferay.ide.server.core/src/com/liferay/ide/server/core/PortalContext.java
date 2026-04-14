@@ -14,7 +14,7 @@
 
 package com.liferay.ide.server.core;
 
-import java.util.Locale;
+import com.liferay.ide.core.util.StringUtil;
 
 /**
  * @author Seiphon Wang
@@ -34,7 +34,7 @@ public class PortalContext {
 			baseName = "ROOT" + baseName;
 		}
 
-		String lowerCaseBaseName = baseName.toLowerCase(Locale.ENGLISH);
+		String lowerCaseBaseName = StringUtil.toLowerCase(baseName);
 
 		if (lowerCaseBaseName.endsWith(".war") || lowerCaseBaseName.endsWith(".xml")) {
 			baseName = baseName.substring(0, baseName.length() - 4);

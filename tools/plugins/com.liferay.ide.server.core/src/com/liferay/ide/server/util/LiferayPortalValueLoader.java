@@ -17,6 +17,7 @@ package com.liferay.ide.server.util;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
@@ -95,7 +96,7 @@ public class LiferayPortalValueLoader {
 
 					@Override
 					public boolean accept(File dir, String fileName) {
-						String fileNameLowerCase = fileName.toLowerCase();
+						String fileNameLowerCase = StringUtil.toLowerCase(fileName);
 
 						return fileNameLowerCase.endsWith(".jar");
 					}

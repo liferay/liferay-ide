@@ -151,7 +151,7 @@ public class NewPortletClassDataModelProvider
 					tempStr = portletName.toString();
 				}
 
-				String property = tempStr.toLowerCase();
+				String property = StringUtil.toLowerCase(tempStr);
 
 				return "/html/" + property.replaceAll(_PORTLET_SUFFIX_PATTERN, "");
 			}
@@ -176,7 +176,7 @@ public class NewPortletClassDataModelProvider
 			else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
 				String property = portletName.toString();
 
-				return property.toLowerCase() + "-portlet";
+				return StringUtil.toLowerCase(property) + "-portlet";
 			}
 			else if (ID.equals(propertyName)) {
 				return portletName;

@@ -16,6 +16,7 @@ package com.liferay.ide.portlet.vaadin.core.operation;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -51,13 +52,13 @@ public class NewVaadinPortletClassDataModelProvider
 			return "NewVaadinPortletApplication";
 		}
 		else if (PORTLET_NAME.equals(propertyName) || LIFERAY_PORTLET_NAME.equals(propertyName)) {
-			return _getPortletName().toLowerCase();
+			return StringUtil.toLowerCase(_getPortletName());
 		}
 		else if (DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName) || SHORT_TITLE.equals(propertyName)) {
 			return _getPortletName();
 		}
 		else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
-			return _getPortletName().toLowerCase() + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+			return StringUtil.toLowerCase(_getPortletName()) + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (SUPERCLASS.equals(propertyName)) {
 			return QUALIFIED_VAADIN_APPLICATION;

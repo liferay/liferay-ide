@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
@@ -124,24 +125,24 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
 
 			IFolder metaFolder = resourceFolder.getFolder("META-INF/resources");
 
-			IFile mainJs = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/js/main.js"));
+			IFile mainJs = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/js/main.js"));
 
 			if (FileUtil.notExists(mainJs)) {
 				createSampleFile(mainJs, "pollerprocessor/poller-main.js");
 			}
 
-			IFile initJsp = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/init.jsp"));
+			IFile initJsp = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/init.jsp"));
 
 			if (FileUtil.notExists(initJsp)) {
 				createSampleFile(initJsp, "pollerprocessor/poller-init.jsp");
 			}
 
-			IFile viewJsp = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/view.jsp"));
+			IFile viewJsp = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/view.jsp"));
 
 			if (FileUtil.notExists(viewJsp)) {
 				createSampleFile(
 					viewJsp, "pollerprocessor/poller-view.jsp", "/init.jsp",
-					"/" + componentClassName.toLowerCase() + "/init.jsp");
+					"/" + StringUtil.toLowerCase(componentClassName) + "/init.jsp");
 			}
 		}
 		catch (Exception e) {
@@ -215,8 +216,10 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
 		properties.add("javax.portlet.portlet.info.short-title=" + componentClassName);
 		properties.add("javax.portlet.portlet.info.title=" + componentClassName);
 		properties.add(
-			"com.liferay.portlet.header-portlet-javascript=/" + componentClassName.toLowerCase() + "/js/main.js");
-		properties.add("javax.portlet.init-param.view-template=/" + componentClassName.toLowerCase() + "/view.jsp");
+			"com.liferay.portlet.header-portlet-javascript=/" + StringUtil.toLowerCase(componentClassName) +
+				"/js/main.js");
+		properties.add(
+			"javax.portlet.init-param.view-template=/" + StringUtil.toLowerCase(componentClassName) + "/view.jsp");
 		properties.add("javax.portlet.resource-bundle=content.Language");
 
 		return properties;

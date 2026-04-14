@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 
@@ -165,7 +166,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 
 		String bp = bundlePath.toString();
 
-		String bundlePathLowerCase = bp.toLowerCase();
+		String bundlePathLowerCase = StringUtil.toLowerCase(bp);
 
 		URI uri = bundleFile.toURI();
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules.templates.friendlyurl;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 
@@ -39,7 +40,7 @@ public class NewLiferayComponentFriendUrlOperation extends AbstractLiferayCompon
 
 			IFolder metaFolder = resourceFolder.getFolder("META-INF/friendly-url-routes");
 
-			IFile routesXml = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/routes.xml"));
+			IFile routesXml = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/routes.xml"));
 
 			if (FileUtil.notExists(routesXml)) {
 				createSampleFile(routesXml, "friendlyurl/friendurl-routes.xml");
@@ -73,8 +74,8 @@ public class NewLiferayComponentFriendUrlOperation extends AbstractLiferayCompon
 		Collections.addAll(friendUrlProperties, _PROPERTIES_LIST);
 
 		friendUrlProperties.add(
-			"com.liferay.portlet.friendly-url-routes=META-INF/friendly-url-routes/" + componentClassName.toLowerCase() +
-				"/routes.xml");
+			"com.liferay.portlet.friendly-url-routes=META-INF/friendly-url-routes/" +
+				StringUtil.toLowerCase(componentClassName) + "/routes.xml");
 
 		return friendUrlProperties;
 	}

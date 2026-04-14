@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BndProperties;
 import com.liferay.ide.project.core.modules.BndPropertiesValue;
@@ -103,13 +104,13 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 
 			IFolder metaFolder = resourceFolder.getFolder("META-INF/resources");
 
-			IFile initFtl = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/init.ftl"));
+			IFile initFtl = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/init.ftl"));
 
 			if (FileUtil.notExists(initFtl)) {
 				createSampleFile(initFtl, "portletinactioncommand/portletactioncommand-init.ftl");
 			}
 
-			IFile viewFtl = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/view.ftl"));
+			IFile viewFtl = metaFolder.getFile(new Path(StringUtil.toLowerCase(componentClassName) + "/view.ftl"));
 
 			if (FileUtil.notExists(viewFtl)) {
 				createSampleFile(viewFtl, "portletinactioncommand/portletactionconmmand-view.ftl");
@@ -229,9 +230,11 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 		}
 
 		properties.add("javax.portlet.display-name=" + componentNameWithoutTemplateName + " Portlet");
-		properties.add("javax.portlet.init-param.view-template=/" + componentClassName.toLowerCase() + "/view.ftl");
 		properties.add(
-			"com.liferay.portlet.css-class-wrapper=portlet-" + componentNameWithoutTemplateName.toLowerCase());
+			"javax.portlet.init-param.view-template=/" + StringUtil.toLowerCase(componentClassName) + "/view.ftl");
+		properties.add(
+			"com.liferay.portlet.css-class-wrapper=portlet-" +
+				StringUtil.toLowerCase(componentNameWithoutTemplateName));
 
 		return properties;
 	}
