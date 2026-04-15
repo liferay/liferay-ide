@@ -1,8 +1,8 @@
 <FindBugsFilter>
 	<Match>
-        <!--Skip this hard coded password because the username and password are defaults for a testcase-->
-        <Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
-        <Method name="startServer" />
-        <Bug pattern="HARD_CODE_PASSWORD" />
-    </Match>
+		<!--Skip this hard coded password because the username and password are defaults for a testcase-->
+		<Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
+		<Method name="startServer" />
+		<Bug pattern="HARD_CODE_PASSWORD" />
+	</Match>
 </FindBugsFilter>
