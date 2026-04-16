@@ -14,6 +14,7 @@
 
 package com.liferay.ide.core.tests;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.JobUtil;
 
@@ -23,8 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import java.nio.file.Files;
 
@@ -50,11 +49,7 @@ public class TestUtil {
 	}
 
 	public static void failTest(Exception e) {
-		StringWriter s = new StringWriter();
-
-		e.printStackTrace(new PrintWriter(s));
-
-		TestCase.fail(s.toString());
+		TestCase.fail(CoreUtil.getStackTrace(e));
 	}
 
 	public static void waitForBuildAndValidation() throws Exception {

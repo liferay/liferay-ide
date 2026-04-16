@@ -15,10 +15,8 @@
 package com.liferay.ide.ui.form;
 
 import com.liferay.ide.core.model.IBaseModel;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringUtil;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IAction;
@@ -578,15 +576,7 @@ public abstract class IDEFormPage extends FormPage {
 	}
 
 	private String _getStackTrace(Throwable throwable) {
-		StringWriter swriter = new StringWriter();
-
-		PrintWriter pwriter = new PrintWriter(swriter);
-
-		throwable.printStackTrace(pwriter);
-		pwriter.flush();
-		pwriter.close();
-
-		return swriter.toString();
+		return CoreUtil.getStackTrace(throwable);
 	}
 
 	private void _resetMenu(Menu menu, Control c) {

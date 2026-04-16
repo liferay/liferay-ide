@@ -27,9 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.io.Writer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -450,13 +448,19 @@ public class CoreUtil {
 	 *  <code>printStackTrace(PrintWriter)</code> method.
 	 */
 	public static String getStackTrace(Throwable throwable) {
-		StringWriter sw = new StringWriter();
+		StringBuilder sb = new StringBuilder();
 
-		PrintWriter pw = new PrintWriter(sw, true);
+		_appendThrowable(sb, throwable);
 
-		throwable.printStackTrace(pw);
+		Throwable cause = throwable.getCause();
 
-		StringBuffer sb = sw.getBuffer();
+		while (cause != null) {
+			sb.append("Caused by: ");
+
+			_appendThrowable(sb, cause);
+
+			cause = cause.getCause();
+		}
 
 		return sb.toString();
 	}
@@ -733,6 +737,23 @@ public class CoreUtil {
 		}
 
 		return result;
+	}
+
+	private static void _appendThrowable(StringBuilder sb, Throwable throwable) {
+		sb.append(throwable.toString());
+		sb.append('\n');
+
+		for (StackTraceElement element : throwable.getStackTrace()) {
+			sb.append("\tat ");
+			sb.append(element.toString());
+			sb.append('\n');
+		}
+
+		for (Throwable suppressed : throwable.getSuppressed()) {
+			sb.append("\tSuppressed: ");
+
+			_appendThrowable(sb, suppressed);
+		}
 	}
 
 }

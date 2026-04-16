@@ -162,7 +162,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl {
 			_findJspFiles(customJspFolder, customJspFiles);
 		}
 		catch (CoreException ce) {
-			ce.printStackTrace();
+			LiferayCore.logError(ce);
 		}
 
 		return customJspFiles.toArray(new IFile[0]);

@@ -124,7 +124,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			delta.accept(this);
 		}
 		catch (Throwable e) {
-			e.printStackTrace();
+			LiferayCore.logError(e);
 		}
 	}
 

@@ -427,7 +427,7 @@ public abstract class AbstractLiferayComponentTemplate
 			bndProperty.load(bndFile);
 		}
 		catch (IOException ioe) {
-			ioe.printStackTrace();
+			LiferayCore.logError(ioe);
 		}
 	}
 
