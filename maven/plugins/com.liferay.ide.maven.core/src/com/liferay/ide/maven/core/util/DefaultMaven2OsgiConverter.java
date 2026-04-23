@@ -375,13 +375,12 @@ public class DefaultMaven2OsgiConverter {
 		"([0-9])(\\.([0-9]))?(\\.([0-9]))?\\-([0-9]{8}\\.[0-9]{6}\\-[0-9]*)");
 	private static final Pattern _dotsInQualifier = Pattern.compile(
 		"([0-9])(\\.[0-9])?\\.([0-9A-Za-z_-]+)\\.([0-9A-Za-z_-]+)");
-	private static final Pattern _needToFillZeros = Pattern.compile("([0-9])(\\.([0-9]))?(\\.([0-9A-Za-z_-]+))?");
+	private static final Pattern _needToFillZeros = Pattern.compile("(\\d)(\\.(\\d))?(\\.([0-9A-Za-z_-]+)){0,1}");
 
 	/**
 	 * pattern that matches strings that contain only numbers
 	 */
 	private static final Pattern _onlyNumbers = Pattern.compile("[0-9]+");
 
-	private static final Pattern _osgiVersionPattern = Pattern.compile("[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9A-Za-z_-]+)?");
-
+	private static final Pattern _osgiVersionPattern = Pattern.compile("\\d++\\.\\d++\\.\\d++(?>\\.[0-9A-Za-z_-]+){0,1}");
 }
