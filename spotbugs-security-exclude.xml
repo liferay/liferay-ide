@@ -23,4 +23,40 @@
 		<Class name="com.liferay.ide.maven.core.util.DefaultMaven2OsgiConverter" />
 		<Method name="getVersion" />
 	</Match>
+
+	<!-- Skip this unencrypted socket because the Gogo OSGi console is a telnet protocol (per class Javadoc) and the server endpoint is not SSL -->
+
+	<Match>
+		<Class name="com.liferay.ide.server.core.gogo.GogoShellClient" />
+		<Method name="&lt;init&gt;" />
+		<Bug pattern="UNENCRYPTED_SOCKET" />
+	</Match>
+
+	<!-- Skip this unencrypted socket because it is a TCP reachability probe to a user-configured remote port; the wire protocol is dictated by the remote server, not the IDE -->
+
+	<Match>
+		<Class name="com.liferay.ide.server.remote.RemoteServer" />
+		<Method name="canMakeHttpConnection" />
+		<Bug pattern="UNENCRYPTED_SOCKET" />
+	</Match>
+
+	<!-- Skip these unencrypted sockets because they back the reachability probes above; sockets are bound, connected, and immediately closed without transmitting application data -->
+
+	<Match>
+		<Class name="com.liferay.ide.server.util.SocketUtil" />
+		<Or>
+			<Method name="canConnect" />
+			<Method name="canConnectProxy" />
+		</Or>
+		<Bug pattern="UNENCRYPTED_SOCKET" />
+	</Match>
+
+	<!-- Skip this unencrypted server socket because it does a local bind()-then-close to test port availability; no remote client ever connects and no data is transmitted -->
+
+	<Match>
+		<Class name="com.liferay.ide.server.util.SocketUtil" />
+		<Method name="isPortAvailable" />
+		<Bug pattern="UNENCRYPTED_SERVER_SOCKET" />
+	</Match>
+
 </FindBugsFilter>
