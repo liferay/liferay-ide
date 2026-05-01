@@ -137,13 +137,13 @@
 	</Match>
 
 	<!--
-	AbstractDefaultHandler.getFactory() uses SecureXMLFactoryUtil.newSAXParserFactory()
-	which disables external entity processing. SpotBugs cannot track security
-	features set inside the utility method.
+	AbstractDefaultHandler routes all SAX parsing through SecureXMLFactoryUtil.newSAXParserFactory(),
+	which disables external entity processing. SpotBugs flags the SAXParser.parse(...) call site
+	(parseContents) rather than the factory construction (getFactory), and cannot track security
+	features set inside the utility method, so this exclusion covers the whole class.
 	-->
 	<Match>
 		<Class name="com.liferay.ide.core.AbstractDefaultHandler" />
-		<Method name="getFactory" />
 		<Bug pattern="XXE_SAXPARSER" />
 	</Match>
 
