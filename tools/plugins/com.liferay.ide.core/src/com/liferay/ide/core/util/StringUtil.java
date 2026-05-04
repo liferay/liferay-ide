@@ -82,18 +82,11 @@ public class StringUtil {
 	}
 
 	public static boolean equalsIgnoreCase(String s1, Object o) {
-		if ((s1 == null) || (o == null)) {
+		if (o == null) {
 			return false;
 		}
 
-		return s1.toLowerCase(
-			Locale.ROOT
-		).equals(
-			o.toString(
-			).toLowerCase(
-				Locale.ROOT
-			)
-		);
+		return equalsIgnoreCase(s1, o.toString());
 	}
 
 	public static boolean equalsIgnoreCase(String s1, String s2) {
