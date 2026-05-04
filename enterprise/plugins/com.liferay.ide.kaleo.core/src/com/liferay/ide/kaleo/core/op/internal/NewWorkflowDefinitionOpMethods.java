@@ -14,6 +14,7 @@
 
 package com.liferay.ide.kaleo.core.op.internal;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.kaleo.core.model.Action;
 import com.liferay.ide.kaleo.core.model.ExecutionType;
@@ -80,7 +81,7 @@ public class NewWorkflowDefinitionOpMethods {
 
 			String name = opName.content();
 
-			String lowerCaseName = name.toLowerCase();
+			String lowerCaseName = StringUtil.toLowerCase(name);
 
 			String[] segments = lowerCaseName.split("\\s+");
 
