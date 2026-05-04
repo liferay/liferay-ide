@@ -94,11 +94,10 @@ public class StringUtil {
 			return false;
 		}
 
-		return s1.toLowerCase(
-			Locale.ROOT
-		).equals(
-			s2.toLowerCase(Locale.ROOT)
-		);
+		String lower1 = s1.toLowerCase(Locale.ROOT);
+		String lower2 = s2.toLowerCase(Locale.ROOT);
+
+		return lower1.equals(lower2);
 	}
 
 	public static byte[] getBytes(String s) {
