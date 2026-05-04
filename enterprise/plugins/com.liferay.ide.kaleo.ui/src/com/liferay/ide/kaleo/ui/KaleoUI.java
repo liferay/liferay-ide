@@ -15,6 +15,7 @@
 package com.liferay.ide.kaleo.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.kaleo.core.model.ScriptLanguageType;
 import com.liferay.ide.kaleo.ui.editor.WorkflowTextEditor;
 import com.liferay.ide.kaleo.ui.helpers.TextEditorHelper;
@@ -79,7 +80,7 @@ public class KaleoUI extends AbstractUIPlugin {
 		Bundle bundle = getDefault().getBundle();
 
 		URL scriptFileUrl = bundle.getEntry(
-			"/scripts/default." + nodeType.toLowerCase() + "." + scriptType.toString().toLowerCase());
+			"/scripts/default." + StringUtil.toLowerCase(nodeType) + "." + StringUtil.toLowerCase(scriptType.toString()));
 
 		try {
 			return CoreUtil.readStreamToString(scriptFileUrl.openStream());
