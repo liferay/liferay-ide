@@ -39,6 +39,7 @@ import java.security.MessageDigest;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -182,19 +183,9 @@ public class CoreUtil {
 
 			byte[] digest = md.digest(input);
 
-			StringBuilder buf = new StringBuilder();
+			HexFormat hexFormat = HexFormat.of();
 
-			for (byte d : digest) {
-				String hex = String.format("%02X", d);
-
-				if (hex.length() == 1) {
-					buf.append('0');
-				}
-
-				buf.append(hex);
-			}
-
-			return buf.toString();
+			return hexFormat.formatHex(digest);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
