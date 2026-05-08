@@ -110,7 +110,7 @@ public class RemoteLogStream extends BufferedInputStream {
 			return openInputStream(connection, url);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LiferayServerCore.logError(e);
 		}
 
 		return null;

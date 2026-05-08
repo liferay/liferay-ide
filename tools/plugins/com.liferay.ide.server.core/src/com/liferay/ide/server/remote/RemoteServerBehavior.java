@@ -149,7 +149,7 @@ public class RemoteServerBehavior
 				retval = remoteConnection.getServerState();
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				LiferayServerCore.logError(e);
 			}
 
 			if (retval == null) {

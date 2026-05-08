@@ -65,7 +65,7 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 			retVal = bundledPortalFile.exists();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			logError(e);
 		}
 
 		return retVal;

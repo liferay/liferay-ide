@@ -84,7 +84,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
 			}
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			LiferayServerCore.logError(ex);
 		}
 
 		return new Path(warfile.getAbsolutePath());

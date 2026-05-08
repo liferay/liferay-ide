@@ -186,7 +186,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 			httpPost.releaseConnection();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LiferayServerCore.logError(e);
 
 			return e.getMessage();
 		}
@@ -323,7 +323,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 			httpPut.releaseConnection();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LiferayServerCore.logError(e);
 
 			return e.getMessage();
 		}
