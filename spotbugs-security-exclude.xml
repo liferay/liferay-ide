@@ -72,4 +72,56 @@
 		<Method name="canConnectProxy" />
 	</Match>
 
+	<!-- LPD-84736 Test helper intentionally exposes stack traces in failure messages for developer diagnostics -->
+
+	<Match>
+		<Class name="com.liferay.ide.core.tests.BaseTests" />
+		<Method name="failTest" />
+		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
+	</Match>
+
+	<!-- LPD-84736 Test helper intentionally exposes stack traces in failure messages for developer diagnostics -->
+
+	<Match>
+		<Class name="com.liferay.ide.core.tests.TestUtil" />
+		<Method name="failTest" />
+		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
+	</Match>
+
+	<!-- LPD-84736 Public API method whose purpose is to convert a Throwable to a stack trace string;
+	     callers are responsible for how the result is used -->
+
+	<Match>
+		<Class name="com.liferay.ide.core.util.CoreUtil" />
+		<Method name="getStackTrace" />
+		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
+	</Match>
+
+	<!-- LPD-84736 Stack trace is the intended content of the Eclipse form error-details panel, shown in a
+	     read-only text widget to the developer to help diagnose IDE errors -->
+
+	<Match>
+		<Class name="com.liferay.ide.ui.form.IDEFormPage" />
+		<Method name="_getStackTrace" />
+		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
+	</Match>
+
+	<!-- LPD-84736 As a simplistic transfer listener that logs uploads/downloads to the console,
+	     printing transfer error details to the output stream is expected behavior -->
+
+	<Match>
+		<Class name="com.liferay.ide.maven.core.aether.ConsoleTransferListener" />
+		<Method name="transferCorrupted" />
+		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
+	</Match>
+
+	<!-- LPD-84736 As a simplistic transfer listener that logs uploads/downloads to the console,
+	     printing transfer error details to the output stream is expected behavior -->
+
+	<Match>
+		<Class name="com.liferay.ide.maven.core.aether.ConsoleTransferListener" />
+		<Method name="transferFailed" />
+		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
+	</Match>
+
 </FindBugsFilter>
