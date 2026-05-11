@@ -177,15 +177,11 @@ public class CoreUtil {
 
 	public static final String createStringDigest(String str) {
 		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-			byte[] input = str.getBytes("UTF-8");
-
-			byte[] digest = md.digest(input);
-
 			HexFormat hexFormat = HexFormat.of();
 
-			return hexFormat.formatHex(digest);
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+			return hexFormat.formatHex(md.digest(str.getBytes("UTF-8")));
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
