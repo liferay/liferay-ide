@@ -24,7 +24,9 @@ Why: splitting makes every exclusion individually auditable and traceable to a s
 
 **Right:**
 ```xml
+
 <!-- Comment specific to canConnect -->
+
 <Match>
     <Bug pattern="UNENCRYPTED_SOCKET" />
     <Class name="com.example.SocketUtil" />
@@ -32,6 +34,7 @@ Why: splitting makes every exclusion individually auditable and traceable to a s
 </Match>
 
 <!-- Comment specific to canConnectProxy -->
+
 <Match>
     <Bug pattern="UNENCRYPTED_SOCKET" />
     <Class name="com.example.SocketUtil" />
@@ -64,6 +67,7 @@ Any `<!-- ... -->` block above a `<Match>`, separated only by blank lines, is pa
 **Width:** Each line (including indent, where a tab counts as 1 character) is at most 120 characters. Use the single-line form when `<!-- text -->` plus indent fits within 120; otherwise switch to multi-line. Multi-line body lines also wrap at 120 characters, broken on word boundaries with greedy fill.
 
 ```xml
+
 <!--
 False positive: getVersion performs OSGi format detection, not security validation.
 The replaceAll is internal version string formatting (dots to underscores), not
@@ -93,6 +97,9 @@ If a `<Match>` uses other non-standard elements (e.g. `<Field>`, `<Source>`), ke
 
 **Before:**
 ```xml
+
+<!-- comment -->
+
 <Match>
     <Class name="com.example.Foo" />
     <Method name="bar" />
@@ -110,6 +117,7 @@ If a `<Match>` uses other non-standard elements (e.g. `<Field>`, `<Source>`), ke
 
 **After:**
 ```xml
+
 <!-- comment -->
 
 <Match>
@@ -117,6 +125,8 @@ If a `<Match>` uses other non-standard elements (e.g. `<Field>`, `<Source>`), ke
     <Class name="com.example.Baz" />
     <Method name="qux" />
 </Match>
+
+<!-- comment -->
 
 <Match>
     <Bug pattern="HARD_CODE_PASSWORD" />
