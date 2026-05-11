@@ -1,5 +1,13 @@
 <FindBugsFilter>
 
+	<!-- Only loads .groovy scripts bundled in the plugin, not user input -->
+
+	<Match>
+		<Bug pattern="GROOVY_SHELL" />
+		<Class name="com.liferay.ide.scripting.core.GroovyScriptingSupport" />
+		<Method name="newInstanceFromFile" />
+	</Match>
+
 	<!-- False positive: hard coded password is the default for a testcase only -->
 
 	<Match>
