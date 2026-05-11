@@ -1,16 +1,16 @@
 ---
-name: sort-spotbugs-exclude
-description: Sort `spotbugs-security-exclude.xml` (or another `<FindBugsFilter>` file in this repo) according to the rule at `.claude/rules/spotbugs-security-exclude-xml.md`. Use when the user asks to sort or normalize the SpotBugs exclude file, or when adding entries to it.
+name: format-spotbugs-exclude
+description: Format `spotbugs-security-exclude.xml` (or another `<FindBugsFilter>` file in this repo) according to the rule at `.claude/rules/spotbugs-security-exclude-xml.md`. Use when the user asks to format or normalize the SpotBugs exclude file, or when adding entries to it.
 ---
 
-# Sort SpotBugs Exclude Filter
+# Format SpotBugs Exclude Filter
 
 Apply the rule defined in `.claude/rules/spotbugs-security-exclude-xml.md` to a `<FindBugsFilter>` XML file.
 
 ## Usage
 
-- `/sort-spotbugs-exclude` — sort `spotbugs-security-exclude.xml` at the repo root
-- `/sort-spotbugs-exclude <path>` — sort the given filter file
+- `/format-spotbugs-exclude` — format `spotbugs-security-exclude.xml` at the repo root
+- `/format-spotbugs-exclude <path>` — format the given filter file
 
 ## Process
 
