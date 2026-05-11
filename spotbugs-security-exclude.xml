@@ -24,7 +24,7 @@
 		<Method name="getVersion" />
 	</Match>
 
-	<!-- Skip this unencrypted server socket because it does a local bind()-then-close to test port availability; no remote client ever connects and no data is transmitted -->
+	<!-- Local bind()-then-close to test port availability; no client connects and no data is transmitted -->
 
 	<Match>
 		<Bug pattern="UNENCRYPTED_SERVER_SOCKET" />
@@ -32,7 +32,7 @@
 		<Method name="isPortAvailable" />
 	</Match>
 
-	<!-- Skip this unencrypted socket because the Gogo OSGi console is a telnet protocol (per class Javadoc) and the server endpoint is not SSL -->
+	<!-- Gogo OSGi console uses the telnet protocol (per class Javadoc); endpoint is not SSL -->
 
 	<Match>
 		<Bug pattern="UNENCRYPTED_SOCKET" />
@@ -40,7 +40,7 @@
 		<Method name="&lt;init&gt;" />
 	</Match>
 
-	<!-- Skip this unencrypted socket because it is a TCP reachability probe to a user-configured remote port; the wire protocol is dictated by the remote server, not the IDE -->
+	<!-- TCP reachability probe to a user-configured remote port; the remote server dictates the wire protocol -->
 
 	<Match>
 		<Bug pattern="UNENCRYPTED_SOCKET" />
@@ -48,7 +48,7 @@
 		<Method name="canMakeHttpConnection" />
 	</Match>
 
-	<!-- Skip this unencrypted socket because canConnect backs the reachability probe above; the socket is bound, connected, and immediately closed without transmitting application data -->
+	<!-- Reachability probe: socket is bound, connected, and immediately closed without sending data -->
 
 	<Match>
 		<Bug pattern="UNENCRYPTED_SOCKET" />
@@ -56,7 +56,7 @@
 		<Method name="canConnect" />
 	</Match>
 
-	<!-- Skip this unencrypted socket because canConnectProxy backs the reachability probe above; the socket is bound, connected, and immediately closed without transmitting application data -->
+	<!-- Reachability probe (proxy variant): bound, connected, and immediately closed without sending data -->
 
 	<Match>
 		<Bug pattern="UNENCRYPTED_SOCKET" />
