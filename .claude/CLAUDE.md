@@ -37,8 +37,8 @@ cd build/com.liferay.ide.build.source.formatter && ./sf.sh
 ./run-security-scan.sh --bug-type XXE_SAXPARSER # filter by bug type
 ```
 
-### SpotBugs exclude file ordering
-`spotbugs-security-exclude.xml` is kept sorted per `.claude/rules/spotbugs-security-exclude-xml.md`. The `/sort-spotbugs-exclude` skill applies that rule.
+### SpotBugs exclude file format
+`spotbugs-security-exclude.xml` is kept formatted per `.claude/rules/spotbugs-security-exclude-xml.md`. The `/format-spotbugs-exclude` skill applies that rule.
 
 ## Architecture
 

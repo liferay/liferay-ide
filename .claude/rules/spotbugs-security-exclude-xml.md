@@ -1,4 +1,4 @@
-# SpotBugs Exclude File Ordering
+# SpotBugs Exclude File Format
 
 **Applies to:** `spotbugs-security-exclude.xml` (and any other `<FindBugsFilter>` file in this repo).
 
