@@ -137,25 +137,14 @@
 	</Match>
 
 	<!--
-	AbstractDefaultHandler routes all SAX parsing through SecureXMLFactoryUtil.newSAXParserFactory(),
-	which disables external entity processing. SpotBugs flags the SAXParser.parse(...) call site
-	(parseContents) rather than the factory construction (getFactory), and cannot track security
-	features set inside the utility method, so this exclusion covers the whole class.
-	-->
-	<Match>
-		<Class name="com.liferay.ide.core.AbstractDefaultHandler" />
-		<Bug pattern="XXE_SAXPARSER" />
-	</Match>
-
-	<!--
 	FileUtil.readXML() uses SecureXMLFactoryUtil.newDocumentBuilderFactory()
 	which disables external entity processing. SpotBugs cannot track security
 	features set inside the utility method.
 	-->
 	<Match>
+		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.core.util.FileUtil" />
 		<Method name="readXML" />
-		<Bug pattern="XXE_DOCUMENT" />
 	</Match>
 
 	<!--
@@ -164,42 +153,9 @@
 	features set inside the utility method.
 	-->
 	<Match>
+		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.core.util.FileUtil" />
 		<Method name="readXMLFile" />
-		<Bug pattern="XXE_DOCUMENT" />
-	</Match>
-
-	<!--
-	FileUtil.writeXml() uses SecureXMLFactoryUtil.newTransformerFactory()
-	which sets FEATURE_SECURE_PROCESSING, ACCESS_EXTERNAL_DTD="", and
-	ACCESS_EXTERNAL_STYLESHEET="". SpotBugs cannot track these settings.
-	-->
-	<Match>
-		<Class name="com.liferay.ide.core.util.FileUtil" />
-		<Method name="writeXml" />
-		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
-	</Match>
-
-	<!--
-	PropertiesUtil._getLanguageFileInfo() uses a SAXParser from the static
-	_saxParserFactory field initialized via SecureXMLFactoryUtil.newSAXParserFactory().
-	SpotBugs cannot track security features set inside the utility method.
-	-->
-	<Match>
-		<Class name="com.liferay.ide.core.util.PropertiesUtil" />
-		<Method name="_getLanguageFileInfo" />
-		<Bug pattern="XXE_SAXPARSER" />
-	</Match>
-
-	<!--
-	PropertiesUtil._getResourceNodeInfo() uses a SAXParser from the static
-	_saxParserFactory field initialized via SecureXMLFactoryUtil.newSAXParserFactory().
-	SpotBugs cannot track security features set inside the utility method.
-	-->
-	<Match>
-		<Class name="com.liferay.ide.core.util.PropertiesUtil" />
-		<Method name="_getResourceNodeInfo" />
-		<Bug pattern="XXE_SAXPARSER" />
 	</Match>
 
 	<!--
@@ -208,9 +164,30 @@
 	security features set inside the utility method.
 	-->
 	<Match>
+		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.hook.core.model.internal.StrutsActionPathPossibleValuesCacheService" />
 		<Method name="getPossibleValuesForPath" />
+	</Match>
+
+	<!--
+	AbstractPortalBundle.getHttpPortValue() uses
+	SecureXMLFactoryUtil.newDocumentBuilderFactory(). SpotBugs cannot track
+	security features set inside the utility method.
+	-->
+	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
+		<Class name="com.liferay.ide.server.core.portal.AbstractPortalBundle" />
+		<Method name="getHttpPortValue" />
+	</Match>
+
+	<!--
+	ServerUtil.getServletFilterNames() uses SecureXMLFactoryUtil.newDocumentBuilderFactory().
+	SpotBugs cannot track security features set inside the utility method.
+	-->
+	<Match>
+		<Bug pattern="XXE_DOCUMENT" />
+		<Class name="com.liferay.ide.server.util.ServerUtil" />
+		<Method name="getServletFilterNames" />
 	</Match>
 
 	<!--
@@ -220,31 +197,9 @@
 	security features set inside the utility method.
 	-->
 	<Match>
+		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
 		<Class name="com.liferay.ide.maven.core.NewMavenPluginProjectProvider" />
 		<Method name="createNewProject" />
-		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
-	</Match>
-
-	<!--
-	PortletModelUtil.printDocument() uses SecureXMLFactoryUtil.newTransformerFactory()
-	which sets FEATURE_SECURE_PROCESSING, ACCESS_EXTERNAL_DTD="", and
-	ACCESS_EXTERNAL_STYLESHEET="". SpotBugs cannot track these settings.
-	-->
-	<Match>
-		<Class name="com.liferay.ide.portlet.core.util.PortletModelUtil" />
-		<Method name="printDocument" />
-		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
-	</Match>
-
-	<!--
-	AbstractPortalBundle.getHttpPortValue() uses
-	SecureXMLFactoryUtil.newDocumentBuilderFactory(). SpotBugs cannot track
-	security features set inside the utility method.
-	-->
-	<Match>
-		<Class name="com.liferay.ide.server.core.portal.AbstractPortalBundle" />
-		<Method name="getHttpPortValue" />
-		<Bug pattern="XXE_DOCUMENT" />
 	</Match>
 
 	<!--
@@ -254,9 +209,9 @@
 	security features set inside the utility method.
 	-->
 	<Match>
+		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
 		<Class name="com.liferay.ide.server.core.portal.PortalJBossBundle" />
 		<Method name="_setHttpPortValue" />
-		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
 	</Match>
 
 	<!--
@@ -266,19 +221,64 @@
 	security features set inside the utility method.
 	-->
 	<Match>
+		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
 		<Class name="com.liferay.ide.server.core.portal.PortalTomcatBundle" />
 		<Method name="_setHttpPortValue" />
-		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
 	</Match>
 
 	<!--
-	ServerUtil.getServletFilterNames() uses SecureXMLFactoryUtil.newDocumentBuilderFactory().
+	AbstractDefaultHandler routes all SAX parsing through SecureXMLFactoryUtil.newSAXParserFactory(),
+	which disables external entity processing. SpotBugs flags the SAXParser.parse(...) call site
+	(parseContents) rather than the factory construction (getFactory), and cannot track security
+	features set inside the utility method, so this exclusion covers the whole class.
+	-->
+	<Match>
+		<Bug pattern="XXE_SAXPARSER" />
+		<Class name="com.liferay.ide.core.AbstractDefaultHandler" />
+	</Match>
+
+	<!--
+	PropertiesUtil._getLanguageFileInfo() uses a SAXParser from the static
+	_saxParserFactory field initialized via SecureXMLFactoryUtil.newSAXParserFactory().
 	SpotBugs cannot track security features set inside the utility method.
 	-->
 	<Match>
-		<Class name="com.liferay.ide.server.util.ServerUtil" />
-		<Method name="getServletFilterNames" />
-		<Bug pattern="XXE_DOCUMENT" />
+		<Bug pattern="XXE_SAXPARSER" />
+		<Class name="com.liferay.ide.core.util.PropertiesUtil" />
+		<Method name="_getLanguageFileInfo" />
+	</Match>
+
+	<!--
+	PropertiesUtil._getResourceNodeInfo() uses a SAXParser from the static
+	_saxParserFactory field initialized via SecureXMLFactoryUtil.newSAXParserFactory().
+	SpotBugs cannot track security features set inside the utility method.
+	-->
+	<Match>
+		<Bug pattern="XXE_SAXPARSER" />
+		<Class name="com.liferay.ide.core.util.PropertiesUtil" />
+		<Method name="_getResourceNodeInfo" />
+	</Match>
+
+	<!--
+	FileUtil.writeXml() uses SecureXMLFactoryUtil.newTransformerFactory()
+	which sets FEATURE_SECURE_PROCESSING, ACCESS_EXTERNAL_DTD="", and
+	ACCESS_EXTERNAL_STYLESHEET="". SpotBugs cannot track these settings.
+	-->
+	<Match>
+		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
+		<Class name="com.liferay.ide.core.util.FileUtil" />
+		<Method name="writeXml" />
+	</Match>
+
+	<!--
+	PortletModelUtil.printDocument() uses SecureXMLFactoryUtil.newTransformerFactory()
+	which sets FEATURE_SECURE_PROCESSING, ACCESS_EXTERNAL_DTD="", and
+	ACCESS_EXTERNAL_STYLESHEET="". SpotBugs cannot track these settings.
+	-->
+	<Match>
+		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
+		<Class name="com.liferay.ide.portlet.core.util.PortletModelUtil" />
+		<Method name="printDocument" />
 	</Match>
 
 </FindBugsFilter>
