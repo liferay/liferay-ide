@@ -22,6 +22,8 @@ Any `<!-- ... -->` block immediately above a `<Match>` (separated only by blank 
 
 **Multi-line comments** put the opener (`<!--`) and closer (`-->`) on their own lines, at the same indent as the `<Match>`. Body lines use the same indent as the opener and closer (no extra alignment to the `<!--` text).
 
+**Width:** Each line (including indent, where a tab counts as 1 character) is at most 120 characters. Use the single-line form when `<!-- text -->` plus indent fits within 120; otherwise switch to multi-line. Multi-line body lines also wrap at 120 characters, broken on word boundaries with greedy fill.
+
 ```xml
 <!--
 False positive: getVersion performs OSGi format detection, not security validation.
