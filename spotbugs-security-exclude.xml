@@ -38,9 +38,9 @@
 	because it cannot verify the Locale parameter through static analysis.
 	-->
 	<Match>
+		<Bug pattern="IMPROPER_UNICODE" />
 		<Class name="com.liferay.ide.core.util.StringUtil" />
 		<Method name="equalsIgnoreCase" />
-		<Bug pattern="IMPROPER_UNICODE" />
 	</Match>
 
 	<!--
@@ -49,9 +49,9 @@
 	toLowerCase call as suspect regardless of the Locale argument.
 	-->
 	<Match>
+		<Bug pattern="IMPROPER_UNICODE" />
 		<Class name="com.liferay.ide.core.util.StringUtil" />
 		<Method name="toLowerCase" />
-		<Bug pattern="IMPROPER_UNICODE" />
 	</Match>
 
 	<!-- Test failure messages intentionally include stack traces for developer diagnostics -->
