@@ -2,6 +2,43 @@
 
 **Applies to:** `spotbugs-security-exclude.xml` (and any other `<FindBugsFilter>` file in this repo).
 
+## Uniqueness
+
+Each `<Match>` block must target a single, unique finding location.
+
+**Do not use `<Or>` to combine multiple targets into one block.** When multiple methods (or other variants) on the same class need the same exclusion, write one `<Match>` per target, each with its own comment.
+
+Why: splitting makes every exclusion individually auditable and traceable to a specific call site. An `<Or>` block hides per-finding justifications behind a single shared comment and is harder to diff or review one finding at a time.
+
+**Wrong:**
+```xml
+<Match>
+    <Bug pattern="UNENCRYPTED_SOCKET" />
+    <Class name="com.example.SocketUtil" />
+    <Or>
+        <Method name="canConnect" />
+        <Method name="canConnectProxy" />
+    </Or>
+</Match>
+```
+
+**Right:**
+```xml
+<!-- Comment specific to canConnect -->
+<Match>
+    <Bug pattern="UNENCRYPTED_SOCKET" />
+    <Class name="com.example.SocketUtil" />
+    <Method name="canConnect" />
+</Match>
+
+<!-- Comment specific to canConnectProxy -->
+<Match>
+    <Bug pattern="UNENCRYPTED_SOCKET" />
+    <Class name="com.example.SocketUtil" />
+    <Method name="canConnectProxy" />
+</Match>
+```
+
 ## Block order
 
 Sort `<Match>` blocks by:
@@ -48,7 +85,9 @@ untrusted input handling, so there is no security bypass risk.
 
 ## Edge case: non-standard children
 
-If a `<Match>` uses elements other than `Bug`/`Class`/`Method` (e.g. `<Or>`, `<Field>`, `<Source>`), keep those at the end of the child list in their original relative order, and use the first `Bug`/`Class`/`Method` value (or empty string if absent) as the sort key. Flag the unusual entry to the user.
+`<Or>` is **not allowed** — see the Uniqueness section; split the entry instead.
+
+If a `<Match>` uses other non-standard elements (e.g. `<Field>`, `<Source>`), keep those at the end of the child list in their original relative order, and use the first `Bug`/`Class`/`Method` value (or empty string if absent) as the sort key. Flag the unusual entry to the user.
 
 ## Example
 
