@@ -1,5 +1,13 @@
 <FindBugsFilter>
 
+	<!-- Command template is a local IDE preference; path token is escaped by quotePath -->
+
+	<Match>
+		<Bug pattern="COMMAND_INJECTION" />
+		<Class name="com.liferay.ide.server.ui.util.ServerUIUtil" />
+		<Method name="openInSystemExplorer" />
+	</Match>
+
 	<!-- Only loads .groovy scripts bundled in the plugin, not user input -->
 
 	<Match>
