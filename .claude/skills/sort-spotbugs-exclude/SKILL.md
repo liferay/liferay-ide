@@ -20,4 +20,4 @@ Apply the rule defined in `.claude/rules/spotbugs-security-exclude-xml.md` to a 
 4. **Reorder children** inside each `<Match>` per the rule.
 5. **Sort the pairs** per the rule.
 6. **Re-emit** the file with one blank line between entries, comments above their `<Match>`, and the original wrapper preserved.
-7. **Verify** with `git diff <path>` — the diff should be purely a reordering. No attribute or comment text changes. If anything else changed, stop and investigate.
+7. **Verify** with `git diff <path>` — the diff should be only reordering and comment formatting. No attribute changes. If anything else changed, stop and investigate.
