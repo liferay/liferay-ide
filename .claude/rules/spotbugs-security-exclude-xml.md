@@ -60,6 +60,12 @@ Any `<!-- ... -->` block above a `<Match>`, separated only by blank lines, is pa
 
 **Separation:** Leave exactly one blank line between the comment and its `<Match>`. This matches the existing file's style.
 
+**Wording:** State the reason directly — no `Skip this X because...` or `This is a false positive because...` preamble. Lead with the category or the fact, then a short justification.
+
+**Wrong** (verbose preamble): `<!-- Skip this unencrypted socket because the Gogo OSGi console is a telnet protocol (per class Javadoc) and the server endpoint is not SSL -->`
+
+**Right** (direct): `<!-- Gogo OSGi console uses the telnet protocol (per class Javadoc); endpoint is not SSL -->`
+
 **Single-line comments** stay on one line: `<!-- text -->`.
 
 **Multi-line comments** put the opener (`<!--`) and closer (`-->`) on their own lines, at the same indent as the `<Match>`. Body lines use the same indent as the opener and closer (no extra alignment to the `<!--` text).
