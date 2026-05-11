@@ -8,6 +8,14 @@
 		<Method name="openInSystemExplorer" />
 	</Match>
 
+	<!-- Discrete argv tokens passed to ProcessBuilder; no shell or string concatenation -->
+
+	<Match>
+		<Bug pattern="COMMAND_INJECTION" />
+		<Class name="com.liferay.ide.ui.workspace.LaunchWorkspaceHandler" />
+		<Method name="execute" />
+	</Match>
+
 	<!-- Only loads .groovy scripts bundled in the plugin, not user input -->
 
 	<Match>
