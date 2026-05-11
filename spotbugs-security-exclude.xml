@@ -1,6 +1,6 @@
 <FindBugsFilter>
 
-	<!-- Skip this hard coded password because the username and password are defaults for a testcase -->
+	<!-- False positive: hard coded password is the default for a testcase only -->
 
 	<Match>
 		<Bug pattern="HARD_CODE_PASSWORD" />
@@ -8,11 +8,7 @@
 		<Method name="startServer" />
 	</Match>
 
-	<!--
-	False positive: _getNewDoctTypeSetting uses a regex match only to locate a version
-	substring within an internal DOCTYPE string, not to validate untrusted input.
-	The subsequent replace operates on known-safe internal data.
-	-->
+	<!-- False positive: regex matches an internal DOCTYPE string, not untrusted input -->
 
 	<Match>
 		<Bug pattern="MODIFICATION_AFTER_VALIDATION" />
@@ -20,11 +16,7 @@
 		<Method name="_getNewDoctTypeSetting" />
 	</Match>
 
-	<!--
-	False positive: getVersion performs OSGi format detection, not security validation.
-	The replaceAll is internal version string formatting (dots to underscores), not
-	untrusted input handling, so there is no security bypass risk.
-	-->
+	<!-- False positive: internal version string formatting (dots to underscores), not untrusted input -->
 
 	<Match>
 		<Bug pattern="MODIFICATION_AFTER_VALIDATION" />
