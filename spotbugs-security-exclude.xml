@@ -3,28 +3,32 @@
 	<!-- Skip this hard coded password because the username and password are defaults for a testcase -->
 
 	<Match>
+		<Bug pattern="HARD_CODE_PASSWORD" />
 		<Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
 		<Method name="startServer" />
-		<Bug pattern="HARD_CODE_PASSWORD" />
 	</Match>
 
-	<!-- False positive: getVersion performs OSGi format detection, not security validation.
-	     The replaceAll is internal version string formatting (dots to underscores), not
-	     untrusted input handling, so there is no security bypass risk. -->
+	<!--
+	False positive: _getNewDoctTypeSetting uses a regex match only to locate a version
+	substring within an internal DOCTYPE string, not to validate untrusted input.
+	The subsequent replace operates on known-safe internal data.
+	-->
 
 	<Match>
-		<Class name="com.liferay.ide.maven.core.util.DefaultMaven2OsgiConverter" />
-		<Method name="getVersion" />
 		<Bug pattern="MODIFICATION_AFTER_VALIDATION" />
-	</Match>
-
-	<!-- False positive: _getNewDoctTypeSetting uses a regex match only to locate a version
-	     substring within an internal DOCTYPE string, not to validate untrusted input.
-	     The subsequent replace operates on known-safe internal data. -->
-
-	<Match>
 		<Class name="com.liferay.ide.maven.core.LiferayMavenProjectProvider" />
 		<Method name="_getNewDoctTypeSetting" />
+	</Match>
+
+	<!--
+	False positive: getVersion performs OSGi format detection, not security validation.
+	The replaceAll is internal version string formatting (dots to underscores), not
+	untrusted input handling, so there is no security bypass risk.
+	-->
+
+	<Match>
 		<Bug pattern="MODIFICATION_AFTER_VALIDATION" />
+		<Class name="com.liferay.ide.maven.core.util.DefaultMaven2OsgiConverter" />
+		<Method name="getVersion" />
 	</Match>
 </FindBugsFilter>
