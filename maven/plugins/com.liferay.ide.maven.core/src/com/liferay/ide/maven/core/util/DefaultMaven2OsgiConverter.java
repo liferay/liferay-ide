@@ -382,5 +382,7 @@ public class DefaultMaven2OsgiConverter {
 	 */
 	private static final Pattern _onlyNumbers = Pattern.compile("[0-9]+");
 
-	private static final Pattern _osgiVersionPattern = Pattern.compile("\\d++\\.\\d++\\.\\d++(?>\\.[0-9A-Za-z_-]+){0,1}");
+	private static final Pattern _osgiVersionPattern = Pattern.compile(
+		"\\d++\\.\\d++\\.\\d++(?>\\.[0-9A-Za-z_-]+){0,1}");
+
 }
