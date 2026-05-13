@@ -16,7 +16,7 @@
 		<Method name="startServer" />
 	</Match>
 
-	<!-- LPD-84736 Test helper intentionally exposes stack traces in failure messages for developer diagnostics -->
+	<!-- Test failure messages intentionally include stack traces for developer diagnostics -->
 
 	<Match>
 		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
@@ -24,7 +24,7 @@
 		<Method name="failTest" />
 	</Match>
 
-	<!-- LPD-84736 Test helper intentionally exposes stack traces in failure messages for developer diagnostics -->
+	<!-- Test failure messages intentionally include stack traces for developer diagnostics -->
 
 	<Match>
 		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
@@ -32,8 +32,7 @@
 		<Method name="failTest" />
 	</Match>
 
-	<!-- LPD-84736 Public API method whose purpose is to convert a Throwable to a stack trace string;
-	     callers are responsible for how the result is used -->
+	<!-- Utility converts a Throwable to a stack trace string; callers control how the result is used -->
 
 	<Match>
 		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
@@ -41,8 +40,7 @@
 		<Method name="getStackTrace" />
 	</Match>
 
-	<!-- LPD-84736 As a simplistic transfer listener that logs uploads/downloads to the console,
-	     printing transfer error details to the output stream is expected behavior -->
+	<!-- Console transfer listener; printing transfer error details to output is expected behavior -->
 
 	<Match>
 		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
@@ -50,8 +48,7 @@
 		<Method name="transferCorrupted" />
 	</Match>
 
-	<!-- LPD-84736 As a simplistic transfer listener that logs uploads/downloads to the console,
-	     printing transfer error details to the output stream is expected behavior -->
+	<!-- Console transfer listener; printing transfer error details to output is expected behavior -->
 
 	<Match>
 		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
@@ -59,8 +56,7 @@
 		<Method name="transferFailed" />
 	</Match>
 
-	<!-- LPD-84736 Stack trace is the intended content of the Eclipse form error-details panel, shown in a
-	     read-only text widget to the developer to help diagnose IDE errors -->
+	<!-- Eclipse form's error-details panel intentionally displays the stack trace to the developer -->
 
 	<Match>
 		<Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" />
