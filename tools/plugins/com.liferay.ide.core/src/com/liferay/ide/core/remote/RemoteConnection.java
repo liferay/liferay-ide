@@ -40,7 +40,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -316,19 +315,17 @@ public class RemoteConnection implements IRemoteConnection {
 
 					cm.setDefaultMaxPerRoute(20);
 
+					HttpHost proxy = new HttpHost(data.getHost(), data.getPort());
+
 					HttpClientBuilder httpClientBuilder = HttpClients.custom();
 
 					httpClientBuilder.setConnectionManager(cm);
 
+					httpClientBuilder.setProxy(proxy);
+
 					httpClientBuilder.useSystemProperties();
 
 					CloseableHttpClient newHttpClient = httpClientBuilder.build();
-
-					HttpHost proxy = new HttpHost(data.getHost(), data.getPort());
-
-					HttpParams params = newHttpClient.getParams();
-
-					params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 
 					newDefaultHttpClient = newHttpClient;
 
