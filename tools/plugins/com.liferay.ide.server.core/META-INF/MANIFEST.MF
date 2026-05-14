@@ -37,7 +37,7 @@ Require-Bundle: com.fasterxml.jackson.core.jackson-annotations,
  org.gradle.toolingapi,
  org.json,
  org.slf4j.api
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.github.dockerjava.api.model,
  com.liferay.ide.server.core,

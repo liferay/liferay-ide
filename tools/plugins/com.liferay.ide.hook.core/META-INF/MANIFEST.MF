@@ -26,7 +26,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.validation,
  org.eclipse.wst.xml.core
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.hook.core,
  com.liferay.ide.hook.core.dd,
