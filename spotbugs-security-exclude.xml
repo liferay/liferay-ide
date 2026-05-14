@@ -136,11 +136,7 @@
 		<Method name="canConnectProxy" />
 	</Match>
 
-	<!--
-	FileUtil.readXML() uses SecureXMLFactoryUtil.newDocumentBuilderFactory()
-	which disables external entity processing. SpotBugs cannot track security
-	features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
@@ -148,11 +144,7 @@
 		<Method name="readXML" />
 	</Match>
 
-	<!--
-	FileUtil.readXMLFile() uses SecureXMLFactoryUtil.newDocumentBuilderFactory()
-	which disables external entity processing. SpotBugs cannot track security
-	features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
@@ -160,11 +152,7 @@
 		<Method name="readXMLFile" />
 	</Match>
 
-	<!--
-	StrutsActionPathPossibleValuesCacheService.getPossibleValuesForPath() uses
-	SecureXMLFactoryUtil.newDocumentBuilderFactory(). SpotBugs cannot track
-	security features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
@@ -172,11 +160,7 @@
 		<Method name="getPossibleValuesForPath" />
 	</Match>
 
-	<!--
-	AbstractPortalBundle.getHttpPortValue() uses
-	SecureXMLFactoryUtil.newDocumentBuilderFactory(). SpotBugs cannot track
-	security features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
@@ -184,10 +168,7 @@
 		<Method name="getHttpPortValue" />
 	</Match>
 
-	<!--
-	ServerUtil.getServletFilterNames() uses SecureXMLFactoryUtil.newDocumentBuilderFactory().
-	SpotBugs cannot track security features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
@@ -195,12 +176,7 @@
 		<Method name="getServletFilterNames" />
 	</Match>
 
-	<!--
-	NewMavenPluginProjectProvider.createNewProject() uses
-	SecureXMLFactoryUtil.newDocumentBuilderFactory() and
-	SecureXMLFactoryUtil.newTransformerFactory(). SpotBugs cannot track
-	security features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
@@ -208,12 +184,7 @@
 		<Method name="createNewProject" />
 	</Match>
 
-	<!--
-	PortalJBossBundle._setHttpPortValue() uses
-	SecureXMLFactoryUtil.newDocumentBuilderFactory() and
-	SecureXMLFactoryUtil.newTransformerFactory(). SpotBugs cannot track
-	security features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
@@ -221,12 +192,7 @@
 		<Method name="_setHttpPortValue" />
 	</Match>
 
-	<!--
-	PortalTomcatBundle._setHttpPortValue() uses
-	SecureXMLFactoryUtil.newDocumentBuilderFactory() and
-	SecureXMLFactoryUtil.newTransformerFactory(). SpotBugs cannot track
-	security features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
@@ -234,23 +200,14 @@
 		<Method name="_setHttpPortValue" />
 	</Match>
 
-	<!--
-	AbstractDefaultHandler routes all SAX parsing through SecureXMLFactoryUtil.newSAXParserFactory(),
-	which disables external entity processing. SpotBugs flags the SAXParser.parse(...) call site
-	(parseContents) rather than the factory construction (getFactory), and cannot track security
-	features set inside the utility method, so this exclusion covers the whole class.
-	-->
+	<!-- SAXParser via SecureXMLFactoryUtil; class-wide because SpotBugs flags subclass .parse() call sites -->
 
 	<Match>
 		<Bug pattern="XXE_SAXPARSER" />
 		<Class name="com.liferay.ide.core.AbstractDefaultHandler" />
 	</Match>
 
-	<!--
-	PropertiesUtil._getLanguageFileInfo() uses a SAXParser from the static
-	_saxParserFactory field initialized via SecureXMLFactoryUtil.newSAXParserFactory().
-	SpotBugs cannot track security features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_SAXPARSER" />
@@ -258,11 +215,7 @@
 		<Method name="_getLanguageFileInfo" />
 	</Match>
 
-	<!--
-	PropertiesUtil._getResourceNodeInfo() uses a SAXParser from the static
-	_saxParserFactory field initialized via SecureXMLFactoryUtil.newSAXParserFactory().
-	SpotBugs cannot track security features set inside the utility method.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_SAXPARSER" />
@@ -270,11 +223,7 @@
 		<Method name="_getResourceNodeInfo" />
 	</Match>
 
-	<!--
-	FileUtil.writeXml() uses SecureXMLFactoryUtil.newTransformerFactory()
-	which sets FEATURE_SECURE_PROCESSING, ACCESS_EXTERNAL_DTD="", and
-	ACCESS_EXTERNAL_STYLESHEET="". SpotBugs cannot track these settings.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
@@ -282,11 +231,7 @@
 		<Method name="writeXml" />
 	</Match>
 
-	<!--
-	PortletModelUtil.printDocument() uses SecureXMLFactoryUtil.newTransformerFactory()
-	which sets FEATURE_SECURE_PROCESSING, ACCESS_EXTERNAL_DTD="", and
-	ACCESS_EXTERNAL_STYLESHEET="". SpotBugs cannot track these settings.
-	-->
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
 		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
