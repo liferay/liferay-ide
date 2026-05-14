@@ -156,6 +156,14 @@
 
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
+		<Class name="com.liferay.ide.core.tests.SecureXMLFactoryUtilTests" />
+		<Method name="parseDoctypeXml" />
+	</Match>
+
+	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
+
+	<Match>
+		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.core.util.FileUtil" />
 		<Method name="readXML" />
 	</Match>
