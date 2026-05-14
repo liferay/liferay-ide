@@ -43,7 +43,7 @@
         <tm-site>https://download.eclipse.org/tm/updates/4.5.500/repository/</tm-site>
         <jre-site>https://download.eclipse.org/justj/jres/21/updates/release/latest</jre-site>
         <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
-        <tycho-version>3.0.5</tycho-version>
+        <tycho-version>5.0.2</tycho-version>
     </properties>
 
     <repositories>
@@ -202,7 +202,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.15.0</version>
                     <configuration>
-                        <release>17</release>
+                        <release>21</release>
                         <meminitial>256m</meminitial>
                         <maxmem>1024m</maxmem>
                         <proc>none</proc>
