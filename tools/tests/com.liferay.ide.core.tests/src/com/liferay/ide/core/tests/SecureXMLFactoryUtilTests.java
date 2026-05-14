@@ -32,7 +32,7 @@ import org.xml.sax.InputSource;
 /**
  * @author Anthony Chu
  */
-public class SecureXMLFactoryUtilTests extends BaseTests {
+public class SecureXMLFactoryUtilTests {
 
 	@Test
 	public void parseDoctypeXml() throws Exception {
