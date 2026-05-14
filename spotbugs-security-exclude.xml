@@ -32,11 +32,7 @@
 		<Method name="startServer" />
 	</Match>
 
-	<!--
-	StringUtil.equalsIgnoreCase(String, Object) already uses
-	toLowerCase(Locale.ROOT) internally. SpotBugs flags the call
-	because it cannot verify the Locale parameter through static analysis.
-	-->
+	<!-- False positive: delegates to toLowerCase(Locale.ROOT); SpotBugs cannot verify Locale via static analysis -->
 
 	<Match>
 		<Bug pattern="IMPROPER_UNICODE" />
@@ -44,11 +40,7 @@
 		<Method name="equalsIgnoreCase" />
 	</Match>
 
-	<!--
-	StringUtil.toLowerCase(String) already passes Locale.ROOT to
-	String.toLowerCase(). SpotBugs flags it because it treats any
-	toLowerCase call as suspect regardless of the Locale argument.
-	-->
+	<!-- False positive: passes Locale.ROOT to String.toLowerCase; SpotBugs cannot verify Locale via static analysis -->
 
 	<Match>
 		<Bug pattern="IMPROPER_UNICODE" />
