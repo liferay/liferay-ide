@@ -141,6 +141,7 @@
 	which disables external entity processing. SpotBugs cannot track security
 	features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.core.util.FileUtil" />
@@ -152,6 +153,7 @@
 	which disables external entity processing. SpotBugs cannot track security
 	features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.core.util.FileUtil" />
@@ -163,6 +165,7 @@
 	SecureXMLFactoryUtil.newDocumentBuilderFactory(). SpotBugs cannot track
 	security features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.hook.core.model.internal.StrutsActionPathPossibleValuesCacheService" />
@@ -174,6 +177,7 @@
 	SecureXMLFactoryUtil.newDocumentBuilderFactory(). SpotBugs cannot track
 	security features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.server.core.portal.AbstractPortalBundle" />
@@ -184,6 +188,7 @@
 	ServerUtil.getServletFilterNames() uses SecureXMLFactoryUtil.newDocumentBuilderFactory().
 	SpotBugs cannot track security features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_DOCUMENT" />
 		<Class name="com.liferay.ide.server.util.ServerUtil" />
@@ -196,6 +201,7 @@
 	SecureXMLFactoryUtil.newTransformerFactory(). SpotBugs cannot track
 	security features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
 		<Class name="com.liferay.ide.maven.core.NewMavenPluginProjectProvider" />
@@ -208,6 +214,7 @@
 	SecureXMLFactoryUtil.newTransformerFactory(). SpotBugs cannot track
 	security features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
 		<Class name="com.liferay.ide.server.core.portal.PortalJBossBundle" />
@@ -220,6 +227,7 @@
 	SecureXMLFactoryUtil.newTransformerFactory(). SpotBugs cannot track
 	security features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_DOCUMENT,XXE_XSLT_TRANSFORM_FACTORY" />
 		<Class name="com.liferay.ide.server.core.portal.PortalTomcatBundle" />
@@ -232,6 +240,7 @@
 	(parseContents) rather than the factory construction (getFactory), and cannot track security
 	features set inside the utility method, so this exclusion covers the whole class.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_SAXPARSER" />
 		<Class name="com.liferay.ide.core.AbstractDefaultHandler" />
@@ -242,6 +251,7 @@
 	_saxParserFactory field initialized via SecureXMLFactoryUtil.newSAXParserFactory().
 	SpotBugs cannot track security features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_SAXPARSER" />
 		<Class name="com.liferay.ide.core.util.PropertiesUtil" />
@@ -253,6 +263,7 @@
 	_saxParserFactory field initialized via SecureXMLFactoryUtil.newSAXParserFactory().
 	SpotBugs cannot track security features set inside the utility method.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_SAXPARSER" />
 		<Class name="com.liferay.ide.core.util.PropertiesUtil" />
@@ -264,6 +275,7 @@
 	which sets FEATURE_SECURE_PROCESSING, ACCESS_EXTERNAL_DTD="", and
 	ACCESS_EXTERNAL_STYLESHEET="". SpotBugs cannot track these settings.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
 		<Class name="com.liferay.ide.core.util.FileUtil" />
@@ -275,6 +287,7 @@
 	which sets FEATURE_SECURE_PROCESSING, ACCESS_EXTERNAL_DTD="", and
 	ACCESS_EXTERNAL_STYLESHEET="". SpotBugs cannot track these settings.
 	-->
+
 	<Match>
 		<Bug pattern="XXE_XSLT_TRANSFORM_FACTORY" />
 		<Class name="com.liferay.ide.portlet.core.util.PortletModelUtil" />
