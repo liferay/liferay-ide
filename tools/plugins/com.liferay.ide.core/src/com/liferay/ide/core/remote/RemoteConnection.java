@@ -315,19 +315,11 @@ public class RemoteConnection implements IRemoteConnection {
 
 					cm.setDefaultMaxPerRoute(20);
 
-					HttpHost proxy = new HttpHost(data.getHost(), data.getPort());
-
-					HttpClientBuilder httpClientBuilder = HttpClients.custom();
-
-					httpClientBuilder.setConnectionManager(cm);
-
-					httpClientBuilder.setProxy(proxy);
-
-					httpClientBuilder.useSystemProperties();
-
-					CloseableHttpClient newHttpClient = httpClientBuilder.build();
-
-					newDefaultHttpClient = newHttpClient;
+					newDefaultHttpClient = HttpClients.custom()
+						.setConnectionManager(cm)
+						.setProxy(new HttpHost(data.getHost(), data.getPort()))
+						.useSystemProperties()
+						.build();
 
 					break;
 				}
