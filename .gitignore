@@ -1,6 +1,7 @@
 .DS_Store
 .apt_generated/
 .claude/*.local.json
+.claude/worktrees/
 .resources/
 .springBeans
 .tycho-consumer-pom.xml
