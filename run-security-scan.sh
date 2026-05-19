@@ -75,7 +75,7 @@ else
 fi
 
 # Clear stale reports before running
-find "$search_dir" \( -path '*/target/spotbugsXml.xml' -o -path '*/target/site/spotbugs.html' \) -type f -delete 2>/dev/null
+find "$search_dir" \( -path '*/target/spotbugsXml.xml' -o -path '*/target/spotbugs.html' \) -type f -delete 2>/dev/null
 
 # Use spotbugs:spotbugs (report-only) instead of spotbugs:check (fail-on-bugs)
 # so that all modules get scanned even when some have violations
@@ -161,7 +161,7 @@ if [ -n "$zip_output" ]; then
 	report_files=()
 	while IFS= read -r f; do
 		report_files+=("$f")
-	done < <(find "$search_dir" \( -path '*/target/spotbugsXml.xml' -o -path '*/target/site/spotbugs.html' \) -type f | sort)
+	done < <(find "$search_dir" \( -path '*/target/spotbugsXml.xml' -o -path '*/target/spotbugs.html' \) -type f | sort)
 
 	if [ ${#report_files[@]} -eq 0 ]; then
 		echo "No SpotBugs reports found to zip."
