@@ -93,6 +93,7 @@
 						</plugins>
 						<effort>Max</effort>
 						<threshold>Low</threshold>
+						<htmlOutput>true</htmlOutput>
 						<xmlOutput>true</xmlOutput>
 						<includeFilterFile>${maven.multiModuleProjectDirectory}/spotbugs-security-include.xml</includeFilterFile>
 						<excludeFilterFile>${maven.multiModuleProjectDirectory}/spotbugs-security-exclude.xml</excludeFilterFile>
