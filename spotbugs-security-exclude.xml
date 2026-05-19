@@ -112,6 +112,46 @@
 		<Method name="getVersion" />
 	</Match>
 
+	<!-- These are internal IDE resources locked inside the plugin JAR, making template injection impossible -->
+
+	<Match>
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+		<Class name="com.liferay.ide.core.templates.TemplateOperation" />
+		<Method name="execute" />
+	</Match>
+
+	<!-- These are internal IDE resources locked inside the plugin JAR, making template injection impossible -->
+
+	<Match>
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+		<Class name="com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate" />
+		<Method name="doSourceCodeOperation" />
+	</Match>
+
+	<!-- These are internal IDE resources locked inside the plugin JAR, making template injection impossible -->
+
+	<Match>
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+		<Class name="com.liferay.ide.project.core.modules.templates.pollerprocessor.NewLiferayComponentPollerProcessorOperation" />
+		<Method name="_sourceCodeOperation" />
+	</Match>
+
+	<!-- These are internal IDE resources locked inside the plugin JAR, making template injection impossible -->
+
+	<Match>
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+		<Class name="com.liferay.ide.project.core.modules.templates.portletfilter.NewLiferayComponentPortletFilterOperation" />
+		<Method name="_sourceCodeOperation" />
+	</Match>
+
+	<!-- These are internal IDE resources locked inside the plugin JAR, making template injection impossible -->
+
+	<Match>
+		<Bug pattern="TEMPLATE_INJECTION_FREEMARKER" />
+		<Class name="com.liferay.ide.project.core.modules.templates.portletinactioncommand.NewLiferayComponentPortletActionCommandOperation" />
+		<Method name="_sourceCodeOperation" />
+	</Match>
+
 	<!-- Local bind()-then-close to test port availability; no client connects and no data is transmitted -->
 
 	<Match>
