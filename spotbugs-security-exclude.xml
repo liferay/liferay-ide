@@ -152,6 +152,78 @@
 		<Method name="canConnectProxy" />
 	</Match>
 
+	<!-- FileStoreEditorInput URI — a file the developer explicitly opened in the IDE, not external input -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.hook.ui.editor.HookXmlEditor" />
+		<Method name="getFileContents" />
+	</Match>
+
+	<!-- URL points to a bundled plugin icon, not user-supplied input -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.layouttpl.ui.wizard.AddLayoutTplOperation" />
+		<Method name="createThumbnailFile" />
+	</Match>
+
+	<!-- Developer-configured Docker server home URL, polled to detect when the container finishes starting -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.server.core.portal.docker.PortalDockerServerStateStartThread" />
+		<Method name="startMonitor" />
+	</Match>
+
+	<!-- Hardcoded to localhost, test setup pinging its own server to confirm startup -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
+		<Method name="startServer" />
+	</Match>
+
+	<!-- Hardcoded to localhost, test teardown pinging its own server to confirm shutdown -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
+		<Method name="stopServer" />
+	</Match>
+
+	<!-- Developer-configured remote server endpoint for log streaming, no external attacker controls this URL -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.server.remote.RemoteLogStream" />
+		<Method name="openInputStream" />
+	</Match>
+
+	<!-- Developer-configured Liferay server URL, polled in a loop to detect when the server finishes starting -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.server.util.PingThread" />
+		<Method name="ping" />
+	</Match>
+
+	<!-- Developer-configured server endpoint, fetches the WSDL list from the developer's own Liferay server -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.server.util.WebServicesHelper" />
+		<Method name="initMap" />
+	</Match>
+
+	<!-- FileStoreEditorInput URI — a file the developer explicitly opened in the IDE, not external input -->
+
+	<Match>
+		<Bug pattern="URLCONNECTION_SSRF_FD" />
+		<Class name="com.liferay.ide.service.ui.editor.ServiceBuilderEditor" />
+		<Method name="getFileContents" />
+	</Match>
+
 	<!-- Hardened via SecureXMLFactoryUtil; SpotBugs cannot trace features set inside the utility -->
 
 	<Match>
