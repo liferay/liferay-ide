@@ -44,9 +44,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
@@ -309,17 +307,20 @@ public class RemoteConnection implements IRemoteConnection {
 						continue;
 					}
 
-					PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+					PoolingHttpClientConnectionManager poolingHttpClientConnectionManager =
+						new PoolingHttpClientConnectionManager();
 
-					cm.setMaxTotal(200);
+					poolingHttpClientConnectionManager.setMaxTotal(200);
 
-					cm.setDefaultMaxPerRoute(20);
+					poolingHttpClientConnectionManager.setDefaultMaxPerRoute(20);
 
-					newDefaultHttpClient = HttpClients.custom()
-						.setConnectionManager(cm)
-						.setProxy(new HttpHost(data.getHost(), data.getPort()))
-						.useSystemProperties()
-						.build();
+					newDefaultHttpClient = HttpClients.custom(
+					).setConnectionManager(
+						poolingHttpClientConnectionManager
+					).setProxy(
+						new HttpHost(data.getHost(), data.getPort())
+					).useSystemProperties(
+					).build();
 
 					break;
 				}
