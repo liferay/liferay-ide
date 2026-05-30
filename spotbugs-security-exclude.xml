@@ -112,6 +112,46 @@
 		<Method name="getVersion" />
 	</Match>
 
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.describer.LiferayPortalPropertiesFileDescriber" />
+		<Method name="isPropertiesFile" />
+	</Match>
+
+	<!-- False positive: Test class, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.tests.TestUtil" />
+		<Method name="_copyDir" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.util.FileUtil" />
+		<Method name="copyFileToDir" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.util.FileUtil" />
+		<Method name="getFile" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.util.IOUtil" />
+		<Method name="copyDirToDir" />
+	</Match>
+
 	<!--
 	Zip entry name validated to stay in the same extraction directory.
 	SpotBugs cannot detect the security sanitizer.
@@ -132,6 +172,726 @@
 		<Bug pattern="PATH_TRAVERSAL_IN" />
 		<Class name="com.liferay.ide.core.util.ZipUtil" />
 		<Method name="unzip" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Method name="clearWorkspace" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Method name="findParentFile" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Method name="getGradleProperty" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Method name="getMavenProperty" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Method name="getWorkspaceType" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Method name="hasBundlesDir" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Method name="isValidGradleWorkspaceLocation" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.workspace.LiferayWorkspaceUtil" />
+		<Method name="isValidMavenWorkspaceLocation" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.gradle.action.WatchTaskAction" />
+		<Method name="_getBndPaths" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.gradle.core.GradleModuleProjectImporter" />
+		<Method name="canImport" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.gradle.core.GradleTooling" />
+		<Method name="_extractJar" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.gradle.core.LiferayGradleProject" />
+		<Method name="getOutputBundlePath" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.gradle.ui.handler.CompareFileHandler" />
+		<Method name="getTemplateFile" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.gradle.ui.portal.docker.DockerServerWizard" />
+		<Method name="isValidGradleWorkspaceLocation" />
+	</Match>
+
+	<!-- False positive: portal installation path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.hook.ui.wizard.CustomJSPsTableWizardSection$JSPFileViewerFilter" />
+		<Method name="&lt;init&gt;" />
+	</Match>
+
+	<!-- False positive: bundled plugin resource path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.kaleo.core.util.WorkflowValidationProxy" />
+		<Method name="getGroovyFile" />
+	</Match>
+
+	<!-- False positive: bundled plugin resource path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.kaleo.core.util.WorkflowValidationProxy" />
+		<Method name="getProxyClasspath" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.BuildCSSBuildParticipant" />
+		<Method name="configureExecution" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.LiferayMavenProjectConfigurator" />
+		<Method name="_checkValidConfigDir" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.MavenModuleProjectImporter" />
+		<Method name="canImport" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.MavenProjectBuilder" />
+		<Method name="updateDependencies" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.NewGradleJSFModuleProjectProvider" />
+		<Method name="createNewProject" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.NewMavenPluginProjectProvider" />
+		<Method name="_getBackupFile" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.NewMavenPluginProjectProvider" />
+		<Method name="createNewProject" />
+	</Match>
+
+	<!-- False positive: Test class, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.tests.ImportLiferayModuleProjectOpTest" />
+		<Method name="_unzipFile" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.maven.core.util.DefaultMaven2OsgiConverter" />
+		<Method name="_getGroupIdFromPackage" />
+	</Match>
+
+	<!-- False positive: portal installation path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.portlet.ui.editor.PortalDeployExcludesSection" />
+		<Method name="createJarsArray" />
+	</Match>
+
+	<!-- False positive: portal installation path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.portlet.ui.editor.PortalJarViewerFilter" />
+		<Method name="&lt;init&gt;" />
+	</Match>
+
+	<!-- False positive: portal installation path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.portlet.ui.editor.PortalJarsSection" />
+		<Method name="createJarsArray" />
+	</Match>
+
+	<!-- False positive: portal installation path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.portlet.ui.editor.PortalTldViewerFilter" />
+		<Method name="&lt;init&gt;" />
+	</Match>
+
+	<!-- False positive: portal installation path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.portlet.ui.editor.PortalTldsSection" />
+		<Method name="createTldsArray" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.LiferayProjectImportDataModelProvider" />
+		<Method name="getDefaultProperty" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.modules.ProjectTemplateNameValidationService" />
+		<Method name="_loadSupportedVersionRanges" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.modules.ServiceWrapperCommand" />
+		<Method name="_getDynamicServiceWrapper" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.modules.ext.NewModuleExtOpMethods" />
+		<Method name="copyFiles" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOpMethods" />
+		<Method name="execute" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods" />
+		<Method name="copyOverrideFiles" />
+	</Match>
+
+	<!-- False positive: Test class, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.tests.ProjectCoreBase" />
+		<Method name="getProjectZip" />
+	</Match>
+
+	<!-- False positive: Test class, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.tests.XmlTestsBase" />
+		<Method name="importProject" />
+	</Match>
+
+	<!-- False positive: Test class, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.tests.workspace.LiferayWorkspaceUtilTests" />
+		<Method name="testLiferayWorkspaceUtil" />
+	</Match>
+
+	<!-- False positive: Test class, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.tests.workspace.NewLiferayWorkspaceOpTests" />
+		<Method name="testNewLiferayWorkspaceOp" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.util.ProjectUtil" />
+		<Method name="getLiferayPluginType" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.util.ProjectUtil" />
+		<Method name="getProjectRecordForDir" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.util.ProjectUtil" />
+		<Method name="isWorkspaceWars" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.util.TargetPlatformUtil" />
+		<Method name="_useSpecificTargetPlatform" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.util.TargetPlatformUtil" />
+		<Method name="getAllTargetPlatfromVersions" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.util.TargetPlatformUtil" />
+		<Method name="getThirdPartyBundleList" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.core.workspace.WorkspaceLocationValidationService" />
+		<Method name="compute" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.ui.action.CompareOriginalImplementationAction" />
+		<Method name="run" />
+	</Match>
+
+	<!-- False positive: Eclipse project wizard path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.project.ui.modules.ext.AddFilesFromSourceJarAction" />
+		<Method name="run" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.sdk.core.SDK" />
+		<Method name="_getSDKAntProject" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.sdk.core.SDK" />
+		<Method name="_loadPropertiesFile" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.sdk.core.SDK" />
+		<Method name="addOrUpdateServerProperties" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.sdk.core.SDK" />
+		<Method name="getDependencyJarPaths" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.sdk.core.SDKUtil" />
+		<Method name="isValidSDKLocation" />
+	</Match>
+
+	<!-- False positive: Gradle/Maven build path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.sdk.core.SDKUtil" />
+		<Method name="openAsProject" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.AbstractPortalBundle" />
+		<Method name="getBundleDependencyJars" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.LiferayServerLogFileStreamsProxy$1" />
+		<Method name="run" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalJBossBundle" />
+		<Method name="getHttpPort" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalJBossBundle" />
+		<Method name="getUserLibs" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalJBossBundle" />
+		<Method name="setHttpPort" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalRuntime" />
+		<Method name="validate" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalServerBehavior" />
+		<Method name="_getRuntimeStartVMArguments" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalTomcatBundle" />
+		<Method name="getHttpPort" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalTomcatBundle" />
+		<Method name="getUserLibs" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalTomcatBundle" />
+		<Method name="setHttpPort" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalWildFlyBundleFactory" />
+		<Method name="_getFiles" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.portal.PortalWildFlyBundleFactory" />
+		<Method name="detectBundleDir" />
+	</Match>
+
+	<!-- False positive: Test class, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.core.tests.ServerManagerTests" />
+		<Method name="getLaunchConfig" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.remote.ServerManagerConnection" />
+		<Method name="installApplication" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.remote.ServerManagerConnection" />
+		<Method name="updateApplication" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.ui.action.CreateDBConnectAction" />
+		<Method name="_getLiferayRuntimeLibs" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.ui.action.CreateDBConnectAction$1" />
+		<Method name="run" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.ui.editor.PortalServerLaunchEditorSection" />
+		<Method name="validate" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.util.JavaUtil" />
+		<Method name="getJDKVersion" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.util.JavaUtil" />
+		<Method name="getManifestPropFromFolderJars" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.util.LayeredModulePathFactory" />
+		<Method name="loadOverlays" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.util.LayeredModulePathFactory" />
+		<Method name="resolveLayeredModulePath" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.util.LiferayPortalValueLoader" />
+		<Method name="_loadClass" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.util.ServerUtil" />
+		<Method name="_copyModuleBundleJar" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.util.ServerUtil" />
+		<Method name="getModuleFileFrom70Server" />
+	</Match>
+
+	<!-- False positive: server runtime path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.server.util.ServerUtil" />
+		<Method name="getSDKRequiredProperties" />
+	</Match>
+
+	<!-- False positive: bundled plugin resource path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.studio.ui.StudioPlugin" />
+		<Method name="canInitLiferayWorkspace" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.theme.core.util.BuildHelper" />
+		<Method name="_copyFile" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.ui.LiferayUIPlugin$1" />
+		<Method name="serviceChanged" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.ui.WorkspaceHelper" />
+		<Method name="openDir" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.ui.dialog.ChooseWorkspaceWithPreferenceDialog" />
+		<Method name="_patchWorkingSets" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.ui.editor.LiferayPropertiesSourceViewerConfiguration" />
+		<Method name="_getAppServerPortalDir" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.ui.workspace.WorkbenchPreferencesTransfer" />
+		<Method name="transferSettings" />
+	</Match>
+
+	<!-- False positive: Eclipse workspace path, not reachable by external input -->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_OUT" />
+		<Class name="com.liferay.ide.theme.core.util.BuildHelper" />
+		<Method name="_copyFile" />
 	</Match>
 
 	<!-- These are internal IDE resources locked inside the plugin JAR, making template injection impossible -->
