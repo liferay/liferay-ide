@@ -1,0 +1,4 @@
+Bundle-Name: testGradleProject
+Bundle-SymbolicName: testgradleproject
+Bundle-Version: 1.0.0
+Export-Package: testgradleproject.constants
