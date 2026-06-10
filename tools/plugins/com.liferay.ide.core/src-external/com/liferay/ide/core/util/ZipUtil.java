@@ -204,12 +204,16 @@ public final class ZipUtil {
 				if (entry.isDirectory()) {
 					File emptyDir = new File(destdir, entryName);
 
+					_validateZipEntryPath(destdir, emptyDir);
+
 					_mkdir(emptyDir);
 
 					continue;
 				}
 
 				File f = new File(destdir, entryName);
+
+				_validateZipEntryPath(destdir, f);
 
 				File dir = f.getParentFile();
 
@@ -251,6 +255,8 @@ public final class ZipUtil {
 				}
 
 				final File f = new File(destinationDir, entryName);
+
+				_validateZipEntryPath(destinationDir, f);
 
 				if (f.exists()) {
 					Files.delete(f.toPath());
@@ -321,12 +327,16 @@ public final class ZipUtil {
 		if (entry.isDirectory()) {
 			File emptyDir = new File(destDir, entryName);
 
+			_validateZipEntryPath(destDir, emptyDir);
+
 			_mkdir(emptyDir);
 
 			return;
 		}
 
 		File file = new File(destDir, entryName);
+
+		_validateZipEntryPath(destDir, file);
 
 		File dir = file.getParentFile();
 
@@ -365,6 +375,19 @@ public final class ZipUtil {
 			String msg = "Could not create dir: " + dir.getPath();
 
 			throw new IOException(msg);
+		}
+	}
+
+	private static void _validateZipEntryPath(File destDir, File file)
+		throws IOException {
+
+		String canonicalDestDirPath = destDir.getCanonicalPath();
+		String canonicalEntryPath = file.getCanonicalPath();
+
+		if (!canonicalEntryPath.startsWith(canonicalDestDirPath + File.separator)) {
+			throw new IOException(
+				"Zip entry would extract outside destination directory: " +
+					canonicalEntryPath);
 		}
 	}
 
