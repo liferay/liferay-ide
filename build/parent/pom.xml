@@ -246,9 +246,6 @@
                             <profileProperties>
                                 <org.eclipse.justj.buildtime>true</org.eclipse.justj.buildtime>
                             </profileProperties>
-                            <resolver>p2</resolver>
-                            <ignoreJREContactPoints>true</ignoreJREContactPoints>
-                            <allowConflictingDependencies>true</allowConflictingDependencies>
                             <extraRequirements>
                                 <requirement>
                                     <type>p2-installable-unit</type>
