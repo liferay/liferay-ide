@@ -83,6 +83,10 @@ public class BaseTests {
 		Assert.assertTrue(FileUtil.exists(path));
 	}
 
+	protected void assertFileNotExists(File file) {
+		Assert.assertFalse(FileUtil.exists(file));
+	}
+
 	protected void assertProjectExists(IProject project) {
 		Assert.assertTrue(FileUtil.exists(project));
 	}
