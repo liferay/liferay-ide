@@ -112,6 +112,28 @@
 		<Method name="getVersion" />
 	</Match>
 
+	<!--
+	Zip entry name validated to stay in the same extraction directory.
+	SpotBugs cannot detect the security sanitizer.
+	-->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.util.ZipUtil" />
+		<Method name="_copyEntry" />
+	</Match>
+
+	<!--
+	Zip entry name validated to stay in the same extraction directory.
+	SpotBugs cannot detect the security sanitizer.
+	-->
+
+	<Match>
+		<Bug pattern="PATH_TRAVERSAL_IN" />
+		<Class name="com.liferay.ide.core.util.ZipUtil" />
+		<Method name="unzip" />
+	</Match>
+
 	<!-- These are internal IDE resources locked inside the plugin JAR, making template injection impossible -->
 
 	<Match>
